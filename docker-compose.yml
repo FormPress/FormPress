@@ -1,0 +1,86 @@
+version: "3.1"
+services:
+    mysql:
+      image: mysql:5.6
+      container_name: bookconnect-mysql
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=243243
+        - MYSQL_DATABASE=bookconnect
+        - MYSQL_USER=bookconnect
+        - MYSQL_PASSWORD=bookconnect
+      ports:
+        - "3002:3306"
+    webserver:
+      image: nginx:alpine
+      container_name: bookconnect-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+        - "3000:80"
+      links:
+        - php-fpm
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: bookconnect-php-fpm
+      working_dir: /application
+      environment:
+        - RDS_HOSTNAME=bookconnect-mysql
+        - RDS_DB_NAME=bookconnect
+        - RDS_USERNAME=bookconnect
+        - RDS_PASSWORD=bookconnect
+        - PHINX_ENVIRONMENT=docker
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
+      links:
+        - mysql
+    redis:
+      image: redis:alpine
+      container_name: redis
+      ports:
+        - "6379:6380"
+    producer:
+      build: ./node/producer/
+      volumes:
+        - ./node/producer:/src
+      command: 'nodemon app.js'
+      links:
+        - redis
+        - mysql
+      environment:
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+        - RDS_HOSTNAME=bookconnect-mysql
+        - RDS_DB_NAME=bookconnect
+        - RDS_USERNAME=bookconnect
+        - RDS_PASSWORD=bookconnect
+        - PRODUCER_PORT=3087
+      ports:
+        - "3001:3001"
+        - "3087:3087"
+    consumer:
+      build: ./node/consumer/
+      volumes:
+        - ./node/consumer:/src
+      command: 'nodemon app.js'
+      links:
+        - redis
+        - mysql
+      environment:
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+        - RDS_HOSTNAME=bookconnect-mysql
+        - RDS_DB_NAME=bookconnect
+        - RDS_USERNAME=bookconnect
+        - RDS_PASSWORD=bookconnect
+        - SMTP_HOST=35.168.131.235
+        - SMTP_PORT=33426
+        - SMTP_USERNAME=2zwY6PBseyA9RDyT4LKK
+        - SMTP_PASSWORD=37UdmaV7xT.w847PN@5Zas
+        - REDIRECT_URL=http://localhost:3087
+        - SENDGRID_API_KEY=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

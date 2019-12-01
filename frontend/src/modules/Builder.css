@@ -1,0 +1,26 @@
+.oh {
+  overflow: hidden;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+/* Builder */
+.builder .content .elements {
+  width: 15%;
+  min-height: 500px;
+}
+.builder .content .form {
+  width: 70%;
+}
+
+
+/* Elements */
+.elementInput > div {
+  width: 50%;
+}
