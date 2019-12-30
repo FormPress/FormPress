@@ -1,0 +1,43 @@
+- [DONE] Implement Basic structure 
+- [ONGOING] Builder: Drag & Drop from elements to form itself
+  -- DRAG DROP working by blindly adding form element to end of the form
+
+- Backend: Implement backend + database to handle form save events
+  Implement endpoint to list forms and form details
+- Builder: save form using backend
+- Backend: Implement form renderer to render form into html
+  and host the form in a url :DOMAIN/form/:FORM_ID
+  -- Rendered form should not have React, it should be lean
+     so required fields, and other computation should be done with a lean + raw JS code
+- Backend: Handle submissions
+- Form List: List saved forms
+- Submissions: List received responses
+- Backend: Send responses to user email
+- Frontend&Backend: Implement signup auth
+- Builder: allow users to import forms into their websites using a JS file
+- Setup k8s and deploy to production
+- Templates: Implement template mechanism List templates and allow users to clone
+- Styling: Get a designer to design everything and apply styling so it looks cool
+- Form themes: Make sure at least 1 theme exists for forms
+- Add Multiple form Themes and allow quick switch between them
+- Decide basic paid plans
+- Implement a payment gateway (stripe) and accept paid subscriptions
+- Implement unit and functional tests
+- Setup pipelines CI/CD
+- Add more form items: textarea, dropdown
+  Work on customizing form elements such as, label at top, required..
+  Investigate if basic html5 form validation can be used to reduce JS in exported form
+- Go Live and start experimenting with paid advertising
+- Integrations: 
+  -- Payment gateways so that people can sell stuff with forms
+  -- Google drive, dropbox, so that responses can go automatically to other places
+  -- Webhook integration, so that when responses received, it can be forwarded to customer urls
+- API: a very nice to have, not very near
+- Make everything opensource with a suitable license so that formPress can't be used
+  commercially without a paid license
+- Finally somewhere in between, quit my job and focus on this business solely :)
+- Make sure the company is friendly to its workers, find ways to share financial success
+  with employees so they can enjoy life and have financial security through creative hardwork!
+  -- Do not hire toxic people and fire them if noticed. Treat people with respect. 
+  Build a rock solid company culture where everybody enjoys life, do good work and learn new things
+- Thats enough planning, now do some work
