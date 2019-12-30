@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import './Text.css'
 
-export class ElementInput extends Component {
+export default class Text extends Component {
   render() {
     return (
-      <div className='elementInput oh'>
+      <div className='element elementText oh'>
         <div className='fl label'>
           {this.props.label}
         </div>
@@ -11,6 +12,6 @@ export class ElementInput extends Component {
           <input />
         </div>
       </div>
-    );
+    )
   }
 }

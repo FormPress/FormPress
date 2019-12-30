@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 
-export class ElementButton extends Component {
+export default class Button extends Component {
   render() {
     return (
-      <div className='elementButton'>
+      <div className='element elementButton'>
         <input type='submit' value={this.props.value} />
       </div>
     )
