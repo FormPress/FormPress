@@ -2,6 +2,11 @@
 - [ONGOING] Builder: Drag & Drop from elements to form itself
   -- DRAG DROP working by blindly adding form element to end of the form
 
+VNTTD:
+- Fix DD so that form elements can be added to any part of the form
+ -- While dragging over form, there should be an indication of where form element will be put
+
+BACKLOG:
 - Backend: Implement backend + database to handle form save events
   Implement endpoint to list forms and form details
 - Builder: save form using backend
