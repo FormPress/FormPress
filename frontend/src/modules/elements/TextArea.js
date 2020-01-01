@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import './Text.css'
 
-export default class Text extends Component {
+export default class TextArea extends Component {
   static weight = 1
 
   static defaultProps = {
     id: 0,
-    type: 'Text',
+    type: 'TextArea',
     label: 'Label'
   }
 
@@ -14,7 +13,7 @@ export default class Text extends Component {
     const { props } = this.props
 
     return (
-      <div className='element elementText oh' { ...this.props }>
+      <div className='element elementArea oh' { ...this.props }>
         <div className='fl label'>
           {props.label}
         </div>

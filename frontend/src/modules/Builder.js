@@ -1,33 +1,43 @@
 import React, { Component } from 'react';
 import * as Elements from './elements'
+import Renderer from './Renderer'
 
 import './Builder.css'
 
 //Stuff that we render in left hand side
-const getElements = () => [
-  { type: 'Text', label: 'First Name' },
-  { type: 'Button', value: 'Submit' }
-]
+const getElements = () => Object.values(Elements).map((element) => Object
+  .assign({}, element.defaultProps)
+)
+const getWeightedElements = () => Object
+  .values(Elements)
+  .map((element) => Object
+    .assign({}, element.defaultProps, {weight: element.weight})
+  )
 const getElementsKeys = () => getElements()
   .reduce((acc, item) => {
     acc[item.type] = item
 
     return acc
   }, {})
-const elements = getElements()
+const pickerElements = getWeightedElements()
+  .sort((a, b) => a.weight - b.weight)
 
 export class Builder extends Component {
   constructor (props) {
     super(props)
     this.state = {
       counter: 0,
+      dragging: false,
+      dragIndex: false,
       form: {
         elements: [
           {
+            id: 1,
             type: 'Text',
             label: 'First Name'
           },
           {
+            id: 2,
             type: 'Button',
             value: 'Submit'
           }
@@ -48,37 +58,59 @@ export class Builder extends Component {
   handleDragStart (item, e) {
     console.log('DRAG STARTED ', e, item)
     e.dataTransfer.setData('text/plain', item.type)
+    this.setState({dragging: true})
   }
 
-  handleDragEnter (e) {
-    console.log('DRAG ENTERED')
+  handleDragEnter (e, elem) {
+    console.log('DRAG ENTERED', elem)
+
+    if (elem.id !== this.state.dragIndex) {
+      this.setState({dragIndex: elem.id})
+    }
   }
 
-  handleDragLeave (e) {
-    console.log('DRAG LEAVED')
+  handleDragLeave (e, elem) {
+    //console.log('DRAG LEAVED', elem)
   }
 
   handleDrop (e) {
+    console.log('Drop Happened')
     e.stopPropagation()
     e.preventDefault()
-    console.log('Drop Happened')
+    
     const type = e.dataTransfer.getData('text')
     const item = getElementsKeys()[type]
-    const { form } = this.state
+    const { form, dragIndex } = this.state
 
-    this.setState({form: {
-      ...form,
-      elements: [
-        ...form.elements,
-        item
-      ]
-    }})
+    //set auto increment element id
+    const maxId = Math.max(...form.elements.map((element) => element.id))
+
+    item.id = maxId + 1
+
+    console.log('Should insert after elem id => ', dragIndex)
+
+    const index = form.elements.findIndex(
+      (element) => (element.id === dragIndex)
+    )
+    console.log('IDS ', form.elements.map((element) => element.id), ' DRAGINDEX ', dragIndex, 'FOUND ARR INDEX ', index)
+    this.setState({
+      dragging: false,
+      dragIndex: false,
+      form: {
+        ...form,
+        elements: [
+          ...form.elements.slice(0, index + 1),
+          item,
+          ...form.elements.slice(index + 1)
+        ]
+      }
+    })
   }
 
   handleDragOver (e) {
+    //console.log('DRAG OVER')
     e.stopPropagation()
     e.preventDefault()
-    console.log('DRAG OVER')
   }
 
   render () {
@@ -89,7 +121,7 @@ export class Builder extends Component {
           <div className='fl elements'>
             <div>Form Elements</div>
             <div className='elementList'>
-              {elements.map((elem) => 
+              {pickerElements.map((elem) => 
                 <div
                   className='element'
                   draggable
@@ -101,20 +133,16 @@ export class Builder extends Component {
               )}
             </div>
           </div>
-          <div
+          <Renderer
             className='fl form'
-            onDragEnter={this.handleDragEnter}
-            onDragLeave={this.handleDragLeave}
-            onDrop={this.handleDrop}
-            onDragOver={this.handleDragOver}
-          >
-            {this.state.form.elements.map((elem, index) => {
-              console.log('Elements ', Elements, elem.type)
-              const Component = Elements[elem.type] 
-
-              return <Component key={ index } { ...elem }/>
-            })}
-          </div>
+            handleDragEnter={ this.handleDragEnter }
+            handleDragLeave={ this.handleDragLeave }
+            handleDrop={ this.handleDrop }
+            handleDragOver={ this.handleDragOver }
+            dragIndex={ this.state.dragIndex }
+            dragging={ this.state.dragging }
+            form={ this.state.form }
+          />
         </div>
       </div>
     );

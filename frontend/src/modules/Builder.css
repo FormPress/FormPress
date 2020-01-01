@@ -42,6 +42,7 @@
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 2px;
+  cursor: move;
 }
 
 .builder > .content > .form {
@@ -51,4 +52,11 @@
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 2px;
+}
+
+.builder > .content > .form > .dropPlaceHolder {
+  height: 3px;
+  width: 100%;
+  background-color: blue;
+  opacity: 0.5;
 }
