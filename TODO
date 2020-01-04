@@ -1,15 +1,16 @@
 - [DONE] Implement Basic structure 
-- [ONGOING] Builder: Drag & Drop from elements to form itself
-  -- DRAG DROP working by blindly adding form element to end of the form
+- [Done] Builder: Drag & Drop from elements to form itself
+  -- DRAG DROP working almost super duper good
+-[DONE] Fix DD so that form elements can be added to any part of the form
+ --[DONE] While dragging over form, there should be an indication of where form element will be put
 
 VNTTD:
-- Fix DD so that form elements can be added to any part of the form
- -- While dragging over form, there should be an indication of where form element will be put
-
-BACKLOG:
 - Backend: Implement backend + database to handle form save events
   Implement endpoint to list forms and form details
 - Builder: save form using backend
+
+MVP:
+
 - Backend: Implement form renderer to render form into html
   and host the form in a url :DOMAIN/form/:FORM_ID
   -- Rendered form should not have React, it should be lean
@@ -19,16 +20,20 @@ BACKLOG:
 - Submissions: List received responses
 - Backend: Send responses to user email
 - Frontend&Backend: Implement signup auth
+- Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
+- Form themes: Make sure at least 1 theme exists for forms
+- Setup pipelines CI/CD
+- Implement UnitTests for React components and run them on CI/CD pipelines
+BackLog:
+
 - Templates: Implement template mechanism List templates and allow users to clone
 - Styling: Get a designer to design everything and apply styling so it looks cool
-- Form themes: Make sure at least 1 theme exists for forms
 - Add Multiple form Themes and allow quick switch between them
 - Decide basic paid plans
 - Implement a payment gateway (stripe) and accept paid subscriptions
-- Implement unit and functional tests
-- Setup pipelines CI/CD
+- Implement functional tests (Using selenium, create a form and do a submission and verify it worked)
 - Add more form items: textarea, dropdown
   Work on customizing form elements such as, label at top, required..
   Investigate if basic html5 form validation can be used to reduce JS in exported form
