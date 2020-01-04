@@ -7,37 +7,46 @@ export default class Renderer extends Component {
   }
 
   render () {
-    console.log('Props Rendeer: ', this.props)
+    let { className } = this.props
+
+    if (this.props.dragging === true) {
+      className += ' dragging'
+    }
+
     return <div
-      className={ this.props.className }
+      className={ className }
       onDrop={ this.props.handleDrop }
+      onDragEnter={(e) => this.props.handleDragEnter(e, 'container')}
+      onDragLeave={(e) => this.props.handleDragLeave(e, 'container')}
       onDragOver={ this.props.handleDragOver }
     >
     {this.props.form.elements.map((elem, index) => {
-      console.log('Elements ', Elements, elem.type, this.props.dragIndex)
       const Component = Elements[elem.type] 
-
       const renderList = [
         <Component
           key={ index }
+          id={ elem.id }
           props={ elem }
           onDrop={ this.props.handleDrop }
-          onDragOver={ this.props.handleDragOver }
-          onDragEnter={ (e) => this.props.handleDragEnter(e, elem) }
-          onDragLeave={ (e) => this.props.handleDragLeave(e, elem) }
+          onDragOver={ (e) => this.props.handleDragOver(e, elem) }
         />
       ]
 
       if (
-        this.props.dragIndex === elem.id &&
+        this.props.dragIndex === elem.id.toString() &&
         this.props.dragging === true
       ) {
-        console.log('Will push')
-        renderList.push(
-          <div key='dropPlaceHolder' className='dropPlaceHolder'></div>
-        )
+        if (this.props.insertBefore === true) {
+          renderList.unshift(
+            <div key='dropPlaceHolder' className='dropPlaceHolder'></div>
+          )
+        } else {
+          renderList.push(
+            <div key='dropPlaceHolder' className='dropPlaceHolder'></div>
+          )
+        }
       }
-      console.log('Will return ', (renderList.length === 1) ? renderList[0] : renderList)
+
       return (renderList.length === 1) ? renderList[0] : renderList
 
     })}

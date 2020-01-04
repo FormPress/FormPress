@@ -16,23 +16,36 @@
 
 .builder {
   width: 100%;
-  padding: 25px;
   box-sizing: border-box;
 }
 
 .builder > .header {
   box-sizing: border-box;
-  padding: 5px 10px; 
+  padding: 5px 10px;
+  position: fixed;
+  height: 40px;
+  width: 100%;
+  background-color: white;
+}
+
+.builder > .content {
+  padding-top: 40px;
 }
 
 /* Builder */
 .builder > .content > .elements {
   width: 15%;
   min-height: 500px;
+}
+
+.builder > .content > .elements > .elementsContent {
+  position: fixed;
+  top: 40px;
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid black;
   border-radius: 2px;
+  width: inherit;
 }
 
 .elementList > .element {
@@ -54,7 +67,12 @@
   border-radius: 2px;
 }
 
+.builder > .content > .form.dragging > * *{
+  pointer-events: none;
+}
+
 .builder > .content > .form > .dropPlaceHolder {
+  pointer-events: none;
   height: 3px;
   width: 100%;
   background-color: blue;

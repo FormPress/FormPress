@@ -3,7 +3,7 @@ import * as Elements from './elements'
 import Renderer from './Renderer'
 
 import './Builder.css'
-
+let counter = 0
 //Stuff that we render in left hand side
 const getElements = () => Object.values(Elements).map((element) => Object
   .assign({}, element.defaultProps)
@@ -29,6 +29,7 @@ export class Builder extends Component {
       counter: 0,
       dragging: false,
       dragIndex: false,
+      insertBefore: false,
       form: {
         elements: [
           {
@@ -49,8 +50,9 @@ export class Builder extends Component {
     
     this.handleDragEnter = this.handleDragEnter.bind(this)
     this.handleDragLeave = this.handleDragLeave.bind(this)
-    this.handleDrop = this.handleDrop.bind(this)
     this.handleDragOver = this.handleDragOver.bind(this)
+    this.handleDrop = this.handleDrop.bind(this)
+    this.handleDragEnd = this.handleDragEnd.bind(this)
   }
 
 
@@ -62,15 +64,11 @@ export class Builder extends Component {
   }
 
   handleDragEnter (e, elem) {
-    console.log('DRAG ENTERED', elem)
-
-    if (elem.id !== this.state.dragIndex) {
-      this.setState({dragIndex: elem.id})
-    }
+    //console.log('Drag enter ', elem)
   }
 
   handleDragLeave (e, elem) {
-    //console.log('DRAG LEAVED', elem)
+    // drag leave
   }
 
   handleDrop (e) {
@@ -87,28 +85,63 @@ export class Builder extends Component {
 
     item.id = maxId + 1
 
-    console.log('Should insert after elem id => ', dragIndex)
-
     const index = form.elements.findIndex(
-      (element) => (element.id === dragIndex)
+      (element) => (element.id.toString() === dragIndex)
     )
-    console.log('IDS ', form.elements.map((element) => element.id), ' DRAGINDEX ', dragIndex, 'FOUND ARR INDEX ', index)
+
+    let newElements
+
+    if (this.state.insertBefore === true) {
+      newElements = [
+        ...form.elements.slice(0, index),
+        item,
+        ...form.elements.slice(index)
+      ]
+    } else {
+      newElements = [
+        ...form.elements.slice(0, index + 1),
+        item,
+        ...form.elements.slice(index + 1)
+      ]
+    }
+
     this.setState({
       dragging: false,
       dragIndex: false,
       form: {
         ...form,
-        elements: [
-          ...form.elements.slice(0, index + 1),
-          item,
-          ...form.elements.slice(index + 1)
-        ]
+        elements: newElements
       }
     })
   }
 
-  handleDragOver (e) {
+  handleDragEnd (e) {
+    this.setState({dragging: false})
+  }
+
+  handleDragOver (e, elem) {
     //console.log('DRAG OVER')
+    const rect = e.target.getBoundingClientRect()
+    const {left, top, height} = rect
+    const {clientY} = e
+    const id = e.target.id
+    const middleTop = top + height / 2
+    const diff = clientY - middleTop
+    const insertBefore = (diff < 0)
+
+    if (
+      id !== '' &&
+      (
+        id !== this.state.dragIndex.toString() ||
+        insertBefore !== this.state.insertBefore
+      )
+    ) {
+      this.setState({
+        dragIndex: id,
+        insertBefore
+      })
+    }
+
     e.stopPropagation()
     e.preventDefault()
   }
@@ -119,18 +152,21 @@ export class Builder extends Component {
         <div className='header'>Welcome to builder!</div>
         <div className='content oh'>
           <div className='fl elements'>
-            <div>Form Elements</div>
-            <div className='elementList'>
-              {pickerElements.map((elem) => 
-                <div
-                  className='element'
-                  draggable
-                  onDragStart={this.handleDragStart.bind(this, elem)}
-                  key={elem.type}
-                >
-                  {elem.type}
-                </div>
-              )}
+            <div className='elementsContent'>
+              <div>Form Elements</div>
+              <div className='elementList'>
+                {pickerElements.map((elem) =>
+                  <div
+                    className='element'
+                    draggable
+                    onDragStart={ this.handleDragStart.bind(this, elem) }
+                    onDragEnd={ this.handleDragEnd }
+                    key={ elem.type }
+                  >
+                    {elem.type}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <Renderer
@@ -141,6 +177,7 @@ export class Builder extends Component {
             handleDragOver={ this.handleDragOver }
             dragIndex={ this.state.dragIndex }
             dragging={ this.state.dragging }
+            insertBefore={ this.state.insertBefore }
             form={ this.state.form }
           />
         </div>
