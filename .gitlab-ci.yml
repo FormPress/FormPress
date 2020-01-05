@@ -6,6 +6,7 @@ stages:
 run-unit-test:
   stage: unittest
   script:
+    - cd frontend
     - yarn install
     - yarn test
   only:
