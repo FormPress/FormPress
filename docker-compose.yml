@@ -27,6 +27,7 @@ services:
       - MYSQL_HOST=mysql
       - MYSQL_USER=formpress
       - MYSQL_PASSWORD=formpress
+      - SERVER_PORT=3001
     ports:
       - "3001:3001"
     links:
@@ -43,7 +44,7 @@ services:
     volumes:
       - ./frontend:/src
     environment:
-      - REACT_APP_BACKEND=http://backend:3001
+      - REACT_APP_BACKEND=http://localhost:3001
     ports:
       - "3000:3000"
     links:

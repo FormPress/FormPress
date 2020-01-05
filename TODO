@@ -6,18 +6,18 @@
 - [DONE] Implement docker-compose based development environment including mysql
 - [DONE] Implement basic mysql pooled connectivity + migrations system
 - [DONE] Migration created to store form objects
+- [DONE] Backend: Implement backend + database to handle form save events, simple express.js app
+  Implement endpoint to list forms and form details
+- [DONE] Builder: save form using backend
 
 VNTTD:
-- Backend: Implement backend + database to handle form save events, simple express.js app
-  Implement endpoint to list forms and form details
-- Builder: save form using backend
-
-MVP:
-
 - Backend: Implement form renderer to render form into html
   and host the form in a url :DOMAIN/form/:FORM_ID
   -- Rendered form should not have React, it should be lean
      so required fields, and other computation should be done with a lean + raw JS code
+
+MVP:
+
 - Backend: Handle submissions
 - Form List: List saved forms
 - Submissions: List received responses

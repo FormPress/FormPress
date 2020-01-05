@@ -27,12 +27,12 @@ module.exports = async (db) => {
 
   for (const migration of migrations) {
     if (executedMigrations.indexOf(migration) > -1) {
-      console.log(`${migration} [DONE]`)
+      console.log(`${migration} [ALREADY DONE]`)
 
       continue
     }
 
-    console.log(`Running ${name}`)
+    console.log(`Running ${migration}`)
     const fn = require(path.resolve('./', 'migration', migration))
 
     await fn(db)

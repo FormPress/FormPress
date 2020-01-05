@@ -9,4 +9,6 @@ WORKDIR /src
 ADD package.json /deps/package.json
 ENV NODE_PATH=/deps/node_modules
 
+EXPOSE 3001
+
 RUN cd /deps && npm install
