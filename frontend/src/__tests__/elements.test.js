@@ -1,0 +1,20 @@
+import React from 'react'
+import { create } from 'react-test-renderer'
+import * as Elements from '../modules/elements'
+
+const keys = Object.keys(Elements)
+
+for (const key of keys) {
+  const Component = Elements[key]
+
+  describe(`Element ${key} component`, () => {
+    test('Has weight and defaultProps static attributes defined', () => {
+      expect(Component.weight).toBeDefined()
+      expect(Component.defaultProps).toBeDefined()
+    })
+
+    test('Can be rendered without errors', () => {
+      const component = create(<Component props={Component.defaultProps}/>)
+    })
+  })  
+}

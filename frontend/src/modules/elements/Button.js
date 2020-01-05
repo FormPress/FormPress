@@ -10,10 +10,10 @@ export default class Button extends Component {
   }
 
   render() {
-    const { props } = this.props
+    const { props, ...rest} = this.props
 
     return (
-      <div className='element elementButton' { ...this.props }>
+      <div className='element elementButton' { ...rest }>
         <input type='submit' value={props.value} />
       </div>
     )

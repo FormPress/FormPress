@@ -1,0 +1,12 @@
+image: node:12.14
+ 
+stages:
+  - unittest-frontend
+ 
+run-unit-test:
+  stage: test
+  script:
+    - yarn install
+    - yarn test
+  only:
+    - merge_requests
