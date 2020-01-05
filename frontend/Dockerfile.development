@@ -1,0 +1,11 @@
+FROM node:12.14-alpine3.10
+
+RUN mkdir /src
+
+ENV PATH="/node_modules/.bin:$PATH"
+
+WORKDIR /src
+ADD package.json /package.json
+ENV NODE_PATH=/node_modules
+
+RUN cd / && npm install

@@ -1,11 +1,14 @@
 - [DONE] Implement Basic structure 
 - [Done] Builder: Drag & Drop from elements to form itself
   -- DRAG DROP working almost super duper good
--[DONE] Fix DD so that form elements can be added to any part of the form
- --[DONE] While dragging over form, there should be an indication of where form element will be put
+- [DONE] Fix DD so that form elements can be added to any part of the form
+ -- [DONE] While dragging over form, there should be an indication of where form element will be put
+- [DONE] Implement docker-compose based development environment including mysql
+- [DONE] Implement basic mysql pooled connectivity + migrations system
+- [DONE] Migration created to store form objects
 
 VNTTD:
-- Backend: Implement backend + database to handle form save events
+- Backend: Implement backend + database to handle form save events, simple express.js app
   Implement endpoint to list forms and form details
 - Builder: save form using backend
 
