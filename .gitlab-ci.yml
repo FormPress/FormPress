@@ -1,11 +1,12 @@
 image: node:12.14
  
 stages:
-  - unittest-frontend
+  - unittest
  
 run-unit-test:
-  stage: test
+  stage: unittest
   script:
+    - cd frontend
     - yarn install
     - yarn test
   only:

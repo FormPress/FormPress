@@ -9,6 +9,8 @@
 - [DONE] Backend: Implement backend + database to handle form save events, simple express.js app
   Implement endpoint to list forms and form details
 - [DONE] Builder: save form using backend
+- [DONE] Setup pipelines CI/CD
+- [DONE] Implement UnitTests for React components and run them on CI/CD pipelines
 
 VNTTD:
 - Backend: Implement form renderer to render form into html
@@ -27,8 +29,7 @@ MVP:
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms
-- Setup pipelines CI/CD
-- Implement UnitTests for React components and run them on CI/CD pipelines
+
 BackLog:
 
 - Templates: Implement template mechanism List templates and allow users to clone

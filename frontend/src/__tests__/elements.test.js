@@ -3,7 +3,7 @@ import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 
 const keys = Object.keys(Elements)
-
+console.log('process.argv', process.argv)
 for (const key of keys) {
   const Component = Elements[key]
 
