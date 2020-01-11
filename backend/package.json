@@ -6,14 +6,24 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "node script/migrate.js",
-    "start-dev": "yarn migrate && nodemon app.js",
-    "start": "node app.js"
+    "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed",
+    "start": "node app.js",
+    "rebuild-backend": "docker-compose stop backend && docker-compose rm -f backend && docker-compose build backend && docker-compose create backend && docker-compose start backend"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "@babel/core": "7.7.7",
+    "@babel/plugin-proposal-class-properties": "7.7.4",
+    "@babel/plugin-transform-modules-commonjs": "7.7.5",
+    "@babel/preset-env": "7.7.7",
+    "@babel/preset-react": "7.7.4",
+    "@babel/register": "7.7.7",
+    "express": "4.17.1",
+    "ignore-styles": "5.0.1",
     "nodemon": "2.0.2",
-    "promise-mysql": "4.1.1"
+    "promise-mysql": "4.1.1",
+    "react": "16.12.0",
+    "react-dom": "16.12.0"
   }
 }

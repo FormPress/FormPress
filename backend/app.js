@@ -49,9 +49,9 @@ const handlePostForm = async (req, res) => {
   }
 }
 
-app.post('/form', handlePostForm)
+app.post('/api/form', handlePostForm)
 
-app.get('/form/:id', async (req, res) => {
+app.get('/api/form/:id', async (req, res) => {
   const id = req.params.id
   const db = await getPool()
   const result = await db.query(`
@@ -63,6 +63,40 @@ app.get('/form/:id', async (req, res) => {
   } else {
     res.json({})
   }
+})
+
+const reactDOMServer = require('react-dom/server')
+const React = require('react')
+const transform = require(path.resolve('script', 'babel-transform'))
+
+app.get('/form/view/:id', async (req, res) => {
+  const id = req.params.id
+  const db = await getPool()
+  const result = await db.query(`
+    SELECT * FROM \`form\` WHERE id = ? LIMIT 1
+  `, [id])
+
+  if (result.length === 0) {
+    return res.status(404).send('Form not found')
+  }
+
+  console.log('Form found ', result)
+  const form = JSON.parse(result[0].props)
+
+  // Update frontend form renderer TODO: don't do this on production!
+  transform()
+  const Renderer = require(path.resolve('script', 'transformed', 'Renderer')).default
+
+  const str = reactDOMServer.renderToStaticMarkup(
+    React.createElement(
+      Renderer,
+      {
+        form
+      }
+    )
+  )
+
+  res.send(str)
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
