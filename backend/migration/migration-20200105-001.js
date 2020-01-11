@@ -22,7 +22,7 @@ module.exports = async (db) => {
       PRIMARY KEY (\`id\`),
       KEY \`form_id\` (\`form_id\`),
       KEY \`submission_id\` (\`submission_id\`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `)
 
   await db.query(`
