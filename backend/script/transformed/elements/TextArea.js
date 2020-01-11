@@ -26,7 +26,10 @@ class TextArea extends _react.Component {
       className: "fl label"
     }, props.label), _react.default.createElement("div", {
       className: "fl input"
-    }, _react.default.createElement("input", null)));
+    }, _react.default.createElement("textarea", {
+      id: `q_${props.id}`,
+      name: `q_${props.id}`
+    })));
   }
 
 }

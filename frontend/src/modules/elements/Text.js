@@ -19,7 +19,7 @@ export default class Text extends Component {
           {props.label}
         </div>
         <div className='fl input'>
-          <input />
+          <input id={`q_${props.id}`} name={`q_${props.id}`}/>
         </div>
       </div>
     )
