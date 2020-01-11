@@ -22,11 +22,13 @@ services:
     working_dir: /src
     volumes:
       - ./backend:/src
+      - ./frontend:/frontend
     environment:
       - MYSQL_DATABASE=formpress
       - MYSQL_HOST=mysql
       - MYSQL_USER=formpress
       - MYSQL_PASSWORD=formpress
+      - NODE_ENV=production
       - SERVER_PORT=3001
     ports:
       - "3001:3001"

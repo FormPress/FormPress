@@ -32,7 +32,7 @@ export class Builder extends Component {
     if (formId !== null) {
       console.log('Should load form ', formId)
       this.setState({loading: true})
-      fetch(`${BACKEND}/form/${formId}`, {
+      fetch(`${BACKEND}/api/form/${formId}`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -40,6 +40,13 @@ export class Builder extends Component {
       }).then((response) => {
         return response.json()
       }).then((data) => {
+        if (typeof data.props === 'undefined') {
+          this.setState({
+            loading: false
+          })
+          return
+        }
+
         const form = JSON.parse(data.props)
 
         form.id = data.id
@@ -86,6 +93,7 @@ export class Builder extends Component {
     this.handleDragEnd = this.handleDragEnd.bind(this)
 
     this.handleSaveClick = this.handleSaveClick.bind(this)
+    this.handlePreviewClick = this.handlePreviewClick.bind(this)
   }
 
   handleDragStart (item, e) {
@@ -182,7 +190,7 @@ export class Builder extends Component {
 
     this.setState({saving: true})
 
-    fetch(`${BACKEND}/form`, {
+    fetch(`${BACKEND}/api/form`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -206,6 +214,12 @@ export class Builder extends Component {
     })
   }
 
+  handlePreviewClick (e) {
+    const {id} = this.state.form
+
+    window.open(`${BACKEND}/form/view/${id}`, '_blank')
+  }
+
   render () {
     const {saving, loading} = this.state
     const saveButtonProps = {}
@@ -220,6 +234,9 @@ export class Builder extends Component {
           Welcome to builder!
           <button onClick={this.handleSaveClick} {...saveButtonProps}>
             {saving === true ? 'Saving...': 'Save'}
+          </button>
+          <button onClick={this.handlePreviewClick}>
+            Preview Form
           </button>
         </div>
         <div className='content oh'>

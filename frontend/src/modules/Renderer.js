@@ -21,7 +21,7 @@ export default class Renderer extends Component {
       onDragOver={ this.props.handleDragOver }
     >
     {this.props.form.elements.map((elem, index) => {
-      const Component = Elements[elem.type] 
+      const Component = Elements[elem.type]
       const renderList = [
         <Component
           key={ index }
@@ -52,5 +52,4 @@ export default class Renderer extends Component {
     })}
     </div>
   }
-
 }
