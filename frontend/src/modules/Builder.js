@@ -25,7 +25,6 @@ const pickerElements = getWeightedElements()
   .sort((a, b) => a.weight - b.weight)
 
 export class Builder extends Component {
-
   async componentDidMount () {
     const formId = window.localStorage.getItem('formId')
 

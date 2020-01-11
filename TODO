@@ -15,16 +15,18 @@
     and host the form in a url :DOMAIN/form/:FORM_ID
     -- Rendered form should not have React, it should be lean
         so required fields, and other computation should be done with a lean + raw JS code
+- [DONE] Impove backend renderer so that it should render into a proper form with proper POST target
+- [DONE] Backend: Handle submissions
+
 VNTTD:
-- Impove backend renderer so that it should render into a proper form with proper POST target
+- Add react-router and implement main menu, builder, forms, data 
+- Submissions: List received responses
 
 
 MVP:
-- Backend: Handle submissions
 - Form List: List saved forms
-- Submissions: List received responses
 - Backend: Send responses to user email
-- Frontend&Backend: Implement signup auth
+- Frontend&Backend: Implement signup auth and make sure only owners can edit forms
 - Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production

@@ -10,7 +10,9 @@ app.use(function(req, res, next) {
 
   next()
 })
+app.use(express.urlencoded())
 app.use(express.json())
+app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
@@ -51,6 +53,39 @@ const handlePostForm = async (req, res) => {
 
 app.post('/api/form', handlePostForm)
 
+app.post('/form/submit/:id', async (req, res) => {
+  const form_id = parseInt(req.params.id)
+
+  const keys = Object.keys(req.body)
+  const db = await getPool()
+
+  //create submission and get id
+  const result = await db.query(
+    `INSERT INTO \`submission\`
+      (form_id, created_at, updated_at)
+    VALUES
+      (?, NOW(), NOW())`,
+    [form_id]
+  )
+  const submission_id = result.insertId
+
+  for(const key of keys) {
+    const question_id = parseInt(key.split('_')[1])
+    const value = req.body[key]
+
+    //save answer
+    await db.query(
+      `INSERT INTO \`entry\`
+        (form_id, submission_id, question_id, value)
+      VALUES
+        (?, ?, ?, ?)`,
+      [form_id, submission_id, question_id, value]
+    )
+  }
+
+  res.send('Your Submission has been received')
+})
+
 app.get('/api/form/:id', async (req, res) => {
   const id = req.params.id
   const db = await getPool()
@@ -81,7 +116,8 @@ app.get('/form/view/:id', async (req, res) => {
   }
 
   console.log('Form found ', result)
-  const form = JSON.parse(result[0].props)
+  const form = result[0]
+  form.props = JSON.parse(form.props)
 
   // Update frontend form renderer TODO: don't do this on production!
   transform()
@@ -91,12 +127,19 @@ app.get('/form/view/:id', async (req, res) => {
     React.createElement(
       Renderer,
       {
-        form
+        form: form.props
       }
     )
   )
 
-  res.send(str)
+  res.render(
+    'form.tpl.ejs',
+    {
+      title: form.title,
+      form: str,
+      postTarget: `http://localhost:${port}/form/submit/${form.id}`
+    }
+  )
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

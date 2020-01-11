@@ -18,7 +18,7 @@ export default class TextArea extends Component {
           {props.label}
         </div>
         <div className='fl input'>
-          <input />
+          <textarea id={`q_${props.id}`} name={`q_${props.id}`}></textarea>
         </div>
       </div>
     )
