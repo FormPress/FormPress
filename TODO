@@ -11,15 +11,15 @@
 - [DONE] Builder: save form using backend
 - [DONE] Setup pipelines CI/CD
 - [DONE] Implement UnitTests for React components and run them on CI/CD pipelines
-
+- [DONE] Backend: Implement form renderer to render form into html
+    and host the form in a url :DOMAIN/form/:FORM_ID
+    -- Rendered form should not have React, it should be lean
+        so required fields, and other computation should be done with a lean + raw JS code
 VNTTD:
-- Backend: Implement form renderer to render form into html
-  and host the form in a url :DOMAIN/form/:FORM_ID
-  -- Rendered form should not have React, it should be lean
-     so required fields, and other computation should be done with a lean + raw JS code
+- Impove backend renderer so that it should render into a proper form with proper POST target
+
 
 MVP:
-
 - Backend: Handle submissions
 - Form List: List saved forms
 - Submissions: List received responses
@@ -31,7 +31,7 @@ MVP:
 - Form themes: Make sure at least 1 theme exists for forms
 
 BackLog:
-
+- Do not transpile react components for form render each time on production
 - Templates: Implement template mechanism List templates and allow users to clone
 - Styling: Get a designer to design everything and apply styling so it looks cool
 - Add Multiple form Themes and allow quick switch between them
