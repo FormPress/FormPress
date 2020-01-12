@@ -1,0 +1,44 @@
+.data {
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 20px;
+}
+
+.data > div {
+  float: left;
+  min-height: 500px;
+  border: 1px solid black;
+}
+
+.data > .forms {
+  width: 20%;
+}
+
+.data > .forms > ul > li {
+  cursor: pointer;
+}
+
+.data > .forms > ul > li.selected {
+  font-weight: bold;
+}
+
+.data > .submissions {
+  width: 40%;
+}
+
+.data > .submissions > table {
+  width: 100%;
+}
+
+.data > .submissions > table > tbody > tr {
+  cursor: pointer;
+}
+
+.data > .submissions > table > tbody > tr.selected {
+  background-color: #ddd;
+}
+
+.data > .entries {
+  width: 35%;
+}

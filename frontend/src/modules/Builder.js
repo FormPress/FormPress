@@ -24,7 +24,7 @@ const getElementsKeys = () => getElements()
 const pickerElements = getWeightedElements()
   .sort((a, b) => a.weight - b.weight)
 
-export class Builder extends Component {
+export default class Builder extends Component {
   async componentDidMount () {
     const formId = window.localStorage.getItem('formId')
 
@@ -158,9 +158,8 @@ export class Builder extends Component {
   }
 
   handleDragOver (e, elem) {
-    //console.log('DRAG OVER')
     const rect = e.target.getBoundingClientRect()
-    const {left, top, height} = rect
+    const {top, height} = rect
     const {clientY} = e
     const id = e.target.id
     const middleTop = top + height / 2
@@ -275,6 +274,6 @@ export class Builder extends Component {
           
         </div>
       </div>
-    );
+    )
   }
 }
