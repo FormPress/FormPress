@@ -23,13 +23,14 @@
   box-sizing: border-box;
   padding: 5px 10px;
   position: fixed;
+  top: 40px;
   height: 40px;
   width: 100%;
   background-color: white;
 }
 
 .builder > .content {
-  padding-top: 40px;
+  padding-top: 80px;
 }
 
 /* Builder */
@@ -40,7 +41,7 @@
 
 .builder > .content > .elements > .elementsContent {
   position: fixed;
-  top: 40px;
+  top: 80px;
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid black;
