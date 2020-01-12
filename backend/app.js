@@ -86,6 +86,7 @@ app.post('/form/submit/:id', async (req, res) => {
   res.send('Your Submission has been received')
 })
 
+// return single form via id
 app.get('/api/form/:id', async (req, res) => {
   const id = req.params.id
   const db = await getPool()
@@ -98,6 +99,68 @@ app.get('/api/form/:id', async (req, res) => {
   } else {
     res.json({})
   }
+})
+
+// return forms of given user id
+app.get('/api/forms/:id', async (req, res) => {
+  const user_id = req.params.id
+  const db = await getPool()
+  const result = await db.query(`
+    SELECT * FROM \`form\` WHERE user_id = ?
+  `, [user_id])
+
+  if (result.length > 0) {
+    res.json(result)
+  } else {
+    res.json([])
+  }
+})
+
+// return submissions of given form id
+app.get('/api/form/:id/submissions', async (req, res) => {
+  const id = req.params.id
+  const db = await getPool()
+  const result = await db.query(`
+    SELECT * FROM \`submission\` WHERE form_id = ?
+  `, [id])
+
+  if (result.length > 0) {
+    res.json(result)
+  } else {
+    res.json([])
+  }
+})
+
+// return entries of given submission id
+app.get('/api/submission/:id/entries', async (req, res) => {
+  const id = req.params.id
+  const db = await getPool()
+  const result = await db.query(`
+    SELECT * FROM \`entry\` WHERE submission_id = ?
+  `, [id])
+
+  if (result.length > 0) {
+    res.json(result)
+  } else {
+    res.json([])
+  }
+})
+
+// Update single submission, ie it is read!
+app.post('/api/submission/:id', async (req, res) => {
+  const id = req.params.id
+  const db = await getPool()
+  const submission = req.body
+
+  const result = await db.query(`
+    UPDATE \`submission\`
+    SET
+      \`read\` = ?
+    WHERE
+      \`id\` = ?
+  `, [submission.read, id])
+
+  res.send('OK')
 })
 
 const reactDOMServer = require('react-dom/server')

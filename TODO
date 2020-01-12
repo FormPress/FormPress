@@ -17,20 +17,22 @@
         so required fields, and other computation should be done with a lean + raw JS code
 - [DONE] Impove backend renderer so that it should render into a proper form with proper POST target
 - [DONE] Backend: Handle submissions
+- [DONE] Add react-router and implement main menu, builder, forms, data 
+- [DONE] Submissions: List received responses
 
 VNTTD:
-- Add react-router and implement main menu, builder, forms, data 
-- Submissions: List received responses
+
+- Form List: List saved forms and allow user to click form for editing
 
 
 MVP:
-- Form List: List saved forms
 - Backend: Send responses to user email
 - Frontend&Backend: Implement signup auth and make sure only owners can edit forms
 - Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms
+- Refactor api endpoints to look like RESTfull api
 
 BackLog:
 - Do not transpile react components for form render each time on production

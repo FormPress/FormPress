@@ -1,5 +1,6 @@
 import React from 'react'
-import {Builder} from './modules/Builder'
+import Builder from './modules/Builder'
+import Data from './modules/Data'
 import {
   BrowserRouter as Router,
   Switch,
@@ -41,7 +42,7 @@ function App() {
             <Builder />
           </Route>
           <Route path="/data">
-            Data
+            <Data />
           </Route>
         </Switch>
       </div>
