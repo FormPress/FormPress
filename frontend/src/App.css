@@ -8,6 +8,8 @@
   position: fixed;
   top: 0;
   height: 40px;
+  width: 100%;
+  background: white;
   overflow: hidden;
   padding: 10px;
   margin: 0;
