@@ -7,6 +7,7 @@ const getPool = require(path.resolve('./', 'db'))
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
 
   next()
 })
@@ -16,8 +17,8 @@ app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-const handlePostForm = async (req, res) => {
-  console.log('HandlePostForm Handler called')
+const handleCreateForm = async (req, res) => {
+  console.log('handleCreateForm Handler called')
   console.log('req.body', req.body, typeof req.body)
   const form = req.body
   const db = await getPool()
@@ -51,7 +52,7 @@ const handlePostForm = async (req, res) => {
   }
 }
 
-app.post('/api/form', handlePostForm)
+app.put('/api/users/:user_id/forms', handleCreateForm)
 
 app.post('/form/submit/:id', async (req, res) => {
   const form_id = parseInt(req.params.id)
@@ -87,12 +88,12 @@ app.post('/form/submit/:id', async (req, res) => {
 })
 
 // return single form via id
-app.get('/api/form/:id', async (req, res) => {
-  const id = req.params.id
+app.get('/api/users/:user_id/forms/:form_id', async (req, res) => {
+  const { user_id, form_id } = req.params
   const db = await getPool()
   const result = await db.query(`
     SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-  `, [id])
+  `, [form_id])
   
   if (result.length === 1) {
     res.json(result[0])
@@ -102,8 +103,8 @@ app.get('/api/form/:id', async (req, res) => {
 })
 
 // return forms of given user id
-app.get('/api/forms/:id', async (req, res) => {
-  const user_id = req.params.id
+app.get('/api/users/:user_id/forms', async (req, res) => {
+  const user_id = req.params.user_id
   const db = await getPool()
   const result = await db.query(`
     SELECT * FROM \`form\` WHERE user_id = ?
@@ -117,12 +118,12 @@ app.get('/api/forms/:id', async (req, res) => {
 })
 
 // return submissions of given form id
-app.get('/api/form/:id/submissions', async (req, res) => {
-  const id = req.params.id
+app.get('/api/users/:user_id/forms/:form_id/submissions', async (req, res) => {
+  const { user_id, form_id } = req.params
   const db = await getPool()
   const result = await db.query(`
     SELECT * FROM \`submission\` WHERE form_id = ?
-  `, [id])
+  `, [form_id])
 
   if (result.length > 0) {
     res.json(result)
@@ -132,36 +133,42 @@ app.get('/api/form/:id/submissions', async (req, res) => {
 })
 
 // return entries of given submission id
-app.get('/api/submission/:id/entries', async (req, res) => {
-  const id = req.params.id
-  const db = await getPool()
-  const result = await db.query(`
-    SELECT * FROM \`entry\` WHERE submission_id = ?
-  `, [id])
+app.get(
+  '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
+  async (req, res) => {
+    const { user_id, form_id, submission_id} = req.params
+    const db = await getPool()
+    const result = await db.query(`
+      SELECT * FROM \`entry\` WHERE submission_id = ?
+    `, [submission_id])
 
-  if (result.length > 0) {
-    res.json(result)
-  } else {
-    res.json([])
+    if (result.length > 0) {
+      res.json(result)
+    } else {
+      res.json([])
+    }
   }
-})
+)
 
 // Update single submission, ie it is read!
-app.post('/api/submission/:id', async (req, res) => {
-  const id = req.params.id
-  const db = await getPool()
-  const submission = req.body
+app.put(
+  '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
+  async (req, res) => {
+    const { user_id, form_id, submission_id} = req.params
+    const db = await getPool()
+    const submission = req.body
 
-  const result = await db.query(`
-    UPDATE \`submission\`
-    SET
-      \`read\` = ?
-    WHERE
-      \`id\` = ?
-  `, [submission.read, id])
+    const result = await db.query(`
+      UPDATE \`submission\`
+      SET
+        \`read\` = ?
+      WHERE
+        \`id\` = ?
+    `, [submission.read, submission_id])
 
-  res.send('OK')
-})
+    res.json({message: 'OK'})
+  }
+)
 
 const reactDOMServer = require('react-dom/server')
 const React = require('react')

@@ -13,6 +13,19 @@ module.exports = async (db) => {
   `)
 
   await db.query(`
+    CREATE TABLE \`submission\` (
+      \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      \`form_id\` int(11) DEFAULT NULL,
+      \`created_at\` datetime DEFAULT NULL,
+      \`updated_at\` datetime DEFAULT NULL,
+      \`read\` tinyint(11) DEFAULT '0',
+      PRIMARY KEY (\`id\`),
+      KEY \`form_id\` (\`form_id\`),
+      KEY \`created_at\` (\`created_at\`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `)
+
+  await db.query(`
     CREATE TABLE \`entry\` (
       \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
       \`form_id\` int(11) NOT NULL,
@@ -22,18 +35,6 @@ module.exports = async (db) => {
       PRIMARY KEY (\`id\`),
       KEY \`form_id\` (\`form_id\`),
       KEY \`submission_id\` (\`submission_id\`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-  `)
-
-  await db.query(`
-    CREATE TABLE \`submission\` (
-      \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
-      \`form_id\` int(11) DEFAULT NULL,
-      \`created_at\` datetime DEFAULT NULL,
-      \`updated_at\` datetime DEFAULT NULL,
-      PRIMARY KEY (\`id\`),
-      KEY \`form_id\` (\`form_id\`),
-      KEY \`created_at\` (\`created_at\`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `)
 }

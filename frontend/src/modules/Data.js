@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-
+import { api } from '../helper'
 import './Data.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
 const user_id = 1
-export default class Data extends Component {
 
+export default class Data extends Component {
   setLoadingState (key, value) {
     this.setState({
       loading: {
@@ -18,24 +17,19 @@ export default class Data extends Component {
   async componentDidMount () {
     this.setLoadingState('forms', true)
 
-    fetch(`${BACKEND}/api/forms/${user_id}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'get'
-    }).then((response) => {
-      return response.json()
-    }).then((data) => {
-      const forms = data.map((form) => {
-        return {
-          ...form,
-          props: JSON.parse(form.props) 
-        }
-      })
-
-      this.setLoadingState('forms', false)
-      this.setState({ forms })
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms`
     })
+
+    const forms = data.map((form) => {
+      return {
+        ...form,
+        props: JSON.parse(form.props) 
+      }
+    })
+
+    this.setLoadingState('forms', false)
+    this.setState({ forms })
   }
 
   constructor (props) {
@@ -57,7 +51,7 @@ export default class Data extends Component {
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
   }
 
-  handleFormClick (form, e) {
+  async handleFormClick (form, e) {
     const { id } = form
 
     this.setLoadingState('submissions', true)
@@ -66,21 +60,17 @@ export default class Data extends Component {
       selectedFormId: id,
     })
 
-    fetch(`${BACKEND}/api/form/${id}/submissions`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'get'
-    }).then((response) => {
-      return response.json()
-    }).then((submissions) => {
-      this.setLoadingState('submissions', false)
-      this.setState({ submissions })
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms/${id}/submissions`
     })
+
+    this.setLoadingState('submissions', false)
+    this.setState({ submissions: data })
   }
 
-  handleSubmissionClick (submission, e) {
+  async handleSubmissionClick (submission, e) {
     const { id } = submission
+    const form_id = this.state.selectedFormId
 
     this.setLoadingState('entries', true)
     this.setState({
@@ -88,23 +78,16 @@ export default class Data extends Component {
       selectedSubmissionId: id,
     })
 
-    fetch(`${BACKEND}/api/submission/${id}/entries`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'get'
-    }).then((response) => {
-      return response.json()
-    }).then((entries) => {
-      this.setLoadingState('entries', false)
-      this.setState({ entries })
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms/${form_id}/submissions/${id}/entries`
     })
 
-    fetch(`${BACKEND}/api/submission/${id}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'post',
+    this.setLoadingState('entries', false)
+    this.setState({ entries: data })
+
+    await api({
+      resource: `/api/users/${user_id}/forms/${form_id}/submissions/${id}`,
+      method: 'put',
       body: JSON.stringify({
         ...submission,
         read: 1

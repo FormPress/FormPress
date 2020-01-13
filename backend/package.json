@@ -8,7 +8,8 @@
     "migrate": "node script/migrate.js",
     "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed",
     "start": "node app.js",
-    "rebuild-backend": "docker-compose stop backend && docker-compose rm -f backend && docker-compose build backend && docker-compose create backend && docker-compose start backend"
+    "rebuild-backend": "docker-compose stop backend && docker-compose rm -f backend && docker-compose build backend && docker-compose create backend && docker-compose start backend",
+    "restart-backend": "docker-compose stop backend && docker-compose start backend"
   },
   "author": "",
   "license": "ISC",
