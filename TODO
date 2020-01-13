@@ -19,11 +19,12 @@
 - [DONE] Backend: Handle submissions
 - [DONE] Add react-router and implement main menu, builder, forms, data 
 - [DONE] Submissions: List received responses
+- [DONE] Refactor api endpoints to look like RESTfull api
+- [DONE] Implement frontend api wrapper
 
 VNTTD:
 
 - Form List: List saved forms and allow user to click form for editing
-
 
 MVP:
 - Backend: Send responses to user email
@@ -32,7 +33,6 @@ MVP:
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms
-- Refactor api endpoints to look like RESTfull api
 
 BackLog:
 - Do not transpile react components for form render each time on production
