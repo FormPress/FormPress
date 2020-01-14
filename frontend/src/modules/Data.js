@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+
 import { api } from '../helper'
+
 import './Data.css'
 
 const user_id = 1
@@ -14,7 +16,7 @@ export default class Data extends Component {
     })
   }
 
-  async componentDidMount () {
+  async updateForms () {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
@@ -30,6 +32,35 @@ export default class Data extends Component {
 
     this.setLoadingState('forms', false)
     this.setState({ forms })
+  }
+
+  async updateSubmissionsSeamless (formId) {
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms/${formId}/submissions`
+    })
+
+    this.setState({ submissions: data })
+  }
+
+  async updateSubmissions (formId) {
+    this.setLoadingState('submissions', true)
+    this.setState({
+      submissions: [],
+      selectedFormId: formId,
+      selectedSubmissionId: null,
+      entries: []
+    })
+
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms/${formId}/submissions`
+    })
+
+    this.setLoadingState('submissions', false)
+    this.setState({ submissions: data })
+  }
+
+  componentDidMount () {
+    this.updateForms()
   }
 
   constructor (props) {
@@ -51,21 +82,8 @@ export default class Data extends Component {
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
   }
 
-  async handleFormClick (form, e) {
-    const { id } = form
-
-    this.setLoadingState('submissions', true)
-    this.setState({
-      submissions: [],
-      selectedFormId: id,
-    })
-
-    const { data } = await api({
-      resource: `/api/users/${user_id}/forms/${id}/submissions`
-    })
-
-    this.setLoadingState('submissions', false)
-    this.setState({ submissions: data })
+  handleFormClick (form, e) {
+    this.updateSubmissions(form.id)
   }
 
   async handleSubmissionClick (submission, e) {
@@ -85,6 +103,11 @@ export default class Data extends Component {
     this.setLoadingState('entries', false)
     this.setState({ entries: data })
 
+    // Do not update and refetch submissions as it is already read!
+    if (submission.read === 1) {
+      return
+    }
+
     await api({
       resource: `/api/users/${user_id}/forms/${form_id}/submissions/${id}`,
       method: 'put',
@@ -93,6 +116,8 @@ export default class Data extends Component {
         read: 1
       })
     })
+
+    this.updateSubmissionsSeamless(form_id)
   }
 
   render () {

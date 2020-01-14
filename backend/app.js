@@ -23,16 +23,16 @@ const handleCreateForm = async (req, res) => {
   const form = req.body
   const db = await getPool()
 
-  if (typeof form.id !== 'undefined') {
+  if (typeof form.id !== 'undefined' && form.id !== null) {
     // Existing form should update!!!
     await db.query(
       `
         UPDATE \`form\`
-          SET props = ?
+          SET props = ?, title = ?, updated_at = NOW()
         WHERE
           id = ?
       `,
-      [JSON.stringify(form), form.id]
+      [JSON.stringify(form.props), form.title, form.id]
     )
 
     res.json({status: 'updated', id: form.id})
@@ -41,11 +41,11 @@ const handleCreateForm = async (req, res) => {
     const result = await db.query(
       `
         INSERT INTO \`form\`
-          (user_id, title, props)
+          (user_id, title, props, created_at, updated_at)
         VALUES
-          (?, ?, ?)
+          (?, ?, ?, NOW(), NOW())
       `,
-      [1, 'My First Form', JSON.stringify(form)]
+      [1, form.title, JSON.stringify(form.props)]
     )
 
     res.json({status: 'done', id: result.insertId})
@@ -53,7 +53,9 @@ const handleCreateForm = async (req, res) => {
 }
 
 app.put('/api/users/:user_id/forms', handleCreateForm)
+app.post('/api/users/:user_id/forms', handleCreateForm)
 
+// Handle form submission
 app.post('/form/submit/:id', async (req, res) => {
   const form_id = parseInt(req.params.id)
 
@@ -102,12 +104,23 @@ app.get('/api/users/:user_id/forms/:form_id', async (req, res) => {
   }
 })
 
+// return single form via id
+app.delete('/api/users/:user_id/forms/:form_id', async (req, res) => {
+  const { user_id, form_id } = req.params
+  const db = await getPool()
+  const result = await db.query(`
+    UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
+  `, [form_id])
+  
+  res.json({message: 'deleted'})
+})
+
 // return forms of given user id
 app.get('/api/users/:user_id/forms', async (req, res) => {
   const user_id = req.params.user_id
   const db = await getPool()
   const result = await db.query(`
-    SELECT * FROM \`form\` WHERE user_id = ?
+    SELECT * FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL
   `, [user_id])
 
   if (result.length > 0) {
@@ -196,9 +209,7 @@ app.get('/form/view/:id', async (req, res) => {
   const str = reactDOMServer.renderToStaticMarkup(
     React.createElement(
       Renderer,
-      {
-        form: form.props
-      }
+      { form }
     )
   )
 

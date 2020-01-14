@@ -33,7 +33,7 @@ class Renderer extends _react.Component {
       onDragEnter: e => this.props.handleDragEnter(e, 'container'),
       onDragLeave: e => this.props.handleDragLeave(e, 'container'),
       onDragOver: this.props.handleDragOver
-    }, this.props.form.elements.map((elem, index) => {
+    }, this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type];
       const renderList = [_react.default.createElement(Component, {
         key: index,

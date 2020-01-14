@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+
 import * as Elements from './elements'
 import Renderer from './Renderer'
 import { api } from '../helper'
+
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -28,9 +30,9 @@ const user_id = 1
 
 export default class Builder extends Component {
   async componentDidMount () {
-    const formId = window.localStorage.getItem('formId')
+    if (typeof this.props.match.params.formId !== 'undefined') {
+      const { formId } = this.props.match.params
 
-    if (formId !== null) {
       this.setState({ loading: true })
 
       const { data } = await api({
@@ -43,10 +45,13 @@ export default class Builder extends Component {
         })
         return
       }
-
-      const form = JSON.parse(data.props)
-
-      form.id = data.id
+      const props = JSON.parse(data.props)
+      const form = {
+        ...data,
+        props
+      }
+      console.log('Form received ', JSON.stringify(data))
+      console.log('Form will be set to state ', JSON.stringify(form))
 
       this.setState({
         loading: false,
@@ -65,18 +70,23 @@ export default class Builder extends Component {
       dragIndex: false,
       insertBefore: false,
       form: {
-        elements: [
-          {
-            id: 1,
-            type: 'Text',
-            label: 'First Name'
-          },
-          {
-            id: 2,
-            type: 'Button',
-            value: 'Submit'
-          }
-        ]
+        id: null,
+        user_id: null,
+        title: 'My Form ' + Math.random(),
+        props: {
+          elements: [
+            {
+              id: 1,
+              type: 'Text',
+              label: 'First Name'
+            },
+            {
+              id: 2,
+              type: 'Button',
+              value: 'Submit'
+            }
+          ]
+        }
       }
     }
     //this.handleClick = this.handleClick.bind(this)
@@ -112,11 +122,11 @@ export default class Builder extends Component {
     const { form, dragIndex } = this.state
 
     //set auto increment element id
-    const maxId = Math.max(...form.elements.map((element) => element.id))
+    const maxId = Math.max(...form.props.elements.map((element) => element.id))
 
     item.id = maxId + 1
 
-    const index = form.elements.findIndex(
+    const index = form.props.elements.findIndex(
       (element) => (element.id.toString() === dragIndex)
     )
 
@@ -124,15 +134,15 @@ export default class Builder extends Component {
 
     if (this.state.insertBefore === true) {
       newElements = [
-        ...form.elements.slice(0, index),
+        ...form.props.elements.slice(0, index),
         item,
-        ...form.elements.slice(index)
+        ...form.props.elements.slice(index)
       ]
     } else {
       newElements = [
-        ...form.elements.slice(0, index + 1),
+        ...form.props.elements.slice(0, index + 1),
         item,
-        ...form.elements.slice(index + 1)
+        ...form.props.elements.slice(index + 1)
       ]
     }
 
@@ -141,7 +151,10 @@ export default class Builder extends Component {
       dragIndex: false,
       form: {
         ...form,
-        elements: newElements
+        props: {
+          ...form.props,
+          elements: newElements
+        }
       }
     })
   }
@@ -183,20 +196,14 @@ export default class Builder extends Component {
 
     const { data } = await api({
       resource: `/api/users/${user_id}/forms`,
-      method: 'put',
+      method: (form.id === null) ? 'post' : 'put',
       body: this.state.form
     })
 
     this.setState({ saving: false })
 
-    if (typeof form.id === 'undefined' && typeof data.id !== 'undefined') {
-      this.setState({
-        form: {
-          ...form,
-          id: data.id
-        }
-      })
-      window.localStorage.setItem('formId', data.id)
+    if (form.id === null && typeof data.id !== 'undefined') {
+      this.props.history.push(`/editor/${data.id}`)
     }
   }
 
@@ -209,7 +216,7 @@ export default class Builder extends Component {
   render () {
     const { saving, loading } = this.state
     const saveButtonProps = {}
-
+    console.log('Rendering builder ', this.state.form)
     if (saving === true || loading === true) {
       saveButtonProps.disabled = true
     }

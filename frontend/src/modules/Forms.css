@@ -1,0 +1,44 @@
+.forms {
+  width: 900px;
+}
+
+.forms > .form {
+  padding: 20px 30px;
+  cursor: pointer;
+  box-sizing: border-box;
+  border: 1px solid gray;
+  border-collapse: collapse;
+}
+
+.forms > .form:hover {
+  border: 1px solid black;
+}
+
+.forms > .form.gettingDeleted {
+  opacity: 0.5;
+}
+
+.forms > .form > .title {
+  width: 70%;
+}
+
+.forms > .form > .actions {
+  width: 30%;
+  display: none;
+  text-align: right;
+}
+
+.forms > .form:hover > .actions {
+  display: block;
+}
+
+.forms > .form > .actions > a {
+  color: blue;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.forms > .form > .actions > a:hover {
+  font-weight: bold;
+}
+
