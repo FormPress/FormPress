@@ -7,9 +7,13 @@ module.exports = async (db) => {
       \`user_id\` int(11) DEFAULT NULL,
       \`title\` varchar(256) DEFAULT NULL,
       \`props\` mediumtext,
+      \`created_at\` datetime DEFAULT NULL,
+      \`updated_at\` datetime DEFAULT NULL,
+      \`deleted_at\` datetime DEFAULT NULL,
       PRIMARY KEY (\`id\`),
-      KEY \`user_id\` (\`user_id\`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+      KEY \`user_id\` (\`user_id\`),
+      KEY \`deleted_at\` (\`deleted_at\`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
   `)
 
   await db.query(`

@@ -1,3 +1,19 @@
+.oh {
+  overflow: hidden;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.center {
+  margin: 0 auto;
+}
+
 .nav {
   height: 40px;
   width: 100%;
@@ -20,4 +36,9 @@
   float: left;
   list-style: none;
   margin-left: 15px;
+}
+
+.nav > ul > li > a.selected {
+  pointer-events: none;
+  font-weight: bold;
 }

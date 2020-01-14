@@ -20,7 +20,7 @@ export default class Renderer extends Component {
       onDragLeave={(e) => this.props.handleDragLeave(e, 'container')}
       onDragOver={ this.props.handleDragOver }
     >
-    {this.props.form.elements.map((elem, index) => {
+    {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
       const renderList = [
         <Component

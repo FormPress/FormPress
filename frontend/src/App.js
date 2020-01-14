@@ -1,12 +1,14 @@
 import React from 'react'
-import Builder from './modules/Builder'
-import Data from './modules/Data'
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+  NavLink
+} from 'react-router-dom'
+
+import Builder from './modules/Builder'
+import Data from './modules/Data'
+import Forms from './modules/Forms'
 
 import './App.css'
 
@@ -17,16 +19,16 @@ function App() {
         <nav className='nav'>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <NavLink exact to='/' activeClassName='selected'>Home</NavLink>
             </li>
             <li>
-              <Link to="/forms">Forms</Link>
+              <NavLink to='/forms' activeClassName='selected'>Forms</NavLink>
             </li>
             <li>
-              <Link to="/editor">Editor</Link>
+              <NavLink to='/editor' activeClassName='selected'>Editor</NavLink>
             </li>
             <li>
-              <Link to="/data">Data</Link>
+              <NavLink to='/data' activeClassName='selected'>Data</NavLink>
             </li>
           </ul>
         </nav>
@@ -36,11 +38,10 @@ function App() {
             <h1>Welcome to FormPress</h1>
           </Route>
           <Route path="/forms">
-            Forms
+            <Forms />
           </Route>
-          <Route path="/editor">
-            <Builder />
-          </Route>
+          <Route path="/editor/:formId" component={Builder} />
+          <Route path="/editor" component={Builder} />
           <Route path="/data">
             <Data />
           </Route>
