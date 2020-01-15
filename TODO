@@ -22,18 +22,23 @@
 - [DONE] Refactor api endpoints to look like RESTfull api
 - [DONE] Implement frontend api wrapper
 - [DONE] Form List: List saved forms and allow user to click form for editing
-
+- [DONE] Backend: Send responses to user email, if configured use sendgrid, if not, use system mail command
+  -- Basic sendgrid is configured, more TODO added for MVP
 VNTTD:
-- Backend: Send responses to user email, if configured use mandril, if not, use system mail command
 
+- Frontend&Backend: Implement signup auth and make sure only owners can edit forms
+  -- This can be done by a middleware which compares if actions being made are from owner of resources
+  -- Add backend Unit tests for this security feature
 
 MVP:
-- Frontend&Backend: Implement signup auth and make sure only owners can edit forms
 - Investigate content editable to allow users to edit form titles, put form title in builder
 - Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms
+- Email notifications should use a formatted html/text version
+- Put SendGrid api key in .env file and add it to .gitignore, load it via dotenv
+  so that we can remove hardcoded api key from repo. Usefull for making it opensource
 
 BackLog:
 - Do not transpile react components for form render each time on production

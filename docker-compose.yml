@@ -29,7 +29,8 @@ services:
       - MYSQL_USER=formpress
       - MYSQL_PASSWORD=formpress
       - NODE_ENV=production
-      - SERVER_PORT=3001
+      - SERVER_PORT=3001,
+      - SENDGRID_API_KEY=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
     ports:
       - "3001:3001"
     links:
