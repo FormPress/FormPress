@@ -3,6 +3,7 @@ const path = require('path')
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const getPool = require(path.resolve('./', 'db'))
+const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -16,6 +17,8 @@ app.use(express.json())
 app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => res.send('Hello World!'))
+
+submissionMiddleware(app)
 
 const handleCreateForm = async (req, res) => {
   console.log('handleCreateForm Handler called')
@@ -54,40 +57,6 @@ const handleCreateForm = async (req, res) => {
 
 app.put('/api/users/:user_id/forms', handleCreateForm)
 app.post('/api/users/:user_id/forms', handleCreateForm)
-
-// Handle form submission
-app.post('/form/submit/:id', async (req, res) => {
-  const form_id = parseInt(req.params.id)
-
-  const keys = Object.keys(req.body)
-  const db = await getPool()
-
-  //create submission and get id
-  const result = await db.query(
-    `INSERT INTO \`submission\`
-      (form_id, created_at, updated_at)
-    VALUES
-      (?, NOW(), NOW())`,
-    [form_id]
-  )
-  const submission_id = result.insertId
-
-  for(const key of keys) {
-    const question_id = parseInt(key.split('_')[1])
-    const value = req.body[key]
-
-    //save answer
-    await db.query(
-      `INSERT INTO \`entry\`
-        (form_id, submission_id, question_id, value)
-      VALUES
-        (?, ?, ?, ?)`,
-      [form_id, submission_id, question_id, value]
-    )
-  }
-
-  res.send('Your Submission has been received')
-})
 
 // return single form via id
 app.get('/api/users/:user_id/forms/:form_id', async (req, res) => {
