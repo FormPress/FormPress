@@ -1,5 +1,7 @@
 const express = require('express')
 const path = require('path')
+const crypto = require('crypto')
+
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const getPool = require(path.resolve('./', 'db'))
@@ -19,6 +21,58 @@ app.set('view engine', 'ejs')
 app.get('/', (req, res) => res.send('Hello World!'))
 
 submissionMiddleware(app)
+
+const genRandomString = (length) => crypto
+  .randomBytes(Math.ceil(length/2))
+  .toString('hex') /** convert to hexadecimal format */
+  .slice(0,length)   /** return required number of characters */
+const sha512 = (password, salt) => {
+  const hash = crypto.createHmac('sha512', salt) /** Hashing algorithm sha512 */
+  
+  hash.update(password)
+
+  return {
+      salt: salt,
+      passwordHash: hash.digest('hex')
+  }
+}
+
+app.post('/api/users/login', async (req, res) => {
+  console.log('Login request ', req.body)
+  const { email, password } = req.body
+  const db = await getPool()
+
+  const result = await db.query(
+    `
+      SELECT *
+      FROM \`user\`
+      WHERE email = ?
+    `,
+    [email]
+  )
+
+  if (result.length === 0) {
+    const salt = genRandomString(128)
+    const hash = sha512(password, salt)
+    console.log(`DEBUG INSERT: ${email} `, hash)
+
+    //res.status(403).json({ message: 'Email/Password does not match' })
+  } else {
+    const user = result[0]
+    const incomingHash = sha512(password, user.salt)
+
+    if (user.password === incomingHash.passwordHash) {
+      res.status(200).json({
+        message: 'Login Success'
+      })
+    } else {
+      console.log('PWD FALSE')
+      res.status(403).json({ message: 'Email/Password does not match' })
+    }
+  }
+
+  
+})
 
 const handleCreateForm = async (req, res) => {
   console.log('handleCreateForm Handler called')

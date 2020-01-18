@@ -3,19 +3,19 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 import Renderer from './Renderer'
 import { api } from '../helper'
-
+import Profile from '../Profile'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
 //Stuff that we render in left hand side
 const getElements = () => Object.values(Elements).map((element) => Object
-  .assign({}, element.defaultProps)
+  .assign({}, element.defaultConfig)
 )
 const getWeightedElements = () => Object
   .values(Elements)
   .map((element) => Object
-    .assign({}, element.defaultProps, {weight: element.weight})
+    .assign({}, element.defaultConfig, {weight: element.weight})
   )
 const getElementsKeys = () => getElements()
   .reduce((acc, item) => {
@@ -83,7 +83,7 @@ export default class Builder extends Component {
             {
               id: 2,
               type: 'Button',
-              value: 'Submit'
+              buttonText: 'Submit'
             }
           ]
         }
@@ -223,14 +223,19 @@ export default class Builder extends Component {
 
     return (
       <div className='builder center'>
-        <div className='header'>
-          Welcome to builder!
-          <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-            { saving === true ? 'Saving...': 'Save' }
-          </button>
-          <button onClick={ this.handlePreviewClick }>
-            Preview Form
-          </button>
+        <div className='header oh'>
+          <div className='fl'>
+            Welcome to builder!
+            <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
+              { saving === true ? 'Saving...': 'Save' }
+            </button>
+            <button onClick={ this.handlePreviewClick }>
+              Preview Form
+            </button>
+          </div>
+          <div className='fr'>
+            <Profile />
+          </div>
         </div>
         <div className='content oh'>
           <div className='fl elements'>

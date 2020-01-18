@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import * as Elements from './elements'
 
 export default class Renderer extends Component {
@@ -22,16 +22,29 @@ export default class Renderer extends Component {
     >
     {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
+      const extraProps = {}
+
+      if (typeof this.props.handleFieldChange === 'function') {
+        extraProps.onChange = (e) => {
+          this.props.handleFieldChange(elem, e)
+        }
+      }
+
+      if (elem.type === 'Button') {
+        console.log('Rendering button extraProps', extraProps)
+      }
+
       const renderList = [
         <Component
           key={ index }
           id={ elem.id }
-          props={ elem }
+          config={ elem }
           onDrop={ this.props.handleDrop }
           onDragOver={ (e) => this.props.handleDragOver(e, elem) }
+          { ...extraProps }
         />
       ]
-
+      console.log('RenderList ', renderList)
       if (
         this.props.dragIndex === elem.id.toString() &&
         this.props.dragging === true
