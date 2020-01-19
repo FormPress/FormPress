@@ -12,67 +12,49 @@ import Data from './modules/Data'
 import Forms from './modules/Forms'
 import Login from './modules/Login'
 import AuthContext from './auth.context'
+import PrivateRoute from './PrivateRoute'
+import Profile from './Profile'
 
 import './App.css'
 
-const PrivateRoute = ({ children, component, ...rest }) => {
-  return (
-    <AuthContext.Consumer>
-      {(value) => 
-        <Route
-          {...rest}
-          render={(props) => {
-            const Component = component
+const auth = window.localStorage.getItem('auth')
+let initialAuthObject = {
+  token: '',
+  email: '',
+  exp: '',
+  loggedIn: false
+}
 
-            return (value.loggedIn === true) ? (
-              (component !== undefined) ? <Component { ...props } /> : children
-            ) : (
-              <Redirect
-                to={{
-                  pathname:'/login',
-                  state: { from: props.location }
-                }}
-              />
-            )
-          }
-            
-          } 
-        />
-      }
-    </AuthContext.Consumer>
-  )
+if (auth !== null) {
+  try {
+    const authObject = JSON.parse(auth)
+
+    if ((authObject.exp * 1000) > (new Date().getTime())) {
+      initialAuthObject = authObject
+    }
+  } catch (e) {
+    console.error('Error on parsing auth information from localStorage')
+  }
 }
 
 class App extends Component {
-  componentDidMount () {
-    const token = window.localStorage.getItem('token')
-
-    if (token !== null) { // TODO check if token will expire soon
-      this.setState({
-        token,
-        loggedIn: true
-      })
-    }
-  }
   constructor (props) {
     super(props)
     this.state = {
-      token: '',
-      email: '',
-      loggedIn: false
+      ...initialAuthObject
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
-
-    // setTimeout(() => {
-    //   this.setState({token: ''})
-    // }, 2000)
   }
 
-  handleSetAuth ({ email, token, loggedIn }) {
-    this.setState({ email, token, loggedIn })
+  handleSetAuth ({ email, token, loggedIn, exp }, persist = true) {
+    this.setState({ email, token, loggedIn, exp })
 
-    window.localStorage.setItem('token', token)
+    if (persist === true) {
+      window.localStorage.setItem('auth', JSON.stringify(
+        { email, token, loggedIn, exp }
+      ))  
+    }
   }
 
   getAuthContextValue () {
@@ -89,8 +71,8 @@ class App extends Component {
       <Router>
       <AuthContext.Provider value={this.getAuthContextValue()}>
         <div>
-          <nav className='nav'>
-            <ul>
+          <nav className='nav oh'>
+            <ul className='menu fl'>
               <li>
                 <NavLink exact to='/' activeClassName='selected'>Home</NavLink>
               </li>
@@ -104,6 +86,9 @@ class App extends Component {
                 <NavLink to='/data' activeClassName='selected'>Data</NavLink>
               </li>
             </ul>
+            <div className='fr profile_container'>
+              <Profile />
+            </div>
           </nav>
 
           <Switch>
@@ -118,10 +103,7 @@ class App extends Component {
             <PrivateRoute path="/data">
               <Data />
             </PrivateRoute>
-            <Route path="/login">
-              <h1>Login Here</h1>
-              <Login />
-            </Route>
+            <Route path="/login" component={Login} />
           </Switch>
         </div>
       </AuthContext.Provider>

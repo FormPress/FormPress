@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 import Renderer from './Renderer'
 import { api } from '../helper'
-import Profile from '../Profile'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -239,9 +238,6 @@ export default class Builder extends Component {
             <button onClick={ this.handlePreviewClick }>
               Preview Form
             </button>
-          </div>
-          <div className='fr'>
-            <Profile />
           </div>
         </div>
         <div className='content oh'>

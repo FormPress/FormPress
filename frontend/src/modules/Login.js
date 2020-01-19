@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 
 import Renderer from './Renderer'
 import { api } from '../helper'
@@ -37,7 +38,8 @@ class Login extends Component {
     this.setState({[stateKey]: e.target.value})
   }
 
-  async handleLoginButtonClick () {
+  async handleLoginButtonClick (e) {
+    e.preventDefault()
     this.setState({state: 'loading'})
 
     const { email, password } = this.state
@@ -54,6 +56,7 @@ class Login extends Component {
       console.log('LOGIN OK')
       this.props.auth.setAuth({
         email,
+        exp: data.exp,
         token: data.token,
         loggedIn: true
       })
@@ -67,34 +70,44 @@ class Login extends Component {
   render () {
     const { message, state } = this.state
 
-    return <div className='loginForm center'>
-      <Renderer
-        handleFieldChange={this.handleFieldChange}
-        form={{
-          props: {
-            elements: [
-              {
-                id: 1,
-                type: 'Text',
-                label: 'Email',
-                value: this.state.email
-              },
-              {
-                id: 2,
-                type: 'Text',
-                label: 'Password',
-                value: this.state.password
-              },
-              {
-                id: 2,
-                type: 'Button',
-                buttonText: 'Login',
-                onClick: this.handleLoginButtonClick
-              }
-            ]
-          }
-        }}
+    if (this.props.auth.loggedIn === true) {
+      return <Redirect
+        to={{
+          pathname: '/forms',
+          state: { from: this.props.location }
+        }} 
       />
+    }
+
+    return <div className='loginForm center'>
+      <form onSubmit={this.handleLoginButtonClick}>
+        <Renderer
+          handleFieldChange={this.handleFieldChange}
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 1,
+                  type: 'Text',
+                  label: 'Email',
+                  value: this.state.email
+                },
+                {
+                  id: 2,
+                  type: 'Text',
+                  label: 'Password',
+                  value: this.state.password
+                },
+                {
+                  id: 2,
+                  type: 'Button',
+                  buttonText: 'Login'
+                }
+              ]
+            }
+          }}
+        />
+      </form>
       <p>
         { (state === 'loading') ? 'Loading...' : null }
         { (state === 'done') ? message : null }
