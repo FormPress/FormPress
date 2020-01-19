@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const getPool = require(path.resolve('./', 'db'))
 
-const jwt_secret = 'asdadasdasdasdasd'
+const JWT_SECRET = process.env.JWT_SECRET
 const genRandomString = (length) => crypto
   .randomBytes(Math.ceil(length/2))
   .toString('hex') /** convert to hexadecimal format */
@@ -53,8 +53,8 @@ module.exports = (app) => {
           exp
         }
 
-        jwt.sign({ foo: 'bar' }, jwt_secret, (err, token) => {
-          console.log(token)
+        jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+          console.log('SIGNED TOKEN ', token)
           res.status(200).json({
             message: 'Login Success',
             token,

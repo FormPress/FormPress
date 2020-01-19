@@ -14,6 +14,7 @@ import Login from './modules/Login'
 import AuthContext from './auth.context'
 import PrivateRoute from './PrivateRoute'
 import Profile from './Profile'
+import { setToken } from './helper'
 
 import './App.css'
 
@@ -31,6 +32,8 @@ if (auth !== null) {
 
     if ((authObject.exp * 1000) > (new Date().getTime())) {
       initialAuthObject = authObject
+      console.log('Auth Object', authObject)
+      setToken(authObject.token)
     }
   } catch (e) {
     console.error('Error on parsing auth information from localStorage')

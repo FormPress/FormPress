@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import Renderer from './Renderer'
-import { api } from '../helper'
+import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
 
 import './Login.css'
@@ -47,13 +47,15 @@ class Login extends Component {
     const { success, data } = await api({
       resource: `/api/users/login`,
       method: 'post',
-      body: { email, password }
+      body: { email, password },
+      useAuth: false // login request should not have Authorization header
     })
 
     this.setState({ state: 'done', message: data.message })
 
     if (success === true) {
       console.log('LOGIN OK')
+      setToken(data.token)
       this.props.auth.setAuth({
         email,
         exp: data.exp,

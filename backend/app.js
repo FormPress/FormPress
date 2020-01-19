@@ -6,10 +6,14 @@ const port = parseInt(process.env.SERVER_PORT || 3000)
 const getPool = require(path.resolve('./', 'db'))
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
+const authMiddleware = require(path.resolve('middleware', 'auth'))
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  )
   res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
 
   next()
@@ -20,6 +24,7 @@ app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
+authMiddleware(app)
 submissionMiddleware(app)
 loginMiddleware(app)
 
