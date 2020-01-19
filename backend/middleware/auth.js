@@ -9,19 +9,17 @@ module.exports = (app) => {
     const auth = req.get('Authorization')
 
     if (typeof auth !== 'undefined') {
-      console.log('Auth header detected ', auth)
       jwt.verify(auth.replace('Bearer ', ''), JWT_SECRET, (err, decoded) => {
-        console.log('JSON DECODED err ', err)
         if (err !== null) {
           return res.status(403).send({ message: 'Invalid Token'})
         }
-
+        console.log('Auth Middleware setting decoded auth:', decoded)
         res.locals.auth = decoded
 
         next()
       })
+    } else {
+      next()
     }
-
-    next()
   })
 }

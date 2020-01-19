@@ -3,10 +3,19 @@ image: node:12.14
 stages:
   - unittest
  
-run-unit-test:
+run-unit-test-frontend:
   stage: unittest
   script:
     - cd frontend
+    - yarn install
+    - yarn test
+  only:
+    - merge_requests
+
+run-unit-test-backend:
+  stage: unittest
+  script:
+    - cd backend
     - yarn install
     - yarn test
   only:
