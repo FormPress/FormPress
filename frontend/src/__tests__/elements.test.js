@@ -14,7 +14,7 @@ for (const key of keys) {
     })
 
     test('Can be rendered without errors', () => {
-      const component = create(<Component props={Component.defaultConfig}/>)
+      const component = create(<Component config={ Component.defaultConfig }/>)
     })
   })  
 }
