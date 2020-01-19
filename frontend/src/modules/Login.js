@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 
 import Renderer from './Renderer'
 import { api } from '../helper'
+import AuthContext from '../auth.context'
 
 import './Login.css'
 
-export default class Login extends Component {
+class Login extends Component {
 
   constructor (props) {
     super(props)
@@ -22,9 +23,6 @@ export default class Login extends Component {
   }
 
   handleFieldChange (elem, e) {
-    console.log('Field changed ', e)
-    console.log('Field change ', elem)
-
     const stateKey = (elem.id === 1)
       ? 'email'
       : (elem.id === 2)
@@ -40,12 +38,11 @@ export default class Login extends Component {
   }
 
   async handleLoginButtonClick () {
-    console.log('Should login')
     this.setState({state: 'loading'})
 
     const { email, password } = this.state
 
-    const { success, status, data } = await api({
+    const { success, data } = await api({
       resource: `/api/users/login`,
       method: 'post',
       body: { email, password }
@@ -55,7 +52,11 @@ export default class Login extends Component {
 
     if (success === true) {
       console.log('LOGIN OK')
-      
+      this.props.auth.setAuth({
+        email,
+        token: data.token,
+        loggedIn: true
+      })
     } else {
       this.setState({ state: 'done', message: data.message })
       console.log('LOGIN FAIL')
@@ -101,3 +102,14 @@ export default class Login extends Component {
     </div>  
   }
 }
+
+
+
+const LoginWrapped = (props) => 
+  <AuthContext.Consumer>
+    {
+      (value) => <Login {...props} auth={ value } />
+    }
+  </AuthContext.Consumer>
+
+export default LoginWrapped

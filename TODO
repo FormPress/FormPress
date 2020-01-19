@@ -24,6 +24,7 @@
 - [DONE] Form List: List saved forms and allow user to click form for editing
 - [DONE] Backend: Send responses to user email, if configured use sendgrid, if not, use system mail command
   -- Basic sendgrid is configured, more TODO added for MVP
+- [DONE] Basic structure for login, authentication and UI
 VNTTD:
 
 - Frontend&Backend: Implement signup auth and make sure only owners can edit forms

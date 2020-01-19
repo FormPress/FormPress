@@ -12,8 +12,7 @@ export default class Button extends Component {
   render() {
     const { config, ...rest } = this.props
     const inputProps = {}
-    console.log('Full props ', Object.keys(this.props))
-    console.log('Rest on button ', Object.keys(rest))
+
     if (typeof config.onClick !== 'undefined') {
       inputProps.onClick = config.onClick
     }

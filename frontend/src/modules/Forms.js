@@ -94,7 +94,7 @@ export default class Forms extends Component {
             </div>
           </div>
         ),
-        <div className='form oh'>
+        <div key='newform' className='form oh'>
           <Link to='/editor'>Create New Form</Link>
         </div>
       ]

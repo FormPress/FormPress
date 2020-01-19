@@ -2,10 +2,6 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 
 export default class Renderer extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     let { className } = this.props
 
@@ -30,10 +26,6 @@ export default class Renderer extends Component {
         }
       }
 
-      if (elem.type === 'Button') {
-        console.log('Rendering button extraProps', extraProps)
-      }
-
       const renderList = [
         <Component
           key={ index }
@@ -44,7 +36,7 @@ export default class Renderer extends Component {
           { ...extraProps }
         />
       ]
-      console.log('RenderList ', renderList)
+
       if (
         this.props.dragIndex === elem.id.toString() &&
         this.props.dragging === true

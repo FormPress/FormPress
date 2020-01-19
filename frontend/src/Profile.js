@@ -6,9 +6,8 @@ const Profile = () => {
     <AuthContext.Consumer>
       {
         (value) => {
-          console.log('Val is ', value)
          return <div>
-          Is logged in: {value.token}
+          Is logged in: {value.email}
         </div>
         }
       }

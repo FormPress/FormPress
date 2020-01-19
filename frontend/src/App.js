@@ -16,33 +16,49 @@ import AuthContext from './auth.context'
 import './App.css'
 
 const PrivateRoute = ({ children, component, ...rest }) => {
-  console.log('Priv route handler ', rest)
   return (
     <AuthContext.Consumer>
-      {(value) => <Route
-        {...rest}
-        render={({ location }) =>
-          (value.loggedIn === true) ? (
-            (rest.component !== undefined) ? null : children
-          ) : (
-            <Redirect
-              to={{
-                pathname:'/login',
-                state: { from: location }
-              }}
-            />
-          )
-        } />
+      {(value) => 
+        <Route
+          {...rest}
+          render={(props) => {
+            const Component = component
+
+            return (value.loggedIn === true) ? (
+              (component !== undefined) ? <Component { ...props } /> : children
+            ) : (
+              <Redirect
+                to={{
+                  pathname:'/login',
+                  state: { from: props.location }
+                }}
+              />
+            )
+          }
+            
+          } 
+        />
       }
     </AuthContext.Consumer>
   )
 }
 
 class App extends Component {
+  componentDidMount () {
+    const token = window.localStorage.getItem('token')
+
+    if (token !== null) { // TODO check if token will expire soon
+      this.setState({
+        token,
+        loggedIn: true
+      })
+    }
+  }
   constructor (props) {
     super(props)
     this.state = {
       token: '',
+      email: '',
       loggedIn: false
     }
 
@@ -53,14 +69,16 @@ class App extends Component {
     // }, 2000)
   }
 
-  handleSetAuth ({ token, loggedIn }) {
-    console.log('Handle set auth called ', { token, loggedIn })
-    this.setState({ token, loggedIn })
+  handleSetAuth ({ email, token, loggedIn }) {
+    this.setState({ email, token, loggedIn })
+
+    window.localStorage.setItem('token', token)
   }
 
   getAuthContextValue () {
     return {
       token: this.state.token,
+      email: this.state.email,
       loggedIn: this.state.loggedIn,
       setAuth: this.handleSetAuth
     }

@@ -45,6 +45,7 @@ export default class Builder extends Component {
         })
         return
       }
+
       const props = JSON.parse(data.props)
       const form = {
         ...data,
@@ -204,6 +205,12 @@ export default class Builder extends Component {
 
     if (form.id === null && typeof data.id !== 'undefined') {
       this.props.history.push(`/editor/${data.id}`)
+      this.setState({
+        form: {
+          ...this.state.form,
+          id: data.id
+        }
+      })
     }
   }
 
@@ -216,7 +223,7 @@ export default class Builder extends Component {
   render () {
     const { saving, loading } = this.state
     const saveButtonProps = {}
-    console.log('Rendering builder ', this.state.form)
+
     if (saving === true || loading === true) {
       saveButtonProps.disabled = true
     }

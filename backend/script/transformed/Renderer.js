@@ -16,10 +16,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 class Renderer extends _react.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     let {
       className
@@ -45,10 +41,6 @@ class Renderer extends _react.Component {
         };
       }
 
-      if (elem.type === 'Button') {
-        console.log('Rendering button extraProps', extraProps);
-      }
-
       const renderList = [_react.default.createElement(Component, _extends({
         key: index,
         id: elem.id,
@@ -56,7 +48,6 @@ class Renderer extends _react.Component {
         onDrop: this.props.handleDrop,
         onDragOver: e => this.props.handleDragOver(e, elem)
       }, extraProps))];
-      console.log('RenderList ', renderList);
 
       if (this.props.dragIndex === elem.id.toString() && this.props.dragging === true) {
         if (this.props.insertBefore === true) {

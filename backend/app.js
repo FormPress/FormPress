@@ -1,6 +1,8 @@
 const express = require('express')
 const path = require('path')
 const crypto = require('crypto')
+const jwt = require('jsonwebtoken')
+const jwt_secret = 'asdadasdasdasdasd'
 
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
@@ -62,9 +64,20 @@ app.post('/api/users/login', async (req, res) => {
     const incomingHash = sha512(password, user.salt)
 
     if (user.password === incomingHash.passwordHash) {
-      res.status(200).json({
-        message: 'Login Success'
+      const jwt_data = {
+        user_id: user.id,
+        email: user.email,
+        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 *7) // 7 days to expire 
+      }
+
+      jwt.sign({ foo: 'bar' }, jwt_secret, (err, token) => {
+        console.log(token)
+        res.status(200).json({
+          message: 'Login Success',
+          token
+        })
       })
+      
     } else {
       console.log('PWD FALSE')
       res.status(403).json({ message: 'Email/Password does not match' })
