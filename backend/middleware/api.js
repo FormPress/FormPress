@@ -1,13 +1,13 @@
 const path = require('path')
-const getPool = require(path.resolve('./', 'db'))
+const { getPool } = require(path.resolve('./', 'db'))
+const { mustHaveValidToken } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
+const port = parseInt(process.env.SERVER_PORT || 3000)
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
-    console.log('handleCreateForm Handler called')
-    console.log('req.body', req.body, typeof req.body)
     const form = req.body
     const db = await getPool()
 
@@ -40,11 +40,11 @@ module.exports = (app) => {
     }
   }
 
-  app.put('/api/users/:user_id/forms', handleCreateForm)
-  app.post('/api/users/:user_id/forms', handleCreateForm)
+  app.put('/api/users/:user_id/forms', mustHaveValidToken, handleCreateForm)
+  app.post('/api/users/:user_id/forms', mustHaveValidToken, handleCreateForm)
 
   // return single form via id
-  app.get('/api/users/:user_id/forms/:form_id', async (req, res) => {
+  app.get('/api/users/:user_id/forms/:form_id', mustHaveValidToken, async (req, res) => {
     const { user_id, form_id } = req.params
     const db = await getPool()
     const result = await db.query(`
@@ -59,7 +59,7 @@ module.exports = (app) => {
   })
 
   // return single form via id
-  app.delete('/api/users/:user_id/forms/:form_id', async (req, res) => {
+  app.delete('/api/users/:user_id/forms/:form_id', mustHaveValidToken, async (req, res) => {
     const { user_id, form_id } = req.params
     const db = await getPool()
     const result = await db.query(`
@@ -70,7 +70,7 @@ module.exports = (app) => {
   })
 
   // return forms of given user id
-  app.get('/api/users/:user_id/forms', async (req, res) => {
+  app.get('/api/users/:user_id/forms', mustHaveValidToken, async (req, res) => {
     const user_id = req.params.user_id
     const db = await getPool()
     const result = await db.query(`
@@ -85,7 +85,8 @@ module.exports = (app) => {
   })
 
   // return submissions of given form id
-  app.get('/api/users/:user_id/forms/:form_id/submissions', async (req, res) => {
+  app.get('/api/users/:user_id/forms/:form_id/submissions', mustHaveValidToken, async (req, res) => {
+    console.log('HANDLING SUBMISSION LIST')
     const { user_id, form_id } = req.params
     const db = await getPool()
     const result = await db.query(`
@@ -93,8 +94,10 @@ module.exports = (app) => {
     `, [form_id])
 
     if (result.length > 0) {
+      console.log('SENDING SOME DATA')
       res.json(result)
     } else {
+      console.log('SENDING NONE DATA')
       res.json([])
     }
   })
@@ -102,6 +105,7 @@ module.exports = (app) => {
   // return entries of given submission id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
+    mustHaveValidToken,
     async (req, res) => {
       const { user_id, form_id, submission_id} = req.params
       const db = await getPool()
@@ -120,7 +124,9 @@ module.exports = (app) => {
   // Update single submission, ie it is read!
   app.put(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
+    mustHaveValidToken,
     async (req, res) => {
+      console.log('RESPONDING to PUT submission id')
       const { user_id, form_id, submission_id} = req.params
       const db = await getPool()
       const submission = req.body

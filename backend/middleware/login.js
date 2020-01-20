@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const path = require('path')
 const jwt = require('jsonwebtoken')
 
-const getPool = require(path.resolve('./', 'db'))
+const { getPool } = require(path.resolve('./', 'db'))
 
 const JWT_SECRET = process.env.JWT_SECRET
 const genRandomString = (length) => crypto

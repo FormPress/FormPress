@@ -6,7 +6,7 @@ const port = parseInt(process.env.SERVER_PORT || 3000)
 
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
-const authMiddleware = require(path.resolve('middleware', 'auth'))
+const authenticationMiddleware = require(path.resolve('middleware', 'authentication'))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 
 app.use(function(req, res, next) {
@@ -26,7 +26,7 @@ app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-authMiddleware(app)
+authenticationMiddleware(app)
 submissionMiddleware(app)
 loginMiddleware(app)
 apiMiddleware(app)

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const path = require('path')
-const getPool = require(path.resolve('./', 'db'))
+const { getPool } = require(path.resolve('./', 'db'))
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -15,6 +15,7 @@ module.exports = (app) => {
         }
         console.log('Auth Middleware setting decoded auth:', decoded)
         res.locals.auth = decoded
+        res.locals.validToken = true
 
         next()
       })

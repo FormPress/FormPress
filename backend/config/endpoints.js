@@ -4,45 +4,91 @@
   It is used in unit test suits for various testing. For example:
   if security is applied for given endpoint. There even is a test
   suite for checking if all endpoints are accounted for
+
+  format: {
+    method // Method of the HTTP request
+    path // self explanatory
+    protected // if true, it conveys that endpoint must only respond
+              // to a request with a valid Authorization header
+              // Plus if there is user_id param in path
+              // valid token should contain same user_id
+    TODO: ownership // for requests containing sub resources such as
+              // form and submission
+              // an owner ship check will be made if specific resource
+              // belongs to requesting user, obtained from token user_id
+  }
+
 */
 
 module.exports = {
   endpoints: [
     {
       method: 'post',
-      path: '/api/users/:user_id/forms'
+      path: '/api/users/:user_id/forms',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms',
+      exampleRequestBody: {
+        id: 1,
+        user_id: 1,
+        title: 'form title',
+        props: { elements: [{ id: 1, type: 'Text', label: 'Label' }] }
+      }
     },
     {
       method: 'put',
-      path: '/api/users/:user_id/forms'
+      path: '/api/users/:user_id/forms',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms',
+      exampleRequestBody: {
+        user_id: 1,
+        title: 'form title',
+        props: { elements: [{ id: 1, type: 'Text', label: 'Label' }] }
+      }
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms/:form_id'
+      path: '/api/users/:user_id/forms/:form_id',
+      protected: true,
+      exampleRequestPath: '/api/users/2/forms/:form_id'
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms'
+      path: '/api/users/:user_id/forms',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms'
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms/:form_id/submissions'
+      path: '/api/users/:user_id/forms/:form_id/submissions',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/submissions'
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries'
+      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/submissions/1/entries'
     },
     {
       method: 'get',
-      path: '/form/view/:id'
+      path: '/form/view/:id',
+      protected: false,
+      exampleRequestPath: '/form/view/1'
     },
     {
       method: 'delete',
-      path: '/api/users/:user_id/forms/:form_id'
+      path: '/api/users/:user_id/forms/:form_id',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1'
     },
     {
       method: 'put',
-      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id'
+      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/submissions/1',
+      exampleRequestBody: {
+        read: 1
+      }
     }
   ]
 }
