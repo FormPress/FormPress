@@ -15,6 +15,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 class Renderer extends _react.Component {
   render() {
     let {
@@ -33,7 +35,9 @@ class Renderer extends _react.Component {
       onDragOver: this.props.handleDragOver
     }, this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type];
-      const extraProps = {};
+      const extraProps = {
+        mode: this.props.mode
+      };
 
       if (typeof this.props.handleFieldChange === 'function') {
         extraProps.onChange = e => {
@@ -46,7 +50,8 @@ class Renderer extends _react.Component {
         id: elem.id,
         config: elem,
         onDrop: this.props.handleDrop,
-        onDragOver: e => this.props.handleDragOver(e, elem)
+        onDragOver: e => this.props.handleDragOver(e, elem),
+        handleLabelChange: this.props.handleLabelChange
       }, extraProps))];
 
       if (this.props.dragIndex === elem.id.toString() && this.props.dragging === true) {
@@ -70,3 +75,7 @@ class Renderer extends _react.Component {
 }
 
 exports.default = Renderer;
+
+_defineProperty(Renderer, "defaultProps", {
+  mode: 'viewer'
+});

@@ -1,4 +1,6 @@
 const path = require('path')
+const fs = require('fs')
+
 const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
@@ -195,13 +197,18 @@ module.exports = (app) => {
     const str = reactDOMServer.renderToStaticMarkup(
       React.createElement(
         Renderer,
-        { form }
+        { className: 'fl form', form, mode: 'renderer' }
       )
     )
+
+    let style = fs.readFileSync(path.resolve('../', 'frontend/src/App.css'))
+    style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
+
 
     res.render(
       'form.tpl.ejs',
       {
+        headerAppend: `<style type='text/css'>${style}</style>`,
         title: form.title,
         form: str,
         postTarget: `http://localhost:${port}/form/submit/${form.id}`

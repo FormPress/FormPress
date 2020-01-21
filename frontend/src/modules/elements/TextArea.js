@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import EditableLabel from '../EditableLabel'
+
 export default class TextArea extends Component {
   static weight = 1
 
@@ -23,9 +25,13 @@ export default class TextArea extends Component {
 
     return (
       <div className='element elementArea oh' { ...this.props }>
-        <div className='fl label'>
-          { config.label }
-        </div>
+        <EditableLabel
+          className='fl label'
+          mode={ this.props.mode }
+          labelKey={ config.id }
+          handleLabelChange={ this.props.handleLabelChange }
+          value={ config.label }
+        />
         <div className='fl input'>
           <textarea
             id={ `q_${config.id}` }

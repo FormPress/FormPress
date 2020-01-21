@@ -7,7 +7,11 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _EditableLabel = _interopRequireDefault(require("../EditableLabel"));
+
 require("./Text.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -34,9 +38,13 @@ class Text extends _react.Component {
 
     return _react.default.createElement("div", _extends({
       className: "element elementText oh"
-    }, this.props), _react.default.createElement("div", {
-      className: "fl label"
-    }, config.label), _react.default.createElement("div", {
+    }, this.props), _react.default.createElement(_EditableLabel.default, {
+      className: "fl label",
+      mode: this.props.mode,
+      labelKey: config.id,
+      handleLabelChange: this.props.handleLabelChange,
+      value: config.label
+    }), _react.default.createElement("div", {
       className: "fl input"
     }, _react.default.createElement("input", _extends({
       id: `q_${config.id}`,
