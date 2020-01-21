@@ -49,7 +49,7 @@ module.exports = {
       method: 'get',
       path: '/api/users/:user_id/forms/:form_id',
       protected: true,
-      exampleRequestPath: '/api/users/2/forms/:form_id'
+      exampleRequestPath: '/api/users/1/forms/:form_id'
     },
     {
       method: 'get',

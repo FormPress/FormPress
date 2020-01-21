@@ -1,6 +1,9 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
-const { mustHaveValidToken } = require(path.resolve('middleware', 'authorization'))
+const {
+  mustHaveValidToken,
+  paramShouldMatchTokenUserId
+} = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
@@ -40,72 +43,98 @@ module.exports = (app) => {
     }
   }
 
-  app.put('/api/users/:user_id/forms', mustHaveValidToken, handleCreateForm)
-  app.post('/api/users/:user_id/forms', mustHaveValidToken, handleCreateForm)
+  app.put(
+    '/api/users/:user_id/forms',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    handleCreateForm
+  )
+  app.post('/api/users/:user_id/forms',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    handleCreateForm
+  )
 
   // return single form via id
-  app.get('/api/users/:user_id/forms/:form_id', mustHaveValidToken, async (req, res) => {
-    const { user_id, form_id } = req.params
-    const db = await getPool()
-    const result = await db.query(`
-      SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-    `, [form_id])
-    
-    if (result.length === 1) {
-      res.json(result[0])
-    } else {
-      res.json({})
+  app.get('/api/users/:user_id/forms/:form_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id, form_id } = req.params
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
+      `, [form_id])
+      
+      if (result.length === 1) {
+        res.json(result[0])
+      } else {
+        res.json({})
+      }
     }
-  })
+  )
 
   // return single form via id
-  app.delete('/api/users/:user_id/forms/:form_id', mustHaveValidToken, async (req, res) => {
-    const { user_id, form_id } = req.params
-    const db = await getPool()
-    const result = await db.query(`
-      UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
-    `, [form_id])
-    
-    res.json({message: 'deleted'})
-  })
+  app.delete(
+    '/api/users/:user_id/forms/:form_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id, form_id } = req.params
+      const db = await getPool()
+      const result = await db.query(`
+        UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
+      `, [form_id])
+      
+      res.json({message: 'deleted'})
+    }
+  )
 
   // return forms of given user id
-  app.get('/api/users/:user_id/forms', mustHaveValidToken, async (req, res) => {
-    const user_id = req.params.user_id
-    const db = await getPool()
-    const result = await db.query(`
-      SELECT * FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL
-    `, [user_id])
+  app.get(
+    '/api/users/:user_id/forms',
+    mustHaveValidToken, 
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const user_id = req.params.user_id
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT * FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL
+      `, [user_id])
 
-    if (result.length > 0) {
-      res.json(result)
-    } else {
-      res.json([])
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
     }
-  })
+  )
 
   // return submissions of given form id
-  app.get('/api/users/:user_id/forms/:form_id/submissions', mustHaveValidToken, async (req, res) => {
-    console.log('HANDLING SUBMISSION LIST')
-    const { user_id, form_id } = req.params
-    const db = await getPool()
-    const result = await db.query(`
-      SELECT * FROM \`submission\` WHERE form_id = ?
-    `, [form_id])
+  app.get(
+    '/api/users/:user_id/forms/:form_id/submissions',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id, form_id } = req.params
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT * FROM \`submission\` WHERE form_id = ?
+      `, [form_id])
 
-    if (result.length > 0) {
-      console.log('SENDING SOME DATA')
-      res.json(result)
-    } else {
-      console.log('SENDING NONE DATA')
-      res.json([])
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
     }
-  })
+  )
 
   // return entries of given submission id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
     mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { user_id, form_id, submission_id} = req.params
       const db = await getPool()
@@ -125,6 +154,7 @@ module.exports = (app) => {
   app.put(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
     mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       console.log('RESPONDING to PUT submission id')
       const { user_id, form_id, submission_id} = req.params

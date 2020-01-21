@@ -11,9 +11,9 @@ module.exports = (app) => {
     if (typeof auth !== 'undefined') {
       jwt.verify(auth.replace('Bearer ', ''), JWT_SECRET, (err, decoded) => {
         if (err !== null) {
-          return res.status(403).send({ message: 'Invalid Token'})
+          return res.status(403).send({ message: 'Invalid Token' })
         }
-        console.log('Auth Middleware setting decoded auth:', decoded)
+
         res.locals.auth = decoded
         res.locals.validToken = true
 

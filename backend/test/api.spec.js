@@ -3,6 +3,9 @@ const assert = require('assert').strict
 const express = require('express')
 const request = require('supertest')
 const sinon = require('sinon')
+const jwt = require('jsonwebtoken')
+
+process.env.JWT_SECRET = 'somesecretforunittesting'
 
 const db = require(path.resolve('./', 'db'))
 const getPoolStub = sinon.stub(db, 'getPool')
@@ -13,7 +16,6 @@ const endpoints = require(path.resolve('config', 'endpoints'))
 
 const words = ['post', 'get', 'delete', 'put']
 const expressMock = {}
-
 
 for (const word of words) {
   expressMock[`data_${word}`] = [],
@@ -43,7 +45,6 @@ app.set('view engine', 'ejs')
 
 authenticationMiddleware(app)
 apiMiddleware(app)
-
 
 describe('Api', () => {
   describe('Endpoints coverage in middleware', () => {
@@ -79,6 +80,20 @@ describe('Api', () => {
     const protected_endpoints = endpoints.endpoints.filter(
       (endpoint) => endpoint.protected
     )
+    const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 *7)
+    const jwt_data = {
+      user_id: 1,
+      email: 'test@formpress.org',
+      exp
+    }
+    const jwt_data2 = {
+      user_id: 2,
+      email: 'test2@formpress.org',
+      exp
+    }
+
+    const token = jwt.sign(jwt_data, process.env.JWT_SECRET)
+    const token_otheruser = jwt.sign(jwt_data2, process.env.JWT_SECRET)
 
     for (const endpoint of protected_endpoints) {
       it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request without valid auth token`, (done) => {
@@ -99,7 +114,53 @@ describe('Api', () => {
         
         pro.expect('Content-Type', /json/)
           .expect(403, done) //method is called with no token, should return 403 
-      })      
+      })
+
+      it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP200 to a request with valid auth token`, (done) => {
+        getPoolStub.returns({
+          query: async (sql, params) => {
+            //console.log('Query is called with ', sql, params)
+            return []
+          }
+        })
+
+        const pro = request(app)
+          [endpoint.method](endpoint.exampleRequestPath)
+          .set({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          })
+
+        if (typeof endpoint.exampleRequestBody !== 'undefined') {
+          pro.send(endpoint.exampleRequestBody)
+        }
+        
+        pro.expect('Content-Type', /json/)
+          .expect(200, done) //method is called with a valid token, should return 200
+      })
+
+      it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request with valid auth token belonging to another user`, (done) => {
+        getPoolStub.returns({
+          query: async (sql, params) => {
+            //console.log('Query is called with ', sql, params)
+            return []
+          }
+        })
+
+        const pro = request(app)
+          [endpoint.method](endpoint.exampleRequestPath)
+          .set({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token_otheruser}`
+          })
+
+        if (typeof endpoint.exampleRequestBody !== 'undefined') {
+          pro.send(endpoint.exampleRequestBody)
+        }
+        
+        pro.expect('Content-Type', /json/)
+          .expect(403, done) //method is called with a valid token of another user, should return 403
+      })
     }
   })
 })
