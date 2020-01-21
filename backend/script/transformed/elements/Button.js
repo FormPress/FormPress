@@ -18,15 +18,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class Button extends _react.Component {
   render() {
     const {
-      props,
+      config,
       ...rest
     } = this.props;
+    const inputProps = {};
+
+    if (typeof config.onClick !== 'undefined') {
+      inputProps.onClick = config.onClick;
+    }
+
     return _react.default.createElement("div", _extends({
       className: "element elementButton"
-    }, rest), _react.default.createElement("input", {
+    }, rest), _react.default.createElement("input", _extends({
       type: "submit",
-      value: props.value
-    }));
+      value: config.buttonText
+    }, inputProps)));
   }
 
 }
@@ -35,8 +41,8 @@ exports.default = Button;
 
 _defineProperty(Button, "weight", 2);
 
-_defineProperty(Button, "defaultProps", {
+_defineProperty(Button, "defaultConfig", {
   id: 0,
   type: 'Button',
-  value: 'Submit'
+  buttonText: 'Submit'
 });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": " mocha ./test/**/*.spec.js",
     "migrate": "node script/migrate.js",
     "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed",
     "start": "node app.js",
@@ -24,9 +24,15 @@
     "ejs": "3.0.1",
     "express": "4.17.1",
     "ignore-styles": "5.0.1",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "2.0.2",
     "promise-mysql": "4.1.1",
     "react": "16.12.0",
     "react-dom": "16.12.0"
+  },
+  "devDependencies": {
+    "mocha": "^7.0.0",
+    "sinon": "^8.1.0",
+    "supertest": "^4.0.2"
   }
 }

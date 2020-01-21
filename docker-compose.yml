@@ -24,6 +24,7 @@ services:
       - ./backend:/src
       - ./frontend:/frontend
     environment:
+      - JWT_SECRET=SOMESUPERHARDTOGUESSSECRET
       - MYSQL_DATABASE=formpress
       - MYSQL_HOST=mysql
       - MYSQL_USER=formpress

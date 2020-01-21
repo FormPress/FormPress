@@ -88,13 +88,13 @@ export default class Forms extends Component {
             <div className='title fl'>{form.title}</div>
             <div className='actions fr'>
               <Link to={ `/editor/${form.id}` }>Edit</Link>
-              <a onClick={ this.handleFormDeleteClick.bind(this, form) } href='#'>
+              <a href='#/' onClick={ this.handleFormDeleteClick.bind(this, form) } >
                 Delete
               </a>
             </div>
           </div>
         ),
-        <div className='form oh'>
+        <div key='newform' className='form oh'>
           <Link to='/editor'>Create New Form</Link>
         </div>
       ]

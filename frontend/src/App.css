@@ -24,7 +24,6 @@
   position: fixed;
   top: 0;
   height: 40px;
-  width: 100%;
   background: white;
   overflow: hidden;
   padding: 10px;
@@ -41,4 +40,9 @@
 .nav > ul > li > a.selected {
   pointer-events: none;
   font-weight: bold;
+}
+
+.nav > .profile_container {
+  padding: 10px;
+  box-sizing: border-box;
 }

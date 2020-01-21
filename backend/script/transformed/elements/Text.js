@@ -20,18 +20,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class Text extends _react.Component {
   render() {
     const {
-      props
+      config
     } = this.props;
+    const inputProps = {};
+
+    if (typeof config.value !== 'undefined') {
+      inputProps.value = config.value;
+    }
+
+    if (typeof this.props.onChange !== 'undefined') {
+      inputProps.onChange = this.props.onChange;
+    }
+
     return _react.default.createElement("div", _extends({
       className: "element elementText oh"
     }, this.props), _react.default.createElement("div", {
       className: "fl label"
-    }, props.label), _react.default.createElement("div", {
+    }, config.label), _react.default.createElement("div", {
       className: "fl input"
-    }, _react.default.createElement("input", {
-      id: `q_${props.id}`,
-      name: `q_${props.id}`
-    })));
+    }, _react.default.createElement("input", _extends({
+      id: `q_${config.id}`,
+      name: `q_${config.id}`
+    }, inputProps))));
   }
 
 }
@@ -40,7 +50,7 @@ exports.default = Text;
 
 _defineProperty(Text, "weight", 1);
 
-_defineProperty(Text, "defaultProps", {
+_defineProperty(Text, "defaultConfig", {
   id: 0,
   type: 'Text',
   label: 'Label'

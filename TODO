@@ -24,14 +24,15 @@
 - [DONE] Form List: List saved forms and allow user to click form for editing
 - [DONE] Backend: Send responses to user email, if configured use sendgrid, if not, use system mail command
   -- Basic sendgrid is configured, more TODO added for MVP
-VNTTD:
-
-- Frontend&Backend: Implement signup auth and make sure only owners can edit forms
+- [DONE] Basic structure for login, authentication and UI
+- [DONE] Frontend&Backend: Implement logi  auth and make sure only owners can edit forms
   -- This can be done by a middleware which compares if actions being made are from owner of resources
   -- Add backend Unit tests for this security feature
 
-MVP:
+VNTTD:
 - Investigate content editable to allow users to edit form titles, put form title in builder
+
+MVP:
 - Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
@@ -39,6 +40,11 @@ MVP:
 - Email notifications should use a formatted html/text version
 - Put SendGrid api key in .env file and add it to .gitignore, load it via dotenv
   so that we can remove hardcoded api key from repo. Usefull for making it opensource
+- Add security check that only owner can view submissions
+  Currently only user_id param is compared to the user_id in jwt token, this allows other users to query
+  submissions of another user if form_id is known
+- Implement SignUp page along with login page
+- Implement forgot password feature
 
 BackLog:
 - Do not transpile react components for form render each time on production

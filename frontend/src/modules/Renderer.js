@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import * as Elements from './elements'
 
 export default class Renderer extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     let { className } = this.props
 
@@ -22,13 +18,22 @@ export default class Renderer extends Component {
     >
     {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
+      const extraProps = {}
+
+      if (typeof this.props.handleFieldChange === 'function') {
+        extraProps.onChange = (e) => {
+          this.props.handleFieldChange(elem, e)
+        }
+      }
+
       const renderList = [
         <Component
           key={ index }
           id={ elem.id }
-          props={ elem }
+          config={ elem }
           onDrop={ this.props.handleDrop }
           onDragOver={ (e) => this.props.handleDragOver(e, elem) }
+          { ...extraProps }
         />
       ]
 

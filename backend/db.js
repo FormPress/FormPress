@@ -2,7 +2,7 @@ const mysql = require('promise-mysql')
 
 let pool = false
 
-const getPool  = async () => {
+const getPool = async () => {
   if (pool !== false) {
     return pool
   }
@@ -18,4 +18,4 @@ const getPool  = async () => {
   return pool
 }
 
-module.exports = getPool
+module.exports = { getPool }

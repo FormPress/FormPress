@@ -5,16 +5,29 @@
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
+let token = ''
+
+export const setToken = (_token) => {
+  console.log('Setting token to ', _token)
+  token = _token
+}
+
 export const api = ({
   resource,
   method = 'get',
-  body
+  body,
+  useAuth = true
 }) => new Promise((resolve, reject) => {
   const options = {
     headers: {
       'Content-Type': 'application/json'
     },
     method
+  }
+
+  if (useAuth === true) {
+    console.log('Using token for request ', token)
+    options.headers['Authorization'] = `Bearer ${token}`
   }
 
   if (typeof body !== 'undefined') {
