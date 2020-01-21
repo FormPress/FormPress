@@ -98,6 +98,7 @@ export default class Builder extends Component {
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
+    this.handleLabelChange = this.handleLabelChange.bind(this)
   }
 
   handleDragStart (item, e) {
@@ -189,6 +190,22 @@ export default class Builder extends Component {
     e.preventDefault()
   }
 
+  handleLabelChange (id, value) {
+    console.log('Label changed ', id, value)
+    const form = { ...this.state.form }
+
+    form.props.elements = [...form.props.elements]
+
+    const question = form
+      .props
+      .elements
+      .filter((element) => (element.id === id))[0]
+
+    question.label = value
+
+    this.setState({ form })
+  }
+
   async handleSaveClick (e) {
     const { form } = this.state
 
@@ -268,10 +285,12 @@ export default class Builder extends Component {
                 handleDragLeave={ this.handleDragLeave }
                 handleDrop={ this.handleDrop }
                 handleDragOver={ this.handleDragOver }
+                handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
                 dragging={ this.state.dragging }
                 insertBefore={ this.state.insertBefore }
                 form={ this.state.form }
+                mode='builder'
               />
           }
         </div>

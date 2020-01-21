@@ -1,4 +1,12 @@
-.form .element {
+.form > .element {
   box-sizing: border-box;
   padding: 5px 10px;
+}
+
+.form > .element > .label {
+  width: 200px;
+}
+
+.form > .element > .input {
+  width: 400px;
 }

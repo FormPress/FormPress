@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 
 export default class Renderer extends Component {
+  static defaultProps = {
+    mode: 'viewer'
+  }
+
   render () {
     let { className } = this.props
 
@@ -18,7 +22,7 @@ export default class Renderer extends Component {
     >
     {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
-      const extraProps = {}
+      const extraProps = { mode: this.props.mode }
 
       if (typeof this.props.handleFieldChange === 'function') {
         extraProps.onChange = (e) => {
@@ -33,6 +37,7 @@ export default class Renderer extends Component {
           config={ elem }
           onDrop={ this.props.handleDrop }
           onDragOver={ (e) => this.props.handleDragOver(e, elem) }
+          handleLabelChange={ this.props.handleLabelChange }
           { ...extraProps }
         />
       ]

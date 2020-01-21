@@ -15,6 +15,11 @@ const transformMap = [
     target: path.resolve('./', 'script', 'transformed', 'Renderer.js')
   },
   {
+    type: 'file',
+    source: path.resolve('../', 'frontend', 'src', 'modules', 'EditableLabel.js'),
+    target: path.resolve('./', 'script', 'transformed', 'EditableLabel.js')
+  },
+  {
     type: 'folder',
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'modules', 'elements'),

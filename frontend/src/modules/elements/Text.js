@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+
+import EditableLabel from '../EditableLabel'
 import './Text.css'
 
 export default class Text extends Component {
@@ -24,9 +26,13 @@ export default class Text extends Component {
 
     return (
       <div className='element elementText oh' { ...this.props }>
-        <div className='fl label'>
-          { config.label }
-        </div>
+        <EditableLabel
+          className='fl label'
+          mode={ this.props.mode }
+          labelKey={ config.id }
+          handleLabelChange={ this.props.handleLabelChange }
+          value={ config.label }
+        />
         <div className='fl input'>
           <input
             id={ `q_${config.id}` }

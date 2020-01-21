@@ -28,9 +28,11 @@
 - [DONE] Frontend&Backend: Implement logi  auth and make sure only owners can edit forms
   -- This can be done by a middleware which compares if actions being made are from owner of resources
   -- Add backend Unit tests for this security feature
+- [DONE] Allow users to change question labels using contenteditable
 
 VNTTD:
 - Investigate content editable to allow users to edit form titles, put form title in builder
+- Allow users to change button text using contenteditable
 
 MVP:
 - Use Renderer to allow users to change form and element properties on right hand side
