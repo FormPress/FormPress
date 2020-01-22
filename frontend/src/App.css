@@ -18,13 +18,12 @@
   height: 40px;
   width: 100%;
   background-color: white;
+  top: 0;
+  position: fixed;
 }
 
 .nav > ul {
-  position: fixed;
-  top: 0;
   height: 40px;
-  background: white;
   overflow: hidden;
   padding: 10px;
   margin: 0;
@@ -45,4 +44,8 @@
 .nav > .profile_container {
   padding: 10px;
   box-sizing: border-box;
+}
+
+.homepage {
+  margin-top: 40px;
 }

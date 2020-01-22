@@ -3,8 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  NavLink,
-  Redirect
+  NavLink
 } from 'react-router-dom'
 
 import Builder from './modules/Builder'
@@ -95,18 +94,20 @@ class App extends Component {
           </nav>
 
           <Switch>
-            <Route exact path="/">
-              <h1>Welcome to FormPress</h1>
+            <Route exact path='/'>
+              <div className='homepage'>
+                <h1>Welcome to FormPress</h1>
+              </div>
             </Route>
-            <PrivateRoute path="/forms">
+            <PrivateRoute path='/forms'>
               <Forms />
             </PrivateRoute>
-            <PrivateRoute path="/editor/:formId" component={Builder} />
-            <PrivateRoute path="/editor" component={Builder} />
-            <PrivateRoute path="/data">
+            <PrivateRoute path='/editor/:formId' component={Builder} />
+            <PrivateRoute path='/editor' component={Builder} />
+            <PrivateRoute path='/data'>
               <Data />
             </PrivateRoute>
-            <Route path="/login" component={Login} />
+            <Route path='/login' component={Login} />
           </Switch>
         </div>
       </AuthContext.Provider>
