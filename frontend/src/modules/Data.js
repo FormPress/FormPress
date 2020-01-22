@@ -144,7 +144,7 @@ export default class Data extends Component {
 
     return (
       <div className='data'>
-        <div className='forms'>
+        <div className='dataForms'>
           {forms}
         </div>
         <div className='submissions'>

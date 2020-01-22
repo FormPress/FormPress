@@ -29,13 +29,15 @@
   -- This can be done by a middleware which compares if actions being made are from owner of resources
   -- Add backend Unit tests for this security feature
 - [DONE] Allow users to change question labels using contenteditable
-
+- [DONE] Investigate content editable to allow users to edit form titles, put form title in builder
+- [DONE] Allow users to change button text using contenteditable
+- [DONE] Store last edited form in local storage, and if form_id url param is empty, redirect to last edited form
 VNTTD:
-- Investigate content editable to allow users to edit form titles, put form title in builder
-- Allow users to change button text using contenteditable
+
+- Use Renderer to allow users to change form and element properties on right hand side
+
 
 MVP:
-- Use Renderer to allow users to change form and element properties on right hand side
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms

@@ -1,6 +1,7 @@
 .form > .element {
   box-sizing: border-box;
   padding: 5px 10px;
+  margin: 15px 0;
 }
 
 .form > .element > .label {

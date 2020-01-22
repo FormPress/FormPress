@@ -18,12 +18,20 @@ class EditableLabel extends _react.Component {
     super(props);
     this.handleOnInput = this.handleOnInput.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
   }
 
   handleOnInput(e) {}
 
   handleOnBlur(e) {
     this.props.handleLabelChange(this.props.labelKey, e.target.innerHTML.replace(/(<([^>]+)>)/ig, ''));
+  }
+
+  handleOnKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.target.blur();
+    }
   }
 
   render() {
@@ -36,7 +44,9 @@ class EditableLabel extends _react.Component {
     return _react.default.createElement("div", _extends({
       className: this.props.className,
       onInput: this.handleOnInput,
-      onBlur: this.handleOnBlur
+      onBlur: this.handleOnBlur,
+      onKeyDown: this.handleOnKeyDown,
+      suppressContentEditableWarning: true
     }, extraProps), this.props.value);
   }
 

@@ -3,6 +3,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 10px 20px;
+  margin-top: 40px;
 }
 
 .data > div {
@@ -11,15 +12,15 @@
   border: 1px solid black;
 }
 
-.data > .forms {
+.data > .dataForms {
   width: 20%;
 }
 
-.data > .forms > ul > li {
+.data > .dataForms > ul > li {
   cursor: pointer;
 }
 
-.data > .forms > ul > li.selected {
+.data > .dataForms > ul > li.selected {
   font-weight: bold;
 }
 

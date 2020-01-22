@@ -6,6 +6,7 @@ export default class EditableLabel extends Component {
 
     this.handleOnInput = this.handleOnInput.bind(this)
     this.handleOnBlur = this.handleOnBlur.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
   }
 
   handleOnInput (e) {
@@ -17,6 +18,13 @@ export default class EditableLabel extends Component {
       this.props.labelKey,
       e.target.innerHTML.replace(/(<([^>]+)>)/ig, '')
     )
+  }
+
+  handleOnKeyDown (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      e.target.blur()
+    }
   }
 
   render() {
@@ -31,6 +39,8 @@ export default class EditableLabel extends Component {
         className={ this.props.className }
         onInput={ this.handleOnInput }
         onBlur={ this.handleOnBlur }
+        onKeyDown={ this.handleOnKeyDown }
+        suppressContentEditableWarning={ true }
         { ...extraProps }
       >
         { this.props.value }

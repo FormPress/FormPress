@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 
 import * as Elements from './elements'
 import Renderer from './Renderer'
+import EditableLabel from './EditableLabel'
 import { api } from '../helper'
+
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -32,32 +34,51 @@ export default class Builder extends Component {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
 
-      this.setState({ loading: true })
-
-      const { data } = await api({
-        resource: `/api/users/${user_id}/forms/${formId}`
-      })
-
-      if (typeof data.props === 'undefined') {
-        this.setState({
-          loading: false
-        })
-        return
+      if (formId !== 'new') {
+        await this.loadForm(formId)
+        window.localStorage.setItem('lastEditedFormId', formId)  
+      } else {
+        window.scrollTo(0, 0)
       }
+    } else {
+      const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
+      console.log('This props ', this.props, lastEditedFormId)
 
-      const props = JSON.parse(data.props)
-      const form = {
-        ...data,
-        props
+      if (lastEditedFormId !== null) {
+        this.props.history.push(`/editor/${lastEditedFormId}`)
+        setTimeout(() => {
+          this.componentDidMount()
+        }, 1)
       }
-      console.log('Form received ', JSON.stringify(data))
-      console.log('Form will be set to state ', JSON.stringify(form))
-
-      this.setState({
-        loading: false,
-        form
-      })
     }
+  }
+
+  async loadForm (formId) {
+    this.setState({ loading: true })
+
+    const { data } = await api({
+      resource: `/api/users/${user_id}/forms/${formId}`
+    })
+
+    if (typeof data.props === 'undefined') {
+      this.setState({
+        loading: false
+      })
+      return
+    }
+
+    const props = JSON.parse(data.props)
+    const form = {
+      ...data,
+      props
+    }
+    console.log('Form received ', JSON.stringify(data))
+    console.log('Form will be set to state ', JSON.stringify(form))
+
+    this.setState({
+      loading: false,
+      form
+    })
   }
 
   constructor (props) {
@@ -72,7 +93,7 @@ export default class Builder extends Component {
       form: {
         id: null,
         user_id: null,
-        title: 'My Form ' + Math.random(),
+        title: 'Untitled Form',
         props: {
           elements: [
             {
@@ -99,6 +120,7 @@ export default class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
+    this.handleTitleChange = this.handleTitleChange.bind(this)
   }
 
   handleDragStart (item, e) {
@@ -201,7 +223,20 @@ export default class Builder extends Component {
       .elements
       .filter((element) => (element.id === id))[0]
 
-    question.label = value
+    if (question.type === 'Button') {
+      question.buttonText = value
+    } else {
+      question.label = value
+    }
+
+    this.setState({ form })
+  }
+
+  handleTitleChange (id, value) {
+    console.log('Form Label changed ', id, value)
+    const form = { ...this.state.form }
+
+    form.title = value
 
     this.setState({ form })
   }
@@ -227,6 +262,7 @@ export default class Builder extends Component {
           id: data.id
         }
       })
+      window.localStorage.setItem('lastEditedFormId', data.id)
     }
   }
 
@@ -237,7 +273,7 @@ export default class Builder extends Component {
   }
 
   render () {
-    const { saving, loading } = this.state
+    const { form, loading, saving } = this.state
     const saveButtonProps = {}
 
     if (saving === true || loading === true) {
@@ -246,15 +282,29 @@ export default class Builder extends Component {
 
     return (
       <div className='builder center'>
-        <div className='header oh'>
-          <div className='fl'>
-            Welcome to builder!
-            <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-              { saving === true ? 'Saving...': 'Save' }
-            </button>
-            <button onClick={ this.handlePreviewClick }>
-              Preview Form
-            </button>
+        <div className='headerContainer'>
+          <div className='header oh'>
+            <div className='formTitle fl'>
+              {
+                (loading === false)
+                  ? <EditableLabel
+                    className='label'
+                    mode='builder'
+                    labelKey='title'
+                    handleLabelChange={ this.handleTitleChange }
+                    value={ form.title }
+                  />
+                  : null
+              }
+            </div>
+            <div className='formControls fl'>
+              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
+                { saving === true ? 'Saving...': 'Save' }
+              </button>
+              <button onClick={ this.handlePreviewClick }>
+                Preview Form
+              </button>
+            </div>
           </div>
         </div>
         <div className='content oh'>
@@ -289,7 +339,7 @@ export default class Builder extends Component {
                 dragIndex={ this.state.dragIndex }
                 dragging={ this.state.dragging }
                 insertBefore={ this.state.insertBefore }
-                form={ this.state.form }
+                form={ form }
                 mode='builder'
               />
           }

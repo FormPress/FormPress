@@ -3,18 +3,34 @@
   box-sizing: border-box;
 }
 
-.builder > .header {
+.builder > .headerContainer {
   box-sizing: border-box;
-  padding: 5px 10px;
-  position: fixed;
-  top: 40px;
   height: 40px;
+  top: 40px;
   width: 100%;
+  position: fixed;
   background-color: white;
 }
 
+.builder > .headerContainer > .header {
+  box-sizing: border-box;
+  padding: 5px 10px;
+  height: 40px;
+  width: 100%;
+}
+
+.header > .formTitle {
+  width: 400px;
+  min-height: 20px;
+}
+
+.header > .formControls {
+  width: 400px;
+  margin-left: 20px;
+}
+
 .builder > .content {
-  padding-top: 40px;
+  padding-top: 80px;
 }
 
 /* Builder */
