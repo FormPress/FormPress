@@ -22,7 +22,6 @@ class Renderer extends _react.Component {
     let {
       className
     } = this.props;
-    console.log('rendering renderer ', this.props);
 
     if (this.props.dragging === true) {
       className += ' dragging';
