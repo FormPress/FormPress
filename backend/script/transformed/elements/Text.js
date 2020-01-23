@@ -24,7 +24,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class Text extends _react.Component {
   render() {
     const {
-      config
+      config,
+      mode
     } = this.props;
     const inputProps = {};
 
@@ -38,9 +39,12 @@ class Text extends _react.Component {
 
     return _react.default.createElement("div", _extends({
       className: "element elementText oh"
-    }, this.props), _react.default.createElement(_EditableLabel.default, {
+    }, {
+      id: config.id,
+      ...this.props.ddHandlers
+    }), _react.default.createElement(_EditableLabel.default, {
       className: "fl label",
-      mode: this.props.mode,
+      mode: mode,
       labelKey: config.id,
       handleLabelChange: this.props.handleLabelChange,
       value: config.label

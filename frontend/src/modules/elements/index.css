@@ -11,3 +11,9 @@
 .form > .element > .input {
   width: 400px;
 }
+
+.form > .element > button,
+.form > .element > input[type=submit] {
+  padding: 5px 10px;
+  font-size: 16px;
+}

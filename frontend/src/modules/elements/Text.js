@@ -13,7 +13,7 @@ export default class Text extends Component {
   }
 
   render() {
-    const { config } = this.props
+    const { config, mode } = this.props
     const inputProps = {}
 
     if (typeof config.value !== 'undefined') {
@@ -25,10 +25,10 @@ export default class Text extends Component {
     }
 
     return (
-      <div className='element elementText oh' { ...this.props }>
+      <div className='element elementText oh' {...{ id: config.id, ...this.props.ddHandlers }}>
         <EditableLabel
           className='fl label'
-          mode={ this.props.mode }
+          mode={ mode }
           labelKey={ config.id }
           handleLabelChange={ this.props.handleLabelChange }
           value={ config.label }

@@ -112,8 +112,6 @@ export default class Builder extends Component {
     }
     //this.handleClick = this.handleClick.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
-    this.handleDragEnter = this.handleDragEnter.bind(this)
-    this.handleDragLeave = this.handleDragLeave.bind(this)
     this.handleDragOver = this.handleDragOver.bind(this)
     this.handleDrop = this.handleDrop.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
@@ -128,14 +126,6 @@ export default class Builder extends Component {
     this.setState({ dragging: true })
   }
 
-  handleDragEnter (e, elem) {
-    //console.log('Drag enter ', elem)
-  }
-
-  handleDragLeave (e, elem) {
-    // drag leave
-  }
-
   handleDrop (e) {
     e.stopPropagation()
     e.preventDefault()
@@ -143,7 +133,7 @@ export default class Builder extends Component {
     const type = e.dataTransfer.getData('text')
     const item = getElementsKeys()[type]
     const { form, dragIndex } = this.state
-
+    console.log('Drop happened ', type, dragIndex, 'Before? ',this.state.insertBefore)
     //set auto increment element id
     const maxId = Math.max(...form.props.elements.map((element) => element.id))
 
@@ -186,7 +176,7 @@ export default class Builder extends Component {
     this.setState({ dragging: false })
   }
 
-  handleDragOver (e, elem) {
+  handleDragOver (e) {
     const rect = e.target.getBoundingClientRect()
     const {top, height} = rect
     const {clientY} = e
@@ -331,10 +321,10 @@ export default class Builder extends Component {
               ? 'Loading...'
               : <Renderer
                 className='fl form'
-                handleDragEnter={ this.handleDragEnter }
-                handleDragLeave={ this.handleDragLeave }
-                handleDrop={ this.handleDrop }
-                handleDragOver={ this.handleDragOver }
+                ddHandlers={{
+                  onDrop: this.handleDrop,
+                  onDragOver: this.handleDragOver
+                }}
                 handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
                 dragging={ this.state.dragging }

@@ -7,7 +7,7 @@ export default class Renderer extends Component {
   }
 
   render () {
-    let { className } = this.props
+    let { className, ddHandlers } = this.props
 
     if (this.props.dragging === true) {
       className += ' dragging'
@@ -15,10 +15,7 @@ export default class Renderer extends Component {
 
     return <div
       className={ className }
-      onDrop={ this.props.handleDrop }
-      onDragEnter={(e) => this.props.handleDragEnter(e, 'container')}
-      onDragLeave={(e) => this.props.handleDragLeave(e, 'container')}
-      onDragOver={ this.props.handleDragOver }
+      { ...ddHandlers }
     >
     {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
@@ -35,8 +32,7 @@ export default class Renderer extends Component {
           key={ index }
           id={ elem.id }
           config={ elem }
-          onDrop={ this.props.handleDrop }
-          onDragOver={ (e) => this.props.handleDragOver(e, elem) }
+          ddHandlers={ this.props.ddHandlers }
           handleLabelChange={ this.props.handleLabelChange }
           { ...extraProps }
         />
