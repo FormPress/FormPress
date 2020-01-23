@@ -23,8 +23,7 @@ class Button extends _react.Component {
   render() {
     const {
       config,
-      mode,
-      ...rest
+      mode
     } = this.props;
     const inputProps = {};
 
@@ -34,9 +33,12 @@ class Button extends _react.Component {
 
     return _react.default.createElement("div", _extends({
       className: "element elementButton"
-    }, rest), mode === 'builder' ? _react.default.createElement("button", inputProps, _react.default.createElement(_EditableLabel.default, {
+    }, {
+      id: config.id,
+      ...this.props.ddHandlers
+    }), mode === 'builder' ? _react.default.createElement("button", inputProps, _react.default.createElement(_EditableLabel.default, {
       className: "fl label",
-      mode: this.props.mode,
+      mode: mode,
       labelKey: config.id,
       handleLabelChange: this.props.handleLabelChange,
       value: config.buttonText

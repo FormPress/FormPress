@@ -12,7 +12,7 @@ export default class Button extends Component {
   }
 
   render() {
-    const { config, mode, ...rest } = this.props
+    const { config, mode } = this.props
     const inputProps = {}
 
     if (typeof config.onClick !== 'undefined') {
@@ -20,12 +20,12 @@ export default class Button extends Component {
     }
 
     return (
-      <div className='element elementButton' { ...rest }>
+      <div className='element elementButton'  {...{ id: config.id, ...this.props.ddHandlers }}>
         { (mode === 'builder')
           ? <button { ...inputProps }>
             <EditableLabel
               className='fl label'
-              mode={ this.props.mode }
+              mode={ mode }
               labelKey={ config.id }
               handleLabelChange={ this.props.handleLabelChange }
               value={ config.buttonText }

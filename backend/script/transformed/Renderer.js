@@ -20,20 +20,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class Renderer extends _react.Component {
   render() {
     let {
-      className
+      className,
+      ddHandlers
     } = this.props;
 
     if (this.props.dragging === true) {
       className += ' dragging';
     }
 
-    return _react.default.createElement("div", {
-      className: className,
-      onDrop: this.props.handleDrop,
-      onDragEnter: e => this.props.handleDragEnter(e, 'container'),
-      onDragLeave: e => this.props.handleDragLeave(e, 'container'),
-      onDragOver: this.props.handleDragOver
-    }, this.props.form.props.elements.map((elem, index) => {
+    return _react.default.createElement("div", _extends({
+      className: className
+    }, ddHandlers), this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type];
       const extraProps = {
         mode: this.props.mode
@@ -49,8 +46,7 @@ class Renderer extends _react.Component {
         key: index,
         id: elem.id,
         config: elem,
-        onDrop: this.props.handleDrop,
-        onDragOver: e => this.props.handleDragOver(e, elem),
+        ddHandlers: this.props.ddHandlers,
         handleLabelChange: this.props.handleLabelChange
       }, extraProps))];
 
