@@ -34,6 +34,9 @@
 - [DONE] Store last edited form in local storage, and if form_id url param is empty, redirect to last edited form
 VNTTD:
 
+- Fix basic auth and JWT collision
+- staging db auth using cloudsql proxy
+
 - Use Renderer to allow users to change form and element properties on right hand side
 
 
