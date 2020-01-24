@@ -1,2 +1,4 @@
 node_modules
+build.sh
+Dockerfile.development
 package-lock.json
