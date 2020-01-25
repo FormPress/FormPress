@@ -69,30 +69,47 @@ class App extends Component {
   }
 
   render () {
+    const auth = this.getAuthContextValue()
     return (
       <Router>
-      <AuthContext.Provider value={this.getAuthContextValue()}>
+      <AuthContext.Provider value={ auth }>
         <div>
           <nav className='nav oh'>
             <ul className='menu fl'>
-              <li>
-                <NavLink exact to='/' activeClassName='selected'>Home</NavLink>
-              </li>
-              <li>
-                <NavLink to='/forms' activeClassName='selected'>Forms</NavLink>
-              </li>
-              <li>
-                <NavLink to='/editor' activeClassName='selected'>Editor</NavLink>
-              </li>
-              <li>
-                <NavLink to='/data' activeClassName='selected'>Data</NavLink>
-              </li>
+              { (auth.loggedIn === true)
+                  ? [
+                    <li>
+                      <NavLink exact to='/' activeClassName='selected'>
+                        Home
+                      </NavLink>
+                    </li>,
+                    <li>
+                      <NavLink to='/forms' activeClassName='selected'>
+                        Forms
+                      </NavLink>
+                    </li>,
+                    <li>
+                      <NavLink to='/editor' activeClassName='selected'>
+                        Editor
+                      </NavLink>
+                    </li>,
+                    <li>
+                      <NavLink to='/data' activeClassName='selected'>
+                        Data
+                      </NavLink>
+                    </li>
+                  ]
+                  : <li>
+                      <NavLink to='/login' activeClassName='selected'>
+                        Login
+                      </NavLink>
+                  </li>
+              }
             </ul>
             <div className='fr profile_container'>
               <Profile />
             </div>
           </nav>
-
           <Switch>
             <Route exact path='/'>
               <div className='homepage'>

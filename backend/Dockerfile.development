@@ -12,4 +12,4 @@ ENV NODE_PATH=/node_modules
 
 EXPOSE 3001
 
-RUN cd / && npm install
+RUN cd / && yarn install
