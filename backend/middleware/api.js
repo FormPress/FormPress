@@ -204,6 +204,10 @@ module.exports = (app) => {
     let style = fs.readFileSync(path.resolve('../', 'frontend/src/App.css'))
     style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
 
+    const { FP_ENV, FP_HOST } = process.env
+    const postTarget = (FP_ENV === 'development')
+      ? `${FP_HOST}:${port}/form/submit/${form.id}`
+      : `${FP_HOST}/form/submit/${form.id}`
 
     res.render(
       'form.tpl.ejs',
@@ -211,7 +215,7 @@ module.exports = (app) => {
         headerAppend: `<style type='text/css'>${style}</style>`,
         title: form.title,
         form: str,
-        postTarget: `http://localhost:${port}/form/submit/${form.id}`
+        postTarget
       }
     )
   })

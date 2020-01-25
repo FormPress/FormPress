@@ -6,6 +6,8 @@ RUN mkdir /src
 
 ENV PATH="/node_modules/.bin:$PATH"
 ENV FP_ENV=development
+ENV FP_HOST=http://localhost
+
 WORKDIR /src
 ADD package.json /package.json
 ENV NODE_PATH=/node_modules

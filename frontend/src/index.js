@@ -5,4 +5,21 @@ import './index.css'
 
 import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const FP_ENV = process.env.REACT_APP_FP_ENV
+let render = true
+
+//Redirect to https on production
+if (FP_ENV === 'production') {
+  const { location } = document
+  const { protocol, host, pathname } = location
+
+  if ( protocol === 'http:' ) {
+    console.log('Redirecting to https ',`${protocol}${host}${pathname}`)
+    window.location = `https://${host}${pathname}`
+    render = false
+  }
+}
+
+if (render === true) {
+  ReactDOM.render(<App />, document.getElementById('root'))  
+}
