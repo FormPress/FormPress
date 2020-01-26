@@ -15,6 +15,7 @@ module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
     const db = await getPool()
+    const { user_id } = req.params
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       // Existing form should update!!!
@@ -38,7 +39,7 @@ module.exports = (app) => {
           VALUES
             (?, ?, ?, NOW(), NOW())
         `,
-        [1, form.title, JSON.stringify(form.props)]
+        [user_id, form.title, JSON.stringify(form.props)]
       )
 
       res.json({status: 'done', id: result.insertId})
@@ -76,7 +77,7 @@ module.exports = (app) => {
     }
   )
 
-  // return single form via id
+  // delete single form via id
   app.delete(
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,

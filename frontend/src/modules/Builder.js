@@ -4,6 +4,8 @@ import * as Elements from './elements'
 import AuthContext from '../auth.context'
 import Renderer from './Renderer'
 import EditableLabel from './EditableLabel'
+import Tabs from './common/Tabs'
+import FormProperties from './helper/FormProperties'
 import { api } from '../helper'
 
 import './Builder.css'
@@ -31,13 +33,14 @@ const pickerElements = getWeightedElements()
 class Builder extends Component {
   async componentDidMount () {
     if (typeof this.props.match.params.formId !== 'undefined') {
-      const { formId } = this.props.match.params
+      const { formId, auth } = this.props.match.params
 
       if (formId !== 'new') {
         await this.loadForm(formId)
         window.localStorage.setItem('lastEditedFormId', formId)  
       } else {
         window.scrollTo(0, 0)
+        this.setIntegration({ type: 'email', to: this.props.auth.email })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
@@ -80,6 +83,29 @@ class Builder extends Component {
     })
   }
 
+  setIntegration (_integration) {
+    const form = { ...this.state.form }
+
+    form.props.integrations = [...form.props.integrations]
+
+    const matched = form.props.integrations.filter((integration) =>
+      (integration.type === _integration.type)
+    )
+
+    if (matched.length > 0) {
+      const index = form.props.integrations.indexOf(matched[0])
+
+      form.props.integrations[index] = {
+        ...form.props.integrations[index],
+        ..._integration
+      }
+    } else {
+      form.props.integrations.push(_integration)
+    }
+
+    this.setState({ form })
+  }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -94,6 +120,12 @@ class Builder extends Component {
         user_id: null,
         title: 'Untitled Form',
         props: {
+          integrations: [
+            {
+              type: 'email',
+              value: false
+            }
+          ],
           elements: [
             {
               id: 1,
@@ -118,6 +150,7 @@ class Builder extends Component {
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.setIntegration = this.setIntegration.bind(this)
   }
 
   handleDragStart (item, e) {
@@ -297,23 +330,45 @@ class Builder extends Component {
           </div>
         </div>
         <div className='content oh'>
-          <div className='fl elements'>
-            <div className='elementsContent'>
-              <div>Form Elements</div>
-              <div className='elementList'>
-                {pickerElements.map((elem) =>
-                  <div
-                    className='element'
-                    draggable
-                    onDragStart={ this.handleDragStart.bind(this, elem) }
-                    onDragEnd={ this.handleDragEnd }
-                    key={ elem.type }
-                  >
-                    { elem.type }
-                  </div>
-                )}
-              </div>
-            </div>
+          <div className='fl leftMenu'>
+            <Tabs
+              className='leftMenuContents'
+              items={[
+                {
+                  name: 'elements',
+                  text: 'Form Elements',
+                  content: (
+                    <div className='elements'>
+                      <div className='elementsContent'>
+                        <div>Form Elements</div>
+                        <div className='elementList'>
+                          {pickerElements.map((elem) =>
+                            <div
+                              className='element'
+                              draggable
+                              onDragStart={ this.handleDragStart.bind(this, elem) }
+                              onDragEnd={ this.handleDragEnd }
+                              key={ elem.type }
+                            >
+                              { elem.type }
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                },
+                {
+                  name: 'formProperties',
+                  text: 'Form Properties',
+                  component: FormProperties,
+                  props: {
+                    form,
+                    setIntegration: this.setIntegration
+                  }
+                }
+              ]}
+            />
           </div>
           {
             (loading === true)

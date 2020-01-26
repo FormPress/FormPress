@@ -38,17 +38,37 @@ module.exports = (app) => {
 
     res.send('Your Submission has been received')
 
-    //send notif email in the background
-    const email = 'gkemaldag@gmail.com'
+    //read out form
+    const formResult = await db.query(
+      `SELECT * FROM \`form\`
+      WHERE id = ?`,
+      [form_id]
+    )
+    let sendEmailTo = false
 
-    const msg = {
-      to: email,
-      from: 'submission-notifications-noreply@api.formpress.org',
-      subject: 'New submission has been received',
-      text: `New Submission has been received ${JSON.stringify(req.body)}`,
-      html: `New Submission has been received ${JSON.stringify(req.body)}`,
+    if (formResult.length > 0) {
+      const form = formResult[0]
+
+      form.props = JSON.parse(form.props)
+
+      const integrations = form.props.integrations || []
+      const emailIntegration = integrations.filter((integration) => (integration.type === 'email'))
+
+      if (emailIntegration.length > 0) {
+        sendEmailTo = emailIntegration[0].to
+      }
     }
 
-    sgMail.send(msg)
+    if (sendEmailTo !== false) {
+      const msg = {
+        to: sendEmailTo,
+        from: 'submission-notifications-noreply@api.formpress.org',
+        subject: 'New submission has been received',
+        text: `New Submission has been received ${JSON.stringify(req.body)}`,
+        html: `New Submission has been received ${JSON.stringify(req.body)}`,
+      }
+
+      sgMail.send(msg)  
+    }
   })
 }
