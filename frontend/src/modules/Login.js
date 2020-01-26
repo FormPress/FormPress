@@ -60,6 +60,7 @@ class Login extends Component {
         email,
         exp: data.exp,
         token: data.token,
+        user_id: data.user_id,
         loggedIn: true
       })
     } else {
@@ -123,7 +124,7 @@ class Login extends Component {
 const LoginWrapped = (props) => 
   <AuthContext.Consumer>
     {
-      (value) => <Login {...props} auth={ value } />
+      (value) => <Login { ...props } auth={ value } />
     }
   </AuthContext.Consumer>
 

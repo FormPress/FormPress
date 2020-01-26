@@ -21,6 +21,7 @@ const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {
   token: '',
   email: '',
+  user_id: 0,
   exp: '',
   loggedIn: false
 }
@@ -31,7 +32,7 @@ if (auth !== null) {
 
     if ((authObject.exp * 1000) > (new Date().getTime())) {
       initialAuthObject = authObject
-      console.log('Auth Object', authObject)
+      console.log('Initializing Auth Object from local storage', authObject)
       setToken(authObject.token)
     }
   } catch (e) {
@@ -49,12 +50,12 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth ({ email, token, loggedIn, exp }, persist = true) {
-    this.setState({ email, token, loggedIn, exp })
+  handleSetAuth ({ email, user_id, token, loggedIn, exp }, persist = true) {
+    this.setState({ email, user_id, token, loggedIn, exp })
 
     if (persist === true) {
       window.localStorage.setItem('auth', JSON.stringify(
-        { email, token, loggedIn, exp }
+        { email, user_id, token, loggedIn, exp }
       ))  
     }
   }
@@ -63,6 +64,7 @@ class App extends Component {
     return {
       token: this.state.token,
       email: this.state.email,
+      user_id: this.state.user_id,
       loggedIn: this.state.loggedIn,
       setAuth: this.handleSetAuth
     }
@@ -70,6 +72,7 @@ class App extends Component {
 
   render () {
     const auth = this.getAuthContextValue()
+
     return (
       <Router>
       <AuthContext.Provider value={ auth }>

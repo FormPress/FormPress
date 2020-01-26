@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import * as Elements from './elements'
+import AuthContext from '../auth.context'
 import Renderer from './Renderer'
 import EditableLabel from './EditableLabel'
 import { api } from '../helper'
@@ -27,9 +28,7 @@ const getElementsKeys = () => getElements()
 const pickerElements = getWeightedElements()
   .sort((a, b) => a.weight - b.weight)
 
-const user_id = 1
-
-export default class Builder extends Component {
+class Builder extends Component {
   async componentDidMount () {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
@@ -57,7 +56,7 @@ export default class Builder extends Component {
     this.setState({ loading: true })
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms/${formId}`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
 
     if (typeof data.props === 'undefined') {
@@ -237,7 +236,7 @@ export default class Builder extends Component {
     this.setState({ saving: true })
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms`,
+      resource: `/api/users/${this.props.auth.user_id}/forms`,
       method: (form.id === null) ? 'post' : 'put',
       body: this.state.form
     })
@@ -338,3 +337,12 @@ export default class Builder extends Component {
     )
   }
 }
+
+const BuilderWrapped = (props) => 
+  <AuthContext.Consumer>
+    {
+      (value) => <Builder { ...props } auth={ value } />
+    }
+  </AuthContext.Consumer>
+
+export default BuilderWrapped
