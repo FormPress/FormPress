@@ -24,14 +24,14 @@ services:
       - ./backend:/src
       - ./frontend:/frontend
     environment:
-      - JWT_SECRET=SOMESUPERHARDTOGUESSSECRET
+      - JWT_SECRET=${JWT_SECRET}
       - MYSQL_DATABASE=formpress
       - MYSQL_HOST=mysql
       - MYSQL_USER=formpress
       - MYSQL_PASSWORD=formpress
       - NODE_ENV=production
-      - SERVER_PORT=3001,
-      - SENDGRID_API_KEY=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
+      - SERVER_PORT=3001
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
     ports:
       - "3001:3001"
     links:

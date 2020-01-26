@@ -22,7 +22,6 @@ const sha512 = (password, salt) => {
 
 module.exports = (app) => {
   app.post('/api/users/login', async (req, res) => {
-    console.log('Login request ', req.body)
     const { email, password } = req.body
     const db = await getPool()
 
@@ -38,9 +37,9 @@ module.exports = (app) => {
     if (result.length === 0) {
       const salt = genRandomString(128)
       const hash = sha512(password, salt)
-      console.log(`DEBUG INSERT: ${email} `, hash)
+      console.log(`DEBUG INSERT: ${email} `, hash, salt)
 
-      //res.status(403).json({ message: 'Email/Password does not match' })
+      return res.status(403).json({ message: 'Email/Password does not match' })
     } else {
       const user = result[0]
       const incomingHash = sha512(password, user.salt)
@@ -58,6 +57,7 @@ module.exports = (app) => {
           res.status(200).json({
             message: 'Login Success',
             token,
+            user_id: user.id,
             exp
           })
         })

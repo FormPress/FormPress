@@ -1,1 +1,6 @@
+.env
 backend/node_modules
+frontend/node_modules
+release.sh
+k8s
+

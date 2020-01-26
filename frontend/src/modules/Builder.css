@@ -34,12 +34,12 @@
 }
 
 /* Builder */
-.builder > .content > .elements {
-  width: 15%;
+.builder > .content > .leftMenu {
+  width: 25%;
   min-height: 500px;
 }
 
-.builder > .content > .elements > .elementsContent {
+.builder > .content > .leftMenu > .leftMenuContents {
   position: fixed;
   top: 80px;
   padding: 20px;
@@ -60,7 +60,7 @@
 }
 
 .builder > .content > .form {
-  width: 69%;
+  width: 59%;
   margin-left: 1%;
   padding: 20px;
   box-sizing: border-box;

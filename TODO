@@ -32,13 +32,16 @@
 - [DONE] Investigate content editable to allow users to edit form titles, put form title in builder
 - [DONE] Allow users to change button text using contenteditable
 - [DONE] Store last edited form in local storage, and if form_id url param is empty, redirect to last edited form
+- [DONE] Fix basic auth and JWT collision
+- [DONE] staging db auth using cloudsql proxy
 VNTTD:
-
-- Fix basic auth and JWT collision
-- staging db auth using cloudsql proxy
-
+- Use user_id from auth context instead of hard coded 1
 - Use Renderer to allow users to change form and element properties on right hand side
-
+  - Form Properties submission notification email
+  - Question properties
+    -- Define editable properties on question level with Renderer.js format
+       For now include required fields
+    -- Define JS injection logic, include seperate functionality if used such as required.js if any of the questions use required
 
 MVP:
 - Builder: allow users to import forms into their websites using a JS file

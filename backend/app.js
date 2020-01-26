@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
-const basicAuth = require('express-basic-auth')
 
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
@@ -10,13 +9,6 @@ const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
 const authenticationMiddleware = require(path.resolve('middleware', 'authentication'))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
-
-// app.use(basicAuth({
-//   users: { 'admin': '243243' },
-//   challenge: true,
-//   realm: 'FormPress Beta'
-// }))
-
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -49,7 +41,5 @@ if (process.env.FP_ENV === 'production') {
     res.status(200).send(staticIndexHtml)
   })
 }
-
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

@@ -15,6 +15,7 @@ module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
     const db = await getPool()
+    const { user_id } = req.params
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       // Existing form should update!!!
@@ -38,7 +39,7 @@ module.exports = (app) => {
           VALUES
             (?, ?, ?, NOW(), NOW())
         `,
-        [1, form.title, JSON.stringify(form.props)]
+        [user_id, form.title, JSON.stringify(form.props)]
       )
 
       res.json({status: 'done', id: result.insertId})
@@ -76,7 +77,7 @@ module.exports = (app) => {
     }
   )
 
-  // return single form via id
+  // delete single form via id
   app.delete(
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
@@ -204,6 +205,10 @@ module.exports = (app) => {
     let style = fs.readFileSync(path.resolve('../', 'frontend/src/App.css'))
     style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
 
+    const { FP_ENV, FP_HOST } = process.env
+    const postTarget = (FP_ENV === 'development')
+      ? `${FP_HOST}:${port}/form/submit/${form.id}`
+      : `${FP_HOST}/form/submit/${form.id}`
 
     res.render(
       'form.tpl.ejs',
@@ -211,7 +216,7 @@ module.exports = (app) => {
         headerAppend: `<style type='text/css'>${style}</style>`,
         title: form.title,
         form: str,
-        postTarget: `http://localhost:${port}/form/submit/${form.id}`
+        postTarget
       }
     )
   })

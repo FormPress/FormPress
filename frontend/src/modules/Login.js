@@ -60,6 +60,7 @@ class Login extends Component {
         email,
         exp: data.exp,
         token: data.token,
+        user_id: data.user_id,
         loggedIn: true
       })
     } else {
@@ -82,9 +83,9 @@ class Login extends Component {
     }
 
     return <div className='loginForm'>
-      <form onSubmit={this.handleLoginButtonClick}>
+      <form onSubmit={ this.handleLoginButtonClick }>
         <Renderer
-          handleFieldChange={this.handleFieldChange}
+          handleFieldChange={ this.handleFieldChange }
           form={{
             props: {
               elements: [
@@ -123,7 +124,7 @@ class Login extends Component {
 const LoginWrapped = (props) => 
   <AuthContext.Consumer>
     {
-      (value) => <Login {...props} auth={ value } />
+      (value) => <Login { ...props } auth={ value } />
     }
   </AuthContext.Consumer>
 

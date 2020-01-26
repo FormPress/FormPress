@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 import { api } from '../helper'
-import { Link } from 'react-router-dom'
+import AuthContext from '../auth.context'
 
 import './Forms.css'
 
-const user_id = 1
-
-export default class Forms extends Component {
+class Forms extends Component {
   setLoadingState (key, value) {
     this.setState({
       loading: {
@@ -21,7 +20,7 @@ export default class Forms extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms`
+      resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
     const forms = data.map((form) => {
@@ -63,7 +62,7 @@ export default class Forms extends Component {
     })
 
     await api({
-      resource: `/api/users/${user_id}/forms/${form.id}`,
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
 
@@ -105,3 +104,12 @@ export default class Forms extends Component {
     </div>
   }
 }
+
+const FormsWrapped = (props) => 
+  <AuthContext.Consumer>
+    {
+      (value) => <Forms { ...props } auth={ value } />
+    }
+  </AuthContext.Consumer>
+
+export default FormsWrapped

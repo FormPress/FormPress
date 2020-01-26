@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 
 import { api } from '../helper'
+import AuthContext from '../auth.context'
 
 import './Data.css'
 
-const user_id = 1
-
-export default class Data extends Component {
+class Data extends Component {
   setLoadingState (key, value) {
     this.setState({
       loading: {
@@ -20,7 +19,7 @@ export default class Data extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms`
+      resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
     const forms = data.map((form) => {
@@ -36,7 +35,7 @@ export default class Data extends Component {
 
   async updateSubmissionsSeamless (formId) {
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
     })
 
     this.setState({ submissions: data })
@@ -52,7 +51,7 @@ export default class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
     })
 
     this.setLoadingState('submissions', false)
@@ -97,7 +96,7 @@ export default class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${user_id}/forms/${form_id}/submissions/${id}/entries`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}/entries`
     })
 
     this.setLoadingState('entries', false)
@@ -109,7 +108,7 @@ export default class Data extends Component {
     }
 
     await api({
-      resource: `/api/users/${user_id}/forms/${form_id}/submissions/${id}`,
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}`,
       method: 'put',
       body: JSON.stringify({
         ...submission,
@@ -229,3 +228,12 @@ export default class Data extends Component {
     </table>
   }
 }
+
+const DataWrapped = (props) => 
+  <AuthContext.Consumer>
+    {
+      (value) => <Data { ...props } auth={ value } />
+    }
+  </AuthContext.Consumer>
+
+export default DataWrapped

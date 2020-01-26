@@ -4,6 +4,8 @@ FROM base as frontend_builder
 
 ENV PATH="/node_modules/.bin:$PATH"
 ENV REACT_APP_BACKEND=''
+ENV REACT_APP_FP_ENV="production"
+
 ADD frontend /frontend
 RUN cd /frontend &&\
   yarn &&\
