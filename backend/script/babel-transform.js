@@ -16,8 +16,13 @@ const transformMap = [
   },
   {
     type: 'file',
-    source: path.resolve('../', 'frontend', 'src', 'modules', 'EditableLabel.js'),
-    target: path.resolve('./', 'script', 'transformed', 'EditableLabel.js')
+    source: path.resolve('../', 'frontend', 'src', 'modules/common', 'EditableLabel.js'),
+    target: path.resolve('./', 'script', 'transformed/common', 'EditableLabel.js')
+  },
+  {
+    type: 'file',
+    source: path.resolve('../', 'frontend', 'src', 'modules/common', 'ElementContainer.js'),
+    target: path.resolve('./', 'script', 'transformed/common', 'ElementContainer.js')
   },
   {
     type: 'folder',

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
 import Renderer from './Renderer'
-import EditableLabel from './EditableLabel'
+import EditableLabel from './common/EditableLabel'
 import Tabs from './common/Tabs'
 import FormProperties from './helper/FormProperties'
 import { api } from '../helper'
@@ -33,7 +33,7 @@ const pickerElements = getWeightedElements()
 class Builder extends Component {
   async componentDidMount () {
     if (typeof this.props.match.params.formId !== 'undefined') {
-      const { formId, auth } = this.props.match.params
+      const { formId } = this.props.match.params
 
       if (formId !== 'new') {
         await this.loadForm(formId)
@@ -44,7 +44,6 @@ class Builder extends Component {
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
-      console.log('This props ', this.props, lastEditedFormId)
 
       if (lastEditedFormId !== null) {
         this.props.history.push(`/editor/${lastEditedFormId}`)
@@ -74,8 +73,6 @@ class Builder extends Component {
       ...data,
       props
     }
-    console.log('Form received ', JSON.stringify(data))
-    console.log('Form will be set to state ', JSON.stringify(form))
 
     this.setState({
       loading: false,
@@ -123,7 +120,7 @@ class Builder extends Component {
           integrations: [
             {
               type: 'email',
-              value: false
+              value: ''
             }
           ],
           elements: [
@@ -165,7 +162,7 @@ class Builder extends Component {
     const type = e.dataTransfer.getData('text')
     const item = getElementsKeys()[type]
     const { form, dragIndex } = this.state
-    console.log('Drop happened ', type, dragIndex, 'Before? ',this.state.insertBefore)
+
     //set auto increment element id
     const maxId = Math.max(...form.props.elements.map((element) => element.id))
 
@@ -235,7 +232,6 @@ class Builder extends Component {
   }
 
   handleLabelChange (id, value) {
-    console.log('Label changed ', id, value)
     const form = { ...this.state.form }
 
     form.props.elements = [...form.props.elements]
@@ -255,7 +251,6 @@ class Builder extends Component {
   }
 
   handleTitleChange (id, value) {
-    console.log('Form Label changed ', id, value)
     const form = { ...this.state.form }
 
     form.title = value

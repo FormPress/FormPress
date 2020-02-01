@@ -7,7 +7,9 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _EditableLabel = _interopRequireDefault(require("../EditableLabel"));
+var _EditableLabel = _interopRequireDefault(require("../common/EditableLabel"));
+
+var _ElementContainer = _interopRequireDefault(require("../common/ElementContainer"));
 
 require("./Text.css");
 
@@ -37,12 +39,9 @@ class Text extends _react.Component {
       inputProps.onChange = this.props.onChange;
     }
 
-    return _react.default.createElement("div", _extends({
-      className: "element elementText oh"
-    }, {
-      id: config.id,
-      ...this.props.ddHandlers
-    }), _react.default.createElement(_EditableLabel.default, {
+    return _react.default.createElement(_ElementContainer.default, _extends({
+      type: config.type
+    }, this.props), _react.default.createElement(_EditableLabel.default, {
       className: "fl label",
       mode: mode,
       labelKey: config.id,

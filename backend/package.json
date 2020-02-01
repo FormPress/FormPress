@@ -1,6 +1,6 @@
 {
   "name": "FormPress",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "OpenSource data collection solution",
   "main": "app.js",
   "scripts": {
@@ -31,6 +31,7 @@
     "react-dom": "16.12.0"
   },
   "devDependencies": {
+    "cheerio": "1.0.0-rc.3",
     "mocha": "7.0.0",
     "sinon": "8.1.0",
     "supertest": "4.0.2"

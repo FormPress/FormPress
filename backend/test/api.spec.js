@@ -4,6 +4,7 @@ const express = require('express')
 const request = require('supertest')
 const sinon = require('sinon')
 const jwt = require('jsonwebtoken')
+const cheerio = require('cheerio')
 
 process.env.JWT_SECRET = 'somesecretforunittesting'
 
@@ -162,5 +163,72 @@ describe('Api', () => {
           .expect(403, done) //method is called with a valid token of another user, should return 403
       })
     }
+  })
+
+  describe('Form Rendering', () => {
+    it(`Basic form server side renders without problems`, (done) => {
+      const form = {
+        id: 1,
+        title: 'test form',
+        props: {
+          elements: [  
+            {
+              id: 1,
+              type: 'Text',
+              label: 'First Name'
+            },
+            {
+              id: 2,
+              type: 'TextArea',
+              label: 'Comments'
+            },
+            {
+              id: 3,
+              type: 'Button',
+              buttonText: 'Submit'
+            }
+          ]
+        }
+      }
+
+      getPoolStub.returns({
+        query: async (sql, params) => {
+          //console.log('Query is called with ', sql, params)
+          return [{
+            ...form,
+            props: JSON.stringify(form.props)
+          }]
+        }
+      })
+
+      const pro = request(app)
+        .get('/form/view/1')
+        .set({
+          'Accept': 'text/html'
+        })
+
+      pro.expect('Content-Type', /text\/html/)
+        .expect(200)
+        .then((res) => {
+          const html = res.text
+
+          assert(html.length > 100, 'Rendered form html length is shorter than 100 characters')
+
+          const $ = cheerio.load(html)
+
+          for (const elem of form.props.elements) {
+            const rendered = $(`#q_${elem.id}`)
+
+            if (elem.type !== 'Button') {
+              assert(rendered.length === 1, `Question ${elem.id} of test form is successfully rendered`)
+            } else {
+              assert(rendered.length === 0, `Question ${elem.id} of type submit Should not be rendered with id`)
+            }
+            
+          }
+
+          done()
+        })
+    })
   })
 })

@@ -32,7 +32,6 @@ if (auth !== null) {
 
     if ((authObject.exp * 1000) > (new Date().getTime())) {
       initialAuthObject = authObject
-      console.log('Initializing Auth Object from local storage', authObject)
       setToken(authObject.token)
     }
   } catch (e) {
@@ -81,22 +80,22 @@ class App extends Component {
             <ul className='menu fl'>
               { (auth.loggedIn === true)
                   ? [
-                    <li>
+                    <li key='1'>
                       <NavLink exact to='/' activeClassName='selected'>
                         Home
                       </NavLink>
                     </li>,
-                    <li>
+                    <li key='2'>
                       <NavLink to='/forms' activeClassName='selected'>
                         Forms
                       </NavLink>
                     </li>,
-                    <li>
+                    <li key='3'>
                       <NavLink to='/editor' activeClassName='selected'>
                         Editor
                       </NavLink>
                     </li>,
-                    <li>
+                    <li key='4'>
                       <NavLink to='/data' activeClassName='selected'>
                         Data
                       </NavLink>
