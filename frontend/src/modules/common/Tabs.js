@@ -35,10 +35,14 @@ export default class Tabs extends Component {
       <div className={ `tabsContainer ${this.props.className}` }>
         <div className='tabs'>
           {
-            items.map((item) => 
+            items.map((item, key) => 
               <a
+                href='#/'
+                key={ key }
                 onClick={ this.handleTabClick.bind(this, item) }
-                className={(item.name === activeTab) ? 'selected' : undefined}
+                className={
+                  (item.name === activeTab) ? 'selected' : undefined
+                }
               >
                 { item.text }
               </a>

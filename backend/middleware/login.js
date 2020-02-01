@@ -2,23 +2,11 @@ const crypto = require('crypto')
 const path = require('path')
 const jwt = require('jsonwebtoken')
 
+const { genRandomString, sha512 } = require(path.resolve('helper')).random
+
 const { getPool } = require(path.resolve('./', 'db'))
 
 const JWT_SECRET = process.env.JWT_SECRET
-const genRandomString = (length) => crypto
-  .randomBytes(Math.ceil(length/2))
-  .toString('hex') /** convert to hexadecimal format */
-  .slice(0,length)   /** return required number of characters */
-const sha512 = (password, salt) => {
-  const hash = crypto.createHmac('sha512', salt) /** Hashing algorithm sha512 */
-  
-  hash.update(password)
-
-  return {
-      salt: salt,
-      passwordHash: hash.digest('hex')
-  }
-}
 
 module.exports = (app) => {
   app.post('/api/users/login', async (req, res) => {

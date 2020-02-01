@@ -23,7 +23,7 @@ export default class FormProperties extends Component {
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = integrations.filter((integration) => integration.type === 'email')
-    let email
+    let email = ''
 
     if (matchingIntegration.length > 0) {
       email = matchingIntegration[0].to
@@ -41,11 +41,6 @@ export default class FormProperties extends Component {
                 type: 'Text',
                 label: 'Send submission notifications to',
                 value: email
-              },
-              {
-                id: 2,
-                type: 'Button',
-                buttonText: 'Save'
               }
             ]
           }

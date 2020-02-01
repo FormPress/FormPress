@@ -7,7 +7,9 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _EditableLabel = _interopRequireDefault(require("../EditableLabel"));
+var _EditableLabel = _interopRequireDefault(require("../common/EditableLabel"));
+
+var _ElementContainer = _interopRequireDefault(require("../common/ElementContainer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

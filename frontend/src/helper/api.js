@@ -8,7 +8,6 @@ const BACKEND = process.env.REACT_APP_BACKEND
 let token = ''
 
 export const setToken = (_token) => {
-  console.log('Setting token to ', _token)
   token = _token
 }
 

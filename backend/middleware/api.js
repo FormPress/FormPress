@@ -201,8 +201,8 @@ module.exports = (app) => {
         { className: 'fl form', form, mode: 'renderer' }
       )
     )
-
     let style = fs.readFileSync(path.resolve('../', 'frontend/src/App.css'))
+
     style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
 
     const { FP_ENV, FP_HOST } = process.env

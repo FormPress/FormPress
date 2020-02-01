@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
-import EditableLabel from '../EditableLabel'
+import EditableLabel from '../common/EditableLabel'
+import ElementContainer from '../common/ElementContainer'
 
 export default class TextArea extends Component {
   static weight = 1
@@ -24,7 +25,7 @@ export default class TextArea extends Component {
     }
 
     return (
-      <div className='element elementArea oh'  {...{ id: config.id, ...this.props.ddHandlers }}>
+      <ElementContainer type={ config.type } { ...this.props }>
         <EditableLabel
           className='fl label'
           mode={ mode }
@@ -40,7 +41,7 @@ export default class TextArea extends Component {
           >
           </textarea>
         </div>
-      </div>
+      </ElementContainer>
     )
   }
 }

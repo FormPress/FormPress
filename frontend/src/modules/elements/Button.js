@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
-import EditableLabel from '../EditableLabel'
+import EditableLabel from '../common/EditableLabel'
+import ElementContainer from '../common/ElementContainer'
 
 export default class Button extends Component {
   static weight = 2
@@ -20,7 +21,7 @@ export default class Button extends Component {
     }
 
     return (
-      <div className='element elementButton'  {...{ id: config.id, ...this.props.ddHandlers }}>
+      <ElementContainer type={ config.type } { ...this.props }>
         { (mode === 'builder')
           ? <button { ...inputProps }>
             <EditableLabel
@@ -33,7 +34,7 @@ export default class Button extends Component {
           </button>
           : <input type='submit' value={ config.buttonText } { ...inputProps } />
         }
-      </div>
+      </ElementContainer>
     )
   }
 }

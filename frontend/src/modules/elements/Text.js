@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 
-import EditableLabel from '../EditableLabel'
+import EditableLabel from '../common/EditableLabel'
+import ElementContainer from '../common/ElementContainer'
+
 import './Text.css'
 
 export default class Text extends Component {
@@ -25,7 +27,7 @@ export default class Text extends Component {
     }
 
     return (
-      <div className='element elementText oh' {...{ id: config.id, ...this.props.ddHandlers }}>
+      <ElementContainer type={ config.type } { ...this.props }>
         <EditableLabel
           className='fl label'
           mode={ mode }
@@ -40,7 +42,7 @@ export default class Text extends Component {
             { ...inputProps }
           />
         </div>
-      </div>
+      </ElementContainer>
     )
   }
 }
