@@ -7,11 +7,16 @@ const options = {
   plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-modules-commonjs'],
   presets: ['@babel/preset-react'] 
 }
-
+const frontendRuntimeTarget = path.resolve(path.resolve(
+  '../',
+  'frontend',
+  (process.env.FP_ENV === 'production') ? 'build' : 'public',
+  'runtime'
+))
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
-  path.resolve(path.resolve('../', 'frontend', 'public', 'runtime'))
+  frontendRuntimeTarget
 ]
 
 for (const dir of createDirs) {
@@ -25,7 +30,7 @@ const transformMap = [
     type: 'folder',
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'runtime'),
-    target: path.resolve('../', 'frontend', 'public', 'runtime')
+    target: frontendRuntimeTarget
   },
   {
     type: 'file',
