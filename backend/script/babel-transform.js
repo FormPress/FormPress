@@ -8,6 +8,17 @@ const options = {
   presets: ['@babel/preset-react'] 
 }
 
+const createDirs = [
+  path.resolve(path.resolve('./', 'script', 'transformed')),
+  path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
+]
+
+for (const dir of createDirs) {
+  if (fs.existsSync(dir) === false) {
+    fs.mkdirSync(dir)
+  }
+}
+
 const transformMap = [
   {
     type: 'folder',
