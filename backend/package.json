@@ -7,9 +7,7 @@
     "test": " mocha ./test/**/*.spec.js",
     "migrate": "node script/migrate.js",
     "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed",
-    "start": "yarn migrate && node app.js",
-    "rebuild-backend": "docker-compose stop backend && docker-compose rm -f backend && docker-compose build backend && docker-compose create backend && docker-compose start backend",
-    "restart-backend": "docker-compose stop backend && docker-compose start backend"
+    "start": "yarn migrate && node app.js"
   },
   "author": "kemal@formpress.org",
   "license": "ISC",
@@ -21,6 +19,9 @@
     "@babel/preset-react": "7.7.4",
     "@babel/register": "7.7.7",
     "@sendgrid/mail": "6.4.0",
+    "@fortawesome/fontawesome-svg-core": "1.2.26",
+    "@fortawesome/free-solid-svg-icons": "5.12.0",
+    "@fortawesome/react-fontawesome": "0.1.8",
     "ejs": "3.0.1",
     "express": "4.17.1",
     "ignore-styles": "5.0.1",

@@ -5,8 +5,14 @@
   <%- headerAppend %>
 </head>
 <body>
-  <form method="POST" action="<%= postTarget %>">
+  <form method="POST" action="<%= postTarget %>" id="FORMPRESS_FORM_<%= FORMID %>">
     <%- form %>
   </form>
+  <script>
+    var FORMID = "<%= FORMID %>"
+    var BACKEND = "<%= BACKEND %>"
+    var USERID = "<%= USERID %>"
+  </script>
+  <script src="<%= RUNTIMEJSURL %>"></script>
 </body>
 </html>

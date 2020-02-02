@@ -10,6 +10,12 @@ const options = {
 
 const transformMap = [
   {
+    type: 'folder',
+    extension: '.js',
+    source: path.resolve('../', 'frontend', 'src', 'runtime'),
+    target: path.resolve('../', 'frontend', 'public', 'runtime')
+  },
+  {
     type: 'file',
     source: path.resolve('../', 'frontend', 'src', 'modules', 'Renderer.js'),
     target: path.resolve('./', 'script', 'transformed', 'Renderer.js')

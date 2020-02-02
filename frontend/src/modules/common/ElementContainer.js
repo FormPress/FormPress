@@ -27,10 +27,10 @@ export default class ElementContainer extends Component {
     return (
       <div
         className={ classNames.join(' ') }
-        {...{ id: config.id, ...builderHandlers }}
+        {...{ id: `qc_${config.id}`, ...builderHandlers }}
       >
         { this.props.children }
-        { 
+        {
           (mode === 'builder')
             ? <div className='action'>
               <FontAwesomeIcon icon={faTrash} />
