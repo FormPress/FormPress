@@ -1,6 +1,7 @@
 .env
 backend/node_modules
+backend/script/transformed/
+frontend/public/runtime/
 frontend/node_modules
 release.sh
 k8s
-

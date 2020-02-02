@@ -3,13 +3,23 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
-export default class TextArea extends Component {
-  static weight = 2
+export default class Checkbox extends Component {
+  static weight = 3
 
   static defaultConfig = {
     id: 0,
-    type: 'TextArea',
+    type: 'Checkbox',
     label: 'Label'
+  }
+
+  static configurableSettings = {
+    required: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field required?'
+      }
+    }
   }
 
   render() {
@@ -17,7 +27,7 @@ export default class TextArea extends Component {
     const inputProps = {}
 
     if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
+      inputProps.checked = (config.value === true)
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -35,12 +45,12 @@ export default class TextArea extends Component {
           required={ config.required }
         />
         <div className='fl input'>
-          <textarea
+          <input
+            type='checkbox'
             id={ `q_${config.id}` }
             name={ `q_${config.id}` }
             { ...inputProps }
-          >
-          </textarea>
+          />
         </div>
       </ElementContainer>
     )

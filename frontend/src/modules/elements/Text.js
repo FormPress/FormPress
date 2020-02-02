@@ -14,6 +14,16 @@ export default class Text extends Component {
     label: 'Label'
   }
 
+  static configurableSettings = {
+    required: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field required?'
+      }
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -34,6 +44,7 @@ export default class Text extends Component {
           labelKey={ config.id }
           handleLabelChange={ this.props.handleLabelChange }
           value={ config.label }
+          required={ config.required }
         />
         <div className='fl input'>
           <input

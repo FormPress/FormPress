@@ -16,7 +16,10 @@ export default class EditableLabel extends Component {
   handleOnBlur (e) {
     this.props.handleLabelChange(
       this.props.labelKey,
-      e.target.innerHTML.replace(/(<([^>]+)>)/ig, '')
+      e.target.innerHTML
+        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+        .replace(/(<([^>]+)>)/ig, '')
+        .trim()
     )
   }
 
@@ -43,7 +46,11 @@ export default class EditableLabel extends Component {
         suppressContentEditableWarning={ true }
         { ...extraProps }
       >
-        { this.props.value }
+        { this.props.value } {
+          (this.props.required === true)
+            ? <span className='requiredMarker' contentEditable={ false }>*</span>
+            : null
+        }
       </div>
     )
   }

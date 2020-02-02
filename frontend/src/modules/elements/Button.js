@@ -4,7 +4,7 @@ import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
 export default class Button extends Component {
-  static weight = 2
+  static weight = 4
 
   static defaultConfig = {
     id: 0,

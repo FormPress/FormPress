@@ -40,6 +40,8 @@ if (process.env.FP_ENV === 'production') {
     res.header('Content-type', 'text/html')
     res.status(200).send(staticIndexHtml)
   })
+} else {
+  app.use(express.static('/frontend/public'))
 }
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

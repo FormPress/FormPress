@@ -3,22 +3,14 @@ import React, { Component } from 'react'
 import './Tabs.css'
 
 export default class Tabs extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      activeTab: false
-    }
-  }
-
   handleTabClick (item, e) {
     e.preventDefault()
-    this.setState({ activeTab: item.name })
+    this.props.setActiveTab(item.name)
   }
 
   render() {
-    let { activeTab } = this.state
-    const { items } = this.props
+    let { activeTab } = this.props
+    const items = this.props.items.filter((item) => (item !== null))
 
     if (activeTab === false && items.length > 0) {
       activeTab = items[0].name

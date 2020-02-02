@@ -6,16 +6,38 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import Tabs from './common/Tabs'
 import FormProperties from './helper/FormProperties'
+import QuestionProperties from './helper/QuestionProperties'
 import { api } from '../helper'
 
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
-//Stuff that we render in left hand side
-const getElements = () => Object.values(Elements).map((element) => Object
-  .assign({}, element.defaultConfig)
+const getElements = () => Object.values(Elements).map((element) => {
+    const config = Object
+      .assign({}, element.defaultConfig)
+    
+    if (typeof element.configurableSettings !== 'undefined') {
+      const configurableKeys = Object.keys(element.configurableSettings)
+
+      for (const key of configurableKeys) {
+        config[key] = element.configurableSettings[key].default
+      }
+    }
+
+    return config
+  }
 )
+const getElementsConfigurableSettingsObject = () => Object
+  .values(Elements)
+  .reduce((acc, element) => {
+    acc[element.defaultConfig.type] = {
+      configurableSettings: element.configurableSettings || {}
+    }
+
+    return acc
+  }, {})
+
 const getWeightedElements = () => Object
   .values(Elements)
   .map((element) => Object
@@ -27,6 +49,8 @@ const getElementsKeys = () => getElements()
 
     return acc
   }, {})
+
+//Stuff that we render in left hand side
 const pickerElements = getWeightedElements()
   .sort((a, b) => a.weight - b.weight)
 
@@ -103,15 +127,21 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setActiveTab (activeTab) {
+    this.setState({ activeTab })
+  }
+
   constructor (props) {
     super(props)
     this.state = {
       counter: 0,
+      activeTab: false,
       saving: false,
       loading: false,
       dragging: false,
       dragIndex: false,
       insertBefore: false,
+      selectedFieldId: false,
       form: {
         id: null,
         user_id: null,
@@ -147,7 +177,10 @@ class Builder extends Component {
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.handleFormElementClick = this.handleFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
+    this.setActiveTab = this.setActiveTab.bind(this)
+    this.configureQuestion = this.configureQuestion.bind(this)
   }
 
   handleDragStart (item, e) {
@@ -209,7 +242,7 @@ class Builder extends Component {
     const rect = e.target.getBoundingClientRect()
     const {top, height} = rect
     const {clientY} = e
-    const id = e.target.id
+    const id = e.target.id.replace('qc_', '')
     const middleTop = top + height / 2
     const diff = clientY - middleTop
     const insertBefore = (diff < 0)
@@ -258,6 +291,23 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  handleFormElementClick (e) {
+    e.preventDefault()
+    const id = parseInt(e.target.id.replace('qc_', ''))
+    const { elements } = this.state.form.props
+
+    const matchingElements = elements.filter((elem) => (elem.id === id))
+
+    if (matchingElements.length === 1) {
+      this.setState({
+        selectedFieldId: id,
+        activeTab: 'questionProperties'
+      })
+    }
+
+    console.log('Form Element Clicked ', e.target.id)
+  }
+
   async handleSaveClick (e) {
     const { form } = this.state
 
@@ -289,12 +339,49 @@ class Builder extends Component {
     window.open(`${BACKEND}/form/view/${id}`, '_blank')
   }
 
+  configureQuestion (changes) {
+    console.log('Configure question is called with ', changes)
+    const form = { ...this.state.form }
+
+    form.props.elements = [...form.props.elements]
+
+    const question = form
+      .props
+      .elements
+      .filter((element) => (element.id === changes.id))[0]
+
+    Object.assign(question, changes.newState)
+
+    this.setState({ form })
+  }
+
   render () {
-    const { form, loading, saving } = this.state
+    const {
+      activeTab,
+      dragging,
+      form,
+      loading,
+      saving,
+      selectedFieldId
+    } = this.state
     const saveButtonProps = {}
+    const selectedField = {}
 
     if (saving === true || loading === true) {
       saveButtonProps.disabled = true
+    }
+
+    if (selectedFieldId !== false) {
+      const selectedFieldConfig = form
+        .props
+        .elements
+        .filter((elem) => (elem.id === selectedFieldId))[0]
+
+      const elements = getElementsConfigurableSettingsObject()
+
+      selectedField.config = selectedFieldConfig
+      selectedField.configurableSettings = elements[selectedFieldConfig.type]
+        .configurableSettings || {}
     }
 
     return (
@@ -328,6 +415,8 @@ class Builder extends Component {
           <div className='fl leftMenu'>
             <Tabs
               className='leftMenuContents'
+              activeTab={ activeTab }
+              setActiveTab={ this.setActiveTab }
               items={[
                 {
                   name: 'elements',
@@ -361,7 +450,18 @@ class Builder extends Component {
                     form,
                     setIntegration: this.setIntegration
                   }
-                }
+                },
+                (selectedFieldId !== false)
+                  ? {
+                    name: 'questionProperties',
+                    text: 'Question Properties',
+                    component: QuestionProperties,
+                    props: {
+                      selectedField,
+                      configureQuestion: this.configureQuestion
+                    }
+                  } :
+                  null
               ]}
             />
           </div>
@@ -369,16 +469,18 @@ class Builder extends Component {
             (loading === true)
               ? 'Loading...'
               : <Renderer
-                className='fl form'
-                ddHandlers={{
+                className={`fl form${(dragging === true)? ' dragging' : ''}`}
+                builderHandlers={{
                   onDrop: this.handleDrop,
-                  onDragOver: this.handleDragOver
+                  onDragOver: this.handleDragOver,
+                  onClick: this.handleFormElementClick
                 }}
                 handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
-                dragging={ this.state.dragging }
+                dragging={ dragging }
                 insertBefore={ this.state.insertBefore }
                 form={ form }
+                selectedFieldId={ selectedFieldId }
                 mode='builder'
               />
           }

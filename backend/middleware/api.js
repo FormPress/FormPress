@@ -77,6 +77,25 @@ module.exports = (app) => {
     }
   )
 
+  // return form questions
+  app.get('/api/users/:user_id/forms/:form_id/elements',
+    async (req, res) => {
+      const { user_id, form_id } = req.params
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
+      `, [form_id])
+
+      if (result.length === 1) {
+        const form = result[0]
+
+        res.json(JSON.parse(form.props).elements)
+      } else {
+        res.json({})
+      }
+    }
+  )
+
   // delete single form via id
   app.delete(
     '/api/users/:user_id/forms/:form_id',
@@ -206,9 +225,10 @@ module.exports = (app) => {
     style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
 
     const { FP_ENV, FP_HOST } = process.env
-    const postTarget = (FP_ENV === 'development')
-      ? `${FP_HOST}:${port}/form/submit/${form.id}`
-      : `${FP_HOST}/form/submit/${form.id}`
+    const BACKEND = (FP_ENV === 'development')
+      ? `${FP_HOST}:${port}`
+      : FP_HOST
+    const postTarget = `${BACKEND}/form/submit/${form.id}`
 
     res.render(
       'form.tpl.ejs',
@@ -216,7 +236,11 @@ module.exports = (app) => {
         headerAppend: `<style type='text/css'>${style}</style>`,
         title: form.title,
         form: str,
-        postTarget
+        postTarget,
+        BACKEND,
+        FORMID: id,
+        USERID: form.user_id,
+        RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
       }
     )
   })
