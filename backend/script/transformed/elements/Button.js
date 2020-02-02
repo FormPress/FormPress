@@ -33,12 +33,9 @@ class Button extends _react.Component {
       inputProps.onClick = config.onClick;
     }
 
-    return _react.default.createElement("div", _extends({
-      className: "element elementButton"
-    }, {
-      id: config.id,
-      ...this.props.ddHandlers
-    }), mode === 'builder' ? _react.default.createElement("button", inputProps, _react.default.createElement(_EditableLabel.default, {
+    return _react.default.createElement(_ElementContainer.default, _extends({
+      type: config.type
+    }, this.props), mode === 'builder' ? _react.default.createElement("button", inputProps, _react.default.createElement(_EditableLabel.default, {
       className: "fl label",
       mode: mode,
       labelKey: config.id,

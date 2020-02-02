@@ -37,12 +37,9 @@ class TextArea extends _react.Component {
       inputProps.onChange = this.props.onChange;
     }
 
-    return _react.default.createElement("div", _extends({
-      className: "element elementArea oh"
-    }, {
-      id: config.id,
-      ...this.props.ddHandlers
-    }), _react.default.createElement(_EditableLabel.default, {
+    return _react.default.createElement(_ElementContainer.default, _extends({
+      type: config.type
+    }, this.props), _react.default.createElement(_EditableLabel.default, {
       className: "fl label",
       mode: mode,
       labelKey: config.id,

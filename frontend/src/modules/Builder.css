@@ -59,7 +59,7 @@
   cursor: move;
 }
 
-.builder > .content > .form {
+.form {
   width: 59%;
   margin-left: 1%;
   padding: 20px;
@@ -68,14 +68,33 @@
   border-radius: 2px;
 }
 
-.builder > .content > .form.dragging > * *{
+.form.dragging > * *{
   pointer-events: none;
 }
 
-.builder > .content > .form > .dropPlaceHolder {
+.form > .dropPlaceHolder {
   pointer-events: none;
   height: 3px;
   width: 100%;
   background-color: blue;
   opacity: 0.5;
+}
+
+.form > .element > .action {
+  display: none;
+  float: right;
+  margin-top: -23px;
+  font-size: 14px;
+}
+
+.form > .element > .action > * {
+  cursor: pointer;
+}
+
+.form > .element:hover, .form > .element.selected {
+  border: 1px solid black
+}
+
+.form > .element:hover > .action, .form > .element.selected > .action {
+  display: block;
 }

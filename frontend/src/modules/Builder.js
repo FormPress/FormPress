@@ -6,6 +6,7 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import Tabs from './common/Tabs'
 import FormProperties from './helper/FormProperties'
+import QuestionProperties from './helper/QuestionProperties'
 import { api } from '../helper'
 
 import './Builder.css'
@@ -103,15 +104,21 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setActiveTab (activeTab) {
+    this.setState({ activeTab })
+  }
+
   constructor (props) {
     super(props)
     this.state = {
       counter: 0,
+      activeTab: false,
       saving: false,
       loading: false,
       dragging: false,
       dragIndex: false,
       insertBefore: false,
+      selectedFieldId: false,
       form: {
         id: null,
         user_id: null,
@@ -147,7 +154,10 @@ class Builder extends Component {
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.handleFormElementClick = this.handleFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
+    this.setActiveTab = this.setActiveTab.bind(this)
+
   }
 
   handleDragStart (item, e) {
@@ -258,6 +268,23 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  handleFormElementClick (e) {
+    e.preventDefault()
+    const id = parseInt(e.target.id)
+    const { elements } = this.state.form.props
+
+    const matchingElements = elements.filter((elem) => (elem.id === id))
+
+    if (matchingElements.length === 1) {
+      this.setState({
+        selectedFieldId: id,
+        activeTab: 'questionProperties'
+      })
+    }
+
+    console.log('Form Element Clicked ', e.target.id)
+  }
+
   async handleSaveClick (e) {
     const { form } = this.state
 
@@ -290,7 +317,14 @@ class Builder extends Component {
   }
 
   render () {
-    const { form, loading, saving } = this.state
+    const {
+      activeTab,
+      dragging,
+      form,
+      loading,
+      saving,
+      selectedFieldId
+    } = this.state
     const saveButtonProps = {}
 
     if (saving === true || loading === true) {
@@ -328,6 +362,8 @@ class Builder extends Component {
           <div className='fl leftMenu'>
             <Tabs
               className='leftMenuContents'
+              activeTab={ activeTab }
+              setActiveTab={ this.setActiveTab }
               items={[
                 {
                   name: 'elements',
@@ -361,7 +397,17 @@ class Builder extends Component {
                     form,
                     setIntegration: this.setIntegration
                   }
-                }
+                },
+                (selectedFieldId !== false)
+                  ? {
+                    name: 'questionProperties',
+                    text: 'Question Properties',
+                    component: QuestionProperties,
+                    props: {
+                      form
+                    }
+                  } :
+                  null
               ]}
             />
           </div>
@@ -369,16 +415,18 @@ class Builder extends Component {
             (loading === true)
               ? 'Loading...'
               : <Renderer
-                className='fl form'
-                ddHandlers={{
+                className={`fl form${(dragging === true)? ' dragging' : ''}`}
+                builderHandlers={{
                   onDrop: this.handleDrop,
-                  onDragOver: this.handleDragOver
+                  onDragOver: this.handleDragOver,
+                  onClick: this.handleFormElementClick
                 }}
                 handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
-                dragging={ this.state.dragging }
+                dragging={ dragging }
                 insertBefore={ this.state.insertBefore }
                 form={ form }
+                selectedFieldId={ selectedFieldId }
                 mode='builder'
               />
           }

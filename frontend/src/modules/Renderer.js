@@ -7,7 +7,7 @@ export default class Renderer extends Component {
   }
 
   render () {
-    let { className, ddHandlers } = this.props
+    let { className, builderHandlers, selectedFieldId } = this.props
 
     if (this.props.dragging === true) {
       className += ' dragging'
@@ -15,7 +15,7 @@ export default class Renderer extends Component {
 
     return <div
       className={ className }
-      { ...ddHandlers }
+      { ...builderHandlers }
     >
     {this.props.form.props.elements.map((elem, index) => {
       const Component = Elements[elem.type]
@@ -34,6 +34,7 @@ export default class Renderer extends Component {
           config={ elem }
           ddHandlers={ this.props.ddHandlers }
           handleLabelChange={ this.props.handleLabelChange }
+          selectedFieldId={ selectedFieldId }
           { ...extraProps }
         />
       ]
