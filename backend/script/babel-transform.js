@@ -11,6 +11,7 @@ const options = {
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
+  path.resolve(path.resolve('../', 'frontend', 'public', 'runtime'))
 ]
 
 for (const dir of createDirs) {
