@@ -15,6 +15,8 @@ import PrivateRoute from './PrivateRoute'
 import Profile from './Profile'
 import { setToken } from './helper'
 
+import { Logo } from './svg'
+
 import './App.css'
 
 const auth = window.localStorage.getItem('auth')
@@ -75,43 +77,53 @@ class App extends Component {
     return (
       <Router>
       <AuthContext.Provider value={ auth }>
-        <div>
-          <nav className='nav oh'>
-            <ul className='menu fl'>
-              { (auth.loggedIn === true)
-                  ? [
-                    <li key='1'>
-                      <NavLink exact to='/' activeClassName='selected'>
-                        Home
-                      </NavLink>
-                    </li>,
-                    <li key='2'>
-                      <NavLink to='/forms' activeClassName='selected'>
-                        Forms
-                      </NavLink>
-                    </li>,
-                    <li key='3'>
-                      <NavLink to='/editor' activeClassName='selected'>
-                        Editor
-                      </NavLink>
-                    </li>,
-                    <li key='4'>
-                      <NavLink to='/data' activeClassName='selected'>
-                        Data
-                      </NavLink>
-                    </li>
-                  ]
-                  : <li>
-                      <NavLink to='/login' activeClassName='selected'>
-                        Login
-                      </NavLink>
-                  </li>
-              }
-            </ul>
-            <div className='fr profile_container'>
-              <Profile />
+        <div className='container'>
+          <div className='grid'>
+            <div className='grid header'>
+              <div className='col-1-16 logo'>
+                <Logo />
+              </div>
+              <div className='col-11-16 menu'>
+                <nav className='nav oh'>
+                  <ul className='menu fl'>
+                    { (auth.loggedIn === true)
+                        ? [
+                          <li key='1'>
+                            <NavLink exact to='/' activeClassName='selected'>
+                              Home
+                            </NavLink>
+                          </li>,
+                          <li key='2'>
+                            <NavLink to='/forms' activeClassName='selected'>
+                              Forms
+                            </NavLink>
+                          </li>,
+                          <li key='3'>
+                            <NavLink to='/editor' activeClassName='selected'>
+                              Editor
+                            </NavLink>
+                          </li>,
+                          <li key='4'>
+                            <NavLink to='/data' activeClassName='selected'>
+                              Data
+                            </NavLink>
+                          </li>
+                        ]
+                        : <li>
+                            <NavLink to='/login' activeClassName='selected'>
+                              Login
+                            </NavLink>
+                        </li>
+                    }
+                  </ul>
+                </nav>
+              </div>
+              <div className="col-4-16 profile_container">
+                <Profile />
+              </div>
             </div>
-          </nav>
+          </div>
+          
           <Switch>
             <Route exact path='/'>
               <div className='homepage'>

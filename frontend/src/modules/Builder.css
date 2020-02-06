@@ -1,12 +1,13 @@
 .builder {
   width: 100%;
   box-sizing: border-box;
+  margin-top: 86px;
 }
 
 .builder > .headerContainer {
   box-sizing: border-box;
   height: 40px;
-  top: 40px;
+  top: 86px;
   width: 100%;
   position: fixed;
   background-color: white;
@@ -30,7 +31,7 @@
 }
 
 .builder > .content {
-  padding-top: 80px;
+  padding-top: 40px;
 }
 
 /* Builder */
@@ -41,7 +42,7 @@
 
 .builder > .content > .leftMenu > .leftMenuContents {
   position: fixed;
-  top: 80px;
+  top: 126px;
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid black;

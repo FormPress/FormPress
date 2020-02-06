@@ -17,11 +17,10 @@ const Profile = () => {
          return <div>
           {
             (value.loggedIn === true)
-              ? <div> Wellcome {value.email}. <a href='#/' onClick={logout}>logout</a></div>
-              : <div> Wellcome <Link to='/login'>login here</Link></div>
+              ? <p> Wellcome {value.email}. <a href='#/' onClick={logout}>logout</a></p>
+              : <p> Wellcome <Link to='/login'>login here</Link></p>
           }
-
-        </div>
+          </div>
         }
       }
     </AuthContext.Consumer>
