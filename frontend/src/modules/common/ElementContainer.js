@@ -33,7 +33,7 @@ export default class ElementContainer extends Component {
         {
           (mode === 'builder')
             ? <div className='action'>
-              <FontAwesomeIcon icon={faTrash} />
+              <FontAwesomeIcon icon={ faTrash } />
             </div>
             : null
         }

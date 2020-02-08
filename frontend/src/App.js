@@ -77,7 +77,7 @@ class App extends Component {
     return (
       <Router>
       <AuthContext.Provider value={ auth }>
-        <div className='container'>
+        <div className='headerContainer'>
           <div className='grid'>
             <div className='grid header'>
               <div className='col-1-16 logo'>
@@ -123,7 +123,8 @@ class App extends Component {
               </div>
             </div>
           </div>
-          
+        </div>
+        <div className='content'>
           <Switch>
             <Route exact path='/'>
               <div className='homepage'>
@@ -141,6 +142,7 @@ class App extends Component {
             <Route path='/login' component={Login} />
           </Switch>
         </div>
+        
       </AuthContext.Provider>
       </Router>
     )

@@ -1,24 +1,45 @@
 .builder {
-  width: 100%;
-  box-sizing: border-box;
   margin-top: 86px;
 }
 
 .builder > .headerContainer {
-  box-sizing: border-box;
-  height: 40px;
+  height: 30px;
   top: 86px;
   width: 100%;
   position: fixed;
-  background-color: white;
+  background-color: #E2E2E2;
 }
 
 .builder > .headerContainer > .header {
-  box-sizing: border-box;
-  padding: 5px 10px;
-  height: 40px;
-  width: 100%;
+  height: 30px;
+  width: 1200px;
 }
+
+.builder > .headerContainer > .header .back {
+  background-color: #C9C9C9;
+  color: rgb(48, 93, 134);
+  line-height: 30px;
+  height: 30px;
+  width: 57px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.header > .mainTabs > a {
+  color: #1C5C85;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.header > .mainTabs > a.selected {
+  background-color: #1C5C85;
+  color: #FFFFFF;
+}
+
 
 .header > .formTitle {
   width: 400px;
@@ -32,41 +53,58 @@
 
 .builder > .content {
   padding-top: 40px;
+  width: 1200px;
+  margin: 0 auto;
 }
 
 /* Builder */
+
+.builder > .content > .leftTabs {
+  min-height: 100px;
+}
+
 .builder > .content > .leftMenu {
-  width: 25%;
   min-height: 500px;
 }
 
 .builder > .content > .leftMenu > .leftMenuContents {
   position: fixed;
   top: 126px;
-  padding: 20px;
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-radius: 2px;
-  width: inherit;
+  width: 359px;
+  box-shadow: 0px 3px 10px #00000014;
 }
 
-.elementList > .element {
+.elements > .elementsMessage {
+  background-color: #FFFCDD;
+  color: #646464;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+}
+
+.elements > .elementList {
+  margin-top: 20px;
+}
+
+.elements > .elementList > .element {
   width: 98%;
   margin: 5px 1%;
   padding: 5px 10px;
-  box-sizing: border-box;
   border: 1px solid black;
   border-radius: 2px;
   cursor: move;
 }
 
+.builderStage > .formTitle {
+  height: 60px;
+  line-height: 60px;
+  color: #1C5C85;
+  padding-left: 16px;
+  font-size: 18px;
+}
+
 .form {
-  width: 59%;
-  margin-left: 1%;
-  padding: 20px;
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-radius: 2px;
+  box-shadow: 0px 3px 10px #00000014
 }
 
 .form.dragging > * *{
@@ -81,6 +119,10 @@
   opacity: 0.5;
 }
 
+.form > .element {
+  border: 1px solid transparent;
+}
+
 .form > .element > .action {
   display: none;
   float: right;
@@ -93,7 +135,7 @@
 }
 
 .form > .element:hover, .form > .element.selected {
-  border: 1px solid black
+  border: 1px solid black;
 }
 
 .form > .element:hover > .action, .form > .element.selected > .action {
