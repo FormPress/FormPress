@@ -34,35 +34,50 @@
 - [DONE] Store last edited form in local storage, and if form_id url param is empty, redirect to last edited form
 - [DONE] Fix basic auth and JWT collision
 - [DONE] staging db auth using cloudsql proxy
-VNTTD:
-- Use user_id from auth context instead of hard coded 1
-- Use Renderer to allow users to change form and element properties on right hand side
+- [DONE] Use user_id from auth context instead of hard coded 1
+- [DONE] Use Renderer to allow users to change form and element properties on right hand side
   - Form Properties submission notification email
   - Question properties
     -- Define editable properties on question level with Renderer.js format
        For now include required fields
     -- Define JS injection logic, include seperate functionality if used such as required.js if any of the questions use required
+- [DONE] Put SendGrid api key in .env file and add it to .gitignore, load it via dotenv
+  so that we can remove hardcoded api key from repo. Usefull for making it opensource
+
+VNTTD:
+- code css for header profile section
+- code css for Forms section
+- code css for Data section
 
 MVP:
+- Implement Publish button functionality
+  -- Versionify forms, each click to publish, if different to last released version, should cause a version increment
+    --We can store new version of the form in a new table `form_published` and last version id in `form` table
+    -- on Preview, render latest saved form
+    -- on Publish, render latest published version
+    -- Ask user to save if there are unsaved progress in form editor
+- Allow questions to be sorted
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
 - Form themes: Make sure at least 1 theme exists for forms
 - Email notifications should use a formatted html/text version
-- Put SendGrid api key in .env file and add it to .gitignore, load it via dotenv
-  so that we can remove hardcoded api key from repo. Usefull for making it opensource
+
 - Add security check that only owner can view submissions
   Currently only user_id param is compared to the user_id in jwt token, this allows other users to query
   submissions of another user if form_id is known
 - Implement SignUp page along with login page
 - Implement forgot password feature
+- Styling: Get a designer to design everything and apply styling so it looks cool
+- A under construction page as homepage
+- A nice homepage
+- Do not transpile react components for form render each time on production
+  -- also, use redis cache to render forms from cached versions, probably form version id can be used for caching
 
 BackLog:
-- Do not transpile react components for form render each time on production
 - Templates: Implement template mechanism List templates and allow users to clone
-- Styling: Get a designer to design everything and apply styling so it looks cool
 - Add Multiple form Themes and allow quick switch between them
 - Decide basic paid plans
-- Implement a payment gateway (stripe) and accept paid subscriptions
+- Implement a payment gateway (braintree) and accept paid subscriptions
 - Implement functional tests (Using selenium, create a form and do a submission and verify it worked)
 - Add more form items: textarea, dropdown
   Work on customizing form elements such as, label at top, required..
@@ -72,12 +87,5 @@ BackLog:
   -- Payment gateways so that people can sell stuff with forms
   -- Google drive, dropbox, so that responses can go automatically to other places
   -- Webhook integration, so that when responses received, it can be forwarded to customer urls
-- API: a very nice to have, not very near
-- Make everything opensource with a suitable license so that formPress can't be used
-  commercially without a paid license
-- Finally somewhere in between, quit my job and focus on this business solely :)
-- Make sure the company is friendly to its workers, find ways to share financial success
-  with employees so they can enjoy life and have financial security through creative hardwork!
-  -- Do not hire toxic people and fire them if noticed. Treat people with respect. 
-  Build a rock solid company culture where everybody enjoys life, do good work and learn new things
-- Thats enough planning, now do some work
+- API: a very nice to have, not very near (Current way, we can expose internally used REST API just as is)
+- Make everything opensource with a suitable license
