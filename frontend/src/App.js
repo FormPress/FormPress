@@ -22,6 +22,7 @@ import './App.css'
 const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {
   token: '',
+  name: '',
   email: '',
   user_id: 0,
   exp: '',
@@ -51,19 +52,30 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth ({ email, user_id, token, loggedIn, exp }, persist = true) {
-    this.setState({ email, user_id, token, loggedIn, exp })
+  handleSetAuth (
+    {
+      name,
+      email,
+      user_id,
+      token,
+      loggedIn,
+      exp
+    }, 
+    persist = true
+  ) {
+    this.setState({ name, email, user_id, token, loggedIn, exp })
 
     if (persist === true) {
       window.localStorage.setItem('auth', JSON.stringify(
-        { email, user_id, token, loggedIn, exp }
-      ))  
+        { name, email, user_id, token, loggedIn, exp }
+      ))
     }
   }
 
   getAuthContextValue () {
     return {
       token: this.state.token,
+      name: this.state.name,
       email: this.state.email,
       user_id: this.state.user_id,
       loggedIn: this.state.loggedIn,
@@ -83,7 +95,7 @@ class App extends Component {
               <div className='col-1-16 logo'>
                 <Logo />
               </div>
-              <div className='col-11-16 menu'>
+              <div className='col-10-16 menu'>
                 <nav className='nav oh'>
                   <ul className='menu fl'>
                     { (auth.loggedIn === true)
@@ -118,7 +130,7 @@ class App extends Component {
                   </ul>
                 </nav>
               </div>
-              <div className="col-4-16 profile_container">
+              <div className="col-5-16 profile_container">
                 <Profile />
               </div>
             </div>

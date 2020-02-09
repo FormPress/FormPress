@@ -18,6 +18,20 @@
   padding: 12px 0;
 }
 
+.header > .profile_container > .profile {
+  line-height: 60px;
+  height: 60px;
+}
+
+.header > .profile_container > .profile > * {
+  float: right;
+  display: inline-block;
+}
+
+.header > .profile_container > .profile > .profileSVG {
+  cursor: pointer;
+}
+
 .nav {
   margin-top: 14px;
   width: auto;
@@ -52,10 +66,6 @@
   pointer-events: none;
   background-color: #113952;
   color: #ffffff;
-}
-
-.nav > .profile_container {
-  padding: 10px;
 }
 
 .content {
