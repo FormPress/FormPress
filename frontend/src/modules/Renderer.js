@@ -7,7 +7,13 @@ export default class Renderer extends Component {
   }
 
   render () {
-    let { className, builderHandlers, selectedFieldId } = this.props
+    let { className } = this.props
+    const {
+      customBuilderHandlers,
+      builderHandlers,
+      handleLabelChange,
+      selectedFieldId
+    } = this.props
 
     if (this.props.dragging === true) {
       className += ' dragging'
@@ -32,8 +38,9 @@ export default class Renderer extends Component {
           key={ index }
           id={ elem.id }
           config={ elem }
-          ddHandlers={ this.props.ddHandlers }
-          handleLabelChange={ this.props.handleLabelChange }
+          builderHandlers={ builderHandlers }
+          customBuilderHandlers = { customBuilderHandlers }
+          handleLabelChange={ handleLabelChange }
           selectedFieldId={ selectedFieldId }
           { ...extraProps }
         />

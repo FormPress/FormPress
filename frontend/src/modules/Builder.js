@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
-import Tabs from './common/Tabs'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import { api } from '../helper'
@@ -128,14 +130,20 @@ class Builder extends Component {
   }
 
   setActiveTab (activeTab) {
-    this.setState({ activeTab })
+    const newState = { activeTab }
+
+    if (activeTab !== 'questionProperties') {
+      newState.selectedFieldId = false
+    }
+
+    this.setState(newState)
   }
 
   constructor (props) {
     super(props)
     this.state = {
       counter: 0,
-      activeTab: false,
+      activeTab: 'elements',
       saving: false,
       loading: false,
       dragging: false,
@@ -178,6 +186,7 @@ class Builder extends Component {
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
+    this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.setActiveTab = this.setActiveTab.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
@@ -304,8 +313,14 @@ class Builder extends Component {
         activeTab: 'questionProperties'
       })
     }
+  }
 
-    console.log('Form Element Clicked ', e.target.id)
+  handleFormElementDeleteClick (id) {
+    const form = { ...this.state.form }
+
+    form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
+
+    this.setState({ form })
   }
 
   async handleSaveClick (e) {
@@ -340,7 +355,6 @@ class Builder extends Component {
   }
 
   configureQuestion (changes) {
-    console.log('Configure question is called with ', changes)
     const form = { ...this.state.form }
 
     form.props.elements = [...form.props.elements]
@@ -365,11 +379,108 @@ class Builder extends Component {
       selectedFieldId
     } = this.state
     const saveButtonProps = {}
-    const selectedField = {}
+    const tabs = [
+      { name: 'elements', text: 'Elements' },
+      { name: 'formProperties', text: 'Form Properties' }
+    ]
+
+    if (selectedFieldId !== false) {
+      tabs.push({ name: 'questionProperties', text: 'Question Properties' })
+    }
 
     if (saving === true || loading === true) {
       saveButtonProps.disabled = true
     }
+
+    return (
+      <div className='builder'>
+        <div className='headerContainer'>
+          <div className='header grid center'>
+            <div className='col-1-16'>
+              <Link to='/forms' className='back'>
+                <FontAwesomeIcon icon={ faChevronLeft } />
+              </Link>
+            </div>
+            <div className='col-15-16 mainTabs'>
+              {tabs.map((item, key) => (
+                <a
+                  href='#/'
+                  key={ key }
+                  onClick={ this.setActiveTab.bind(this, item.name) }
+                  className={
+                    (item.name === activeTab) ? 'selected' : undefined
+                  }
+                >
+                  { item.text }
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className='content grid'>
+          <div className='leftTabs col-1-16'>
+          </div>
+          <div className='leftMenu col-5-16'>
+            <div className='leftMenuContents'>
+              { this.renderLeftMenuContents() }
+            </div>
+          </div>
+          <div className='builderStage col-10-16 grid'>
+            <div className='formTitle col-16-16'>
+              {
+                (loading === false)
+                  ? <EditableLabel
+                    className='label'
+                    mode='builder'
+                    labelKey='title'
+                    handleLabelChange={ this.handleTitleChange }
+                    value={ form.title }
+                  />
+                  : null
+              }
+            </div>
+            <div className='col-16-16 formControls'>
+              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
+                { saving === true ? 'Saving...': 'Save' }
+              </button>
+              <button onClick={ this.handlePreviewClick }>
+                Preview
+              </button>
+              <button className='publish'>
+                Publish
+              </button>
+            </div>
+            {
+            (loading === true)
+              ? 'Loading...'
+              : <Renderer
+                className={`col-16-16 form${(dragging === true)? ' dragging' : ''}`}
+                builderHandlers={{
+                  onDrop: this.handleDrop,
+                  onDragOver: this.handleDragOver,
+                  onClick: this.handleFormElementClick
+                }}
+                customBuilderHandlers={{
+                  onDelete: this.handleFormElementDeleteClick
+                }}
+                handleLabelChange={ this.handleLabelChange }
+                dragIndex={ this.state.dragIndex }
+                dragging={ dragging }
+                insertBefore={ this.state.insertBefore }
+                form={ form }
+                selectedFieldId={ selectedFieldId }
+                mode='builder'
+              />
+          }
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  renderLeftMenuContents () {
+    const { activeTab, form, selectedFieldId } = this.state
+    const selectedField = {}
 
     if (selectedFieldId !== false) {
       const selectedFieldConfig = form
@@ -383,110 +494,45 @@ class Builder extends Component {
       selectedField.configurableSettings = elements[selectedFieldConfig.type]
         .configurableSettings || {}
     }
-
-    return (
-      <div className='builder center'>
-        <div className='headerContainer'>
-          <div className='header oh'>
-            <div className='formTitle fl'>
-              {
-                (loading === false)
-                  ? <EditableLabel
-                    className='label'
-                    mode='builder'
-                    labelKey='title'
-                    handleLabelChange={ this.handleTitleChange }
-                    value={ form.title }
-                  />
-                  : null
-              }
+    
+    switch (activeTab) {
+      case 'elements':
+        return (
+          <div className='elements'>
+            <div className='elementsMessage'>
+              Drag and Drop elements to right hand side to add to the form.
+              Or you can click + icon
             </div>
-            <div className='formControls fl'>
-              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-                { saving === true ? 'Saving...': 'Save' }
-              </button>
-              <button onClick={ this.handlePreviewClick }>
-                Preview Form
-              </button>
+            <div className='elementList'>
+              {pickerElements.map((elem) =>
+                <div
+                  className='element'
+                  draggable
+                  onDragStart={ this.handleDragStart.bind(this, elem) }
+                  onDragEnd={ this.handleDragEnd }
+                  key={ elem.type }
+                >
+                  { elem.type }
+                </div>
+              )}
             </div>
           </div>
-        </div>
-        <div className='content oh'>
-          <div className='fl leftMenu'>
-            <Tabs
-              className='leftMenuContents'
-              activeTab={ activeTab }
-              setActiveTab={ this.setActiveTab }
-              items={[
-                {
-                  name: 'elements',
-                  text: 'Form Elements',
-                  content: (
-                    <div className='elements'>
-                      <div className='elementsContent'>
-                        <div>Form Elements</div>
-                        <div className='elementList'>
-                          {pickerElements.map((elem) =>
-                            <div
-                              className='element'
-                              draggable
-                              onDragStart={ this.handleDragStart.bind(this, elem) }
-                              onDragEnd={ this.handleDragEnd }
-                              key={ elem.type }
-                            >
-                              { elem.type }
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )
-                },
-                {
-                  name: 'formProperties',
-                  text: 'Form Properties',
-                  component: FormProperties,
-                  props: {
-                    form,
-                    setIntegration: this.setIntegration
-                  }
-                },
-                (selectedFieldId !== false)
-                  ? {
-                    name: 'questionProperties',
-                    text: 'Question Properties',
-                    component: QuestionProperties,
-                    props: {
-                      selectedField,
-                      configureQuestion: this.configureQuestion
-                    }
-                  } :
-                  null
-              ]}
-            />
-          </div>
-          {
-            (loading === true)
-              ? 'Loading...'
-              : <Renderer
-                className={`fl form${(dragging === true)? ' dragging' : ''}`}
-                builderHandlers={{
-                  onDrop: this.handleDrop,
-                  onDragOver: this.handleDragOver,
-                  onClick: this.handleFormElementClick
-                }}
-                handleLabelChange={ this.handleLabelChange }
-                dragIndex={ this.state.dragIndex }
-                dragging={ dragging }
-                insertBefore={ this.state.insertBefore }
-                form={ form }
-                selectedFieldId={ selectedFieldId }
-                mode='builder'
-              />
-          }
-        </div>
-      </div>
-    )
+        )
+      case 'formProperties':
+        return (
+          <FormProperties
+            form={ form }
+            setIntegration={ this.setIntegration }
+          />
+        )
+      case 'questionProperties':
+        return (
+          <QuestionProperties
+            selectedField={ selectedField }
+            configureQuestion={ this.configureQuestion }
+          />
+        )
+    }
   }
 }
 

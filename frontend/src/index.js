@@ -1,6 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import './style/normalize.css'
+import './style/grid.css'
+import './style/common.css'
 import './index.css'
 
 import App from './App'

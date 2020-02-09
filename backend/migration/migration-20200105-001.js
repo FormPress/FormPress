@@ -16,7 +16,7 @@ module.exports = async (db) => {
       PRIMARY KEY (\`id\`),
       KEY \`user_id\` (\`user_id\`),
       KEY \`deleted_at\` (\`deleted_at\`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
   `)
 
   await db.query(`
@@ -48,20 +48,21 @@ module.exports = async (db) => {
   await db.query(`
     CREATE TABLE \`user\` (
       \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      \`name\` varchar(256) DEFAULT NULL,
       \`email\` varchar(512) NOT NULL DEFAULT '',
       \`password\` char(128) NOT NULL DEFAULT '',
       \`salt\` char(128) NOT NULL DEFAULT '',
       PRIMARY KEY (\`id\`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=21DEFAULT CHARSET=utf8mb4;
   `)
 
   const hash = sha512('admin', genRandomString(128))
 
-  // insert default user
+  // insert default user email: admin@formpress.org and password: admin
   await db.query(`
     INSERT INTO \`user\`
-      (email, password, salt)
+      (name, email, password, salt)
     VALUES
-      ('admin@formpress.org', '${hash.passwordHash}', '${hash.salt}')
+      ('Admin', 'admin@formpress.org', '${hash.passwordHash}', '${hash.salt}')
   `)
 }

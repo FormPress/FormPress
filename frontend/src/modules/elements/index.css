@@ -1,3 +1,9 @@
+.form {
+  background-color: white;
+  width: 750px;
+  margin: 0 auto;
+}
+
 .form > .element {
   box-sizing: border-box;
   padding: 25px 10px;

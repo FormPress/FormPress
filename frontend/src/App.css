@@ -1,51 +1,63 @@
-.oh {
-  overflow: hidden;
-}
-
-.fl {
-  float: left;
-}
-
-.fr {
-  float: right;
-}
-
-.center {
+.headerContainer {
+  width: 1200px;
   margin: 0 auto;
 }
 
-.nav {
-  height: 40px;
-  width: 100%;
-  background-color: white;
-  top: 0;
+.headerContainer > .grid {
+  width: inherit;
+}
+.headerContainer > .grid > .header {
+  height: 86px;
   position: fixed;
+  background-color: #F5F5F5;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: inherit;
+  margin: 0 auto;
+  padding: 12px 0;
+}
+
+.nav {
+  margin-top: 14px;
+  width: auto;
 }
 
 .nav > ul {
-  height: 40px;
+  height: 30px;
   overflow: hidden;
-  padding: 10px;
   margin: 0;
-  box-sizing: border-box;
+  padding: 0;
 }
 
 .nav > ul > li {
   float: left;
   list-style: none;
-  margin-left: 15px;
 }
 
+.nav > ul > li > a {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 15px;
+  color: #1C5C85;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 0.8px;
+  text-align: center;
+}
 .nav > ul > li > a.selected {
   pointer-events: none;
-  font-weight: bold;
+  background-color: #113952;
+  color: #ffffff;
 }
 
 .nav > .profile_container {
   padding: 10px;
-  box-sizing: border-box;
 }
 
-.homepage {
-  margin-top: 40px;
+.content {
+  margin-top: 86px;
 }
