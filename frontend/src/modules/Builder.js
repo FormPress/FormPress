@@ -320,7 +320,10 @@ class Builder extends Component {
 
     form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
 
-    this.setState({ form })
+    this.setState({
+      form,
+      selectedFieldId: false
+    })
   }
 
   async handleSaveClick (e) {
