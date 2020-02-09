@@ -186,6 +186,7 @@ class Builder extends Component {
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
+    this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.setActiveTab = this.setActiveTab.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
@@ -312,8 +313,14 @@ class Builder extends Component {
         activeTab: 'questionProperties'
       })
     }
+  }
 
-    console.log('Form Element Clicked ', e.target.id)
+  handleFormElementDeleteClick (id) {
+    const form = { ...this.state.form }
+
+    form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
+
+    this.setState({ form })
   }
 
   async handleSaveClick (e) {
@@ -348,7 +355,6 @@ class Builder extends Component {
   }
 
   configureQuestion (changes) {
-    console.log('Configure question is called with ', changes)
     const form = { ...this.state.form }
 
     form.props.elements = [...form.props.elements]
@@ -379,7 +385,6 @@ class Builder extends Component {
     ]
 
     if (selectedFieldId !== false) {
-      console.log('SelectedFieldId is not false ', selectedFieldId)
       tabs.push({ name: 'questionProperties', text: 'Question Properties' })
     }
 
@@ -396,7 +401,7 @@ class Builder extends Component {
                 <FontAwesomeIcon icon={ faChevronLeft } />
               </Link>
             </div>
-            <div className='col-7-16 mainTabs'>
+            <div className='col-15-16 mainTabs'>
               {tabs.map((item, key) => (
                 <a
                   href='#/'
@@ -409,14 +414,6 @@ class Builder extends Component {
                   { item.text }
                 </a>
               ))}
-            </div>
-            <div className='col-8-16 formControls'>
-              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-                { saving === true ? 'Saving...': 'Save' }
-              </button>
-              <button onClick={ this.handlePreviewClick }>
-                Preview Form
-              </button>
             </div>
           </div>
         </div>
@@ -463,6 +460,9 @@ class Builder extends Component {
                   onDragOver: this.handleDragOver,
                   onClick: this.handleFormElementClick
                 }}
+                customBuilderHandlers={{
+                  onDelete: this.handleFormElementDeleteClick
+                }}
                 handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
                 dragging={ dragging }
@@ -495,7 +495,6 @@ class Builder extends Component {
         .configurableSettings || {}
     }
     
-    console.log('Rendering left menu contents ', selectedField)
     switch (activeTab) {
       case 'elements':
         return (

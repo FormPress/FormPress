@@ -3,19 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export default class ElementContainer extends Component {
-  constructor (props) {
-    super(props)
-
-    this.handleDeleteFieldClick = this.handleDeleteFieldClick.bind(this)
-  }
-
-  handleDeleteFieldClick (e) {
-    console.log('Field delete clicked')
+  handleDeleteClick (id, e) {
+    e.stopPropagation()
+    this.props.customBuilderHandlers.onDelete(id)
   }
 
   render() {
-    const { config, builderHandlers, mode, selectedFieldId, type } = this.props
-
+    const {
+      builderHandlers,
+      config,
+      customBuilderHandlers,
+      mode,
+      selectedFieldId,
+      type
+    } = this.props
     const classNames = ['element', 'oh']
 
     classNames.push(`element${type}`)
@@ -33,7 +34,10 @@ export default class ElementContainer extends Component {
         {
           (mode === 'builder')
             ? <div className='action'>
-              <FontAwesomeIcon icon={ faTrash } />
+              <FontAwesomeIcon
+                icon={ faTrash }
+                onClick={ this.handleDeleteClick.bind(this, config.id) }
+              />
             </div>
             : null
         }
