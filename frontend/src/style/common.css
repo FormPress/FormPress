@@ -1,0 +1,16 @@
+/* Generic classes */
+.oh {
+  overflow: hidden;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.center {
+  margin: 0 auto;
+}

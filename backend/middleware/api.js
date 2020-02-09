@@ -217,11 +217,12 @@ module.exports = (app) => {
     const str = reactDOMServer.renderToStaticMarkup(
       React.createElement(
         Renderer,
-        { className: 'fl form', form, mode: 'renderer' }
+        { className: 'form', form, mode: 'renderer' }
       )
     )
-    let style = fs.readFileSync(path.resolve('../', 'frontend/src/App.css'))
-
+    let style = fs.readFileSync(path.resolve('../', 'frontend/src/style/normalize.css'))
+    
+    style += fs.readFileSync(path.resolve('../', 'frontend/src/style/common.css'))
     style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
 
     const { FP_ENV, FP_HOST } = process.env

@@ -442,6 +442,17 @@ class Builder extends Component {
                   : null
               }
             </div>
+            <div className='col-16-16 formControls'>
+              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
+                { saving === true ? 'Saving...': 'Save' }
+              </button>
+              <button onClick={ this.handlePreviewClick }>
+                Preview
+              </button>
+              <button className='publish'>
+                Publish
+              </button>
+            </div>
             {
             (loading === true)
               ? 'Loading...'
