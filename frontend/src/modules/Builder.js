@@ -322,7 +322,8 @@ class Builder extends Component {
 
     this.setState({
       form,
-      selectedFieldId: false
+      selectedFieldId: false,
+      activeTab: 'elements'
     })
   }
 
