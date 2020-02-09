@@ -9,6 +9,7 @@
 .headerContainer > .grid > .header {
   height: 86px;
   position: fixed;
+  background-color: #F5F5F5;
   top: 0;
   left: 0;
   right: 0;
