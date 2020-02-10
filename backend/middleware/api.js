@@ -58,6 +58,43 @@ module.exports = (app) => {
     handleCreateForm
   )
 
+  // return forms of given user id
+  app.get(
+    '/api/users/:user_id/forms',
+    mustHaveValidToken, 
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const user_id = req.params.user_id
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT
+          id,
+          user_id,
+          title,
+          props,
+          created_at,
+          (
+            SELECT
+                COUNT(*)
+            FROM
+                submission
+            WHERE
+                form_id = \`form\`.\`id\`
+          ) as responseCount
+        FROM \`form\`
+        WHERE
+          user_id = ? AND 
+          deleted_at IS NULL
+      `, [user_id])
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
   // return single form via id
   app.get('/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
@@ -109,26 +146,6 @@ module.exports = (app) => {
       `, [form_id])
       
       res.json({message: 'deleted'})
-    }
-  )
-
-  // return forms of given user id
-  app.get(
-    '/api/users/:user_id/forms',
-    mustHaveValidToken, 
-    paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
-      const user_id = req.params.user_id
-      const db = await getPool()
-      const result = await db.query(`
-        SELECT * FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL
-      `, [user_id])
-
-      if (result.length > 0) {
-        res.json(result)
-      } else {
-        res.json([])
-      }
     }
   )
 

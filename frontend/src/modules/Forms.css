@@ -1,45 +1,97 @@
 .forms {
-  width: 900px;
-  margin: 40px auto 0;
 }
 
-.forms > .form {
-  padding: 20px 30px;
-  cursor: pointer;
-  box-sizing: border-box;
-  border: 1px solid gray;
-  border-collapse: collapse;
+.forms > .formsContent {
+  width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+  position: relative;
 }
 
-.forms > .form:hover {
-  border: 1px solid black;
+.forms table.fp_table {
+  width: 100%;
 }
 
-.forms > .form.gettingDeleted {
-  opacity: 0.5;
+.forms table.fp_table > thead > tr > th:first-child,
+.forms table.fp_table > tbody > tr > td:first-child {
+  text-align: center;
 }
 
-.forms > .form > .title {
-  width: 70%;
+.forms table.fp_table > tbody > tr {
+  height: 60px;
+  background-color: #FFFFFF;
+  border-bottom: 2px solid rgb(234, 239, 242);
 }
 
-.forms > .form > .actions {
-  width: 30%;
-  display: none;
-  text-align: right;
+.forms table.fp_table > tbody > tr:last-child {
+  border-bottom: none;
 }
 
-.forms > .form:hover > .actions {
-  display: block;
+.forms table.fp_table > tbody > tr > td.check {
+  min-width: 20px;
 }
 
-.forms > .form > .actions > a {
-  color: blue;
-  text-decoration: none;
-  margin-left: 10px;
+.forms table.fp_table > tbody > tr > td.name {
+  color: #333333;
+  font-size: 18px;
 }
 
-.forms > .form > .actions > a:hover {
+.forms table.fp_table .responseCount {
+  background-color: #1C5C85;
+  color: #FFFFFF;
+  font-size: 16px;
+  border-radius: 10px;
+  width: 57px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
   font-weight: bold;
 }
 
+.forms table.fp_table tr .actions {
+  visibility: hidden;
+}
+
+.forms table.fp_table tr:hover .actions {
+  visibility: visible;
+}
+
+.forms table.fp_table tr .actions > * {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  line-height: 40px;
+  text-align: center;
+  color: rgb(225, 225, 225);
+}
+
+.forms table.fp_table .actions > *:hover {
+  background-color: rgb(245, 245, 245);
+  color: rgb(48, 93, 134);
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.forms table.fp_table .actions svg {
+  font-size: 18px;
+}
+
+.forms > .newButtonContainer {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.forms > .newButtonContainer > a {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  background-color: #719FBD;
+  display: inline-block;
+  margin-top: 20px;
+}

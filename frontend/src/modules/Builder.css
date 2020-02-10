@@ -2,12 +2,13 @@
   margin-top: 86px;
 }
 
-.builder > .headerContainer {
+.builder > .headerContainer, .forms > .headerContainer {
   height: 30px;
   top: 86px;
   width: 100%;
   position: fixed;
   background-color: #E2E2E2;
+  z-index: 0;
 }
 
 .builder > .headerContainer > .header {

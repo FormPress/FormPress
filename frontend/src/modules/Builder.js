@@ -14,7 +14,6 @@ import { api } from '../helper'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
-
 const getElements = () => Object.values(Elements).map((element) => {
     const config = Object
       .assign({}, element.defaultConfig)
