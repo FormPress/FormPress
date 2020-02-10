@@ -105,7 +105,7 @@ class Forms extends Component {
             },
             {
               label: 'Created At',
-              content: (form) => new Date(form.created_at).toString()
+              content: (form) => [<Moment fromNow ago date={ form.created_at } />, ' ago']
             },
             {
               label: 'Actions',

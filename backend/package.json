@@ -1,6 +1,6 @@
 {
   "name": "FormPress",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "OpenSource data collection solution",
   "main": "app.js",
   "scripts": {
