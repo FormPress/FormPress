@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 
 import { api } from '../helper'
 import AuthContext from '../auth.context'
@@ -65,6 +68,7 @@ class Data extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      formSelectorOpen: false,
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
@@ -120,28 +124,22 @@ class Data extends Component {
   }
 
   render () {
-    const { loading, selectedFormId } = this.state
-    const forms = (loading.forms === true)
-      ? 'Loading...'
-      : <ul>
-        {this.state.forms.map((form, index) => (
-          <li
-            key={ index }
-            className={ (form.id === selectedFormId) ? 'selected' : '' }
-            onClick={this.handleFormClick.bind(this, form)}
-          >
-            {form.title}
-          </li>
-        ))}
-      </ul>
+    const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions = (loading.submissions === true)
       ? 'Loading...'
       : this.renderSubmissions()
     const entries = (loading.entries === true)
       ? 'Loading...'
       : this.renderEntries()
+    let formSelectorText = 'Please select form'
 
-    return (
+    if (selectedFormId !== null && forms.length > 0) {
+      formSelectorText = forms.filter(
+        (form) => (form.id === selectedFormId)
+      )[0].title
+    }
+
+    const oldContent = (
       <div className='data'>
         <div className='dataForms'>
           {forms}
@@ -151,6 +149,50 @@ class Data extends Component {
         </div>
         <div className='entries'>
           {entries}
+        </div>
+      </div>
+    )
+
+    return (
+      <div className='data'>
+        <div className='headerContainer'>
+          <div className='header cw grid center'>
+            <div className='col-1-16'>
+              <Link to='/forms' className='back'>
+                <FontAwesomeIcon icon={ faChevronLeft } />
+              </Link>
+            </div>
+            <div className='col-15-16 mainTabs'>
+              <a
+                href='#/'
+                className='selected'
+              >
+                Responses
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className='formSelectorContainer center'>
+          <div className='formSelector cw center grid'>
+            <div className='col-15-16' onClick={ () => {this.setState({formSelectorOpen: !formSelectorOpen })}}>
+              {formSelectorText}
+              {
+                (formSelectorOpen === true)
+                  ? forms.map((form, index) => (
+                    <li
+                      key={ index }
+                      onClick={ this.handleFormClick.bind(this, form) }
+                    >
+                      {form.title}
+                    </li>
+                  ))
+                  : null
+              }
+            </div>
+            <div className='col-1-16 down'>
+              <FontAwesomeIcon icon={ faChevronDown } />
+            </div>
+          </div>
         </div>
       </div>
     )

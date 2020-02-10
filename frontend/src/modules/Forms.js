@@ -79,8 +79,7 @@ class Forms extends Component {
   }
 
   render () {
-    const { forms, loading } = this.state
-    let content
+    const { forms } = this.state
 
     return <div className='forms'>
       <div className='headerContainer'></div>
@@ -105,14 +104,29 @@ class Forms extends Component {
             },
             {
               label: 'Created At',
-              content: (form) => [<Moment fromNow ago date={ form.created_at } />, ' ago']
+              content: (form) => [
+                <Moment fromNow ago date={ form.created_at } key='1' />,
+                <span key='2'>{ ' ago' }</span>
+              ]
             },
             {
               label: 'Actions',
               content: (form) => <div className='actions'>
-                <span><FontAwesomeIcon icon={ faEye } onClick={ this.handlePreviewClick.bind(this, form) } /></span>
-                <span><FontAwesomeIcon icon={ faTrash } onClick={ this.handleFormDeleteClick.bind(this, form) } /></span>
-                <Link to={ `/editor/${form.id}` }><FontAwesomeIcon icon={ faPen } /></Link>
+                <span>
+                  <FontAwesomeIcon
+                    icon={ faEye }
+                    onClick={ this.handlePreviewClick.bind(this, form) }
+                  />
+                </span>
+                <span>
+                  <FontAwesomeIcon
+                    icon={ faTrash }
+                    onClick={ this.handleFormDeleteClick.bind(this, form) }
+                  />
+                </span>
+                <Link to={ `/editor/${form.id}` }>
+                  <FontAwesomeIcon icon={ faPen } />
+                </Link>
               </div>
             }
           ]}
@@ -122,7 +136,6 @@ class Forms extends Component {
       <div className='newButtonContainer'>
         <Link to='/editor/new'>Create a new form</Link>
       </div>
-      
     </div>
   }
 }

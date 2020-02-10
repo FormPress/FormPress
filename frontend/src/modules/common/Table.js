@@ -18,9 +18,9 @@ export default class Table extends Component {
 
   renderHead () {
     return <tr>
-      { this.props.columns.map((column) => {
+      { this.props.columns.map((column, key) => {
         return (
-          <th>
+          <th key={ key }>
             { column.label }
           </th>
         )
@@ -29,10 +29,10 @@ export default class Table extends Component {
   }
 
   renderBody () {
-    return this.props.data.map((row) => {
+    return this.props.data.map((row, rowKey) => {
       return (
-        <tr>
-          { this.props.columns.map((column)=> {
+        <tr key={ rowKey }>
+          { this.props.columns.map((column, keyColumn)=> {
             const props = {}
 
             if (typeof column.className !== 'undefined') {
@@ -40,7 +40,7 @@ export default class Table extends Component {
             }
 
             return (
-              <td { ...props }>
+              <td key={ keyColumn } { ...props }>
                 { column.content(row) }
               </td>
             )

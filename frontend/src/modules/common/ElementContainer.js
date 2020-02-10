@@ -12,7 +12,6 @@ export default class ElementContainer extends Component {
     const {
       builderHandlers,
       config,
-      customBuilderHandlers,
       mode,
       selectedFieldId,
       type

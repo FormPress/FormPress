@@ -13,8 +13,8 @@ const Profile = () => {
 
   const renderLoggedIn = (auth) => {
     return [
-      <ProfileSVG className='profileSVG' onClick={ logout } />,
-      <span>Welcome { auth.name }</span>
+      <ProfileSVG key='1' className='profileSVG' onClick={ logout } />,
+      <span key='2'>Welcome { auth.name }</span>
     ]
   }
 

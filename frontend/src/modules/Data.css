@@ -1,45 +1,38 @@
 .data {
-  overflow: hidden;
   width: 100%;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  margin-top: 40px;
 }
 
-.data > div {
-  float: left;
-  min-height: 500px;
+.data .header {
+  margin: 0 auto;
+}
+
+.data > .formSelectorContainer {
+  height: 60px;
+  top: 132px;
+  width: 100%;
+  position: fixed;
+}
+
+.data > .formSelectorContainer > .formSelector {
+  border-left: 8px solid #113952;
+  color: #333333;
+  font-size: 18px;
+  padding-left: 8px;
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
+}
+
+.data > .formSelectorContainer > .formSelector > .down {
+  background-color: #719FBD;
+  color: white;
+  text-align: center;
+  font-size: 22px;
+}
+.data > .formSelectorContainer > .formSelector li {
+  list-style: none;
+  border: 1px solid transparent;
+}
+.data > .formSelectorContainer > .formSelector li:hover {
   border: 1px solid black;
-}
-
-.data > .dataForms {
-  width: 20%;
-}
-
-.data > .dataForms > ul > li {
-  cursor: pointer;
-}
-
-.data > .dataForms > ul > li.selected {
-  font-weight: bold;
-}
-
-.data > .submissions {
-  width: 40%;
-}
-
-.data > .submissions > table {
-  width: 100%;
-}
-
-.data > .submissions > table > tbody > tr {
-  cursor: pointer;
-}
-
-.data > .submissions > table > tbody > tr.selected {
-  background-color: #ddd;
-}
-
-.data > .entries {
-  width: 35%;
 }

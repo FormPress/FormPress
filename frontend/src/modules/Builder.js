@@ -535,6 +535,8 @@ class Builder extends Component {
             configureQuestion={ this.configureQuestion }
           />
         )
+      default:
+        return null
     }
   }
 }

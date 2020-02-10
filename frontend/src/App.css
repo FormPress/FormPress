@@ -1,12 +1,13 @@
-.headerContainer {
+#root > .headerContainer {
   width: 1200px;
   margin: 0 auto;
 }
 
-.headerContainer > .grid {
+#root > .headerContainer > .grid {
   width: inherit;
 }
-.headerContainer > .grid > .header {
+
+#root > .headerContainer > .grid > .header {
   height: 86px;
   position: fixed;
   background-color: #F5F5F5;
