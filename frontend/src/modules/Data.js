@@ -157,20 +157,6 @@ class Data extends Component {
       )[0].title
     }
 
-    const oldContent = (
-      <div className='data'>
-        <div className='dataForms'>
-          {forms}
-        </div>
-        <div className='submissions'>
-          {submissions}
-        </div>
-        <div className='entries'>
-          {entries}
-        </div>
-      </div>
-    )
-
     return (
       <div className='data'>
         <div className='headerContainer'>
@@ -305,22 +291,14 @@ class Data extends Component {
       return question.label
     }
 
-    return <table>
-      <thead>
-        <tr>
-          <th>Key</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        {this.state.entries.map((entry, index) => (
-          <tr key={ index }>
-            <td>{getLabel(entry.question_id)}</td>
-            <td>{entry.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    return entries.map((entry, index) => {
+      return (
+        <div key={ index } className='entry'>
+          <div className='label'>{ getLabel(entry.question_id) }</div>
+          <div className='value'>{ entry.value }</div>
+        </div>
+      )
+    })
   }
 }
 

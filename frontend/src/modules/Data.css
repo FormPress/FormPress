@@ -48,3 +48,21 @@
   background-color: #FFFFFF;
   cursor: pointer;
 }
+
+.data > .dataContent > .entriesViewer {
+  padding-top: 20px;
+  padding-left: 34px;
+}
+
+.data > .dataContent > .entriesViewer > .entry {
+  margin-bottom: 20px;
+}
+
+.data > .dataContent > .entriesViewer > .entry > .label {
+  color: #333333;
+  font-size: 12px;
+}
+.data > .dataContent > .entriesViewer > .entry > .value {
+  color: #113952;
+  padding-left: 16px;
+}
