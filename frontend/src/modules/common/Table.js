@@ -17,21 +17,35 @@ export default class Table extends Component {
   }
 
   renderHead () {
-    return <tr>
-      { this.props.columns.map((column, key) => {
-        return (
-          <th key={ key }>
-            { column.label }
-          </th>
-        )
-      })}
-    </tr>
+    return (
+      <tr onClick={this.pro}>
+        { this.props.columns.map((column, key) => {
+          const props = {}
+
+          if (typeof column.className !== 'undefined') {
+            props.className = column.className
+          }
+
+          return (
+            <th key={ key } { ...props }>
+              { column.label }
+            </th>
+          )
+        })}
+      </tr>
+    )
   }
 
   renderBody () {
     return this.props.data.map((row, rowKey) => {
+      const props = {}
+
+      if (typeof this.props.onTrClick !== 'undefined') {
+        props.onClick = this.props.onTrClick.bind(this, row)
+      }
+
       return (
-        <tr key={ rowKey }>
+        <tr key={ rowKey } {...props}>
           { this.props.columns.map((column, keyColumn)=> {
             const props = {}
 

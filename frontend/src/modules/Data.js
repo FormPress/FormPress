@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import Moment from 'react-moment'
 
 import { api } from '../helper'
 import AuthContext from '../auth.context'
+import Table from './common/Table'
 
 import './Data.css'
 
@@ -72,6 +74,7 @@ class Data extends Component {
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
+      selectedSubmissionIds: [],
       submissions: [],
       entries: [],
       loading: {
@@ -89,7 +92,22 @@ class Data extends Component {
     this.updateSubmissions(form.id)
   }
 
-  async handleSubmissionClick (submission, e) {
+  toggleSubmission (submission_id) {
+    const { selectedSubmissionIds } = this.state 
+
+    if (selectedSubmissionIds.includes(submission_id)) {
+      this.setState({
+        selectedSubmissionIds: selectedSubmissionIds
+          .filter((_submission_id) => (_submission_id !== submission_id))
+      })
+    } else {
+      this.setState({
+        selectedSubmissionIds: [...selectedSubmissionIds, submission_id]
+      })
+    }
+  }
+
+  async handleSubmissionClick (submission) {
     const { id } = submission
     const form_id = this.state.selectedFormId
 
@@ -194,45 +212,80 @@ class Data extends Component {
             </div>
           </div>
         </div>
+        <div className='cw center grid dataContent'>
+          <div className='submissionSelector col-5-16'>
+            { submissions }
+          </div>
+          <div className='entriesViewer col-11-16'>
+            { entries }
+          </div>
+        </div>
       </div>
     )
   }
 
   renderSubmissions () {
-    const { submissions, selectedSubmissionId } = this.state
+    const { submissions, selectedSubmissionId, selectedSubmissionIds } = this.state
+    let checkAllProps = { checked: true }
 
+    for (const { id } of submissions) {
+      if (selectedSubmissionIds.includes(id) === false) {
+        checkAllProps.checked = false
+        break
+      }
+    }
     if (submissions.length === 0) {
       return null
     }
 
-    return <table>
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>Created At</th>
-          <th>Updated At</th>
-          <th>Read</th>
-        </tr>
-      </thead>
-      <tbody>
-        { this.state.submissions.map((submission, index) => (
-          <tr
-            key={ index }
-            className={ (submission.id === selectedSubmissionId) ? 'selected' : '' }
-            onClick={ this.handleSubmissionClick.bind(this, submission) }
-          >
-            <td>{submission.id}</td>
-            <td>{submission.created_at}</td>
-            <td>{submission.updated_at}</td>
-            <td>{
-              (submission.read === 1)
-                ? 'Yes'
-                : 'No'
-            }</td>
-          </tr>
-        )) }
-      </tbody>
-    </table>
+    return (
+      <Table
+        onTrClick={this.handleSubmissionClick}
+        columns={[
+          {
+            label: <input
+              type='checkbox'
+              onChange={(e) => {
+                if (e.target.checked === true) {
+                  this.setState({
+                    selectedSubmissionIds: submissions.map((submission) => submission.id)
+                  })
+                } else {
+                  this.setState({
+                    selectedSubmissionIds: []
+                  })
+                }
+              }}
+              { ...checkAllProps }
+            />,
+            content: (submission) => {
+              const props = { checked: false }
+
+              if (selectedSubmissionIds.includes(submission.id)) {
+                props.checked = true
+              }
+
+              return (
+                <input
+                  type='checkbox'
+                  onChange={this.toggleSubmission.bind(this, submission.id)}
+                  { ...props }
+                />
+              )
+            },
+            className: 'text_center'
+          },
+          {
+            label: 'Response Date',
+            content: (submission) => [
+              <Moment fromNow ago date={ submission.created_at } key='1' />,
+              <span key='2'>{ ' ago' }</span>
+            ]
+          },
+        ]}
+        data={ submissions }
+      />
+    )
   }
 
   renderEntries () {

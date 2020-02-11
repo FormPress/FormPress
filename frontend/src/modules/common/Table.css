@@ -1,5 +1,6 @@
 table.fp_table {
   border-collapse: collapse;
+  width: 100%;
 }
 table.fp_table tr, table.fp_table td, table.fp_table th{
   margin: 0;
@@ -16,4 +17,14 @@ table.fp_table > thead {
   text-align: left;
   font-weight: normal;
   letter-spacing: 0;
+}
+
+table.fp_table > tbody > tr > td.mw,
+table.fp_table > thead > tr > th.mw {
+  min-width: 20px;
+}
+
+table.fp_table > tbody > tr > td.text_center,
+table.fp_table > thead > tr > th.text_center {
+  text-align: center;
 }

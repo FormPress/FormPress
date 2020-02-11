@@ -89,7 +89,7 @@ class Forms extends Component {
             {
               label: <span>{' '}</span>,
               content: () => <span>{' '}</span>,
-              className: 'check'
+              className: 'mw'
             },
             {
               label: 'Name',

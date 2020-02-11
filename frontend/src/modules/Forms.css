@@ -8,10 +8,6 @@
   position: relative;
 }
 
-.forms table.fp_table {
-  width: 100%;
-}
-
 .forms table.fp_table > thead > tr > th:first-child,
 .forms table.fp_table > tbody > tr > td:first-child {
   text-align: center;
@@ -25,10 +21,6 @@
 
 .forms table.fp_table > tbody > tr:last-child {
   border-bottom: none;
-}
-
-.forms table.fp_table > tbody > tr > td.check {
-  min-width: 20px;
 }
 
 .forms table.fp_table > tbody > tr > td.name {

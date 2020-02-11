@@ -32,7 +32,19 @@
 .data > .formSelectorContainer > .formSelector li {
   list-style: none;
   border: 1px solid transparent;
+  padding-left: 10px;
 }
 .data > .formSelectorContainer > .formSelector li:hover {
   border: 1px solid black;
+}
+
+.data > .dataContent {
+  margin-top: 210px;
+  background-color: white;
+}
+
+.data > .dataContent table.fp_table > tbody > tr {
+  height: 32px;
+  background-color: #FFFFFF;
+  cursor: pointer;
 }
