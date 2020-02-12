@@ -70,6 +70,12 @@ module.exports = {
       exampleRequestPath: '/api/users/1/forms/1/submissions'
     },
     {
+      method: 'post',
+      path: '/api/users/:user_id/forms/:form_id/CSVExport',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/CSVExport'
+    },
+    {
       method: 'get',
       path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
       protected: true,

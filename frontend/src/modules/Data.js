@@ -10,6 +10,19 @@ import Table from './common/Table'
 
 import './Data.css'
 
+function download(filename, text) {
+  var element = document.createElement('a')
+  element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(text))
+  element.setAttribute('download', filename)
+
+  element.style.display = 'none'
+  document.body.appendChild(element)
+
+  element.click()
+
+  document.body.removeChild(element)
+}
+
 class Data extends Component {
   setLoadingState (key, value) {
     this.setState({
@@ -38,25 +51,25 @@ class Data extends Component {
     this.setState({ forms })
   }
 
-  async updateSubmissionsSeamless (formId) {
+  async updateSubmissionsSeamless (form_id) {
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
     })
 
     this.setState({ submissions: data })
   }
 
-  async updateSubmissions (formId) {
+  async updateSubmissions (form_id) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
-      selectedFormId: formId,
+      selectedFormId: form_id,
       selectedSubmissionId: null,
       entries: []
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
     })
 
     this.setLoadingState('submissions', false)
@@ -86,6 +99,7 @@ class Data extends Component {
     
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
+    this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
   }
 
   handleFormClick (form, e) {
@@ -139,6 +153,20 @@ class Data extends Component {
     })
 
     this.updateSubmissionsSeamless(form_id)
+  }
+
+  async handleCSVExportClick () {
+    const form_id = this.state.selectedFormId
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/CSVExport`,
+      method: 'post',
+      body: {
+        submissionIds: this.state.selectedSubmissionIds
+      }
+    })
+
+    download(data.filename, data.content)
+    this.setState({ selectedSubmissionIds: [] })
   }
 
   render () {
@@ -246,7 +274,10 @@ class Data extends Component {
           0 submissions today.
         </div>
         <div className='col-6-16 buttonContainer'>
-          <button className={ csvExportClassNames.join(' ') }>
+          <button
+            className={ csvExportClassNames.join(' ') }
+            onClick={ this.handleCSVExportClick }
+          >
             { csvExportButtonText }
           </button>
         </div>
