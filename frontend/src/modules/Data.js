@@ -180,18 +180,20 @@ class Data extends Component {
           <div className='formSelector cw center grid'>
             <div className='col-15-16' onClick={ () => {this.setState({formSelectorOpen: !formSelectorOpen })}}>
               {formSelectorText}
-              {
-                (formSelectorOpen === true)
-                  ? forms.map((form, index) => (
-                    <li
-                      key={ index }
-                      onClick={ this.handleFormClick.bind(this, form) }
-                    >
-                      {form.title}
-                    </li>
-                  ))
-                  : null
-              }
+              <ul className='formSelectorOptions'>
+                {
+                  (formSelectorOpen === true)
+                    ? forms.map((form, index) => (
+                      <li
+                        key={ index }
+                        onClick={ this.handleFormClick.bind(this, form) }
+                      >
+                        {form.title}
+                      </li>
+                    ))
+                    : null
+                }
+              </ul>
             </div>
             <div className='col-1-16 down'>
               <FontAwesomeIcon icon={ faChevronDown } />
@@ -200,7 +202,10 @@ class Data extends Component {
         </div>
         <div className='cw center grid dataContent'>
           <div className='submissionSelector col-5-16'>
-            { submissions }
+            { (this.state.submissions.length === 0)
+                ? <div className='noData'>No data</div>
+                : submissions
+            }
           </div>
           <div className='entriesViewer col-11-16'>
             { entries }
@@ -220,13 +225,39 @@ class Data extends Component {
         break
       }
     }
+
     if (submissions.length === 0) {
       return null
     }
 
-    return (
+    const csvExportClassNames = ['csvExportButton']
+    let csvExportButtonText = 'Export CSV'
+
+    if (selectedSubmissionIds.length === 0) {
+      csvExportClassNames.push('disabled')
+    } else {
+      csvExportButtonText = `Export CSV (${selectedSubmissionIds.length})`
+    }
+
+    return [
+      <div className='submissionActions grid'>
+        <div className='col-10-16'>
+          { submissions.length } total submission(s). <br />
+          0 submissions today.
+        </div>
+        <div className='col-6-16 buttonContainer'>
+          <button className={ csvExportClassNames.join(' ') }>
+            { csvExportButtonText }
+          </button>
+        </div>
+      </div>,
       <Table
-        onTrClick={this.handleSubmissionClick}
+        onTrClick={ this.handleSubmissionClick }
+        getTrClassName={
+          (submission) => (submission.id === selectedSubmissionId)
+            ? 'selected'
+            : undefined
+        }
         columns={[
           {
             label: <input
@@ -271,7 +302,7 @@ class Data extends Component {
         ]}
         data={ submissions }
       />
-    )
+    ]
   }
 
   renderEntries () {

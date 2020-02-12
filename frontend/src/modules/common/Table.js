@@ -44,6 +44,10 @@ export default class Table extends Component {
         props.onClick = this.props.onTrClick.bind(this, row)
       }
 
+      if (typeof this.props.getTrClassName !== 'undefined') {
+        props.className = this.props.getTrClassName(row)
+      }
+
       return (
         <tr key={ rowKey } {...props}>
           { this.props.columns.map((column, keyColumn)=> {
