@@ -1,9 +1,27 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import Moment from 'react-moment'
 
 import { api } from '../helper'
 import AuthContext from '../auth.context'
+import Table from './common/Table'
 
 import './Data.css'
+
+function download(filename, text) {
+  var element = document.createElement('a')
+  element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(text))
+  element.setAttribute('download', filename)
+
+  element.style.display = 'none'
+  document.body.appendChild(element)
+
+  element.click()
+
+  document.body.removeChild(element)
+}
 
 class Data extends Component {
   setLoadingState (key, value) {
@@ -33,25 +51,25 @@ class Data extends Component {
     this.setState({ forms })
   }
 
-  async updateSubmissionsSeamless (formId) {
+  async updateSubmissionsSeamless (form_id) {
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
     })
 
     this.setState({ submissions: data })
   }
 
-  async updateSubmissions (formId) {
+  async updateSubmissions (form_id) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
-      selectedFormId: formId,
+      selectedFormId: form_id,
       selectedSubmissionId: null,
       entries: []
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
     })
 
     this.setLoadingState('submissions', false)
@@ -65,9 +83,11 @@ class Data extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      formSelectorOpen: false,
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
+      selectedSubmissionIds: [],
       submissions: [],
       entries: [],
       loading: {
@@ -79,13 +99,29 @@ class Data extends Component {
     
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
+    this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
   }
 
   handleFormClick (form, e) {
     this.updateSubmissions(form.id)
   }
 
-  async handleSubmissionClick (submission, e) {
+  toggleSubmission (submission_id) {
+    const { selectedSubmissionIds } = this.state 
+
+    if (selectedSubmissionIds.includes(submission_id)) {
+      this.setState({
+        selectedSubmissionIds: selectedSubmissionIds
+          .filter((_submission_id) => (_submission_id !== submission_id))
+      })
+    } else {
+      this.setState({
+        selectedSubmissionIds: [...selectedSubmissionIds, submission_id]
+      })
+    }
+  }
+
+  async handleSubmissionClick (submission) {
     const { id } = submission
     const form_id = this.state.selectedFormId
 
@@ -119,78 +155,185 @@ class Data extends Component {
     this.updateSubmissionsSeamless(form_id)
   }
 
+  async handleCSVExportClick () {
+    const form_id = this.state.selectedFormId
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/CSVExport`,
+      method: 'post',
+      body: {
+        submissionIds: this.state.selectedSubmissionIds
+      }
+    })
+
+    download(data.filename, data.content)
+    this.setState({ selectedSubmissionIds: [] })
+  }
+
   render () {
-    const { loading, selectedFormId } = this.state
-    const forms = (loading.forms === true)
-      ? 'Loading...'
-      : <ul>
-        {this.state.forms.map((form, index) => (
-          <li
-            key={ index }
-            className={ (form.id === selectedFormId) ? 'selected' : '' }
-            onClick={this.handleFormClick.bind(this, form)}
-          >
-            {form.title}
-          </li>
-        ))}
-      </ul>
+    const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions = (loading.submissions === true)
       ? 'Loading...'
       : this.renderSubmissions()
     const entries = (loading.entries === true)
       ? 'Loading...'
       : this.renderEntries()
+    let formSelectorText = 'Please select form'
+
+    if (selectedFormId !== null && forms.length > 0) {
+      formSelectorText = forms.filter(
+        (form) => (form.id === selectedFormId)
+      )[0].title
+    }
 
     return (
       <div className='data'>
-        <div className='dataForms'>
-          {forms}
+        <div className='headerContainer'>
+          <div className='header cw grid center'>
+            <div className='col-1-16'>
+              <Link to='/forms' className='back'>
+                <FontAwesomeIcon icon={ faChevronLeft } />
+              </Link>
+            </div>
+            <div className='col-15-16 mainTabs'>
+              <a
+                href='#/'
+                className='selected'
+              >
+                Responses
+              </a>
+            </div>
+          </div>
         </div>
-        <div className='submissions'>
-          {submissions}
+        <div className='formSelectorContainer center'>
+          <div className='formSelector cw center grid'>
+            <div className='col-15-16' onClick={ () => {this.setState({formSelectorOpen: !formSelectorOpen })}}>
+              {formSelectorText}
+              <ul className='formSelectorOptions'>
+                {
+                  (formSelectorOpen === true)
+                    ? forms.map((form, index) => (
+                      <li
+                        key={ index }
+                        onClick={ this.handleFormClick.bind(this, form) }
+                      >
+                        {form.title}
+                      </li>
+                    ))
+                    : null
+                }
+              </ul>
+            </div>
+            <div className='col-1-16 down'>
+              <FontAwesomeIcon icon={ faChevronDown } />
+            </div>
+          </div>
         </div>
-        <div className='entries'>
-          {entries}
+        <div className='cw center grid dataContent'>
+          <div className='submissionSelector col-5-16'>
+            { (this.state.submissions.length === 0)
+                ? <div className='noData'>No data</div>
+                : submissions
+            }
+          </div>
+          <div className='entriesViewer col-11-16'>
+            { entries }
+          </div>
         </div>
       </div>
     )
   }
 
   renderSubmissions () {
-    const { submissions, selectedSubmissionId } = this.state
+    const { submissions, selectedSubmissionId, selectedSubmissionIds } = this.state
+    let checkAllProps = { checked: true }
+
+    for (const { id } of submissions) {
+      if (selectedSubmissionIds.includes(id) === false) {
+        checkAllProps.checked = false
+        break
+      }
+    }
 
     if (submissions.length === 0) {
       return null
     }
 
-    return <table>
-      <thead>
-        <tr>
-          <th>id</th>
-          <th>Created At</th>
-          <th>Updated At</th>
-          <th>Read</th>
-        </tr>
-      </thead>
-      <tbody>
-        { this.state.submissions.map((submission, index) => (
-          <tr
-            key={ index }
-            className={ (submission.id === selectedSubmissionId) ? 'selected' : '' }
-            onClick={ this.handleSubmissionClick.bind(this, submission) }
+    const csvExportClassNames = ['csvExportButton']
+    let csvExportButtonText = 'Export CSV'
+
+    if (selectedSubmissionIds.length === 0) {
+      csvExportClassNames.push('disabled')
+    } else {
+      csvExportButtonText = `Export CSV (${selectedSubmissionIds.length})`
+    }
+
+    return [
+      <div className='submissionActions grid'>
+        <div className='col-10-16'>
+          { submissions.length } total submission(s). <br />
+          0 submissions today.
+        </div>
+        <div className='col-6-16 buttonContainer'>
+          <button
+            className={ csvExportClassNames.join(' ') }
+            onClick={ this.handleCSVExportClick }
           >
-            <td>{submission.id}</td>
-            <td>{submission.created_at}</td>
-            <td>{submission.updated_at}</td>
-            <td>{
-              (submission.read === 1)
-                ? 'Yes'
-                : 'No'
-            }</td>
-          </tr>
-        )) }
-      </tbody>
-    </table>
+            { csvExportButtonText }
+          </button>
+        </div>
+      </div>,
+      <Table
+        onTrClick={ this.handleSubmissionClick }
+        getTrClassName={
+          (submission) => (submission.id === selectedSubmissionId)
+            ? 'selected'
+            : undefined
+        }
+        columns={[
+          {
+            label: <input
+              type='checkbox'
+              onChange={(e) => {
+                if (e.target.checked === true) {
+                  this.setState({
+                    selectedSubmissionIds: submissions.map((submission) => submission.id)
+                  })
+                } else {
+                  this.setState({
+                    selectedSubmissionIds: []
+                  })
+                }
+              }}
+              { ...checkAllProps }
+            />,
+            content: (submission) => {
+              const props = { checked: false }
+
+              if (selectedSubmissionIds.includes(submission.id)) {
+                props.checked = true
+              }
+
+              return (
+                <input
+                  type='checkbox'
+                  onChange={this.toggleSubmission.bind(this, submission.id)}
+                  { ...props }
+                />
+              )
+            },
+            className: 'text_center'
+          },
+          {
+            label: 'Response Date',
+            content: (submission) => [
+              <Moment fromNow ago date={ submission.created_at } key='1' />,
+              <span key='2'>{ ' ago' }</span>
+            ]
+          },
+        ]}
+        data={ submissions }
+      />
+    ]
   }
 
   renderEntries () {
@@ -210,22 +353,14 @@ class Data extends Component {
       return question.label
     }
 
-    return <table>
-      <thead>
-        <tr>
-          <th>Key</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        {this.state.entries.map((entry, index) => (
-          <tr key={ index }>
-            <td>{getLabel(entry.question_id)}</td>
-            <td>{entry.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    return entries.map((entry, index) => {
+      return (
+        <div key={ index } className='entry'>
+          <div className='label'>{ getLabel(entry.question_id) }</div>
+          <div className='value'>{ entry.value }</div>
+        </div>
+      )
+    })
   }
 }
 

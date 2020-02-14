@@ -37,15 +37,23 @@ module.exports = (app) => {
         const jwt_data = {
           user_id: user.id,
           email: user.email,
+          name: user.name,
           exp
         }
 
         jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
-          console.log('SIGNED TOKEN ', token)
+          console.log('SIGNED TOKEN ', {
+            message: 'Login Success',
+            token,
+            user_id: user.id,
+            name: user.name,
+            exp
+          })
           res.status(200).json({
             message: 'Login Success',
             token,
             user_id: user.id,
+            name: user.name,
             exp
           })
         })

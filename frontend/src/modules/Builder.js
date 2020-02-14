@@ -14,7 +14,6 @@ import { api } from '../helper'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
-
 const getElements = () => Object.values(Elements).map((element) => {
     const config = Object
       .assign({}, element.defaultConfig)
@@ -320,7 +319,11 @@ class Builder extends Component {
 
     form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
 
-    this.setState({ form })
+    this.setState({
+      form,
+      selectedFieldId: false,
+      activeTab: 'elements'
+    })
   }
 
   async handleSaveClick (e) {
@@ -532,6 +535,8 @@ class Builder extends Component {
             configureQuestion={ this.configureQuestion }
           />
         )
+      default:
+        return null
     }
   }
 }

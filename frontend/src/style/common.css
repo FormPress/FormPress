@@ -1,4 +1,8 @@
 /* Generic classes */
+/*Application Width*/
+.cw {
+  width: 1200px;
+}
 .oh {
   overflow: hidden;
 }

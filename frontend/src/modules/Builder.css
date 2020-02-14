@@ -2,20 +2,25 @@
   margin-top: 86px;
 }
 
-.builder > .headerContainer {
+.builder > .headerContainer,
+.forms > .headerContainer,
+.data > .headerContainer {
   height: 30px;
   top: 86px;
   width: 100%;
   position: fixed;
   background-color: #E2E2E2;
+  z-index: 0;
 }
 
-.builder > .headerContainer > .header {
+.builder > .headerContainer > .header,
+.data > .headerContainer > .header {
   height: 30px;
   width: 1200px;
 }
 
-.builder > .headerContainer > .header .back {
+.builder > .headerContainer > .header .back,
+.data > .headerContainer > .header .back {
   background-color: #C9C9C9;
   color: rgb(48, 93, 134);
   line-height: 30px;
@@ -26,7 +31,8 @@
   display: inline-block;
 }
 
-.header > .mainTabs > a {
+.builder .header > .mainTabs > a,
+.data .header > .mainTabs > a {
   color: #1C5C85;
   display: inline-block;
   height: 30px;
@@ -35,7 +41,8 @@
   text-decoration: none;
 }
 
-.header > .mainTabs > a.selected {
+.builder .header > .mainTabs > a.selected,
+.data .header > .mainTabs > a.selected {
   background-color: #1C5C85;
   color: #FFFFFF;
 }

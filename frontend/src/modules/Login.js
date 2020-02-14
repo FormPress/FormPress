@@ -54,10 +54,10 @@ class Login extends Component {
     this.setState({ state: 'done', message: data.message })
 
     if (success === true) {
-      console.log('LOGIN OK')
       setToken(data.token)
       this.props.auth.setAuth({
         email,
+        name: data.name,
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
@@ -65,9 +65,7 @@ class Login extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
-      console.log('LOGIN FAIL')
     }
-
   }
 
   render () {
@@ -119,13 +117,12 @@ class Login extends Component {
   }
 }
 
-
-
-const LoginWrapped = (props) => 
+const LoginWrapped = (props) => (
   <AuthContext.Consumer>
     {
       (value) => <Login { ...props } auth={ value } />
     }
   </AuthContext.Consumer>
+)
 
 export default LoginWrapped

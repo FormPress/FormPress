@@ -1,45 +1,111 @@
 .data {
-  overflow: hidden;
   width: 100%;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  margin-top: 40px;
 }
 
-.data > div {
-  float: left;
-  min-height: 500px;
+.data .header {
+  margin: 0 auto;
+}
+
+.data > .formSelectorContainer {
+  height: 60px;
+  top: 132px;
+  width: 100%;
+  position: fixed;
+}
+
+.data > .formSelectorContainer > .formSelector {
+  border-left: 8px solid #113952;
+  background-color: white;
+  color: #333333;
+  font-size: 18px;
+  padding-left: 8px;
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
+}
+
+.data > .formSelectorContainer > .formSelector > .down {
+  background-color: #719FBD;
+  color: white;
+  text-align: center;
+  font-size: 22px;
+}
+
+.data > .formSelectorContainer > .formSelector ul.formSelectorOptions {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.data > .formSelectorContainer > .formSelector li {
+  list-style: none;
+  border: 1px solid transparent;
+  padding-left: 10px;
+}
+.data > .formSelectorContainer > .formSelector li:hover {
   border: 1px solid black;
 }
 
-.data > .dataForms {
-  width: 20%;
+
+.data > .dataContent {
+  margin-top: 210px;
+  background-color: white;
 }
 
-.data > .dataForms > ul > li {
+.data > .dataContent table.fp_table > tbody > tr {
+  height: 32px;
+  background-color: #FFFFFF;
   cursor: pointer;
 }
 
-.data > .dataForms > ul > li.selected {
-  font-weight: bold;
-}
-
-.data > .submissions {
-  width: 40%;
-}
-
-.data > .submissions > table {
-  width: 100%;
-}
-
-.data > .submissions > table > tbody > tr {
-  cursor: pointer;
-}
-
-.data > .submissions > table > tbody > tr.selected {
+.data > .dataContent table.fp_table > tbody > tr.selected {
   background-color: #ddd;
 }
 
-.data > .entries {
-  width: 35%;
+.data > .dataContent > .submissionSelector > .submissionActions > * {
+  padding: 16px;
+  color: #646464;
+  font-size: 10px;
+}
+
+.data > .dataContent > .submissionSelector > .submissionActions > .buttonContainer {
+  text-align: right;
+  padding-right: 0;
+}
+
+.data > .dataContent > .submissionSelector > .submissionActions .csvExportButton {
+  border: none;
+  background-color: #8CC63F;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.data > .dataContent > .submissionSelector > .submissionActions .csvExportButton.disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.data > .dataContent > .entriesViewer,
+.data > .dataContent > .submissionSelector > .noData {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 18px;
+}
+
+.data > .dataContent > .entriesViewer > .entry {
+  margin-bottom: 20px;
+}
+
+.data > .dataContent > .entriesViewer > .entry > .label {
+  color: #333333;
+  font-size: 12px;
+}
+.data > .dataContent > .entriesViewer > .entry > .value {
+  color: #113952;
+  padding-left: 16px;
 }

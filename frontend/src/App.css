@@ -1,12 +1,13 @@
-.headerContainer {
+#root > .headerContainer {
   width: 1200px;
   margin: 0 auto;
 }
 
-.headerContainer > .grid {
+#root > .headerContainer > .grid {
   width: inherit;
 }
-.headerContainer > .grid > .header {
+
+#root > .headerContainer > .grid > .header {
   height: 86px;
   position: fixed;
   background-color: #F5F5F5;
@@ -16,6 +17,20 @@
   width: inherit;
   margin: 0 auto;
   padding: 12px 0;
+}
+
+.header > .profile_container > .profile {
+  line-height: 60px;
+  height: 60px;
+}
+
+.header > .profile_container > .profile > * {
+  float: right;
+  display: inline-block;
+}
+
+.header > .profile_container > .profile > .profileSVG {
+  cursor: pointer;
 }
 
 .nav {
@@ -52,10 +67,6 @@
   pointer-events: none;
   background-color: #113952;
   color: #ffffff;
-}
-
-.nav > .profile_container {
-  padding: 10px;
 }
 
 .content {

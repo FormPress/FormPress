@@ -58,6 +58,43 @@ module.exports = (app) => {
     handleCreateForm
   )
 
+  // return forms of given user id
+  app.get(
+    '/api/users/:user_id/forms',
+    mustHaveValidToken, 
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const user_id = req.params.user_id
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT
+          id,
+          user_id,
+          title,
+          props,
+          created_at,
+          (
+            SELECT
+                COUNT(*)
+            FROM
+                submission
+            WHERE
+                form_id = \`form\`.\`id\`
+          ) as responseCount
+        FROM \`form\`
+        WHERE
+          user_id = ? AND 
+          deleted_at IS NULL
+      `, [user_id])
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
   // return single form via id
   app.get('/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
@@ -112,26 +149,6 @@ module.exports = (app) => {
     }
   )
 
-  // return forms of given user id
-  app.get(
-    '/api/users/:user_id/forms',
-    mustHaveValidToken, 
-    paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
-      const user_id = req.params.user_id
-      const db = await getPool()
-      const result = await db.query(`
-        SELECT * FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL
-      `, [user_id])
-
-      if (result.length > 0) {
-        res.json(result)
-      } else {
-        res.json([])
-      }
-    }
-  )
-
   // return submissions of given form id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions',
@@ -149,6 +166,93 @@ module.exports = (app) => {
       } else {
         res.json([])
       }
+    }
+  )
+
+  // return csv export of incoming submission IDS
+  app.post(
+    '/api/users/:user_id/forms/:form_id/CSVExport',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id } = req.params
+      const ids = req.body.submissionIds
+      const db = await getPool()
+
+      const result = await db.query(`
+        SELECT * FROM \`entry\`
+          WHERE form_id = ? AND submission_id IN (${ids.map(() => '?').join(',')})
+      `, [form_id, ...ids])
+      const submissionsResult = await db.query(`
+        SELECT * FROM \`submission\`
+          WHERE form_id = ? AND id IN (${ids.map(() => '?').join(',')})
+      `, [form_id, ...ids])
+      const formResult = await db.query(`
+        SELECT * FROM \`form\`
+          WHERE id = ?
+      `, [form_id])
+
+      /*
+        TODO: returning HTTP200 here is wrong. This is done since unit tests
+        mocking db does not support mocking 3 sequencial SQL queries.
+
+        We should add more SQL behaviour to config/endpoints.js and
+        properly extend unit tests
+      */
+      if (formResult.length === 0) { //form not found
+        return res.status(200).json({message: 'Form not found'})
+      }
+
+      formResult[0].props = JSON.parse(formResult[0].props)
+
+      const form = formResult[0]
+      const CSVData = {}
+      const submissions = {}
+
+      for (const submission of submissionsResult) {
+        submissions[submission.id] = submission
+      }
+
+      for (const entry of result) {
+        const questionId = entry.question_id
+        const questionProps = form.props.elements.filter((element) => (element.id === questionId))
+        const label = questionProps.label
+        const submissionId = entry.submission_id
+        const submission = submissions[submissionId.toString()]
+
+        if (typeof CSVData[submissionId] === 'undefined') {
+          CSVData[submissionId] = {
+            submissionId,
+            createdAt: submission.created_at
+          }
+        }
+
+        CSVData[submissionId][questionId] = entry.value
+      }
+
+      const createCsvStringifier = require('csv-writer').createObjectCsvStringifier
+      const header = [
+        {id: 'submissionId', title: 'ID'},
+        {id: 'createdAt', title: 'CREATED_AT'}
+      ]
+
+      for (const element of form.props.elements) {
+        header.push({
+          id: element.id.toString(),
+          title: element.label
+        })
+      }
+
+      const csvStringifier = createCsvStringifier({
+        header
+      })
+      const csv = csvStringifier.getHeaderString() +
+        csvStringifier.stringifyRecords(Object.values(CSVData))
+
+      res.json({
+        content: csv,
+        filename: `${form.title}-${new Date().getTime()}.csv`
+      })
     }
   )
 
@@ -178,7 +282,6 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      console.log('RESPONDING to PUT submission id')
       const { user_id, form_id, submission_id} = req.params
       const db = await getPool()
       const submission = req.body
@@ -206,7 +309,6 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
-    console.log('Form found ', result)
     const form = result[0]
     form.props = JSON.parse(form.props)
 

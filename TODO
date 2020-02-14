@@ -43,11 +43,13 @@
     -- Define JS injection logic, include seperate functionality if used such as required.js if any of the questions use required
 - [DONE] Put SendGrid api key in .env file and add it to .gitignore, load it via dotenv
   so that we can remove hardcoded api key from repo. Usefull for making it opensource
+- [DONE] Code css for header profile section
+- [DONE] Code css for Forms section
+- [DONE] Styling:  design everything and apply styling so it looks cool Thanks Soner Kaya ksonerkaya@gmail.com!
+- [DONE] Make everything opensource with a suitable license
 
 VNTTD:
-- code css for header profile section
-- code css for Forms section
-- code css for Data section
+- Code css for Data section
 
 MVP:
 - Implement Publish button functionality
@@ -67,11 +69,16 @@ MVP:
   submissions of another user if form_id is known
 - Implement SignUp page along with login page
 - Implement forgot password feature
-- Styling: Get a designer to design everything and apply styling so it looks cool
 - A under construction page as homepage
-- A nice homepage
+- A nice homepage along with instructions to install properly and description of basic functionality
 - Do not transpile react components for form render each time on production
   -- also, use redis cache to render forms from cached versions, probably form version id can be used for caching
+- Add more form items: textarea, dropdown, checkbox, radio, file upload
+  -- Work on customizing form elements such as, label at top, required..
+  -- File uploads should go to a cloud storage, for now, Google Cloud Storage
+- Implement helm chart with commented values.yaml
+- Implement terraform scripts to automatically install with every dependency, Database, Redis, file upload bucket, service accounts
+
 
 BackLog:
 - Templates: Implement template mechanism List templates and allow users to clone
@@ -79,13 +86,11 @@ BackLog:
 - Decide basic paid plans
 - Implement a payment gateway (braintree) and accept paid subscriptions
 - Implement functional tests (Using selenium, create a form and do a submission and verify it worked)
-- Add more form items: textarea, dropdown
-  Work on customizing form elements such as, label at top, required..
-  Investigate if basic html5 form validation can be used to reduce JS in exported form
+
 - Go Live and start experimenting with paid advertising
 - Integrations: 
-  -- Payment gateways so that people can sell stuff with forms
+  -- Payment gateways so that people can sell stuff with forms (Lets ignore this part for sometime)
   -- Google drive, dropbox, so that responses can go automatically to other places
   -- Webhook integration, so that when responses received, it can be forwarded to customer urls
 - API: a very nice to have, not very near (Current way, we can expose internally used REST API just as is)
-- Make everything opensource with a suitable license
+- Think about open source contributions licensing

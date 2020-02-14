@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import Moment from 'react-moment'
 
 import { api } from '../helper'
+import Table from './common/Table'
 import AuthContext from '../auth.context'
 
 import './Forms.css'
 
+const BACKEND = process.env.REACT_APP_BACKEND
 class Forms extends Component {
   setLoadingState (key, value) {
     this.setState({
@@ -47,8 +52,6 @@ class Forms extends Component {
         deletingId: false
       }
     }
-    
-    this.handleFormDeleteClick = this.handleFormDeleteClick.bind(this)
   }
 
   async handleFormDeleteClick (form, e) {
@@ -69,38 +72,70 @@ class Forms extends Component {
     this.updateForms()
   }
 
+  handlePreviewClick (form, e) {
+    const { id } = form
+
+    window.open(`${BACKEND}/form/view/${id}`, '_blank')
+  }
+
   render () {
-    const { forms, loading } = this.state
-    let content
+    const { forms } = this.state
 
-    if (loading.forms === true) {
-      content = 'Loading...'
-    } else {
-      content = [
-        forms.map((form, index) => 
-          <div
-            key={ index }
-            className={`form oh${
-              (form.id === loading.deletingId)? ' gettingDeleted': ''
-            }`}
-          >
-            <div className='title fl'>{form.title}</div>
-            <div className='actions fr'>
-              <Link to={ `/editor/${form.id}` }>Edit</Link>
-              <a href='#/' onClick={ this.handleFormDeleteClick.bind(this, form) } >
-                Delete
-              </a>
-            </div>
-          </div>
-        ),
-        <div key='newform' className='form oh'>
-          <Link to='/editor/new'>Create New Form</Link>
-        </div>
-      ]
-    }
-
-    return <div className='forms oh'>
-      {content}
+    return <div className='forms'>
+      <div className='headerContainer'></div>
+      <div className='formsContent'>
+        <Table
+          columns={[
+            {
+              label: <span>{' '}</span>,
+              content: () => <span>{' '}</span>,
+              className: 'mw'
+            },
+            {
+              label: 'Name',
+              content: (form) => form.title,
+              className: 'name'
+            },
+            {
+              label: 'Responses',
+              content: (form) => <div className='responseCount'>
+                { form.responseCount }
+              </div>
+            },
+            {
+              label: 'Created At',
+              content: (form) => [
+                <Moment fromNow ago date={ form.created_at } key='1' />,
+                <span key='2'>{ ' ago' }</span>
+              ]
+            },
+            {
+              label: 'Actions',
+              content: (form) => <div className='actions'>
+                <span>
+                  <FontAwesomeIcon
+                    icon={ faEye }
+                    onClick={ this.handlePreviewClick.bind(this, form) }
+                  />
+                </span>
+                <span>
+                  <FontAwesomeIcon
+                    icon={ faTrash }
+                    onClick={ this.handleFormDeleteClick.bind(this, form) }
+                  />
+                </span>
+                <Link to={ `/editor/${form.id}` }>
+                  <FontAwesomeIcon icon={ faPen } />
+                </Link>
+              </div>
+            }
+          ]}
+          data={ forms }
+        />
+      </div>
+      <div className='newButtonContainer'>
+        <Link to='/editor/new'>Create a new form</Link>
+      </div>
     </div>
   }
 }

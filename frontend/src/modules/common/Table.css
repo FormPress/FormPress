@@ -1,0 +1,30 @@
+table.fp_table {
+  border-collapse: collapse;
+  width: 100%;
+}
+table.fp_table tr, table.fp_table td, table.fp_table th{
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+table.fp_table > thead {
+  background-color: #E2E2E2;
+  color: #646464;
+  height: 30px;
+  line-height: 30px;
+  font-size: 10px;
+  text-align: left;
+  font-weight: normal;
+  letter-spacing: 0;
+}
+
+table.fp_table > tbody > tr > td.mw,
+table.fp_table > thead > tr > th.mw {
+  min-width: 20px;
+}
+
+table.fp_table > tbody > tr > td.text_center,
+table.fp_table > thead > tr > th.text_center {
+  text-align: center;
+}
