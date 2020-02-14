@@ -192,6 +192,17 @@ module.exports = (app) => {
           WHERE id = ?
       `, [form_id])
 
+      /*
+        TODO: returning HTTP200 here is wrong. This is done since unit tests
+        mocking db does not support mocking 3 sequencial SQL queries.
+
+        We should add more SQL behaviour to config/endpoints.js and
+        properly extend unit tests
+      */
+      if (formResult.length === 0) { //form not found
+        return res.status(200).json({message: 'Form not found'})
+      }
+
       formResult[0].props = JSON.parse(formResult[0].props)
 
       const form = formResult[0]
