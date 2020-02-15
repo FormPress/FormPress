@@ -31,18 +31,30 @@
   font-size: 22px;
 }
 
-.data > .formSelectorContainer > .formSelector ul.formSelectorOptions {
+.data > .formSelectorContainer > .formSelectorOptions {
   background-color: white;
+  border-left: 8px solid #E2E2E2;
+  border-bottom: 8px solid #719FBD;
+  max-height: 600px;
+  overflow: scroll;
+}
+
+.data > .formSelectorContainer > .formSelectorOptions ul {
   margin: 0;
   padding: 0;
 }
 
-.data > .formSelectorContainer > .formSelector li {
+.data > .formSelectorContainer > .formSelectorOptions li {
   list-style: none;
   border: 1px solid transparent;
+  border-top: 1px solid rgb(234, 234, 234);
   padding-left: 10px;
+  height: 60px;
+  line-height: 60px;
+  cursor: pointer;
 }
-.data > .formSelectorContainer > .formSelector li:hover {
+
+.data > .formSelectorContainer > .formSelectorOptions li:hover {
   border: 1px solid black;
 }
 
