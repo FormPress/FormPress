@@ -10,6 +10,22 @@ import Table from './common/Table'
 
 import './Data.css'
 
+const getStartOfToday = () => {
+  const start = new Date()
+  start.setHours(0, 0, 0, 0)
+
+  return start.getTime()
+}
+
+const getNumberOfSubmissionsToday = (submissions) => {  
+  const startOfToday = getStartOfToday()
+
+  return submissions
+    .map((submission) => new Date(submission.created_at).getTime())
+    .filter((ts) => (ts > startOfToday))
+    .length
+}
+
 function download(filename, text) {
   var element = document.createElement('a')
   element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(text))
@@ -53,7 +69,7 @@ class Data extends Component {
 
   async updateSubmissionsSeamless (form_id) {
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
     this.setState({ submissions: data })
@@ -69,7 +85,7 @@ class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`,
     })
 
     this.setLoadingState('submissions', false)
@@ -103,6 +119,7 @@ class Data extends Component {
   }
 
   handleFormClick (form, e) {
+    this.setState({ formSelectorOpen: false })
     this.updateSubmissions(form.id)
   }
 
@@ -208,25 +225,31 @@ class Data extends Component {
           <div className='formSelector cw center grid'>
             <div className='col-15-16' onClick={ () => {this.setState({formSelectorOpen: !formSelectorOpen })}}>
               {formSelectorText}
-              <ul className='formSelectorOptions'>
-                {
-                  (formSelectorOpen === true)
-                    ? forms.map((form, index) => (
-                      <li
-                        key={ index }
-                        onClick={ this.handleFormClick.bind(this, form) }
-                      >
-                        {form.title}
-                      </li>
-                    ))
-                    : null
-                }
-              </ul>
             </div>
             <div className='col-1-16 down'>
               <FontAwesomeIcon icon={ faChevronDown } />
             </div>
           </div>
+          {
+            (formSelectorOpen === true)
+              ? <div className='formSelectorOptions cw center grid'>
+                <div className='col-16-16'>
+                  <ul>
+                    {
+                      forms.map((form, index) => (
+                        <li
+                          key={ index }
+                          onClick={ this.handleFormClick.bind(this, form) }
+                        >
+                          {form.title}
+                        </li>
+                      ))
+                    }
+                  </ul>
+                </div>
+              </div>
+              : null
+          }
         </div>
         <div className='cw center grid dataContent'>
           <div className='submissionSelector col-5-16'>
@@ -268,10 +291,10 @@ class Data extends Component {
     }
 
     return [
-      <div className='submissionActions grid'>
+      <div className='submissionActions grid' key='actions'>
         <div className='col-10-16'>
           { submissions.length } total submission(s). <br />
-          0 submissions today.
+          {getNumberOfSubmissionsToday(submissions)} submission(s) today.
         </div>
         <div className='col-6-16 buttonContainer'>
           <button
@@ -283,6 +306,7 @@ class Data extends Component {
         </div>
       </div>,
       <Table
+        key='table'
         onTrClick={ this.handleSubmissionClick }
         getTrClassName={
           (submission) => (submission.id === selectedSubmissionId)

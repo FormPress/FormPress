@@ -156,10 +156,23 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { user_id, form_id } = req.params
+      const { orderBy, desc } = req.query
       const db = await getPool()
-      const result = await db.query(`
-        SELECT * FROM \`submission\` WHERE form_id = ?
-      `, [form_id])
+      let query = 'SELECT * FROM \`submission\` WHERE form_id = ?'
+
+      if (typeof orderBy !== 'undefined') {
+        if (['created_at', 'deleted_at', 'updated_at'].includes(orderBy)) {
+          query += ` ORDER BY ${orderBy}`
+
+          if (desc === 'true') {
+            query += ' DESC'
+          } else {
+            query += ' ASC'
+          }
+        }
+      }
+
+      const result = await db.query(query, [form_id])
 
       if (result.length > 0) {
         res.json(result)
