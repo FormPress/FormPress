@@ -6,6 +6,7 @@ import {
   NavLink
 } from 'react-router-dom'
 
+import HomePage from './modules/HomePage'
 import Builder from './modules/Builder'
 import Data from './modules/Data'
 import Forms from './modules/Forms'
@@ -90,10 +91,12 @@ class App extends Component {
       <Router>
       <AuthContext.Provider value={ auth }>
         <div className='headerContainer'>
-          <div className='grid'>
+          <div className='grid cw center'>
             <div className='grid header'>
               <div className='col-1-16 logo'>
-                <Logo />
+                <NavLink exact to='/'>
+                  <Logo />
+                </NavLink>
               </div>
               <div className='col-10-16 menu'>
                 <nav className='nav oh'>
@@ -121,11 +124,18 @@ class App extends Component {
                             </NavLink>
                           </li>
                         ]
-                        : <li>
+                        : [
+                          <li key='1'>
+                            <NavLink exact to='/' activeClassName='selected'>
+                              Home
+                            </NavLink>
+                          </li>,
+                          <li key='2'>
                             <NavLink to='/login' activeClassName='selected'>
                               Login
                             </NavLink>
-                        </li>
+                          </li>
+                        ]
                     }
                   </ul>
                 </nav>
@@ -139,9 +149,7 @@ class App extends Component {
         <div className='content'>
           <Switch>
             <Route exact path='/'>
-              <div className='homepage'>
-                <h1>Welcome to FormPress</h1>
-              </div>
+              <HomePage />
             </Route>
             <PrivateRoute path='/forms'>
               <Forms />

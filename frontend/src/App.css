@@ -1,19 +1,20 @@
 #root > .headerContainer {
-  width: 1200px;
   margin: 0 auto;
-}
-
-#root > .headerContainer > .grid {
-  width: inherit;
-}
-
-#root > .headerContainer > .grid > .header {
   height: 86px;
   position: fixed;
-  background-color: #F5F5F5;
   top: 0;
   left: 0;
   right: 0;
+  background-color: #F5F5F5;
+  z-index: 10;
+}
+
+#root > .headerContainer > .grid {
+}
+
+#root > .headerContainer > .grid > .header {
+  background-color: #F5F5F5;
+  
   width: inherit;
   margin: 0 auto;
   padding: 12px 0;

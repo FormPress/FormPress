@@ -26,7 +26,7 @@ const Profile = () => {
           {
             (value.loggedIn === true)
               ? renderLoggedIn(value)
-              : <div> Welcome <Link to='/login'>login here</Link></div>
+              : null
           }
           </div>
         }
