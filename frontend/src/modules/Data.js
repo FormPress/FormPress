@@ -369,12 +369,16 @@ class Data extends Component {
 
     const form = forms.filter((form) => (form.id === selectedFormId))[0]
     const getLabel = (question_id) => {
-      const question = form
+      const matchingQuestion = form
         .props
         .elements
-        .filter((element) => (element.id === question_id))[0]
+        .filter((element) => (element.id === question_id))
 
-      return question.label
+      if (matchingQuestion.length > 0) {
+        return matchingQuestion[0].label  
+      } else {
+        return 'Deleted Question'
+      }
     }
 
     return entries.map((entry, index) => {

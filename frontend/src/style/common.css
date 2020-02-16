@@ -18,3 +18,11 @@
 .center {
   margin: 0 auto;
 }
+
+.tr {
+  text-align: right;
+}
+
+.tl {
+  text-align: left;
+}
