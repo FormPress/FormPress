@@ -10,6 +10,7 @@ module.exports = async (db) => {
       \`user_id\` int(11) DEFAULT NULL,
       \`title\` varchar(256) DEFAULT NULL,
       \`props\` mediumtext,
+      \`published_version\` int(11) DEFAULT NULL,
       \`created_at\` datetime DEFAULT NULL,
       \`updated_at\` datetime DEFAULT NULL,
       \`deleted_at\` datetime DEFAULT NULL,
@@ -17,6 +18,22 @@ module.exports = async (db) => {
       KEY \`user_id\` (\`user_id\`),
       KEY \`deleted_at\` (\`deleted_at\`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+  `)
+
+  await db.query(`
+    CREATE TABLE \`form_published\` (
+      \`id\` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      \`user_id\` int(11) DEFAULT NULL,
+      \`form_id\` int(11) DEFAULT NULL,
+      \`title\` varchar(256) DEFAULT NULL,
+      \`props\` mediumtext,
+      \`version\` int(11) DEFAULT NULL,
+      \`created_at\` datetime DEFAULT NULL,
+      PRIMARY KEY (\`id\`),
+      KEY \`user_id\` (\`user_id\`),
+      KEY \`form_id\` (\`form_id\`),
+      KEY \`version\` (\`version\`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `)
 
   await db.query(`

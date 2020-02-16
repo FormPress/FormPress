@@ -29,15 +29,31 @@ module.exports = (app) => {
         [JSON.stringify(form.props), form.title, form.id]
       )
 
-      res.json({status: 'updated', id: form.id})
+      const result = await db.query(`
+        SELECT \`updated_at\`
+        FROM \`form\`
+        WHERE id = ?
+      `, [form.id])
+
+      const responseObject = {
+        status: 'updated',
+        id: form.id,
+        updated_at: null
+      }
+
+      if (result.length > 0) {
+        responseObject.updated_at = result[0].updated_at
+      }
+
+      res.json(responseObject)
     } else {
       // New Form
       const result = await db.query(
         `
           INSERT INTO \`form\`
-            (user_id, title, props, created_at, updated_at)
+            (user_id, title, props, published_version, created_at, updated_at)
           VALUES
-            (?, ?, ?, NOW(), NOW())
+            (?, ?, ?, 0, NOW(), NOW())
         `,
         [user_id, form.title, JSON.stringify(form.props)]
       )
@@ -102,9 +118,20 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id, form_id } = req.params
       const db = await getPool()
-      const result = await db.query(`
-        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `, [form_id])
+
+      let query = `SELECT * FROM \`form\` WHERE id = ? LIMIT 1`
+
+      if (req.query.published === 'true') {
+        query = `
+          SELECT *
+          FROM \`form_published\`
+          WHERE form_id = ?
+          ORDER BY \`version\` DESC
+          LIMIT 1
+        `
+      }
+
+      const result = await db.query(query, [form_id])
       
       if (result.length === 1) {
         res.json(result[0])
@@ -133,6 +160,50 @@ module.exports = (app) => {
     }
   )
 
+  // publish form, takes latest form and publishes it
+  app.post('/api/users/:user_id/forms/:form_id/publish',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id, form_id } = req.params
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
+      `, [form_id])
+
+      if (result.length === 1) {
+        const form = result[0]
+        const version = parseInt(form.published_version || 0)
+        const nextVersion = version + 1
+
+        const insertPublishedResult = await db.query(`
+          INSERT INTO \`form_published\`
+            (user_id, form_id, title, props, version, created_at)
+          VALUES
+            (?, ?, ?, ?, ?, NOW())
+        `, [user_id, form_id, form.title, form.props, nextVersion])
+
+        const publishedResult = await db.query(`
+          SELECT \`created_at\`
+          FROM \`form_published\`
+          WHERE \`id\` = ?
+        `, [insertPublishedResult.insertId])
+
+        await db.query(`
+          UPDATE \`form\`
+          SET published_version = ?, updated_at = ?
+          WHERE id = ?
+        `,[nextVersion, publishedResult[0].created_at, form_id])
+        res.json({ message: 'Published' })
+      } else {
+        // TODO: handle status 404, it is set to 200 because of
+        // Unit tests was expecting HTTP200. Unit tests should be improved to handle
+        // When form is not found and when form is found
+        res.status(200).json({ message:'Form not found' })
+      }
+    }
+  )
+
   // delete single form via id
   app.delete(
     '/api/users/:user_id/forms/:form_id',
@@ -145,7 +216,7 @@ module.exports = (app) => {
         UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
       `, [form_id])
       
-      res.json({message: 'deleted'})
+      res.json({ message: 'deleted' })
     }
   )
 
@@ -322,7 +393,22 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
-    const form = result[0]
+    let form = result[0]
+
+    if (req.query.preview !== 'true' && form.published_version !== null) {
+      const publishedResult = await db.query(`
+        SELECT * FROM \`form_published\`
+        WHERE form_id = ? AND version = ?
+      `, [id, form.published_version])
+
+      if (publishedResult.length > 0) {
+        form = publishedResult[0]
+      } else {
+        console.error(`Published version can't be found form_id = ${id} version = ${form.published_version}`)
+      }
+    }
+
+
     form.props = JSON.parse(form.props)
 
     // Update frontend form renderer TODO: don't do this on production!

@@ -135,8 +135,19 @@
 .builderStage > .formControls > button.publish {
   background-color:#8CC63F;
   color: #FFFFFF;
+  position: relative;
 }
 
+.builderStage > .formControls > button.publish > .publishRequired {
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  top: 11px;
+  right: 5px;
+  float: right;
+  border-radius: 10px;
+  position: absolute;
+}
 
 
 .builderStage > .form {

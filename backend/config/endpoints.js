@@ -58,6 +58,12 @@ module.exports = {
       exampleRequestPath: '/api/users/1/forms/1'
     },
     {
+      method: 'post',
+      path: '/api/users/:user_id/forms/:form_id/publish',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/publish'
+    },
+    {
       method: 'get',
       path: '/api/users/:user_id/forms',
       protected: true,

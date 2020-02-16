@@ -48,18 +48,26 @@
 - [DONE] Styling:  design everything and apply styling so it looks cool Thanks Soner Kaya ksonerkaya@gmail.com!
 - [DONE] Make everything opensource with a suitable license
 - [DONE] Code css for Data section
-
-VNTTD:
-- Code homepage for not logged in users
-
-MVP:
-- Implement Publish button functionality
+- [DONE] Code homepage for not logged in users
+- [DONE] Implement Publish button functionality
   -- Versionify forms, each click to publish, if different to last released version, should cause a version increment
     --We can store new version of the form in a new table `form_published` and last version id in `form` table
     -- on Preview, render latest saved form
     -- on Publish, render latest published version
-    -- Ask user to save if there are unsaved progress in form editor
+
+VNTTD:
 - Allow questions to be sorted
+
+MVP:
+- Small fixes
+  -- Use react-router for submission viewer so that submissions can be linked directly from forms page
+  -- Show unread/read status on Data page
+  -- Show number of unread submissions on forms page
+  -- To calculate if form should be published, ie changes are made since last publish
+    use a deep equality check on actual form properties instead of doing an form.updated_at !== publishedForm.created_at
+  -- Ask user to save if there are unsaved progress in form editor
+  -- Imrove notification when publish is needed
+
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
   -- Put required k8s files/scripts in k8s folder
