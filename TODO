@@ -67,6 +67,7 @@ MVP:
     use a deep equality check on actual form properties instead of doing an form.updated_at !== publishedForm.created_at
   -- Ask user to save if there are unsaved progress in form editor
   -- Imrove notification when publish is needed
+  -- Store form version on submission table, when showing responses, use relevant form version to render responses
 
 - Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
