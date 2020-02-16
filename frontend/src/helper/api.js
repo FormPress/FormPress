@@ -25,7 +25,6 @@ export const api = ({
   }
 
   if (useAuth === true) {
-    console.log('Using token for request ', token)
     options.headers['Authorization'] = `Bearer ${token}`
   }
 
