@@ -15,7 +15,7 @@ class HomePage extends Component {
         <div className='homepage cw center grid'>
           <div className='col-4-16'>
             <div className='logoContainer'>
-              <img src={ logo_big } />
+              <img src={ logo_big } alt='FormPress Logo'/>
             </div>
             <div className='mainProperties'>
               <div className='opensource'>
@@ -36,6 +36,7 @@ class HomePage extends Component {
                 className='gitlab'
                 href='https://gitlab.com/formpress/formpress'
                 target='_blank'
+                rel='noopener noreferrer'
               >
                 <FontAwesomeIcon icon={ faGitlab }/>
                 Go to GitLab page

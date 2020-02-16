@@ -79,8 +79,10 @@ class Builder extends Component {
     }
   }
 
-  async loadForm (formId) {
-    this.setState({ loading: true })
+  async loadForm (formId, seamless = false) {
+    if (seamless === false) {
+      this.setState({ loading: true })
+    }
 
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
@@ -90,6 +92,7 @@ class Builder extends Component {
       this.setState({
         loading: false
       })
+
       return
     }
 
@@ -99,9 +102,18 @@ class Builder extends Component {
       props
     }
 
+    const publishedFormResult = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
+    })
+
+    if (typeof publishedFormResult.data.props !== 'undefined') {
+      publishedFormResult.data.props = JSON.parse(publishedFormResult.data.props)
+    }
+
     this.setState({
       loading: false,
-      form
+      form,
+      publishedForm: publishedFormResult.data
     })
   }
 
@@ -149,6 +161,7 @@ class Builder extends Component {
       dragIndex: false,
       insertBefore: false,
       selectedFieldId: false,
+      publishedForm: {},
       form: {
         id: null,
         user_id: null,
@@ -181,6 +194,7 @@ class Builder extends Component {
     this.handleDrop = this.handleDrop.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleSaveClick = this.handleSaveClick.bind(this)
+    this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
@@ -326,7 +340,7 @@ class Builder extends Component {
     })
   }
 
-  async handleSaveClick (e) {
+  async handleSaveClick () {
     const { form } = this.state
 
     this.setState({ saving: true })
@@ -349,12 +363,45 @@ class Builder extends Component {
       })
       window.localStorage.setItem('lastEditedFormId', data.id)
     }
+
+    if (form.id !== null && data.updated_at !== null) {
+      this.setState({
+        form: {
+          ...this.state.form,
+          updated_at: data.updated_at
+        }
+      })
+    }
+  }
+
+  async handlePublishClick () {
+    const { form, publishing, saving } = this.state
+
+    if (publishing === true || saving === true) {
+      return
+    }
+
+    this.setState({ publishing: true })
+
+    await this.handleSaveClick()
+
+    if (typeof form.id !== 'undefined' && form.id !== null) {
+      const { data } = await api({
+        resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}/publish`,
+        method: 'post'
+      })
+
+      await this.loadForm(form.id, true)
+    }
+
+    this.setState({ publishing: false })
+
   }
 
   handlePreviewClick (e) {
     const { id } = this.state.form
 
-    window.open(`${BACKEND}/form/view/${id}`, '_blank')
+    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion (changes) {
@@ -377,10 +424,13 @@ class Builder extends Component {
       activeTab,
       dragging,
       form,
+      publishedForm,
       loading,
       saving,
+      publishing,
       selectedFieldId
     } = this.state
+    const isPublishRequired = (form.updated_at !== publishedForm.created_at)
     const saveButtonProps = {}
     const tabs = [
       { name: 'elements', text: 'Elements' },
@@ -449,8 +499,13 @@ class Builder extends Component {
               <button onClick={ this.handlePreviewClick }>
                 Preview
               </button>
-              <button className='publish'>
-                Publish
+              <button className='publish' onClick={ this.handlePublishClick }>
+              { publishing === true ? 'Publishing...': 'Publish' }
+              {
+                (isPublishRequired === true)
+                  ? <div className='publishRequired'></div>
+                  : null
+              }
               </button>
             </div>
             {
