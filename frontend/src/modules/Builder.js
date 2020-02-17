@@ -159,6 +159,8 @@ class Builder extends Component {
       loading: false,
       dragging: false,
       dragIndex: false,
+      dragMode: 'insert',
+      sortItem: false,
       insertBefore: false,
       selectedFieldId: false,
       publishedForm: {},
@@ -205,9 +207,27 @@ class Builder extends Component {
     this.configureQuestion = this.configureQuestion.bind(this)
   }
 
-  handleDragStart (item, e) {
-    e.dataTransfer.setData('text/plain', item.type)
-    this.setState({ dragging: true })
+  handleDragStart (_item, e) {
+    let item = _item
+    let dragMode = 'insert'
+    let type = item.type
+
+    if (item.mode === 'sort') {
+      const {mode, ...rest} = item
+
+      item = rest
+      dragMode = 'sort'
+      type = ''
+    }
+
+    e.dataTransfer.setData('text/plain', type)
+    const dragState = {
+      dragMode,
+      dragging: true,
+      sortItem: item,
+    }
+
+    this.setState(dragState)
   }
 
   handleDrop (e) {
@@ -215,13 +235,22 @@ class Builder extends Component {
     e.preventDefault()
     
     const type = e.dataTransfer.getData('text')
-    const item = getElementsKeys()[type]
-    const { form, dragIndex } = this.state
+    let item = getElementsKeys()[type]
+    const { form, dragIndex, dragMode, sortItem } = this.state
+    let elements = [...form.props.elements]
 
-    //set auto increment element id
-    const maxId = Math.max(...form.props.elements.map((element) => element.id))
+    if (dragMode === 'insert') {
+      //set auto increment element id
+      const maxId = Math.max(...form.props.elements.map((element) => element.id))
 
-    item.id = maxId + 1
+      item.id = maxId + 1
+    } else {
+      item = sortItem
+      //mark sorted element to be deleted
+      const sortedElementOriginal = elements.filter((element) => (element.id === item.id))
+
+      sortedElementOriginal[0].__original__ = true
+    }
 
     const index = form.props.elements.findIndex(
       (element) => (element.id.toString() === dragIndex)
@@ -231,19 +260,26 @@ class Builder extends Component {
 
     if (this.state.insertBefore === true) {
       newElements = [
-        ...form.props.elements.slice(0, index),
+        ...elements.slice(0, index),
         item,
-        ...form.props.elements.slice(index)
+        ...elements.slice(index)
       ]
     } else {
       newElements = [
-        ...form.props.elements.slice(0, index + 1),
+        ...elements.slice(0, index + 1),
         item,
-        ...form.props.elements.slice(index + 1)
+        ...elements.slice(index + 1)
       ]
     }
 
+    if (dragMode === 'sort') {
+      newElements = newElements
+        .filter((element) => (element.__original__ !== true))
+    }
+
     this.setState({
+      dragMode: 'insert',
+      sortItem: false,
       dragging: false,
       dragIndex: false,
       form: {
@@ -257,7 +293,11 @@ class Builder extends Component {
   }
 
   handleDragEnd (e) {
-    this.setState({ dragging: false })
+    this.setState({
+      dragging: false,
+      dragMode: 'insert',
+      sortItem: false
+    })
   }
 
   handleDragOver (e) {
@@ -386,7 +426,7 @@ class Builder extends Component {
     await this.handleSaveClick()
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
-      const { data } = await api({
+      await api({
         resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}/publish`,
         method: 'post'
       })
@@ -395,7 +435,6 @@ class Builder extends Component {
     }
 
     this.setState({ publishing: false })
-
   }
 
   handlePreviewClick (e) {
@@ -424,6 +463,8 @@ class Builder extends Component {
       activeTab,
       dragging,
       form,
+      dragMode,
+      sortItem,
       publishedForm,
       loading,
       saving,
@@ -519,11 +560,15 @@ class Builder extends Component {
                   onClick: this.handleFormElementClick
                 }}
                 customBuilderHandlers={{
-                  onDelete: this.handleFormElementDeleteClick
+                  onDelete: this.handleFormElementDeleteClick,
+                  handleDragEnd: this.handleDragEnd,
+                  handleDragStart: this.handleDragStart
                 }}
                 handleLabelChange={ this.handleLabelChange }
                 dragIndex={ this.state.dragIndex }
                 dragging={ dragging }
+                dragMode={ dragMode }
+                sortItem={ sortItem }
                 insertBefore={ this.state.insertBefore }
                 form={ form }
                 selectedFieldId={ selectedFieldId }
