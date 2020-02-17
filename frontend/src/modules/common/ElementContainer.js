@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faGripHorizontal, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export default class ElementContainer extends Component {
   handleDeleteClick (id, e) {
@@ -12,9 +12,11 @@ export default class ElementContainer extends Component {
     const {
       builderHandlers,
       config,
+      customBuilderHandlers,
       mode,
       selectedFieldId,
-      type
+      type,
+      className
     } = this.props
     const classNames = ['element', 'oh']
 
@@ -22,6 +24,10 @@ export default class ElementContainer extends Component {
 
     if (config.id === selectedFieldId) {
       classNames.push('selected')
+    }
+
+    if (typeof className !== 'undefined') {
+      classNames.push(className.trim())
     }
 
     return (
@@ -33,6 +39,21 @@ export default class ElementContainer extends Component {
         {
           (mode === 'builder')
             ? <div className='action'>
+              <div
+                className='sortHandle'
+                onDragStart={
+                  customBuilderHandlers.handleDragStart.bind(
+                    this,
+                    { mode: 'sort', ...config }
+                  )
+                }
+                onDragEnd={ customBuilderHandlers.handleDragEnd }
+                draggable
+              >
+                <FontAwesomeIcon
+                  icon={ faGripHorizontal }
+                />
+              </div>
               <FontAwesomeIcon
                 icon={ faTrash }
                 onClick={ this.handleDeleteClick.bind(this, config.id) }

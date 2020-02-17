@@ -9,7 +9,6 @@ export default class QuestionProperties extends Component {
   }
 
   handleFieldChange (elem, e) {
-    console.log('Field changed ', elem, e.target.value)
     const value = (e.target.type === 'checkbox') ? e.target.checked : e.target.value
 
     this.props.configureQuestion({
@@ -21,7 +20,6 @@ export default class QuestionProperties extends Component {
   }
 
   render() {
-    console.log('Rendering question settings ', this.props.selectedField)
     const { selectedField } = this.props
     const { configurableSettings, config } = selectedField
     const form = {

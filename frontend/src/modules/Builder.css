@@ -179,6 +179,13 @@
 
 .form > .element > .action > * {
   cursor: pointer;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+.form > .element > .action > .sortHandle {
+  cursor: move;
+  display: inline-block;
 }
 
 .form > .element:hover, .form > .element.selected {

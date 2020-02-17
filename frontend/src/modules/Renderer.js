@@ -7,7 +7,7 @@ export default class Renderer extends Component {
   }
 
   render () {
-    let { className } = this.props
+    let { className, dragging, dragMode, sortItem } = this.props
     const {
       customBuilderHandlers,
       builderHandlers,
@@ -31,6 +31,11 @@ export default class Renderer extends Component {
         extraProps.onChange = (e) => {
           this.props.handleFieldChange(elem, e)
         }
+      }
+
+      // Hide sorted item
+      if (dragging === true && dragMode === 'sort' && sortItem.id === elem.id) {
+        extraProps.className = 'dn'
       }
 
       const renderList = [
