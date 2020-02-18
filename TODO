@@ -54,9 +54,11 @@
     --We can store new version of the form in a new table `form_published` and last version id in `form` table
     -- on Preview, render latest saved form
     -- on Publish, render latest published version
+- [DONE] Allow questions to be sorted
 
 VNTTD:
-- Allow questions to be sorted
+- Implement vertical tabs in builder, via react-router if possible
+- Builder: allow users to import forms into their websites using a JS file
 
 MVP:
 - Small fixes
@@ -69,7 +71,6 @@ MVP:
   -- Imrove notification when publish is needed
   -- Store form version on submission table, when showing responses, use relevant form version to render responses
 
-- Builder: allow users to import forms into their websites using a JS file
 - Setup k8s and deploy to production
   -- Put required k8s files/scripts in k8s folder
 - Form themes: Make sure at least 1 theme exists for forms
