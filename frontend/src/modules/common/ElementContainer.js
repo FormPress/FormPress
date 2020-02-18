@@ -3,6 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripHorizontal, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export default class ElementContainer extends Component {
+  constructor (props) {
+    super(props)
+
+    this.myRef = React.createRef()
+  }
+
   handleDeleteClick (id, e) {
     e.stopPropagation()
     this.props.customBuilderHandlers.onDelete(id)
@@ -34,6 +40,7 @@ export default class ElementContainer extends Component {
       <div
         className={ classNames.join(' ') }
         {...{ id: `qc_${config.id}`, ...builderHandlers }}
+        ref={ this.myRef }
       >
         { this.props.children }
         {
@@ -44,7 +51,7 @@ export default class ElementContainer extends Component {
                 onDragStart={
                   customBuilderHandlers.handleDragStart.bind(
                     this,
-                    { mode: 'sort', ...config }
+                    { mode: 'sort', ref: this.myRef, ...config }
                   )
                 }
                 onDragEnd={ customBuilderHandlers.handleDragEnd }

@@ -83,6 +83,7 @@ class Login extends Component {
     return <div className='loginForm'>
       <form onSubmit={ this.handleLoginButtonClick }>
         <Renderer
+          className='form'
           handleFieldChange={ this.handleFieldChange }
           form={{
             props: {

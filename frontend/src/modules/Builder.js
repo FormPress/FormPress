@@ -213,21 +213,29 @@ class Builder extends Component {
     let type = item.type
 
     if (item.mode === 'sort') {
-      const {mode, ...rest} = item
+      const {mode, ref, ...rest} = item
 
       item = rest
       dragMode = 'sort'
       type = ''
+
+      e.dataTransfer.setDragImage(ref.current, 710, 15)
+      e.dataTransfer.dropEffect = 'move'
     }
 
     e.dataTransfer.setData('text/plain', type)
     const dragState = {
       dragMode,
-      dragging: true,
-      sortItem: item,
+      selectedFieldId: false,
+      activeTab: 'elements',
+      dragging: true
     }
 
     this.setState(dragState)
+
+    setTimeout(() => {
+      this.setState({sortItem: item})
+    }, 10)
   }
 
   handleDrop (e) {
@@ -282,6 +290,8 @@ class Builder extends Component {
       sortItem: false,
       dragging: false,
       dragIndex: false,
+      selectedFieldId: item.id,
+      activeTab: 'questionProperties',
       form: {
         ...form,
         props: {

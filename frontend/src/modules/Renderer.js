@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import * as Elements from './elements'
 
 export default class Renderer extends Component {
-  static defaultProps = {
-    mode: 'viewer'
-  }
-
   render () {
-    let { className, dragging, dragMode, sortItem } = this.props
+    let { className } = this.props
     const {
+      dragging,
+      dragMode,
+      sortItem,
       customBuilderHandlers,
       builderHandlers,
       handleLabelChange,
@@ -18,6 +17,8 @@ export default class Renderer extends Component {
     if (this.props.dragging === true) {
       className += ' dragging'
     }
+
+    className += ` ${ this.props.mode }`
 
     return <div
       className={ className }
@@ -71,4 +72,8 @@ export default class Renderer extends Component {
     })}
     </div>
   }
+}
+
+Renderer.defaultProps = {
+  mode: 'viewer'
 }

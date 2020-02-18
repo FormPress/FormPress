@@ -1,4 +1,4 @@
-.builder {
+.content > .builder {
   margin-top: 86px;
 }
 
@@ -10,7 +10,7 @@
   width: 100%;
   position: fixed;
   background-color: #E2E2E2;
-  z-index: 0;
+  z-index: 1;
 }
 
 .builder > .headerContainer > .header,
@@ -154,44 +154,45 @@
   box-shadow: 0px 3px 10px #00000014;
 }
 
-.form.dragging > * *{
+.form.builder.dragging > * *{
   pointer-events: none;
 }
 
-.form > .dropPlaceHolder {
+.form.builder > .dropPlaceHolder {
   pointer-events: none;
-  height: 3px;
+  height: 80px;
   width: 100%;
   background-color: blue;
-  opacity: 0.5;
+  opacity: 0.1;
+  border: 3px solid blue;
 }
 
-.form > .element {
+.form.builder > .element {
   border: 1px solid transparent;
 }
 
-.form > .element > .action {
+.form.builder > .element > .action {
   display: none;
   float: right;
   margin-top: -23px;
   font-size: 14px;
 }
 
-.form > .element > .action > * {
+.form.builder > .element > .action > * {
   cursor: pointer;
   margin-left: 10px;
   margin-top: 5px;
 }
 
-.form > .element > .action > .sortHandle {
+.form.builder > .element > .action > .sortHandle {
   cursor: move;
   display: inline-block;
 }
 
-.form > .element:hover, .form > .element.selected {
+.form.builder > .element:hover, .form > .element.selected {
   border: 1px solid black;
 }
 
-.form > .element:hover > .action, .form > .element.selected > .action {
+.form.builder > .element:hover > .action, .form > .element.selected > .action {
   display: block;
 }
