@@ -24,7 +24,7 @@ export default class Renderer extends Component {
       className={ className }
       { ...builderHandlers }
     >
-    {this.props.form.props.elements.map((elem, index) => {
+    {this.props.form.props.elements.map((elem) => {
       const Component = Elements[elem.type]
       const extraProps = { mode: this.props.mode }
 
@@ -41,7 +41,7 @@ export default class Renderer extends Component {
 
       const renderList = [
         <Component
-          key={ index }
+          key={ elem.id }
           id={ elem.id }
           config={ elem }
           builderHandlers={ builderHandlers }

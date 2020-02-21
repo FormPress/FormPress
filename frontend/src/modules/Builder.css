@@ -70,6 +70,39 @@
   min-height: 100px;
 }
 
+.builder > .content > .leftTabs > div {
+  list-style: none;
+  box-shadow:  0px 3px 10px #00000014;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.builder > .content > .leftTabs > div > a {
+  width: 59px;
+  height: 57px;
+  font-size: 25px;
+  line-height: 57px;
+  text-align: center;
+  display: inline-block;
+}
+
+.builder > .content > .leftTabs > div > a,
+.builder > .content > .leftTabs > div > a:visited {
+  color: rgb(148, 200, 50);
+}
+.builder > .content > .leftTabs > div > a:hover {
+  color: white;
+  background-color: rgb(148, 200, 50);
+}
+
+.builder > .content > .leftTabs > div > a.selected {
+  color: white;
+  background-color: rgb(168, 227, 57);
+}
+
+
+
 .builder > .content > .leftMenu {
   min-height: 500px;
 }

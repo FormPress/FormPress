@@ -55,9 +55,10 @@
     -- on Preview, render latest saved form
     -- on Publish, render latest published version
 - [DONE] Allow questions to be sorted
+- [DONE] Implement vertical tabs in builder, via react-router if possible
 
 VNTTD:
-- Implement vertical tabs in builder, via react-router if possible
+- Put left panel elements/form/question props into vertical tab context
 - Builder: allow users to import forms into their websites using a JS file
 
 MVP:

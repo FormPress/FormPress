@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import {
+  Link,
+  NavLink,
+  Switch,
+  Route
+} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faChevronLeft, faPaintBrush, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
@@ -208,9 +213,12 @@ class Builder extends Component {
   }
 
   handleDragStart (_item, e) {
+    console.log('Drag start')
     let item = _item
     let dragMode = 'insert'
     let type = item.type
+
+    e.dataTransfer.setData('text/plain', type)
 
     if (item.mode === 'sort') {
       const {mode, ref, ...rest} = item
@@ -223,7 +231,6 @@ class Builder extends Component {
       e.dataTransfer.dropEffect = 'move'
     }
 
-    e.dataTransfer.setData('text/plain', type)
     const dragState = {
       dragMode,
       selectedFieldId: false,
@@ -235,13 +242,13 @@ class Builder extends Component {
 
     setTimeout(() => {
       this.setState({sortItem: item})
-    }, 10)
+    }, 1)
   }
 
   handleDrop (e) {
     e.stopPropagation()
     e.preventDefault()
-    
+    console.log('Drop oldi')
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
@@ -303,6 +310,9 @@ class Builder extends Component {
   }
 
   handleDragEnd (e) {
+    e.stopPropagation()
+    e.preventDefault()
+    console.log('drag ended')
     this.setState({
       dragging: false,
       dragMode: 'insert',
@@ -373,7 +383,8 @@ class Builder extends Component {
     if (matchingElements.length === 1) {
       this.setState({
         selectedFieldId: id,
-        activeTab: 'questionProperties'
+        activeTab: 'questionProperties',
+        dragging: false
       })
     }
   }
@@ -471,18 +482,9 @@ class Builder extends Component {
   render () {
     const {
       activeTab,
-      dragging,
-      form,
-      dragMode,
-      sortItem,
-      publishedForm,
-      loading,
-      saving,
-      publishing,
       selectedFieldId
     } = this.state
-    const isPublishRequired = (form.updated_at !== publishedForm.created_at)
-    const saveButtonProps = {}
+    
     const tabs = [
       { name: 'elements', text: 'Elements' },
       { name: 'formProperties', text: 'Form Properties' }
@@ -490,10 +492,6 @@ class Builder extends Component {
 
     if (selectedFieldId !== false) {
       tabs.push({ name: 'questionProperties', text: 'Question Properties' })
-    }
-
-    if (saving === true || loading === true) {
-      saveButtonProps.disabled = true
     }
 
     return (
@@ -523,69 +521,14 @@ class Builder extends Component {
         </div>
         <div className='content grid'>
           <div className='leftTabs col-1-16'>
+            { this.renderLeftVerticalTabs() }
           </div>
           <div className='leftMenu col-5-16'>
             <div className='leftMenuContents'>
               { this.renderLeftMenuContents() }
             </div>
           </div>
-          <div className='builderStage col-10-16 grid'>
-            <div className='formTitle col-16-16'>
-              {
-                (loading === false)
-                  ? <EditableLabel
-                    className='label'
-                    mode='builder'
-                    labelKey='title'
-                    handleLabelChange={ this.handleTitleChange }
-                    value={ form.title }
-                  />
-                  : null
-              }
-            </div>
-            <div className='col-16-16 formControls'>
-              <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-                { saving === true ? 'Saving...': 'Save' }
-              </button>
-              <button onClick={ this.handlePreviewClick }>
-                Preview
-              </button>
-              <button className='publish' onClick={ this.handlePublishClick }>
-              { publishing === true ? 'Publishing...': 'Publish' }
-              {
-                (isPublishRequired === true)
-                  ? <div className='publishRequired'></div>
-                  : null
-              }
-              </button>
-            </div>
-            {
-            (loading === true)
-              ? 'Loading...'
-              : <Renderer
-                className={`col-16-16 form${(dragging === true)? ' dragging' : ''}`}
-                builderHandlers={{
-                  onDrop: this.handleDrop,
-                  onDragOver: this.handleDragOver,
-                  onClick: this.handleFormElementClick
-                }}
-                customBuilderHandlers={{
-                  onDelete: this.handleFormElementDeleteClick,
-                  handleDragEnd: this.handleDragEnd,
-                  handleDragStart: this.handleDragStart
-                }}
-                handleLabelChange={ this.handleLabelChange }
-                dragIndex={ this.state.dragIndex }
-                dragging={ dragging }
-                dragMode={ dragMode }
-                sortItem={ sortItem }
-                insertBefore={ this.state.insertBefore }
-                form={ form }
-                selectedFieldId={ selectedFieldId }
-                mode='builder'
-              />
-          }
-          </div>
+          { this.renderMainContent() }
         </div>
       </div>
     )
@@ -648,6 +591,116 @@ class Builder extends Component {
       default:
         return null
     }
+  }
+
+  renderLeftVerticalTabs () {
+    const { url } = this.props.match
+
+    return (
+      <div>
+        <NavLink exact to={ url } activeClassName='selected'>
+          <FontAwesomeIcon icon={ faPlusSquare } />
+        </NavLink>
+        <NavLink exact to={ `${url}/design` } activeClassName='selected'>
+          <FontAwesomeIcon icon={ faPaintBrush } />
+        </NavLink>
+      </div>
+    )
+  }
+
+  renderMainContent() {
+    const { url } = this.props.match
+
+    return <Switch>
+      <Route exact path={`${url}`}>
+        { this.renderBuilder() }
+      </Route>
+      <Route path={`${url}/design`}>
+        Form Designer will come here
+      </Route>
+    </Switch>
+  }
+
+  renderBuilder () {
+    const {
+      activeTab,
+      dragging,
+      form,
+      dragMode,
+      sortItem,
+      publishedForm,
+      loading,
+      saving,
+      publishing,
+      selectedFieldId
+    } = this.state
+
+    const isPublishRequired = (form.updated_at !== publishedForm.created_at)
+    const saveButtonProps = {}
+
+    if (saving === true || loading === true) {
+      saveButtonProps.disabled = true
+    }
+
+    return (
+      <div className='builderStage col-10-16 grid'>
+        <div className='formTitle col-16-16'>
+          {
+            (loading === false)
+              ? <EditableLabel
+                className='label'
+                mode='builder'
+                labelKey='title'
+                handleLabelChange={ this.handleTitleChange }
+                value={ form.title }
+              />
+              : null
+          }
+        </div>
+        <div className='col-16-16 formControls'>
+          <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
+            { saving === true ? 'Saving...': 'Save' }
+          </button>
+          <button onClick={ this.handlePreviewClick }>
+            Preview
+          </button>
+          <button className='publish' onClick={ this.handlePublishClick }>
+          { publishing === true ? 'Publishing...': 'Publish' }
+          {
+            (isPublishRequired === true)
+              ? <div className='publishRequired'></div>
+              : null
+          }
+          </button>
+        </div>
+        {
+        (loading === true)
+          ? 'Loading...'
+          : <Renderer
+            className={`col-16-16 form${(dragging === true)? ' dragging' : ''}`}
+            builderHandlers={{
+              onDrop: this.handleDrop,
+              onDragOver: this.handleDragOver,
+              onClick: this.handleFormElementClick
+            }}
+            customBuilderHandlers={{
+              onDelete: this.handleFormElementDeleteClick,
+              handleDragEnd: this.handleDragEnd,
+              handleDragStart: this.handleDragStart
+            }}
+            handleLabelChange={ this.handleLabelChange }
+            dragIndex={ this.state.dragIndex }
+            dragging={ dragging }
+            dragMode={ dragMode }
+            sortItem={ sortItem }
+            insertBefore={ this.state.insertBefore }
+            form={ form }
+            selectedFieldId={ selectedFieldId }
+            mode='builder'
+          />
+        }
+      </div>
+    )
   }
 }
 
