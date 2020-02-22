@@ -76,7 +76,7 @@ class Builder extends Component {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
       if (lastEditedFormId !== null) {
-        this.props.history.push(`/editor/${lastEditedFormId}`)
+        this.props.history.push(`/editor/${lastEditedFormId}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)
@@ -145,21 +145,10 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  setActiveTab (activeTab) {
-    const newState = { activeTab }
-
-    if (activeTab !== 'questionProperties') {
-      newState.selectedFieldId = false
-    }
-
-    this.setState(newState)
-  }
-
   constructor (props) {
     super(props)
     this.state = {
       counter: 0,
-      activeTab: 'elements',
       saving: false,
       loading: false,
       dragging: false,
@@ -208,7 +197,6 @@ class Builder extends Component {
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
     this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
-    this.setActiveTab = this.setActiveTab.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
   }
 
@@ -234,7 +222,6 @@ class Builder extends Component {
     const dragState = {
       dragMode,
       selectedFieldId: false,
-      activeTab: 'elements',
       dragging: true
     }
 
@@ -248,7 +235,7 @@ class Builder extends Component {
   handleDrop (e) {
     e.stopPropagation()
     e.preventDefault()
-    console.log('Drop oldi')
+
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
@@ -297,8 +284,6 @@ class Builder extends Component {
       sortItem: false,
       dragging: false,
       dragIndex: false,
-      selectedFieldId: item.id,
-      activeTab: 'questionProperties',
       form: {
         ...form,
         props: {
@@ -377,13 +362,13 @@ class Builder extends Component {
     e.preventDefault()
     const id = parseInt(e.target.id.replace('qc_', ''))
     const { elements } = this.state.form.props
+    let { formId } = this.props.match.params
 
     const matchingElements = elements.filter((elem) => (elem.id === id))
 
     if (matchingElements.length === 1) {
+      this.props.history.push(`/editor/${formId}/builder/question/${id}/properties`)
       this.setState({
-        selectedFieldId: id,
-        activeTab: 'questionProperties',
         dragging: false
       })
     }
@@ -391,14 +376,17 @@ class Builder extends Component {
 
   handleFormElementDeleteClick (id) {
     const form = { ...this.state.form }
+    const { params } = this.props.match
 
     form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
 
     this.setState({
-      form,
-      selectedFieldId: false,
-      activeTab: 'elements'
+      form
     })
+
+    if (typeof params.questionId !== 'undefined') {
+      this.props.history.push(`/editor/${params.formId}/builder`)
+    }
   }
 
   async handleSaveClick () {
@@ -480,18 +468,19 @@ class Builder extends Component {
   }
 
   render () {
-    const {
-      activeTab,
-      selectedFieldId
-    } = this.state
-    
+    const { params } = this.props.match
+    const { formId, questionId } = params
     const tabs = [
-      { name: 'elements', text: 'Elements' },
-      { name: 'formProperties', text: 'Form Properties' }
+      { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
+      { name: 'formProperties', text: 'Form Properties', path: `/editor/${formId}/builder/properties` }
     ]
 
-    if (selectedFieldId !== false) {
-      tabs.push({ name: 'questionProperties', text: 'Question Properties' })
+    if (typeof questionId !== 'undefined') {
+      tabs.push({
+        name: 'questionProperties',
+        text: 'Question Properties',
+        path: `/editor/${formId}/builder/question/${params.questionId}/properties`
+      })
     }
 
     return (
@@ -505,16 +494,14 @@ class Builder extends Component {
             </div>
             <div className='col-15-16 mainTabs'>
               {tabs.map((item, key) => (
-                <a
-                  href='#/'
+                <NavLink
                   key={ key }
-                  onClick={ this.setActiveTab.bind(this, item.name) }
-                  className={
-                    (item.name === activeTab) ? 'selected' : undefined
-                  }
+                  exact
+                  to={ `${item.path}` }
+                  activeClassName='selected'
                 >
                   { item.text }
-                </a>
+                </NavLink>
               ))}
             </div>
           </div>
@@ -523,11 +510,6 @@ class Builder extends Component {
           <div className='leftTabs col-1-16'>
             { this.renderLeftVerticalTabs() }
           </div>
-          <div className='leftMenu col-5-16'>
-            <div className='leftMenuContents'>
-              { this.renderLeftMenuContents() }
-            </div>
-          </div>
           { this.renderMainContent() }
         </div>
       </div>
@@ -535,73 +517,78 @@ class Builder extends Component {
   }
 
   renderLeftMenuContents () {
-    const { activeTab, form, selectedFieldId } = this.state
+    const { form } = this.state
+    const { params } = this.props.match
     const selectedField = {}
+    const { questionId } = params
+    let questionPropertiesReady = true
 
-    if (selectedFieldId !== false) {
-      const selectedFieldConfig = form
-        .props
-        .elements
-        .filter((elem) => (elem.id === selectedFieldId))[0]
+    if (typeof questionId !== 'undefined') {
+      try {
+        const selectedFieldConfig = form
+          .props
+          .elements
+          .filter((elem) => (elem.id === parseInt(questionId)))[0]
 
-      const elements = getElementsConfigurableSettingsObject()
+        const elements = getElementsConfigurableSettingsObject()
 
-      selectedField.config = selectedFieldConfig
-      selectedField.configurableSettings = elements[selectedFieldConfig.type]
-        .configurableSettings || {}
+        selectedField.config = selectedFieldConfig
+        selectedField.configurableSettings = elements[selectedFieldConfig.type]
+          .configurableSettings || {}
+      } catch (e) {
+        questionPropertiesReady = false
+      }
     }
-    
-    switch (activeTab) {
-      case 'elements':
-        return (
-          <div className='elements'>
-            <div className='elementsMessage'>
-              Drag and Drop elements to right hand side to add to the form.
-              Or you can click + icon
-            </div>
-            <div className='elementList'>
-              {pickerElements.map((elem) =>
-                <div
-                  className='element'
-                  draggable
-                  onDragStart={ this.handleDragStart.bind(this, elem) }
-                  onDragEnd={ this.handleDragEnd }
-                  key={ elem.type }
-                >
-                  { elem.type }
-                </div>
-              )}
-            </div>
+
+    return <Switch>
+      <Route exact path='/editor/:formId/builder'>
+        <div className='elements'>
+          <div className='elementsMessage'>
+            Drag and Drop elements to right hand side to add to the form.
+            Or you can click + icon
           </div>
-        )
-      case 'formProperties':
-        return (
-          <FormProperties
-            form={ form }
-            setIntegration={ this.setIntegration }
-          />
-        )
-      case 'questionProperties':
-        return (
-          <QuestionProperties
-            selectedField={ selectedField }
-            configureQuestion={ this.configureQuestion }
-          />
-        )
-      default:
-        return null
-    }
+          <div className='elementList'>
+            {pickerElements.map((elem) =>
+              <div
+                className='element'
+                draggable
+                onDragStart={ this.handleDragStart.bind(this, elem) }
+                onDragEnd={ this.handleDragEnd }
+                key={ elem.type }
+              >
+                { elem.type }
+              </div>
+            )}
+          </div>
+        </div>
+      </Route>
+      <Route path='/editor/:formId/builder/properties'>
+        <FormProperties
+          form={ form }
+          setIntegration={ this.setIntegration }
+        />
+      </Route>
+      <Route path='/editor/:formId/builder/question/:questionId/properties'>
+        { (questionPropertiesReady === true)
+            ? <QuestionProperties
+              selectedField={ selectedField }
+              configureQuestion={ this.configureQuestion }
+            />
+            : null
+        }
+      </Route>
+    </Switch>
   }
 
   renderLeftVerticalTabs () {
-    const { url } = this.props.match
+    const { formId } = this.props.match.params
 
     return (
       <div>
-        <NavLink exact to={ url } activeClassName='selected'>
+        <NavLink to={ `/editor/${formId}/builder` } activeClassName='selected'>
           <FontAwesomeIcon icon={ faPlusSquare } />
         </NavLink>
-        <NavLink exact to={ `${url}/design` } activeClassName='selected'>
+        <NavLink to={ `/editor/${formId}/design` } activeClassName='selected'>
           <FontAwesomeIcon icon={ faPaintBrush } />
         </NavLink>
       </div>
@@ -609,21 +596,25 @@ class Builder extends Component {
   }
 
   renderMainContent() {
-    const { url } = this.props.match
-
-    return <Switch>
-      <Route exact path={`${url}`}>
-        { this.renderBuilder() }
-      </Route>
-      <Route path={`${url}/design`}>
-        Form Designer will come here
-      </Route>
-    </Switch>
+    return (
+      <Switch>
+        <Route path='/editor/:formId/builder'>
+          <div className='leftMenu col-5-16'>
+            <div className='leftMenuContents'>
+              { this.renderLeftMenuContents() }
+            </div>
+          </div>
+          { this.renderBuilder() }
+        </Route>
+        <Route path='/editor/:formId/design'>
+          Form Designer will come here
+        </Route>
+      </Switch>
+    )
   }
 
   renderBuilder () {
     const {
-      activeTab,
       dragging,
       form,
       dragMode,
@@ -632,8 +623,9 @@ class Builder extends Component {
       loading,
       saving,
       publishing,
-      selectedFieldId
     } = this.state
+    const { params } = this.props.match
+    let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = (form.updated_at !== publishedForm.created_at)
     const saveButtonProps = {}

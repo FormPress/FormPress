@@ -124,7 +124,7 @@ class Forms extends Component {
                     onClick={ this.handleFormDeleteClick.bind(this, form) }
                   />
                 </span>
-                <Link to={ `/editor/${form.id}` }>
+                <Link to={ `/editor/${form.id}/builder` }>
                   <FontAwesomeIcon icon={ faPen } />
                 </Link>
               </div>

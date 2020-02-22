@@ -56,9 +56,10 @@
     -- on Publish, render latest published version
 - [DONE] Allow questions to be sorted
 - [DONE] Implement vertical tabs in builder, via react-router if possible
-
+- [DONE] Put elements/question props /form props using react-router
+- [DONE] Put left panel elements/form/question props into vertical tab context
 VNTTD:
-- Put left panel elements/form/question props into vertical tab context
+
 - Builder: allow users to import forms into their websites using a JS file
 
 MVP:
@@ -71,6 +72,7 @@ MVP:
   -- Ask user to save if there are unsaved progress in form editor
   -- Imrove notification when publish is needed
   -- Store form version on submission table, when showing responses, use relevant form version to render responses
+  -- Improve contentEditable to prevent stuff like &nbsp;
 
 - Setup k8s and deploy to production
   -- Put required k8s files/scripts in k8s folder
