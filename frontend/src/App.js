@@ -154,6 +154,7 @@ class App extends Component {
             <PrivateRoute path='/forms'>
               <Forms />
             </PrivateRoute>
+            <PrivateRoute path='/editor/:formId/builder/question/:questionId/properties' component={Builder} />
             <PrivateRoute path='/editor/:formId' component={Builder} />
             <PrivateRoute path='/editor' component={Builder} />
             <PrivateRoute path='/data'>
