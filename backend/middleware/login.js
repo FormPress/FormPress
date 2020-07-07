@@ -42,6 +42,7 @@ module.exports = (app) => {
         }
 
         jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+          console.log('token sign error ', err)
           console.log('SIGNED TOKEN ', {
             message: 'Login Success',
             token,
