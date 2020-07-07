@@ -51,6 +51,7 @@ services:
       - REACT_APP_BACKEND=http://localhost:3001
     ports:
       - "3000:3000"
+    stdin_open: true
     links:
       - "backend"
     depends_on:

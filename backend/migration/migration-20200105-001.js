@@ -70,7 +70,7 @@ module.exports = async (db) => {
       \`password\` char(128) NOT NULL DEFAULT '',
       \`salt\` char(128) NOT NULL DEFAULT '',
       PRIMARY KEY (\`id\`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=21DEFAULT CHARSET=utf8mb4;
+    ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
   `)
 
   const hash = sha512('admin', genRandomString(128))
