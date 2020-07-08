@@ -28,7 +28,7 @@ class Forms extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
-    const forms = data.map((form) => {
+    const forms = Array.from(data).map((form) => {
       return {
         ...form,
         props: JSON.parse(form.props) 
