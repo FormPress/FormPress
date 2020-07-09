@@ -7,16 +7,23 @@ const options = {
   plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-modules-commonjs'],
   presets: ['@babel/preset-react'] 
 }
-const frontendRuntimeTarget = path.resolve(path.resolve(
+const frontendRuntimeTarget = path.resolve(
   '../',
   'frontend',
   (process.env.FP_ENV === 'production') ? 'build' : 'public',
   'runtime'
-))
+)
+const frontend3rdpartyTarget = path.resolve(
+  frontendRuntimeTarget,
+  '3rdparty'
+)
+
+
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
-  frontendRuntimeTarget
+  frontendRuntimeTarget,
+  frontend3rdpartyTarget
 ]
 
 for (const dir of createDirs) {
@@ -31,6 +38,12 @@ const transformMap = [
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'runtime'),
     target: frontendRuntimeTarget
+  },
+  {
+    type: 'folder_copy',
+    extension: '.js',
+    source: path.resolve('../', 'frontend', 'src', 'runtime', '3rdparty'),
+    target: frontend3rdpartyTarget
   },
   {
     type: 'file',
@@ -64,6 +77,7 @@ const transformMap = [
 const transformFrontend = () => {
   for (const transform of transformMap) {
     const {type, source, target} = transform
+    let files
 
     switch (type) {
       case 'file':
@@ -78,7 +92,7 @@ const transformFrontend = () => {
           fs.mkdirSync(target)
         }
 
-        const files = fs.readdirSync(source)
+        files = fs.readdirSync(source)
           .filter((fileName) => fileName.endsWith(transform.extension))
         
         for (const file of files) {
@@ -89,10 +103,33 @@ const transformFrontend = () => {
           } else {
             const input = fs.readFileSync(path.resolve(source, file))
             const result = babel.transformSync(input, options)
+
             fs.writeFileSync(path.resolve(target, file), result.code)
           }
         }
         break
+      case 'folder_copy':
+        //create target folder if does not exists
+        if (fs.existsSync(target) === false) {
+          fs.mkdirSync(target)
+        }
+
+        files = fs.readdirSync(source)
+          .filter((fileName) => fileName.endsWith(transform.extension))
+        
+        for (const file of files) {
+          console.log(`Transpiling ${path.resolve(source, file)}`)
+
+          if (file.endsWith('.css')) {
+            fs.writeFileSync(path.resolve(target, file), '')
+          } else {
+            const input = fs.readFileSync(path.resolve(source, file))
+
+            fs.writeFileSync(path.resolve(target, file), input)
+          }
+        }
+        break
+
     }
   }
 }

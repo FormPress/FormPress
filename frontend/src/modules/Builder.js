@@ -6,7 +6,12 @@ import {
   Route
 } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faPaintBrush, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faPaintBrush,
+  faPlusSquare,
+  faShareAlt
+} from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
@@ -14,6 +19,7 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
+import ShareForm from './helper/ShareForm'
 import { api } from '../helper'
 
 import './Builder.css'
@@ -224,18 +230,20 @@ class Builder extends Component {
       selectedFieldId: false,
       dragging: true
     }
-
-    this.setState(dragState)
-
     setTimeout(() => {
-      this.setState({sortItem: item})
-    }, 1)
+      this.setState(dragState)
+
+      setTimeout(() => {
+        this.setState({sortItem: item})
+      }, 20)
+    }, 20)
   }
 
   handleDrop (e) {
     e.stopPropagation()
     e.preventDefault()
 
+    const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
@@ -257,7 +265,6 @@ class Builder extends Component {
     const index = form.props.elements.findIndex(
       (element) => (element.id.toString() === dragIndex)
     )
-
     let newElements
 
     if (this.state.insertBefore === true) {
@@ -277,6 +284,7 @@ class Builder extends Component {
     if (dragMode === 'sort') {
       newElements = newElements
         .filter((element) => (element.__original__ !== true))
+      this.props.history.push(`/editor/${formId}/builder/question/${item.id}/properties`)
     }
 
     this.setState({
@@ -540,44 +548,46 @@ class Builder extends Component {
       }
     }
 
-    return <Switch>
-      <Route exact path='/editor/:formId/builder'>
-        <div className='elements'>
-          <div className='elementsMessage'>
-            Drag and Drop elements to right hand side to add to the form.
-            Or you can click + icon
+    return (
+      <Switch>
+        <Route exact path='/editor/:formId/builder'>
+          <div className='elements'>
+            <div className='elementsMessage'>
+              Drag and Drop elements to right hand side to add to the form.
+              Or you can click + icon
+            </div>
+            <div className='elementList'>
+              {pickerElements.map((elem) =>
+                <div
+                  className='element'
+                  draggable
+                  onDragStart={ this.handleDragStart.bind(this, elem) }
+                  onDragEnd={ this.handleDragEnd }
+                  key={ elem.type }
+                >
+                  { elem.type }
+                </div>
+              )}
+            </div>
           </div>
-          <div className='elementList'>
-            {pickerElements.map((elem) =>
-              <div
-                className='element'
-                draggable
-                onDragStart={ this.handleDragStart.bind(this, elem) }
-                onDragEnd={ this.handleDragEnd }
-                key={ elem.type }
-              >
-                { elem.type }
-              </div>
-            )}
-          </div>
-        </div>
-      </Route>
-      <Route path='/editor/:formId/builder/properties'>
-        <FormProperties
-          form={ form }
-          setIntegration={ this.setIntegration }
-        />
-      </Route>
-      <Route path='/editor/:formId/builder/question/:questionId/properties'>
-        { (questionPropertiesReady === true)
-            ? <QuestionProperties
-              selectedField={ selectedField }
-              configureQuestion={ this.configureQuestion }
-            />
-            : null
-        }
-      </Route>
-    </Switch>
+        </Route>
+        <Route path='/editor/:formId/builder/properties'>
+          <FormProperties
+            form={ form }
+            setIntegration={ this.setIntegration }
+          />
+        </Route>
+        <Route path='/editor/:formId/builder/question/:questionId/properties'>
+          { (questionPropertiesReady === true)
+              ? <QuestionProperties
+                selectedField={ selectedField }
+                configureQuestion={ this.configureQuestion }
+              />
+              : null
+          }
+        </Route>
+      </Switch>
+    )
   }
 
   renderLeftVerticalTabs () {
@@ -590,6 +600,9 @@ class Builder extends Component {
         </NavLink>
         <NavLink to={ `/editor/${formId}/design` } activeClassName='selected'>
           <FontAwesomeIcon icon={ faPaintBrush } />
+        </NavLink>
+        <NavLink to={ `/editor/${formId}/share` } activeClassName='selected'>
+          <FontAwesomeIcon icon={ faShareAlt } />
         </NavLink>
       </div>
     )
@@ -608,6 +621,9 @@ class Builder extends Component {
         </Route>
         <Route path='/editor/:formId/design'>
           Form Designer will come here
+        </Route>
+        <Route path='/editor/:formId/share'>
+          <ShareForm />
         </Route>
       </Switch>
     )
