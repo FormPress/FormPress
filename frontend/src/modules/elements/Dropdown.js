@@ -3,69 +3,74 @@ import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
 export default class Dropdown extends Component {
+  static weight = 5
 
   static defaultConfig = {
     id: 0,
     type: 'Dropdown',
-    dropdownText: 'Toggle'
+    label: 'Dropdown Label'
   }
 
-  constructor(){
-    super();
+  static configurableSettings = {
+    required: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field required?'
+      }
+    }
+  }
+
+  constructor(props) {
+    super(props);
     this.state = {
-          displayMenu: false,
-        };
-   
-     this.showDropdownMenu = this.showDropdownMenu.bind(this);
-     this.hideDropdownMenu = this.hideDropdownMenu.bind(this);
-   };
+      options: []
+    };
+  };
 
-   showDropdownMenu(event) {
-    event.preventDefault();
-    this.setState({ displayMenu: true }, () => {
-    document.addEventListener('click', this.hideDropdownMenu);
+  componentDidMount() {
+    this.setState({
+      options: [
+        { id: 'id1', name: 'Item 1' },
+        { id: 'id2', name: 'Item 2' },
+        { id: 'id3', name: 'Item 3' },
+      ]
     });
-  }
-
-  hideDropdownMenu() {
-    this.setState({ displayMenu: false }, () => {
-      document.removeEventListener('click', this.hideDropdownMenu);
-    });
-  }
+  } 
 
   render() {
     const { config, mode } = this.props
     const inputProps = {}
+    const { options } = this.state;
 
     if (typeof config.onClick !== 'undefined') {
       inputProps.onClick = config.onClick
     }
 
+    let optionsList = options.length > 0 && options.map((item, i) => {
+      return (
+        <option
+          key={i}
+          value={item.id}>{item.name}
+        </option>
+      )
+    }, this);
+
     return (
-      <ElementContainer type={ config.type } { ...this.props }>
-        { (mode === 'builder')
-          ? <div  className="dropdown" style = {{background:"gray",width:"200px"}} onClick={this.showDropdownMenu}>
-            <EditableLabel
-                className='button'
-                mode={ mode }
-                labelKey={ config.id }
-                handleLabelChange={ this.props.handleLabelChange }
-                value={ config.dropdownText }
-            />
-            { this.state.displayMenu ? (
-            <ul>
-              <li><a className="active" href="#Item 1">Item 1</a></li>
-              <li><a href="#Item 2">Item 2</a></li>
-              <li><a href="#Item 3">Item 3</a></li>
-              <li><a href="#Item 4">Item 4</a></li>
-              <li><a href="#Item 5">Item 5</a></li>
-              <li><a href="#Item 6">Item 6</a></li>
-            </ul>
-            ):(null)
-            }
-          </div>
-          : <input type='dropdown' value={ config.dropdownText } { ...inputProps } />
-        }
+      <ElementContainer type={config.type} {...this.props}>
+        <EditableLabel
+          className='fl label'
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />
+        <div>
+          <select style={{ width: 240 }}>
+            {optionsList}
+          </select>
+        </div>
       </ElementContainer>
     );
   }
