@@ -24,14 +24,14 @@ export default class Radio extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            options: [1,2,3],
+            options: [1, 2, 3],
             checked: 0
         };
         this.onChange = this.onChange.bind(this);
     };
 
 
-    onChange(i){
+    onChange(i) {
         this.setState({
             checked: i
         });
@@ -44,7 +44,7 @@ export default class Radio extends Component {
         let optionsList = options.length > 0 && options.map((item, i) => {
             return (
                 <label key={i}>
-                    <input type="radio" checked={this.state.checked === i ? true : false} key={i+100} onChange={this.onChange.bind(this,i)} value={i} />
+                    <input type="radio" checked={this.state.checked === i ? true : false} key={i + 100} onChange={this.onChange.bind(this, i)} value={i} />
                     {item}
                 </label>
             )
@@ -52,17 +52,25 @@ export default class Radio extends Component {
 
         return (
             <ElementContainer type={config.type} {...this.props}>
-                <EditableLabel
-                    className='fl label'
-                    mode={mode}
-                    labelKey={config.id}
-                    handleLabelChange={this.props.handleLabelChange}
-                    value={config.label}
-                    required={config.required}
-                />
-                <div>
-                    {optionsList} 
-                </div>
+                {(mode !== 'preview')
+                    ? <>
+                        <EditableLabel
+                            className='fl label'
+                            mode={mode}
+                            labelKey={config.id}
+                            handleLabelChange={this.props.handleLabelChange}
+                            value={config.label}
+                            required={config.required}
+                        />
+                        <div>
+                            {optionsList}
+                        </div>
+                    </>
+                    :
+                    <div>
+                        {optionsList}
+                    </div>
+                }
             </ElementContainer>
         )
     }

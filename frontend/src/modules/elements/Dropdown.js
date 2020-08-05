@@ -60,6 +60,11 @@ export default class Dropdown extends Component {
   render() {
     const { config, mode } = this.props
     const { options } = this.state;
+    const inputProps = {}
+
+    if (typeof config.onClick !== 'undefined') {
+      inputProps.onClick = config.onClick
+    }
 
     let optionsList = options.length > 0 && options.map((item, i) => {
       return (
@@ -73,22 +78,30 @@ export default class Dropdown extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className='fl label'
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
-        <div>
-          <input type="text" value={this.state.userInput} placeholder="Choose..." list="optionsList" onChange={this.handleChange.bind(this)} />
-          <datalist id="optionsList">
+        {(mode !== 'preview')
+          ? <>
+            <EditableLabel
+              className='fl label'
+              mode={mode}
+              labelKey={config.id}
+              handleLabelChange={this.props.handleLabelChange}
+              value={config.label}
+              required={config.required}
+            />
+            <div>
+              <input type="text" value={this.state.userInput} placeholder="Choose..." list="optionsList" onChange={this.handleChange.bind(this)} />
+              <datalist id="optionsList">
+                {optionsList}
+              </datalist>
+              <button type="button" onClick={this.add}>Add</button>
+              <button type="button" onClick={this.remove}>Remove</button>
+            </div>
+          </>
+          :
+          <select type={config.type} {...this.props}>
             {optionsList}
-          </datalist>
-          <button type="button" onClick={this.add}>Add</button>
-          <button type="button" onClick={this.remove}>Remove</button>
-        </div>
+          </select>
+        }
       </ElementContainer>
     )
   }
