@@ -22,86 +22,83 @@ export default class Dropdown extends Component {
   }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
-      options: [],
-      userInput: null
-    };
-    this.add = this.add.bind(this);
-    this.remove = this.remove.bind(this);
-  };
-
-  componentDidMount() {
-    this.setState({
-      options: [
-        { key: 'Item1', value: 'Item1' },
-        { key: 'Item2', value: 'Item2' },
-        { key: 'Item3', value: 'Item3' },
-        { key: 'Item4', value: 'Item4' },
-        { key: 'Item5', value: 'Item5' }
-      ]
-    });
+      options: []
+    }
+    this.toggleTextarea = this.toggleTextarea.bind(this)
   }
 
-  handleChange(event) { this.setState({ userInput: event.target.value }) }
-
-  add() {
-    this.setState(previousState => ({
-      options: [...previousState.options, { key: this.state.userInput, value: this.state.userInput }]
-    }));
+  componentDidMount(){
+    this.state.options = JSON.parse(localStorage.getItem('dropdown'))
   }
 
-  remove() {
-    this.setState(previousState => ({
-      options: previousState.options.filter(el => el.value !== this.state.userInput)
-    }));
+  toggleTextarea() {
+    var txt = document.getElementById("txt")
+    var lines = txt.innerHTML.split('\n');
+
+    if (txt.style.display === "none") {
+      txt.style.display = "block"
+    } else {
+      txt.style.display = "none"
+    }
+
+    for (var i = 0; i < lines.length; i++) {
+      this.setState({
+        options: this.state.options.concat(lines[i])
+      })
+    }
+    localStorage.setItem('dropdown', JSON.stringify(this.state.options))
   }
 
   render() {
     const { config, mode } = this.props
-    const { options } = this.state;
     const inputProps = {}
 
-    if (typeof config.onClick !== 'undefined') {
-      inputProps.onClick = config.onClick
+    if (typeof config.value !== 'undefined') {
+      inputProps.value = config.value
     }
 
-    let optionsList = options.length > 0 && options.map((item, i) => {
-      return (
-        <option
-          key={i}
-          value={item.key}>{item.value}
-        </option>
-      )
-    }, this);
+    if (typeof this.props.onChange !== 'undefined') {
+      inputProps.onChange = this.props.onChange
+    }
 
+    var display
+    if (mode === 'builder') {
+      display = [
+        <EditableLabel
+          key='1'
+          className='fl label'
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />,
+        <div key='2'>
+          <button onClick={this.toggleTextarea} >Edit</button>
+          <textarea id='txt' name='txtname' {...inputProps}></textarea>
+        </div>
+      ]
+    }
+    else {
+      display = [
+        <EditableLabel
+          key='1'
+          className='fl label'
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />,
+        <input type='text' value={this.state.options.length}></input>
+      ]
+    }
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        {(mode !== 'preview')
-          ? <>
-            <EditableLabel
-              className='fl label'
-              mode={mode}
-              labelKey={config.id}
-              handleLabelChange={this.props.handleLabelChange}
-              value={config.label}
-              required={config.required}
-            />
-            <div>
-              <input type="text" value={this.state.userInput} placeholder="Choose..." list="optionsList" onChange={this.handleChange.bind(this)} />
-              <datalist id="optionsList">
-                {optionsList}
-              </datalist>
-              <button type="button" onClick={this.add}>Add</button>
-              <button type="button" onClick={this.remove}>Remove</button>
-            </div>
-          </>
-          :
-          <select type={config.type} {...this.props}>
-            {optionsList}
-          </select>
-        }
+        {display}
       </ElementContainer>
     )
   }
