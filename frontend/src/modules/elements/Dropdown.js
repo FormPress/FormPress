@@ -8,7 +8,8 @@ export default class Dropdown extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Dropdown',
-    label: 'Choose'
+    label: 'Dropdown',
+    options: []
   }
 
   static configurableSettings = {
@@ -23,32 +24,23 @@ export default class Dropdown extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      options: []
-    }
-    this.toggleTextarea = this.toggleTextarea.bind(this)
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount(){
-    this.state.options = JSON.parse(localStorage.getItem('dropdown'))
-  }
+  handleChange(event) {
+    const { config } = this.props
+    const inputProps = {}
+    var lines = event.target.value.split('\n')
 
-  toggleTextarea() {
-    var txt = document.getElementById("txt")
-    var lines = txt.innerHTML.split('\n');
-
-    if (txt.style.display === "none") {
-      txt.style.display = "block"
-    } else {
-      txt.style.display = "none"
+    if (typeof config.value !== 'undefined') {
+      inputProps.value = config.value
     }
 
+    config.options = []
     for (var i = 0; i < lines.length; i++) {
-      this.setState({
-        options: this.state.options.concat(lines[i])
-      })
+      config.options = config.options.concat(lines[i])
     }
-    localStorage.setItem('dropdown', JSON.stringify(this.state.options))
+
   }
 
   render() {
@@ -76,8 +68,7 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key='2'>
-          <button onClick={this.toggleTextarea} >Edit</button>
-          <textarea id='txt' name='txtname' {...inputProps}></textarea>
+          <textarea onChange={this.handleChange}></textarea>
         </div>
       ]
     }
@@ -92,7 +83,13 @@ export default class Dropdown extends Component {
           value={config.label}
           required={config.required}
         />,
-        <input type='text' value={this.state.options.length}></input>
+        <div key='2'>
+          <select>
+            {
+              config.options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
+            }
+          </select>
+        </div>
       ]
     }
 

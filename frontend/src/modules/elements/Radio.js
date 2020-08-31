@@ -8,7 +8,8 @@ export default class Radio extends Component {
     static defaultConfig = {
         id: 0,
         type: 'Radio',
-        label: 'Choose'
+        label: 'Radio',
+        options: []
     }
 
     static configurableSettings = {
@@ -24,20 +25,11 @@ export default class Radio extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            userInput: null,
-            options: JSON.parse(localStorage.getItem('options')) || ['A', 'B'],
             checked: 0
         }
-        this.add = this.add.bind(this)
-        this.remove = this.remove.bind(this)
+        this.handleChange = this.handleChange.bind(this);
         this.onChange = this.onChange.bind(this)
     }
-
-    componentWillUnmount() {
-        localStorage.setItem('options', null)
-    }
-
-    handleChange(event) { this.setState({ userInput: event.target.value }) }
 
     onChange(i) {
         this.setState({
@@ -45,20 +37,20 @@ export default class Radio extends Component {
         })
     }
 
-    add() {
-        this.setState({
-            options: this.state.options.concat(this.state.userInput)
-        }, () => {
-            localStorage.setItem('options', JSON.stringify(this.state.options))
-        })
-    }
+    handleChange(event) {
+        const { config } = this.props
+        const inputProps = {}
+        var lines = event.target.value.split('\n')
 
-    remove() {
-        this.setState(previousState => ({
-            options: previousState.options.filter(el => el !== this.state.userInput)
-        }), () => {
-            localStorage.setItem('options', JSON.stringify(this.state.options))
-        })
+        if (typeof config.value !== 'undefined') {
+            inputProps.value = config.value
+        }
+
+        config.options = []
+        for (var i = 0; i < lines.length; i++) {
+            config.options = config.options.concat(lines[i])
+        }
+
     }
 
     render() {
@@ -69,14 +61,14 @@ export default class Radio extends Component {
             inputProps.onClick = config.onClick
         }
 
-        let optionsList = this.state.options.length > 0 && this.state.options.map((item, i) => {
+        let optionsList = config.options.length > 0 && config.options.map((item, i) => {
             return (
                 <label key={i}>
                     <input type="radio" checked={this.state.checked === i ? true : false} name='myradio' key={i + 100} value={i} onChange={this.onChange.bind(this, i)} />
                     {item}
                 </label>
             )
-        }, this)
+        })
 
         var display
         if (mode === 'builder') {
@@ -91,12 +83,7 @@ export default class Radio extends Component {
                     required={config.required}
                 />,
                 <div key='2'>
-                    <input type="text" value={this.state.userInput} placeholder="Choose..." list="optionsList" onChange={this.handleChange.bind(this)} />
-                    <datalist id="optionsList">
-                        {optionsList}
-                    </datalist>
-                    <button type="button" onClick={this.add}>Add</button>
-                    <button type="button" onClick={this.remove}>Remove</button>
+                    <textarea onChange={this.handleChange}></textarea>
                 </div>
             ]
         }
