@@ -681,6 +681,7 @@ class Builder extends Component {
               handleDragStart: this.handleDragStart
             }}
             handleLabelChange={ this.handleLabelChange }
+            configureQuestion= { this.configureQuestion }
             dragIndex={ this.state.dragIndex }
             dragging={ dragging }
             dragMode={ dragMode }

@@ -9,6 +9,7 @@ export default class Renderer extends Component {
       dragMode,
       sortItem,
       customBuilderHandlers,
+      configureQuestion,
       builderHandlers,
       handleLabelChange,
       selectedFieldId
@@ -47,6 +48,7 @@ export default class Renderer extends Component {
           builderHandlers={ builderHandlers }
           customBuilderHandlers = { customBuilderHandlers }
           handleLabelChange={ handleLabelChange }
+          configureQuestion={ configureQuestion }
           selectedFieldId={ selectedFieldId }
           { ...extraProps }
         />

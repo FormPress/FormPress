@@ -40,12 +40,15 @@ export default class Dropdown extends Component {
     for (var i = 0; i < lines.length; i++) {
       config.options = config.options.concat(lines[i])
     }
-
   }
 
   render() {
     const { config, mode } = this.props
     const inputProps = {}
+
+    const options = (Array.isArray(config.options) === true)
+      ? config.options
+      : []
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
@@ -86,7 +89,7 @@ export default class Dropdown extends Component {
         <div key='2'>
           <select>
             {
-              config.options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
+              options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
             }
           </select>
         </div>

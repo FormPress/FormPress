@@ -46,11 +46,18 @@ export default class Radio extends Component {
             inputProps.value = config.value
         }
 
-        config.options = []
+        const newOptions = []
+
         for (var i = 0; i < lines.length; i++) {
-            config.options = config.options.concat(lines[i])
+          newOptions.push(lines[i])
         }
 
+        this.props.configureQuestion({
+          id: config.id,
+          newState: {
+            options: newOptions
+          }
+        })
     }
 
     render() {
@@ -61,7 +68,7 @@ export default class Radio extends Component {
             inputProps.onClick = config.onClick
         }
 
-        let optionsList = config.options.length > 0 && config.options.map((item, i) => {
+        let optionsList = Array.isArray(config.options) === true && config.options.map((item, i) => {
             return (
                 <label key={i}>
                     <input type="radio" checked={this.state.checked === i ? true : false} name='myradio' key={i + 100} value={i} onChange={this.onChange.bind(this, i)} />
@@ -83,7 +90,9 @@ export default class Radio extends Component {
                     required={config.required}
                 />,
                 <div key='2'>
-                    <textarea onChange={this.handleChange}></textarea>
+                    <textarea onChange={this.handleChange}>
+                      {config.options.join('\n')}
+                    </textarea>
                 </div>
             ]
         }
