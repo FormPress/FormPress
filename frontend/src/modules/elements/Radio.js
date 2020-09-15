@@ -3,119 +3,124 @@ import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
 export default class Radio extends Component {
-    static weight = 6
+	static weight = 6
 
-    static defaultConfig = {
-        id: 0,
-        type: 'Radio',
-        label: 'Radio',
-        options: []
-    }
+	static defaultConfig = {
+		id: 0,
+		type: 'Radio',
+		label: 'Radio',
+		options: []
+	}
 
-    static configurableSettings = {
-        required: {
-            default: false,
-            formProps: {
-                type: 'Checkbox',
-                label: 'Make this field required?'
-            }
-        }
-    }
+	static configurableSettings = {
+		required: {
+			default: false,
+			formProps: {
+				type: 'Checkbox',
+				label: 'Make this field required?'
+			}
+		}
+	}
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            checked: 0
-        }
-        this.handleChange = this.handleChange.bind(this);
-        this.onChange = this.onChange.bind(this)
-    }
+	constructor(props) {
+		super(props)
+		this.state = {
+			show: true,
+			checked: 0
+		}
+		this.handleChange = this.handleChange.bind(this);
+		this.onChange = this.onChange.bind(this)
+	}
 
-    onChange(i) {
-        this.setState({
-            checked: i
-        })
-    }
+	onChange(i) {
+		this.setState({
+			checked: i
+		})
+	}
 
-    handleChange(event) {
-        const { config } = this.props
-        const inputProps = {}
-        var lines = event.target.value.split('\n')
+	handleChange(event) {
+		const { config } = this.props
+		const inputProps = {}
+		var lines = event.target.value.split('\n')
 
-        if (typeof config.value !== 'undefined') {
-            inputProps.value = config.value
-        }
+		if (typeof config.value !== 'undefined') {
+			inputProps.value = config.value
+		}
 
-        const newOptions = []
+		const newOptions = []
 
-        for (var i = 0; i < lines.length; i++) {
-          newOptions.push(lines[i])
-        }
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i] && lines[i].trim().length !== 0)
+			{
+				newOptions.push(lines[i])
+			}
+		}
 
-        this.props.configureQuestion({
-          id: config.id,
-          newState: {
-            options: newOptions
-          }
-        })
-    }
+		this.props.configureQuestion({
+			id: config.id,
+			newState: {
+				options: newOptions
+			}
+		})
+	}
 
-    render() {
-        const { config, mode } = this.props
-        const inputProps = {}
+	render() {
+		const { config, mode } = this.props
+		const inputProps = {}
 
-        if (typeof config.onClick !== 'undefined') {
-            inputProps.onClick = config.onClick
-        }
+		if (typeof config.onClick !== 'undefined') {
+			inputProps.onClick = config.onClick
+		}
 
-        let optionsList = Array.isArray(config.options) === true && config.options.map((item, i) => {
-            return (
-                <label key={i}>
-                    <input type="radio" checked={this.state.checked === i ? true : false} name='myradio' key={i + 100} value={i} onChange={this.onChange.bind(this, i)} />
-                    {item}
-                </label>
-            )
-        })
+		let optionsList = Array.isArray(config.options) === true && config.options.map((item, i) => {
+			return (
+				<label key={i}>
+					<input type="radio" checked={this.state.checked === i ? true : false} name='myradio' key={i + 100} value={i} onChange={this.onChange.bind(this, i)} />
+					{item}
+				</label>
+			)
+		})
 
-        var display
-        if (mode === 'builder') {
-            display = [
-                <EditableLabel
-                    key='1'
-                    className='fl label'
-                    mode={mode}
-                    labelKey={config.id}
-                    handleLabelChange={this.props.handleLabelChange}
-                    value={config.label}
-                    required={config.required}
-                />,
-                <div key='2'>
-                    <textarea onChange={this.handleChange}>
-                      {config.options.join('\n')}
-                    </textarea>
-                </div>
-            ]
-        }
-        else {
-            display = [
-                <EditableLabel
-                    key='1'
-                    className='fl label'
-                    mode={mode}
-                    labelKey={config.id}
-                    handleLabelChange={this.props.handleLabelChange}
-                    value={config.label}
-                    required={config.required}
-                />,
-                <div key='2'>
-                    {optionsList}
-                </div>
-            ]
-        }
-        return (
-            <ElementContainer type={config.type} {...this.props}>
-                {display}
-            </ElementContainer>
-        )
-    }
+		var display
+		if (mode === 'builder') {
+			display = [
+				<EditableLabel
+					key='1'
+					className='fl label'
+					mode={mode}
+					labelKey={config.id}
+					handleLabelChange={this.props.handleLabelChange}
+					value={config.label}
+					required={config.required}
+				/>,
+				<div key='2'>
+					<button onClick={()=>{this.setState({show:!this.state.show})}}>{ this.state.show ? 'Hide' : 'Show'}</button>
+					{
+						this.state.show ? <textarea onChange={this.handleChange}>{config.options.join('\n')}</textarea>: null
+					}
+				</div>
+			]
+		}
+		else {
+			display = [
+				<EditableLabel
+					key='1'
+					className='fl label'
+					mode={mode}
+					labelKey={config.id}
+					handleLabelChange={this.props.handleLabelChange}
+					value={config.label}
+					required={config.required}
+				/>,
+				<div key='2'>
+					{optionsList}
+				</div>
+			]
+		}
+		return (
+			<ElementContainer type={config.type} {...this.props}>
+				{display}
+			</ElementContainer>
+		)
+	}
 }

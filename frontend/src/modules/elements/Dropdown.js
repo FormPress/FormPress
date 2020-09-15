@@ -24,6 +24,9 @@ export default class Dropdown extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+			show: true
+		}
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -36,10 +39,21 @@ export default class Dropdown extends Component {
       inputProps.value = config.value
     }
 
-    config.options = []
-    for (var i = 0; i < lines.length; i++) {
-      config.options = config.options.concat(lines[i])
-    }
+    const newOptions = []
+
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i] && lines[i].trim().length !== 0)
+			{
+				newOptions.push(lines[i])
+			}
+		}
+
+		this.props.configureQuestion({
+			id: config.id,
+			newState: {
+				options: newOptions
+			}
+		})
   }
 
   render() {
@@ -57,7 +71,7 @@ export default class Dropdown extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
-
+    
     var display
     if (mode === 'builder') {
       display = [
@@ -71,8 +85,11 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key='2'>
-          <textarea onChange={this.handleChange}></textarea>
-        </div>
+					<button onClick={()=>{this.setState({show:!this.state.show})}}>{ this.state.show ? 'Hide' : 'Show'}</button>
+					{
+						this.state.show ? <textarea onChange={this.handleChange}>{config.options.join('\n')}</textarea>: null
+					}
+				</div>
       ]
     }
     else {
