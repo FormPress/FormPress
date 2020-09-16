@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
+import './Radio.css'
+
 export default class Radio extends Component {
 	static weight = 6
 
@@ -29,7 +31,8 @@ export default class Radio extends Component {
 			checked: 0
 		}
 		this.handleChange = this.handleChange.bind(this);
-		this.onChange = this.onChange.bind(this)
+		this.onChange = this.onChange.bind(this);
+
 	}
 
 	onChange(i) {
@@ -50,8 +53,7 @@ export default class Radio extends Component {
 		const newOptions = []
 
 		for (var i = 0; i < lines.length; i++) {
-			if (lines[i] && lines[i].trim().length !== 0)
-			{
+			if (lines[i] && lines[i].trim().length !== 0) {
 				newOptions.push(lines[i])
 			}
 		}
@@ -74,9 +76,8 @@ export default class Radio extends Component {
 
 		let optionsList = Array.isArray(config.options) === true && config.options.map((item, i) => {
 			return (
-				<label key={i}>
-					<input type="radio" checked={this.state.checked === i ? true : false} name='myradio' key={i + 100} value={i} onChange={this.onChange.bind(this, i)} />
-					{item}
+				<label>
+					<input type='radio' checked={this.state.checked === i ? true : false} name='myradio' value={i} onChange={this.onChange.bind(i)} />&emsp;{item}<br />
 				</label>
 			)
 		})
@@ -94,9 +95,20 @@ export default class Radio extends Component {
 					required={config.required}
 				/>,
 				<div key='2'>
-					<button onClick={()=>{this.setState({show:!this.state.show})}}>{ this.state.show ? 'Hide' : 'Show'}</button>
+					<button onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
 					{
-						this.state.show ? <textarea onChange={this.handleChange}>{config.options.join('\n')}</textarea>: null
+						this.state.show
+							?
+							<textarea onChange={this.handleChange}>
+								{config.options.join('\n')}
+							</textarea>
+							:
+							<div class="dropdown">
+								<span>&emsp;Mouse to Preview</span>
+								<div class="dropdown-content">
+									{optionsList}
+								</div>
+							</div>
 					}
 				</div>
 			]
@@ -112,11 +124,15 @@ export default class Radio extends Component {
 					value={config.label}
 					required={config.required}
 				/>,
-				<div key='2'>
-					{optionsList}
+				<div key='2' class="dropdown">
+					<span>&emsp;Choose</span>
+					<div class="dropdown-content">
+						{optionsList}
+					</div>
 				</div>
 			]
 		}
+
 		return (
 			<ElementContainer type={config.type} {...this.props}>
 				{display}

@@ -25,8 +25,8 @@ export default class Dropdown extends Component {
   constructor(props) {
     super(props)
     this.state = {
-			show: true
-		}
+      show: true
+    }
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -41,19 +41,18 @@ export default class Dropdown extends Component {
 
     const newOptions = []
 
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i] && lines[i].trim().length !== 0)
-			{
-				newOptions.push(lines[i])
-			}
-		}
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i] && lines[i].trim().length !== 0) {
+        newOptions.push(lines[i])
+      }
+    }
 
-		this.props.configureQuestion({
-			id: config.id,
-			newState: {
-				options: newOptions
-			}
-		})
+    this.props.configureQuestion({
+      id: config.id,
+      newState: {
+        options: newOptions
+      }
+    })
   }
 
   render() {
@@ -71,7 +70,7 @@ export default class Dropdown extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
-    
+
     var display
     if (mode === 'builder') {
       display = [
@@ -85,11 +84,21 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key='2'>
-					<button onClick={()=>{this.setState({show:!this.state.show})}}>{ this.state.show ? 'Hide' : 'Show'}</button>
-					{
-						this.state.show ? <textarea onChange={this.handleChange}>{config.options.join('\n')}</textarea>: null
-					}
-				</div>
+          <button onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
+          {
+            this.state.show
+              ?
+              <textarea onChange={this.handleChange}>
+                {config.options.join('\n')}
+              </textarea>
+              :
+              <select>
+                {
+                  options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
+                }
+              </select>
+          }
+        </div>
       ]
     }
     else {
