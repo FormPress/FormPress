@@ -74,11 +74,13 @@ export default class Radio extends Component {
 			inputProps.onClick = config.onClick
 		}
 
-		let optionsList = Array.isArray(config.options) === true && config.options.map((item, i) => {
+		let optionsList = Array.isArray(config.options) === true && config.options.map((item) => {
 			return (
-				<label>
-					<input type='radio' checked={this.state.checked === i ? true : false} name='myradio' value={i} onChange={this.onChange.bind(i)} />&emsp;{item}<br />
-				</label>
+				<li>
+					<input type="radio" id="t-option" name="selector"></input>
+					<label for="t-option">{item}</label>
+					<div class="check"><div class="inside"></div></div>
+				</li>
 			)
 		})
 
@@ -95,7 +97,6 @@ export default class Radio extends Component {
 					required={config.required}
 				/>,
 				<div key='2'>
-					<button onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
 					{
 						this.state.show
 							?
@@ -103,13 +104,14 @@ export default class Radio extends Component {
 								{config.options.join('\n')}
 							</textarea>
 							:
-							<div class="dropdown">
-								<span>&emsp;Mouse to Preview</span>
-								<div class="dropdown-content">
+							<div class='container'>
+								<h4>Choose an option:</h4>
+								<ul>
 									{optionsList}
-								</div>
+								</ul>
 							</div>
 					}
+					<button class="button button1" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
 				</div>
 			]
 		}
@@ -124,11 +126,11 @@ export default class Radio extends Component {
 					value={config.label}
 					required={config.required}
 				/>,
-				<div key='2' class="dropdown">
-					<span>&emsp;Choose</span>
-					<div class="dropdown-content">
+				<div key='2' class='container'>
+					<h4>Choose an option:</h4>
+					<ul>
 						{optionsList}
-					</div>
+					</ul>
 				</div>
 			]
 		}
