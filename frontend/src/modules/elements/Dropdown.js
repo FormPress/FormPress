@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
+import './Dropdown.css'
+
 export default class Dropdown extends Component {
   static weight = 5
 
@@ -84,7 +86,6 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key='2'>
-          <button onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
           {
             this.state.show
               ?
@@ -92,12 +93,18 @@ export default class Dropdown extends Component {
                 {config.options.join('\n')}
               </textarea>
               :
-              <select>
-                {
-                  options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
-                }
-              </select>
+              <div class='select'>
+                <select name="slct" id="slct">
+                  <option selected disabled>Choose one</option>
+                  {
+                    options.map((item) => {
+                      return <option key={item} value={item}>{item}</option>
+                    })
+                  }
+                </select>
+              </div>
           }
+          <button class="button button1" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
         </div>
       ]
     }
@@ -112,10 +119,13 @@ export default class Dropdown extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key='2'>
-          <select>
+        <div key='2' class='select'>
+          <select name="slct" id="slct2">
+            <option selected disabled>Choose one</option>
             {
-              options.map((item) => { return (<option key={item} value={item}>{item}</option>) })
+              options.map((item) => {
+                return <option key={item} value={item}>{item}</option>
+              })
             }
           </select>
         </div>
