@@ -3,11 +3,28 @@ set -e
 
 version=$(git log --pretty=format:'%h' -n 1)
 
-echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
-
-gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
+if gcloud auth list 2>&1 |grep -q "No credentialed"; then
+  echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
+  gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
+fi
 
 gcloud container clusters get-credentials primary --zone europe-west3-a --project formpress
+
+n=0
+until [ "$n" -ge 20 ]
+do
+  STATUS=$(gcloud builds list|grep $version| awk '{print $6}')
+
+  if [[ $STATUS == 'SUCCESS' ]]; then
+    echo "(Attempt#$n)Build completed! Setting new image"
+    break
+  else
+    echo "(Attempt#$n)Build status is $STATUS. Retry in 15 seconds."
+  fi
+
+  n=$((n+1))
+  sleep 15
+done
 
 echo "Setting formpress/main image version to gcr.io/formpress/formpress:$version"
 kubectl set image deployment/formpress main=gcr.io/formpress/formpress:$version
