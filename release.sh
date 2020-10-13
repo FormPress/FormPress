@@ -2,18 +2,19 @@
 set -e
 
 version=$(git log --pretty=format:'%h' -n 1)
+PROJECT="formpress"
 
 if gcloud auth list 2>&1 |grep -q "No credentialed"; then
   echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
   gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
 fi
 
-gcloud container clusters get-credentials primary --zone europe-west3-a --project formpress
+gcloud container clusters get-credentials primary --zone europe-west3-a --project $PROJECT
 
 n=0
 until [ "$n" -ge 20 ]
 do
-  STATUS=$(gcloud builds list|grep $version| awk '{print $6}')
+  STATUS=$(gcloud builds list --project=$PROJECT| grep $version| awk '{print $6}')
 
   if [[ $STATUS == 'SUCCESS' ]]; then
     echo "(Attempt#$n)Build completed! Setting new image"
