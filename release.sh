@@ -4,7 +4,8 @@ set -e
 version=$(git log --pretty=format:'%h' -n 1)
 
 echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
-export GOOGLE_APPLICATION_CREDENTIALS="/service-account-key.json"
+
+gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
 
 gcloud container clusters get-credentials primary --zone europe-west3-a --project formpress
 
