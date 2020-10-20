@@ -89,22 +89,22 @@ export default class Dropdown extends Component {
           {
             this.state.show
               ?
-              <textarea onChange={this.handleChange}>
+              <textarea id="options-textarea" onChange={this.handleChange}>
                 {config.options.join('\n')}
               </textarea>
               :
-              <div class='select'>
-                <select name="slct" id="slct">
+              <div class='dropdown-div'>
+                <select class="dropdown-select" name="dropdown-select">
                   <option selected disabled>Choose one</option>
                   {
                     options.map((item) => {
-                      return <option key={item} value={item}>{item}</option>
+                      return <option class="option-space" key={item} value={item}>{item}</option>
                     })
                   }
                 </select>
               </div>
           }
-          <button class="button button1" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
+          <button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
         </div>
       ]
     }
@@ -119,12 +119,12 @@ export default class Dropdown extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key='2' class='select'>
-          <select name="slct" id="slct2">
+        <div key="2" class="dropdown-div">
+          <select class="dropdown-select" name="dropdown-select">
             <option selected disabled>Choose one</option>
             {
               options.map((item) => {
-                return <option key={item} value={item}>{item}</option>
+                return <option class="option-space" key={item} value={item}>{item}</option>
               })
             }
           </select>

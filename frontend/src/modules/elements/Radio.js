@@ -77,8 +77,8 @@ export default class Radio extends Component {
 		let optionsList = Array.isArray(config.options) === true && config.options.map((item) => {
 			return (
 				<li>
-					<input type="radio" id="t-option" name="selector"></input>
-					<label for="t-option">{item}</label>
+					<input type="radio" id="radio-btn" name="radio-btn"></input>
+					<label for="radio-btn">{item}</label>
 					<div class="check"><div class="inside"></div></div>
 				</li>
 			)
@@ -100,18 +100,18 @@ export default class Radio extends Component {
 					{
 						this.state.show
 							?
-							<textarea onChange={this.handleChange}>
+							<textarea id="options-textarea" onChange={this.handleChange}>
 								{config.options.join('\n')}
 							</textarea>
 							:
 							<div class='container'>
-								<h4>Choose an option:</h4>
+								<p id="choose-option-par">Choose an option:</p>
 								<ul>
 									{optionsList}
 								</ul>
 							</div>
 					}
-					<button class="button button1" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>&emsp;
+					<button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
 				</div>
 			]
 		}
@@ -126,11 +126,22 @@ export default class Radio extends Component {
 					value={config.label}
 					required={config.required}
 				/>,
-				<div key='2' class='container'>
-					<h4>Choose an option:</h4>
-					<ul>
-						{optionsList}
-					</ul>
+				<div key='2'>
+					{
+						this.state.show
+							?
+							<textarea id="options-textarea" onChange={this.handleChange}>
+								{config.options.join('\n')}
+							</textarea>
+							:
+							<div class='container'>
+								<p id="choose-option-par">Choose an option:</p>
+								<ul>
+									{optionsList}
+								</ul>
+							</div>
+					}
+					<button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
 				</div>
 			]
 		}

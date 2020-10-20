@@ -1,12 +1,19 @@
 .container{
   position: relative;
-  width: 40%;
+  width: 50%;
   float: left;
+  background-color: #fdfdfd;
 }
 
-h4 {
-  color: #000000;
+#choose-option-par {
   margin: 0;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
 }
 
 .container ul{
@@ -21,7 +28,7 @@ ul li{
   float: left;
   width: 100%;
   height: auto;
-	border-bottom: 1px solid #333;
+	border-bottom: 1px dotted #333;
 }
 
 ul li input[type=radio]{
@@ -33,7 +40,7 @@ ul li label{
   display: block;
   position: relative;
   font-weight: 100;
-  font-size: 1em;
+  font-size: 14px;
   padding: 20px 20px 0px 50px;
   z-index: 9;
   cursor: pointer;
@@ -41,7 +48,7 @@ ul li label{
 }
 
 ul li:hover label{
-	color: #b6b6b6;
+	color: #333333;
 }
 
 ul li .check{
@@ -76,18 +83,18 @@ ul li .check::before {
 	-webkit-transition: background 0.25s linear;
 }
 
-textarea {
-  width:40%;
+
+#options-textarea {
+  width: 50%;
   float: left;
 }
 
-.button {
-  background-color: #0071bc;
-  border: none;
-  color: white;
+#edit-preview-button {
+  background-color: white;
+  color: black; 
+  border: 2px solid #0071bc;
   padding: 10px 20px;
   text-align: center;
-  text-decoration: none;
   display: inline-block;
   font-size: 12px;
   margin: 8px 4px;
@@ -95,13 +102,7 @@ textarea {
   cursor: pointer;
 }
 
-.button1 {
-  background-color: white; 
-  color: black; 
-  border: 2px solid #0071bc;
-}
-
-.button1:hover {
+#edit-preview-button:hover {
   background-color: #737679;
   color: white;
 }
