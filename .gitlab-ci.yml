@@ -2,7 +2,8 @@ image: node:12.14
  
 stages:
   - unittest
- 
+  - buildAndDeploy
+
 run-unit-test-frontend:
   stage: unittest
   script:
@@ -20,3 +21,9 @@ run-unit-test-backend:
     - yarn test
   only:
     - merge_requests
+
+build-and-deploy:
+  stage: buildAndDeploy
+  image: google/cloud-sdk:latest
+  script:
+    - ./release.sh
