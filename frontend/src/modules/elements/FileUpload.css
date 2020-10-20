@@ -1,0 +1,78 @@
+@import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+
+.file-upload-form-class{
+	 display: inline-block;
+	 width: 50%;
+}
+
+.file-upload-form-class input[type="file"] {
+	display: none;
+}
+
+.file-upload-form-class label {
+	float: left;
+  clear: both;
+  width: 276px;
+  height: 174px;
+	text-align: center;
+	background: #fdfdfd;
+	border-radius: 7px;
+  border: solid 2px #e2e2e2;
+  transition: all 0.2s ease;
+	user-select: none;
+}
+
+.file-upload-form-class label:hover {
+  border: solid 2px #8cc63f;
+}
+
+.file-upload-form-class #start {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+.file-upload-form-class #start.hidden {
+	display: none;
+}
+
+.file-upload-form-class #start i.fa {
+  font-size: 50px;
+  margin-top: 0.2em;
+  margin-bottom: 0.1em;
+  color: #e2e2e2;
+	transition: all 0.2s ease-in-out;
+}
+
+.file-upload-form-class #start #click-here-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: normal;
+  text-align: center;
+  color: #646464;
+}
+
+.file-upload-form-class #file-image.hidden {
+	display: none;
+}
+
+.file-upload-form-class .btn {
+  display: inline-block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  clear: both;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 1.5rem;
+  height: 30px;
+  line-height: 30px;
+  color: #ffffff;
+  background: #8cc63f;
+  border-color: #8cc63f;
+  cursor: pointer;
+}
+ 

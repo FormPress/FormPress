@@ -45,11 +45,20 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        <form class="file-upload-form-class" id="file-upload-form-id">
+        <form id="file-upload-form-id" class="file-upload-form-class">
           <input type="file" id="file-upload" name="fileUpload" />
-          
+
+          <label for="file-upload" id="file-drag">
+            <img id="file-image" src="#" alt="Preview" class="hidden"></img>
+            
+            <div id="start">
+              <i class="fa fa-cloud-upload"></i>
+              <p id="click-here-text">Click to the button below or <br></br>drag&drop your file here to upload</p>
+              <span id="add-file-btn" class="btn add-file-btn">Add File</span>
+            </div>
+          </label>
         </form>
-        
+
       </ElementContainer>
     )
   }
