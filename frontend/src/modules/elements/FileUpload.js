@@ -23,6 +23,15 @@ export default class FileUpload extends Component {
     }
   }
 
+  constructor(props) {
+    super(props)
+    this.addFileButtonClicked = this.addFileButtonClicked.bind(this);
+  }
+
+  addFileButtonClicked(){
+
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -45,16 +54,16 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        <form id="file-upload-form-id" class="file-upload-form-class">
-          <input type="file" id="file-upload" name="fileUpload" />
+        <form class="file-form">
+          <input type="file" id="file-input" name="fileUpload" />
 
-          <label for="file-upload" id="file-drag">
-            <img id="file-image" src="#" alt="Preview" class="hidden"></img>
-            
-            <div id="start">
+          <label for="file-input">
+            <img id="file-image" class="hidden" src="#" alt="Preview"></img>
+
+            <div id="file-not-uploaded">
               <i class="fa fa-cloud-upload"></i>
               <p id="click-here-text">Click to the button below or <br></br>drag&drop your file here to upload</p>
-              <span id="add-file-btn" class="btn add-file-btn">Add File</span>
+              <button id="add-file-btn" class="btn add-file-btn" onChange={this.addFileButtonClicked}>Add File</button>
             </div>
           </label>
         </form>

@@ -8,7 +8,7 @@ export default class Name extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Name',
-    label: 'Name'
+    label: 'Full Name'
   }
 
   static configurableSettings = {

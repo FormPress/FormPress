@@ -1,16 +1,16 @@
 @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap);
 
-.file-upload-form-class{
+.file-form{
 	 display: inline-block;
 	 width: 50%;
 }
 
-.file-upload-form-class input[type="file"] {
+.file-form input[type="file"] {
 	display: none;
 }
 
-.file-upload-form-class label {
+.file-form label {
 	float: left;
   clear: both;
   width: 276px;
@@ -23,21 +23,21 @@
 	user-select: none;
 }
 
-.file-upload-form-class label:hover {
+.file-form label:hover {
   border: solid 2px #8cc63f;
 }
 
-.file-upload-form-class #start {
+.file-form #file-not-uploaded {
 	float: left;
 	clear: both;
 	width: 100%;
 }
 
-.file-upload-form-class #start.hidden {
+.file-form #file-not-uploaded.hidden {
 	display: none;
 }
 
-.file-upload-form-class #start i.fa {
+.file-form #file-not-uploaded i.fa {
   font-size: 50px;
   margin-top: 0.2em;
   margin-bottom: 0.1em;
@@ -45,10 +45,10 @@
 	transition: all 0.2s ease-in-out;
 }
 
-.file-upload-form-class #start #click-here-text {
+.file-form #file-not-uploaded #click-here-text {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
-  font-stretch: normal;
+  font-stretch: normal; 
   font-style: normal;
   line-height: 1.6;
   letter-spacing: normal;
@@ -56,11 +56,11 @@
   color: #646464;
 }
 
-.file-upload-form-class #file-image.hidden {
+.file-form #file-image.hidden {
 	display: none;
 }
 
-.file-upload-form-class .btn {
+.file-form .btn {
   display: inline-block;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
@@ -75,4 +75,3 @@
   border-color: #8cc63f;
   cursor: pointer;
 }
- 
