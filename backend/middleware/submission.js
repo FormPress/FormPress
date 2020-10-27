@@ -1,6 +1,7 @@
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
 const { getPool } = require(path.resolve('./', 'db'))
+const { fileupload } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -8,7 +9,6 @@ module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id', async (req, res) => {
     const form_id = parseInt(req.params.id)
-
     const keys = Object.keys(req.body)
     const db = await getPool()
 
@@ -26,6 +26,11 @@ module.exports = (app) => {
       const question_id = parseInt(key.split('_')[1])
       const value = req.body[key]
 
+      //upload file to GCS
+      if(key === 'fileUpload')
+      {
+        fileupload.uploadFile(value)
+      }
       //save answer
       await db.query(
         `INSERT INTO \`entry\`

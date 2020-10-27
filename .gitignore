@@ -1,6 +1,7 @@
 .env
 backend/node_modules
 backend/script/transformed/
+backend/formpress-2bb91771c29b.json
 frontend/public/runtime/
 frontend/node_modules
 k8s
