@@ -106,7 +106,7 @@ export default class Radio extends Component {
 							:
 							<div class='container'>
 								<p id="choose-option-par">Choose an option:</p>
-								<ul>
+								<ul className='radio-container'>
 									{optionsList}
 								</ul>
 							</div>

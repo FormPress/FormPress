@@ -90,7 +90,11 @@ export default class FileUpload extends Component {
           required={config.required}
         />
         <form class="file-form">
-          <input type="file" id="file-input" name="fileUpload"/>
+          <input
+            type="file"
+            id={ `q_${config.id}` }
+            name={ `q_${config.id}` }
+          />
           
           <label for="file-input">
             <img id="file-image" class="hidden" src="#" alt="Preview"></img>

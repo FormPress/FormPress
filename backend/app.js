@@ -1,6 +1,13 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
+const fileUpload = require('express-fileupload')
+
+let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
+var buff = Buffer.from(tmp, 'base64')
+let finalSecret = buff.toString('ascii')
+process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE = '/gcp-key.json'
+fs.writeFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE, finalSecret)
 
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
@@ -23,6 +30,7 @@ app.use(function(req, res, next) {
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(fileUpload())
 app.set('view engine', 'ejs')
 
 authenticationMiddleware(app)

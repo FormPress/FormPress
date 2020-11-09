@@ -22,7 +22,7 @@
 	overflow: auto;
 }
 
-ul li{
+ul.radioContainer li{
   display: block;
   position: relative;
   float: left;
@@ -31,7 +31,7 @@ ul li{
 	border-bottom: 1px dotted #333;
 }
 
-ul li input[type=radio]{
+ul.radioContainer li input[type=radio]{
   position: absolute;
   visibility: hidden;
 }
@@ -47,11 +47,11 @@ ul li label{
   -webkit-transition: all 0.25s linear;
 }
 
-ul li:hover label{
+ul.radioContainer li:hover label{
 	color: #333333;
 }
 
-ul li .check{
+ul.radioContainer li .check{
   display: block;
   position: absolute;
   border: 1px solid #aaaaaa;
@@ -65,11 +65,11 @@ ul li .check{
 	-webkit-transition: border .25s linear;
 }
 
-ul li:hover .check {
+ul.radioContainer li:hover .check {
   border: 5px solid #059c05;
 }
 
-ul li .check::before {
+ul.radioContainer li .check::before {
   display: block;
   position: absolute;
 	content: '';
