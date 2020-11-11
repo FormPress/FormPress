@@ -22,9 +22,6 @@
     "eject": "react-scripts eject",
     "rebuild-frontend": "docker-compose stop frontend && docker-compose rm -f frontend && docker-compose build frontend && docker-compose create frontend && docker-compose start frontend"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

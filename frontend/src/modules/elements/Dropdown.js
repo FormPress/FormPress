@@ -89,14 +89,14 @@ export default class Dropdown extends Component {
               {config.options.join('\n')}
             </textarea>
           ) : (
-            <div class="dropdown-div">
-              <select class="dropdown-select" name="dropdown-select">
+            <div className="dropdown-div">
+              <select className="dropdown-select" name="dropdown-select">
                 <option selected disabled>
                   Choose one
                 </option>
                 {options.map((item) => {
                   return (
-                    <option class="option-space" key={item} value={item}>
+                    <option className="option-space" key={item} value={item}>
                       {item}
                     </option>
                   )
@@ -124,14 +124,14 @@ export default class Dropdown extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2" class="dropdown-div">
-          <select class="dropdown-select" name="dropdown-select">
+        <div key="2" className="dropdown-div">
+          <select className="dropdown-select" name="dropdown-select">
             <option selected disabled>
               Choose one
             </option>
             {options.map((item) => {
               return (
-                <option class="option-space" key={item} value={item}>
+                <option className="option-space" key={item} value={item}>
                   {item}
                 </option>
               )

@@ -1,6 +1,7 @@
+frontend/src/runtime
 k8s
 backend/test
 backend/script/transformed
 frontend/src/__tests__
-frontend/public/
+frontend/public
 *.test.js

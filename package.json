@@ -5,19 +5,23 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "prettier": "2.1.2",
-    "prettylint": "1.0.0"
+    "babel-eslint": "^10.1.0",
+    "eslint": "7.13.0",
+    "eslint-config-prettier": "6.15.0",
+    "eslint-plugin-react": "7.21.5",
+    "prettier": "2.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pretty-check": "prettier --check .",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@gitlab.com/formpress/formpress.git"
   },
-  "author": "",
+  "author": "gkemaldag@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/formpress/formpress/issues"

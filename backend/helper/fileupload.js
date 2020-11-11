@@ -10,7 +10,7 @@ const storage = new Storage({
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
 exports.uploadFile = (uploadedFile) =>
-  new Promise(async (resolve, reject) => {
+  new Promise((resolve, reject) => {
     const fileName = uuidv4()
     const file = fileUploadBucket.file(fileName)
     const stream = new Duplex()
