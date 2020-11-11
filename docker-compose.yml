@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 services:
   mysql:
     image: mysql:5.7
@@ -12,9 +12,9 @@ services:
       - MYSQL_USER=formpress
       - MYSQL_PASSWORD=formpress
     ports:
-      - "3003:3306"
+      - '3003:3306'
   backend:
-    build: 
+    build:
       context: ./backend/
       dockerfile: Dockerfile.development
     container_name: formpress-backend
@@ -32,14 +32,16 @@ services:
       - NODE_ENV=production
       - SERVER_PORT=3001
       - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - GOOGLE_SERVICE_ACCOUNT_CREDENTIALS=${GOOGLE_SERVICE_ACCOUNT_CREDENTIALS}
+      - FILE_UPLOAD_BUCKET=${FILE_UPLOAD_BUCKET}
     ports:
-      - "3001:3001"
+      - '3001:3001'
     links:
-      - "mysql"
+      - 'mysql'
     depends_on:
-      - "mysql"
+      - 'mysql'
   frontend:
-    build: 
+    build:
       context: ./frontend/
       dockerfile: Dockerfile.development
     container_name: formpress-frontend
@@ -50,10 +52,9 @@ services:
     environment:
       - REACT_APP_BACKEND=http://localhost:3001
     ports:
-      - "3000:3000"
+      - '3000:3000'
     stdin_open: true
     links:
-      - "backend"
+      - 'backend'
     depends_on:
-      - "backend"
-  
+      - 'backend'

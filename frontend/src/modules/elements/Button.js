@@ -21,19 +21,20 @@ export default class Button extends Component {
     }
 
     return (
-      <ElementContainer type={ config.type } { ...this.props }>
-        { (mode === 'builder')
-          ? <button { ...inputProps }>
+      <ElementContainer type={config.type} {...this.props}>
+        {mode === 'builder' ? (
+          <button {...inputProps}>
             <EditableLabel
-              className='fl label'
-              mode={ mode }
-              labelKey={ config.id }
-              handleLabelChange={ this.props.handleLabelChange }
-              value={ config.buttonText }
+              className="fl label"
+              mode={mode}
+              labelKey={config.id}
+              handleLabelChange={this.props.handleLabelChange}
+              value={config.buttonText}
             />
           </button>
-          : <input type='submit' value={ config.buttonText } { ...inputProps } />
-        }
+        ) : (
+          <input type="submit" value={config.buttonText} {...inputProps} />
+        )}
       </ElementContainer>
     )
   }

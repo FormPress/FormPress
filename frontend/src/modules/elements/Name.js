@@ -1,15 +1,24 @@
 import React, { Component } from 'react'
-
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
-export default class TextArea extends Component {
-  static weight = 2
+export default class Name extends Component {
+  static weight = 7
 
   static defaultConfig = {
     id: 0,
-    type: 'TextArea',
-    label: 'Label'
+    type: 'Name',
+    label: 'Full Name'
+  }
+
+  static configurableSettings = {
+    required: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field required?'
+      }
+    }
   }
 
   render() {
@@ -34,12 +43,24 @@ export default class TextArea extends Component {
           value={config.label}
           required={config.required}
         />
-        <div className="fl input">
-          <textarea
-            id={`q_${config.id}`}
-            name={`q_${config.id}`}
-            {...inputProps}></textarea>
-        </div>
+        <table>
+          <tr>
+            <td>
+              <label htmlFor="firstname">First name:</label>
+            </td>
+            <td>
+              <input type="text" id="fname" name="firstname"></input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label htmlFor="lastname">Last name:</label>
+            </td>
+            <td>
+              <input type="text" id="lname" name="lastname"></input>
+            </td>
+          </tr>
+        </table>
       </ElementContainer>
     )
   }

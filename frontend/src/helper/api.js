@@ -1,4 +1,3 @@
-
 /*
   Generic method handles api requests
 */
@@ -11,38 +10,35 @@ export const setToken = (_token) => {
   token = _token
 }
 
-export const api = ({
-  resource,
-  method = 'get',
-  body,
-  useAuth = true
-}) => new Promise((resolve, reject) => {
-  const options = {
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    method
-  }
+export const api = ({ resource, method = 'get', body, useAuth = true }) =>
+  new Promise((resolve, reject) => {
+    const options = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method
+    }
 
-  if (useAuth === true) {
-    options.headers['Authorization'] = `Bearer ${token}`
-  }
+    if (useAuth === true) {
+      options.headers['Authorization'] = `Bearer ${token}`
+    }
 
-  if (typeof body !== 'undefined') {
-    options.body = (typeof body === 'object')
-      ? JSON.stringify(body)
-      : body
-  }
+    if (typeof body !== 'undefined') {
+      options.body = typeof body === 'object' ? JSON.stringify(body) : body
+    }
 
-  let success = true
-  let status
+    let success = true
+    let status
 
-  fetch(`${BACKEND}${resource}`, options).then((response) => {
-    success = response.ok
-    status = response.status
+    fetch(`${BACKEND}${resource}`, options)
+      .then((response) => {
+        success = response.ok
+        status = response.status
 
-    return response.json()
-  }).then((data) => {
-    resolve({ success, status, data })
-  }).catch(reject)
-})
+        return response.json()
+      })
+      .then((data) => {
+        resolve({ success, status, data })
+      })
+      .catch(reject)
+  })

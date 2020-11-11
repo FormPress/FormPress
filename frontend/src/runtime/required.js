@@ -1,4 +1,4 @@
-(async () => {
+;(async () => {
   console.log('REQUIRED LOADED')
   const requireds = {}
 
@@ -9,7 +9,6 @@
 
     console.log('Handle required check for element ', elem)
 
-
     const id = elem.id
     let elemActivated = false
     const domElem = document.getElementById(`q_${id}`)
@@ -17,10 +16,8 @@
 
     requireds[id] = {
       id,
-      valid: (domElem.value.trim().length > 0)
+      valid: domElem.value.trim().length > 0
     }
-
-    
 
     console.log('DOM ELEM ', domElem)
     domElem.addEventListener('focus', () => {
@@ -80,5 +77,4 @@
       return false
     }
   })
-
 })()

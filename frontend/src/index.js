@@ -16,13 +16,13 @@ if (FP_ENV === 'production') {
   const { location } = document
   const { protocol, host, pathname } = location
 
-  if ( protocol === 'http:' ) {
-    console.log('Redirecting to https ',`${protocol}${host}${pathname}`)
+  if (protocol === 'http:') {
+    console.log('Redirecting to https ', `${protocol}${host}${pathname}`)
     window.location = `https://${host}${pathname}`
     render = false
   }
 }
 
 if (render === true) {
-  ReactDOM.render(<App />, document.getElementById('root'))  
+  ReactDOM.render(<App />, document.getElementById('root'))
 }

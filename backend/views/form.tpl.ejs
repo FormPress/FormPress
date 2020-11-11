@@ -5,7 +5,12 @@
   <%- headerAppend %>
 </head>
 <body>
-  <form method="POST" action="<%= postTarget %>" id="FORMPRESS_FORM_<%= FORMID %>">
+  <form
+    method="POST"
+    action="<%= postTarget %>"
+    id="FORMPRESS_FORM_<%= FORMID %>"
+    encType="multipart/form-data"
+  >
     <%- form %>
   </form>
   <script>

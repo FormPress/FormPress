@@ -12,7 +12,7 @@ import './Forms.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 class Forms extends Component {
-  setLoadingState (key, value) {
+  setLoadingState(key, value) {
     this.setState({
       loading: {
         ...this.state.loading,
@@ -21,17 +21,17 @@ class Forms extends Component {
     })
   }
 
-  async updateForms () {
+  async updateForms() {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
-    const forms = data.map((form) => {
+    const forms = (data || []).map((form) => {
       return {
         ...form,
-        props: JSON.parse(form.props) 
+        props: JSON.parse(form.props)
       }
     })
 
@@ -39,11 +39,11 @@ class Forms extends Component {
     this.setState({ forms })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.updateForms()
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       forms: [],
@@ -54,7 +54,7 @@ class Forms extends Component {
     }
   }
 
-  async handleFormDeleteClick (form, e) {
+  async handleFormDeleteClick(form, e) {
     e.preventDefault()
 
     this.setState({
@@ -72,79 +72,82 @@ class Forms extends Component {
     this.updateForms()
   }
 
-  handlePreviewClick (form, e) {
+  handlePreviewClick(form) {
     const { id } = form
 
     window.open(`${BACKEND}/form/view/${id}`, '_blank')
   }
 
-  render () {
+  render() {
     const { forms } = this.state
 
-    return <div className='forms'>
-      <div className='headerContainer'></div>
-      <div className='formsContent'>
-        <Table
-          columns={[
-            {
-              label: <span>{' '}</span>,
-              content: () => <span>{' '}</span>,
-              className: 'mw'
-            },
-            {
-              label: 'Name',
-              content: (form) => form.title,
-              className: 'name'
-            },
-            {
-              label: 'Responses',
-              content: (form) => <div className='responseCount'>
-                { form.responseCount }
-              </div>
-            },
-            {
-              label: 'Created At',
-              content: (form) => [
-                <Moment fromNow ago date={ form.created_at } key='1' />,
-                <span key='2'>{ ' ago' }</span>
-              ]
-            },
-            {
-              label: 'Actions',
-              content: (form) => <div className='actions'>
-                <span>
-                  <FontAwesomeIcon
-                    icon={ faEye }
-                    onClick={ this.handlePreviewClick.bind(this, form) }
-                  />
-                </span>
-                <span>
-                  <FontAwesomeIcon
-                    icon={ faTrash }
-                    onClick={ this.handleFormDeleteClick.bind(this, form) }
-                  />
-                </span>
-                <Link to={ `/editor/${form.id}/builder` }>
-                  <FontAwesomeIcon icon={ faPen } />
-                </Link>
-              </div>
-            }
-          ]}
-          data={ forms }
-        />
+    return (
+      <div className="forms">
+        <div className="headerContainer"></div>
+        <div className="formsContent">
+          <Table
+            columns={[
+              {
+                label: <span> </span>,
+                content: () => <span> </span>,
+                className: 'mw'
+              },
+              {
+                label: 'Name',
+                content: (form) => form.title,
+                className: 'name'
+              },
+              {
+                label: 'Responses',
+                content: (form) => (
+                  <div className="responseCount">{form.responseCount}</div>
+                )
+              },
+              {
+                label: 'Created At',
+                content: (form) => [
+                  <Moment fromNow ago date={form.created_at} key="1" />,
+                  <span key="2">{' ago'}</span>
+                ]
+              },
+              {
+                label: 'Actions',
+                content: (form) => (
+                  <div className="actions">
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faEye}
+                        onClick={this.handlePreviewClick.bind(this, form)}
+                      />
+                    </span>
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        onClick={this.handleFormDeleteClick.bind(this, form)}
+                      />
+                    </span>
+                    <Link to={`/editor/${form.id}/builder`}>
+                      <FontAwesomeIcon icon={faPen} />
+                    </Link>
+                  </div>
+                )
+              }
+            ]}
+            data={forms}
+          />
+        </div>
+        <div className="newButtonContainer">
+          <Link to="/editor/new">Create a new form</Link>
+        </div>
       </div>
-      <div className='newButtonContainer'>
-        <Link to='/editor/new'>Create a new form</Link>
-      </div>
-    </div>
+    )
   }
 }
 
-const FormsWrapped = (props) => 
+const FormsWrapped = (props) => (
   <AuthContext.Consumer>
-    {
-      (value) => <Forms { ...props } auth={ value } />
-    }
+    {(value) => <Forms {...props} auth={value} />}
   </AuthContext.Consumer>
+)
 
 export default FormsWrapped

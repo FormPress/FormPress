@@ -5,6 +5,7 @@ version=$(git log --pretty=format:'%h' -n 1)
 PROJECT="formpress"
 
 if gcloud auth list 2>&1 |grep -q "No credentialed"; then
+  echo "Setting service account key"
   echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
   gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
 fi
