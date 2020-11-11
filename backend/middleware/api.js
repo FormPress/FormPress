@@ -4,7 +4,7 @@ const fs = require('fs')
 const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
-  paramShouldMatchTokenUserId,
+  paramShouldMatchTokenUserId
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
@@ -41,7 +41,7 @@ module.exports = (app) => {
       const responseObject = {
         status: 'updated',
         id: form.id,
-        updated_at: null,
+        updated_at: null
       }
 
       if (result.length > 0) {
@@ -342,7 +342,7 @@ module.exports = (app) => {
         if (typeof CSVData[submissionId] === 'undefined') {
           CSVData[submissionId] = {
             submissionId,
-            createdAt: submission.created_at,
+            createdAt: submission.created_at
           }
         }
 
@@ -353,18 +353,18 @@ module.exports = (app) => {
         .createObjectCsvStringifier
       const header = [
         { id: 'submissionId', title: 'ID' },
-        { id: 'createdAt', title: 'CREATED_AT' },
+        { id: 'createdAt', title: 'CREATED_AT' }
       ]
 
       for (const element of form.props.elements) {
         header.push({
           id: element.id.toString(),
-          title: element.label,
+          title: element.label
         })
       }
 
       const csvStringifier = createCsvStringifier({
-        header,
+        header
       })
       const csv =
         csvStringifier.getHeaderString() +
@@ -372,7 +372,7 @@ module.exports = (app) => {
 
       res.json({
         content: csv,
-        filename: `${form.title}-${new Date().getTime()}.csv`,
+        filename: `${form.title}-${new Date().getTime()}.csv`
       })
     }
   )
@@ -470,7 +470,7 @@ module.exports = (app) => {
       React.createElement(Renderer, {
         className: 'form',
         form,
-        mode: 'renderer',
+        mode: 'renderer'
       })
     )
     let style = fs.readFileSync(
@@ -496,7 +496,7 @@ module.exports = (app) => {
       BACKEND,
       FORMID: id,
       USERID: form.user_id,
-      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
+      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
     })
   })
 }

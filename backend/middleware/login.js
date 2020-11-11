@@ -37,7 +37,7 @@ module.exports = (app) => {
           user_id: user.id,
           email: user.email,
           name: user.name,
-          exp,
+          exp
         }
 
         jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
@@ -47,14 +47,14 @@ module.exports = (app) => {
             token,
             user_id: user.id,
             name: user.name,
-            exp,
+            exp
           })
           res.status(200).json({
             message: 'Login Success',
             token,
             user_id: user.id,
             name: user.name,
-            exp,
+            exp
           })
         })
       } else {
