@@ -43,3 +43,5 @@ build-and-deploy:
   image: google/cloud-sdk:latest
   script:
     - ./release.sh
+  only:
+    - merge_requests
