@@ -29,7 +29,7 @@ export default class Dropdown extends Component {
     this.state = {
       show: true
     }
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleChange(event) {
@@ -61,9 +61,7 @@ export default class Dropdown extends Component {
     const { config, mode } = this.props
     const inputProps = {}
 
-    const options = (Array.isArray(config.options) === true)
-      ? config.options
-      : []
+    const options = Array.isArray(config.options) === true ? config.options : []
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
@@ -77,42 +75,49 @@ export default class Dropdown extends Component {
     if (mode === 'builder') {
       display = [
         <EditableLabel
-          key='1'
-          className='fl label'
+          key="1"
+          className="fl label"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
         />,
-        <div key='2'>
-          {
-            this.state.show
-              ?
-              <textarea id="options-textarea" onChange={this.handleChange}>
-                {config.options.join('\n')}
-              </textarea>
-              :
-              <div class='dropdown-div'>
-                <select class="dropdown-select" name="dropdown-select">
-                  <option selected disabled>Choose one</option>
-                  {
-                    options.map((item) => {
-                      return <option class="option-space" key={item} value={item}>{item}</option>
-                    })
-                  }
-                </select>
-              </div>
-          }
-          <button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
+        <div key="2">
+          {this.state.show ? (
+            <textarea id="options-textarea" onChange={this.handleChange}>
+              {config.options.join('\n')}
+            </textarea>
+          ) : (
+            <div class="dropdown-div">
+              <select class="dropdown-select" name="dropdown-select">
+                <option selected disabled>
+                  Choose one
+                </option>
+                {options.map((item) => {
+                  return (
+                    <option class="option-space" key={item} value={item}>
+                      {item}
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+          )}
+          <button
+            id="edit-preview-button"
+            onClick={() => {
+              this.setState({ show: !this.state.show })
+            }}>
+            {this.state.show ? 'Preview' : 'Edit'}
+          </button>
         </div>
       ]
-    }
-    else {
+    } else {
       display = [
         <EditableLabel
-          key='1'
-          className='fl label'
+          key="1"
+          className="fl label"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
@@ -121,12 +126,16 @@ export default class Dropdown extends Component {
         />,
         <div key="2" class="dropdown-div">
           <select class="dropdown-select" name="dropdown-select">
-            <option selected disabled>Choose one</option>
-            {
-              options.map((item) => {
-                return <option class="option-space" key={item} value={item}>{item}</option>
-              })
-            }
+            <option selected disabled>
+              Choose one
+            </option>
+            {options.map((item) => {
+              return (
+                <option class="option-space" key={item} value={item}>
+                  {item}
+                </option>
+              )
+            })}
           </select>
         </div>
       ]

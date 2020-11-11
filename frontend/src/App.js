@@ -34,7 +34,7 @@ if (auth !== null) {
   try {
     const authObject = JSON.parse(auth)
 
-    if ((authObject.exp * 1000) > (new Date().getTime())) {
+    if (authObject.exp * 1000 > new Date().getTime()) {
       initialAuthObject = authObject
       setToken(authObject.token)
     }
@@ -44,7 +44,7 @@ if (auth !== null) {
 }
 
 class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       ...initialAuthObject
@@ -53,27 +53,21 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth (
-    {
-      name,
-      email,
-      user_id,
-      token,
-      loggedIn,
-      exp
-    }, 
+  handleSetAuth(
+    { name, email, user_id, token, loggedIn, exp },
     persist = true
   ) {
     this.setState({ name, email, user_id, token, loggedIn, exp })
 
     if (persist === true) {
-      window.localStorage.setItem('auth', JSON.stringify(
-        { name, email, user_id, token, loggedIn, exp }
-      ))
+      window.localStorage.setItem(
+        'auth',
+        JSON.stringify({ name, email, user_id, token, loggedIn, exp })
+      )
     }
   }
 
-  getAuthContextValue () {
+  getAuthContextValue() {
     return {
       token: this.state.token,
       name: this.state.name,
@@ -84,87 +78,88 @@ class App extends Component {
     }
   }
 
-  render () {
+  render() {
     const auth = this.getAuthContextValue()
 
     return (
       <Router>
-      <AuthContext.Provider value={ auth }>
-        <div className='headerContainer'>
-          <div className='grid cw center'>
-            <div className='grid header'>
-              <div className='col-1-16 logo'>
-                <NavLink exact to='/'>
-                  <Logo />
-                </NavLink>
-              </div>
-              <div className='col-10-16 menu'>
-                <nav className='nav oh'>
-                  <ul className='menu fl'>
-                    { (auth.loggedIn === true)
+        <AuthContext.Provider value={auth}>
+          <div className="headerContainer">
+            <div className="grid cw center">
+              <div className="grid header">
+                <div className="col-1-16 logo">
+                  <NavLink exact to="/">
+                    <Logo />
+                  </NavLink>
+                </div>
+                <div className="col-10-16 menu">
+                  <nav className="nav oh">
+                    <ul className="menu fl">
+                      {auth.loggedIn === true
                         ? [
-                          <li key='1'>
-                            <NavLink exact to='/' activeClassName='selected'>
-                              Home
-                            </NavLink>
-                          </li>,
-                          <li key='2'>
-                            <NavLink to='/forms' activeClassName='selected'>
-                              Forms
-                            </NavLink>
-                          </li>,
-                          <li key='3'>
-                            <NavLink to='/editor' activeClassName='selected'>
-                              Editor
-                            </NavLink>
-                          </li>,
-                          <li key='4'>
-                            <NavLink to='/data' activeClassName='selected'>
-                              Data
-                            </NavLink>
-                          </li>
-                        ]
+                            <li key="1">
+                              <NavLink exact to="/" activeClassName="selected">
+                                Home
+                              </NavLink>
+                            </li>,
+                            <li key="2">
+                              <NavLink to="/forms" activeClassName="selected">
+                                Forms
+                              </NavLink>
+                            </li>,
+                            <li key="3">
+                              <NavLink to="/editor" activeClassName="selected">
+                                Editor
+                              </NavLink>
+                            </li>,
+                            <li key="4">
+                              <NavLink to="/data" activeClassName="selected">
+                                Data
+                              </NavLink>
+                            </li>
+                          ]
                         : [
-                          <li key='1'>
-                            <NavLink exact to='/' activeClassName='selected'>
-                              Home
-                            </NavLink>
-                          </li>,
-                          <li key='2'>
-                            <NavLink to='/login' activeClassName='selected'>
-                              Login
-                            </NavLink>
-                          </li>
-                        ]
-                    }
-                  </ul>
-                </nav>
-              </div>
-              <div className="col-5-16 profile_container">
-                <Profile />
+                            <li key="1">
+                              <NavLink exact to="/" activeClassName="selected">
+                                Home
+                              </NavLink>
+                            </li>,
+                            <li key="2">
+                              <NavLink to="/login" activeClassName="selected">
+                                Login
+                              </NavLink>
+                            </li>
+                          ]}
+                    </ul>
+                  </nav>
+                </div>
+                <div className="col-5-16 profile_container">
+                  <Profile />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className='content'>
-          <Switch>
-            <Route exact path='/'>
-              <HomePage />
-            </Route>
-            <PrivateRoute path='/forms'>
-              <Forms />
-            </PrivateRoute>
-            <PrivateRoute path='/editor/:formId/builder/question/:questionId/properties' component={Builder} />
-            <PrivateRoute path='/editor/:formId' component={Builder} />
-            <PrivateRoute path='/editor' component={Builder} />
-            <PrivateRoute path='/data'>
-              <Data />
-            </PrivateRoute>
-            <Route path='/login' component={Login} />
-          </Switch>
-        </div>
-        
-      </AuthContext.Provider>
+          <div className="content">
+            <Switch>
+              <Route exact path="/">
+                <HomePage />
+              </Route>
+              <PrivateRoute path="/forms">
+                <Forms />
+              </PrivateRoute>
+              <PrivateRoute
+                path="/editor/:formId/builder/question/:questionId/properties"
+                component={Builder}
+              />
+              <PrivateRoute path="/editor/:formId" component={Builder} />
+              <PrivateRoute path="/editor" component={Builder} />
+              <PrivateRoute path="/data">
+                <Data />
+              </PrivateRoute>
+              <Route path="/login" component={Login} />
+            </Switch>
+          </div>
+        </AuthContext.Provider>
       </Router>
     )
   }

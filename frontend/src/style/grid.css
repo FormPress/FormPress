@@ -1,4 +1,6 @@
-*, *:after, *:before {
+*,
+*:after,
+*:before {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -8,7 +10,7 @@
   width: auto;
 }
 .grid:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -24,51 +26,50 @@
 }
 
 .col-1-16 {
-  width: 6.25%
+  width: 6.25%;
 }
 .col-2-16 {
-  width: 12.5%
+  width: 12.5%;
 }
 .col-3-16 {
-  width: 18.75%
+  width: 18.75%;
 }
 .col-4-16 {
-  width: 25%
+  width: 25%;
 }
 .col-5-16 {
-  width: 31.25%
+  width: 31.25%;
 }
 .col-6-16 {
-  width: 37.5%
+  width: 37.5%;
 }
 .col-7-16 {
-  width: 43.75%
+  width: 43.75%;
 }
 .col-8-16 {
-  width: 50%
+  width: 50%;
 }
 .col-9-16 {
-  width: 56.25%
+  width: 56.25%;
 }
 .col-10-16 {
-  width: 62.5%
+  width: 62.5%;
 }
 .col-11-16 {
-  width: 68.75%
+  width: 68.75%;
 }
 .col-12-16 {
-  width: 75%
+  width: 75%;
 }
 .col-13-16 {
-  width: 81.25%
+  width: 81.25%;
 }
 .col-14-16 {
-  width: 87.5%
+  width: 87.5%;
 }
 .col-15-16 {
-  width: 93.75%
+  width: 93.75%;
 }
 .col-16-16 {
-  width: 100%
+  width: 100%;
 }
-

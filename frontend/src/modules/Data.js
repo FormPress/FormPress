@@ -17,18 +17,20 @@ const getStartOfToday = () => {
   return start.getTime()
 }
 
-const getNumberOfSubmissionsToday = (submissions) => {  
+const getNumberOfSubmissionsToday = (submissions) => {
   const startOfToday = getStartOfToday()
 
   return submissions
     .map((submission) => new Date(submission.created_at).getTime())
-    .filter((ts) => (ts > startOfToday))
-    .length
+    .filter((ts) => ts > startOfToday).length
 }
 
 function download(filename, text) {
   var element = document.createElement('a')
-  element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(text))
+  element.setAttribute(
+    'href',
+    'data:text/plaincharset=utf-8,' + encodeURIComponent(text)
+  )
   element.setAttribute('download', filename)
 
   element.style.display = 'none'
@@ -40,7 +42,7 @@ function download(filename, text) {
 }
 
 class Data extends Component {
-  setLoadingState (key, value) {
+  setLoadingState(key, value) {
     this.setState({
       loading: {
         ...this.state.loading,
@@ -49,7 +51,7 @@ class Data extends Component {
     })
   }
 
-  async updateForms () {
+  async updateForms() {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
@@ -59,7 +61,7 @@ class Data extends Component {
     const forms = (data || []).map((form) => {
       return {
         ...form,
-        props: JSON.parse(form.props) 
+        props: JSON.parse(form.props)
       }
     })
 
@@ -67,7 +69,7 @@ class Data extends Component {
     this.setState({ forms })
   }
 
-  async updateSubmissionsSeamless (form_id) {
+  async updateSubmissionsSeamless(form_id) {
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
@@ -75,7 +77,7 @@ class Data extends Component {
     this.setState({ submissions: data })
   }
 
-  async updateSubmissions (form_id) {
+  async updateSubmissions(form_id) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
@@ -85,18 +87,18 @@ class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`,
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
     this.setLoadingState('submissions', false)
     this.setState({ submissions: data })
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.updateForms()
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       formSelectorOpen: false,
@@ -112,24 +114,25 @@ class Data extends Component {
         entries: false
       }
     }
-    
+
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
   }
 
-  handleFormClick (form, e) {
+  handleFormClick(form, e) {
     this.setState({ formSelectorOpen: false })
     this.updateSubmissions(form.id)
   }
 
-  toggleSubmission (submission_id) {
-    const { selectedSubmissionIds } = this.state 
+  toggleSubmission(submission_id) {
+    const { selectedSubmissionIds } = this.state
 
     if (selectedSubmissionIds.includes(submission_id)) {
       this.setState({
-        selectedSubmissionIds: selectedSubmissionIds
-          .filter((_submission_id) => (_submission_id !== submission_id))
+        selectedSubmissionIds: selectedSubmissionIds.filter(
+          (_submission_id) => _submission_id !== submission_id
+        )
       })
     } else {
       this.setState({
@@ -138,14 +141,14 @@ class Data extends Component {
     }
   }
 
-  async handleSubmissionClick (submission) {
+  async handleSubmissionClick(submission) {
     const { id } = submission
     const form_id = this.state.selectedFormId
 
     this.setLoadingState('entries', true)
     this.setState({
       entries: [],
-      selectedSubmissionId: id,
+      selectedSubmissionId: id
     })
 
     const { data } = await api({
@@ -172,7 +175,7 @@ class Data extends Component {
     this.updateSubmissionsSeamless(form_id)
   }
 
-  async handleCSVExportClick () {
+  async handleCSVExportClick() {
     const form_id = this.state.selectedFormId
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/CSVExport`,
@@ -186,88 +189,84 @@ class Data extends Component {
     this.setState({ selectedSubmissionIds: [] })
   }
 
-  render () {
+  render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
-    const submissions = (loading.submissions === true)
-      ? 'Loading...'
-      : this.renderSubmissions()
-    const entries = (loading.entries === true)
-      ? 'Loading...'
-      : this.renderEntries()
+    const submissions =
+      loading.submissions === true ? 'Loading...' : this.renderSubmissions()
+    const entries =
+      loading.entries === true ? 'Loading...' : this.renderEntries()
     let formSelectorText = 'Please select form'
 
     if (selectedFormId !== null && forms.length > 0) {
-      formSelectorText = forms.filter(
-        (form) => (form.id === selectedFormId)
-      )[0].title
+      formSelectorText = forms.filter((form) => form.id === selectedFormId)[0]
+        .title
     }
 
     return (
-      <div className='data'>
-        <div className='headerContainer'>
-          <div className='header cw grid center'>
-            <div className='col-1-16'>
-              <Link to='/forms' className='back'>
-                <FontAwesomeIcon icon={ faChevronLeft } />
+      <div className="data">
+        <div className="headerContainer">
+          <div className="header cw grid center">
+            <div className="col-1-16">
+              <Link to="/forms" className="back">
+                <FontAwesomeIcon icon={faChevronLeft} />
               </Link>
             </div>
-            <div className='col-15-16 mainTabs'>
-              <a
-                href='#/'
-                className='selected'
-              >
+            <div className="col-15-16 mainTabs">
+              <a href="#/" className="selected">
                 Responses
               </a>
             </div>
           </div>
         </div>
-        <div className='formSelectorContainer center'>
-          <div className='formSelector cw center grid'>
-            <div className='col-15-16' onClick={ () => {this.setState({formSelectorOpen: !formSelectorOpen })}}>
+        <div className="formSelectorContainer center">
+          <div className="formSelector cw center grid">
+            <div
+              className="col-15-16"
+              onClick={() => {
+                this.setState({ formSelectorOpen: !formSelectorOpen })
+              }}>
               {formSelectorText}
             </div>
-            <div className='col-1-16 down'>
-              <FontAwesomeIcon icon={ faChevronDown } />
+            <div className="col-1-16 down">
+              <FontAwesomeIcon icon={faChevronDown} />
             </div>
           </div>
-          {
-            (formSelectorOpen === true)
-              ? <div className='formSelectorOptions cw center grid'>
-                <div className='col-16-16'>
-                  <ul>
-                    {
-                      forms.map((form, index) => (
-                        <li
-                          key={ index }
-                          onClick={ this.handleFormClick.bind(this, form) }
-                        >
-                          {form.title}
-                        </li>
-                      ))
-                    }
-                  </ul>
-                </div>
+          {formSelectorOpen === true ? (
+            <div className="formSelectorOptions cw center grid">
+              <div className="col-16-16">
+                <ul>
+                  {forms.map((form, index) => (
+                    <li
+                      key={index}
+                      onClick={this.handleFormClick.bind(this, form)}>
+                      {form.title}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              : null
-          }
+            </div>
+          ) : null}
         </div>
-        <div className='cw center grid dataContent'>
-          <div className='submissionSelector col-5-16'>
-            { (this.state.submissions.length === 0)
-                ? <div className='noData'>No data</div>
-                : submissions
-            }
+        <div className="cw center grid dataContent">
+          <div className="submissionSelector col-5-16">
+            {this.state.submissions.length === 0 ? (
+              <div className="noData">No data</div>
+            ) : (
+              submissions
+            )}
           </div>
-          <div className='entriesViewer col-11-16'>
-            { entries }
-          </div>
+          <div className="entriesViewer col-11-16">{entries}</div>
         </div>
       </div>
     )
   }
 
-  renderSubmissions () {
-    const { submissions, selectedSubmissionId, selectedSubmissionIds } = this.state
+  renderSubmissions() {
+    const {
+      submissions,
+      selectedSubmissionId,
+      selectedSubmissionIds
+    } = this.state
     let checkAllProps = { checked: true }
 
     for (const { id } of submissions) {
@@ -291,45 +290,46 @@ class Data extends Component {
     }
 
     return [
-      <div className='submissionActions grid' key='actions'>
-        <div className='col-10-16'>
-          { submissions.length } total submission(s). <br />
+      <div className="submissionActions grid" key="actions">
+        <div className="col-10-16">
+          {submissions.length} total submission(s). <br />
           {getNumberOfSubmissionsToday(submissions)} submission(s) today.
         </div>
-        <div className='col-6-16 buttonContainer'>
+        <div className="col-6-16 buttonContainer">
           <button
-            className={ csvExportClassNames.join(' ') }
-            onClick={ this.handleCSVExportClick }
-          >
-            { csvExportButtonText }
+            className={csvExportClassNames.join(' ')}
+            onClick={this.handleCSVExportClick}>
+            {csvExportButtonText}
           </button>
         </div>
       </div>,
       <Table
-        key='table'
-        onTrClick={ this.handleSubmissionClick }
-        getTrClassName={
-          (submission) => (submission.id === selectedSubmissionId)
-            ? 'selected'
-            : undefined
+        key="table"
+        onTrClick={this.handleSubmissionClick}
+        getTrClassName={(submission) =>
+          submission.id === selectedSubmissionId ? 'selected' : undefined
         }
         columns={[
           {
-            label: <input
-              type='checkbox'
-              onChange={(e) => {
-                if (e.target.checked === true) {
-                  this.setState({
-                    selectedSubmissionIds: submissions.map((submission) => submission.id)
-                  })
-                } else {
-                  this.setState({
-                    selectedSubmissionIds: []
-                  })
-                }
-              }}
-              { ...checkAllProps }
-            />,
+            label: (
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  if (e.target.checked === true) {
+                    this.setState({
+                      selectedSubmissionIds: submissions.map(
+                        (submission) => submission.id
+                      )
+                    })
+                  } else {
+                    this.setState({
+                      selectedSubmissionIds: []
+                    })
+                  }
+                }}
+                {...checkAllProps}
+              />
+            ),
             content: (submission) => {
               const props = { checked: false }
 
@@ -339,9 +339,9 @@ class Data extends Component {
 
               return (
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   onChange={this.toggleSubmission.bind(this, submission.id)}
-                  { ...props }
+                  {...props}
                 />
               )
             },
@@ -350,32 +350,31 @@ class Data extends Component {
           {
             label: 'Response Date',
             content: (submission) => [
-              <Moment fromNow ago date={ submission.created_at } key='1' />,
-              <span key='2'>{ ' ago' }</span>
+              <Moment fromNow ago date={submission.created_at} key="1" />,
+              <span key="2">{' ago'}</span>
             ]
-          },
+          }
         ]}
-        data={ submissions }
+        data={submissions}
       />
     ]
   }
 
-  renderEntries () {
+  renderEntries() {
     const { entries, forms, selectedFormId } = this.state
 
     if (entries.length === 0) {
       return null
     }
 
-    const form = forms.filter((form) => (form.id === selectedFormId))[0]
+    const form = forms.filter((form) => form.id === selectedFormId)[0]
     const getLabel = (question_id) => {
-      const matchingQuestion = form
-        .props
-        .elements
-        .filter((element) => (element.id === question_id))
+      const matchingQuestion = form.props.elements.filter(
+        (element) => element.id === question_id
+      )
 
       if (matchingQuestion.length > 0) {
-        return matchingQuestion[0].label  
+        return matchingQuestion[0].label
       } else {
         return 'Deleted Question'
       }
@@ -383,20 +382,19 @@ class Data extends Component {
 
     return entries.map((entry, index) => {
       return (
-        <div key={ index } className='entry'>
-          <div className='label'>{ getLabel(entry.question_id) }</div>
-          <div className='value'>{ entry.value }</div>
+        <div key={index} className="entry">
+          <div className="label">{getLabel(entry.question_id)}</div>
+          <div className="value">{entry.value}</div>
         </div>
       )
     })
   }
 }
 
-const DataWrapped = (props) => 
+const DataWrapped = (props) => (
   <AuthContext.Consumer>
-    {
-      (value) => <Data { ...props } auth={ value } />
-    }
+    {(value) => <Data {...props} auth={value} />}
   </AuthContext.Consumer>
+)
 
 export default DataWrapped

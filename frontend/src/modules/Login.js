@@ -8,8 +8,7 @@ import AuthContext from '../auth.context'
 import './Login.css'
 
 class Login extends Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -23,24 +22,19 @@ class Login extends Component {
     this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this)
   }
 
-  handleFieldChange (elem, e) {
-    const stateKey = (elem.id === 1)
-      ? 'email'
-      : (elem.id === 2)
-        ? 'password'
-        : null
-
+  handleFieldChange(elem, e) {
+    const stateKey = elem.id === 1 ? 'email' : elem.id === 2 ? 'password' : null
 
     if (stateKey === null) {
       return
     }
 
-    this.setState({[stateKey]: e.target.value})
+    this.setState({ [stateKey]: e.target.value })
   }
 
-  async handleLoginButtonClick (e) {
+  async handleLoginButtonClick(e) {
     e.preventDefault()
-    this.setState({state: 'loading'})
+    this.setState({ state: 'loading' })
 
     const { email, password } = this.state
 
@@ -68,61 +62,63 @@ class Login extends Component {
     }
   }
 
-  render () {
+  render() {
     const { message, state } = this.state
 
     if (this.props.auth.loggedIn === true) {
-      return <Redirect
-        to={{
-          pathname: '/forms',
-          state: { from: this.props.location }
-        }} 
-      />
-    }
-
-    return <div className='loginForm'>
-      <form onSubmit={ this.handleLoginButtonClick }>
-        <Renderer
-          className='form'
-          handleFieldChange={ this.handleFieldChange }
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 1,
-                  type: 'Text',
-                  label: 'Email',
-                  value: this.state.email
-                },
-                {
-                  id: 2,
-                  type: 'Text',
-                  label: 'Password',
-                  value: this.state.password
-                },
-                {
-                  id: 2,
-                  type: 'Button',
-                  buttonText: 'Login'
-                }
-              ]
-            }
+      return (
+        <Redirect
+          to={{
+            pathname: '/forms',
+            state: { from: this.props.location }
           }}
         />
-      </form>
-      <p>
-        { (state === 'loading') ? 'Loading...' : null }
-        { (state === 'done') ? message : null }
-      </p>
-    </div>  
+      )
+    }
+
+    return (
+      <div className="loginForm">
+        <form onSubmit={this.handleLoginButtonClick}>
+          <Renderer
+            className="form"
+            handleFieldChange={this.handleFieldChange}
+            form={{
+              props: {
+                elements: [
+                  {
+                    id: 1,
+                    type: 'Text',
+                    label: 'Email',
+                    value: this.state.email
+                  },
+                  {
+                    id: 2,
+                    type: 'Text',
+                    label: 'Password',
+                    value: this.state.password
+                  },
+                  {
+                    id: 2,
+                    type: 'Button',
+                    buttonText: 'Login'
+                  }
+                ]
+              }
+            }}
+          />
+        </form>
+        <p>
+          {state === 'loading' ? 'Loading...' : null}
+          {state === 'done' ? message : null}
+        </p>
+      </div>
+    )
   }
 }
 
 const LoginWrapped = (props) => (
   <AuthContext.Consumer>
-    {
-      (value) => <Login { ...props } auth={ value } />
-    }
+    {(value) => <Login {...props} auth={value} />}
   </AuthContext.Consumer>
 )
 

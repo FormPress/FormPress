@@ -1,46 +1,46 @@
-(async () => {
-  const loadScript = (name) => new Promise((resolve, reject) => {
-    const script = document.createElement('script')
+;(async () => {
+  const loadScript = (name) =>
+    new Promise((resolve, reject) => {
+      const script = document.createElement('script')
 
-    script.onload = resolve
-    script.src = `${BACKEND}/runtime/${name}.js`
-    document.head.appendChild(script)
-  })
-  const extensions = [{
-    name: 'required',
-    check: (element) => (element.required === true)
-  }]
-  const api = ({
-    resource,
-    method = 'get',
-    body,
-    useAuth = false
-  }) => new Promise((resolve, reject) => {
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method
+      script.onload = resolve
+      script.src = `${BACKEND}/runtime/${name}.js`
+      document.head.appendChild(script)
+    })
+  const extensions = [
+    {
+      name: 'required',
+      check: (element) => element.required === true
     }
+  ]
+  const api = ({ resource, method = 'get', body, useAuth = false }) =>
+    new Promise((resolve, reject) => {
+      const options = {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method
+      }
 
-    if (typeof body !== 'undefined') {
-      options.body = (typeof body === 'object')
-        ? JSON.stringify(body)
-        : body
-    }
+      if (typeof body !== 'undefined') {
+        options.body = typeof body === 'object' ? JSON.stringify(body) : body
+      }
 
-    let success = true
-    let status
+      let success = true
+      let status
 
-    fetch(`${BACKEND}${resource}`, options).then((response) => {
-      success = response.ok
-      status = response.status
+      fetch(`${BACKEND}${resource}`, options)
+        .then((response) => {
+          success = response.ok
+          status = response.status
 
-      return response.json()
-    }).then((data) => {
-      resolve({ success, status, data })
-    }).catch(reject)
-  })
+          return response.json()
+        })
+        .then((data) => {
+          resolve({ success, status, data })
+        })
+        .catch(reject)
+    })
 
   console.log('MAIN FORM RUNTIME LOADED')
   console.log('SHOULD LOAD FORM ID QUESTIONS ', FORMID)
@@ -64,7 +64,6 @@
     elements
   }
 
-
   const extensionstoLoad = []
 
   for (const ext of extensions) {
@@ -77,5 +76,4 @@
 
   await Promise.all(extensionstoLoad.map(loadScript))
   console.log('All dependencies are loaded')
-
 })()

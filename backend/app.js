@@ -14,10 +14,13 @@ const port = parseInt(process.env.SERVER_PORT || 3000)
 
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
-const authenticationMiddleware = require(path.resolve('middleware', 'authentication'))
+const authenticationMiddleware = require(path.resolve(
+  'middleware',
+  'authentication'
+))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
     'Access-Control-Allow-Headers',
@@ -39,9 +42,11 @@ loginMiddleware(app)
 apiMiddleware(app)
 
 if (process.env.FP_ENV === 'production') {
-  app.use(express.static('/frontend/build'))  
+  app.use(express.static('/frontend/build'))
 
-  const staticIndexHtml = fs.readFileSync('/frontend/build/index.html', { encoding: 'utf8' })
+  const staticIndexHtml = fs.readFileSync('/frontend/build/index.html', {
+    encoding: 'utf8'
+  })
 
   // Send built index.html to allow refreshes to work
   app.get('*', (req, res) => {

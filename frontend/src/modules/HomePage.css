@@ -39,11 +39,11 @@
 }
 
 .homepageContainer > .homepage .mainProperties > .opensource {
-  background-color: #8CC63F;
+  background-color: #8cc63f;
 }
 
 .homepageContainer > .homepage .mainProperties > .lightweight {
-  background-color: #0071BC;
+  background-color: #0071bc;
 }
 
 .homepageContainer > .homepage .mainProperties > .fast {
@@ -62,13 +62,13 @@
 }
 
 .homepageContainer > .footer {
-  color: #1C5C85;
+  color: #1c5c85;
   font-size: 18px;
   margin-top: 50px;
   padding-bottom: 40px;
 }
 
-.homepageContainer > .footer a{
+.homepageContainer > .footer a {
   text-decoration: none;
   color: inherit;
 }

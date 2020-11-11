@@ -2,14 +2,16 @@ table.fp_table {
   border-collapse: collapse;
   width: 100%;
 }
-table.fp_table tr, table.fp_table td, table.fp_table th{
+table.fp_table tr,
+table.fp_table td,
+table.fp_table th {
   margin: 0;
   padding: 0;
   border: none;
 }
 
 table.fp_table > thead {
-  background-color: #E2E2E2;
+  background-color: #e2e2e2;
   color: #646464;
   height: 30px;
   line-height: 30px;

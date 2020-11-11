@@ -8,7 +8,7 @@ select {
   border-style: ridge;
   background: #ffffff;
   flex: 1;
-  padding: 0 .5em;
+  padding: 0 0.5em;
   color: #0071bc;
   cursor: pointer;
 }
@@ -22,7 +22,7 @@ select::-ms-expand {
   height: 3em;
   line-height: 3;
   overflow: hidden;
-  border-radius: .25em;
+  border-radius: 0.25em;
 }
 
 .dropdown-div::after {
@@ -34,9 +34,9 @@ select::-ms-expand {
   background: #719fbd;
   cursor: pointer;
   pointer-events: none;
-  -webkit-transition: .25s all ease;
-  -o-transition: .25s all ease;
-  transition: .25s all ease;
+  -webkit-transition: 0.25s all ease;
+  -o-transition: 0.25s all ease;
+  transition: 0.25s all ease;
 }
 
 .dropdown-div:hover::after {
@@ -50,7 +50,7 @@ select::-ms-expand {
 
 #edit-preview-button {
   background-color: white;
-  color: black; 
+  color: black;
   border: 2px solid #0071bc;
   padding: 10px 20px;
   text-align: center;

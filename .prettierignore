@@ -1,0 +1,4 @@
+k8s
+backend/test
+backend/script/transformed
+frontend/src/__tests__

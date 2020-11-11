@@ -9,25 +9,30 @@ const storage = new Storage({
 })
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
-exports.uploadFile = (uploadedFile) => new Promise(async (resolve, reject) => {
-  const fileName = uuidv4()
-  const file = fileUploadBucket.file(fileName)
-  const stream = new Duplex()
+exports.uploadFile = (uploadedFile) =>
+  new Promise(async (resolve, reject) => {
+    const fileName = uuidv4()
+    const file = fileUploadBucket.file(fileName)
+    const stream = new Duplex()
 
-  stream.push(uploadedFile.data)
-  stream.push(null)
+    stream.push(uploadedFile.data)
+    stream.push(null)
 
-  stream.pipe(file.createWriteStream())
-    .on('error', (error) => {
-      reject(error)
-    })
-    .on('finish', async () => {
-      await file.makePublic()// TODO, lets not make files public by default
-      resolve(JSON.stringify({
-        url: exports.getPublicUrl(fileName),
-        fileName: uploadedFile.name
-      }))
-    })
-})
+    stream
+      .pipe(file.createWriteStream())
+      .on('error', (error) => {
+        reject(error)
+      })
+      .on('finish', async () => {
+        await file.makePublic() // TODO, lets not make files public by default
+        resolve(
+          JSON.stringify({
+            url: exports.getPublicUrl(fileName),
+            fileName: uploadedFile.name
+          })
+        )
+      })
+  })
 
-exports.getPublicUrl = (fileName) => `https://storage.googleapis.com/${process.env.FILE_UPLOAD_BUCKET}/${fileName}`
+exports.getPublicUrl = (fileName) =>
+  `https://storage.googleapis.com/${process.env.FILE_UPLOAD_BUCKET}/${fileName}`

@@ -25,22 +25,20 @@ export default class TextArea extends Component {
     }
 
     return (
-      <ElementContainer type={ config.type } { ...this.props }>
+      <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
-          className='fl label'
-          mode={ mode }
-          labelKey={ config.id }
-          handleLabelChange={ this.props.handleLabelChange }
-          value={ config.label }
-          required={ config.required }
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
         />
-        <div className='fl input'>
+        <div className="fl input">
           <textarea
-            id={ `q_${config.id}` }
-            name={ `q_${config.id}` }
-            { ...inputProps }
-          >
-          </textarea>
+            id={`q_${config.id}`}
+            name={`q_${config.id}`}
+            {...inputProps}></textarea>
         </div>
       </ElementContainer>
     )

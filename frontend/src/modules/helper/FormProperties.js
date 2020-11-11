@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Renderer from '../Renderer'
 
 export default class FormProperties extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -12,7 +12,7 @@ export default class FormProperties extends Component {
     this.handleFieldChange = this.handleFieldChange.bind(this)
   }
 
-  handleFieldChange (elem, e) {
+  handleFieldChange(elem, e) {
     this.props.setIntegration({
       type: 'email',
       to: e.target.value
@@ -22,30 +22,34 @@ export default class FormProperties extends Component {
   render() {
     const integrations = this.props.form.props.integrations || []
 
-    const matchingIntegration = integrations.filter((integration) => integration.type === 'email')
+    const matchingIntegration = integrations.filter(
+      (integration) => integration.type === 'email'
+    )
     let email = ''
 
     if (matchingIntegration.length > 0) {
       email = matchingIntegration[0].to
     }
 
-    return <div>
-      <h2>Form Properties</h2>
-      <Renderer
-        handleFieldChange={ this.handleFieldChange }
-        form={{
-          props: {
-            elements: [
-              {
-                id: 1,
-                type: 'Text',
-                label: 'Send submission notifications to',
-                value: email
-              }
-            ]
-          }
-        }}
-      />
-    </div>
+    return (
+      <div>
+        <h2>Form Properties</h2>
+        <Renderer
+          handleFieldChange={this.handleFieldChange}
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 1,
+                  type: 'Text',
+                  label: 'Send submission notifications to',
+                  value: email
+                }
+              ]
+            }
+          }}
+        />
+      </div>
+    )
   }
 }

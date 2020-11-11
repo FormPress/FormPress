@@ -6,7 +6,7 @@ const { fileupload } = require(path.resolve('helper'))
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
 const findQuestionType = (qid) => {
-  for( const elem of form.props.elements) {
+  for (const elem of form.props.elements) {
     if (elem.id === qid) {
       return elem.type
     }
@@ -47,13 +47,13 @@ module.exports = (app) => {
     )
     const submission_id = result.insertId
 
-    for(const key of keys) {
+    for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
       const type = findQuestionType(question_id)
       let value
 
       //upload file to GCS
-      if(type === 'FileUpload') {
+      if (type === 'FileUpload') {
         value = await fileupload.uploadFile(req.files[key])
       } else {
         value = req.body[key]
@@ -73,12 +73,13 @@ module.exports = (app) => {
 
     let sendEmailTo = false
     const integrations = form.props.integrations || []
-    const emailIntegration = integrations.filter((integration) => (integration.type === 'email'))
+    const emailIntegration = integrations.filter(
+      (integration) => integration.type === 'email'
+    )
 
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to
     }
-    
 
     if (sendEmailTo !== false) {
       const msg = {
@@ -86,10 +87,10 @@ module.exports = (app) => {
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
         text: `New Submission has been received ${JSON.stringify(req.body)}`,
-        html: `New Submission has been received ${JSON.stringify(req.body)}`,
+        html: `New Submission has been received ${JSON.stringify(req.body)}`
       }
 
-      sgMail.send(msg)  
+      sgMail.send(msg)
     }
   })
 }

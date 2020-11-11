@@ -9,7 +9,7 @@
   top: 86px;
   width: 100%;
   position: fixed;
-  background-color: #E2E2E2;
+  background-color: #e2e2e2;
   z-index: 1;
 }
 
@@ -21,7 +21,7 @@
 
 .builder > .headerContainer > .header .back,
 .data > .headerContainer > .header .back {
-  background-color: #C9C9C9;
+  background-color: #c9c9c9;
   color: rgb(48, 93, 134);
   line-height: 30px;
   height: 30px;
@@ -33,7 +33,7 @@
 
 .builder .header > .mainTabs > a,
 .data .header > .mainTabs > a {
-  color: #1C5C85;
+  color: #1c5c85;
   display: inline-block;
   height: 30px;
   line-height: 30px;
@@ -43,10 +43,9 @@
 
 .builder .header > .mainTabs > a.selected,
 .data .header > .mainTabs > a.selected {
-  background-color: #1C5C85;
-  color: #FFFFFF;
+  background-color: #1c5c85;
+  color: #ffffff;
 }
-
 
 .header > .formTitle {
   width: 400px;
@@ -72,7 +71,7 @@
 
 .builder > .content > .leftTabs > div {
   list-style: none;
-  box-shadow:  0px 3px 10px #00000014;
+  box-shadow: 0px 3px 10px #00000014;
   background-color: white;
   margin: 0;
   padding: 0;
@@ -103,8 +102,6 @@
   background-color: rgb(168, 227, 57);
 }
 
-
-
 .builder > .content > .leftMenu {
   min-height: 500px;
 }
@@ -117,7 +114,7 @@
 }
 
 .elements > .elementsMessage {
-  background-color: #FFFCDD;
+  background-color: #fffcdd;
   color: #646464;
   font-size: 14px;
   text-align: center;
@@ -140,8 +137,8 @@
 .builderStage > .formTitle {
   height: 60px;
   line-height: 60px;
-  background-color: #FDFDFD;
-  color: #1C5C85;
+  background-color: #fdfdfd;
+  color: #1c5c85;
   padding-left: 16px;
   font-size: 18px;
 }
@@ -162,14 +159,14 @@
   font-weight: bold;
   background-color: white;
   cursor: pointer;
-  color: #8CC63F;
+  color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
 }
 
 .builderStage > .formControls > button.publish {
-  background-color:#8CC63F;
-  color: #FFFFFF;
+  background-color: #8cc63f;
+  color: #ffffff;
   position: relative;
 }
 
@@ -184,12 +181,11 @@
   position: absolute;
 }
 
-
 .builderStage > .form {
   box-shadow: 0px 3px 10px #00000014;
 }
 
-.form.builder.dragging > * *{
+.form.builder.dragging > * * {
   pointer-events: none;
 }
 
@@ -224,10 +220,12 @@
   display: inline-block;
 }
 
-.form.builder > .element:hover, .form > .element.selected {
+.form.builder > .element:hover,
+.form > .element.selected {
   border: 1px solid black;
 }
 
-.form.builder > .element:hover > .action, .form > .element.selected > .action {
+.form.builder > .element:hover > .action,
+.form > .element.selected > .action {
   display: block;
 }

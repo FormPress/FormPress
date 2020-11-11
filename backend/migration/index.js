@@ -23,10 +23,12 @@ module.exports = async (db) => {
     console.log('REsult of creating migration table shit ', result)
   }
 
-  const migrations = fs.readdirSync(path.resolve('./', 'migration'))
+  const migrations = fs
+    .readdirSync(path.resolve('./', 'migration'))
     .filter((name) => name.includes('migration-'))
-  const executedMigrations = (await db.query('SELECT * FROM `migration`'))
-    .map((row) => row.name)
+  const executedMigrations = (await db.query('SELECT * FROM `migration`')).map(
+    (row) => row.name
+  )
   console.log('Executed migrations ', executedMigrations)
   for (const migration of migrations) {
     if (executedMigrations.indexOf(migration) > -1) {
@@ -43,7 +45,7 @@ module.exports = async (db) => {
       console.log('Error on doing migration')
       process.exit()
     }
-    
+
     await db.query(
       `INSERT INTO \`migration\`
         (\`name\`) VALUES

@@ -36,19 +36,19 @@ export default class FileUpload extends Component {
     this.buildFileSelector().click()
   }
 
-  buildFileSelector(){
+  buildFileSelector() {
     const fileSelector = document.createElement('input')
     fileSelector.setAttribute('type', 'file')
     fileSelector.addEventListener('change', this.addFileButtonClicked, false)
     return fileSelector
   }
 
-  addFileButtonClicked(e){
+  addFileButtonClicked(e) {
     var file = e.target.files[0]
-    this.setState({uploadedFile: file}) 
+    this.setState({ uploadedFile: file })
     console.log('FILENAME: ', file.name)
   }
-  
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -63,26 +63,29 @@ export default class FileUpload extends Component {
 
     var display
     if (this.state.uploadState === 0) {
-      display =
+      display = (
         <div id="file-not-uploaded">
           <i class="fa fa-cloud-upload"></i>
-          <p id="click-here-text">Click to the button below or <br></br>drag&drop your file here to upload</p>
-          <button id="add-file-btn" class="btn add-file-btn" onClick={this.handleFileSelect}>Add File</button>
+          <p id="click-here-text">
+            Click to the button below or <br></br>drag&drop your file here to
+            upload
+          </p>
+          <button
+            id="add-file-btn"
+            class="btn add-file-btn"
+            onClick={this.handleFileSelect}>
+            Add File
+          </button>
         </div>
-    }
-    else if (this.state.uploadState === 1) {
-
-    }
-    else if (this.state.uploadState === 2) {
-
-    }
-    else if (this.state.uploadState === 3) {
-
+      )
+    } else if (this.state.uploadState === 1) {
+    } else if (this.state.uploadState === 2) {
+    } else if (this.state.uploadState === 3) {
     }
     return (
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
-          className='fl label'
+          className="fl label"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
@@ -90,18 +93,13 @@ export default class FileUpload extends Component {
           required={config.required}
         />
         <form class="file-form">
-          <input
-            type="file"
-            id={ `q_${config.id}` }
-            name={ `q_${config.id}` }
-          />
-          
+          <input type="file" id={`q_${config.id}`} name={`q_${config.id}`} />
+
           <label for="file-input">
             <img id="file-image" class="hidden" src="#" alt="Preview"></img>
             {display}
           </label>
         </form>
-
       </ElementContainer>
     )
   }

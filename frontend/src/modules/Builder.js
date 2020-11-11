@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import {
-  Link,
-  NavLink,
-  Switch,
-  Route
-} from 'react-router-dom'
+import { Link, NavLink, Switch, Route } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faChevronLeft, faPaintBrush, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import {
+  faChevronLeft,
+  faPaintBrush,
+  faPlusSquare
+} from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
@@ -19,10 +18,10 @@ import { api } from '../helper'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
-const getElements = () => Object.values(Elements).map((element) => {
-    const config = Object
-      .assign({}, element.defaultConfig)
-    
+const getElements = () =>
+  Object.values(Elements).map((element) => {
+    const config = Object.assign({}, element.defaultConfig)
+
     if (typeof element.configurableSettings !== 'undefined') {
       const configurableKeys = Object.keys(element.configurableSettings)
 
@@ -32,11 +31,9 @@ const getElements = () => Object.values(Elements).map((element) => {
     }
 
     return config
-  }
-)
-const getElementsConfigurableSettingsObject = () => Object
-  .values(Elements)
-  .reduce((acc, element) => {
+  })
+const getElementsConfigurableSettingsObject = () =>
+  Object.values(Elements).reduce((acc, element) => {
     acc[element.defaultConfig.type] = {
       configurableSettings: element.configurableSettings || {}
     }
@@ -44,30 +41,28 @@ const getElementsConfigurableSettingsObject = () => Object
     return acc
   }, {})
 
-const getWeightedElements = () => Object
-  .values(Elements)
-  .map((element) => Object
-    .assign({}, element.defaultConfig, {weight: element.weight})
+const getWeightedElements = () =>
+  Object.values(Elements).map((element) =>
+    Object.assign({}, element.defaultConfig, { weight: element.weight })
   )
-const getElementsKeys = () => getElements()
-  .reduce((acc, item) => {
+const getElementsKeys = () =>
+  getElements().reduce((acc, item) => {
     acc[item.type] = item
 
     return acc
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements()
-  .sort((a, b) => a.weight - b.weight)
+const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
 
 class Builder extends Component {
-  async componentDidMount () {
+  async componentDidMount() {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
 
       if (formId !== 'new') {
         await this.loadForm(formId)
-        window.localStorage.setItem('lastEditedFormId', formId)  
+        window.localStorage.setItem('lastEditedFormId', formId)
       } else {
         window.scrollTo(0, 0)
         this.setIntegration({ type: 'email', to: this.props.auth.email })
@@ -84,7 +79,7 @@ class Builder extends Component {
     }
   }
 
-  async loadForm (formId, seamless = false) {
+  async loadForm(formId, seamless = false) {
     if (seamless === false) {
       this.setState({ loading: true })
     }
@@ -112,7 +107,9 @@ class Builder extends Component {
     })
 
     if (typeof publishedFormResult.data.props !== 'undefined') {
-      publishedFormResult.data.props = JSON.parse(publishedFormResult.data.props)
+      publishedFormResult.data.props = JSON.parse(
+        publishedFormResult.data.props
+      )
     }
 
     this.setState({
@@ -122,13 +119,13 @@ class Builder extends Component {
     })
   }
 
-  setIntegration (_integration) {
+  setIntegration(_integration) {
     const form = { ...this.state.form }
 
     form.props.integrations = [...form.props.integrations]
 
-    const matched = form.props.integrations.filter((integration) =>
-      (integration.type === _integration.type)
+    const matched = form.props.integrations.filter(
+      (integration) => integration.type === _integration.type
     )
 
     if (matched.length > 0) {
@@ -145,7 +142,7 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       counter: 0,
@@ -195,12 +192,14 @@ class Builder extends Component {
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
-    this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(this)
+    this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(
+      this
+    )
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
   }
 
-  handleDragStart (_item, e) {
+  handleDragStart(_item, e) {
     console.log('Drag start')
     let item = _item
     let dragMode = 'insert'
@@ -209,7 +208,7 @@ class Builder extends Component {
     e.dataTransfer.setData('text/plain', type)
 
     if (item.mode === 'sort') {
-      const {mode, ref, ...rest} = item
+      const { mode, ref, ...rest } = item
 
       item = rest
       dragMode = 'sort'
@@ -228,11 +227,11 @@ class Builder extends Component {
     this.setState(dragState)
 
     setTimeout(() => {
-      this.setState({sortItem: item})
+      this.setState({ sortItem: item })
     }, 1)
   }
 
-  handleDrop (e) {
+  handleDrop(e) {
     e.stopPropagation()
     e.preventDefault()
 
@@ -243,19 +242,23 @@ class Builder extends Component {
 
     if (dragMode === 'insert') {
       //set auto increment element id
-      const maxId = Math.max(...form.props.elements.map((element) => element.id))
+      const maxId = Math.max(
+        ...form.props.elements.map((element) => element.id)
+      )
 
       item.id = maxId + 1
     } else {
       item = sortItem
       //mark sorted element to be deleted
-      const sortedElementOriginal = elements.filter((element) => (element.id === item.id))
+      const sortedElementOriginal = elements.filter(
+        (element) => element.id === item.id
+      )
 
       sortedElementOriginal[0].__original__ = true
     }
 
     const index = form.props.elements.findIndex(
-      (element) => (element.id.toString() === dragIndex)
+      (element) => element.id.toString() === dragIndex
     )
 
     let newElements
@@ -275,8 +278,9 @@ class Builder extends Component {
     }
 
     if (dragMode === 'sort') {
-      newElements = newElements
-        .filter((element) => (element.__original__ !== true))
+      newElements = newElements.filter(
+        (element) => element.__original__ !== true
+      )
     }
 
     this.setState({
@@ -294,7 +298,7 @@ class Builder extends Component {
     })
   }
 
-  handleDragEnd (e) {
+  handleDragEnd(e) {
     e.stopPropagation()
     e.preventDefault()
     console.log('drag ended')
@@ -305,21 +309,19 @@ class Builder extends Component {
     })
   }
 
-  handleDragOver (e) {
+  handleDragOver(e) {
     const rect = e.target.getBoundingClientRect()
-    const {top, height} = rect
-    const {clientY} = e
+    const { top, height } = rect
+    const { clientY } = e
     const id = e.target.id.replace('qc_', '')
     const middleTop = top + height / 2
     const diff = clientY - middleTop
-    const insertBefore = (diff < 0)
+    const insertBefore = diff < 0
 
     if (
       id !== '' &&
-      (
-        id !== this.state.dragIndex.toString() ||
-        insertBefore !== this.state.insertBefore
-      )
+      (id !== this.state.dragIndex.toString() ||
+        insertBefore !== this.state.insertBefore)
     ) {
       this.setState({
         dragIndex: id,
@@ -331,15 +333,14 @@ class Builder extends Component {
     e.preventDefault()
   }
 
-  handleLabelChange (id, value) {
+  handleLabelChange(id, value) {
     const form = { ...this.state.form }
 
     form.props.elements = [...form.props.elements]
 
-    const question = form
-      .props
-      .elements
-      .filter((element) => (element.id === id))[0]
+    const question = form.props.elements.filter(
+      (element) => element.id === id
+    )[0]
 
     if (question.type === 'Button') {
       question.buttonText = value
@@ -350,7 +351,7 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  handleTitleChange (id, value) {
+  handleTitleChange(id, value) {
     const form = { ...this.state.form }
 
     form.title = value
@@ -358,27 +359,29 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  handleFormElementClick (e) {
+  handleFormElementClick(e) {
     e.preventDefault()
     const id = parseInt(e.target.id.replace('qc_', ''))
     const { elements } = this.state.form.props
     let { formId } = this.props.match.params
 
-    const matchingElements = elements.filter((elem) => (elem.id === id))
+    const matchingElements = elements.filter((elem) => elem.id === id)
 
     if (matchingElements.length === 1) {
-      this.props.history.push(`/editor/${formId}/builder/question/${id}/properties`)
+      this.props.history.push(
+        `/editor/${formId}/builder/question/${id}/properties`
+      )
       this.setState({
         dragging: false
       })
     }
   }
 
-  handleFormElementDeleteClick (id) {
+  handleFormElementDeleteClick(id) {
     const form = { ...this.state.form }
     const { params } = this.props.match
 
-    form.props.elements = form.props.elements.filter((elem) => (elem.id !== id))
+    form.props.elements = form.props.elements.filter((elem) => elem.id !== id)
 
     this.setState({
       form
@@ -389,14 +392,14 @@ class Builder extends Component {
     }
   }
 
-  async handleSaveClick () {
+  async handleSaveClick() {
     const { form } = this.state
 
     this.setState({ saving: true })
 
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms`,
-      method: (form.id === null) ? 'post' : 'put',
+      method: form.id === null ? 'post' : 'put',
       body: this.state.form
     })
 
@@ -423,7 +426,7 @@ class Builder extends Component {
     }
   }
 
-  async handlePublishClick () {
+  async handlePublishClick() {
     const { form, publishing, saving } = this.state
 
     if (publishing === true || saving === true) {
@@ -446,33 +449,36 @@ class Builder extends Component {
     this.setState({ publishing: false })
   }
 
-  handlePreviewClick (e) {
+  handlePreviewClick(e) {
     const { id } = this.state.form
 
     window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
   }
 
-  configureQuestion (changes) {
+  configureQuestion(changes) {
     const form = { ...this.state.form }
 
     form.props.elements = [...form.props.elements]
 
-    const question = form
-      .props
-      .elements
-      .filter((element) => (element.id === changes.id))[0]
+    const question = form.props.elements.filter(
+      (element) => element.id === changes.id
+    )[0]
 
     Object.assign(question, changes.newState)
 
     this.setState({ form })
   }
 
-  render () {
+  render() {
     const { params } = this.props.match
     const { formId, questionId } = params
     const tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
-      { name: 'formProperties', text: 'Form Properties', path: `/editor/${formId}/builder/properties` }
+      {
+        name: 'formProperties',
+        text: 'Form Properties',
+        path: `/editor/${formId}/builder/properties`
+      }
     ]
 
     if (typeof questionId !== 'undefined') {
@@ -484,39 +490,38 @@ class Builder extends Component {
     }
 
     return (
-      <div className='builder'>
-        <div className='headerContainer'>
-          <div className='header grid center'>
-            <div className='col-1-16'>
-              <Link to='/forms' className='back'>
-                <FontAwesomeIcon icon={ faChevronLeft } />
+      <div className="builder">
+        <div className="headerContainer">
+          <div className="header grid center">
+            <div className="col-1-16">
+              <Link to="/forms" className="back">
+                <FontAwesomeIcon icon={faChevronLeft} />
               </Link>
             </div>
-            <div className='col-15-16 mainTabs'>
+            <div className="col-15-16 mainTabs">
               {tabs.map((item, key) => (
                 <NavLink
-                  key={ key }
+                  key={key}
                   exact
-                  to={ `${item.path}` }
-                  activeClassName='selected'
-                >
-                  { item.text }
+                  to={`${item.path}`}
+                  activeClassName="selected">
+                  {item.text}
                 </NavLink>
               ))}
             </div>
           </div>
         </div>
-        <div className='content grid'>
-          <div className='leftTabs col-1-16'>
-            { this.renderLeftVerticalTabs() }
+        <div className="content grid">
+          <div className="leftTabs col-1-16">
+            {this.renderLeftVerticalTabs()}
           </div>
-          { this.renderMainContent() }
+          {this.renderMainContent()}
         </div>
       </div>
     )
   }
 
-  renderLeftMenuContents () {
+  renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
     const selectedField = {}
@@ -525,71 +530,67 @@ class Builder extends Component {
 
     if (typeof questionId !== 'undefined') {
       try {
-        const selectedFieldConfig = form
-          .props
-          .elements
-          .filter((elem) => (elem.id === parseInt(questionId)))[0]
+        const selectedFieldConfig = form.props.elements.filter(
+          (elem) => elem.id === parseInt(questionId)
+        )[0]
 
         const elements = getElementsConfigurableSettingsObject()
 
         selectedField.config = selectedFieldConfig
-        selectedField.configurableSettings = elements[selectedFieldConfig.type]
-          .configurableSettings || {}
+        selectedField.configurableSettings =
+          elements[selectedFieldConfig.type].configurableSettings || {}
       } catch (e) {
         questionPropertiesReady = false
       }
     }
 
-    return <Switch>
-      <Route exact path='/editor/:formId/builder'>
-        <div className='elements'>
-          <div className='elementsMessage'>
-            Drag and Drop elements to right hand side to add to the form.
-            Or you can click + icon
+    return (
+      <Switch>
+        <Route exact path="/editor/:formId/builder">
+          <div className="elements">
+            <div className="elementsMessage">
+              Drag and Drop elements to right hand side to add to the form. Or
+              you can click + icon
+            </div>
+            <div className="elementList">
+              {pickerElements.map((elem) => (
+                <div
+                  className="element"
+                  draggable
+                  onDragStart={this.handleDragStart.bind(this, elem)}
+                  onDragEnd={this.handleDragEnd}
+                  key={elem.type}>
+                  {elem.type}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className='elementList'>
-            {pickerElements.map((elem) =>
-              <div
-                className='element'
-                draggable
-                onDragStart={ this.handleDragStart.bind(this, elem) }
-                onDragEnd={ this.handleDragEnd }
-                key={ elem.type }
-              >
-                { elem.type }
-              </div>
-            )}
-          </div>
-        </div>
-      </Route>
-      <Route path='/editor/:formId/builder/properties'>
-        <FormProperties
-          form={ form }
-          setIntegration={ this.setIntegration }
-        />
-      </Route>
-      <Route path='/editor/:formId/builder/question/:questionId/properties'>
-        { (questionPropertiesReady === true)
-            ? <QuestionProperties
-              selectedField={ selectedField }
-              configureQuestion={ this.configureQuestion }
+        </Route>
+        <Route path="/editor/:formId/builder/properties">
+          <FormProperties form={form} setIntegration={this.setIntegration} />
+        </Route>
+        <Route path="/editor/:formId/builder/question/:questionId/properties">
+          {questionPropertiesReady === true ? (
+            <QuestionProperties
+              selectedField={selectedField}
+              configureQuestion={this.configureQuestion}
             />
-            : null
-        }
-      </Route>
-    </Switch>
+          ) : null}
+        </Route>
+      </Switch>
+    )
   }
 
-  renderLeftVerticalTabs () {
+  renderLeftVerticalTabs() {
     const { formId } = this.props.match.params
 
     return (
       <div>
-        <NavLink to={ `/editor/${formId}/builder` } activeClassName='selected'>
-          <FontAwesomeIcon icon={ faPlusSquare } />
+        <NavLink to={`/editor/${formId}/builder`} activeClassName="selected">
+          <FontAwesomeIcon icon={faPlusSquare} />
         </NavLink>
-        <NavLink to={ `/editor/${formId}/design` } activeClassName='selected'>
-          <FontAwesomeIcon icon={ faPaintBrush } />
+        <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
+          <FontAwesomeIcon icon={faPaintBrush} />
         </NavLink>
       </div>
     )
@@ -598,22 +599,22 @@ class Builder extends Component {
   renderMainContent() {
     return (
       <Switch>
-        <Route path='/editor/:formId/builder'>
-          <div className='leftMenu col-5-16'>
-            <div className='leftMenuContents'>
-              { this.renderLeftMenuContents() }
+        <Route path="/editor/:formId/builder">
+          <div className="leftMenu col-5-16">
+            <div className="leftMenuContents">
+              {this.renderLeftMenuContents()}
             </div>
           </div>
-          { this.renderBuilder() }
+          {this.renderBuilder()}
         </Route>
-        <Route path='/editor/:formId/design'>
+        <Route path="/editor/:formId/design">
           Form Designer will come here
         </Route>
       </Switch>
     )
   }
 
-  renderBuilder () {
+  renderBuilder() {
     const {
       dragging,
       form,
@@ -622,12 +623,12 @@ class Builder extends Component {
       publishedForm,
       loading,
       saving,
-      publishing,
+      publishing
     } = this.state
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
-    const isPublishRequired = (form.updated_at !== publishedForm.created_at)
+    const isPublishRequired = form.updated_at !== publishedForm.created_at
     const saveButtonProps = {}
 
     if (saving === true || loading === true) {
@@ -635,41 +636,35 @@ class Builder extends Component {
     }
 
     return (
-      <div className='builderStage col-10-16 grid'>
-        <div className='formTitle col-16-16'>
-          {
-            (loading === false)
-              ? <EditableLabel
-                className='label'
-                mode='builder'
-                labelKey='title'
-                handleLabelChange={ this.handleTitleChange }
-                value={ form.title }
-              />
-              : null
-          }
+      <div className="builderStage col-10-16 grid">
+        <div className="formTitle col-16-16">
+          {loading === false ? (
+            <EditableLabel
+              className="label"
+              mode="builder"
+              labelKey="title"
+              handleLabelChange={this.handleTitleChange}
+              value={form.title}
+            />
+          ) : null}
         </div>
-        <div className='col-16-16 formControls'>
-          <button onClick={ this.handleSaveClick } { ...saveButtonProps }>
-            { saving === true ? 'Saving...': 'Save' }
+        <div className="col-16-16 formControls">
+          <button onClick={this.handleSaveClick} {...saveButtonProps}>
+            {saving === true ? 'Saving...' : 'Save'}
           </button>
-          <button onClick={ this.handlePreviewClick }>
-            Preview
-          </button>
-          <button className='publish' onClick={ this.handlePublishClick }>
-          { publishing === true ? 'Publishing...': 'Publish' }
-          {
-            (isPublishRequired === true)
-              ? <div className='publishRequired'></div>
-              : null
-          }
+          <button onClick={this.handlePreviewClick}>Preview</button>
+          <button className="publish" onClick={this.handlePublishClick}>
+            {publishing === true ? 'Publishing...' : 'Publish'}
+            {isPublishRequired === true ? (
+              <div className="publishRequired"></div>
+            ) : null}
           </button>
         </div>
-        {
-        (loading === true)
-          ? 'Loading...'
-          : <Renderer
-            className={`col-16-16 form${(dragging === true)? ' dragging' : ''}`}
+        {loading === true ? (
+          'Loading...'
+        ) : (
+          <Renderer
+            className={`col-16-16 form${dragging === true ? ' dragging' : ''}`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
@@ -680,28 +675,27 @@ class Builder extends Component {
               handleDragEnd: this.handleDragEnd,
               handleDragStart: this.handleDragStart
             }}
-            handleLabelChange={ this.handleLabelChange }
-            configureQuestion= { this.configureQuestion }
-            dragIndex={ this.state.dragIndex }
-            dragging={ dragging }
-            dragMode={ dragMode }
-            sortItem={ sortItem }
-            insertBefore={ this.state.insertBefore }
-            form={ form }
-            selectedFieldId={ selectedFieldId }
-            mode='builder'
+            handleLabelChange={this.handleLabelChange}
+            configureQuestion={this.configureQuestion}
+            dragIndex={this.state.dragIndex}
+            dragging={dragging}
+            dragMode={dragMode}
+            sortItem={sortItem}
+            insertBefore={this.state.insertBefore}
+            form={form}
+            selectedFieldId={selectedFieldId}
+            mode="builder"
           />
-        }
+        )}
       </div>
     )
   }
 }
 
-const BuilderWrapped = (props) => 
+const BuilderWrapped = (props) => (
   <AuthContext.Consumer>
-    {
-      (value) => <Builder { ...props } auth={ value } />
-    }
+    {(value) => <Builder {...props} auth={value} />}
   </AuthContext.Consumer>
+)
 
 export default BuilderWrapped

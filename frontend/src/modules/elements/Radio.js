@@ -5,151 +5,157 @@ import ElementContainer from '../common/ElementContainer'
 import './Radio.css'
 
 export default class Radio extends Component {
-	static weight = 6
+  static weight = 6
 
-	static defaultConfig = {
-		id: 0,
-		type: 'Radio',
-		label: 'Radio',
-		options: []
-	}
+  static defaultConfig = {
+    id: 0,
+    type: 'Radio',
+    label: 'Radio',
+    options: []
+  }
 
-	static configurableSettings = {
-		required: {
-			default: false,
-			formProps: {
-				type: 'Checkbox',
-				label: 'Make this field required?'
-			}
-		}
-	}
+  static configurableSettings = {
+    required: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field required?'
+      }
+    }
+  }
 
-	constructor(props) {
-		super(props)
-		this.state = {
-			show: true,
-			checked: 0
-		}
-		this.handleChange = this.handleChange.bind(this);
-		this.onChange = this.onChange.bind(this);
+  constructor(props) {
+    super(props)
+    this.state = {
+      show: true,
+      checked: 0
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.onChange = this.onChange.bind(this)
+  }
 
-	}
+  onChange(i) {
+    this.setState({
+      checked: i
+    })
+  }
 
-	onChange(i) {
-		this.setState({
-			checked: i
-		})
-	}
+  handleChange(event) {
+    const { config } = this.props
+    const inputProps = {}
+    var lines = event.target.value.split('\n')
 
-	handleChange(event) {
-		const { config } = this.props
-		const inputProps = {}
-		var lines = event.target.value.split('\n')
+    if (typeof config.value !== 'undefined') {
+      inputProps.value = config.value
+    }
 
-		if (typeof config.value !== 'undefined') {
-			inputProps.value = config.value
-		}
+    const newOptions = []
 
-		const newOptions = []
+    for (var i = 0; i < lines.length; i++) {
+      if (lines[i] && lines[i].trim().length !== 0) {
+        newOptions.push(lines[i])
+      }
+    }
 
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i] && lines[i].trim().length !== 0) {
-				newOptions.push(lines[i])
-			}
-		}
+    this.props.configureQuestion({
+      id: config.id,
+      newState: {
+        options: newOptions
+      }
+    })
+  }
 
-		this.props.configureQuestion({
-			id: config.id,
-			newState: {
-				options: newOptions
-			}
-		})
-	}
+  render() {
+    const { config, mode } = this.props
+    const inputProps = {}
 
-	render() {
-		const { config, mode } = this.props
-		const inputProps = {}
+    if (typeof config.onClick !== 'undefined') {
+      inputProps.onClick = config.onClick
+    }
 
-		if (typeof config.onClick !== 'undefined') {
-			inputProps.onClick = config.onClick
-		}
+    let optionsList =
+      Array.isArray(config.options) === true &&
+      config.options.map((item) => {
+        return (
+          <li>
+            <input type="radio" id="radio-btn" name="radio-btn"></input>
+            <label for="radio-btn">{item}</label>
+            <div class="check">
+              <div class="inside"></div>
+            </div>
+          </li>
+        )
+      })
 
-		let optionsList = Array.isArray(config.options) === true && config.options.map((item) => {
-			return (
-				<li>
-					<input type="radio" id="radio-btn" name="radio-btn"></input>
-					<label for="radio-btn">{item}</label>
-					<div class="check"><div class="inside"></div></div>
-				</li>
-			)
-		})
+    var display
+    if (mode === 'builder') {
+      display = [
+        <EditableLabel
+          key="1"
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />,
+        <div key="2">
+          {this.state.show ? (
+            <textarea id="options-textarea" onChange={this.handleChange}>
+              {config.options.join('\n')}
+            </textarea>
+          ) : (
+            <div class="container">
+              <p id="choose-option-par">Choose an option:</p>
+              <ul className="radio-container">{optionsList}</ul>
+            </div>
+          )}
+          <button
+            id="edit-preview-button"
+            onClick={() => {
+              this.setState({ show: !this.state.show })
+            }}>
+            {this.state.show ? 'Preview' : 'Edit'}
+          </button>
+        </div>
+      ]
+    } else {
+      display = [
+        <EditableLabel
+          key="1"
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />,
+        <div key="2">
+          {this.state.show ? (
+            <textarea id="options-textarea" onChange={this.handleChange}>
+              {config.options.join('\n')}
+            </textarea>
+          ) : (
+            <div class="container">
+              <p id="choose-option-par">Choose an option:</p>
+              <ul>{optionsList}</ul>
+            </div>
+          )}
+          <button
+            id="edit-preview-button"
+            onClick={() => {
+              this.setState({ show: !this.state.show })
+            }}>
+            {this.state.show ? 'Preview' : 'Edit'}
+          </button>
+        </div>
+      ]
+    }
 
-		var display
-		if (mode === 'builder') {
-			display = [
-				<EditableLabel
-					key='1'
-					className='fl label'
-					mode={mode}
-					labelKey={config.id}
-					handleLabelChange={this.props.handleLabelChange}
-					value={config.label}
-					required={config.required}
-				/>,
-				<div key='2'>
-					{
-						this.state.show
-							?
-							<textarea id="options-textarea" onChange={this.handleChange}>
-								{config.options.join('\n')}
-							</textarea>
-							:
-							<div class='container'>
-								<p id="choose-option-par">Choose an option:</p>
-								<ul className='radio-container'>
-									{optionsList}
-								</ul>
-							</div>
-					}
-					<button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
-				</div>
-			]
-		}
-		else {
-			display = [
-				<EditableLabel
-					key='1'
-					className='fl label'
-					mode={mode}
-					labelKey={config.id}
-					handleLabelChange={this.props.handleLabelChange}
-					value={config.label}
-					required={config.required}
-				/>,
-				<div key='2'>
-					{
-						this.state.show
-							?
-							<textarea id="options-textarea" onChange={this.handleChange}>
-								{config.options.join('\n')}
-							</textarea>
-							:
-							<div class='container'>
-								<p id="choose-option-par">Choose an option:</p>
-								<ul>
-									{optionsList}
-								</ul>
-							</div>
-					}
-					<button id="edit-preview-button" onClick={() => { this.setState({ show: !this.state.show }) }}>{this.state.show ? 'Preview' : 'Edit'}</button>
-				</div>
-			]
-		}
-
-		return (
-			<ElementContainer type={config.type} {...this.props}>
-				{display}
-			</ElementContainer>
-		)
-	}
+    return (
+      <ElementContainer type={config.type} {...this.props}>
+        {display}
+      </ElementContainer>
+    )
+  }
 }

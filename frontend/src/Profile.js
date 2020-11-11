@@ -12,24 +12,20 @@ const Profile = () => {
 
   const renderLoggedIn = (auth) => {
     return [
-      <ProfileSVG key='1' className='profileSVG' onClick={ logout } />,
-      <span key='2'>Welcome { auth.name }</span>
+      <ProfileSVG key="1" className="profileSVG" onClick={logout} />,
+      <span key="2">Welcome {auth.name}</span>
     ]
   }
 
   return (
     <AuthContext.Consumer>
-      {
-        (value) => {
-         return <div className='profile'>
-          {
-            (value.loggedIn === true)
-              ? renderLoggedIn(value)
-              : null
-          }
+      {(value) => {
+        return (
+          <div className="profile">
+            {value.loggedIn === true ? renderLoggedIn(value) : null}
           </div>
-        }
-      }
+        )
+      }}
     </AuthContext.Consumer>
   )
 }

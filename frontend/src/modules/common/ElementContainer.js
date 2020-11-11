@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGripHorizontal, faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export default class ElementContainer extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.myRef = React.createRef()
   }
 
-  handleDeleteClick (id, e) {
+  handleDeleteClick(id, e) {
     e.stopPropagation()
     this.props.customBuilderHandlers.onDelete(id)
   }
@@ -38,37 +38,29 @@ export default class ElementContainer extends Component {
 
     return (
       <div
-        className={ classNames.join(' ') }
+        className={classNames.join(' ')}
         {...{ id: `qc_${config.id}`, ...builderHandlers }}
-        ref={ this.myRef }
-      >
-        { this.props.children }
-        {
-          (mode === 'builder')
-            ? <div className='action'>
-              <div
-                className='sortHandle'
-                onDragStart={
-                  customBuilderHandlers.handleDragStart.bind(
-                    this,
-                    { mode: 'sort', ref: this.myRef, ...config }
-                  )
-                }
-                onDragEnd={ customBuilderHandlers.handleDragEnd }
-                draggable
-              >
-                <FontAwesomeIcon
-                  icon={ faGripHorizontal }
-                />
-              </div>
-              <FontAwesomeIcon
-                icon={ faTrash }
-                onClick={ this.handleDeleteClick.bind(this, config.id) }
-              />
+        ref={this.myRef}>
+        {this.props.children}
+        {mode === 'builder' ? (
+          <div className="action">
+            <div
+              className="sortHandle"
+              onDragStart={customBuilderHandlers.handleDragStart.bind(this, {
+                mode: 'sort',
+                ref: this.myRef,
+                ...config
+              })}
+              onDragEnd={customBuilderHandlers.handleDragEnd}
+              draggable>
+              <FontAwesomeIcon icon={faGripHorizontal} />
             </div>
-            : null
-        }
-        
+            <FontAwesomeIcon
+              icon={faTrash}
+              onClick={this.handleDeleteClick.bind(this, config.id)}
+            />
+          </div>
+        ) : null}
       </div>
     )
   }

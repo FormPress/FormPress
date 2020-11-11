@@ -36,7 +36,7 @@ export default class Name extends Component {
     return (
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
-          className='fl label'
+          className="fl label"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
@@ -45,20 +45,20 @@ export default class Name extends Component {
         />
         <table>
           <tr>
-              <td>
-                <label for='firstname'>First name:</label>
-              </td>
-              <td>
-                <input type='text' id='fname' name='firstname'></input>
-              </td>
+            <td>
+              <label for="firstname">First name:</label>
+            </td>
+            <td>
+              <input type="text" id="fname" name="firstname"></input>
+            </td>
           </tr>
           <tr>
-              <td>
-                <label for='lastname'>Last name:</label>
-              </td>
-              <td>
-                <input type='text' id='lname' name='lastname'></input>
-              </td>
+            <td>
+              <label for="lastname">Last name:</label>
+            </td>
+            <td>
+              <input type="text" id="lname" name="lastname"></input>
+            </td>
           </tr>
         </table>
       </ElementContainer>

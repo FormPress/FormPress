@@ -15,7 +15,7 @@
 
 .forms table.fp_table > tbody > tr {
   height: 60px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-bottom: 2px solid rgb(234, 239, 242);
 }
 
@@ -29,8 +29,8 @@
 }
 
 .forms table.fp_table .responseCount {
-  background-color: #1C5C85;
-  color: #FFFFFF;
+  background-color: #1c5c85;
+  color: #ffffff;
   font-size: 16px;
   border-radius: 10px;
   width: 57px;
@@ -83,7 +83,7 @@
   text-align: center;
   color: white;
   text-decoration: none;
-  background-color: #719FBD;
+  background-color: #719fbd;
   display: inline-block;
   margin-top: 20px;
 }
