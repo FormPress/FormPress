@@ -1,8 +1,24 @@
 image: node:12.14
 
 stages:
+  - lint
   - unittest
   - buildAndDeploy
+
+run-prettier-check:
+  stage: lint
+  script:
+    - npm install
+    - npm run pretty-check
+  only:
+    - merge_requests
+run-eslint:
+  stage: lint
+  script:
+    - npm install
+    - npm run lint
+  only:
+    - merge_requests
 
 run-unit-test-frontend:
   stage: unittest
