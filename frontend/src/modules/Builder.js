@@ -208,7 +208,7 @@ class Builder extends Component {
     e.dataTransfer.setData('text/plain', type)
 
     if (item.mode === 'sort') {
-      const { mode, ref, ...rest } = item
+      const { ref, ...rest } = item
 
       item = rest
       dragMode = 'sort'
@@ -449,7 +449,7 @@ class Builder extends Component {
     this.setState({ publishing: false })
   }
 
-  handlePreviewClick(e) {
+  handlePreviewClick() {
     const { id } = this.state.form
 
     window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')

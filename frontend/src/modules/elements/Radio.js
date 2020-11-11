@@ -75,13 +75,13 @@ export default class Radio extends Component {
 
     let optionsList =
       Array.isArray(config.options) === true &&
-      config.options.map((item) => {
+      config.options.map((item, key) => {
         return (
-          <li>
+          <li key={key}>
             <input type="radio" id="radio-btn" name="radio-btn"></input>
-            <label for="radio-btn">{item}</label>
-            <div class="check">
-              <div class="inside"></div>
+            <label htmlFor="radio-btn">{item}</label>
+            <div className="check">
+              <div className="inside"></div>
             </div>
           </li>
         )
@@ -105,7 +105,7 @@ export default class Radio extends Component {
               {config.options.join('\n')}
             </textarea>
           ) : (
-            <div class="container">
+            <div className="container">
               <p id="choose-option-par">Choose an option:</p>
               <ul className="radio-container">{optionsList}</ul>
             </div>
@@ -136,7 +136,7 @@ export default class Radio extends Component {
               {config.options.join('\n')}
             </textarea>
           ) : (
-            <div class="container">
+            <div className="container">
               <p id="choose-option-par">Choose an option:</p>
               <ul>{optionsList}</ul>
             </div>

@@ -72,7 +72,7 @@ class Forms extends Component {
     this.updateForms()
   }
 
-  handlePreviewClick(form, e) {
+  handlePreviewClick(form) {
     const { id } = form
 
     window.open(`${BACKEND}/form/view/${id}`, '_blank')

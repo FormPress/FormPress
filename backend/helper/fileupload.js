@@ -1,4 +1,3 @@
-const path = require('path')
 const { Storage } = require('@google-cloud/storage')
 const { v4: uuidv4 } = require('uuid')
 const { Duplex } = require('stream')

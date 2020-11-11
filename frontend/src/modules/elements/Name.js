@@ -46,7 +46,7 @@ export default class Name extends Component {
         <table>
           <tr>
             <td>
-              <label for="firstname">First name:</label>
+              <label htmlFor="firstname">First name:</label>
             </td>
             <td>
               <input type="text" id="fname" name="firstname"></input>
@@ -54,7 +54,7 @@ export default class Name extends Component {
           </tr>
           <tr>
             <td>
-              <label for="lastname">Last name:</label>
+              <label htmlFor="lastname">Last name:</label>
             </td>
             <td>
               <input type="text" id="lname" name="lastname"></input>

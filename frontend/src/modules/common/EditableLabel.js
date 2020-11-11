@@ -9,7 +9,7 @@ export default class EditableLabel extends Component {
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
   }
 
-  handleOnInput(e) {}
+  handleOnInput() {}
 
   handleOnBlur(e) {
     this.props.handleLabelChange(

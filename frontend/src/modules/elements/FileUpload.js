@@ -65,22 +65,19 @@ export default class FileUpload extends Component {
     if (this.state.uploadState === 0) {
       display = (
         <div id="file-not-uploaded">
-          <i class="fa fa-cloud-upload"></i>
+          <i className="fa fa-cloud-upload"></i>
           <p id="click-here-text">
             Click to the button below or <br></br>drag&drop your file here to
             upload
           </p>
           <button
             id="add-file-btn"
-            class="btn add-file-btn"
+            className="btn add-file-btn"
             onClick={this.handleFileSelect}>
             Add File
           </button>
         </div>
       )
-    } else if (this.state.uploadState === 1) {
-    } else if (this.state.uploadState === 2) {
-    } else if (this.state.uploadState === 3) {
     }
     return (
       <ElementContainer type={config.type} {...this.props}>
@@ -92,11 +89,11 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        <form class="file-form">
+        <form className="file-form">
           <input type="file" id={`q_${config.id}`} name={`q_${config.id}`} />
 
-          <label for="file-input">
-            <img id="file-image" class="hidden" src="#" alt="Preview"></img>
+          <label htmlFor="file-input">
+            <img id="file-image" className="hidden" src="#" alt="Preview"></img>
             {display}
           </label>
         </form>

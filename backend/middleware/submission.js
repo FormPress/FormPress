@@ -5,7 +5,7 @@ const { fileupload } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const findQuestionType = (qid) => {
+const findQuestionType = (form, qid) => {
   for (const elem of form.props.elements) {
     if (elem.id === qid) {
       return elem.type
@@ -49,7 +49,7 @@ module.exports = (app) => {
 
     for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
-      const type = findQuestionType(question_id)
+      const type = findQuestionType(form, question_id)
       let value
 
       //upload file to GCS
@@ -87,7 +87,7 @@ module.exports = (app) => {
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
         text: `New Submission has been received ${JSON.stringify(req.body)}`,
-        html: `New Submission has been received ${JSON.stringify(req.body)}`
+        html: `New Submission has been received ${JSON.stringify(req.body)}`,
       }
 
       sgMail.send(msg)

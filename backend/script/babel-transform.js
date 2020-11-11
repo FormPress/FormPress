@@ -91,12 +91,13 @@ const transformMap = [
 const transformFrontend = () => {
   for (const transform of transformMap) {
     const { type, source, target } = transform
+    let input, result, files
 
     switch (type) {
       case 'file':
-        const input = fs.readFileSync(source)
+        input = fs.readFileSync(source)
         console.log(`Transpiling ${source}`)
-        const result = babel.transformSync(input, options)
+        result = babel.transformSync(input, options)
         fs.writeFileSync(target, result.code)
         break
       case 'folder':
@@ -105,7 +106,7 @@ const transformFrontend = () => {
           fs.mkdirSync(target)
         }
 
-        const files = fs
+        files = fs
           .readdirSync(source)
           .filter((fileName) => fileName.endsWith(transform.extension))
 

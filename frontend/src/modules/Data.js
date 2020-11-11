@@ -120,7 +120,7 @@ class Data extends Component {
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
   }
 
-  handleFormClick(form, e) {
+  handleFormClick(form) {
     this.setState({ formSelectorOpen: false })
     this.updateSubmissions(form.id)
   }
