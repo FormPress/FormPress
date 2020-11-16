@@ -73,6 +73,12 @@ MVP:
   -- Imrove notification when publish is needed
   -- Store form version on submission table, when showing responses, use relevant form version to render responses
   -- Improve contentEditable to prevent stuff like &nbsp;
+  -- Put a maximum length for Form titles
+  -- Put a maximum length for form field labels
+
+- Add more form items: textarea, dropdown, checkbox, radio, file upload
+  -- Work on customizing form elements such as, label at top, required..
+  -- File uploads should go to a cloud storage, for now, Google Cloud Storage
 
 - Setup k8s and deploy to production
   -- Put required k8s files/scripts in k8s folder
@@ -91,9 +97,7 @@ MVP:
 - A nice homepage along with instructions to install properly and description of basic functionality
 - Do not transpile react components for form render each time on production
   -- also, use redis cache to render forms from cached versions, probably form version id can be used for caching
-- Add more form items: textarea, dropdown, checkbox, radio, file upload
-  -- Work on customizing form elements such as, label at top, required..
-  -- File uploads should go to a cloud storage, for now, Google Cloud Storage
+
 - Implement helm chart with commented values.yaml
 - Implement terraform scripts to automatically install with every dependency, Database, Redis, file upload bucket, service accounts
 

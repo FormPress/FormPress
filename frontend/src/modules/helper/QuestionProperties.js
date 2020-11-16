@@ -22,6 +22,11 @@ export default class QuestionProperties extends Component {
 
   render() {
     const { selectedField } = this.props
+
+    if (typeof selectedField === 'undefined') {
+      return null
+    }
+
     const { configurableSettings, config } = selectedField
     const form = {
       props: {

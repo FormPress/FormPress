@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faChevronLeft,
   faPaintBrush,
-  faPlusSquare
+  faPlusSquare,
+  faShareAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -13,6 +14,7 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
+import ShareForm from './helper/ShareForm'
 import { api } from '../helper'
 
 import './Builder.css'
@@ -223,18 +225,20 @@ class Builder extends Component {
       selectedFieldId: false,
       dragging: true
     }
-
-    this.setState(dragState)
-
     setTimeout(() => {
-      this.setState({ sortItem: item })
-    }, 1)
+      this.setState(dragState)
+
+      setTimeout(() => {
+        this.setState({ sortItem: item })
+      }, 20)
+    }, 20)
   }
 
   handleDrop(e) {
     e.stopPropagation()
     e.preventDefault()
 
+    const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
@@ -260,7 +264,6 @@ class Builder extends Component {
     const index = form.props.elements.findIndex(
       (element) => element.id.toString() === dragIndex
     )
-
     let newElements
 
     if (this.state.insertBefore === true) {
@@ -280,6 +283,9 @@ class Builder extends Component {
     if (dragMode === 'sort') {
       newElements = newElements.filter(
         (element) => element.__original__ !== true
+      )
+      this.props.history.push(
+        `/editor/${formId}/builder/question/${item.id}/properties`
       )
     }
 
@@ -592,6 +598,9 @@ class Builder extends Component {
         <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
         </NavLink>
+        <NavLink to={`/editor/${formId}/share`} activeClassName="selected">
+          <FontAwesomeIcon icon={faShareAlt} />
+        </NavLink>
       </div>
     )
   }
@@ -609,6 +618,9 @@ class Builder extends Component {
         </Route>
         <Route path="/editor/:formId/design">
           Form Designer will come here
+        </Route>
+        <Route path="/editor/:formId/share">
+          <ShareForm />
         </Route>
       </Switch>
     )

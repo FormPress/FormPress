@@ -90,7 +90,12 @@ module.exports = (app) => {
         html: `New Submission has been received ${JSON.stringify(req.body)}`
       }
 
-      sgMail.send(msg)
+      try {
+        console.log('sending email ', msg)
+        sgMail.send(msg)
+      } catch (e) {
+        console.log('Error while sending email ', e)
+      }
     }
   })
 }

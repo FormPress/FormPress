@@ -44,4 +44,4 @@ build-and-deploy:
   script:
     - ./release.sh
   only:
-    - merge_requests
+    - /^staging$/

@@ -6,3 +6,5 @@ backend/formpress-2bb91771c29b.json
 frontend/public/runtime/
 frontend/node_modules
 k8s
+node_modules
+
