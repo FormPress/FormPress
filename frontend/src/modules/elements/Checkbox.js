@@ -27,7 +27,7 @@ export default class Checkbox extends Component {
     const inputProps = {}
 
     if (typeof config.value !== 'undefined') {
-      inputProps.checked = (config.value === true)
+      inputProps.checked = config.value === true
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -35,21 +35,21 @@ export default class Checkbox extends Component {
     }
 
     return (
-      <ElementContainer type={ config.type } { ...this.props }>
+      <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
-          className='fl label'
-          mode={ mode }
-          labelKey={ config.id }
-          handleLabelChange={ this.props.handleLabelChange }
-          value={ config.label }
-          required={ config.required }
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
         />
-        <div className='fl input'>
+        <div className="fl input">
           <input
-            type='checkbox'
-            id={ `q_${config.id}` }
-            name={ `q_${config.id}` }
-            { ...inputProps }
+            type="checkbox"
+            id={`q_${config.id}`}
+            name={`q_${config.id}`}
+            {...inputProps}
           />
         </div>
       </ElementContainer>

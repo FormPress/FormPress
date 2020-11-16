@@ -4,20 +4,19 @@ const fs = require('fs')
 const path = require('path')
 
 const options = {
-  plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-modules-commonjs'],
-  presets: ['@babel/preset-react'] 
+  plugins: [
+    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-transform-modules-commonjs'
+  ],
+  presets: ['@babel/preset-react']
 }
 const frontendRuntimeTarget = path.resolve(
   '../',
   'frontend',
-  (process.env.FP_ENV === 'production') ? 'build' : 'public',
+  process.env.FP_ENV === 'production' ? 'build' : 'public',
   'runtime'
 )
-const frontend3rdpartyTarget = path.resolve(
-  frontendRuntimeTarget,
-  '3rdparty'
-)
-
+const frontend3rdpartyTarget = path.resolve(frontendRuntimeTarget, '3rdparty')
 
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
@@ -52,13 +51,35 @@ const transformMap = [
   },
   {
     type: 'file',
-    source: path.resolve('../', 'frontend', 'src', 'modules/common', 'EditableLabel.js'),
-    target: path.resolve('./', 'script', 'transformed/common', 'EditableLabel.js')
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
+      'modules/common',
+      'EditableLabel.js'
+    ),
+    target: path.resolve(
+      './',
+      'script',
+      'transformed/common',
+      'EditableLabel.js'
+    )
   },
   {
     type: 'file',
-    source: path.resolve('../', 'frontend', 'src', 'modules/common', 'ElementContainer.js'),
-    target: path.resolve('./', 'script', 'transformed/common', 'ElementContainer.js')
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
+      'modules/common',
+      'ElementContainer.js'
+    ),
+    target: path.resolve(
+      './',
+      'script',
+      'transformed/common',
+      'ElementContainer.js'
+    )
   },
   {
     type: 'folder',
@@ -76,14 +97,14 @@ const transformMap = [
 
 const transformFrontend = () => {
   for (const transform of transformMap) {
-    const {type, source, target} = transform
-    let files
+    const { type, source, target } = transform
+    let input, result, files
 
     switch (type) {
       case 'file':
-        const input = fs.readFileSync(source)
+        input = fs.readFileSync(source)
         console.log(`Transpiling ${source}`)
-        const result = babel.transformSync(input, options)
+        result = babel.transformSync(input, options)
         fs.writeFileSync(target, result.code)
         break
       case 'folder':
@@ -92,9 +113,10 @@ const transformFrontend = () => {
           fs.mkdirSync(target)
         }
 
-        files = fs.readdirSync(source)
+        files = fs
+          .readdirSync(source)
           .filter((fileName) => fileName.endsWith(transform.extension))
-        
+
         for (const file of files) {
           console.log(`Transpiling ${path.resolve(source, file)}`)
 
@@ -114,9 +136,10 @@ const transformFrontend = () => {
           fs.mkdirSync(target)
         }
 
-        files = fs.readdirSync(source)
+        files = fs
+          .readdirSync(source)
           .filter((fileName) => fileName.endsWith(transform.extension))
-        
+
         for (const file of files) {
           console.log(`Transpiling ${path.resolve(source, file)}`)
 
@@ -129,7 +152,6 @@ const transformFrontend = () => {
           }
         }
         break
-
     }
   }
 }

@@ -29,11 +29,14 @@ module.exports = (app) => {
         [JSON.stringify(form.props), form.title, form.id]
       )
 
-      const result = await db.query(`
+      const result = await db.query(
+        `
         SELECT \`updated_at\`
         FROM \`form\`
         WHERE id = ?
-      `, [form.id])
+      `,
+        [form.id]
+      )
 
       const responseObject = {
         status: 'updated',
@@ -58,7 +61,7 @@ module.exports = (app) => {
         [user_id, form.title, JSON.stringify(form.props)]
       )
 
-      res.json({status: 'done', id: result.insertId})
+      res.json({ status: 'done', id: result.insertId })
     }
   }
 
@@ -68,7 +71,8 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     handleCreateForm
   )
-  app.post('/api/users/:user_id/forms',
+  app.post(
+    '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     handleCreateForm
@@ -77,12 +81,13 @@ module.exports = (app) => {
   // return forms of given user id
   app.get(
     '/api/users/:user_id/forms',
-    mustHaveValidToken, 
+    mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const user_id = req.params.user_id
       const db = await getPool()
-      const result = await db.query(`
+      const result = await db.query(
+        `
         SELECT
           id,
           user_id,
@@ -101,7 +106,9 @@ module.exports = (app) => {
         WHERE
           user_id = ? AND 
           deleted_at IS NULL
-      `, [user_id])
+      `,
+        [user_id]
+      )
 
       if (result.length > 0) {
         res.json(result)
@@ -112,11 +119,12 @@ module.exports = (app) => {
   )
 
   // return single form via id
-  app.get('/api/users/:user_id/forms/:form_id',
+  app.get(
+    '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const { user_id, form_id } = req.params
+      const { form_id } = req.params
       const db = await getPool()
 
       let query = `SELECT * FROM \`form\` WHERE id = ? LIMIT 1`
@@ -132,7 +140,7 @@ module.exports = (app) => {
       }
 
       const result = await db.query(query, [form_id])
-      
+
       if (result.length === 1) {
         res.json(result[0])
       } else {
@@ -142,64 +150,78 @@ module.exports = (app) => {
   )
 
   // return form questions
-  app.get('/api/users/:user_id/forms/:form_id/elements',
-    async (req, res) => {
-      const { user_id, form_id } = req.params
-      const db = await getPool()
-      const result = await db.query(`
+  app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
+    const { form_id } = req.params
+    const db = await getPool()
+    const result = await db.query(
+      `
         SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `, [form_id])
+      `,
+      [form_id]
+    )
 
-      if (result.length === 1) {
-        const form = result[0]
+    if (result.length === 1) {
+      const form = result[0]
 
-        res.json(JSON.parse(form.props).elements)
-      } else {
-        res.json({})
-      }
+      res.json(JSON.parse(form.props).elements)
+    } else {
+      res.json({})
     }
-  )
+  })
 
   // publish form, takes latest form and publishes it
-  app.post('/api/users/:user_id/forms/:form_id/publish',
+  app.post(
+    '/api/users/:user_id/forms/:form_id/publish',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { user_id, form_id } = req.params
       const db = await getPool()
-      const result = await db.query(`
+      const result = await db.query(
+        `
         SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `, [form_id])
+      `,
+        [form_id]
+      )
 
       if (result.length === 1) {
         const form = result[0]
         const version = parseInt(form.published_version || 0)
         const nextVersion = version + 1
 
-        const insertPublishedResult = await db.query(`
+        const insertPublishedResult = await db.query(
+          `
           INSERT INTO \`form_published\`
             (user_id, form_id, title, props, version, created_at)
           VALUES
             (?, ?, ?, ?, ?, NOW())
-        `, [user_id, form_id, form.title, form.props, nextVersion])
+        `,
+          [user_id, form_id, form.title, form.props, nextVersion]
+        )
 
-        const publishedResult = await db.query(`
+        const publishedResult = await db.query(
+          `
           SELECT \`created_at\`
           FROM \`form_published\`
           WHERE \`id\` = ?
-        `, [insertPublishedResult.insertId])
+        `,
+          [insertPublishedResult.insertId]
+        )
 
-        await db.query(`
+        await db.query(
+          `
           UPDATE \`form\`
           SET published_version = ?, updated_at = ?
           WHERE id = ?
-        `,[nextVersion, publishedResult[0].created_at, form_id])
+        `,
+          [nextVersion, publishedResult[0].created_at, form_id]
+        )
         res.json({ message: 'Published' })
       } else {
         // TODO: handle status 404, it is set to 200 because of
         // Unit tests was expecting HTTP200. Unit tests should be improved to handle
         // When form is not found and when form is found
-        res.status(200).json({ message:'Form not found' })
+        res.status(200).json({ message: 'Form not found' })
       }
     }
   )
@@ -210,12 +232,15 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const { user_id, form_id } = req.params
+      const { form_id } = req.params
       const db = await getPool()
-      const result = await db.query(`
+      await db.query(
+        `
         UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
-      `, [form_id])
-      
+      `,
+        [form_id]
+      )
+
       res.json({ message: 'deleted' })
     }
   )
@@ -226,10 +251,10 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const { user_id, form_id } = req.params
+      const { form_id } = req.params
       const { orderBy, desc } = req.query
       const db = await getPool()
-      let query = 'SELECT * FROM \`submission\` WHERE form_id = ?'
+      let query = 'SELECT * FROM `submission` WHERE form_id = ?'
 
       if (typeof orderBy !== 'undefined') {
         if (['created_at', 'deleted_at', 'updated_at'].includes(orderBy)) {
@@ -263,18 +288,29 @@ module.exports = (app) => {
       const ids = req.body.submissionIds
       const db = await getPool()
 
-      const result = await db.query(`
+      const result = await db.query(
+        `
         SELECT * FROM \`entry\`
-          WHERE form_id = ? AND submission_id IN (${ids.map(() => '?').join(',')})
-      `, [form_id, ...ids])
-      const submissionsResult = await db.query(`
+          WHERE form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [form_id, ...ids]
+      )
+      const submissionsResult = await db.query(
+        `
         SELECT * FROM \`submission\`
           WHERE form_id = ? AND id IN (${ids.map(() => '?').join(',')})
-      `, [form_id, ...ids])
-      const formResult = await db.query(`
+      `,
+        [form_id, ...ids]
+      )
+      const formResult = await db.query(
+        `
         SELECT * FROM \`form\`
           WHERE id = ?
-      `, [form_id])
+      `,
+        [form_id]
+      )
 
       /*
         TODO: returning HTTP200 here is wrong. This is done since unit tests
@@ -283,8 +319,9 @@ module.exports = (app) => {
         We should add more SQL behaviour to config/endpoints.js and
         properly extend unit tests
       */
-      if (formResult.length === 0) { //form not found
-        return res.status(200).json({message: 'Form not found'})
+      if (formResult.length === 0) {
+        //form not found
+        return res.status(200).json({ message: 'Form not found' })
       }
 
       formResult[0].props = JSON.parse(formResult[0].props)
@@ -299,8 +336,6 @@ module.exports = (app) => {
 
       for (const entry of result) {
         const questionId = entry.question_id
-        const questionProps = form.props.elements.filter((element) => (element.id === questionId))
-        const label = questionProps.label
         const submissionId = entry.submission_id
         const submission = submissions[submissionId.toString()]
 
@@ -314,10 +349,11 @@ module.exports = (app) => {
         CSVData[submissionId][questionId] = entry.value
       }
 
-      const createCsvStringifier = require('csv-writer').createObjectCsvStringifier
+      const createCsvStringifier = require('csv-writer')
+        .createObjectCsvStringifier
       const header = [
-        {id: 'submissionId', title: 'ID'},
-        {id: 'createdAt', title: 'CREATED_AT'}
+        { id: 'submissionId', title: 'ID' },
+        { id: 'createdAt', title: 'CREATED_AT' }
       ]
 
       for (const element of form.props.elements) {
@@ -330,7 +366,8 @@ module.exports = (app) => {
       const csvStringifier = createCsvStringifier({
         header
       })
-      const csv = csvStringifier.getHeaderString() +
+      const csv =
+        csvStringifier.getHeaderString() +
         csvStringifier.stringifyRecords(Object.values(CSVData))
 
       res.json({
@@ -346,11 +383,14 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const { user_id, form_id, submission_id} = req.params
+      const { submission_id } = req.params
       const db = await getPool()
-      const result = await db.query(`
+      const result = await db.query(
+        `
         SELECT * FROM \`entry\` WHERE submission_id = ?
-      `, [submission_id])
+      `,
+        [submission_id]
+      )
 
       if (result.length > 0) {
         res.json(result)
@@ -366,28 +406,34 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const { user_id, form_id, submission_id} = req.params
+      const { submission_id } = req.params
       const db = await getPool()
       const submission = req.body
 
-      const result = await db.query(`
+      await db.query(
+        `
         UPDATE \`submission\`
         SET
           \`read\` = ?
         WHERE
           \`id\` = ?
-      `, [submission.read, submission_id])
+      `,
+        [submission.read, submission_id]
+      )
 
-      res.json({message: 'OK'})
+      res.json({ message: 'OK' })
     }
   )
 
   app.get('/form/view/:id', async (req, res) => {
     const id = req.params.id
     const db = await getPool()
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-    `, [id])
+    `,
+      [id]
+    )
 
     if (result.length === 0) {
       return res.status(404).send('Form not found')
@@ -396,54 +442,61 @@ module.exports = (app) => {
     let form = result[0]
 
     if (req.query.preview !== 'true' && form.published_version !== null) {
-      const publishedResult = await db.query(`
+      const publishedResult = await db.query(
+        `
         SELECT * FROM \`form_published\`
         WHERE form_id = ? AND version = ?
-      `, [id, form.published_version])
+      `,
+        [id, form.published_version]
+      )
 
       if (publishedResult.length > 0) {
         form = publishedResult[0]
       } else {
-        console.error(`Published version can't be found form_id = ${id} version = ${form.published_version}`)
+        console.error(
+          `Published version can't be found form_id = ${id} version = ${form.published_version}`
+        )
       }
     }
-
 
     form.props = JSON.parse(form.props)
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
-    const Renderer = require(path.resolve('script', 'transformed', 'Renderer')).default
+    const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
+      .default
 
     const str = reactDOMServer.renderToStaticMarkup(
-      React.createElement(
-        Renderer,
-        { className: 'form', form, mode: 'renderer' }
-      )
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer'
+      })
     )
-    let style = fs.readFileSync(path.resolve('../', 'frontend/src/style/normalize.css'))
-    
-    style += fs.readFileSync(path.resolve('../', 'frontend/src/style/common.css'))
-    style += fs.readFileSync(path.resolve('../', 'frontend/src/modules/elements/index.css'))
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/common.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/modules/elements/index.css')
+    )
 
     const { FP_ENV, FP_HOST } = process.env
-    const BACKEND = (FP_ENV === 'development')
-      ? `${FP_HOST}:${port}`
-      : FP_HOST
+    const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
     const postTarget = `${BACKEND}/form/submit/${form.id}`
 
-    res.render(
-      'form.tpl.ejs',
-      {
-        headerAppend: `<style type='text/css'>${style}</style>`,
-        title: form.title,
-        form: str,
-        postTarget,
-        BACKEND,
-        FORMID: id,
-        USERID: form.user_id,
-        RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
-      }
-    )
+    res.render('form.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      title: form.title,
+      form: str,
+      postTarget,
+      BACKEND,
+      FORMID: id,
+      USERID: form.user_id,
+      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
+    })
   })
 }

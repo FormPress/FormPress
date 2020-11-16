@@ -1,25 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 import './Table.css'
 
 export default class Table extends Component {
-  render () {
+  render() {
     return (
-      <table className='fp_table'>
-        <thead>
-          { this.renderHead() }
-        </thead>
-        <tbody>
-          { this.renderBody() }
-        </tbody>
+      <table className="fp_table">
+        <thead>{this.renderHead()}</thead>
+        <tbody>{this.renderBody()}</tbody>
       </table>
     )
   }
 
-  renderHead () {
+  renderHead() {
     return (
       <tr onClick={this.pro}>
-        { this.props.columns.map((column, key) => {
+        {this.props.columns.map((column, key) => {
           const props = {}
 
           if (typeof column.className !== 'undefined') {
@@ -27,8 +23,8 @@ export default class Table extends Component {
           }
 
           return (
-            <th key={ key } { ...props }>
-              { column.label }
+            <th key={key} {...props}>
+              {column.label}
             </th>
           )
         })}
@@ -36,7 +32,7 @@ export default class Table extends Component {
     )
   }
 
-  renderBody () {
+  renderBody() {
     return this.props.data.map((row, rowKey) => {
       const props = {}
 
@@ -49,8 +45,8 @@ export default class Table extends Component {
       }
 
       return (
-        <tr key={ rowKey } {...props}>
-          { this.props.columns.map((column, keyColumn)=> {
+        <tr key={rowKey} {...props}>
+          {this.props.columns.map((column, keyColumn) => {
             const props = {}
 
             if (typeof column.className !== 'undefined') {
@@ -58,11 +54,11 @@ export default class Table extends Component {
             }
 
             return (
-              <td key={ keyColumn } { ...props }>
-                { column.content(row) }
+              <td key={keyColumn} {...props}>
+                {column.content(row)}
               </td>
             )
-          }) }
+          })}
         </tr>
       )
     })

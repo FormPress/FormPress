@@ -86,7 +86,8 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
+      path:
+        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
       protected: true,
       exampleRequestPath: '/api/users/1/forms/1/submissions/1/entries'
     },

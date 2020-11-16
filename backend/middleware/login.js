@@ -1,4 +1,3 @@
-const crypto = require('crypto')
 const path = require('path')
 const jwt = require('jsonwebtoken')
 
@@ -33,7 +32,7 @@ module.exports = (app) => {
       const incomingHash = sha512(password, user.salt)
 
       if (user.password === incomingHash.passwordHash) {
-        const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 *7)
+        const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
         const jwt_data = {
           user_id: user.id,
           email: user.email,
@@ -58,7 +57,6 @@ module.exports = (app) => {
             exp
           })
         })
-        
       } else {
         console.log('PWD FALSE')
         res.status(403).json({ message: 'Email/Password does not match' })
@@ -66,4 +64,3 @@ module.exports = (app) => {
     }
   })
 }
-
