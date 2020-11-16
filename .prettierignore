@@ -2,5 +2,6 @@ k8s
 backend/test
 backend/script/transformed
 frontend/src/__tests__
+frontend/src/runtime/3rdparty/
 frontend/public/
 *.test.js

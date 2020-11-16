@@ -5,7 +5,7 @@ import './ShareForm.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
-export default function ShareForm () {
+export default function ShareForm() {
   const { formId } = useParams()
 
   const embedCode = [
@@ -14,15 +14,20 @@ export default function ShareForm () {
   ].join('\n')
 
   return (
-    <div className='col-15-16 shareForm'>
+    <div className="col-15-16 shareForm">
       <div>
-        Form URL: <input type='text' value={`${BACKEND}/form/view/${formId}`} className='formURL' readOnly />
+        Form URL:{' '}
+        <input
+          type="text"
+          value={`${BACKEND}/form/view/${formId}`}
+          className="formURL"
+          readOnly
+        />
       </div>
       <div>
         Form Embed Code: <br />
-        <textarea className='embedCode' value={embedCode} readOnly />
+        <textarea className="embedCode" value={embedCode} readOnly />
       </div>
-
     </div>
   )
 }

@@ -87,7 +87,7 @@ module.exports = (app) => {
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
         text: `New Submission has been received ${JSON.stringify(req.body)}`,
-        html: `New Submission has been received ${JSON.stringify(req.body)}`,
+        html: `New Submission has been received ${JSON.stringify(req.body)}`
       }
 
       try {
