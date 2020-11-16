@@ -1,5 +1,5 @@
 image: node:12.14
- 
+
 stages:
   - unittest
   - buildAndDeploy
@@ -27,3 +27,5 @@ build-and-deploy:
   image: google/cloud-sdk:latest
   script:
     - ./release.sh
+  only:
+    - /^staging$/
