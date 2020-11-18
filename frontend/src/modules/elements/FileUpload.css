@@ -56,6 +56,17 @@
   color: #646464;
 }
 
+.file-form #cloudButton {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 32px;
+  margin: 0.3em;
+}
+
 .file-form #file-image.hidden {
   display: none;
 }

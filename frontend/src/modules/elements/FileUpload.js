@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 import './FileUpload.css'
 
 export default class FileUpload extends Component {
@@ -65,7 +67,9 @@ export default class FileUpload extends Component {
     if (this.state.uploadState === 0) {
       display = (
         <div id="file-not-uploaded">
-          <i className="fa fa-cloud-upload"></i>
+          <button type="button" id="cloudButton">
+            <FontAwesomeIcon icon={faCloudUploadAlt} />
+          </button>
           <p id="click-here-text">
             Click to the button below or <br></br>drag&drop your file here to
             upload
