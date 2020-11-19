@@ -33,18 +33,41 @@
   width: 100%;
 }
 
+.file-form #file-upload-in-progresss {
+  float: left;
+  clear: both;
+  width: 100%;
+}
+
+.loader {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 6px solid #fdfdfd;
+  border-radius: 50%;
+  border-top: 6px solid #7aad37;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .file-form #file-not-uploaded.hidden {
   display: none;
 }
-
-.file-form #file-not-uploaded i.fa {
-  font-size: 50px;
-  margin-top: 0.2em;
-  margin-bottom: 0.1em;
-  color: #e2e2e2;
-  transition: all 0.2s ease-in-out;
-}
-
 .file-form #file-not-uploaded #click-here-text {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
@@ -64,7 +87,21 @@
   overflow: hidden;
   outline:none;
   font-size: 32px;
+  color: #e2e2e2;
+  transition: all 0.2s ease-in-out;
   margin: 0.3em;
+}
+
+
+.file-form #cancelButton {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 16px;
+  text-decoration: underline;
 }
 
 .file-form #file-image.hidden {
