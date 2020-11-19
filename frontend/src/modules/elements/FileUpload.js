@@ -28,9 +28,10 @@ export default class FileUpload extends Component {
     super(props)
     this.state = {
       uploadedFile: null,
-      uploadState: 1 //0-no file, 1-file upload in progress, 2-file upload success, 3-file upload error
+      uploadState: 0 //0-no file, 1-file upload in progress, 2-file upload success, 3-file upload error
     }
     this.addFileButtonClicked = this.addFileButtonClicked.bind(this)
+    this.cancelButtonClicked = this.cancelButtonClicked.bind(this)
   }
 
   handleFileSelect = (e) => {
@@ -47,7 +48,17 @@ export default class FileUpload extends Component {
 
   addFileButtonClicked(e) {
     var file = e.target.files[0]
-    this.setState({ uploadedFile: file })
+    this.setState({
+      uploadedFile: file,
+      uploadState: 1
+    })
+  }
+
+  cancelButtonClicked(e) {
+    this.setState({
+      uploadedFile: null,
+      uploadState: 0
+    })
   }
 
   render() {
@@ -86,7 +97,7 @@ export default class FileUpload extends Component {
         <div id="file-upload-in-progress">
           <div class="loader"></div>
           <p id="is-uploading">Your file is uploading...</p>
-          <button id="cancelButton" onClick={this.cancelUpload}>
+          <button id="cancelButton" onClick={this.cancelButtonClicked}>
             Cancel
           </button>
         </div>
