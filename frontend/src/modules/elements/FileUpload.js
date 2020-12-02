@@ -28,30 +28,46 @@ export default class FileUpload extends Component {
     super(props)
     this.state = {
       uploadedFile: null,
-      uploadState: 0 //0-no file, 1-file upload in progress, 2-file upload success, 3-file upload error
+      uploadState: 0 //0-default, 1-in progress, 2-success, 3-error
     }
     this.addFileButtonClicked = this.addFileButtonClicked.bind(this)
     this.cancelButtonClicked = this.cancelButtonClicked.bind(this)
+    this.handleFileSelect = this.handleFileSelect.bind(this)
   }
 
   handleFileSelect = (e) => {
     e.preventDefault()
-    this.buildFileSelector().click()
+    const fileSelector = document.createElement('input')
+    fileSelector.setAttribute('id', 'selector')
+    fileSelector.setAttribute('type', 'file')
+    fileSelector.addEventListener('change', this.addFileButtonClicked, false)    
+    fileSelector.click()
   }
 
-  buildFileSelector() {
-    const fileSelector = document.createElement('input')
-    fileSelector.setAttribute('type', 'file')
-    fileSelector.addEventListener('change', this.addFileButtonClicked, false)
-    return fileSelector
-  }
 
   addFileButtonClicked(e) {
-    var file = e.target.files[0]
     this.setState({
-      uploadedFile: file,
+      uploadedFile: null,
       uploadState: 1
     })
+
+    var file = e.target.files[0]
+    if(file !== null)
+    {
+      console.log("A",file.name)
+      this.setState({
+        uploadedFile: file,
+        uploadState: 0
+      })
+    }
+    else
+    {
+      this.setState({
+        uploadedFile: file,
+        uploadState: 3
+      })
+    }
+    e.target.value = null
   }
 
   cancelButtonClicked(e) {
@@ -73,34 +89,31 @@ export default class FileUpload extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    
+
     var display
     if (this.state.uploadState === 0) {
       display = (
-        <div id="file-not-uploaded">
-          <button type="button" id="cloudButton">
-            <FontAwesomeIcon icon={faCloudUploadAlt} />
-          </button>
-          <p id="click-here-text">
-            Click to the button below or <br></br>drag&drop your file here to
-            upload
-          </p>
-          <button
-            id="add-file-btn"
-            className="btn add-file-btn"
-            onClick={this.handleFileSelect}>
-            Add File
-          </button>
+        <div className="box_default">
+          <button type="button" id="cloud_button"><FontAwesomeIcon icon={faCloudUploadAlt} /></button>
+          <input type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+          <label id="label_txt" for="file"><strong>Click to the button below or </strong><span className="box_dragndrop"><br></br>drag&drop your file here to upload</span></label>
+          <button id="input_btn" onClick={this.handleFileSelect}>Add File</button>
         </div>
       )
     } else if (this.state.uploadState === 1) {
       display = (
-        <div id="file-upload-in-progress">
-          <div class="loader"></div>
-          <p id="is-uploading">Your file is uploading...</p>
-          <button id="cancelButton" onClick={this.cancelButtonClicked}>
-            Cancel
-          </button>
+        <div className="box_uploading">
+          <div id="loader"></div>
+          <label id="label_txt">{ this.state.uploadedFile !== null ? this.state.uploadedFile.name : this.state.uploadState } is uploading... </label>
+          <button id="cancel_button" onClick={this.cancelButtonClicked}>Cancel</button>
         </div>
+      )
+    }
+    else if (this.state.uploadState === 3) {
+      display = (
+        <div className="box_uploading">
+         </div>
       )
     }
     return (
@@ -114,12 +127,7 @@ export default class FileUpload extends Component {
           required={config.required}
         />
         <form className="file-form">
-          <input type="file" id={`q_${config.id}`} name={`q_${config.id}`} />
-
-          <label htmlFor="file-input">
-            <img id="file-image" className="hidden" src="#" alt="Preview"></img>
             {display}
-          </label>
         </form>
       </ElementContainer>
     )

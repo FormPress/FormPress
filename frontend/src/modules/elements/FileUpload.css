@@ -2,54 +2,83 @@
 @import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap);
 
 .file-form {
-  display: inline-block;
-  width: 50%;
+  display: inline-flex;
+  width: 276px;
+  height: 174px;
 }
 
 .file-form input[type='file'] {
   display: none;
 }
 
-.file-form label {
-  float: left;
+.file-form .box_default, .box_uploading {
+  width: 100%;
+  height: 100%;
   clear: both;
-  width: 276px;
-  height: 174px;
-  text-align: center;
   background: #fdfdfd;
   border-radius: 7px;
   border: solid 2px #e2e2e2;
   transition: all 0.2s ease;
-  user-select: none;
 }
 
-.file-form label:hover {
+.file-form .box_default,.box_uploading:hover {
   border: solid 2px #8cc63f;
 }
 
-.file-form #file-not-uploaded {
-  float: left;
-  clear: both;
-  width: 100%;
-}
-
-.file-form #file-upload-in-progresss {
-  float: left;
-  clear: both;
-  width: 100%;
-}
-
-.loader {
+.file-form .box_default #label_txt, .box_uploading #label_txt {
   display: block;
-  margin-top: 10px;
-  margin-bottom: 50px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 6px solid #fdfdfd;
+  margin: 14.3px 0 17px;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.6;
+  letter-spacing: normal;
+  text-align: center;
+  color: #646464;
+}
+
+.file-form .box_default #cloud_button {
+  display:block;
+  margin:0 auto;
+  margin-top: 0.4em;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 32px;
+  color: #e2e2e2;
+  transition: all 0.2s ease-in-out;
+}
+
+.file-form .box_default #input_btn {
+  display:block;
+  margin:0 auto;
+  clear: both;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 1.5rem;
+  height: 30px;
+  line-height: 30px;
+  color: #ffffff;
+  background: #8cc63f;
+  border-color: #8cc63f;
+  cursor: pointer;
+}
+
+.file-form .box_uploading #loader {
+  display: block;
+  margin: 0 auto;
+  margin-top: 1em;
+  margin-bottom: 2em;
+  width: 30px;
+  height: 30px;
+  border: solid 5px #fdfdfd;
+  border-top: 5px solid #7aad37;
   border-radius: 50%;
-  border-top: 6px solid #7aad37;
-  width: 40px;
-  height: 40px;
   animation: spin 2s linear infinite;
   -webkit-animation: spin 2s linear infinite; /* Safari */
 }
@@ -65,35 +94,9 @@
   100% { transform: rotate(360deg); }
 }
 
-.file-form #file-not-uploaded.hidden {
-  display: none;
-}
-.file-form #file-not-uploaded #click-here-text {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 10px;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.6;
-  letter-spacing: normal;
-  text-align: center;
-  color: #646464;
-}
-
-.file-form #cloudButton {
-  background-color: Transparent;
-  background-repeat:no-repeat;
-  border: none;
-  cursor:pointer;
-  overflow: hidden;
-  outline:none;
-  font-size: 32px;
-  color: #e2e2e2;
-  transition: all 0.2s ease-in-out;
-  margin: 0.3em;
-}
-
-
-.file-form #cancelButton {
+.file-form .box_uploading #cancel_button {
+  display: block;
+  margin: 0 auto;
   background-color: Transparent;
   background-repeat:no-repeat;
   border: none;
@@ -102,24 +105,5 @@
   outline:none;
   font-size: 16px;
   text-decoration: underline;
-}
-
-.file-form #file-image.hidden {
-  display: none;
-}
-
-.file-form .btn {
-  display: inline-block;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  clear: both;
-  font-weight: bold;
-  font-size: 14px;
-  padding: 0 1.5rem;
-  height: 30px;
-  line-height: 30px;
-  color: #ffffff;
-  background: #8cc63f;
-  border-color: #8cc63f;
-  cursor: pointer;
+  text-align: center;
 }

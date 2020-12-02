@@ -106,7 +106,7 @@ export default class Radio extends Component {
             </textarea>
           ) : (
             <div className="container">
-              <p id="choose-option-par">Choose an option:</p>
+              <p id="choose-option">Choose an option:</p>
               <ul className="radio-container">{optionsList}</ul>
             </div>
           )}
@@ -131,23 +131,10 @@ export default class Radio extends Component {
           required={config.required}
         />,
         <div key="2">
-          {this.state.show ? (
-            <textarea id="options-textarea" onChange={this.handleChange}>
-              {config.options.join('\n')}
-            </textarea>
-          ) : (
-            <div className="container">
-              <p id="choose-option-par">Choose an option:</p>
-              <ul>{optionsList}</ul>
-            </div>
-          )}
-          <button
-            id="edit-preview-button"
-            onClick={() => {
-              this.setState({ show: !this.state.show })
-            }}>
-            {this.state.show ? 'Preview' : 'Edit'}
-          </button>
+          <div className="container">
+            <p id="choose-option-par">Choose an option:</p>
+            <ul>{optionsList}</ul>
+          </div>
         </div>
       ]
     }
