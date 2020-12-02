@@ -19,7 +19,6 @@ module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id', async (req, res) => {
     const form_id = parseInt(req.params.id)
-    const keys = [...Object.keys(req.body), ...Object.keys(req.files)]
     const db = await getPool()
 
     //read out form
@@ -47,26 +46,34 @@ module.exports = (app) => {
     )
     const submission_id = result.insertId
 
-    for (const key of keys) {
-      const question_id = parseInt(key.split('_')[1])
-      const type = findQuestionType(form, question_id)
-      let value
+    try{
+      const keys = [...Object.keys(req.body), ...Object.keys(req.files)]
 
-      //upload file to GCS
-      if (type === 'FileUpload') {
-        value = await fileupload.uploadFile(req.files[key])
-      } else {
-        value = req.body[key]
+      for (const key of keys) {
+        const question_id = parseInt(key.split('_')[1])
+        const type = findQuestionType(form, question_id)
+        let value
+  
+        //upload file to GCS
+        if (type === 'FileUpload') {
+          value = await fileupload.uploadFile(req.files[key])
+        } else {
+          value = req.body[key]
+        }
+  
+        //save answer
+        await db.query(
+          `INSERT INTO \`entry\`
+            (form_id, submission_id, question_id, value)
+          VALUES
+            (?, ?, ?, ?)`,
+          [form_id, submission_id, question_id, value]
+        )
       }
+    }
+    catch(error)
+    {
 
-      //save answer
-      await db.query(
-        `INSERT INTO \`entry\`
-          (form_id, submission_id, question_id, value)
-        VALUES
-          (?, ?, ?, ?)`,
-        [form_id, submission_id, question_id, value]
-      )
     }
 
     res.send('Your Submission has been received')
