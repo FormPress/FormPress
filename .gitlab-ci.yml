@@ -38,7 +38,7 @@ run-unit-test-backend:
   only:
     - merge_requests
 
-build-and-deploy:
+deploy-to-staging:
   stage: buildAndDeploy
   image: google/cloud-sdk:latest
   script:
