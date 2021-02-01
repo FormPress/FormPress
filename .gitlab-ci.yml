@@ -43,4 +43,5 @@ deploy-to-staging:
   image: google/cloud-sdk:latest
   script:
     - ./release.sh
+  when: manual
 
