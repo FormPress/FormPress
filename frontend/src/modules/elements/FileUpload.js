@@ -96,8 +96,8 @@ export default class FileUpload extends Component {
       display = (
         <div className="box_default">
           <button type="button" id="cloud_button"><FontAwesomeIcon icon={faCloudUploadAlt} /></button>
-          <input type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
-          <label id="label_txt" for="file"><strong>Click to the button below or </strong><span className="box_dragndrop"><br></br>drag&drop your file here to upload</span></label>
+          <input type="file" name={`q_${config.id}`} id="file" data-multiple-caption="{count} files selected" multiple />
+          <label id="label_txt" htmlFor="file"><strong>Click to the button below or </strong><span className="box_dragndrop"><br></br>drag&drop your file here to upload</span></label>
           <button id="input_btn" onClick={this.handleFileSelect}>Add File</button>
         </div>
       )

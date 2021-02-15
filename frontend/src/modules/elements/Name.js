@@ -49,7 +49,7 @@ export default class Name extends Component {
               <label htmlFor="firstname">First name:</label>
             </td>
             <td>
-              <input type="text" id="fname" name="firstname"></input>
+              <input type="text" id="fname" name={`q_${config.id}[firstName]`}></input>
             </td>
           </tr>
           <tr>
@@ -57,7 +57,7 @@ export default class Name extends Component {
               <label htmlFor="lastname">Last name:</label>
             </td>
             <td>
-              <input type="text" id="lname" name="lastname"></input>
+              <input type="text" id="lname" name={`q_${config.id}[lastName]`}></input>
             </td>
           </tr>
         </table>

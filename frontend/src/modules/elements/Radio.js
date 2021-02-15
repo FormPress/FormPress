@@ -11,7 +11,7 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: []
+    options: ['Radio 1']
   }
 
   static configurableSettings = {
@@ -78,7 +78,7 @@ export default class Radio extends Component {
       config.options.map((item, key) => {
         return (
           <li key={key}>
-            <input type="radio" id="radio-btn" name="radio-btn"></input>
+            <input type="radio" id="radio-btn" name={`q_${config.id}`}></input>
             <label htmlFor="radio-btn">{item}</label>
             <div className="check">
               <div className="inside"></div>
