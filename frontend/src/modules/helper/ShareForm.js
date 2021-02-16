@@ -17,7 +17,11 @@ export default function ShareForm() {
 
   return (
     <div className="col-15-16 shareForm">
-      <ShareFormLeftTab embedCode={embedCode} backEnd={BACKEND} formId={formId} />
+      <ShareFormLeftTab
+        embedCode={embedCode}
+        backEnd={BACKEND}
+        formId={formId}
+      />
       <ShareFormRightTab />
     </div>
   )
