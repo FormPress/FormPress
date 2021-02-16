@@ -40,10 +40,9 @@ export default class FileUpload extends Component {
     const fileSelector = document.createElement('input')
     fileSelector.setAttribute('id', 'selector')
     fileSelector.setAttribute('type', 'file')
-    fileSelector.addEventListener('change', this.addFileButtonClicked, false)    
+    fileSelector.addEventListener('change', this.addFileButtonClicked, false)
     fileSelector.click()
   }
-
 
   addFileButtonClicked(e) {
     this.setState({
@@ -52,16 +51,13 @@ export default class FileUpload extends Component {
     })
 
     var file = e.target.files[0]
-    if(file !== null)
-    {
-      console.log("A",file.name)
+    if (file !== null) {
+      console.log('A', file.name)
       this.setState({
         uploadedFile: file,
         uploadState: 0
       })
-    }
-    else
-    {
+    } else {
       this.setState({
         uploadedFile: file,
         uploadState: 3
@@ -70,7 +66,7 @@ export default class FileUpload extends Component {
     e.target.value = null
   }
 
-  cancelButtonClicked(e) {
+  cancelButtonClicked() {
     this.setState({
       uploadedFile: null,
       uploadState: 0
@@ -89,32 +85,48 @@ export default class FileUpload extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    
-
     var display
     if (this.state.uploadState === 0) {
       display = (
         <div className="box_default">
-          <button type="button" id="cloud_button"><FontAwesomeIcon icon={faCloudUploadAlt} /></button>
-          <input type="file" name={`q_${config.id}`} id="file" data-multiple-caption="{count} files selected" multiple />
-          <label id="label_txt" htmlFor="file"><strong>Click to the button below or </strong><span className="box_dragndrop"><br></br>drag&drop your file here to upload</span></label>
-          <button id="input_btn" onClick={this.handleFileSelect}>Add File</button>
+          <button type="button" id="cloud_button">
+            <FontAwesomeIcon icon={faCloudUploadAlt} />
+          </button>
+          <input
+            type="file"
+            name="files[]"
+            id="file"
+            data-multiple-caption="{count} files selected"
+            multiple
+          />
+          <label id="label_txt" htmlFor="file">
+            <strong>Click to the button below or </strong>
+            <span className="box_dragndrop">
+              <br></br>drag&drop your file here to upload
+            </span>
+          </label>
+          <button id="input_btn" onClick={this.handleFileSelect}>
+            Add File
+          </button>
         </div>
       )
     } else if (this.state.uploadState === 1) {
       display = (
         <div className="box_uploading">
           <div id="loader"></div>
-          <label id="label_txt">{ this.state.uploadedFile !== null ? this.state.uploadedFile.name : this.state.uploadState } is uploading... </label>
-          <button id="cancel_button" onClick={this.cancelButtonClicked}>Cancel</button>
+          <label id="label_txt">
+            {this.state.uploadedFile !== null
+              ? this.state.uploadedFile.name
+              : this.state.uploadState}{' '}
+            is uploading...{' '}
+          </label>
+          <button id="cancel_button" onClick={this.cancelButtonClicked}>
+            Cancel
+          </button>
         </div>
       )
-    }
-    else if (this.state.uploadState === 3) {
-      display = (
-        <div className="box_uploading">
-         </div>
-      )
+    } else if (this.state.uploadState === 3) {
+      display = <div className="box_uploading"></div>
     }
     return (
       <ElementContainer type={config.type} {...this.props}>
@@ -126,9 +138,7 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        <form className="file-form">
-            {display}
-        </form>
+        <form className="file-form">{display}</form>
       </ElementContainer>
     )
   }
