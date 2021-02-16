@@ -46,21 +46,21 @@ module.exports = (app) => {
     )
     const submission_id = result.insertId
 
-    try{
+    try {
       const keys = [...Object.keys(req.body), ...Object.keys(req.files)]
 
       for (const key of keys) {
         const question_id = parseInt(key.split('_')[1])
         const type = findQuestionType(form, question_id)
         let value
-  
+
         //upload file to GCS
         if (type === 'FileUpload') {
           value = await fileupload.uploadFile(req.files[key])
         } else {
           value = req.body[key]
         }
-  
+
         //save answer
         await db.query(
           `INSERT INTO \`entry\`
@@ -70,10 +70,12 @@ module.exports = (app) => {
           [form_id, submission_id, question_id, value]
         )
       }
-    }
-    catch(error)
-    {
+    } catch (error) {
+      console.error('Error during submission')
+      console.error(error)
 
+      res.status(500).send('Error during submission handling')
+      return
     }
 
     res.send('Your Submission has been received')
