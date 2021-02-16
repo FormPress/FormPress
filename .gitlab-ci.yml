@@ -44,4 +44,3 @@ deploy-to-staging:
   script:
     - ./release.sh
   when: manual
-
