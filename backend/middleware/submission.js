@@ -29,7 +29,7 @@ module.exports = (app) => {
     )
 
     if (formResult.length === 0) {
-      return req.status(404).send('Error: form not found')
+      return res.status(404).send('Error: form not found')
     }
 
     const form = formResult[0]
@@ -86,7 +86,7 @@ module.exports = (app) => {
       sendEmailTo = emailIntegration[0].to
     }
 
-    if (sendEmailTo !== false) {
+    if (sendEmailTo !== false && sendEmailTo !== undefined) {
       const msg = {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',
