@@ -1,5 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import ShareFormLeftTab from './ShareFormTabs/ShareFormLeftTab'
+import ShareFormRightTab from './ShareFormTabs/ShareFormRightTab'
 
 import './ShareForm.css'
 
@@ -15,19 +17,12 @@ export default function ShareForm() {
 
   return (
     <div className="col-15-16 shareForm">
-      <div>
-        Form URL:{' '}
-        <input
-          type="text"
-          value={`${BACKEND}/form/view/${formId}`}
-          className="formURL"
-          readOnly
-        />
-      </div>
-      <div>
-        Form Embed Code: <br />
-        <textarea className="embedCode" value={embedCode} readOnly />
-      </div>
+      <ShareFormLeftTab
+        embedCode={embedCode}
+        backEnd={BACKEND}
+        formId={formId}
+      />
+      <ShareFormRightTab />
     </div>
   )
 }

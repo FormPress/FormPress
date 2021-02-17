@@ -71,7 +71,10 @@ module.exports = (app) => {
         )
       }
     } catch (error) {
-      console.error('Error', error)
+      console.error('Error during submission')
+      console.error(error)
+
+      res.status(500).send('Error during submission handling')
     }
 
     res.send('Your Submission has been received')

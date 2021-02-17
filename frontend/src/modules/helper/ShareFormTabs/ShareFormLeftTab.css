@@ -1,0 +1,43 @@
+.shareFormLeftTab {
+}
+.shareFormLeftTabCover {
+  display: inline-block;
+  background-color: #f5f5f5;
+  box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
+}
+.formURL,
+.formURL:focus {
+  width: 100%;
+  color: #1c5c85;
+  font-weight: bold;
+  padding: 16px 8px;
+  background-color: #ffffff;
+  border: 0;
+  outline: 0;
+}
+.embedCode {
+  width: 100%;
+  resize: none;
+}
+.shareFormMessage {
+  background-color: #fffcdd;
+  color: #646464;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+}
+.shareFormLeftTitle {
+  color: #333333;
+  text-align: center;
+}
+.shareFormLeftContent {
+  margin-top: 20px;
+}
+.shareFormLeftFormUrlArea {
+}
+.shareFormLeftFormUrlAreaTitle,
+.shareFormLeftFormEmbedCodeAreaTitle {
+  color: #333333;
+}
+.shareFormLeftFormEmbedCodeArea {
+}
