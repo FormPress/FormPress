@@ -488,7 +488,10 @@ module.exports = (app) => {
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
     //form table has "published_version" vs form_published has "version"
-    const postTarget = form.version === undefined ? `${BACKEND}/form/submit/${id}`:`${BACKEND}/form/submit/${id}/${form.version}`
+    const postTarget =
+      form.version === undefined
+        ? `${BACKEND}/form/submit/${id}`
+        : `${BACKEND}/form/submit/${id}/${form.version}`
 
     res.render('form.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

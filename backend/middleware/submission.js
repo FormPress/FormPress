@@ -19,7 +19,7 @@ module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id/:version?', async (req, res) => {
     const form_id = parseInt(req.params.id)
-    let version = parseInt(req.params.version)//either a value or NaN
+    let version = parseInt(req.params.version) //either a value or NaN
     const db = await getPool()
     //if preview mode
     if (isNaN(version)) {
@@ -54,7 +54,7 @@ module.exports = (app) => {
       let keys = [...Object.keys(req.body)]
 
       if (req.files !== null) {
-        keys = [...keys,...Object.keys(req.files)]
+        keys = [...keys, ...Object.keys(req.files)]
       }
 
       for (const key of keys) {
@@ -94,7 +94,11 @@ module.exports = (app) => {
       sendEmailTo = emailIntegration[0].to
     }
 
-    if (sendEmailTo !== false && sendEmailTo !== undefined && sendEmailTo !== "") {
+    if (
+      sendEmailTo !== false &&
+      sendEmailTo !== undefined &&
+      sendEmailTo !== ''
+    ) {
       const msg = {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',

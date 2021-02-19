@@ -117,8 +117,16 @@ class Forms extends Component {
                     <span>
                       <FontAwesomeIcon
                         icon={faEye}
-                        title={form.published_version? "View Form" : "You have to publish form to view"}
-                        onClick={form.published_version? this.handlePreviewClick.bind(this, form) : undefined }
+                        title={
+                          form.published_version
+                            ? 'View Form'
+                            : 'You have to publish form to view'
+                        }
+                        onClick={
+                          form.published_version
+                            ? this.handlePreviewClick.bind(this, form)
+                            : undefined
+                        }
                       />
                     </span>
                     <span>
@@ -129,10 +137,7 @@ class Forms extends Component {
                       />
                     </span>
                     <Link to={`/editor/${form.id}/builder`}>
-                      <FontAwesomeIcon
-                       icon={faPen}
-                       title="Edit Form"
-                      />
+                      <FontAwesomeIcon icon={faPen} title="Edit Form" />
                     </Link>
                   </div>
                 )
