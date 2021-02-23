@@ -606,6 +606,7 @@ class Builder extends Component {
   }
 
   renderMainContent() {
+    const { formId } = this.props.match.params
     return (
       <Switch>
         <Route path="/editor/:formId/builder">
@@ -620,7 +621,7 @@ class Builder extends Component {
           Form Designer will come here
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm />
+          <ShareForm formId={formId} backEnd={BACKEND} />
         </Route>
       </Switch>
     )
