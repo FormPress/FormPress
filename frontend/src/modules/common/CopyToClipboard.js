@@ -3,6 +3,16 @@ import './CopyToClipboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLink } from '@fortawesome/free-solid-svg-icons'
 
+function copyURL(e) {
+  const copyDiv = e.target.nextElementSibling
+  if (copyDiv) {
+    copyDiv.classList.add('animate')
+    copyDiv.addEventListener('animationend', () =>
+      copyDiv.classList.remove('animate')
+    )
+  }
+}
+
 class CopyToClipboard extends Component {
   render() {
     return (
@@ -12,11 +22,16 @@ class CopyToClipboard extends Component {
           <button
             className="clipboardButton"
             type="button"
-            onClick={() =>
-              navigator.clipboard.writeText(this.props.clipboardData)
+            onClick={
+              (() => navigator.clipboard.writeText(this.props.clipboardData),
+              (e) => copyURL(e))
             }>
-            <FontAwesomeIcon icon={faLink} className="clipboardIcon" />
+            <FontAwesomeIcon
+              icon={faLink}
+              className="clipboardIcon unselectable"
+            />
           </button>
+          <span className="copyAlert">Copied!</span>
         </div>
       </div>
     )

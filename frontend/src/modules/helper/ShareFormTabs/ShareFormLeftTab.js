@@ -38,6 +38,22 @@ const ShareFormLeftTab = ({ backEnd, embedCode, formId }) => {
             buttonText="Copy the code"
           />
         </div>
+        <div className="shareFormLeftFooterArea">
+          <h5 className="shareFormLeftFooterTitle">Share your form via</h5>
+          <div className="shareFormLeftButtonArea">
+            <div className="shareFormLeftButtonCover">
+              <button type="button" className="shareButton">
+                <i className="fa fa-envelope"></i>
+              </button>
+              <button type="button" className="shareButton">
+                <i className="fa fa-facebook-f"></i>
+              </button>
+              <button type="button" className="shareButton">
+                <i className="fa fa-twitter"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
