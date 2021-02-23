@@ -126,14 +126,56 @@
 }
 
 .elements > .elementList > .element {
-  width: 98%;
-  margin: 5px 1%;
-  padding: 5px 10px;
-  border: 1px solid black;
-  border-radius: 2px;
+  margin: 10px 12px 10px 16px;
+  padding: 10px 10px 10px 12px;
+  border-radius: 8px;
+  font-family: 'Montserrat';
+  border: solid 1px #ffffff;
+  box-shadow: 0 3px 6px 0 rgba(3, 39, 57, 0.04);
+  background-color: #ffffff;
+  color: #646464;
+  width: 91%;
   cursor: move;
 }
 
+.elements > .elementList > .element:hover {
+  border: solid 1px #005a87;
+  color: #1c5c85;
+}
+
+.elements > .elementList > .element:hover .add-element-button {
+  visibility: visible;
+}
+
+.element-picker-icon-wrapper {
+  width: 12%;
+  display: inline-block;
+  text-align: center;
+}
+
+.element-picker-icon {
+  color: #7a9eba;
+}
+
+.element-picker-text {
+  margin: 2px 0 3px 12px;
+  display: inline-block;
+  width: 76%;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  text-align: left;
+}
+.add-element-button {
+  height: 16px;
+  margin: 4px 0 4px 2px;
+  color: #c9c9c9;
+  visibility: hidden;
+  cursor: pointer;
+}
 .builderStage > .formTitle {
   height: 60px;
   line-height: 60px;

@@ -5,7 +5,16 @@ import {
   faChevronLeft,
   faPaintBrush,
   faPlusSquare,
-  faShareAlt
+  faShareAlt,
+  faHeading,
+  faAlignJustify,
+  faCheckSquare,
+  faMousePointer,
+  faSort,
+  faDotCircle,
+  faAddressCard,
+  faFileAlt,
+  faPlusCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -20,6 +29,30 @@ import { api } from '../helper'
 import './Builder.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
+
+//list of element icons
+const iconMap = {
+  Text: faHeading,
+  TextArea: faAlignJustify,
+  Checkbox: faCheckSquare,
+  Button: faMousePointer,
+  Dropdown: faSort,
+  Radio: faDotCircle,
+  Name: faAddressCard,
+  FileUpload: faFileAlt
+}
+
+//list of element texts
+const textMap = {
+  Text: 'Text',
+  TextArea: 'Text Area',
+  Checkbox: 'Checkbox',
+  Button: 'Button',
+  Dropdown: 'Dropdown',
+  Radio: 'Radio button',
+  Name: 'Name',
+  FileUpload: 'File Upload'
+}
 const getElements = () =>
   Object.values(Elements).map((element) => {
     const config = Object.assign({}, element.defaultConfig)
@@ -197,6 +230,7 @@ class Builder extends Component {
     this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(
       this
     )
+    this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
   }
@@ -294,6 +328,25 @@ class Builder extends Component {
       sortItem: false,
       dragging: false,
       dragIndex: false,
+      form: {
+        ...form,
+        props: {
+          ...form.props,
+          elements: newElements
+        }
+      }
+    })
+  }
+
+  handleAddFormElementClick(elemType) {
+    let item = getElementsKeys()[elemType]
+    const { form } = this.state
+    let elements = [...form.props.elements]
+    const maxId = Math.max(...form.props.elements.map((element) => element.id))
+
+    item.id = maxId + 1
+    const newElements = elements.concat(item)
+    this.setState({
       form: {
         ...form,
         props: {
@@ -566,7 +619,21 @@ class Builder extends Component {
                   onDragStart={this.handleDragStart.bind(this, elem)}
                   onDragEnd={this.handleDragEnd}
                   key={elem.type}>
-                  {elem.type}
+                  <span className="element-picker-icon-wrapper">
+                    <FontAwesomeIcon
+                      icon={iconMap[elem.type]}
+                      className="element-picker-icon"
+                    />
+                  </span>
+                  <span className="element-picker-text">
+                    {textMap[elem.type]}
+                  </span>
+                  <span className="add-element-button">
+                    <FontAwesomeIcon
+                      icon={faPlusCircle}
+                      onClick={() => this.handleAddFormElementClick(elem.type)}
+                    />
+                  </span>
                 </div>
               ))}
             </div>
