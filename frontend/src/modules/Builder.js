@@ -631,6 +631,7 @@ class Builder extends Component {
                   <span className="add-element-button">
                     <FontAwesomeIcon
                       icon={faPlusCircle}
+                      title="Add Field"
                       onClick={() => this.handleAddFormElementClick(elem.type)}
                     />
                   </span>
