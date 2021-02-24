@@ -21,6 +21,13 @@ export default class Text extends Component {
         type: 'Checkbox',
         label: 'Make this field required?'
       }
+    },
+    requiredText: {
+      default: 'Please fill this field.',
+      formProps: {
+        type: 'Text',
+        label: 'Error text when this field is left empty.'
+      }
     }
   }
 
@@ -52,6 +59,9 @@ export default class Text extends Component {
             name={`q_${config.id}`}
             {...inputProps}
           />
+        </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>
     )

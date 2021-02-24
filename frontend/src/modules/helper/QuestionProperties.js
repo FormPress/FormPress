@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
 
+import './QuestionProperties.css'
+
 export default class QuestionProperties extends Component {
   constructor(props) {
     super(props)
@@ -48,7 +50,11 @@ export default class QuestionProperties extends Component {
     return (
       <div>
         <h2>Question Properties</h2>
-        <Renderer handleFieldChange={this.handleFieldChange} form={form} />
+        <Renderer
+          className="questionPropertiesForm"
+          handleFieldChange={this.handleFieldChange}
+          form={form}
+        />
       </div>
     )
   }
