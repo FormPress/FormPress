@@ -117,17 +117,27 @@ class Forms extends Component {
                     <span>
                       <FontAwesomeIcon
                         icon={faEye}
-                        onClick={this.handlePreviewClick.bind(this, form)}
+                        title={
+                          form.published_version
+                            ? 'View Form'
+                            : 'You have to publish form to view'
+                        }
+                        onClick={
+                          form.published_version
+                            ? this.handlePreviewClick.bind(this, form)
+                            : undefined
+                        }
                       />
                     </span>
                     <span>
                       <FontAwesomeIcon
                         icon={faTrash}
+                        title="Delete Form"
                         onClick={this.handleFormDeleteClick.bind(this, form)}
                       />
                     </span>
                     <Link to={`/editor/${form.id}/builder`}>
-                      <FontAwesomeIcon icon={faPen} />
+                      <FontAwesomeIcon icon={faPen} title="Edit Form" />
                     </Link>
                   </div>
                 )

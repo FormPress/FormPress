@@ -94,7 +94,7 @@ export default class FileUpload extends Component {
           </button>
           <input
             type="file"
-            name="files[]"
+            name={`q_${config.id}`}
             id="file"
             data-multiple-caption="{count} files selected"
             multiple

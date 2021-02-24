@@ -17,10 +17,14 @@ const findQuestionType = (form, qid) => {
 
 module.exports = (app) => {
   // Handle form submission
-  app.post('/form/submit/:id', async (req, res) => {
+  app.post('/form/submit/:id/:version?', async (req, res) => {
     const form_id = parseInt(req.params.id)
+    let version = parseInt(req.params.version) //either a value or NaN
     const db = await getPool()
-
+    //if preview mode
+    if (isNaN(version)) {
+      version = 0
+    }
     //read out form
     const formResult = await db.query(
       `SELECT * FROM \`form\`
@@ -29,7 +33,7 @@ module.exports = (app) => {
     )
 
     if (formResult.length === 0) {
-      return req.status(404).send('Error: form not found')
+      return res.status(404).send('Error: form not found')
     }
 
     const form = formResult[0]
@@ -39,15 +43,19 @@ module.exports = (app) => {
     //create submission and get id
     const result = await db.query(
       `INSERT INTO \`submission\`
-        (form_id, created_at, updated_at)
+        (form_id, created_at, updated_at, version)
       VALUES
-        (?, NOW(), NOW())`,
-      [form_id]
+        (?, NOW(), NOW(),?)`,
+      [form_id, version]
     )
     const submission_id = result.insertId
 
     try {
-      const keys = [...Object.keys(req.body), ...Object.keys(req.files)]
+      let keys = [...Object.keys(req.body)]
+
+      if (req.files !== null) {
+        keys = [...keys, ...Object.keys(req.files)]
+      }
 
       for (const key of keys) {
         const question_id = parseInt(key.split('_')[1])
@@ -86,7 +94,11 @@ module.exports = (app) => {
       sendEmailTo = emailIntegration[0].to
     }
 
-    if (sendEmailTo !== false) {
+    if (
+      sendEmailTo !== false &&
+      sendEmailTo !== undefined &&
+      sendEmailTo !== ''
+    ) {
       const msg = {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',
