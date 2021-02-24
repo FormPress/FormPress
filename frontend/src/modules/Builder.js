@@ -342,8 +342,11 @@ class Builder extends Component {
     let item = getElementsKeys()[elemType]
     const { form } = this.state
     let elements = [...form.props.elements]
-    const maxId = Math.max(...form.props.elements.map((element) => element.id))
-
+    let maxId = Math.max(...form.props.elements.map((element) => element.id))
+    //if no elements, Math.max returns -Infinity
+    if (maxId === -Infinity) {
+      maxId = -1
+    }
     item.id = maxId + 1
     const newElements = elements.concat(item)
     this.setState({
