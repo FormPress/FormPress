@@ -6,8 +6,8 @@ PROJECT="formpress"
 
 if [[ -n $CI_JOB_STAGE ]]; then
   echo "CI env detected, setting service account key"
-  echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /service-account-key.json
-  gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/service-account-key.json
+  echo $GOOGLE_APPLICATION_CREDENTIALS_VALUE > /tmp/service-account-key.json
+  gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/tmp/service-account-key.json
 fi
 
 gcloud container clusters get-credentials primary --zone europe-west3-a --project $PROJECT
