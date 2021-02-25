@@ -93,6 +93,7 @@ module.exports = (app) => {
           user_id,
           title,
           props,
+          published_version,
           created_at,
           (
             SELECT
@@ -486,7 +487,11 @@ module.exports = (app) => {
 
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-    const postTarget = `${BACKEND}/form/submit/${form.id}`
+    //form table has "published_version" vs form_published has "version"
+    const postTarget =
+      form.version === undefined
+        ? `${BACKEND}/form/submit/${id}`
+        : `${BACKEND}/form/submit/${id}/${form.version}`
 
     res.render('form.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

@@ -90,7 +90,7 @@ export default class Dropdown extends Component {
             </textarea>
           ) : (
             <div className="dropdown-div">
-              <select className="dropdown-select" name="dropdown-select">
+              <select className="dropdown-select" name={`q_${config.id}`}>
                 <option selected disabled>
                   Choose one
                 </option>
@@ -125,7 +125,7 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key="2" className="dropdown-div">
-          <select className="dropdown-select" name="dropdown-select">
+          <select className="dropdown-select" name={`q_${config.id}`}>
             <option selected disabled>
               Choose one
             </option>
