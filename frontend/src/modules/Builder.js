@@ -28,8 +28,6 @@ import { api } from '../helper'
 
 import './Builder.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 //list of element icons
 const iconMap = {
   Text: faHeading,
@@ -512,9 +510,10 @@ class Builder extends Component {
   }
 
   handlePreviewClick() {
+    const hostname = window.location.protocol + '//' + window.location.host
     const { id } = this.state.form
 
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
+    window.open(`${hostname}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion(changes) {
@@ -692,7 +691,7 @@ class Builder extends Component {
           Form Designer will come here
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm formId={formId} backEnd={BACKEND} />
+          <ShareForm formId={formId} />
         </Route>
       </Switch>
     )
