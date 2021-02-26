@@ -14,9 +14,6 @@ export default class QuestionProperties extends Component {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value
 
-    console.log(this.props.selectedField)
-
-    console.log(elem.id, value)
     this.props.configureQuestion({
       id: this.props.selectedField.config.id,
       newState: {

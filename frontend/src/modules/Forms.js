@@ -147,7 +147,7 @@ class Forms extends Component {
           />
         </div>
         <div className="newButtonContainer">
-          <Link to="/editor/new/builder">Create a new form</Link>
+          <Link to="/editor/new">Create a new form</Link>
         </div>
       </div>
     )
