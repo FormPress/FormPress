@@ -14,6 +14,7 @@ const getPoolStub = sinon.stub(db, 'getPool')
 const authenticationMiddleware = require(path.resolve('middleware', 'authentication'))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const endpoints = require(path.resolve('config', 'endpoints'))
+const submissionhandler = require(path.resolve('helper', 'submissionhandler'))
 
 const words = ['post', 'get', 'delete', 'put']
 const expressMock = {}
@@ -232,3 +233,93 @@ describe('Api', () => {
     })
   })
 })
+
+describe('submission handler', () => {
+  const formProps = [
+    {
+      id: 1,
+      type:"Text",
+      label:"Text Label"
+    },
+    {
+      id: 3,
+      type:"TextArea",
+      label:"TextArea Label"
+    },
+    {
+      id: 5,
+      type:"Dropdown",
+      label:"Dropdown Label",
+      options:[
+        "Dropdown 1",
+        "Dropdown 2"
+      ],
+      required:false
+    },
+    {
+      mode:"sort",
+      id:9,
+      type:"Checkbox",
+      label:"Checkbox Label",
+      required:false
+    },
+    {
+      id: 6,
+      type:"Radio",
+      label:"Radio Label",
+      options:[
+        "Radio option 1",
+        "Radio option 2"
+      ],
+      required:false
+    },
+    {
+      id: 7,
+      type:"Name",
+      label:"Full Name Label",
+      required:false
+    },
+    {
+      id: 8,
+      type:"FileUpload",
+      label:"File Upload Label",
+      required:false
+    },
+    {
+      mode:"sort",
+      id: 2,
+      type:"Button",
+      buttonText:"SubmitButton"
+    }
+  ]
+  it('check multiple input for single question(Name)', () => {
+    const input = [
+      { q_id: 'q_7[firstName]', value: 'omer' },
+      { q_id: 'q_7[lastName]', value: 'korkmaz' }
+    ]
+    const expectedOutput = [
+      {q_id: 9, value: 'off'},
+      {q_id: 7, value: {
+        firstName:"omer",
+        lastName:"korkmaz"
+        }
+      }
+    ]
+    const formattedInput = submissionhandler.formatInput(formProps,input)
+    assert.deepEqual(formattedInput, expectedOutput)
+  })
+  it('checkbox unchecked', () => {
+    const input = []
+    const expectedOutput = [
+      {q_id:9, value: 'off'}
+    ]
+    const formattedInput = submissionhandler.formatInput(formProps,input)
+    assert.deepEqual(formattedInput, expectedOutput)
+  })
+})
+// it(`Endpoint in config/endpoints.js(${endpoint.method}::${endpoint.path}) actually defined in api middleware only once`, () => {
+//   const filtered = expressMock[`data_${endpoint.method}`]
+//     .filter((mocked_endpoint) => mocked_endpoint === endpoint.path)
+
+//   assert.equal(filtered.length, 1)
+// })
