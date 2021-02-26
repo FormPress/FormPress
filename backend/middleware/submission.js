@@ -1,7 +1,7 @@
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
 const { getPool } = require(path.resolve('./', 'db'))
-const { fileupload } = require(path.resolve('helper'))
+const { fileupload, submissionhandler } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -26,17 +26,26 @@ module.exports = (app) => {
       version = 0
     }
     //read out form
-    const formResult = await db.query(
-      `SELECT * FROM \`form\`
-      WHERE id = ?`,
-      [form_id]
-    )
+    let formResult
+    if (version === 0) {
+      formResult = await db.query(
+        `SELECT * FROM \`form\`
+        WHERE id = ?`,
+        [form_id]
+      )
+    } else {
+      formResult = await db.query(
+        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
+        [form_id, version]
+      )
+    }
 
     if (formResult.length === 0) {
       return res.status(404).send('Error: form not found')
     }
 
     const form = formResult[0]
+    //preview mode form id = form.id VS published mode form id = form.form_id
 
     form.props = JSON.parse(form.props)
 
@@ -50,26 +59,38 @@ module.exports = (app) => {
     )
     const submission_id = result.insertId
 
-    try {
-      let keys = [...Object.keys(req.body)]
+    const preformatInputs = []
 
-      if (req.files !== null) {
-        keys = [...keys, ...Object.keys(req.files)]
+    let keys = [...Object.keys(req.body)]
+
+    if (req.files !== null) {
+      keys = [...keys, ...Object.keys(req.files)]
+    }
+    for (const key of keys) {
+      const question_id = parseInt(key.split('_')[1])
+      const type = findQuestionType(form, question_id)
+      let value
+
+      //upload file to GCS
+      if (type === 'FileUpload') {
+        value = await fileupload.uploadFile(req.files[key])
+      } else {
+        value = req.body[key]
       }
-
-      for (const key of keys) {
-        const question_id = parseInt(key.split('_')[1])
-        const type = findQuestionType(form, question_id)
-        let value
-
-        //upload file to GCS
-        if (type === 'FileUpload') {
-          value = await fileupload.uploadFile(req.files[key])
-        } else {
-          value = req.body[key]
-        }
-
+      preformatInputs.push({ q_id: key, value: value })
+    }
+    const formattedInput = submissionhandler.formatInput(
+      form.props.elements,
+      preformatInputs
+    )
+    try {
+      for (const data of formattedInput) {
         //save answer
+        const question_id = parseInt(data.q_id)
+        let value = data.value
+        if (typeof value !== 'string') {
+          value = JSON.stringify(value)
+        }
         await db.query(
           `INSERT INTO \`entry\`
             (form_id, submission_id, question_id, value)
@@ -81,7 +102,6 @@ module.exports = (app) => {
     } catch (error) {
       console.error('Error', error)
     }
-
     res.send('Your Submission has been received')
 
     let sendEmailTo = false
