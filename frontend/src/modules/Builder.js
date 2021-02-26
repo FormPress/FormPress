@@ -455,6 +455,8 @@ class Builder extends Component {
   async handleSaveClick() {
     const { form } = this.state
 
+    console.log(form)
+
     this.setState({ saving: true })
 
     const { data } = await api({

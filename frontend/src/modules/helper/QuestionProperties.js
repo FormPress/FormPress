@@ -14,12 +14,27 @@ export default class QuestionProperties extends Component {
     const value =
       e.target.type === 'checkbox' ? e.target.checked : e.target.value
 
+    console.log(this.props.selectedField)
+
+    console.log(elem.id, value)
     this.props.configureQuestion({
       id: this.props.selectedField.config.id,
       newState: {
         [elem.id]: value
       }
     })
+
+    if (e.target.type === 'checkbox' && value === true) {
+      elem = e.target.parentNode.parentNode.nextSibling.children[1].children[0]
+      let newValue = elem.value
+      let elemId = elem.id.split('_')[1]
+      this.props.configureQuestion({
+        id: this.props.selectedField.config.id,
+        newState: {
+          [elemId]: newValue
+        }
+      })
+    }
   }
 
   render() {
@@ -46,6 +61,8 @@ export default class QuestionProperties extends Component {
         })
       )
     }
+
+    console.log(form)
 
     return (
       <div>
