@@ -11,16 +11,6 @@ export default class Name extends Component {
     label: 'Full Name'
   }
 
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
-  }
-
   render() {
     const { config, mode } = this.props
     const inputProps = {}
