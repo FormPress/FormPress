@@ -13,8 +13,8 @@ const policy = {
 		}
 	}
 }
-function getConfigurableSettingsAccordingToType(questionType) {
-	//this will be determined only by type
+
+export function getConfigurableSettings(questionType) {
 	switch (policy.required.rule.type) {
 		case 'all':
 			// code block
@@ -31,8 +31,4 @@ function getConfigurableSettingsAccordingToType(questionType) {
 		default:
 		// code block
 	}
-}
-
-export function getConfigurableSettings(questionType) {
-	return getConfigurableSettingsAccordingToType(questionType)
 }
