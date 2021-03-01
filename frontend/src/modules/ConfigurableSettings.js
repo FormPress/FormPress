@@ -19,24 +19,20 @@ function getConfigurableSettingsAccordingToType(questionType) {
 		case 'all':
 			// code block
 			break
+		case 'only':
+			break
 		case 'exceptAll':
-			if (policy.required.rule.exceptions.indexOf(questionType) == -1) {
+			if (policy.required.rule.exceptions.indexOf(questionType) === -1) {
 				//this will be returned attr name with configSettings
 				return { required: policy.required.configurableSettings }
 			} else {
 				return {}
 			}
-			break
-		case 'only':
-			break
 		default:
 		// code block
 	}
 }
 
-export function getConfigurableSettings(
-	questionType,
-	externalConfigurableSettings = {}
-) {
+export function getConfigurableSettings(questionType) {
 	return getConfigurableSettingsAccordingToType(questionType)
 }
