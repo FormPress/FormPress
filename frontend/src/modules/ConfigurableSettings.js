@@ -2,7 +2,7 @@ const policy = {
 	required: {
 		rule: {
 			type: 'exceptAll',
-			exceptions: ['TextArea', 'Button']
+			exceptions: ['Button']
 		},
 		configurableSettings: {
 			default: false,
@@ -20,6 +20,7 @@ export function getConfigurableSettings(questionType) {
 			// code block
 			break
 		case 'only':
+			// code block
 			break
 		case 'exceptAll':
 			if (policy.required.rule.exceptions.indexOf(questionType) === -1) {
