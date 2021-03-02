@@ -66,7 +66,8 @@ describe('submission handler', () => {
   it('default values', () => {
     const input = []
     const expectedOutput = [
-      {q_id:9, value: 'off'}
+      {q_id: 9, value: 'off'},
+      {q_id: 6, value: ''}
     ]
     const formattedInput = submissionhandler.formatInput(formProps,input)
     assert.deepEqual(formattedInput, expectedOutput)
@@ -79,6 +80,7 @@ describe('submission handler', () => {
     ]
     const expectedOutput = [
       {q_id: 9, value: 'off'},
+      {q_id: 6, value: ''},
       {q_id: 7, value: {
         firstName:"omer",
         lastName:"korkmaz"

@@ -73,7 +73,7 @@ module.exports = (app) => {
 
       //upload file to GCS
       if (type === 'FileUpload') {
-        value = await fileupload.uploadFile(req.files[key])
+        value = await fileupload.uploadFile(req.files[key], submission_id)
       } else {
         value = req.body[key]
       }
@@ -123,8 +123,12 @@ module.exports = (app) => {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
-        text: `New Submission has been received ${JSON.stringify(req.body)}`,
-        html: `New Submission has been received ${JSON.stringify(req.body)}`
+        text: `New Submission has been received ${JSON.stringify(
+          formattedInput
+        )}`,
+        html: `New Submission has been received ${JSON.stringify(
+          formattedInput
+        )}`
       }
 
       try {

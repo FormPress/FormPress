@@ -47,8 +47,14 @@ exports.formatInput = (questions, inputs) => {
     if (question.type === 'Checkbox') {
       if (value === false) {
         value = 'off'
+        formattedInput.push({ q_id: question.id, value: value })
       }
-      formattedInput.push({ q_id: question.id, value: value })
+    }
+    if (question.type === 'Radio') {
+      if (value === false) {
+        value = ''
+        formattedInput.push({ q_id: question.id, value: value })
+      }
     }
   })
 
