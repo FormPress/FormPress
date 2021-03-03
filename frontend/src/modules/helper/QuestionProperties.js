@@ -59,8 +59,6 @@ export default class QuestionProperties extends Component {
       )
     }
 
-    console.log(form)
-
     return (
       <div>
         <h2>Question Properties</h2>
