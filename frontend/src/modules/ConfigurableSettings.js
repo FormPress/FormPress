@@ -38,7 +38,10 @@ export function getConfigurableSettings(questionType) {
     case 'exceptAll':
       if (policy.required.rule.exceptions.indexOf(questionType) === -1) {
         //this will be returned attr name with configSettings
-        return { required: policy.required.configurableSettings }
+        return {
+          required: policy.required.configurableSettings,
+          requiredText: policy.requiredText.configurableSettings
+        }
       } else {
         return {}
       }

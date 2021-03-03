@@ -15,7 +15,6 @@ export default class Text extends Component {
 
   render() {
     const { config, mode } = this.props
-    console.log(config)
     const inputProps = {}
 
     if (typeof config.value !== 'undefined') {
