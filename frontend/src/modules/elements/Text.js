@@ -15,6 +15,7 @@ export default class Text extends Component {
 
   render() {
     const { config, mode } = this.props
+    console.log(config)
     const inputProps = {}
 
     if (typeof config.value !== 'undefined') {
@@ -41,6 +42,9 @@ export default class Text extends Component {
             name={`q_${config.id}`}
             {...inputProps}
           />
+        </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>
     )

@@ -15,6 +15,7 @@ for (const key of keys) {
 
     test('Can be rendered without errors', () => {
       const component = create(<Component config={ Component.defaultConfig }/>)
+      console.log('test component');
     })
 
     test('Has a valid <name> attribute', () => { //what is valid? "q_{id}"

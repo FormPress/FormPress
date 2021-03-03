@@ -29,8 +29,6 @@ import { getConfigurableSettings } from './ConfigurableSettings.js'
 
 import './Builder.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 //list of element icons
 const iconMap = {
   Text: faHeading,
@@ -458,6 +456,8 @@ class Builder extends Component {
   async handleSaveClick() {
     const { form } = this.state
 
+    console.log(form)
+
     this.setState({ saving: true })
 
     const { data } = await api({
@@ -513,9 +513,10 @@ class Builder extends Component {
   }
 
   handlePreviewClick() {
+    const hostname = window.location.protocol + '//' + window.location.host
     const { id } = this.state.form
 
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
+    window.open(`${hostname}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion(changes) {
@@ -678,6 +679,7 @@ class Builder extends Component {
   }
 
   renderMainContent() {
+    const { formId } = this.props.match.params
     return (
       <Switch>
         <Route path="/editor/:formId/builder">
@@ -692,7 +694,7 @@ class Builder extends Component {
           Form Designer will come here
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm />
+          <ShareForm formId={formId} />
         </Route>
       </Switch>
     )

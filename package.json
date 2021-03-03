@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "Form Builder and stuff",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-brands-svg-icons": "^5.15.2",
+    "@fortawesome/free-regular-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "yarn": "^1.22.10"
+  },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
