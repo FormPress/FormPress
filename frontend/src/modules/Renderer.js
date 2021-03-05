@@ -73,6 +73,11 @@ export default class Renderer extends Component {
 
           return renderList.length === 1 ? renderList[0] : renderList
         })}
+
+        {this.props.form.props.elements.length === 0 &&
+          this.props.dragging === true && (
+            <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
+          )}
       </div>
     )
   }

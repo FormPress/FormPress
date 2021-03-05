@@ -280,9 +280,11 @@ class Builder extends Component {
 
     if (dragMode === 'insert') {
       //set auto increment element id
-      const maxId = Math.max(
-        ...form.props.elements.map((element) => element.id)
-      )
+      let maxId = Math.max(...form.props.elements.map((element) => element.id))
+      //if no elements, Math.max returns -Infinity
+      if (maxId === -Infinity) {
+        maxId = -1
+      }
 
       item.id = maxId + 1
     } else {
