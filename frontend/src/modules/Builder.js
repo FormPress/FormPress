@@ -25,7 +25,7 @@ import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
 import { api } from '../helper'
-import { getConfigurableSettings } from './ConfigurableSettings.js'
+import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
 

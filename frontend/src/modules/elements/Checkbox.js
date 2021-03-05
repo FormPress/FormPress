@@ -9,7 +9,7 @@ export default class Checkbox extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Checkbox',
-    label: 'Label'
+    label: 'Checkbox'
   }
 
   render() {

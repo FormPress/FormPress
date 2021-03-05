@@ -10,7 +10,7 @@ export default class Text extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Text',
-    label: 'Label'
+    label: 'Text'
   }
 
   render() {

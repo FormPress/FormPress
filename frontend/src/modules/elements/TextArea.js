@@ -9,7 +9,7 @@ export default class TextArea extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'Label'
+    label: 'TextArea'
   }
 
   render() {
