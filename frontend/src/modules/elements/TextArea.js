@@ -3,13 +3,15 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
+import './TextArea.css'
+
 export default class TextArea extends Component {
   static weight = 2
 
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'Label'
+    label: 'TextArea'
   }
 
   render() {

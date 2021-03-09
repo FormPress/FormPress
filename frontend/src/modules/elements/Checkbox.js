@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
+import './Checkbox.css'
+
 export default class Checkbox extends Component {
   static weight = 3
 
