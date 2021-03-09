@@ -12,14 +12,15 @@ export default class Renderer extends Component {
       configureQuestion,
       builderHandlers,
       handleLabelChange,
-      selectedFieldId
+      selectedFieldId,
+      theme
     } = this.props
 
     if (this.props.dragging === true) {
       className += ' dragging'
     }
 
-    className += ` ${this.props.mode}`
+    className += ` ${this.props.mode} ${theme}`
 
     return (
       <div className={className} {...builderHandlers}>
@@ -84,5 +85,6 @@ export default class Renderer extends Component {
 }
 
 Renderer.defaultProps = {
-  mode: 'viewer'
+  mode: 'viewer',
+  theme: 'gleam'
 }
