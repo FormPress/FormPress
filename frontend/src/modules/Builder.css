@@ -230,6 +230,7 @@
 
 .builderStage > .form {
   box-shadow: 0px 3px 10px #00000014;
+  margin: 0 auto;
 }
 
 .form.builder.dragging > * * {
