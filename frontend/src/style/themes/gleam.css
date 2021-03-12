@@ -124,6 +124,7 @@ body {
   border: 1px solid #9ee048;
   outline: none;
   color: #ffffff;
+  float: right;
 }
 
 .gleam .elementCheckbox .input {
