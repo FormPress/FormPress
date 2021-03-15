@@ -12,7 +12,6 @@ for (const key of keys) {
         expect(getConfigurableSettings(key)).toHaveProperty('required');
         expect(getConfigurableSettings(key)).toHaveProperty('requiredText');
       }else{
-        console.log('getConfigurableSettings: ',getConfigurableSettings(key))
         //assuming only attribute is required
         expect(getConfigurableSettings(key)).toStrictEqual({});
       }

@@ -57,19 +57,18 @@ export default class Radio extends Component {
 
   render() {
     const { config, mode } = this.props
-    const inputProps = {}
-
-    if (typeof config.onClick !== 'undefined') {
-      inputProps.onClick = config.onClick
-    }
 
     let optionsList =
       Array.isArray(config.options) === true &&
       config.options.map((item, key) => {
         return (
           <li key={key}>
-            <input type="radio" id="radio-btn" name={`q_${config.id}`}></input>
-            <label htmlFor="radio-btn">{item}</label>
+            <input
+              type="radio"
+              id={`radio_${config.id}_${key}`}
+              name={`q_${config.id}`}
+              value={item}></input>
+            <label htmlFor={`radio_${config.id}_${key}`}>{item}</label>
             <div className="check">
               <div className="inside"></div>
             </div>

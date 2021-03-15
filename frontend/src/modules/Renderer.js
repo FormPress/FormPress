@@ -12,14 +12,15 @@ export default class Renderer extends Component {
       configureQuestion,
       builderHandlers,
       handleLabelChange,
-      selectedFieldId
+      selectedFieldId,
+      theme
     } = this.props
 
     if (this.props.dragging === true) {
       className += ' dragging'
     }
 
-    className += ` ${this.props.mode}`
+    className += ` ${this.props.mode} ${theme}`
 
     return (
       <div className={className} {...builderHandlers}>
@@ -73,11 +74,17 @@ export default class Renderer extends Component {
 
           return renderList.length === 1 ? renderList[0] : renderList
         })}
+
+        {this.props.form.props.elements.length === 0 &&
+          this.props.dragging === true && (
+            <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
+          )}
       </div>
     )
   }
 }
 
 Renderer.defaultProps = {
-  mode: 'viewer'
+  mode: 'viewer',
+  theme: 'gleam'
 }
