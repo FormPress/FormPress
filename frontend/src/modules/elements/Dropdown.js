@@ -11,7 +11,7 @@ export default class Dropdown extends Component {
     id: 0,
     type: 'Dropdown',
     label: 'Dropdown',
-    options: []
+    options: ['Dropdown 1']
   }
 
   static configurableSettings = {

@@ -39,9 +39,14 @@ export default class QuestionProperties extends Component {
       const question = configurableSettings[key]
 
       form.props.elements.push(
-        Object.assign({ id: key }, question.formProps, {
-          value: config[key] || question.default
-        })
+        Object.assign(
+          { id: key },
+          question.formProps,
+          {
+            value: config[key] || question.default
+          },
+          { options: [''] }
+        )
       )
     }
 

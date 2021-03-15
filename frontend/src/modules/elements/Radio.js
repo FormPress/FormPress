@@ -105,7 +105,6 @@ export default class Radio extends Component {
             </textarea>
           ) : (
             <div className="container">
-              <p id="choose-option">Choose an option:</p>
               <ul className="radio-container">{optionsList}</ul>
             </div>
           )}
@@ -131,7 +130,6 @@ export default class Radio extends Component {
         />,
         <div key="2">
           <div className="container">
-            <p id="choose-option-par">Choose an option:</p>
             <ul>{optionsList}</ul>
           </div>
         </div>

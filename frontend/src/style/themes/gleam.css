@@ -22,6 +22,7 @@ body {
 
 .gleam.form > .element > .label {
   width: 200px;
+  float: none;
 }
 
 .gleam.form > .element > .label > .requiredMarker {
@@ -106,7 +107,47 @@ body {
   color: #ffffff;
 }
 .gleam .elementRadio {
-  background-color: transparent;
+}
+.gleam .elementRadio ul {
+  padding: 0;
+  list-style: none;
+}
+.gleam .elementRadio ul li input {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  border: 1px solid #a0a0a0;
+  border-radius: 50%;
+  transition-duration: 0.3s;
+  outline: none;
+  background-color: #fdfdfd;
+  cursor: pointer;
+}
+.gleam .elementRadio ul li input:checked {
+  background-color: #8cc63f;
+  border: 1px solid #8cc63f;
+}
+.gleam .elementRadio ul li input:checked::after {
+  content: ' ';
+  width: 10px;
+  height: 10px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background-color: #8cc63f;
+  position: absolute;
+}
+.gleam .elementRadio ul li input:checked + label {
+  color: #8cc63f;
+}
+.gleam .elementRadio ul li input + label {
+  display: inline-block;
+  margin-top: 1px;
+  position: absolute;
+  text-indent: 5px;
 }
 .gleam .elementName {
   background-color: transparent;
@@ -128,14 +169,18 @@ body {
 }
 
 .gleam .elementCheckbox .input {
-  display: inline-flex;
-  cursor: pointer;
+  display: block;
   position: relative;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .gleam .elementCheckbox .input > span {
-  color: #8cc63f;
-  padding: 0.5rem 0.25rem;
+  color: #333333;
+  display: inline-block;
+  margin-top: 1px;
+  position: absolute;
+  text-indent: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox'] {
@@ -156,6 +201,9 @@ body {
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
   border: 1px solid #a0a0a0;
   background-color: #8cc63f;
+}
+.gleam .elementCheckbox .input > input[type='checkbox']:checked + span {
+  color: #8cc63f;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked::before {
