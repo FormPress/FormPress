@@ -8,9 +8,14 @@ const storage = new Storage({
 })
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
-exports.uploadFile = (uploadedFile) =>
+exports.uploadFile = (uploadedFile, submit_id) =>
   new Promise((resolve, reject) => {
-    const fileName = uuidv4()
+    let fileExtension = ''
+    if (uploadedFile.name.indexOf('.') > -1) {
+      fileExtension = uploadedFile.name.match(/\.[^.]+$/)[0]
+    }
+
+    const fileName = submit_id.toString() + '/' + uuidv4() + fileExtension
     const file = fileUploadBucket.file(fileName)
     const stream = new Duplex()
 
