@@ -9,17 +9,7 @@ export default class Checkbox extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Checkbox',
-    label: 'Label'
-  }
-
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
+    label: 'Checkbox'
   }
 
   render() {

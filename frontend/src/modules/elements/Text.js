@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-
 import './Text.css'
 
 export default class Text extends Component {
@@ -11,17 +10,7 @@ export default class Text extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Text',
-    label: 'Label'
-  }
-
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
+    label: 'Text'
   }
 
   render() {
@@ -52,6 +41,9 @@ export default class Text extends Component {
             name={`q_${config.id}`}
             {...inputProps}
           />
+        </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>
     )

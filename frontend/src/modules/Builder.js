@@ -25,10 +25,9 @@ import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
 import { api } from '../helper'
+import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
-
-const BACKEND = process.env.REACT_APP_BACKEND
 
 //list of element icons
 const iconMap = {
@@ -70,7 +69,7 @@ const getElements = () =>
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     acc[element.defaultConfig.type] = {
-      configurableSettings: element.configurableSettings || {}
+      configurableSettings: getConfigurableSettings(element.defaultConfig.type)
     }
 
     return acc
@@ -274,7 +273,7 @@ class Builder extends Component {
 
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
-    let item = getElementsKeys()[type]
+    let item = getElementsKeys()[type] //burası çokomelli
     const { form, dragIndex, dragMode, sortItem } = this.state
     let elements = [...form.props.elements]
 
@@ -514,9 +513,10 @@ class Builder extends Component {
   }
 
   handlePreviewClick() {
+    const hostname = window.location.protocol + '//' + window.location.host
     const { id } = this.state.form
 
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
+    window.open(`${hostname}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion(changes) {
@@ -600,6 +600,8 @@ class Builder extends Component {
 
         const elements = getElementsConfigurableSettingsObject()
 
+        console.log(elements)
+
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
           elements[selectedFieldConfig.type].configurableSettings || {}
@@ -679,6 +681,7 @@ class Builder extends Component {
   }
 
   renderMainContent() {
+    const { formId } = this.props.match.params
     return (
       <Switch>
         <Route path="/editor/:formId/builder">
@@ -693,7 +696,7 @@ class Builder extends Component {
           Form Designer will come here
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm />
+          <ShareForm formId={formId} />
         </Route>
       </Switch>
     )

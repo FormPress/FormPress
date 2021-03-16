@@ -1,0 +1,12 @@
+.questionPropertiesForm {
+  padding: 10px 0;
+}
+.questionPropertiesForm > .element {
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.questionPropertiesForm > .element > .label {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
