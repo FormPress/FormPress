@@ -111,7 +111,7 @@ export default class Checkbox extends Component {
                       key={this.makeKey(5)}
                       type="checkbox"
                       id={`q_${config.id}_${htmlKey}`}
-                      name={`q_${config.id}[]`}
+                      name={`q_${config.id}`}
                       value={item}
                       {...inputProps}
                     />
@@ -154,7 +154,7 @@ export default class Checkbox extends Component {
                   key={this.makeKey(5)}
                   type="checkbox"
                   id={`q_${config.id}_${htmlKey}`}
-                  name={`q_${config.id}[]`}
+                  name={`q_${config.id}`}
                   value={item}
                   {...inputProps}
                 />
