@@ -103,7 +103,7 @@ export default class Checkbox extends Component {
             </textarea>
           ) : (
             <div>
-              {options.map((item, key) => {
+              {options.map((item) => {
                 let htmlKey = this.makeKey(5)
                 return (
                   <div className="fl input" key={htmlKey}>
@@ -146,7 +146,7 @@ export default class Checkbox extends Component {
           required={config.required}
         />,
         <div key="2">
-          {options.map((item, key) => {
+          {options.map((item) => {
             let htmlKey = this.makeKey(5)
             return (
               <div className="fl input" key={htmlKey}>
