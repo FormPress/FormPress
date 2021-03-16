@@ -55,7 +55,7 @@ const policy = {
 export function getConfigurableSettings(questionType) {
   let willReturnObject = {}
 
-  Object.keys(policy).map(function (objectKey, index) {
+  Object.keys(policy).map(function (objectKey) {
     const rule = policy[objectKey].rule
     if (
       rule.type === 'exceptAll' &&
