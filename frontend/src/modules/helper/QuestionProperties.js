@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
 
+import './QuestionProperties.css'
+
 export default class QuestionProperties extends Component {
   constructor(props) {
     super(props)
@@ -18,6 +20,17 @@ export default class QuestionProperties extends Component {
         [elem.id]: value
       }
     })
+
+    if (e.target.id === 'q_required' && value === true) {
+      let newValue = elem.value
+      let elemId = elem.id.split('_')[1]
+      this.props.configureQuestion({
+        id: this.props.selectedField.config.id,
+        newState: {
+          [elemId]: newValue
+        }
+      })
+    }
   }
 
   render() {
@@ -48,7 +61,11 @@ export default class QuestionProperties extends Component {
     return (
       <div>
         <h2>Question Properties</h2>
-        <Renderer handleFieldChange={this.handleFieldChange} form={form} />
+        <Renderer
+          className="questionPropertiesForm"
+          handleFieldChange={this.handleFieldChange}
+          form={form}
+        />
       </div>
     )
   }

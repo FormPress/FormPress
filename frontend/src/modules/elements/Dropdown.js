@@ -14,16 +14,6 @@ export default class Dropdown extends Component {
     options: []
   }
 
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
-  }
-
   constructor(props) {
     super(props)
     this.state = {
