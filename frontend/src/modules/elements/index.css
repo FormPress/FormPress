@@ -15,7 +15,11 @@
   background: rgba(255, 0, 0, 0.3);
 }
 
-.builderStage .form > .element > .label {
+.form > .element.requiredError > .metadata > .requiredErrorText {
+  display: block;
+}
+
+.form > .element > .label {
   width: 200px;
 }
 
@@ -33,4 +37,12 @@
 .builderStage .form > .element > input[type='submit'] {
   padding: 5px 10px;
   font-size: 16px;
+}
+
+.form > .element > .metadata {
+  width: 100%;
+}
+
+.form > .element > .metadata > .requiredErrorText {
+  display: none;
 }

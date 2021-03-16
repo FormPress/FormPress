@@ -14,16 +14,6 @@ export default class Radio extends Component {
     options: ['Radio 1']
   }
 
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
-  }
-
   constructor(props) {
     super(props)
     this.state = {
