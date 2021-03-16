@@ -21,8 +21,7 @@ export default class QuestionProperties extends Component {
       }
     })
 
-    if (e.target.type === 'checkbox' && value === true) {
-      elem = e.target.parentNode.parentNode.nextSibling.children[1].children[0]
+    if (e.target.id === 'q_required' && value === true) {
       let newValue = elem.value
       let elemId = elem.id.split('_')[1]
       this.props.configureQuestion({

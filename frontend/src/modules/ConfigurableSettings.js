@@ -24,28 +24,54 @@ const policy = {
         label: 'Error text when this field is left empty.'
       }
     }
+  },
+  placeholder: {
+    rule: {
+      type: 'only',
+      exceptions: ['Text', 'TextArea']
+    },
+    configurableSettings: {
+      default: 'Please enter the information',
+      formProps: {
+        type: 'Text',
+        label: 'Describe the expected value of an input field.'
+      }
+    }
+  },
+  disabled: {
+    rule: {
+      type: 'all'
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field disabled?'
+      }
+    }
   }
 }
 
 export function getConfigurableSettings(questionType) {
-  switch (policy.required.rule.type) {
-    case 'all':
-      // code block
-      break
-    case 'only':
-      // code block
-      break
-    case 'exceptAll':
-      if (policy.required.rule.exceptions.indexOf(questionType) === -1) {
-        //this will be returned attr name with configSettings
-        return {
-          required: policy.required.configurableSettings,
-          requiredText: policy.requiredText.configurableSettings
-        }
-      } else {
-        return {}
-      }
-    default:
-    // code block
-  }
+  let willReturnObject = {}
+
+  Object.keys(policy).map(function (objectKey, index) {
+    const rule = policy[objectKey].rule
+    if (
+      rule.type === 'exceptAll' &&
+      rule.exceptions.indexOf(questionType) === -1
+    ) {
+      willReturnObject[objectKey] = policy[objectKey].configurableSettings
+    } else if (
+      rule.type === 'only' &&
+      rule.exceptions.indexOf(questionType) > -1
+    ) {
+      willReturnObject[objectKey] = policy[objectKey].configurableSettings
+    } else if (rule.type === 'all') {
+      willReturnObject[objectKey] = policy[objectKey].configurableSettings
+    }
+    return {}
+  })
+
+  return willReturnObject
 }
