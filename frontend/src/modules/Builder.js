@@ -25,6 +25,7 @@ import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
 import { api } from '../helper'
+import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
 
@@ -68,7 +69,7 @@ const getElements = () =>
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     acc[element.defaultConfig.type] = {
-      configurableSettings: element.configurableSettings || {}
+      configurableSettings: getConfigurableSettings(element.defaultConfig.type)
     }
 
     return acc
@@ -272,7 +273,7 @@ class Builder extends Component {
 
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
-    let item = getElementsKeys()[type]
+    let item = getElementsKeys()[type] //burası çokomelli
     const { form, dragIndex, dragMode, sortItem } = this.state
     let elements = [...form.props.elements]
 
@@ -457,8 +458,6 @@ class Builder extends Component {
   async handleSaveClick() {
     const { form } = this.state
 
-    console.log(form)
-
     this.setState({ saving: true })
 
     const { data } = await api({
@@ -600,6 +599,8 @@ class Builder extends Component {
         )[0]
 
         const elements = getElementsConfigurableSettingsObject()
+
+        console.log(elements)
 
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
