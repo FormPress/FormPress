@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
+import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
@@ -77,40 +78,81 @@ class Login extends Component {
     }
 
     return (
-      <div className="loginForm">
-        <form onSubmit={this.handleLoginButtonClick}>
-          <Renderer
-            className="form"
-            handleFieldChange={this.handleFieldChange}
-            form={{
-              props: {
-                elements: [
-                  {
-                    id: 1,
-                    type: 'Text',
-                    label: 'Email',
-                    value: this.state.email
-                  },
-                  {
-                    id: 2,
-                    type: 'Text',
-                    label: 'Password',
-                    value: this.state.password
-                  },
-                  {
-                    id: 2,
-                    type: 'Button',
-                    buttonText: 'Login'
+      <div className="login-wrapper">
+        <div className="loginForm">
+          <div className="wellcome-message">WELLCOME BACK!</div>
+          <div className="picture-bg">
+            <div className="login-picture">
+              <LoginPicture />
+            </div>
+          </div>
+          <div className="pale-border">
+            <div className="form-header">LOGIN FORM</div>
+            <form onSubmit={this.handleLoginButtonClick}>
+              <Renderer
+                className="form"
+                theme="infernal"
+                allowInternal={true}
+                handleFieldChange={this.handleFieldChange}
+                form={{
+                  props: {
+                    elements: [
+                      {
+                        id: 1,
+                        type: 'Text',
+                        label: 'Email',
+                        value: this.state.email
+                      },
+                      {
+                        id: 2,
+                        type: 'Password',
+                        label: 'Password',
+                        value: this.state.password
+                      },
+                      {
+                        id: 3,
+                        type: 'Checkbox',
+                        label: 'Remember Me'
+                      },
+                      {
+                        id: 4,
+                        type: 'Button',
+                        buttonText: 'LOGIN'
+                      }
+                    ]
                   }
-                ]
-              }
-            }}
-          />
-        </form>
-        <p>
-          {state === 'loading' ? 'Loading...' : null}
-          {state === 'done' ? message : null}
-        </p>
+                }}
+              />
+            </form>
+            <p className="message-back">
+              {state === 'loading' ? 'Loading...' : null}
+              {state === 'done' ? message : null}
+            </p>
+            <div className="forgot-pass" title="WIP">
+              <span className="wip-placeholder" title="WIP">
+                Forgot password?
+              </span>
+            </div>
+            <div className="do-not-have">
+              Don&apos;t have an account?{' '}
+              <span className="wip-placeholder" title="WIP">
+                Signup
+              </span>
+            </div>
+            <div className="have-trouble">
+              Having trouble?
+              <span className="wip-placeholder" title="WIP">
+                Contact Us
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="footer cw center grid">
+          <div className="col-8-16">Copyright © 2020 formpress.org</div>
+          <div className="col-8-16 tr">
+            <a href="mailto:support@formpress.org">Contact</a>
+          </div>
+        </div>
       </div>
     )
   }

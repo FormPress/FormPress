@@ -62,6 +62,7 @@ export default class QuestionProperties extends Component {
       <div>
         <h2>Question Properties</h2>
         <Renderer
+          theme="infernal"
           className="questionPropertiesForm"
           handleFieldChange={this.handleFieldChange}
           form={form}

@@ -36,6 +36,7 @@ export default class FormProperties extends Component {
         <h2>Form Properties</h2>
         <Renderer
           handleFieldChange={this.handleFieldChange}
+          theme="infernal"
           form={{
             props: {
               elements: [
