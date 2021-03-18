@@ -15,16 +15,6 @@ export default class Checkbox extends Component {
     options: ['Checkbox 1']
   }
 
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
-  }
-
   constructor(props) {
     super(props)
     this.state = {
@@ -96,7 +86,7 @@ export default class Checkbox extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2">
+        <div key="2" className={config.toogle === true ? 'toogle' : ''}>
           {this.state.show ? (
             <textarea id="options-textarea" onChange={this.handleChange}>
               {options.join('\n')}
@@ -145,8 +135,8 @@ export default class Checkbox extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2">
-          {options.map((item) => {
+        <div key="2" className={config.toogle === true ? 'toogle' : ''}>
+          {options.map((item, key) => {
             let htmlKey = this.makeKey(5)
             return (
               <div className="fl input" key={htmlKey}>
@@ -158,6 +148,7 @@ export default class Checkbox extends Component {
                   value={item}
                   {...inputProps}
                 />
+                {config.toogle === true ? <span class="slider"></span> : ''}
                 <span
                   className="checkbox-label"
                   htmlFor={`q_${config.id}_${htmlKey}`}>

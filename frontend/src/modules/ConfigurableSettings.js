@@ -49,6 +49,19 @@ const policy = {
         label: 'Make this field disabled?'
       }
     }
+  },
+  toogle: {
+    rule: {
+      type: 'only',
+      exceptions: ['Checkbox']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: 'Make this field toogle?'
+      }
+    }
   }
 }
 

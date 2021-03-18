@@ -28,6 +28,7 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
+import '../style/themes/gleam.css'
 
 //list of element icons
 const iconMap = {
@@ -599,8 +600,6 @@ class Builder extends Component {
         )[0]
 
         const elements = getElementsConfigurableSettingsObject()
-
-        console.log(elements)
 
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
