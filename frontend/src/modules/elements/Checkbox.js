@@ -86,13 +86,13 @@ export default class Checkbox extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2" className={config.toogle === true ? 'toogle' : ''}>
+        <div key="2" className={config.toggle === true ? 'toggle' : ''}>
           {this.state.show ? (
             <textarea id="options-textarea" onChange={this.handleChange}>
               {options.join('\n')}
             </textarea>
           ) : (
-            <div>
+            <div className="checkboxCover">
               {options.map((item) => {
                 let htmlKey = this.makeKey(5)
                 return (
@@ -105,6 +105,11 @@ export default class Checkbox extends Component {
                       value={item}
                       {...inputProps}
                     />
+                    {config.toggle === true ? (
+                      <span className="slider"></span>
+                    ) : (
+                      ''
+                    )}
                     <span
                       className="checkbox-label"
                       htmlFor={`q_${config.id}_${htmlKey}`}>
@@ -135,8 +140,12 @@ export default class Checkbox extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2" className={config.toogle === true ? 'toogle' : ''}>
-          {options.map((item, key) => {
+        <div
+          key="2"
+          className={
+            config.toggle === true ? 'checkboxCover toggle' : 'checkboxCover'
+          }>
+          {options.map((item) => {
             let htmlKey = this.makeKey(5)
             return (
               <div className="fl input" key={htmlKey}>
@@ -148,7 +157,7 @@ export default class Checkbox extends Component {
                   value={item}
                   {...inputProps}
                 />
-                {config.toogle === true ? <span class="slider"></span> : ''}
+                {config.toggle === true ? <span className="slider"></span> : ''}
                 <span
                   className="checkbox-label"
                   htmlFor={`q_${config.id}_${htmlKey}`}>

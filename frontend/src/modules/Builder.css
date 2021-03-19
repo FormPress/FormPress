@@ -252,9 +252,10 @@
 
 .form.builder > .element > .action {
   display: none;
-  float: right;
-  margin-top: -23px;
   font-size: 14px;
+  position: absolute;
+  right: 10px;
+  top: 2px;
 }
 
 .form.builder > .element > .action > * {

@@ -43,11 +43,6 @@ select::-ms-expand {
   color: white;
 }
 
-#options-textarea {
-  width: 50%;
-  float: left;
-}
-
 #edit-preview-button {
   background-color: white;
   color: black;

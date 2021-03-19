@@ -50,7 +50,7 @@ const policy = {
       }
     }
   },
-  toogle: {
+  toggle: {
     rule: {
       type: 'only',
       exceptions: ['Checkbox']
@@ -59,7 +59,7 @@ const policy = {
       default: false,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field toogle?'
+        label: 'Make this field toggle?'
       }
     }
   }

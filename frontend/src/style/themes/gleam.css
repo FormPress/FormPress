@@ -13,6 +13,7 @@ body {
   box-sizing: border-box;
   padding: 25px 10px;
   margin: 2px 0;
+  position: relative;
 }
 
 .gleam.form > .element.requiredError {
@@ -42,6 +43,7 @@ body {
   display: block;
 }
 .gleam .elementText .input {
+  width: 100%;
 }
 .gleam .elementText .input input {
   color: #113952;
@@ -52,7 +54,7 @@ body {
   outline: 0;
   background-color: #f5f5f5;
 }
-.gleam .fl.label {
+.gleam .element > .fl.label {
   margin-bottom: 10px;
 }
 .gleam .elementTextArea {
@@ -156,7 +158,9 @@ body {
   background-color: transparent;
 }
 .gleam .elementButton input[type='submit'],
-.gleam .elementButton input[type='submit']:focus {
+.gleam .elementButton input[type='submit']:focus,
+.builder.gleam .elementButton button,
+.builder.gleam .elementButton button:focus {
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
@@ -210,7 +214,7 @@ body {
   color: #8cc63f;
 }
 
-.gleam .elementCheckbox .toogle .input .checkbox-label {
+.gleam .elementCheckbox .toggle .input .checkbox-label {
   color: #333333;
   display: inline-block;
   margin-top: 8px;
@@ -233,19 +237,41 @@ body {
   border: 1px solid #a0a0a0;
 }
 
-.gleam .elementCheckbox .toogle .input {
+.gleam .elementCheckbox .toggle .input {
   width: 60px;
   height: 34px;
 }
 
-.gleam .elementCheckbox .toogle {
+.builder.gleam .elementCheckbox .toggle {
+  position: relative;
+  display: block;
+  width: auto;
+  height: auto;
+}
+.checkboxCover {
+  display: grid;
+}
+
+.gleam .elementCheckbox .toggle {
   position: relative;
   display: block;
   width: 60px;
   height: 34px;
 }
 
-.gleam .elementCheckbox .toogle .input input[type='checkbox'] {
+.builder.gleam .elementCheckbox textarea#options-textarea,
+.builder.gleam .elementCheckbox textarea#options-textarea:focus {
+  border: 1px solid #c9c9c9;
+  padding: 5px 16px;
+  background-color: #f5f5f5;
+  height: 80px;
+  resize: none;
+  width: 100%;
+  outline: 0;
+  color: #333333;
+}
+
+.gleam .elementCheckbox .toggle .input input[type='checkbox'] {
   opacity: 0;
   width: 60px;
   height: 34px;
@@ -253,7 +279,7 @@ body {
   position: relative;
 }
 
-.gleam .elementCheckbox .toogle .input .slider {
+.gleam .elementCheckbox .toggle .input .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -265,7 +291,7 @@ body {
   transition: 0.4s;
 }
 
-.gleam .elementCheckbox .toogle .input .slider:before {
+.gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
   content: '';
   height: 26px;
@@ -277,15 +303,15 @@ body {
   transition: 0.4s;
 }
 
-.gleam .elementCheckbox .toogle .input input:checked + .slider {
-  background-color: #2196f3;
+.gleam .elementCheckbox .toggle .input input:checked + .slider {
+  background-color: #8cc63f;
 }
 
-.gleam .elementCheckbox .toogle .input input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+.gleam .elementCheckbox .toggle .input input:focus + .slider {
+  box-shadow: 0 0 1px #8cc63f;
 }
 
-.gleam .elementCheckbox .toogle .input input:checked + .slider:before {
+.gleam .elementCheckbox .toggle .input input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
