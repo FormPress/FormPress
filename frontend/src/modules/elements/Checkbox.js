@@ -27,7 +27,7 @@ export default class Checkbox extends Component {
   handleChange(event) {
     const { config } = this.props
     const inputProps = {}
-    var lines = event.target.value.split('\n')
+    let lines = event.target.value.split('\n')
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
@@ -35,7 +35,7 @@ export default class Checkbox extends Component {
 
     const newOptions = []
 
-    for (var i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i++) {
       if (lines[i] && lines[i].trim().length !== 0) {
         newOptions.push(lines[i])
       }
@@ -50,11 +50,11 @@ export default class Checkbox extends Component {
   }
 
   makeKey(length) {
-    var result = ''
-    var characters =
+    let result = ''
+    const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    var charactersLength = characters.length
-    for (var i = 0; i < length; i++) {
+    const charactersLength = characters.length
+    for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength))
     }
     return result
@@ -74,7 +74,7 @@ export default class Checkbox extends Component {
 
     const options = Array.isArray(config.options) === true ? config.options : []
 
-    var display
+    let display
     if (mode === 'builder') {
       display = [
         <EditableLabel
