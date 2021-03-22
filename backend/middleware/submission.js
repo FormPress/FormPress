@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const { getPool } = require(path.resolve('./', 'db'))
 const { fileupload, submissionhandler } = require(path.resolve('helper'))
@@ -105,7 +106,26 @@ module.exports = (app) => {
 
       res.status(500).send('Error during submission handling')
     }
-    res.send('Your Submission has been received')
+    //res.send('Your Submission has been received')
+
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/common.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/modules/elements/index.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankcan.css')
+    )
+
+    res.render('submit-success.tpl.ejs',{
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle:"Thank you!",
+      tyText:"This is temporary static text for thank you page"
+    })
 
     let sendEmailTo = false
     const integrations = form.props.integrations || []
