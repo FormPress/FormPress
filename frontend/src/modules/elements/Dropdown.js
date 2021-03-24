@@ -131,7 +131,7 @@ export default class Dropdown extends Component {
             })}
           </select>
         </div>,
-        <div className="fl metadata">
+        <div key="3" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]

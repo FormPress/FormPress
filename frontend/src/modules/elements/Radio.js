@@ -125,7 +125,7 @@ export default class Radio extends Component {
             <ul>{optionsList}</ul>
           </div>
         </div>,
-        <div className="fl metadata">
+        <div key="3" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]
