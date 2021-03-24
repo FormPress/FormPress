@@ -115,7 +115,10 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key="2" className="dropdown-div">
-          <select className="dropdown-select" name={`q_${config.id}`}>
+          <select
+            className="dropdown-select"
+            id={`q_${config.id}`}
+            name={`q_${config.id}`}>
             <option selected disabled>
               Choose one
             </option>
@@ -127,6 +130,9 @@ export default class Dropdown extends Component {
               )
             })}
           </select>
+        </div>,
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]
     }

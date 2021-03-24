@@ -38,7 +38,7 @@ export default class FileUpload extends Component {
       <input
         type="file"
         name={`q_${config.id}`}
-        id={`file_${config.id}`}
+        id={`q_${config.id}`}
         data-multiple-caption="{count} files selected"
         multiple
       />
@@ -55,6 +55,9 @@ export default class FileUpload extends Component {
           required={config.required}
         />
         {display}
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }

@@ -600,8 +600,6 @@ class Builder extends Component {
 
         const elements = getElementsConfigurableSettingsObject()
 
-        console.log(elements)
-
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
           elements[selectedFieldConfig.type].configurableSettings || {}
