@@ -7,52 +7,198 @@
       continue
     }
 
-    console.log('Handle required check for element ', elem)
-
     const id = elem.id
     let elemActivated = false
     const domElem = document.getElementById(`q_${id}`)
     const containerElem = document.getElementById(`qc_${id}`)
 
-    requireds[id] = {
-      id,
-      valid: domElem.value.trim().length > 0
+    console.log(elem.type)
+    if (elem.type === 'Checkbox' || elem.type === 'Radio') {
+      requireds[id] = {
+        id,
+        valid: domElem.checked
+      }
+
+      domElem.addEventListener('blur', () => {
+        if (domElem.checked) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem.addEventListener('change', function () {
+        if (this.checked) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+    } else if (elem.type === 'Dropdown') {
+      requireds[id] = {
+        id,
+        valid: domElem.value.trim() !== 'Choose one'
+      }
+
+      domElem.addEventListener('blur', () => {
+        const value = domElem.value
+
+        if (value.trim() !== 'Choose one') {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+      domElem.addEventListener('change', function () {
+        if (this.value === 'Choose one') {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        } else {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        }
+      })
+    } else if (elem.type === 'Name') {
+      const domElem1 = containerElem.querySelector(`#fname`)
+      const domElem2 = containerElem.querySelector(`#lname`)
+      requireds[id] = {
+        id,
+        valid: !(
+          domElem1.value.trim().length === 0 ||
+          domElem2.value.trim().length === 0
+        )
+      }
+
+      domElem1.addEventListener('blur', () => {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem2.addEventListener('blur', () => {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem1.addEventListener('keyup', () => {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem2.addEventListener('keyup', () => {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem1.addEventListener('focus', () => {
+        elemActivated = true
+      })
+
+      domElem2.addEventListener('focus', () => {
+        elemActivated = true
+      })
+    } else if (elem.type === 'FileUpload') {
+      requireds[id] = {
+        id,
+        valid: domElem.value.trim().length > 0
+      }
+
+      domElem.addEventListener('blur', () => {
+        const value = domElem.value
+
+        if (domElem.value.trim().length === 0) {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        } else {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        }
+      })
+      domElem.addEventListener('change', function () {
+        if (domElem.value.trim().length === 0) {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        } else {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        }
+      })
+    } else {
+      requireds[id] = {
+        id,
+        valid: domElem.value.trim().length > 0
+      }
+
+      domElem.addEventListener('blur', () => {
+        const value = domElem.value
+
+        if (value.trim().length === 0) {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        } else {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        }
+      })
+
+      domElem.addEventListener('keyup', () => {
+        const value = domElem.value
+        console.log('OnChange oldi', value)
+        if (value.trim().length === 0) {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        } else {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        }
+      })
     }
 
-    console.log('DOM ELEM ', domElem)
-    domElem.addEventListener('focus', () => {
-      elemActivated = true
-    })
-
-    domElem.addEventListener('blur', () => {
-      const value = domElem.value
-
-      if (value.trim().length === 0) {
-        containerElem.classList.add('requiredError')
-        requireds[id].valid = false
-      } else {
-        containerElem.classList.remove('requiredError')
-        requireds[id].valid = true
-      }
-    })
-
-    domElem.addEventListener('keyup', () => {
-      const value = domElem.value
-      console.log('OnChange oldi', value)
-      if (value.trim().length === 0) {
-        containerElem.classList.add('requiredError')
-        requireds[id].valid = false
-      } else {
-        containerElem.classList.remove('requiredError')
-        requireds[id].valid = true
-      }
-    })
+    if (elem.type !== 'Name') {
+      domElem.addEventListener('focus', () => {
+        elemActivated = true
+      })
+    }
   }
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
-
   form.addEventListener('submit', (event) => {
+    event.preventDefault()
     console.log('submit on going')
+    console.log(requireds)
     const keys = Object.keys(requireds)
     let allValid = true
     const errorsToTrigger = []
@@ -75,6 +221,8 @@
       }
 
       return false
+    } else {
+      form.submit()
     }
   })
 })()

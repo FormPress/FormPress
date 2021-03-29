@@ -65,10 +65,10 @@ export default class Radio extends Component {
           <li key={key}>
             <input
               type="radio"
-              id={`radio_${config.id}_${key}`}
+              id={`q_${config.id}`}
               name={`q_${config.id}`}
               value={item}></input>
-            <label htmlFor={`radio_${config.id}_${key}`}>{item}</label>
+            <label>{item}</label>
             <div className="check">
               <div className="inside"></div>
             </div>
@@ -124,6 +124,9 @@ export default class Radio extends Component {
             <p id="choose-option-par">Choose an option:</p>
             <ul>{optionsList}</ul>
           </div>
+        </div>,
+        <div key="3" className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]
     }

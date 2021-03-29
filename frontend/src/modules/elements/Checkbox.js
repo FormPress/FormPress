@@ -42,6 +42,9 @@ export default class Checkbox extends Component {
             {...inputProps}
           />
         </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }
