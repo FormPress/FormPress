@@ -469,7 +469,7 @@ class Builder extends Component {
     this.setState({ saving: false })
 
     if (form.id === null && typeof data.id !== 'undefined') {
-      this.props.history.push(`/editor/${data.id}`)
+      this.props.history.push(`/editor/${data.id}/builder`)
       this.setState({
         form: {
           ...this.state.form,
