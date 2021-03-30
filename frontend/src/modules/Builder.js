@@ -424,7 +424,13 @@ class Builder extends Component {
 
   handleFormElementClick(e) {
     e.preventDefault()
-    const id = parseInt(e.target.id.replace('qc_', ''))
+    let elemID = e.target
+    let id = parseInt(e.target.id.replace('qc_', ''))
+    while (elemID.id === '') {
+      elemID = elemID.parentNode
+      id = parseInt(elemID.id.replace('qc_', ''))
+    }
+
     const { elements } = this.state.form.props
     let { formId } = this.props.match.params
 
