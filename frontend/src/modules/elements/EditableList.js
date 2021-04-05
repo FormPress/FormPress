@@ -25,7 +25,7 @@ export default class EditableList extends Component {
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleChange(event) {
+  handleChange() {
     const { config } = this.props
     const inputProps = {}
 
