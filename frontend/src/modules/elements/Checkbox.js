@@ -154,6 +154,9 @@ export default class Checkbox extends Component {
     return (
       <ElementContainer type={config.type} {...this.props}>
         {display}
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }

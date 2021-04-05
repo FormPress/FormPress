@@ -42,6 +42,9 @@ export default class TextArea extends Component {
             name={`q_${config.id}`}
             {...inputProps}></textarea>
         </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }
