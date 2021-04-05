@@ -8,6 +8,8 @@ export default class QuestionProperties extends Component {
     super(props)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleAddingItem = this.handleAddingItem.bind(this)
+    this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
   handleFieldChange(elem, e) {
@@ -31,6 +33,14 @@ export default class QuestionProperties extends Component {
         }
       })
     }
+  }
+
+  handleAddingItem() {
+    this.props.handleAddingItem()
+  }
+
+  handleDeletingItem() {
+    this.props.handleDeletingItem()
   }
 
   render() {
@@ -58,7 +68,7 @@ export default class QuestionProperties extends Component {
           {
             value: config[key] || question.default
           },
-          { options: [''] }
+          { options: selectedField.options }
         )
       )
     }
@@ -68,7 +78,10 @@ export default class QuestionProperties extends Component {
         <h2>Question Properties</h2>
         <Renderer
           className="questionPropertiesForm"
+          selectedField={selectedField}
           handleFieldChange={this.handleFieldChange}
+          handleAddingItem={this.handleAddingItem}
+          handleDeletingItem={this.handleDeletingItem}
           form={form}
         />
       </div>

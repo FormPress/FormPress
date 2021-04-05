@@ -67,6 +67,7 @@ const getElements = () =>
 
     return config
   })
+
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     acc[element.defaultConfig.type] = {
@@ -80,6 +81,7 @@ const getWeightedElements = () =>
   Object.values(Elements).map((element) =>
     Object.assign({}, element.defaultConfig, { weight: element.weight })
   )
+
 const getElementsKeys = () =>
   getElements().reduce((acc, item) => {
     acc[item.type] = item
@@ -88,7 +90,9 @@ const getElementsKeys = () =>
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
+const pickerElements = getWeightedElements()
+  .sort((a, b) => a.weight - b.weight)
+  .filter((element) => element.weight !== -1)
 
 class Builder extends Component {
   async componentDidMount() {
@@ -224,6 +228,8 @@ class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
+    this.handleAddingItem = this.handleAddingItem.bind(this)
+    this.handleDeletingItem = this.handleDeletingItem.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
@@ -274,7 +280,7 @@ class Builder extends Component {
 
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
-    let item = getElementsKeys()[type] //burası çokomelli
+    let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
     let elements = [...form.props.elements]
 
@@ -402,15 +408,74 @@ class Builder extends Component {
 
     form.props.elements = [...form.props.elements]
 
-    const question = form.props.elements.filter(
-      (element) => element.id === id
-    )[0]
+    if (Number.isInteger(id) === false) {
+      const questionID = id.split('_')[1]
+      const itemID = id.split('_')[2]
 
-    if (question.type === 'Button') {
-      question.buttonText = value
+      let question = form.props.elements.filter(
+        (element) => element.id === parseInt(questionID)
+      )[0]
+
+      try {
+        if (question.type === 'Button') {
+          question.buttonText = value
+        } else {
+          question.options[itemID] = value
+        }
+      } catch (e) {
+        console.log(e)
+      }
     } else {
-      question.label = value
+      const question = form.props.elements.filter(
+        (element) => element.id === id
+      )[0]
+
+      try {
+        if (question.type === 'Button') {
+          question.buttonText = value
+        } else {
+          question.label = value
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
+
+    this.setState({ form })
+  }
+
+  handleAddingItem() {
+    const { params } = this.props.match
+    let selectedFieldId = parseInt(params.questionId)
+    const form = { ...this.state.form }
+
+    let matchingElementID = -1
+    form.props.elements.forEach((elem, index) => {
+      if (elem.id === selectedFieldId) {
+        matchingElementID = index
+      }
+    })
+
+    const type = form.props.elements[matchingElementID].type
+    form.props.elements[matchingElementID].options.push(
+      `${type} ${form.props.elements[matchingElementID].options.length}`
+    )
+
+    this.setState({ form })
+  }
+
+  handleDeletingItem() {
+    const { params } = this.props.match
+    let selectedFieldId = parseInt(params.questionId)
+    const form = { ...this.state.form }
+
+    let matchingElementID = -1
+    form.props.elements.forEach((elem, index) => {
+      if (elem.id === selectedFieldId) {
+        matchingElementID = index
+      }
+    })
+    form.props.elements[matchingElementID].options.pop()
 
     this.setState({ form })
   }
@@ -653,6 +718,8 @@ class Builder extends Component {
           {questionPropertiesReady === true ? (
             <QuestionProperties
               selectedField={selectedField}
+              handleAddingItem={this.handleAddingItem}
+              handleDeletingItem={this.handleDeletingItem}
               configureQuestion={this.configureQuestion}
             />
           ) : null}

@@ -21,7 +21,6 @@ export default class Checkbox extends Component {
       show: true
     }
     this.handleChange = this.handleChange.bind(this)
-    this.makeKey = this.makeKey.bind(this)
   }
 
   handleChange(event) {
@@ -49,17 +48,6 @@ export default class Checkbox extends Component {
     })
   }
 
-  makeKey(length) {
-    let result = ''
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    const charactersLength = characters.length
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength))
-    }
-    return result
-  }
-
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -72,7 +60,11 @@ export default class Checkbox extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    const options = Array.isArray(config.options) === true ? config.options : []
+    const options =
+      Array.isArray(config.options) === true ||
+      typeof config.options !== 'undefined'
+        ? config.options
+        : ['']
 
     let display
     if (mode === 'builder') {
@@ -87,20 +79,15 @@ export default class Checkbox extends Component {
           required={config.required}
         />,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
-          {this.state.show ? (
-            <textarea id="options-textarea" onChange={this.handleChange}>
-              {options.join('\n')}
-            </textarea>
-          ) : (
+          {
             <div className="checkboxCover">
-              {options.map((item) => {
-                let htmlKey = this.makeKey(5)
+              {options.map((item, key) => {
                 return (
-                  <div className="fl input" key={htmlKey}>
+                  <div className="fl input" key={key}>
                     <input
-                      key={this.makeKey(5)}
+                      key={`s_${key}`}
                       type="checkbox"
-                      id={`q_${config.id}_${htmlKey}`}
+                      id={`q_${config.id}_${key}`}
                       name={`q_${config.id}`}
                       value={item}
                       {...inputProps}
@@ -110,23 +97,20 @@ export default class Checkbox extends Component {
                     ) : (
                       ''
                     )}
-                    <span
-                      className="checkbox-label"
-                      htmlFor={`q_${config.id}_${htmlKey}`}>
-                      {item}
-                    </span>
+                    <EditableLabel
+                      className="fl label checkbox-label"
+                      mode={mode}
+                      labelKey={`s_${config.id}_${key}`}
+                      htmlFor={`q_${config.id}_${key}`}
+                      handleLabelChange={this.props.handleLabelChange}
+                      value={item}
+                      required={config.required}
+                    />
                   </div>
                 )
               })}
             </div>
-          )}
-          <button
-            id="edit-preview-button"
-            onClick={() => {
-              this.setState({ show: !this.state.show })
-            }}>
-            {this.state.show ? 'Preview' : 'Edit'}
-          </button>
+          }
         </div>
       ]
     } else {
@@ -145,14 +129,12 @@ export default class Checkbox extends Component {
           className={
             config.toggle === true ? 'checkboxCover toggle' : 'checkboxCover'
           }>
-          {options.map((item) => {
-            let htmlKey = this.makeKey(5)
+          {options.map((item, key) => {
             return (
-              <div className="fl input" key={htmlKey}>
+              <div className="fl input" key={key}>
                 <input
-                  key={this.makeKey(5)}
                   type="checkbox"
-                  id={`q_${config.id}_${htmlKey}`}
+                  id={`q_${config.id}_${key}`}
                   name={`q_${config.id}`}
                   value={item}
                   {...inputProps}
@@ -160,7 +142,7 @@ export default class Checkbox extends Component {
                 {config.toggle === true ? <span className="slider"></span> : ''}
                 <span
                   className="checkbox-label"
-                  htmlFor={`q_${config.id}_${htmlKey}`}>
+                  htmlFor={`q_${config.id}_${key}`}>
                   {item}
                 </span>
               </div>

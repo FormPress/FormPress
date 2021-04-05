@@ -24,25 +24,6 @@ select::-ms-expand {
   overflow: hidden;
   border-radius: 0.25em;
 }
-
-.dropdown-div::after {
-  content: '\25BC';
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0 1em;
-  background: #719fbd;
-  cursor: pointer;
-  pointer-events: none;
-  -webkit-transition: 0.25s all ease;
-  -o-transition: 0.25s all ease;
-  transition: 0.25s all ease;
-}
-
-.dropdown-div:hover::after {
-  color: white;
-}
-
 #edit-preview-button {
   background-color: white;
   color: black;
