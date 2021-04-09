@@ -36,3 +36,41 @@
 .questionPropertiesCheckboxMenu .questionPropertiesAddNewButton.fullButton {
   max-width: calc(100% - 10px);
 }
+.addNewToggle,
+.addNewCheckbox,
+.addNewRadio {
+  border: 1px dashed;
+  position: relative;
+  width: 180px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.addNewToggle:hover,
+.addNewCheckbox:hover,
+.addNewRadio:hover {
+  border-color: #8cc63f;
+  color: #8cc63f;
+}
+
+.delete-element-button {
+  float: right;
+  cursor: pointer;
+}
+
+.elementCheckbox .input:hover .delete-element-button {
+  display: block;
+}
+
+.elementRadio li:hover .delete-element-button {
+  display: block;
+}
+
+.delete-element-button {
+  display: none;
+}
+
+.delete-element-button:hover {
+  color: #cf1f32;
+}

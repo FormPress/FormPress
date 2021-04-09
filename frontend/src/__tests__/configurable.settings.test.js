@@ -7,7 +7,7 @@ const keys = Object.keys(Elements)
 for (const key of keys) {
   describe(`Element ${key} component`, () => {
     test('Does it have a valid configurable settings', () => {
-      if (key !== "Button" && key !== "EditableList") {
+      if (key !== "Button") {
         //this will be returned attr name with configSettings
         //console.log(key, getConfigurableSettings(key))
         expect(getConfigurableSettings(key)).toHaveProperty('required');

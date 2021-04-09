@@ -150,6 +150,9 @@ body {
   margin-top: 1px;
   position: absolute;
   text-indent: 5px;
+  font-size: 16px;
+  font-family: 'Times New Roman';
+  padding: 0;
 }
 .gleam .elementName {
   background-color: transparent;
@@ -180,6 +183,14 @@ body {
 }
 
 .gleam .elementCheckbox .input .checkbox-label {
+  color: #333333;
+  display: inline-block;
+  margin-top: 1px;
+  position: absolute;
+  text-indent: 5px;
+}
+
+.gleam .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
   margin-top: 1px;
@@ -237,11 +248,6 @@ body {
   border: 1px solid #a0a0a0;
 }
 
-.gleam .elementCheckbox .toggle .input {
-  width: 60px;
-  height: 34px;
-}
-
 .builder.gleam .elementCheckbox .toggle {
   position: relative;
   display: block;
@@ -289,6 +295,8 @@ body {
   background-color: #ccc;
   -webkit-transition: 0.4s;
   transition: 0.4s;
+  width: 60px;
+  height: 34px;
 }
 
 .gleam .elementCheckbox .toggle .input .slider:before {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
+import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
 
 import './Dropdown.css'
@@ -16,28 +17,28 @@ export default class Dropdown extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      show: true
-    }
-    this.handleChange = this.handleChange.bind(this)
+
+    this.handleAddingItem = this.handleAddingItem.bind(this)
+    this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleChange(event) {
+  handleAddingItem() {
     const { config } = this.props
-    const inputProps = {}
-    var lines = event.target.value.split('\n')
+    const newOptions = config.options
+    newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
-
-    const newOptions = []
-
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i] && lines[i].trim().length !== 0) {
-        newOptions.push(lines[i])
+    this.props.configureQuestion({
+      id: config.id,
+      newState: {
+        options: newOptions
       }
-    }
+    })
+  }
+
+  handleDeletingItem(id) {
+    const { config } = this.props
+    const options = config.options
+    const newOptions = options.filter((option, index) => index !== id)
 
     this.props.configureQuestion({
       id: config.id,
@@ -51,15 +52,19 @@ export default class Dropdown extends Component {
     const { config, mode } = this.props
     const inputProps = {}
 
-    const options = Array.isArray(config.options) === true ? config.options : []
-
     if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
+      inputProps.checked = config.value === true
     }
 
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
+
+    const options =
+      Array.isArray(config.options) === true ||
+      typeof config.options !== 'undefined'
+        ? config.options
+        : ['']
 
     var display
     if (mode === 'builder') {
@@ -74,33 +79,18 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key="2">
-          {this.state.show ? (
-            <textarea id="options-textarea" onChange={this.handleChange}>
-              {config.options.join('\n')}
-            </textarea>
-          ) : (
+          {
             <div className="dropdown-div">
-              <select className="dropdown-select" name={`q_${config.id}`}>
-                <option selected disabled>
-                  Choose one
-                </option>
-                {options.map((item) => {
-                  return (
-                    <option className="option-space" key={item} value={item}>
-                      {item}
-                    </option>
-                  )
-                })}
-              </select>
+              <EditableList
+                config={config}
+                mode={mode}
+                options={options}
+                handleAddingItem={this.handleAddingItem}
+                handleDeletingItem={this.handleDeletingItem}
+                handleLabelChange={this.props.handleLabelChange}
+              />
             </div>
-          )}
-          <button
-            id="edit-preview-button"
-            onClick={() => {
-              this.setState({ show: !this.state.show })
-            }}>
-            {this.state.show ? 'Preview' : 'Edit'}
-          </button>
+          }
         </div>
       ]
     } else {

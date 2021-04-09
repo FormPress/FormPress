@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
+import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
 
 import './Checkbox.css'
@@ -17,28 +18,28 @@ export default class Checkbox extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      show: true
-    }
-    this.handleChange = this.handleChange.bind(this)
+
+    this.handleAddingItem = this.handleAddingItem.bind(this)
+    this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleChange(event) {
+  handleAddingItem() {
     const { config } = this.props
-    const inputProps = {}
-    let lines = event.target.value.split('\n')
+    const newOptions = config.options
+    newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
-
-    const newOptions = []
-
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i] && lines[i].trim().length !== 0) {
-        newOptions.push(lines[i])
+    this.props.configureQuestion({
+      id: config.id,
+      newState: {
+        options: newOptions
       }
-    }
+    })
+  }
+
+  handleDeletingItem(id) {
+    const { config } = this.props
+    const options = config.options
+    const newOptions = options.filter((option, index) => index !== id)
 
     this.props.configureQuestion({
       id: config.id,
@@ -79,38 +80,14 @@ export default class Checkbox extends Component {
           required={config.required}
         />,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
-          {
-            <div className="checkboxCover">
-              {options.map((item, key) => {
-                return (
-                  <div className="fl input" key={key}>
-                    <input
-                      key={`s_${key}`}
-                      type="checkbox"
-                      id={`q_${config.id}_${key}`}
-                      name={`q_${config.id}`}
-                      value={item}
-                      {...inputProps}
-                    />
-                    {config.toggle === true ? (
-                      <span className="slider"></span>
-                    ) : (
-                      ''
-                    )}
-                    <EditableLabel
-                      className="fl label checkbox-label"
-                      mode={mode}
-                      labelKey={`s_${config.id}_${key}`}
-                      htmlFor={`q_${config.id}_${key}`}
-                      handleLabelChange={this.props.handleLabelChange}
-                      value={item}
-                      required={config.required}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          }
+          <EditableList
+            config={config}
+            mode={mode}
+            options={options}
+            handleAddingItem={this.handleAddingItem}
+            handleDeletingItem={this.handleDeletingItem}
+            handleLabelChange={this.props.handleLabelChange}
+          />
         </div>
       ]
     } else {

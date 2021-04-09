@@ -2,7 +2,7 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'EditableList']
+      exceptions: ['Button']
     },
     configurableSettings: {
       default: false,
@@ -15,7 +15,7 @@ const policy = {
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'EditableList']
+      exceptions: ['Button']
     },
     configurableSettings: {
       default: 'Please fill this field.',
@@ -48,20 +48,6 @@ const policy = {
       formProps: {
         type: 'Checkbox',
         label: 'Make this field toggle?'
-      }
-    }
-  },
-  editableList: {
-    rule: {
-      type: 'only',
-      exceptions: ['Checkbox', 'Radio', 'Dropdown']
-    },
-    configurableSettings: {
-      default: true,
-      formProps: {
-        type: 'EditableList',
-        label: 'How many options do you need?',
-        options: ['item 1']
       }
     }
   }

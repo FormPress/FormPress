@@ -90,9 +90,7 @@ const getElementsKeys = () =>
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements()
-  .sort((a, b) => a.weight - b.weight)
-  .filter((element) => element.weight !== -1)
+const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
 
 class Builder extends Component {
   async componentDidMount() {
