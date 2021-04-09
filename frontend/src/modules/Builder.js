@@ -226,8 +226,6 @@ class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
-    this.handleAddingItem = this.handleAddingItem.bind(this)
-    this.handleDeletingItem = this.handleDeletingItem.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
