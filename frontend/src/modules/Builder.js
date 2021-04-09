@@ -442,42 +442,6 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  handleAddingItem() {
-    const { params } = this.props.match
-    let selectedFieldId = parseInt(params.questionId)
-    const form = { ...this.state.form }
-
-    let matchingElementID = -1
-    form.props.elements.forEach((elem, index) => {
-      if (elem.id === selectedFieldId) {
-        matchingElementID = index
-      }
-    })
-
-    const type = form.props.elements[matchingElementID].type
-    form.props.elements[matchingElementID].options.push(
-      `${type} ${form.props.elements[matchingElementID].options.length}`
-    )
-
-    this.setState({ form })
-  }
-
-  handleDeletingItem() {
-    const { params } = this.props.match
-    let selectedFieldId = parseInt(params.questionId)
-    const form = { ...this.state.form }
-
-    let matchingElementID = -1
-    form.props.elements.forEach((elem, index) => {
-      if (elem.id === selectedFieldId) {
-        matchingElementID = index
-      }
-    })
-    form.props.elements[matchingElementID].options.pop()
-
-    this.setState({ form })
-  }
-
   handleTitleChange(id, value) {
     const form = { ...this.state.form }
 
