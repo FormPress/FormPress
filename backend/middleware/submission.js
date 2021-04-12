@@ -118,7 +118,7 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
     style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/thankcan.css')
+      path.resolve('../', 'frontend/src/style/thankyou.css')
     )
 
     let tyPageTitle = 'Thank you!'
