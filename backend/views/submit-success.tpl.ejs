@@ -1,14 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;0,400;0,500;0,600;1,900&display=swap"
+      rel="stylesheet"
+    />
   <title>Submission Success!</title>
   <%- headerAppend %>
 </head>
 <body>
-  <div>
-  <%- include ("../svg/SubmitSuccess.svg") %>
-  </div>
-  <div class="testing"><h2><%= tyTitle %></h2></div>
-  <div><%= tyText %></div>
+  
+ <div class="big-box">
+
+  <p class="submit-photo">
+  <%- include ("../svg/SubmitSuccess.svg") %> </p>
+ 
+<div>
+   <div class="testing"><h2><%= tyTitle %></h2></div>
+  <div class="texting"><%= tyText %></div>
+ </div>
+        <!-- image ler svg ile degistirilecek -->
+
+    </div>
+  
+        </div>
+
+
+ </div>
+
+<div class="upper-box">
+      <div class="free-form"> This form has been created on FORMPRESS.
+ <br> <span class="click"> Click here </span> to create your own form now! It is free! <br> </div>
+ 
+  <div >
+<%- include ("../svg/formpresslogo.svg") %>
+</div>
+ 
+  
+</div>
+    
+  
 </body>
 </html>
