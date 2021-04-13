@@ -553,8 +553,12 @@ class Builder extends Component {
     const question = form.props.elements.filter(
       (element) => element.id === changes.id
     )[0]
-
-    if (changes.newState.hasOwnProperty('dropdownOptions') === true) {
+    if (
+      Object.prototype.hasOwnProperty.call(
+        changes.newState,
+        'dropdownOptions'
+      ) === true
+    ) {
       let lines = changes.newState.dropdownOptions.split('\n')
       changes.newState.options = []
 
