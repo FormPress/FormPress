@@ -554,6 +554,17 @@ class Builder extends Component {
       (element) => element.id === changes.id
     )[0]
 
+    if (changes.newState.hasOwnProperty('dropdownOptions') === true) {
+      let lines = changes.newState.dropdownOptions.split('\n')
+      changes.newState.options = []
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i] && lines[i].trim().length !== 0) {
+          changes.newState.options.push(lines[i])
+        }
+      }
+    }
+
     Object.assign(question, changes.newState)
 
     this.setState({ form })
@@ -678,8 +689,6 @@ class Builder extends Component {
           {questionPropertiesReady === true ? (
             <QuestionProperties
               selectedField={selectedField}
-              handleAddingItem={this.handleAddingItem}
-              handleDeletingItem={this.handleDeletingItem}
               configureQuestion={this.configureQuestion}
             />
           ) : null}

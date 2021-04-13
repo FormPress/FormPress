@@ -50,6 +50,19 @@ const policy = {
         label: 'Make this field toggle?'
       }
     }
+  },
+  dropdownOptions: {
+    rule: {
+      type: 'only',
+      exceptions: ['Dropdown']
+    },
+    configurableSettings: {
+      default: ['Dropdown 1'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Dropdown options'
+      }
+    }
   }
 }
 

@@ -36,15 +36,27 @@ export default class TextArea extends Component {
           value={config.label}
           required={config.required}
         />
-        <div className="fl input">
-          <textarea
-            id={`q_${config.id}`}
-            name={`q_${config.id}`}
-            {...inputProps}></textarea>
-        </div>
-        <div className="fl metadata">
-          <div className="requiredErrorText">{config.requiredText}</div>
-        </div>
+        {mode === 'viewer' ? (
+          <div className="fl input">
+            <textarea
+              id={`q_${config.id}`}
+              name={`q_${config.id}`}
+              onChange={this.props.handleFieldChange}
+              {...inputProps}></textarea>
+          </div>
+        ) : (
+          <div>
+            <div className="fl input">
+              <textarea
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                {...inputProps}></textarea>
+            </div>
+            <div className="fl metadata">
+              <div className="requiredErrorText">{config.requiredText}</div>
+            </div>
+          </div>
+        )}
       </ElementContainer>
     )
   }

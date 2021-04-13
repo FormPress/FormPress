@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
-import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
 
 import './Dropdown.css'
@@ -13,39 +12,6 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1']
-  }
-
-  constructor(props) {
-    super(props)
-
-    this.handleAddingItem = this.handleAddingItem.bind(this)
-    this.handleDeletingItem = this.handleDeletingItem.bind(this)
-  }
-
-  handleAddingItem() {
-    const { config } = this.props
-    const newOptions = config.options
-    newOptions.push(`${config.type} ${newOptions.length + 1}`)
-
-    this.props.configureQuestion({
-      id: config.id,
-      newState: {
-        options: newOptions
-      }
-    })
-  }
-
-  handleDeletingItem(id) {
-    const { config } = this.props
-    const options = config.options
-    const newOptions = options.filter((option, index) => index !== id)
-
-    this.props.configureQuestion({
-      id: config.id,
-      newState: {
-        options: newOptions
-      }
-    })
   }
 
   render() {
@@ -81,14 +47,22 @@ export default class Dropdown extends Component {
         <div key="2">
           {
             <div className="dropdown-div">
-              <EditableList
-                config={config}
-                mode={mode}
-                options={options}
-                handleAddingItem={this.handleAddingItem}
-                handleDeletingItem={this.handleDeletingItem}
-                handleLabelChange={this.props.handleLabelChange}
-              />
+              <select
+                className="dropdown-select"
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                defaultValue="choose-disabled">
+                <option disabled value="choose-disabled">
+                  Choose one
+                </option>
+                {options.map((item) => {
+                  return (
+                    <option className="option-space" key={item} value={item}>
+                      {item}
+                    </option>
+                  )
+                })}
+              </select>
             </div>
           }
         </div>
@@ -108,8 +82,9 @@ export default class Dropdown extends Component {
           <select
             className="dropdown-select"
             id={`q_${config.id}`}
-            name={`q_${config.id}`}>
-            <option selected disabled>
+            name={`q_${config.id}`}
+            defaultValue="choose-disabled">
+            <option disabled value="choose-disabled">
               Choose one
             </option>
             {options.map((item) => {

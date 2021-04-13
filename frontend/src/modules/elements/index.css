@@ -29,10 +29,6 @@
   color: red;
 }
 
-.builderStage .form > .element > .input {
-  width: 400px;
-}
-
 .builderStage .form > .element > button,
 .builderStage .form > .element > input[type='submit'] {
   padding: 5px 10px;

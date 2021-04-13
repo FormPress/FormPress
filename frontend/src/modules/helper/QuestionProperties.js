@@ -8,8 +8,6 @@ export default class QuestionProperties extends Component {
     super(props)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleAddingItem = this.handleAddingItem.bind(this)
-    this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
   handleFieldChange(elem, e) {
@@ -33,14 +31,6 @@ export default class QuestionProperties extends Component {
         }
       })
     }
-  }
-
-  handleAddingItem() {
-    this.props.handleAddingItem()
-  }
-
-  handleDeletingItem() {
-    this.props.handleDeletingItem()
   }
 
   render() {
