@@ -1,7 +1,9 @@
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
 const { getPool } = require(path.resolve('./', 'db'))
-const { fileupload, submissionhandler } = require(path.resolve('helper'))
+const { fileupload, submissionhandler, emailtemplate } = require(path.resolve(
+  'helper'
+))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -122,16 +124,22 @@ module.exports = (app) => {
       sendEmailTo !== undefined &&
       sendEmailTo !== ''
     ) {
+      const htmlBody = emailtemplate.htmlEmail(
+        form,
+        formattedInput,
+        submission_id
+      )
+      const textBody = emailtemplate.textEmail(
+        form,
+        formattedInput,
+        submission_id
+      )
       const msg = {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
-        text: `New Submission has been received ${JSON.stringify(
-          formattedInput
-        )}`,
-        html: `New Submission has been received ${JSON.stringify(
-          formattedInput
-        )}`
+        text: textBody,
+        html: htmlBody
       }
 
       try {

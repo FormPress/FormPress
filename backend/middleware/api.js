@@ -4,12 +4,14 @@ const fs = require('fs')
 const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
-  paramShouldMatchTokenUserId
+  paramShouldMatchTokenUserId,
+  userShouldOwnSubmission
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
+const { Storage } = require('@google-cloud/storage')
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -397,6 +399,47 @@ module.exports = (app) => {
         res.json(result)
       } else {
         res.json([])
+      }
+    }
+  )
+
+  //download uploaded file
+  app.get(
+    '/api/users/:user_id/forms/:form_id/submissons/:submission_id/questions/:question_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnSubmission('user_id', 'submission_id'),
+    async (req, res) => {
+      const storage = new Storage({
+        keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
+        projectId: 'formpress'
+      })
+      const fileDownloadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
+      const { submission_id, question_id } = req.params
+      const db = await getPool()
+      const preResult = await db.query(
+        `
+          SELECT \`value\` from \`entry\` WHERE submission_id = ? AND question_id = ?
+        `,
+        [submission_id, question_id]
+      )
+      if (preResult.length < 1) {
+        res.status(404).send('Can not find file')
+      } else {
+        const result = JSON.parse(preResult[0].value)
+        const uploadName = result.uploadName
+        const fileName = result.fileName
+        const fileToDownload = fileDownloadBucket.file(uploadName)
+
+        res.set('Content-disposition', 'attachment; filename=' + fileName)
+        res.set('Content-Type', 'text/plain')
+        fileToDownload
+          .createReadStream()
+          .on('error', function (err) {
+            console.log(err)
+            res.status(404).send('Are you sure about your url?')
+          })
+          .pipe(res)
       }
     }
   )

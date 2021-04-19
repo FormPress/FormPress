@@ -27,16 +27,12 @@ exports.uploadFile = (uploadedFile, submit_id) =>
       .on('error', (error) => {
         reject(error)
       })
-      .on('finish', async () => {
-        await file.makePublic() // TODO, lets not make files public by default
+      .on('finish', () => {
         resolve(
           JSON.stringify({
-            url: exports.getPublicUrl(fileName),
+            uploadName: fileName,
             fileName: uploadedFile.name
           })
         )
       })
   })
-
-exports.getPublicUrl = (fileName) =>
-  `https://storage.googleapis.com/${process.env.FILE_UPLOAD_BUCKET}/${fileName}`

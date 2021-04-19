@@ -10,7 +10,13 @@ export const setToken = (_token) => {
   token = _token
 }
 
-export const api = ({ resource, method = 'get', body, useAuth = true }) =>
+export const api = ({
+  resource,
+  method = 'get',
+  body,
+  useAuth = true,
+  useBlob = false
+}) =>
   new Promise((resolve, reject) => {
     const options = {
       headers: {
@@ -34,8 +40,11 @@ export const api = ({ resource, method = 'get', body, useAuth = true }) =>
       .then((response) => {
         success = response.ok
         status = response.status
-
-        return response.json()
+        if (useBlob && success) {
+          return response.blob()
+        } else {
+          return response.json()
+        }
       })
       .then((data) => {
         resolve({ success, status, data })

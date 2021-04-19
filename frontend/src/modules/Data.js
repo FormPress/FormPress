@@ -381,10 +381,20 @@ class Data extends Component {
     }
 
     return entries.map((entry, index) => {
+      //there should be a better way to check fileUpload
+      let value = ''
+      if (entry.value.indexOf('{"uploadName":"') >= 0) {
+        const parsedValue = JSON.parse(entry.value)
+        const uriEncodedName = encodeURI(parsedValue.fileName)
+        const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
+        value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
+      } else {
+        value = entry.value
+      }
       return (
         <div key={index} className="entry">
           <div className="label">{getLabel(entry.question_id)}</div>
-          <div className="value">{entry.value}</div>
+          <div className="value">{value}</div>
         </div>
       )
     })
