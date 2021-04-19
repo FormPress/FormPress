@@ -424,7 +424,13 @@ class Builder extends Component {
 
   handleFormElementClick(e) {
     e.preventDefault()
-    const id = parseInt(e.target.id.replace('qc_', ''))
+    let elemID = e.target
+    let id = parseInt(e.target.id.replace('qc_', ''))
+    while (elemID.id === '') {
+      elemID = elemID.parentNode
+      id = parseInt(elemID.id.replace('qc_', ''))
+    }
+
     const { elements } = this.state.form.props
     let { formId } = this.props.match.params
 
@@ -469,7 +475,7 @@ class Builder extends Component {
     this.setState({ saving: false })
 
     if (form.id === null && typeof data.id !== 'undefined') {
-      this.props.history.push(`/editor/${data.id}`)
+      this.props.history.push(`/editor/${data.id}/builder`)
       this.setState({
         form: {
           ...this.state.form,
@@ -599,8 +605,6 @@ class Builder extends Component {
         )[0]
 
         const elements = getElementsConfigurableSettingsObject()
-
-        console.log(elements)
 
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
