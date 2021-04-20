@@ -11,7 +11,8 @@ export default class Dropdown extends Component {
     id: 0,
     type: 'Dropdown',
     label: 'Dropdown',
-    options: ['Dropdown 1']
+    options: ['Dropdown 1'],
+    requiredText: 'Please fill this field.'
   }
 
   render() {

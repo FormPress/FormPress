@@ -11,7 +11,8 @@ export default class TextArea extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'TextArea'
+    label: 'TextArea',
+    requiredText: 'Please fill this field.'
   }
 
   render() {

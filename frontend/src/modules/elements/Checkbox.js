@@ -13,7 +13,8 @@ export default class Checkbox extends Component {
     id: 0,
     type: 'Checkbox',
     label: 'Label',
-    options: ['Checkbox 1']
+    options: ['Checkbox 1'],
+    requiredText: 'Please fill this field.'
   }
 
   constructor(props) {
@@ -117,11 +118,11 @@ export default class Checkbox extends Component {
                   {...inputProps}
                 />
                 {config.toggle === true ? <span className="slider"></span> : ''}
-                <span
+                <label
                   className="checkbox-label"
                   htmlFor={`q_${config.id}_${key}`}>
                   {item}
-                </span>
+                </label>
               </div>
             )
           })}

@@ -15,7 +15,7 @@
   background: rgba(255, 0, 0, 0.3);
 }
 
-.form > .element.requiredError > .metadata > .requiredErrorText {
+.form .element.requiredError .metadata .requiredErrorText {
   display: block;
 }
 
@@ -39,6 +39,6 @@
   width: 100%;
 }
 
-.form > .element > .metadata > .requiredErrorText {
+.form .element .metadata .requiredErrorText {
   display: none;
 }

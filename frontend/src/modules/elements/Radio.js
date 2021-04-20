@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
@@ -12,7 +13,8 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: ['Radio 1']
+    options: ['Radio 1'],
+    requiredText: 'Please fill this field.'
   }
 
   constructor(props) {
@@ -98,10 +100,14 @@ export default class Radio extends Component {
                 <li key={key}>
                   <input
                     type="radio"
-                    id={`q_${config.id}`}
+                    id={`q_${config.id}_${key}`}
                     name={`q_${config.id}`}
                     value={item}></input>
-                  <label>{item}</label>
+                  <label
+                    className="radio-label"
+                    htmlFor={`q_${config.id}_${key}`}>
+                    {item}
+                  </label>
                   <div className="check">
                     <div className="inside"></div>
                   </div>
