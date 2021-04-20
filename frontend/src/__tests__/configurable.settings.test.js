@@ -9,14 +9,8 @@ for (const key of keys) {
     test('Does it have a valid configurable settings', () => {
       if (key !== "Button") {
         //this will be returned attr name with configSettings
-        //console.log(key, getConfigurableSettings(key))
         expect(getConfigurableSettings(key)).toHaveProperty('required');
         expect(getConfigurableSettings(key)).toHaveProperty('requiredText');
-      }else{
-        //assuming only attribute is required
-        /*expect.objectContaining({
-          disabled: expect.any(Object)
-        });*/
       }
     })
   })

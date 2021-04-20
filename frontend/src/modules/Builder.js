@@ -279,7 +279,6 @@ class Builder extends Component {
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
-    console.log(form)
     let elements = [...form.props.elements]
 
     if (dragMode === 'insert') {
