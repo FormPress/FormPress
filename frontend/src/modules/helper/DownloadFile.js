@@ -11,16 +11,13 @@ class Download extends Component {
   }
 
   async startDownload(fileName) {
-    const resource = `/api/users/${this.props.auth.user_id}/forms/${this.props.match.params.formId}/submissons/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}`
+    const resource = `/api/users/${this.props.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}`
 
     const { status, data } = await api({
       resource: resource,
       useBlob: true
     })
     if (status !== 200) {
-      console.log('Not 200')
-      console.log(status)
-      console.group(data)
       this.setState({ message: data.message })
     } else {
       const url = window.URL.createObjectURL(new Blob([data]))

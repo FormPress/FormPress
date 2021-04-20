@@ -405,7 +405,7 @@ module.exports = (app) => {
 
   //download uploaded file
   app.get(
-    '/api/users/:user_id/forms/:form_id/submissons/:submission_id/questions/:question_id',
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     userShouldOwnSubmission('user_id', 'submission_id'),
@@ -432,7 +432,7 @@ module.exports = (app) => {
         const fileToDownload = fileDownloadBucket.file(uploadName)
 
         res.set('Content-disposition', 'attachment; filename=' + fileName)
-        res.set('Content-Type', 'text/plain')
+        res.set('Content-Type', 'application/json')
         fileToDownload
           .createReadStream()
           .on('error', function (err) {
