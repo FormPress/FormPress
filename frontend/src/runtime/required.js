@@ -66,7 +66,7 @@
       domElem.addEventListener('blur', () => {
         const value = domElem.value
 
-        if (value.trim() !== 'Choose one') {
+        if (value.trim() !== 'choose-disabled') {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -75,12 +75,14 @@
         }
       })
       domElem.addEventListener('change', function () {
-        if (this.value === 'Choose one') {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
+        const value = domElem.value
+
+        if (value.trim() !== 'choose-disabled') {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
     } else if (elem.type === 'Name') {
