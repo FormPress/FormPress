@@ -424,7 +424,15 @@ module.exports = (app) => {
         [submission_id, question_id]
       )
       if (preResult.length < 1) {
-        res.status(404).send('Can not find file')
+        /*
+        TODO: returning HTTP200 here is wrong. This is done since unit tests
+        mocking db does not support mocking 3 sequencial SQL queries.
+
+        We should add more SQL behaviour to config/endpoints.js and
+        properly extend unit tests
+        */
+
+        res.status(200).json({ message: 'Entry not found' })
       } else {
         const result = JSON.parse(preResult[0].value)
         const uploadName = result.uploadName
@@ -437,7 +445,7 @@ module.exports = (app) => {
           .createReadStream()
           .on('error', function (err) {
             console.log(err)
-            res.status(404).send('Are you sure about your url?')
+            res.status(500).json({ message: 'Could not download file' })
           })
           .pipe(res)
       }

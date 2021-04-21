@@ -117,7 +117,7 @@ module.exports = {
       path:
         '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
       protected: true,
-      exampleRequestPath: 'api/users/1/forms/1/submissions/1/questions/1'
+      exampleRequestPath: '/api/users/1/forms/1/submissions/1/questions/1'
     }
   ]
 }
