@@ -519,10 +519,10 @@ class Builder extends Component {
   }
 
   handlePreviewClick() {
-    const hostname = window.location.protocol + '//' + window.location.host
+    const BACKEND = process.env.REACT_APP_BACKEND
     const { id } = this.state.form
 
-    window.open(`${hostname}/form/view/${id}?preview=true`, '_blank')
+    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion(changes) {
