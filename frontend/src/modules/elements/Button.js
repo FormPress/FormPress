@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
+import './Button.css'
+
 export default class Button extends Component {
   static weight = 4
 

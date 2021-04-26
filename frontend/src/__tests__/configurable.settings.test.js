@@ -11,12 +11,6 @@ for (const key of keys) {
         //this will be returned attr name with configSettings
         expect(getConfigurableSettings(key)).toHaveProperty('required');
         expect(getConfigurableSettings(key)).toHaveProperty('requiredText');
-        expect(getConfigurableSettings(key)).toHaveProperty('disabled');
-      }else{
-        //assuming only attribute is required
-        expect.objectContaining({
-          disabled: expect.any(Object)
-        });
       }
     })
   })
