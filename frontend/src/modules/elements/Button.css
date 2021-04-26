@@ -1,0 +1,15 @@
+.elementButton button {
+  background-color: #719fbd;
+  outline: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 13px;
+  width: 203px;
+  height: 44px;
+}
+
+.elementButton button div {
+  float: none !important;
+  margin: auto;
+  color: #ffffff;
+}

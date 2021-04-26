@@ -482,6 +482,9 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/style/common.css')
     )
     style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+    )
+    style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
