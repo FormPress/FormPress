@@ -1,5 +1,6 @@
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
+const ejs = require('ejs')
 const { getPool } = require(path.resolve('./', 'db'))
 const { fileupload, submissionhandler, emailtemplate } = require(path.resolve(
   'helper'
@@ -124,7 +125,7 @@ module.exports = (app) => {
       sendEmailTo !== undefined &&
       sendEmailTo !== ''
     ) {
-      const htmlBody = emailtemplate.htmlEmail(
+      const FormAnswers = emailtemplate.htmlAnswers(
         form,
         formattedInput,
         submission_id
@@ -134,20 +135,33 @@ module.exports = (app) => {
         formattedInput,
         submission_id
       )
-      const msg = {
-        to: sendEmailTo,
-        from: 'submission-notifications-noreply@api.formpress.org',
-        subject: 'New submission has been received',
-        text: textBody,
-        html: htmlBody
-      }
 
-      try {
-        console.log('sending email ', msg)
-        sgMail.send(msg)
-      } catch (e) {
-        console.log('Error while sending email ', e)
-      }
+      ejs
+        .renderFile(path.join(__dirname, '../views/submitemail.tpl.ejs'), {
+          FormTitle: form.title,
+          FormAnswers: FormAnswers,
+          email: sendEmailTo
+        })
+        .then((result) => {
+          const htmlBody = result
+          const msg = {
+            to: sendEmailTo,
+            from: 'submission-notifications-noreply@api.formpress.org',
+            subject: 'New submission has been received',
+            text: textBody,
+            html: htmlBody
+          }
+
+          try {
+            console.log('sending email ', msg)
+            sgMail.send(msg)
+          } catch (e) {
+            console.log('Error while sending email ', e)
+          }
+        })
+        .catch((err) => {
+          console.log('Error sending mail', err)
+        })
     }
   })
 }

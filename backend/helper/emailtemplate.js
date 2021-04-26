@@ -1,30 +1,8 @@
-const heroImage = 'https://static.formpress.org/images/hero.png'
-const formpressLogo = 'https://static.formpress.org/images/logo.png'
-const mottoText = 'https://static.formpress.org/images/motto.png'
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 
-exports.htmlEmail = (form, formattedInput, submission_id) => {
-  let styledEmail = '<div style=" width: 600px; border:solid 1px #e2e2e2;">'
-  const formName = form.title
-  const topBar =
-    '<div style=" background-color:#8cc63f; width:100%; height: 6px"></div><div style= "height:80px; width:100%;"><span style=" padding: 10px 10px 10px 40px; display: inline-block"><img src="' +
-    formpressLogo +
-    '" alt="formpress logo" width="204"/></span><span style="padding: 10px 10px 10px 110px;"><img src="' +
-    mottoText +
-    '" alt="formpress motto" width="206"/></span></div>'
-  const helloText =
-    '<div style=" width: 100% padding-bottom:50px;"><span style=" padding: 80px 80px 10px 40px; width: 43%; font-size: 16px; color:#113952; float:left;">Your <strong>&quot;' +
-    formName +
-    '&quot;</strong> form just received a respond. Here is the details:</span><span><img src="' +
-    heroImage +
-    '" alt="submisssion success" width="221"/></span></div>'
-  const someLine =
-    '<div><span style="width: 40px; display: inline-block"></span><span style="width: 85%; display: inline-block; height: 2px; background-color: #e2e2e2;"></span></div>'
-  const respondHead =
-    '<div style=" color:#7aad37; font-size: 18px; padding-left:40px; padding-top: 20px;">RESPONDS</div>'
-
+exports.htmlAnswers = (form, formattedInput, submission_id) => {
   let questionData = []
   for (const data of formattedInput) {
     const question_id = parseInt(data.q_id)
@@ -86,24 +64,8 @@ exports.htmlEmail = (form, formattedInput, submission_id) => {
     '<div style= " padding: 10px;">' +
     responses.join('</div><div style= " padding: 10px;">') +
     '</div>'
-  let emailAddress = ''
-  const integrations = form.props.integrations || []
-  const emailIntegration = integrations.filter(
-    (integration) => integration.type === 'email'
-  )
-  emailAddress = emailIntegration[0].to
 
-  const footer =
-    '<div style =" font-size: 12px;   text-align: center; color: #646569;">&#169; 2021 FORMPRESS.ORG This e-mail has been sent to ' +
-    emailAddress +
-    ', you can change it from form properties.</div></div>'
-  styledEmail += topBar
-  styledEmail += helloText
-  styledEmail += someLine
-  styledEmail += respondHead
-  styledEmail += answers
-  styledEmail += footer
-  return styledEmail
+  return answers
 }
 
 exports.textEmail = (form, formattedInput, submission_id) => {
