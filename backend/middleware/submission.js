@@ -111,12 +111,7 @@ module.exports = (app) => {
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/common.css')
-    )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/modules/elements/index.css')
-    )
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/thankyou.css')
     )
