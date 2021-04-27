@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const { getPool } = require(path.resolve('./', 'db'))
 const { fileupload, submissionhandler } = require(path.resolve('helper'))
@@ -105,13 +106,51 @@ module.exports = (app) => {
 
       res.status(500).send('Error during submission handling')
     }
-    res.send('Your Submission has been received')
+    //res.send('Your Submission has been received')
+
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+
+    let tyPageText =
+      'Your submission has been successfully sent and we informed the form owner about your submission.'
 
     let sendEmailTo = false
     const integrations = form.props.integrations || []
     const emailIntegration = integrations.filter(
       (integration) => integration.type === 'email'
     )
+
+    const tyTitleIntegration = integrations.filter(
+      (integration) => integration.type === 'tyPageTitle'
+    )
+
+    if (
+      tyTitleIntegration.length > 0 &&
+      tyTitleIntegration[0].value.length > 0
+    ) {
+      tyPageTitle = tyTitleIntegration[0].value
+    }
+
+    const tyTextIntegration = integrations.filter(
+      (integration) => integration.type === 'tyPageText'
+    )
+
+    if (tyTextIntegration.length > 0 && tyTextIntegration[0].value.length > 0) {
+      tyPageText = tyTextIntegration[0].value
+    }
+
+    res.render('submit-success.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle: tyPageTitle,
+      tyText: tyPageText
+    })
 
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to
