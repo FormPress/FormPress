@@ -1,10 +1,10 @@
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
+const { FP_ENV, FP_HOST } = process.env
+const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { fileupload, submissionhandler, emailtemplate } = require(path.resolve(
-  'helper'
-))
+const { fileupload, submissionhandler } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -125,43 +125,48 @@ module.exports = (app) => {
       sendEmailTo !== undefined &&
       sendEmailTo !== ''
     ) {
-      const FormAnswers = emailtemplate.htmlAnswers(
-        form,
-        formattedInput,
-        submission_id
-      )
-      const textBody = emailtemplate.textEmail(
-        form,
-        formattedInput,
-        submission_id
-      )
-
-      ejs
-        .renderFile(path.join(__dirname, '../views/submitemail.tpl.ejs'), {
+      const FRONTEND =
+        FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
+      const htmlBody = await ejs
+        .renderFile(path.join(__dirname, '../views/htmlsubmitemail.tpl.ejs'), {
+          FRONTEND: FRONTEND,
           FormTitle: form.title,
-          FormAnswers: FormAnswers,
-          email: sendEmailTo
-        })
-        .then((result) => {
-          const htmlBody = result
-          const msg = {
-            to: sendEmailTo,
-            from: 'submission-notifications-noreply@api.formpress.org',
-            subject: 'New submission has been received',
-            text: textBody,
-            html: htmlBody
-          }
-
-          try {
-            console.log('sending email ', msg)
-            sgMail.send(msg)
-          } catch (e) {
-            console.log('Error while sending email ', e)
-          }
+          Form: form,
+          FormattedInput: formattedInput,
+          Submission_id: submission_id,
+          Email: sendEmailTo
         })
         .catch((err) => {
-          console.log('Error sending mail', err)
+          console.log('can not render html body', err)
         })
+
+      const textBody = await ejs
+        .renderFile(path.join(__dirname, '../views/textsubmitemail.tpl.ejs'), {
+          FRONTEND: FRONTEND,
+          FormTitle: form.title,
+          Form: form,
+          FormattedInput: formattedInput,
+          Submission_id: submission_id,
+          Email: sendEmailTo
+        })
+        .catch((err) => {
+          console.log('can not render text body', err)
+        })
+
+      const msg = {
+        to: sendEmailTo,
+        from: 'submission-notifications-noreply@api.formpress.org',
+        subject: 'New submission has been received',
+        text: textBody,
+        html: htmlBody
+      }
+
+      try {
+        console.log('sending email ', msg)
+        sgMail.send(msg)
+      } catch (e) {
+        console.log('Error while sending email ', e)
+      }
     }
   })
 }

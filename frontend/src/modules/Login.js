@@ -66,10 +66,13 @@ class Login extends Component {
     const { message, state } = this.state
 
     if (this.props.auth.loggedIn === true) {
+      const pathName = this.props.location.state
+        ? this.props.location.state.from.pathname
+        : '/forms'
       return (
         <Redirect
           to={{
-            pathname: this.props.location.state.from.pathname || '/forms',
+            pathname: pathName,
             state: { from: this.props.location }
           }}
         />
