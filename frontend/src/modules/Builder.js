@@ -451,11 +451,16 @@ class Builder extends Component {
 
   handleFormElementClick(e) {
     e.preventDefault()
+
     let elemID = e.target
     let id = parseInt(elemID.id.replace('qc_', ''))
+
     while (elemID.id === '' || isNaN(id) === true) {
       elemID = elemID.parentNode
       id = parseInt(elemID.id.replace('qc_', ''))
+      if (elemID.id === 'root') {
+        return false
+      }
     }
 
     const { elements } = this.state.form.props

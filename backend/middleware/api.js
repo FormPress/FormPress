@@ -11,6 +11,10 @@ const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 
+const {
+  getConfigurableSettings
+} = require('../script/transformed/ConfigurableSettings.js')
+
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
@@ -462,6 +466,21 @@ module.exports = (app) => {
 
     form.props = JSON.parse(form.props)
 
+    let organizedFormItems = form.props.elements
+
+    organizedFormItems.map((e, i) => {
+      for (const elem in getConfigurableSettings(e.type)) {
+        if (elem in e !== true) {
+          organizedFormItems[i]['mode'] = 'sort'
+          organizedFormItems[i]['' + elem + ''] = getConfigurableSettings(
+            e.type
+          )[elem].default
+        }
+      }
+    })
+
+    //console.log(organizedFormItems)
+
     // Update frontend form renderer TODO: don't do this on production!
     transform()
     const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
@@ -474,6 +493,7 @@ module.exports = (app) => {
         mode: 'renderer'
       })
     )
+
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )

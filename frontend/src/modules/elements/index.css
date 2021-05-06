@@ -17,6 +17,9 @@
 
 .form .element.requiredError .metadata .requiredErrorText {
   display: block;
+  font-size: 14px;
+  color: #646464;
+  margin-top: 10px;
 }
 
 .form > .element > .label {
