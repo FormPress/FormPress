@@ -83,11 +83,6 @@
   -webkit-transition: background 0.25s linear;
 }
 
-#options-textarea {
-  width: 50%;
-  float: left;
-}
-
 #edit-preview-button {
   background-color: white;
   color: black;
