@@ -11,7 +11,7 @@ const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
-const { Storage } = require('@google-cloud/storage')
+const { storage } = require(path.resolve('helper'))
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -410,11 +410,6 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     userShouldOwnSubmission('user_id', 'submission_id'),
     async (req, res) => {
-      const storage = new Storage({
-        keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
-        projectId: 'formpress'
-      })
-      const fileDownloadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
       const { submission_id, question_id } = req.params
       const db = await getPool()
       const preResult = await db.query(
@@ -437,17 +432,11 @@ module.exports = (app) => {
         const result = JSON.parse(preResult[0].value)
         const uploadName = result.uploadName
         const fileName = result.fileName
-        const fileToDownload = fileDownloadBucket.file(uploadName)
 
         res.set('Content-disposition', 'attachment; filename=' + fileName)
         res.set('Content-Type', 'application/json')
-        fileToDownload
-          .createReadStream()
-          .on('error', function (err) {
-            console.log(err)
-            res.status(500).json({ message: 'Could not download file' })
-          })
-          .pipe(res)
+
+        storage.downloadFile(uploadName).pipe(res)
       }
     }
   )

@@ -5,7 +5,7 @@ const ejs = require('ejs')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { fileupload, submissionhandler } = require(path.resolve('helper'))
+const { storage, submissionhandler } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -77,7 +77,7 @@ module.exports = (app) => {
 
       //upload file to GCS
       if (type === 'FileUpload') {
-        value = await fileupload.uploadFile(req.files[key], submission_id)
+        value = await storage.uploadFile(req.files[key], submission_id)
       } else {
         value = req.body[key]
       }

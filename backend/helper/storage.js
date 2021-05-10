@@ -1,6 +1,6 @@
 const { Storage } = require('@google-cloud/storage')
 const { v4: uuidv4 } = require('uuid')
-const { Duplex } = require('stream')
+const { Duplex, PassThrough } = require('stream')
 
 const storage = new Storage({
   keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
@@ -36,3 +36,16 @@ exports.uploadFile = (uploadedFile, submit_id) =>
         )
       })
   })
+
+exports.downloadFile = (uploadName) => {
+  const fileToDownload = fileUploadBucket.file(uploadName)
+  const out = new PassThrough()
+  fileToDownload
+    .createReadStream()
+    .on('error', function (err) {
+      console.log('Could not download file', err)
+    })
+    .pipe(out)
+
+  return out
+}
