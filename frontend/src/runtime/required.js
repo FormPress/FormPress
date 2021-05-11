@@ -12,42 +12,61 @@
     const domElem = document.getElementById(`q_${id}`)
     const containerElem = document.getElementById(`qc_${id}`)
 
-    console.log(elem.type)
     if (elem.type === 'Checkbox' || elem.type === 'Radio') {
+      const domNames = document.getElementsByName(`q_${id}`)
+
       requireds[id] = {
         id,
-        valid: domElem.checked
+        valid: false
       }
 
-      domElem.addEventListener('blur', () => {
-        if (domElem.checked) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
+      domNames.forEach((domName) => {
+        domName.addEventListener('blur', () => {
+          if (domName.checked) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            let checkedInputLength = 0
+            domNames.forEach((domName) => {
+              if (domName.checked == true) {
+                checkedInputLength++
+              }
+            })
+            if (checkedInputLength == 0) {
+              containerElem.classList.add('requiredError')
+              requireds[id].valid = false
+            }
+          }
+        })
 
-      domElem.addEventListener('change', function () {
-        if (this.checked) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
+        domName.addEventListener('change', function () {
+          if (domName.checked) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            let checkedInputLength = 0
+            domNames.forEach((domName) => {
+              if (domName.checked == true) {
+                checkedInputLength++
+              }
+            })
+            if (checkedInputLength == 0) {
+              containerElem.classList.add('requiredError')
+              requireds[id].valid = false
+            }
+          }
+        })
       })
     } else if (elem.type === 'Dropdown') {
       requireds[id] = {
         id,
-        valid: domElem.value.trim() !== 'Choose one'
+        valid: domElem.value.trim() !== 'choose-disabled'
       }
 
       domElem.addEventListener('blur', () => {
         const value = domElem.value
 
-        if (value.trim() !== 'Choose one') {
+        if (value.trim() !== 'choose-disabled') {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -56,12 +75,14 @@
         }
       })
       domElem.addEventListener('change', function () {
-        if (this.value === 'Choose one') {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
+        const value = domElem.value
+
+        if (value.trim() !== 'choose-disabled') {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
     } else if (elem.type === 'Name') {
@@ -187,7 +208,11 @@
       })
     }
 
-    if (elem.type !== 'Name') {
+    if (
+      elem.type !== 'Name' &&
+      elem.type !== 'Checkbox' &&
+      elem.type !== 'Radio'
+    ) {
       domElem.addEventListener('focus', () => {
         elemActivated = true
       })

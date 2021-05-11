@@ -11,55 +11,27 @@ export default class Dropdown extends Component {
     id: 0,
     type: 'Dropdown',
     label: 'Dropdown',
-    options: []
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      show: true
-    }
-    this.handleChange = this.handleChange.bind(this)
-  }
-
-  handleChange(event) {
-    const { config } = this.props
-    const inputProps = {}
-    var lines = event.target.value.split('\n')
-
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
-
-    const newOptions = []
-
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i] && lines[i].trim().length !== 0) {
-        newOptions.push(lines[i])
-      }
-    }
-
-    this.props.configureQuestion({
-      id: config.id,
-      newState: {
-        options: newOptions
-      }
-    })
+    options: ['Dropdown 1'],
+    requiredText: 'Please fill this field.'
   }
 
   render() {
     const { config, mode } = this.props
     const inputProps = {}
 
-    const options = Array.isArray(config.options) === true ? config.options : []
-
     if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
+      inputProps.checked = config.value === true
     }
 
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
+
+    const options =
+      Array.isArray(config.options) === true ||
+      typeof config.options !== 'undefined'
+        ? config.options
+        : ['']
 
     var display
     if (mode === 'builder') {
@@ -74,14 +46,14 @@ export default class Dropdown extends Component {
           required={config.required}
         />,
         <div key="2">
-          {this.state.show ? (
-            <textarea id="options-textarea" onChange={this.handleChange}>
-              {config.options.join('\n')}
-            </textarea>
-          ) : (
+          {
             <div className="dropdown-div">
-              <select className="dropdown-select" name={`q_${config.id}`}>
-                <option selected disabled>
+              <select
+                className="dropdown-select"
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                defaultValue="choose-disabled">
+                <option disabled value="choose-disabled">
                   Choose one
                 </option>
                 {options.map((item) => {
@@ -93,14 +65,7 @@ export default class Dropdown extends Component {
                 })}
               </select>
             </div>
-          )}
-          <button
-            id="edit-preview-button"
-            onClick={() => {
-              this.setState({ show: !this.state.show })
-            }}>
-            {this.state.show ? 'Preview' : 'Edit'}
-          </button>
+          }
         </div>
       ]
     } else {
@@ -118,8 +83,9 @@ export default class Dropdown extends Component {
           <select
             className="dropdown-select"
             id={`q_${config.id}`}
-            name={`q_${config.id}`}>
-            <option selected disabled>
+            name={`q_${config.id}`}
+            defaultValue="choose-disabled">
+            <option disabled value="choose-disabled">
               Choose one
             </option>
             {options.map((item) => {
