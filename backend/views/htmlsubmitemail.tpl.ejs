@@ -95,16 +95,18 @@
                 <%}%>
                 </div>
               <%}
-            } else if (response.type === 'FileUpload'){
-              if (response.answer === 'N/A') {%>
-                <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">N/A</div>
-              <%} else {%>
-                <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+            } else if (response.type === 'FileUpload'){%>
+              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <%if (response.answer === 'N/A') {%>
+                  N/A
+                <%} else {%>
                   <a href="<%= response.answer.downloadLink %>"><%=response.answer.fileName%></a>
-                </div>
-              <%}%>
+                <%}%>
+              </div>
             <%} else {%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;"><%=response.answer%></div>
+              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <%=response.answer%>
+              </div>
             <%}%>
           </div>
         <%})%>
