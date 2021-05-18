@@ -1,0 +1,79 @@
+<%
+  let textedEmail = ''
+  let questionData = []
+
+  for (const data of FormattedInput) {
+    const question_id = parseInt(data.q_id)
+    const value = data.value
+    const checkQuestion = Form.props.elements.filter(
+      (element) => element.id === question_id
+    )
+    const question = checkQuestion[0].label
+    const type = checkQuestion[0].type
+
+    questionData.push({ question: question, type: type, answer: value })
+  }
+  const formpressText = 'FORMPRESS Open Source Data Collection\r\n\r\n'
+  const helloText =
+    'Your "' +
+    Form.title +
+    '" form just received a respond. Here is the details:\r\n\r\n'
+  const responses = questionData.map((data) => {
+    let answer = ''
+    const question = data.question + '\r\n'
+    if (data.type === 'Name') {
+      for (const [key, value] of Object.entries(data.answer)) {
+        if (key === 'firstName') { 
+          answer += 'First Name: '
+        } else if (key === 'lastName') {
+          answer += 'Last Name: '
+        } else {
+          answer += key + ': '
+        }
+        if (value === '') {
+          answer += 'N/A\r\n' 
+        } else {
+          answer += value + '\r\n'
+        }
+      }
+    } else if (data.type === 'Checkbox' && data.answer === 'off') {
+      answer = 'N/A\r\n'
+    } else if (data.type === 'FileUpload') {
+      if (data.answer === '') {
+        answer = 'N/A\r\n'
+      } else {
+        const value = JSON.parse(data.answer)
+        const uriFileName = encodeURI(value.fileName)
+        const downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
+
+        answer =
+          value.fileName +
+          '\r\n' +
+          ' (To download file visit ' +
+          downloadLink +
+          ')\r\n'
+      }
+      
+    } else {
+      if (data.answer === '') {
+        answer = 'N/A\r\n'
+      } else {
+        answer = data.answer + '\r\n'
+      }
+    }
+
+    return question + answer
+  })
+  const answers = responses.join('\r\n')
+
+  const footer =
+    '\r\n\r\n\r\n2021 FORMPRESS This e-mail has been sent to ' +
+    Email +
+    ', you can change it from form properties.'
+  textedEmail += formpressText
+  textedEmail += helloText
+  textedEmail += answers
+  textedEmail += footer
+
+%>
+<%- textedEmail %>

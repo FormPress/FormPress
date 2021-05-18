@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken')
 const cheerio = require('cheerio')
 
 process.env.JWT_SECRET = 'somesecretforunittesting'
+process.env.FILE_UPLOAD_BUCKET = 'someBucketName'
 
 const db = require(path.resolve('./', 'db'))
 const getPoolStub = sinon.stub(db, 'getPool')
