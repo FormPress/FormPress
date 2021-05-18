@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { getPool } = require(path.resolve('./', 'db'))
+const { oldformpropshandler } = require(path.resolve('helper'))
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId
@@ -10,10 +11,6 @@ const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
-
-const {
-  getConfigurableSettings
-} = require('../script/transformed/ConfigurableSettings.js')
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -464,22 +461,9 @@ module.exports = (app) => {
       }
     }
 
-    form.props = JSON.parse(form.props)
-
-    let organizedFormItems = form.props.elements
-
-    organizedFormItems.map((e, i) => {
-      for (const elem in getConfigurableSettings(e.type)) {
-        if (elem in e !== true) {
-          organizedFormItems[i]['mode'] = 'sort'
-          organizedFormItems[i]['' + elem + ''] = getConfigurableSettings(
-            e.type
-          )[elem].default
-        }
-      }
-    })
-
-    //console.log(organizedFormItems)
+    form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
+      JSON.parse(form.props)
+    )
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
