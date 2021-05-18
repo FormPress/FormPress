@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <div style=" width: 600px; border:solid 1px #e2e2e2;">
+      <div style=" background-color:#8cc63f; width:100%; height: 6px"></div>
+      <div style= "height:80px; width:100%;">
+        <span style=" padding: 10px 10px 10px 40px; display: inline-block">
+          <img src="https://static.formpress.org/images/logo.png" alt="formpress logo" width="204"/>
+        </span>
+        <span style="padding: 10px 10px 10px 110px;">
+          <img src="https://static.formpress.org/images/motto.png" alt="formpress motto" width="206"/>
+        </span>
+      </div>
+      <div style=" width: 100%; padding-bottom:50px;">
+        <span style=" padding: 80px 80px 10px 40px; width: 43%; font-size: 16px; color:#113952; float:left;">
+          Your <strong>&quot;<%= FormTitle %>&quot;</strong> form just received a respond. Here is the details:
+        </span>
+        <span>
+          <img src="https://static.formpress.org/images/hero.png" alt="submisssion success" width="221"/>
+        </span>
+      </div>
+      <div>
+        <span style="width: 40px; display: inline-block"></span>
+        <span style="width: 85%; display: inline-block; height: 2px; background-color: #e2e2e2;"></span>
+      </div>
+      <div style=" color:#7aad37; font-size: 18px; padding-left:40px; padding-top: 20px;">RESPONDS</div>
+      <div style="padding: 10px 0px 20px 10px;">
+        <%
+        let questionData = []
+        for (const data of FormattedInput) {
+          const question_id = parseInt(data.q_id)
+          const value = data.value
+          const checkQuestion = Form.props.elements.filter(
+            (element) => element.id === question_id
+          )
+          const question = checkQuestion[0].label
+          const type = checkQuestion[0].type
+      
+          questionData.push({
+            question: question,
+            type: type,
+            answer: value,
+            question_id: question_id
+          })
+        }
+        const responselist = questionData.map((data) => {
+          let response = {}
+          response.question = data.question
+          if (data.type === 'Checkbox' && data.answer === 'off') {
+            response.answer = 'N/A'
+          } else if (data.type === 'FileUpload') {
+            if (data.answer === '') {
+              response.answer = 'N/A'
+            } else {
+              const value = JSON.parse(data.answer)
+              const uriFileName = encodeURI(value.fileName)
+              const downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
+        
+              response.answer = {}
+              response.answer.downloadLink = downloadLink
+              response.answer.fileName = value.fileName
+            }
+          } else {
+            if (data.answer === '') {
+              response.answer = 'N/A'
+            } else {
+              response.answer = data.answer
+            }
+          }
+          response.type = data.type
+
+          return response
+        })
+
+
+        responselist.forEach (function (response) {%>
+          <div>
+            <div style=" color: #113952; font-weight: bold; font-size: 16px; width: 90%; padding: 10px 10px 10px 30px;">
+              <%= response.question%>
+            </div>
+            <% if (response.type === 'Name') {
+              for (const [key, value] of Object.entries(response.answer)) {%>
+                <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <%if (key === 'firstName') { %>
+                  <i>First Name: </i>
+                <%} else if (key === 'lastName') {%>
+                  <i>Last Name: </i>
+                <%} else {%>
+                  <i><%= key%>: </i>
+                <%}%>
+                <% if (value === '') {%>
+                  N/A
+                <%} else {%>
+                  <%= value%>
+                <%}%>
+                </div>
+              <%}
+            } else if (response.type === 'FileUpload'){%>
+              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <%if (response.answer === 'N/A') {%>
+                  N/A
+                <%} else {%>
+                  <a href="<%= response.answer.downloadLink %>"><%=response.answer.fileName%></a>
+                <%}%>
+              </div>
+            <%} else {%>
+              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <%=response.answer%>
+              </div>
+            <%}%>
+          </div>
+        <%})%>
+      %>
+      </div>
+      <div style =" font-size: 12px;   text-align: center; color: #646569;">
+        &#169; 2021 FORMPRESS.ORG This e-mail has been sent to <%- Email %>, you can change it from form properties.
+      </div>
+    </div>
+  </body>
+</html>
