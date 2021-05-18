@@ -1,8 +1,11 @@
 const path = require('path')
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
+const ejs = require('ejs')
+const { FP_ENV, FP_HOST } = process.env
+const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { fileupload, submissionhandler } = require(path.resolve('helper'))
+const { storage, submissionhandler } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -74,7 +77,7 @@ module.exports = (app) => {
 
       //upload file to GCS
       if (type === 'FileUpload') {
-        value = await fileupload.uploadFile(req.files[key], submission_id)
+        value = await storage.uploadFile(req.files[key], submission_id)
       } else {
         value = req.body[key]
       }
@@ -161,16 +164,40 @@ module.exports = (app) => {
       sendEmailTo !== undefined &&
       sendEmailTo !== ''
     ) {
+      const FRONTEND =
+        FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
+      const htmlBody = await ejs
+        .renderFile(path.join(__dirname, '../views/htmlsubmitemail.tpl.ejs'), {
+          FRONTEND: FRONTEND,
+          FormTitle: form.title,
+          Form: form,
+          FormattedInput: formattedInput,
+          Submission_id: submission_id,
+          Email: sendEmailTo
+        })
+        .catch((err) => {
+          console.log('can not render html body', err)
+        })
+
+      const textBody = await ejs
+        .renderFile(path.join(__dirname, '../views/textsubmitemail.tpl.ejs'), {
+          FRONTEND: FRONTEND,
+          FormTitle: form.title,
+          Form: form,
+          FormattedInput: formattedInput,
+          Submission_id: submission_id,
+          Email: sendEmailTo
+        })
+        .catch((err) => {
+          console.log('can not render text body', err)
+        })
+
       const msg = {
         to: sendEmailTo,
         from: 'submission-notifications-noreply@api.formpress.org',
         subject: 'New submission has been received',
-        text: `New Submission has been received ${JSON.stringify(
-          formattedInput
-        )}`,
-        html: `New Submission has been received ${JSON.stringify(
-          formattedInput
-        )}`
+        text: textBody,
+        html: htmlBody
       }
 
       try {
