@@ -1,0 +1,76 @@
+.questionPropertiesCheckboxMenu {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #e4e4e4;
+  padding: 5px;
+}
+
+.questionPropertiesCheckboxMenu .questionPropertiesCheckbox {
+  padding: 5px;
+  margin: 5px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: calc(50% - 10px);
+  max-width: calc(50% - 10px);
+  box-sizing: border-box;
+  text-align: center;
+  background-color: #ffffff;
+  user-select: none;
+  cursor: pointer;
+  color: #a7a7a7;
+}
+
+.questionPropertiesCheckboxMenu .questionPropertiesAddNewButton {
+  padding: 5px;
+  margin: 5px;
+  background-color: #e4e4e4;
+  border: 1px dashed #a7a7a7;
+  color: #a7a7a7;
+  font-size: 14px;
+}
+
+.questionPropertiesCheckboxMenu .questionPropertiesAddNewButton.halfButton {
+  max-width: calc(50% - 10px);
+}
+
+.questionPropertiesCheckboxMenu .questionPropertiesAddNewButton.fullButton {
+  max-width: calc(100% - 10px);
+}
+.addNewToggle,
+.addNewCheckbox,
+.addNewRadio {
+  border: 1px dashed;
+  position: relative;
+  width: 180px;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.addNewToggle:hover,
+.addNewCheckbox:hover,
+.addNewRadio:hover {
+  border-color: #8cc63f;
+  color: #8cc63f;
+}
+
+.delete-element-button {
+  float: right;
+  cursor: pointer;
+}
+
+.elementCheckbox .input:hover .delete-element-button {
+  display: block;
+}
+
+.elementRadio li:hover .delete-element-button {
+  display: block;
+}
+
+.delete-element-button {
+  display: none;
+}
+
+.delete-element-button:hover {
+  color: #cf1f32;
+}

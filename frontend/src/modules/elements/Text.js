@@ -10,7 +10,8 @@ export default class Text extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Text',
-    label: 'Text'
+    label: 'Text',
+    requiredText: 'Please fill this field.'
   }
 
   render() {

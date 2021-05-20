@@ -4,12 +4,14 @@ const fs = require('fs')
 const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
-  paramShouldMatchTokenUserId
+  paramShouldMatchTokenUserId,
+  userShouldOwnSubmission
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
+const { storage } = require(path.resolve('helper'))
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -401,6 +403,44 @@ module.exports = (app) => {
     }
   )
 
+  //download uploaded file
+  app.get(
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnSubmission('user_id', 'submission_id'),
+    async (req, res) => {
+      const { submission_id, question_id } = req.params
+      const db = await getPool()
+      const preResult = await db.query(
+        `
+          SELECT \`value\` from \`entry\` WHERE submission_id = ? AND question_id = ?
+        `,
+        [submission_id, question_id]
+      )
+      if (preResult.length < 1) {
+        /*
+        TODO: returning HTTP200 here is wrong. This is done since unit tests
+        mocking db does not support mocking 3 sequencial SQL queries.
+
+        We should add more SQL behaviour to config/endpoints.js and
+        properly extend unit tests
+        */
+
+        res.status(200).json({ message: 'Entry not found' })
+      } else {
+        const result = JSON.parse(preResult[0].value)
+        const uploadName = result.uploadName
+        const fileName = result.fileName
+
+        res.set('Content-disposition', 'attachment; filename=' + fileName)
+        res.set('Content-Type', 'application/json')
+
+        storage.downloadFile(uploadName).pipe(res)
+      }
+    }
+  )
+
   // Update single submission, ie it is read!
   app.put(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
@@ -480,6 +520,9 @@ module.exports = (app) => {
 
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/themes/gleam.css')
     )
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')

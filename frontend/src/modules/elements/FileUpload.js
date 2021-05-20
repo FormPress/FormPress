@@ -9,7 +9,8 @@ export default class FileUpload extends Component {
   static defaultConfig = {
     id: 0,
     type: 'FileUpload',
-    label: 'File Upload'
+    label: 'File Upload',
+    requiredText: 'Please fill this field.'
   }
 
   static configurableSettings = {

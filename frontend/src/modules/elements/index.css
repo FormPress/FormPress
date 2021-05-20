@@ -1,21 +1,21 @@
-.form {
+.builderStage .form {
   background-color: white;
   width: 750px;
   margin: 0 auto;
 }
 
-.form > .element {
+.builderStage .form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
   margin: 2px 0;
 }
 
-.form > .element.requiredError {
+.builderStage .form > .element.requiredError {
   border: 1px solid red;
   background: rgba(255, 0, 0, 0.3);
 }
 
-.form > .element.requiredError > .metadata > .requiredErrorText {
+.form .element.requiredError .metadata .requiredErrorText {
   display: block;
 }
 
@@ -23,18 +23,14 @@
   width: 200px;
 }
 
-.form > .element > .label > .requiredMarker {
+.builderStage .form > .element > .label > .requiredMarker {
   margin-left: 10px;
   display: inline-block;
   color: red;
 }
 
-.form > .element > .input {
-  width: 400px;
-}
-
-.form > .element > button,
-.form > .element > input[type='submit'] {
+.builderStage .form > .element > button,
+.builderStage .form > .element > input[type='submit'] {
   padding: 5px 10px;
   font-size: 16px;
 }
@@ -43,6 +39,6 @@
   width: 100%;
 }
 
-.form > .element > .metadata > .requiredErrorText {
+.form .element .metadata .requiredErrorText {
   display: none;
 }

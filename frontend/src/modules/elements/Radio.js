@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
+import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
 
 import './Radio.css'
@@ -11,41 +13,34 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: ['Radio 1']
+    options: ['Radio 1'],
+    requiredText: 'Please fill this field.'
   }
 
   constructor(props) {
     super(props)
-    this.state = {
-      show: true,
-      checked: 0
-    }
-    this.handleChange = this.handleChange.bind(this)
-    this.onChange = this.onChange.bind(this)
+
+    this.handleAddingItem = this.handleAddingItem.bind(this)
+    this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  onChange(i) {
-    this.setState({
-      checked: i
+  handleAddingItem() {
+    const { config } = this.props
+    const newOptions = config.options
+    newOptions.push(`${config.type} ${newOptions.length + 1}`)
+
+    this.props.configureQuestion({
+      id: config.id,
+      newState: {
+        options: newOptions
+      }
     })
   }
 
-  handleChange(event) {
+  handleDeletingItem(id) {
     const { config } = this.props
-    const inputProps = {}
-    var lines = event.target.value.split('\n')
-
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
-
-    const newOptions = []
-
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i] && lines[i].trim().length !== 0) {
-        newOptions.push(lines[i])
-      }
-    }
+    const options = config.options
+    const newOptions = options.filter((option, index) => index !== id)
 
     this.props.configureQuestion({
       id: config.id,
@@ -58,54 +53,33 @@ export default class Radio extends Component {
   render() {
     const { config, mode } = this.props
 
-    let optionsList =
-      Array.isArray(config.options) === true &&
-      config.options.map((item, key) => {
-        return (
-          <li key={key}>
-            <input
-              type="radio"
-              id={`q_${config.id}`}
-              name={`q_${config.id}`}
-              value={item}></input>
-            <label>{item}</label>
-            <div className="check">
-              <div className="inside"></div>
-            </div>
-          </li>
-        )
-      })
+    const options =
+      Array.isArray(config.options) === true ||
+      typeof config.options !== 'undefined'
+        ? config.options
+        : ['']
 
     var display
     if (mode === 'builder') {
       display = [
         <EditableLabel
           key="1"
-          className="fl label"
+          className="label"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
         />,
-        <div key="2">
-          {this.state.show ? (
-            <textarea id="options-textarea" onChange={this.handleChange}>
-              {config.options.join('\n')}
-            </textarea>
-          ) : (
-            <div className="container">
-              <p id="choose-option">Choose an option:</p>
-              <ul className="radio-container">{optionsList}</ul>
-            </div>
-          )}
-          <button
-            id="edit-preview-button"
-            onClick={() => {
-              this.setState({ show: !this.state.show })
-            }}>
-            {this.state.show ? 'Preview' : 'Edit'}
-          </button>
+        <div key="2" className="fl input">
+          <EditableList
+            config={config}
+            mode={mode}
+            options={options}
+            handleAddingItem={this.handleAddingItem}
+            handleDeletingItem={this.handleDeletingItem}
+            handleLabelChange={this.props.handleLabelChange}
+          />
         </div>
       ]
     } else {
@@ -119,11 +93,28 @@ export default class Radio extends Component {
           value={config.label}
           required={config.required}
         />,
-        <div key="2">
-          <div className="container">
-            <p id="choose-option-par">Choose an option:</p>
-            <ul>{optionsList}</ul>
-          </div>
+        <div key="2" className="fl input">
+          <ul>
+            {config.options.map((item, key) => {
+              return (
+                <li key={key}>
+                  <input
+                    type="radio"
+                    id={`q_${config.id}_${key}`}
+                    name={`q_${config.id}`}
+                    value={item}></input>
+                  <label
+                    className="radio-label"
+                    htmlFor={`q_${config.id}_${key}`}>
+                    {item}
+                  </label>
+                  <div className="check">
+                    <div className="inside"></div>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
         </div>,
         <div key="3" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

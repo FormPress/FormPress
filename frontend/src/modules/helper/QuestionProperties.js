@@ -52,9 +52,14 @@ export default class QuestionProperties extends Component {
       const question = configurableSettings[key]
 
       form.props.elements.push(
-        Object.assign({ id: key }, question.formProps, {
-          value: config[key] || question.default
-        })
+        Object.assign(
+          { id: key },
+          question.formProps,
+          {
+            value: config[key] || question.default
+          },
+          { options: selectedField.options }
+        )
       )
     }
 
@@ -63,7 +68,10 @@ export default class QuestionProperties extends Component {
         <h2>Question Properties</h2>
         <Renderer
           className="questionPropertiesForm"
+          selectedField={selectedField}
           handleFieldChange={this.handleFieldChange}
+          handleAddingItem={this.handleAddingItem}
+          handleDeletingItem={this.handleDeletingItem}
           form={form}
         />
       </div>

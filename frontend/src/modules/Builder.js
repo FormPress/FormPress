@@ -28,6 +28,7 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
+import '../style/themes/gleam.css'
 
 //list of element icons
 const iconMap = {
@@ -66,6 +67,7 @@ const getElements = () =>
 
     return config
   })
+
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     acc[element.defaultConfig.type] = {
@@ -79,6 +81,7 @@ const getWeightedElements = () =>
   Object.values(Elements).map((element) =>
     Object.assign({}, element.defaultConfig, { weight: element.weight })
   )
+
 const getElementsKeys = () =>
   getElements().reduce((acc, item) => {
     acc[item.type] = item
@@ -204,7 +207,8 @@ class Builder extends Component {
             {
               id: 1,
               type: 'Text',
-              label: 'First Name'
+              label: 'First Name',
+              requiredText: 'Please fill this field.'
             },
             {
               id: 2,
@@ -273,7 +277,7 @@ class Builder extends Component {
 
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
-    let item = getElementsKeys()[type] //burası çokomelli
+    let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
     let elements = [...form.props.elements]
 
@@ -401,14 +405,37 @@ class Builder extends Component {
 
     form.props.elements = [...form.props.elements]
 
-    const question = form.props.elements.filter(
-      (element) => element.id === id
-    )[0]
+    if (Number.isInteger(id) === false) {
+      const questionID = id.split('_')[1]
+      const itemID = id.split('_')[2]
 
-    if (question.type === 'Button') {
-      question.buttonText = value
+      let question = form.props.elements.filter(
+        (element) => element.id === parseInt(questionID)
+      )[0]
+
+      try {
+        if (question.type === 'Button') {
+          question.buttonText = value
+        } else {
+          question.options[itemID] = value
+        }
+      } catch (e) {
+        console.log(e)
+      }
     } else {
-      question.label = value
+      const question = form.props.elements.filter(
+        (element) => element.id === id
+      )[0]
+
+      try {
+        if (question.type === 'Button') {
+          question.buttonText = value
+        } else {
+          question.label = value
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
 
     this.setState({ form })
@@ -425,8 +452,8 @@ class Builder extends Component {
   handleFormElementClick(e) {
     e.preventDefault()
     let elemID = e.target
-    let id = parseInt(e.target.id.replace('qc_', ''))
-    while (elemID.id === '') {
+    let id = parseInt(elemID.id.replace('qc_', ''))
+    while (elemID.id === '' || isNaN(id) === true) {
       elemID = elemID.parentNode
       id = parseInt(elemID.id.replace('qc_', ''))
     }
@@ -443,6 +470,13 @@ class Builder extends Component {
       this.setState({
         dragging: false
       })
+      var nodeList = document.querySelectorAll('[id^="qc_"]')
+      nodeList.forEach((node) => {
+        node.classList.remove('selected')
+      })
+
+      var node = document.getElementById(elemID.id)
+      node.classList.add('selected')
     }
   }
 
@@ -533,6 +567,21 @@ class Builder extends Component {
     const question = form.props.elements.filter(
       (element) => element.id === changes.id
     )[0]
+    if (
+      Object.prototype.hasOwnProperty.call(
+        changes.newState,
+        'dropdownOptions'
+      ) === true
+    ) {
+      let lines = changes.newState.dropdownOptions.split('\n')
+      changes.newState.options = []
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i] && lines[i].trim().length !== 0) {
+          changes.newState.options.push(lines[i])
+        }
+      }
+    }
 
     Object.assign(question, changes.newState)
 

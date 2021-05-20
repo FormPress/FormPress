@@ -56,6 +56,18 @@ exports.formatInput = (questions, inputs) => {
         formattedInput.push({ q_id: question.id, value: value })
       }
     }
+    if (question.type === 'FileUpload') {
+      if (value === false) {
+        value = ''
+        formattedInput.push({ q_id: question.id, value: value })
+      }
+    }
+    if (question.type === 'Dropdown') {
+      if (value === false) {
+        value = ''
+        formattedInput.push({ q_id: question.id, value: value })
+      }
+    }
   })
 
   return formattedInput
