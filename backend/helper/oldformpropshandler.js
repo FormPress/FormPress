@@ -1,9 +1,7 @@
-const {
+exports.updateFormPropsWithNewlyAddedProps = (
+  formProps,
   getConfigurableSettings
-} = require('../script/transformed/ConfigurableSettings.js')
-
-exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
-  console.log(formProps)
+) => {
   let updatedFormProps = formProps.elements
 
   updatedFormProps.forEach((formElement, index) => {
