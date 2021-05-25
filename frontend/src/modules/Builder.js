@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, NavLink, Switch, Route } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { cloneDeep } from 'lodash'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -225,6 +226,7 @@ class Builder extends Component {
     this.handleDrop = this.handleDrop.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleSaveClick = this.handleSaveClick.bind(this)
+    this.handleFormItemMovement = this.handleFormItemMovement.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
@@ -279,6 +281,8 @@ class Builder extends Component {
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
+
+    console.log(form, dragIndex, dragMode, sortItem, this.state)
     let elements = [...form.props.elements]
 
     if (dragMode === 'insert') {
@@ -303,6 +307,8 @@ class Builder extends Component {
     const index = form.props.elements.findIndex(
       (element) => element.id.toString() === dragIndex
     )
+
+    console.log(index)
     let newElements
 
     if (this.state.insertBefore === true) {
@@ -319,6 +325,8 @@ class Builder extends Component {
       ]
     }
 
+    console.log(newElements)
+
     if (dragMode === 'sort') {
       newElements = newElements.filter(
         (element) => element.__original__ !== true
@@ -327,6 +335,8 @@ class Builder extends Component {
         `/editor/${formId}/builder/question/${item.id}/properties`
       )
     }
+
+    console.log(newElements)
 
     this.setState({
       dragMode: 'insert',
@@ -439,6 +449,156 @@ class Builder extends Component {
     }
 
     this.setState({ form })
+  }
+
+  handleFormItemMovement(_item, movementType) {
+    const { formId } = this.props.match.params
+    let item = getElementsKeys()[_item.type]
+    const dragIndex = _item.id.toString()
+    const { form } = this.state
+    const sortItem = form.props.elements.filter(
+      (element) => element.id.toString() === dragIndex
+    )[0]
+
+    const elements = cloneDeep(form.props.elements)
+
+    item = sortItem
+    //mark sorted element to be deleted
+    const sortedElementOriginal = elements.filter(
+      (element) => element.id === item.id
+    )
+
+    sortedElementOriginal[0].__original__ = true
+
+    const index = form.props.elements.findIndex(
+      (element) => element.id.toString() === dragIndex
+    )
+
+    let newElements
+    if (movementType === 'moveDown') {
+      newElements = [
+        ...elements.slice(0, index + 2),
+        item,
+        ...elements.slice(index + 2)
+      ]
+    } else if (movementType === 'moveUp') {
+      newElements = [
+        ...elements.slice(0, index - 1),
+        item,
+        ...elements.slice(index - 1)
+      ]
+    } else {
+      let maxId = Math.max(...form.props.elements.map((element) => element.id))
+      item.id = maxId + 1
+      newElements = [
+        ...elements.slice(0, index + 1),
+        item,
+        ...elements.slice(index + 1)
+      ]
+    }
+    if (movementType !== 'clone') {
+      newElements = newElements.filter(
+        (element) => element.__original__ !== true
+      )
+    }
+    this.props.history.push(
+      `/editor/${formId}/builder/question/${item.id}/properties`
+    )
+
+    this.setState({
+      dragMode: 'insert',
+      sortItem: false,
+      dragging: false,
+      dragIndex: false,
+      form: {
+        ...form,
+        props: {
+          ...form.props,
+          elements: newElements
+        }
+      }
+    })
+  }
+
+  handleMoveDown(_item, movementType) {
+    const { formId } = this.props.match.params
+    let item = getElementsKeys()[_item.type]
+    const dragIndex = _item.id.toString()
+    const { form } = this.state
+    const dragMode = 'sort'
+    const sortItem = form.props.elements.filter(
+      (element) => element.id.toString() === dragIndex
+    )[0]
+
+    const elements = cloneDeep(form.props.elements)
+
+    if (dragMode === 'insert') {
+      //set auto increment element id
+      let maxId = Math.max(...form.props.elements.map((element) => element.id))
+      //if no elements, Math.max returns -Infinity
+      if (maxId === -Infinity) {
+        maxId = -1
+      }
+
+      item.id = maxId + 1
+    } else {
+      item = sortItem
+      //mark sorted element to be deleted
+      const sortedElementOriginal = elements.filter(
+        (element) => element.id === item.id
+      )
+
+      sortedElementOriginal[0].__original__ = true
+    }
+
+    const index = form.props.elements.findIndex(
+      (element) => element.id.toString() === dragIndex
+    )
+
+    console.log(index)
+
+    let newElements
+
+    if (this.state.insertBefore === true) {
+      newElements = [
+        ...elements.slice(0, index),
+        item,
+        ...elements.slice(index)
+      ]
+    } else {
+      newElements = [
+        ...elements.slice(0, index + 2),
+        item,
+        ...elements.slice(index + 2)
+      ]
+    }
+
+    console.log(newElements)
+
+    if (dragMode === 'sort') {
+      newElements = newElements.filter(
+        (element) => element.__original__ !== true
+      )
+      this.props.history.push(
+        `/editor/${formId}/builder/question/${item.id}/properties`
+      )
+    }
+
+    console.log(newElements)
+
+    this.setState({
+      dragMode: 'insert',
+      sortItem: false,
+      dragging: false,
+      dragIndex: false,
+      form: {
+        ...form,
+        props: {
+          ...form.props,
+          elements: newElements
+        }
+      }
+    })
   }
 
   handleTitleChange(id, value) {
@@ -814,7 +974,8 @@ class Builder extends Component {
             customBuilderHandlers={{
               onDelete: this.handleFormElementDeleteClick,
               handleDragEnd: this.handleDragEnd,
-              handleDragStart: this.handleDragStart
+              handleDragStart: this.handleDragStart,
+              handleFormItemMovement: this.handleFormItemMovement
             }}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}
