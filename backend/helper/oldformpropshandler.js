@@ -1,20 +1,21 @@
-exports.updateFormPropsWithNewlyAddedProps = (
-  formProps,
+const {
   getConfigurableSettings
-) => {
-  let updatedFormProps = formProps.elements
+} = require('../script/transformed/ConfigurableSettings.js')
 
-  updatedFormProps.forEach((formElement, index) => {
+const { cloneDeep } = require('lodash')
+
+exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
+  let updatedFormProps = cloneDeep(formProps)
+
+  for (const formElement of updatedFormProps.elements) {
     for (const elem in getConfigurableSettings(formElement.type)) {
       if (elem in formElement !== true) {
-        updatedFormProps[index][elem.toString()] = getConfigurableSettings(
+        formElement[elem.toString()] = getConfigurableSettings(
           formElement.type
         )[elem].default
       }
     }
-  })
+  }
 
-  formProps.elements = updatedFormProps
-
-  return formProps
+  return updatedFormProps
 }
