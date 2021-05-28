@@ -1,7 +1,9 @@
-const {
-  getConfigurableSettings
-} = require('../script/transformed/ConfigurableSettings.js')
+const path = require('path')
 
+const { getConfigurableSettings } = require(path.resolve(
+  'script/transformed',
+  'ConfigurableSettings'
+))
 const { cloneDeep } = require('lodash')
 
 exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
