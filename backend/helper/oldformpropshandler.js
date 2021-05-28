@@ -1,6 +1,6 @@
-const path = require('path')
+/*const path = require('path')
 
-/*const { getConfigurableSettings } = require(path.resolve(
+const { getConfigurableSettings } = require(path.resolve(
   'script/transformed',
   'ConfigurableSettings'
 ))*/
@@ -8,8 +8,6 @@ const { cloneDeep } = require('lodash')
 
 exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
   let updatedFormProps = cloneDeep(formProps)
-
-  return false
 
   /*for (const formElement of updatedFormProps.elements) {
     for (const elem in getConfigurableSettings(formElement.type)) {
@@ -19,7 +17,7 @@ exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
         )[elem].default
       }
     }
-  }
+  }*/
 
-  return updatedFormProps*/
+  return updatedFormProps
 }
