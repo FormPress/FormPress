@@ -190,9 +190,13 @@ module.exports = (app) => {
 
       if (result.length === 1) {
         const form = result[0]
-        form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-          JSON.parse(form.props)
-        )
+        try {
+          form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
+            JSON.parse(form.props)
+          )
+        } catch (err) {
+          console.log(err)
+        }
 
         form.props = JSON.stringify(form.props)
 
@@ -507,9 +511,13 @@ module.exports = (app) => {
       }
     }
 
-    form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-      JSON.parse(form.props)
-    )
+    try {
+      form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
+        JSON.parse(form.props)
+      )
+    } catch (err) {
+      console.log(err)
+    }
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
