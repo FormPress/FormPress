@@ -230,6 +230,6 @@ describe('Api', () => {
 
           done()
         })
-    })
+    }).catch(done);
   })
 })
