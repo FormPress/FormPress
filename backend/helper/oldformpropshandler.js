@@ -11,13 +11,14 @@ exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
   let updatedFormProps = cloneDeep(formProps)
 
   for (const formElement of updatedFormProps.elements) {
-    for (const elem in getConfigurableSettings(formElement.type)) {
+    console.log(formElement)
+    /*for (const elem in getConfigurableSettings(formElement.type)) {
       if (elem in formElement !== true) {
         formElement[elem.toString()] = getConfigurableSettings(
           formElement.type
         )[elem].default
       }
-    }
+    }*/
   }
 
   return updatedFormProps
