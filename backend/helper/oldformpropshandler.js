@@ -1,24 +1,4 @@
 const path = require('path')
-const fs = require('fs')
-
-const sourcePath = path.resolve(
-  './',
-  'script',
-  'transformed',
-  'ConfigurableSettings.js'
-)
-
-console.log(sourcePath)
-
-fs.access(sourcePath, fs.F_OK, (err) => {
-  if (err) {
-    console.log('File is not exist and we have a problem.')
-    console.error(err)
-    return
-  } else {
-    console.log('File is already exist. But we have another problem.')
-  }
-})
 
 const { getConfigurableSettings } = require(path.resolve(
   './',
