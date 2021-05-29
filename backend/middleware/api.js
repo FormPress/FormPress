@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { getPool } = require(path.resolve('./', 'db'))
-const { oldformpropshandler } = require(path.resolve('helper'))
+
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId,
@@ -13,6 +13,10 @@ const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage } = require(path.resolve('helper'))
+const { oldformpropshandler } = require(path.resolve(
+  'helper',
+  'oldformpropshandler'
+))
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -190,13 +194,9 @@ module.exports = (app) => {
 
       if (result.length === 1) {
         const form = result[0]
-        try {
-          form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-            JSON.parse(form.props)
-          )
-        } catch (err) {
-          console.log(err)
-        }
+        form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
+          JSON.parse(form.props)
+        )
 
         form.props = JSON.stringify(form.props)
 
@@ -511,13 +511,9 @@ module.exports = (app) => {
       }
     }
 
-    try {
-      form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-        JSON.parse(form.props)
-      )
-    } catch (err) {
-      console.log(err)
-    }
+    form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
+      JSON.parse(form.props)
+    )
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
