@@ -9,7 +9,7 @@ const { getConfigurableSettings } = require(path.resolve(
 
 const { cloneDeep } = require('lodash')
 
-exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
+function updateFormPropsWithNewlyAddedProps(formProps) {
   let updatedFormProps = cloneDeep(formProps)
 
   for (const formElement of updatedFormProps.elements) {
@@ -24,3 +24,5 @@ exports.updateFormPropsWithNewlyAddedProps = (formProps) => {
 
   return updatedFormProps
 }
+
+module.exports = { updateFormPropsWithNewlyAddedProps }

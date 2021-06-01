@@ -13,9 +13,10 @@ const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage } = require(path.resolve('helper'))
-const { oldformpropshandler } = require(path.resolve(
+const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
+  './',
   'helper',
-  'oldformpropshandler'
+  'oldformpropshandler.js'
 ))
 
 module.exports = (app) => {
@@ -194,9 +195,8 @@ module.exports = (app) => {
 
       if (result.length === 1) {
         const form = result[0]
-        form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-          JSON.parse(form.props)
-        )
+
+        form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
 
         form.props = JSON.stringify(form.props)
 
@@ -511,9 +511,7 @@ module.exports = (app) => {
       }
     }
 
-    form.props = oldformpropshandler.updateFormPropsWithNewlyAddedProps(
-      JSON.parse(form.props)
-    )
+    form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
