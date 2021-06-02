@@ -66,7 +66,7 @@ const policy = {
   }
 }
 
-export function getConfigurableSettings(questionType) {
+exports.getConfigurableSettings = (questionType) => {
   let willReturnObject = {}
 
   Object.keys(policy).map(function (objectKey) {
