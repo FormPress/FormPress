@@ -250,7 +250,7 @@
   border: 1px solid transparent;
 }
 
-.form.builder > .element > .action {
+.form.builder > .element .action {
   display: none;
   border: solid 1px #e2e2e2;
   background-color: #f5f5f5;
@@ -262,7 +262,12 @@
   padding: 0 5px;
 }
 
-.form.builder > .element > .action > * {
+.form.builder > .element .fl.input .action {
+  right: 0px;
+  top: -2px;
+}
+
+.form.builder .element .action > * {
   cursor: pointer;
   margin: 5px;
   font-size: 14px;
@@ -283,9 +288,10 @@
   border: 1px solid black;
 }
 
-.form.builder > .element:hover > .action,
-.form > .element.selected > .action {
+.form.builder > .element:hover .action,
+.form > .element.selected .action {
   display: inline-flex;
+  float: right;
 }
 
 .popoverText {
@@ -308,6 +314,7 @@
   background-color: #113952;
   color: #fff;
   text-align: center;
-  top: -22px;
+  top: -25px;
   left: -35px;
+  z-index: 9999;
 }

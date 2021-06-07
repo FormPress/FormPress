@@ -451,73 +451,79 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  handleFormItemMovement(_item, movementType) {
-    const { formId } = this.props.match.params
-    let item = getElementsKeys()[_item.type]
-    const dragIndex = _item.id.toString()
-    const { form } = this.state
-    const sortItem = form.props.elements.filter(
-      (element) => element.id.toString() === dragIndex
-    )[0]
+  handleFormItemMovement(_item, movementType, itemType = 'formItem') {
+    if (itemType === 'formItem') {
+      const { formId } = this.props.match.params
+      let item = getElementsKeys()[_item.type]
+      const dragIndex = _item.id.toString()
+      const { form } = this.state
+      const sortItem = form.props.elements.filter(
+        (element) => element.id.toString() === dragIndex
+      )[0]
 
-    const elements = cloneDeep(form.props.elements)
+      const elements = cloneDeep(form.props.elements)
 
-    item = sortItem
-    //mark sorted element to be deleted
-    const sortedElementOriginal = elements.filter(
-      (element) => element.id === item.id
-    )
-
-    sortedElementOriginal[0].__original__ = true
-
-    const index = form.props.elements.findIndex(
-      (element) => element.id.toString() === dragIndex
-    )
-
-    let newElements
-    if (movementType === 'moveDown') {
-      newElements = [
-        ...elements.slice(0, index + 2),
-        item,
-        ...elements.slice(index + 2)
-      ]
-    } else if (movementType === 'moveUp') {
-      newElements = [
-        ...elements.slice(0, index - 1),
-        item,
-        ...elements.slice(index - 1)
-      ]
-    } else {
-      let maxId = Math.max(...form.props.elements.map((element) => element.id))
-      item.id = maxId + 1
-      newElements = [
-        ...elements.slice(0, index + 1),
-        item,
-        ...elements.slice(index + 1)
-      ]
-    }
-    if (movementType !== 'clone') {
-      newElements = newElements.filter(
-        (element) => element.__original__ !== true
+      item = sortItem
+      //mark sorted element to be deleted
+      const sortedElementOriginal = elements.filter(
+        (element) => element.id === item.id
       )
-    }
-    this.props.history.push(
-      `/editor/${formId}/builder/question/${item.id}/properties`
-    )
 
-    this.setState({
-      dragMode: 'insert',
-      sortItem: false,
-      dragging: false,
-      dragIndex: false,
-      form: {
-        ...form,
-        props: {
-          ...form.props,
-          elements: newElements
-        }
+      sortedElementOriginal[0].__original__ = true
+
+      const index = form.props.elements.findIndex(
+        (element) => element.id.toString() === dragIndex
+      )
+
+      let newElements
+      if (movementType === 'moveDown') {
+        newElements = [
+          ...elements.slice(0, index + 2),
+          item,
+          ...elements.slice(index + 2)
+        ]
+      } else if (movementType === 'moveUp') {
+        newElements = [
+          ...elements.slice(0, index - 1),
+          item,
+          ...elements.slice(index - 1)
+        ]
+      } else {
+        let maxId = Math.max(
+          ...form.props.elements.map((element) => element.id)
+        )
+        item.id = maxId + 1
+        newElements = [
+          ...elements.slice(0, index + 1),
+          item,
+          ...elements.slice(index + 1)
+        ]
       }
-    })
+      if (movementType !== 'clone') {
+        newElements = newElements.filter(
+          (element) => element.__original__ !== true
+        )
+      }
+      this.props.history.push(
+        `/editor/${formId}/builder/question/${item.id}/properties`
+      )
+
+      this.setState({
+        dragMode: 'insert',
+        sortItem: false,
+        dragging: false,
+        dragIndex: false,
+        form: {
+          ...form,
+          props: {
+            ...form.props,
+            elements: newElements
+          }
+        }
+      })
+    } else {
+      console.log(_item, movementType)
+    }
   }
 
   handleTitleChange(id, value) {

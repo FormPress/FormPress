@@ -88,6 +88,7 @@ export default class Checkbox extends Component {
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
+            customBuilderHandlers={this.props.customBuilderHandlers}
           />
         </div>
       ]
