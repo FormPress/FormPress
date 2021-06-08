@@ -55,6 +55,22 @@ const transformMap = [
       '../',
       'frontend',
       'src',
+      'modules',
+      'ConfigurableSettings.js'
+    ),
+    target: path.resolve(
+      './',
+      'script',
+      'transformed',
+      'ConfigurableSettings.js'
+    )
+  },
+  {
+    type: 'file',
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
       'modules/common',
       'EditableLabel.js'
     ),

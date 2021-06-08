@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { getPool } = require(path.resolve('./', 'db'))
+
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId,
@@ -12,6 +13,11 @@ const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage } = require(path.resolve('helper'))
+const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
+  './',
+  'helper',
+  'oldformpropshandler.js'
+))
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -189,6 +195,11 @@ module.exports = (app) => {
 
       if (result.length === 1) {
         const form = result[0]
+
+        form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
+
+        form.props = JSON.stringify(form.props)
+
         const version = parseInt(form.published_version || 0)
         const nextVersion = version + 1
 
@@ -500,7 +511,7 @@ module.exports = (app) => {
       }
     }
 
-    form.props = JSON.parse(form.props)
+    form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
@@ -514,6 +525,7 @@ module.exports = (app) => {
         mode: 'renderer'
       })
     )
+
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )
