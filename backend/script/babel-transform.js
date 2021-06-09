@@ -55,6 +55,22 @@ const transformMap = [
       '../',
       'frontend',
       'src',
+      'modules',
+      'ConfigurableSettings.js'
+    ),
+    target: path.resolve(
+      './',
+      'script',
+      'transformed',
+      'ConfigurableSettings.js'
+    )
+  },
+  {
+    type: 'file',
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
       'modules/common',
       'EditableLabel.js'
     ),
@@ -63,6 +79,22 @@ const transformMap = [
       'script',
       'transformed/common',
       'EditableLabel.js'
+    )
+  },
+  {
+    type: 'file',
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
+      'modules/common',
+      'EditableList.js'
+    ),
+    target: path.resolve(
+      './',
+      'script',
+      'transformed/common',
+      'EditableList.js'
     )
   },
   {
@@ -86,6 +118,12 @@ const transformMap = [
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'modules', 'elements'),
     target: path.resolve('./', 'script', 'transformed', 'elements')
+  },
+  {
+    type: 'folder',
+    extension: '.css',
+    source: path.resolve('../', 'frontend', 'src', 'modules', 'common'),
+    target: path.resolve('./', 'script', 'transformed', 'common')
   },
   {
     type: 'folder',

@@ -2,3 +2,12 @@
 .elementInput > div {
   width: 50%;
 }
+.elementText input {
+  background-color: #f5f5f5;
+  color: #a0a0a0;
+  width: 100%;
+  padding: 5px 16px;
+  height: 30px;
+  border: 0;
+  outline: 0;
+}

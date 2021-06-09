@@ -14,7 +14,9 @@ export default class Renderer extends Component {
       configureQuestion,
       builderHandlers,
       handleLabelChange,
-      selectedFieldId,
+      handleAddingItem,
+      handleDeletingItem,
+      selectedField,
       theme,
       allowInternal
     } = this.props
@@ -58,8 +60,10 @@ export default class Renderer extends Component {
               builderHandlers={builderHandlers}
               customBuilderHandlers={customBuilderHandlers}
               handleLabelChange={handleLabelChange}
+              handleAddingItem={handleAddingItem}
+              handleDeletingItem={handleDeletingItem}
               configureQuestion={configureQuestion}
-              selectedFieldId={selectedFieldId}
+              selectedField={selectedField}
               {...extraProps}
             />
           ]

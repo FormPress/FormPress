@@ -38,21 +38,35 @@ const policy = {
       }
     }
   },
-  disabled: {
+  toggle: {
     rule: {
-      type: 'all'
+      type: 'only',
+      exceptions: ['Checkbox']
     },
     configurableSettings: {
       default: false,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field disabled?'
+        label: 'Make this field toggle?'
+      }
+    }
+  },
+  dropdownOptions: {
+    rule: {
+      type: 'only',
+      exceptions: ['Dropdown']
+    },
+    configurableSettings: {
+      default: ['Dropdown 1'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Dropdown options'
       }
     }
   }
 }
 
-export function getConfigurableSettings(questionType) {
+exports.getConfigurableSettings = (questionType) => {
   let willReturnObject = {}
 
   Object.keys(policy).map(function (objectKey) {

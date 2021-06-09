@@ -15,6 +15,7 @@ import AuthContext from './auth.context'
 import PrivateRoute from './PrivateRoute'
 import Profile from './Profile'
 import { setToken } from './helper'
+import DownloadFile from './modules/helper/DownloadFile'
 
 import { Logo } from './svg'
 
@@ -160,6 +161,10 @@ class App extends Component {
               <Route path="/login" component={Login} />
             </Switch>
           </div>
+          <PrivateRoute
+            path="/download/:formId/:submissionId/:questionId/:fileName"
+            component={DownloadFile}
+          />
         </AuthContext.Provider>
       </Router>
     )
