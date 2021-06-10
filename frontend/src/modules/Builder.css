@@ -265,6 +265,12 @@
 .form.builder > .element .fl.input .action {
   right: 0px;
   top: -2px;
+  display: none;
+}
+
+.form.builder > .element .fl.input li:hover .action,
+.form.builder > .element .fl.input:hover .checkbox-label + .action {
+  display: block;
 }
 
 .form.builder .element .action > * {
@@ -288,8 +294,8 @@
   border: 1px solid black;
 }
 
-.form.builder > .element:hover .action,
-.form > .element.selected .action {
+.form.builder > .element:hover > .action,
+.form > .element.selected > .action {
   display: inline-flex;
   float: right;
 }

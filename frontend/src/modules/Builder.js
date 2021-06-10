@@ -522,7 +522,52 @@ class Builder extends Component {
         }
       })
     } else {
-      console.log(_item, movementType)
+      const form = cloneDeep(this.state.form)
+      for (let elem of form.props.elements) {
+        if (elem.id === _item.id) {
+          if (movementType === 'moveDown') {
+            if (_item.listItemId === elem.options.length - 1) {
+              elem.options.unshift(elem.options[_item.listItemId])
+              elem.options.pop()
+            } else {
+              elem.options.splice(
+                _item.listItemId + 2,
+                0,
+                elem.options[_item.listItemId]
+              )
+              elem.options.splice(_item.listItemId, 1)
+            }
+          } else if (movementType === 'moveUp') {
+            if (_item.listItemId === 0) {
+              elem.options.push(elem.options[_item.listItemId])
+              elem.options.shift()
+            } else {
+              elem.options.splice(
+                _item.listItemId - 1,
+                0,
+                elem.options[_item.listItemId]
+              )
+              elem.options.splice(_item.listItemId + 1, 1)
+            }
+          } else {
+            elem.options.splice(
+              _item.listItemId + 1,
+              0,
+              elem.options[_item.listItemId]
+            )
+          }
+        }
+      }
+
+      this.setState({
+        dragMode: 'insert',
+        sortItem: false,
+        dragging: false,
+        dragIndex: false,
+        form: {
+          ...form
+        }
+      })
     }
   }
 

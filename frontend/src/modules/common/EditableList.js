@@ -29,8 +29,12 @@ class EditableList extends Component {
     this.props.handleDeletingItem(id)
   }
 
-  handleFormItemMovement(item, movementType) {
-    this.props.customBuilderHandlers.handleFormItemMovement(item, movementType)
+  handleFormItemMovement = (item, movementType, itemType) => {
+    this.props.customBuilderHandlers.handleFormItemMovement(
+      item,
+      movementType,
+      itemType
+    )
   }
 
   render() {
@@ -67,17 +71,18 @@ class EditableList extends Component {
                 <div className="popover-container">
                   <FontAwesomeIcon
                     icon={faAngleDown}
-                    onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                      this,
-                      {
-                        mode: 'sort',
-                        ref: this.myRef,
-                        value: item,
-                        id: key
-                      },
-                      'moveDown',
-                      'listItem'
-                    )}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveDown',
+                        'listItem'
+                      )
+                    }
                     className="moveButton"
                   />
                   <div className="popoverText">Move Down</div>
@@ -85,17 +90,18 @@ class EditableList extends Component {
                 <div className="popover-container">
                   <FontAwesomeIcon
                     icon={faAngleUp}
-                    onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                      this,
-                      {
-                        mode: 'sort',
-                        ref: this.myRef,
-                        value: item,
-                        id: key
-                      },
-                      'moveUp',
-                      'listItem'
-                    )}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveUp',
+                        'listItem'
+                      )
+                    }
                     className="moveButton"
                     popover-data="up"
                   />
@@ -104,17 +110,18 @@ class EditableList extends Component {
                 <div className="popover-container">
                   <FontAwesomeIcon
                     icon={faClone}
-                    onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                      this,
-                      {
-                        mode: 'sort',
-                        ref: this.myRef,
-                        value: item,
-                        id: key
-                      },
-                      'clone',
-                      'listItem'
-                    )}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'clone',
+                        'listItem'
+                      )
+                    }
                   />
                   <div className="popoverText">Clone</div>
                 </div>
@@ -165,15 +172,18 @@ class EditableList extends Component {
                   <div className="popover-container">
                     <FontAwesomeIcon
                       icon={faAngleDown}
-                      onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                        this,
-                        {
-                          mode: 'sort',
-                          ref: this.myRef,
-                          ...config
-                        },
-                        'moveDown'
-                      )}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'moveDown',
+                          'listItem'
+                        )
+                      }
                       className="moveButton"
                     />
                     <div className="popoverText">Move Down</div>
@@ -181,15 +191,18 @@ class EditableList extends Component {
                   <div className="popover-container">
                     <FontAwesomeIcon
                       icon={faAngleUp}
-                      onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                        this,
-                        {
-                          mode: 'sort',
-                          ref: this.myRef,
-                          ...config
-                        },
-                        'moveUp'
-                      )}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'moveUp',
+                          'listItem'
+                        )
+                      }
                       className="moveButton"
                       popover-data="up"
                     />
@@ -198,15 +211,18 @@ class EditableList extends Component {
                   <div className="popover-container">
                     <FontAwesomeIcon
                       icon={faClone}
-                      onClick={customBuilderHandlers.handleFormItemMovement.bind(
-                        this,
-                        {
-                          mode: 'sort',
-                          ref: this.myRef,
-                          ...config
-                        },
-                        'clone'
-                      )}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'clone',
+                          'listItem'
+                        )
+                      }
                     />
                     <div className="popoverText">Clone</div>
                   </div>
