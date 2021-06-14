@@ -469,7 +469,9 @@ class Builder extends Component {
         (element) => element.id === item.id
       )
 
-      sortedElementOriginal[0].__original__ = true
+      if (movementType !== 'clone') {
+        sortedElementOriginal[0].__original__ = true
+      }
 
       const index = form.props.elements.findIndex(
         (element) => element.id.toString() === dragIndex
