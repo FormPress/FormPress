@@ -282,7 +282,6 @@ class Builder extends Component {
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
 
-    console.log(form, dragIndex, dragMode, sortItem, this.state)
     let elements = [...form.props.elements]
 
     if (dragMode === 'insert') {
