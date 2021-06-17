@@ -6,21 +6,23 @@
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 500;
-  margin-top: -20px;
   margin-bottom: 8px;
 }
 
 .infernal > .elementText > .input {
-  margin: auto;
   width: 350px;
   float: none;
+  padding: 1px;
 }
 
 .infernal > .elementText > .input > input {
-  width: 100%;
+  width: 95%;
   padding: 15px;
   border-radius: 4px;
+  font-family: Montserrat;
   border: solid 1px #f5f5f5;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 .infernal > .elementText > .input > input:hover {
@@ -28,23 +30,50 @@
   border: solid 2px #c9c9c9;
   margin: -1px;
 }
+
+.infernal > .elementTextArea > .input {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  width: 95%;
+}
+
+.infernal > .elementTextArea > .input > textarea {
+  outline: 0;
+}
+
+.infernal > .elementTextArea > .input > textarea:hover {
+  border-radius: 4px;
+  border: solid 2px #c9c9c9;
+  margin: -1px;
+}
+
+.infernal > .elementTextArea > .label {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
 .infernal > .elementPassword > .label {
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 500;
-  margin-top: -20px;
   margin-bottom: 8px;
 }
 
 .infernal > .elementPassword > .input {
-  margin: auto;
   width: 350px;
+  padding: 1px;
   float: none;
 }
 .infernal > .elementPassword > .input > input {
-  width: 100%;
+  width: 95%;
   padding: 15px;
+  height: 30px;
   border-radius: 4px;
+  outline: 0;
   border: solid 1px #f5f5f5;
 }
 
@@ -64,11 +93,30 @@
   text-align: left;
   color: #0c2738;
   margin-left: 30px;
+  margin-bottom: 0px;
 }
+
+.infernal > .elementCheckbox > .checkboxCover {
+  float: left;
+}
+
+.infernal .checkbox-label {
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #0c2738;
+  margin-left: 10px;
+  float: left;
+}
+
 .infernal > .elementButton {
-  margin: auto;
-  width: 370px;
+  width: 332px;
 }
+
 .infernal > .elementButton > input {
   font-family: Montserrat;
   font-weight: 700;
@@ -88,9 +136,6 @@
   cursor: pointer;
 }
 
-.infernal .elementCheckbox .input {
-  margin-top: -18px;
-}
 .infernal .elementCheckbox .input > input {
   width: 18px;
   height: 18px;
@@ -102,6 +147,7 @@
   border-radius: 4px;
   outline: none;
   transition-duration: 0.3s;
+  float: left;
   background-color: #fdfdfd;
   cursor: pointer;
   overflow: hidden;

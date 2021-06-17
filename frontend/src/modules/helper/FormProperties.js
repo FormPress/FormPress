@@ -80,6 +80,7 @@ export default class FormProperties extends Component {
         />
         <Renderer
           handleFieldChange={this.handleTyPageTitleChange}
+          theme="infernal"
           form={{
             props: {
               elements: [
@@ -95,6 +96,7 @@ export default class FormProperties extends Component {
         />
         <Renderer
           handleFieldChange={this.handleTyPageTextChange}
+          theme="infernal"
           form={{
             props: {
               elements: [

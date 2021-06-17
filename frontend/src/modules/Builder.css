@@ -280,9 +280,8 @@
 }
 
 .leftMenuContents .element {
-  padding: 20px 0px 10px 0px;
+  padding: 20px 0px 10px 10px;
 }
 #qc_required .input {
-  margin-right: 93%;
   float: right;
 }

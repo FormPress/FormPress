@@ -83,7 +83,7 @@ class Login extends Component {
     return (
       <div className="login-wrapper">
         <div className="loginForm">
-          <div className="wellcome-message">WELLCOME BACK!</div>
+          <div className="wellcome-message">WELCOME BACK!</div>
           <div className="picture-bg">
             <div className="login-picture">
               <LoginPicture />
@@ -115,7 +115,8 @@ class Login extends Component {
                       {
                         id: 3,
                         type: 'Checkbox',
-                        label: 'Remember Me'
+                        label: '',
+                        options: ['Remember Me']
                       },
                       {
                         id: 4,
@@ -135,6 +136,12 @@ class Login extends Component {
               <span className="wip-placeholder" title="WIP">
                 Forgot password?
               </span>
+            </div>
+            <div className="or-seperator">or</div>
+            <div className="google-sign-in">
+              <button className="google-sign-in-button" type="button">
+                Signin via Google
+              </button>
             </div>
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
