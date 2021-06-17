@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Link,
   NavLink
 } from 'react-router-dom'
 
@@ -18,6 +19,10 @@ import { setToken } from './helper'
 import DownloadFile from './modules/helper/DownloadFile'
 
 import { Logo } from './svg'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './App.css'
 
@@ -94,7 +99,7 @@ class App extends Component {
                   </NavLink>
                 </div>
                 <div className="col-10-16 menu">
-                  <nav className="nav oh">
+                  <nav className="nav">
                     <ul className="menu fl">
                       {auth.loggedIn === true
                         ? [
@@ -132,6 +137,22 @@ class App extends Component {
                             </li>
                           ]}
                     </ul>
+                    {auth.loggedIn === true ? (
+                      <div className="nav_add_new_form_container">
+                        <Link
+                          to="/editor/new/builder"
+                          className="nav_add_new_form_link">
+                          <div className="popover-container">
+                            <FontAwesomeIcon
+                              icon={faPlusCircle}
+                              title="Add New Form"
+                              className="nav_add_new_form_logo"
+                            />
+                            <div className="popoverText">Create a new form</div>
+                          </div>
+                        </Link>
+                      </div>
+                    ) : null}
                   </nav>
                 </div>
                 <div className="col-5-16 profile_container">

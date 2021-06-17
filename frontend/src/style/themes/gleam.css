@@ -15,6 +15,8 @@ body {
   padding: 25px 10px;
   margin: 2px 0;
   position: relative;
+  overflow: visible;
+  display: grid;
 }
 
 .gleam.form > .element.requiredError {
