@@ -44,7 +44,8 @@ body {
 .gleam .elementText .input {
   width: 100%;
 }
-.gleam .elementText .input input {
+.gleam .elementText .input input,
+.gleam .elementEmail .input input {
   color: #113952;
   width: 100%;
   padding: 5px 16px;

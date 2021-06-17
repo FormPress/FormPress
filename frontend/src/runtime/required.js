@@ -3,7 +3,7 @@
   const requireds = {}
 
   for (const elem of FORMPRESS.elements) {
-    if (elem.required !== true) {
+    if (elem.required !== true && elem.type !== 'Email') {
       continue
     }
 
@@ -175,6 +175,59 @@
         } else {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
+        }
+      })
+    } else if (elem.type === 'Email') {
+      requireds[id] = {
+        id,
+        valid: domElem.value.trim().length > 0
+      }
+
+      const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
+
+      domElem.addEventListener('blur', () => {
+        const value = domElem.value
+
+        if (elem.required !== true) {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+            pattern.test(domElem.value.trim()) === true
+              ? containerElem.classList.remove('requiredError')
+              : containerElem.classList.add('requiredError')
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
+        } else {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+            pattern.test(domElem.value.trim()) === true
+              ? containerElem.classList.remove('requiredError')
+              : containerElem.classList.add('requiredError')
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        }
+      })
+
+      domElem.addEventListener('keyup', () => {
+        const value = domElem.value
+
+        if (elem.required !== true) {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
+        } else {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
         }
       })
     } else {

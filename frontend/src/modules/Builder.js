@@ -14,7 +14,8 @@ import {
   faDotCircle,
   faAddressCard,
   faFileAlt,
-  faPlusCircle
+  faPlusCircle,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -39,7 +40,8 @@ const iconMap = {
   Dropdown: faSort,
   Radio: faDotCircle,
   Name: faAddressCard,
-  FileUpload: faFileAlt
+  FileUpload: faFileAlt,
+  Email: faEnvelope
 }
 
 //list of element texts
@@ -51,7 +53,8 @@ const textMap = {
   Dropdown: 'Dropdown',
   Radio: 'Radio button',
   Name: 'Name',
-  FileUpload: 'File Upload'
+  FileUpload: 'File Upload',
+  Email: 'E-mail'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
