@@ -4,7 +4,6 @@ import * as InternalElements from './internal'
 
 export default class Renderer extends Component {
   render() {
-    let Elements = { ...StandartElements }
     let { className } = this.props
     const {
       dragging,
@@ -21,7 +20,9 @@ export default class Renderer extends Component {
       allowInternal
     } = this.props
 
-    if (allowInternal) {
+
+    let Elements = { ...StandartElements }
+    if (allowInternal === true) {
       Elements = { ...StandartElements, ...InternalElements }
     }
 

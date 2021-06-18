@@ -57,8 +57,7 @@ export default class QuestionProperties extends Component {
           question.formProps,
           {
             value: config[key] || question.default
-          },
-          { options: configurableSettings[key].formProps.options || null }
+          }
         )
       )
     }
