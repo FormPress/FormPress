@@ -20,7 +20,6 @@ export default class Renderer extends Component {
       allowInternal
     } = this.props
 
-
     let Elements = { ...StandartElements }
     if (allowInternal === true) {
       Elements = { ...StandartElements, ...InternalElements }
