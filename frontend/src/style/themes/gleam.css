@@ -26,6 +26,7 @@ body {
 
 .gleam.form > .element > .label {
   float: none;
+  margin-bottom: 10px;
 }
 
 .gleam.form > .element > .label > .requiredMarker {
@@ -55,10 +56,6 @@ body {
   outline: 0;
   background-color: #f5f5f5;
   box-sizing: border-box;
-}
-.gleam .element > .fl.label {
-  margin-bottom: 10px;
-  width: 100%;
 }
 .gleam .elementTextArea {
 }
@@ -271,7 +268,7 @@ body {
 
 .gleam .elementCheckbox .toggle {
   position: relative;
-  display: block;
+  display: table;
   width: 60px;
   height: 34px;
 }
