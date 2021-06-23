@@ -63,7 +63,7 @@ export default class FormProperties extends Component {
       <div>
         <h2>Form Properties</h2>
         <Renderer
-          handleFieldChange={this.handleFieldChange}
+          handleFieldChange={this.handleEmailChange}
           theme="infernal"
           form={{
             props: {
