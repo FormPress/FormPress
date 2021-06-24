@@ -42,6 +42,7 @@ export default class EditableLabel extends Component {
           onBlur={this.handleOnBlur}
           onKeyDown={this.handleOnKeyDown}
           suppressContentEditableWarning={true}
+          className={this.props.value === '' ? 'emptySpan' : null}
           {...extraProps}>
           {this.props.value}
         </span>

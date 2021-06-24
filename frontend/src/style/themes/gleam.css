@@ -29,6 +29,15 @@ body {
   margin-bottom: 10px;
 }
 
+.gleam.form > .element > .label > span {
+  min-width: 100px;
+  display: inline-block;
+}
+
+.gleam.form > .element > .label > span.emptySpan {
+  border: 1px dashed;
+}
+
 .gleam.form > .element > .label > .requiredMarker {
   margin-left: 10px;
   display: inline-block;
