@@ -17,7 +17,6 @@
   height: 614px;
   display: flex;
   align-items: center;
-  margin-left: 280px;
 
   justify-content: center;
   font-family: Montserrat;
@@ -107,7 +106,7 @@
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 500;
-  margin-left: 290px;
+
   line-height: 1.75;
 }
 .submit-photo {
@@ -117,7 +116,6 @@
 .Group_170 {
   width: 203px;
   height: 58px;
-  margin-left: 290px;
 }
 .click {
   text-decoration: underline;
@@ -138,23 +136,27 @@
   }
   .free-form {
     margin-left: 100px;
+    font-size: 11px;
   }
 
   .Group_170 {
     margin-left: 0px;
+    width: 190px;
+    height: 45px;
   }
   .testing {
     text-align: center;
-    font-size: 20px;
+    font-size: 16px;
     margin-bottom: 0px;
   }
   .texting {
     text-align: center;
+    font-size: 11px;
   }
   .submit-photo {
-    width: 200px;
-    height: 153px;
-    margin-left: 40px;
+    width: 180px;
+    height: 133px;
+    margin-left: 55px;
   }
   .free-form {
     margin-left: 0px;
