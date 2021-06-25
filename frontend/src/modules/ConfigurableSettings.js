@@ -8,7 +8,8 @@ const policy = {
       default: false,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field required?'
+        label: '',
+        options: ['Make this field required?']
       }
     }
   },
@@ -47,7 +48,8 @@ const policy = {
       default: false,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field toggle?'
+        label: '',
+        options: ['Make this field toggle?']
       }
     }
   },
