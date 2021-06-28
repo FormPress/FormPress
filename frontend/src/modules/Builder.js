@@ -41,7 +41,8 @@ const iconMap = {
   Radio: faDotCircle,
   Name: faAddressCard,
   FileUpload: faFileAlt,
-  Email: faEnvelope
+  Email: faEnvelope,
+  Header: faHeading
 }
 
 //list of element texts
@@ -54,7 +55,8 @@ const textMap = {
   Radio: 'Radio button',
   Name: 'Name',
   FileUpload: 'File Upload',
-  Email: 'E-mail'
+  Email: 'E-mail',
+  Header: 'Header'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -416,14 +418,22 @@ class Builder extends Component {
         (element) => element.id === parseInt(questionID)
       )[0]
 
-      try {
-        if (question.type === 'Button') {
-          question.buttonText = value
-        } else {
-          question.options[itemID] = value
+      if (id.split('_')[0] === 'sub') {
+        if (value !== 'sublabel text') {
+          question.sublabelText = value
         }
-      } catch (e) {
-        console.log(e)
+      } else if (id.split('_')[0] === 'header') {
+        question.sublabel = value
+      } else {
+        try {
+          if (question.type === 'Button') {
+            question.buttonText = value
+          } else {
+            question.options[itemID] = value
+          }
+        } catch (e) {
+          console.log(e)
+        }
       }
     } else {
       const question = form.props.elements.filter(

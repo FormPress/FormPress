@@ -12,7 +12,9 @@ export default class TextArea extends Component {
     id: 0,
     type: 'TextArea',
     label: 'TextArea',
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: '',
+    placeholder: 'Please enter the information.'
   }
 
   render() {
@@ -27,6 +29,10 @@ export default class TextArea extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    if (typeof config.placeholder !== 'undefined') {
+      inputProps.placeholder = config.placeholder
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
@@ -37,27 +43,39 @@ export default class TextArea extends Component {
           value={config.label}
           required={config.required}
         />
-        {mode === 'viewer' ? (
+        <div>
           <div className="fl input">
             <textarea
               id={`q_${config.id}`}
               name={`q_${config.id}`}
-              onChange={this.props.handleFieldChange}
               {...inputProps}></textarea>
           </div>
-        ) : (
-          <div>
-            <div className="fl input">
-              <textarea
-                id={`q_${config.id}`}
-                name={`q_${config.id}`}
-                {...inputProps}></textarea>
+          {mode === 'viewer' ? (
+            ''
+          ) : (
+            <div className="clearfix">
+              <EditableLabel
+                className={`sublabel ${
+                  config.sublabelText === '' ||
+                  typeof config.sublabelText === 'undefined'
+                    ? 'emptySpan'
+                    : ''
+                }`}
+                mode={mode}
+                labelKey={`sub_${config.id}`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.sublabelText !== 'undefined'
+                    ? config.sublabelText
+                    : ''
+                }
+              />
             </div>
-            <div className="fl metadata">
-              <div className="requiredErrorText">{config.requiredText}</div>
-            </div>
+          )}
+          <div className="fl metadata">
+            <div className="requiredErrorText">{config.requiredText}</div>
           </div>
-        )}
+        </div>
       </ElementContainer>
     )
   }

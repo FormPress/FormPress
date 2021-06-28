@@ -11,7 +11,9 @@ export default class Email extends Component {
     id: 0,
     type: 'Email',
     label: 'Email',
-    requiredText: 'Please enter a valid email.'
+    requiredText: 'Please enter a valid email.',
+    sublabelText: '',
+    placeholder: 'Please enter the information.'
   }
 
   render() {
@@ -24,6 +26,10 @@ export default class Email extends Component {
 
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
+    }
+
+    if (typeof config.placeholder !== 'undefined') {
+      inputProps.placeholder = config.placeholder
     }
 
     return (
@@ -41,6 +47,24 @@ export default class Email extends Component {
             id={`q_${config.id}`}
             name={`q_${config.id}`}
             {...inputProps}
+          />
+        </div>
+        <div className="clearfix">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
           />
         </div>
         <div className="fl metadata">

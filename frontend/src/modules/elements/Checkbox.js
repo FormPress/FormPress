@@ -14,7 +14,8 @@ export default class Checkbox extends Component {
     type: 'Checkbox',
     label: 'Label',
     options: ['Checkbox 1'],
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: 'sublabel Text'
   }
 
   constructor(props) {
@@ -26,6 +27,10 @@ export default class Checkbox extends Component {
 
   handleAddingItem() {
     const { config } = this.props
+    if (typeof config.options === 'undefined') {
+      config.options = [`${config.type} 1`]
+    }
+
     const newOptions = config.options
     newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
@@ -132,6 +137,28 @@ export default class Checkbox extends Component {
     return (
       <ElementContainer type={config.type} {...this.props}>
         {display}
+        {mode === 'viewer' ? (
+          ''
+        ) : (
+          <div className="clearfix">
+            <EditableLabel
+              className={`sublabel ${
+                config.sublabelText === '' ||
+                typeof config.sublabelText === 'undefined'
+                  ? 'emptySpan'
+                  : ''
+              }`}
+              mode={mode}
+              labelKey={`sub_${config.id}`}
+              handleLabelChange={this.props.handleLabelChange}
+              value={
+                typeof config.sublabelText !== 'undefined'
+                  ? config.sublabelText
+                  : ''
+              }
+            />
+          </div>
+        )}
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>

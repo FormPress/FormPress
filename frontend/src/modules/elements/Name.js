@@ -8,7 +8,8 @@ export default class Name extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Name',
-    label: 'Full Name'
+    label: 'Full Name',
+    sublabelText: ''
   }
 
   render() {
@@ -57,6 +58,27 @@ export default class Name extends Component {
             </td>
           </tr>
         </table>
+        <div className="clearfix">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }

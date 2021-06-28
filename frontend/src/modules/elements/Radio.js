@@ -14,7 +14,8 @@ export default class Radio extends Component {
     type: 'Radio',
     label: 'Radio',
     options: ['Radio 1'],
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: ''
   }
 
   constructor(props) {
@@ -26,6 +27,10 @@ export default class Radio extends Component {
 
   handleAddingItem() {
     const { config } = this.props
+    if (typeof config.options === 'undefined') {
+      config.options = [`${config.type} 1`]
+    }
+
     const newOptions = config.options
     newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
@@ -80,6 +85,24 @@ export default class Radio extends Component {
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
           />
+        </div>,
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
         </div>
       ]
     } else {
@@ -116,7 +139,25 @@ export default class Radio extends Component {
             })}
           </ul>
         </div>,
-        <div key="3" className="fl metadata">
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>,
+        <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]

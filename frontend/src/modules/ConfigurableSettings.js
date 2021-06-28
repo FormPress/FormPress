@@ -2,7 +2,7 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button']
+      exceptions: ['Button', 'Header']
     },
     configurableSettings: {
       default: false,
@@ -15,7 +15,7 @@ const policy = {
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button']
+      exceptions: ['Button', 'Header']
     },
     configurableSettings: {
       default: 'Please fill this field.',
@@ -28,10 +28,10 @@ const policy = {
   placeholder: {
     rule: {
       type: 'only',
-      exceptions: ['Text', 'TextArea']
+      exceptions: ['Text', 'TextArea', 'Email']
     },
     configurableSettings: {
-      default: 'Please enter the information',
+      default: 'Please enter the information.',
       formProps: {
         type: 'Text',
         label: 'Describe the expected value of an input field.'

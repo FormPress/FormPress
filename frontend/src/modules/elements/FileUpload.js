@@ -10,7 +10,8 @@ export default class FileUpload extends Component {
     id: 0,
     type: 'FileUpload',
     label: 'File Upload',
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: ''
   }
 
   static configurableSettings = {
@@ -56,6 +57,24 @@ export default class FileUpload extends Component {
           required={config.required}
         />
         {display}
+        <div className="clearfix">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>

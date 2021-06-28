@@ -12,7 +12,8 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1'],
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: ''
   }
 
   render() {
@@ -66,6 +67,24 @@ export default class Dropdown extends Component {
               </select>
             </div>
           }
+        </div>,
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' ||
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
         </div>
       ]
     } else {
@@ -97,7 +116,25 @@ export default class Dropdown extends Component {
             })}
           </select>
         </div>,
-        <div key="3" className="fl metadata">
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className={`sublabel ${
+              config.sublabelText === '' &&
+              typeof config.sublabelText === 'undefined'
+                ? 'emptySpan'
+                : ''
+            }`}
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined'
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>,
+        <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]

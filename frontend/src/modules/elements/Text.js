@@ -11,7 +11,9 @@ export default class Text extends Component {
     id: 0,
     type: 'Text',
     label: 'Text',
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    sublabelText: '',
+    placeholder: 'Please enter the information.'
   }
 
   render() {
@@ -24,6 +26,10 @@ export default class Text extends Component {
 
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
+    }
+
+    if (typeof config.placeholder !== 'undefined') {
+      inputProps.placeholder = config.placeholder
     }
 
     return (
@@ -43,6 +49,28 @@ export default class Text extends Component {
             {...inputProps}
           />
         </div>
+        {mode === 'viewer' ? (
+          ''
+        ) : (
+          <div className="clearfix">
+            <EditableLabel
+              className={`sublabel ${
+                config.sublabelText === '' ||
+                typeof config.sublabelText === 'undefined'
+                  ? 'emptySpan'
+                  : ''
+              }`}
+              mode={mode}
+              labelKey={`sub_${config.id}`}
+              handleLabelChange={this.props.handleLabelChange}
+              value={
+                typeof config.sublabelText !== 'undefined'
+                  ? config.sublabelText
+                  : ''
+              }
+            />
+          </div>
+        )}
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
