@@ -278,3 +278,10 @@
 .form > .element.selected > .action {
   display: block;
 }
+
+.leftMenuContents .element {
+  padding: 20px 0px 10px 10px;
+}
+#qc_required .input {
+  float: right;
+}

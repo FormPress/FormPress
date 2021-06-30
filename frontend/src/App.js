@@ -20,6 +20,7 @@ import DownloadFile from './modules/helper/DownloadFile'
 import { Logo } from './svg'
 
 import './App.css'
+import './style/themes/infernal.css'
 
 const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {

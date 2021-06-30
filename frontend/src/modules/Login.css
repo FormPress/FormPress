@@ -3,3 +3,135 @@
   width: 500px;
   margin: 40px auto 0;
 }
+.wellcome-message {
+  text-align: center;
+  color: #113952;
+  font-family: Montserrat;
+  font-weight: 600;
+  margin: 16px;
+  font-size: 16px;
+}
+.loginForm .element {
+  margin-left: 85px;
+  margin-bottom: 15px;
+}
+
+.content {
+  background-color: white;
+}
+.pale-border {
+  border: solid 1px #e2e2e2;
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.picture-bg {
+  background-color: #00538a;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+.login-picture {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.form-header {
+  font-family: Montserrat;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #0c2738;
+  padding: 16px;
+  margin-top: 9px;
+}
+
+.forgot-pass {
+  color: #0c2738;
+  font-family: Montserrat;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 12px;
+  margin-top: -130px;
+  margin-bottom: 100px;
+  margin-left: 300px;
+}
+
+.do-not-have {
+  width: 100%;
+  height: 19px;
+  margin: 10px 0px 10px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #113952;
+}
+
+.have-trouble {
+  width: 100%;
+  height: 19px;
+  margin: auto;
+  padding: 8px;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #113952;
+}
+
+.login-wrapper > .footer {
+  color: #1c5c85;
+  font-size: 18px;
+  margin-top: 50px;
+  padding-bottom: 40px;
+}
+
+.login-wrapper > .footer a {
+  text-decoration: none;
+  color: inherit;
+}
+.message-back {
+  width: 100%;
+  height: 20px;
+  font-family: Montserrat;
+  font-style: italic;
+  text-align: center;
+  color: #ff5050;
+  margin-bottom: 10px;
+}
+
+.or-seperator {
+  width: 100%;
+  height: 19px;
+  font-family: Montserrat;
+  text-align: center;
+  color: #a0a0a0;
+  margin-top: 110px;
+}
+
+.google-sign-in {
+  margin: 10px 0px 10px 85px;
+}
+
+.google-sign-in-button:hover {
+  background-color: #ae2317;
+  color: #ffffff;
+}
+
+.google-sign-in-button {
+  width: 332px;
+  font-family: Montserrat;
+  text-align: center;
+  height: 50px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #be0000;
+  background-color: #ffffff;
+  border: solid 1px #ae2317;
+}
