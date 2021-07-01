@@ -30,6 +30,7 @@ export default class Button extends Component {
             <button {...inputProps}>
               <EditableLabel
                 className="fl label"
+                data-placeholder="Type a button text"
                 mode={mode}
                 labelKey={config.id}
                 handleLabelChange={this.props.handleLabelChange}
@@ -38,12 +39,8 @@ export default class Button extends Component {
             </button>
             <div className="clearfix">
               <EditableLabel
-                className={`sublabel ${
-                  config.sublabelText === '' ||
-                  typeof config.sublabelText === 'undefined'
-                    ? 'emptySpan'
-                    : ''
-                }`}
+                className="sublabel"
+                data-placeholder="Type a sublabel"
                 mode={mode}
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -60,12 +57,7 @@ export default class Button extends Component {
             <input type="submit" value={config.buttonText} {...inputProps} />
             <div className="clearfix">
               <EditableLabel
-                className={`sublabel ${
-                  config.sublabelText === '' ||
-                  typeof config.sublabelText === 'undefined'
-                    ? 'emptySpan'
-                    : ''
-                }`}
+                className="sublabel"
                 mode={mode}
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}

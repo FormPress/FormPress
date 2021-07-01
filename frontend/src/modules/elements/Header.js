@@ -30,22 +30,22 @@ export default class Header extends Component {
       <ElementContainer type={config.type} {...this.props}>
         <h2>
           <EditableLabel
-            className={`header label ${config.label === '' ? 'emptySpan' : ''}`}
+            className="header label"
             mode={mode}
             labelKey={config.id}
             handleLabelChange={this.props.handleLabelChange}
             value={config.label}
+            data-placeholder="Type a header"
           />
         </h2>
         <h4>
           <EditableLabel
-            className={`header sublabel ${
-              config.sublabel === '' ? 'emptySpan' : ''
-            }`}
+            className="header sublabel"
             mode={mode}
             labelKey={`header_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.sublabel}
+            data-placeholder="Type a subheader"
           />
         </h4>
       </ElementContainer>

@@ -17,7 +17,7 @@ for (const key of keys) {
     })
 
     test('Has a valid <name> attribute', () => { //what is valid? "q_{id}"
-      if (key !== "Button") { //button element dont have name attribute
+      if (key !== "Button" && key !== 'Header') { //button element dont have name attribute
         const component = create(<Component config={ Component.defaultConfig } mode={ "not build" }/>)
         if (key === "Name") {//Name has 2 values; first name and last name. Test should reconsidered for multiple value fields
           const myTestObject = component.root

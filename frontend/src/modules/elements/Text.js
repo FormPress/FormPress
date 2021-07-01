@@ -36,6 +36,7 @@ export default class Text extends Component {
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
           className="fl label"
+          data-placeholder="Type a question"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
@@ -54,12 +55,8 @@ export default class Text extends Component {
         ) : (
           <div className="clearfix">
             <EditableLabel
-              className={`sublabel ${
-                config.sublabelText === '' ||
-                typeof config.sublabelText === 'undefined'
-                  ? 'emptySpan'
-                  : ''
-              }`}
+              className="sublabel"
+              data-placeholder="Type a sublabel"
               mode={mode}
               labelKey={`sub_${config.id}`}
               handleLabelChange={this.props.handleLabelChange}

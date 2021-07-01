@@ -39,6 +39,7 @@ export default class Email extends Component {
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
+          data-placeholder="Type a question"
           value={config.label}
           required={config.required}
         />
@@ -51,13 +52,9 @@ export default class Email extends Component {
         </div>
         <div className="clearfix">
           <EditableLabel
-            className={`sublabel ${
-              config.sublabelText === '' ||
-              typeof config.sublabelText === 'undefined'
-                ? 'emptySpan'
-                : ''
-            }`}
+            className="sublabel"
             mode={mode}
+            data-placeholder="Type a sublabel"
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={

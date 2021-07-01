@@ -37,11 +37,14 @@ export default class EditableLabel extends Component {
 
     return (
       <div
-        className={this.props.className}
+        className={`${this.props.className}${
+          this.props.value !== '' ? ' hasContent' : ''
+        }`}
         onInput={this.handleOnInput}
         onBlur={this.handleOnBlur}
         onKeyDown={this.handleOnKeyDown}
         suppressContentEditableWarning={true}
+        data-placeholder={this.props['data-placeholder']}
         {...extraProps}>
         {this.props.value}{' '}
         {this.props.required === true ? (

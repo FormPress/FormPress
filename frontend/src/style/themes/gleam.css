@@ -45,6 +45,24 @@ body {
   display: inline-block;
   margin-top: 10px;
   max-width: 600px;
+  color: gray;
+  padding: 2px 5px;
+  border: 1px solid #ffffff;
+}
+
+.gleam.form .sublabel:not(.header):hover {
+  border: 1px dashed gray;
+}
+
+.gleam.form .sublabel[contentEditable='true']:not(:focus, :hover):before,
+.gleam.form .label[contentEditable='true']:not(:focus):before {
+  content: attr(data-placeholder);
+  color: gray !important;
+}
+
+.gleam.form .hasContent.sublabel[contentEditable='true']:not(:empty):before,
+.gleam.form .hasContent.label[contentEditable='true']:not(:empty):before {
+  content: '';
 }
 
 .gleam.form .header.label {
@@ -60,11 +78,6 @@ body {
 
 .gleam.form .clearfix {
   clear: both;
-}
-
-.gleam.form.builder .sublabel.emptySpan,
-.gleam.form.builder .label.emptySpan {
-  border: 1px dashed;
 }
 
 .gleam .elementText {
@@ -87,9 +100,14 @@ body {
   background-color: #f5f5f5;
   box-sizing: border-box;
 }
-.gleam .element > .fl.label {
+.gleam.form .element > .fl.label {
   margin-bottom: 10px;
   width: 100%;
+  padding: 2px 5px;
+  border: 1px solid #ffffff;
+}
+.gleam.form .element > .fl.label:hover {
+  border: 1px dashed gray;
 }
 .gleam .elementTextArea {
 }
@@ -228,15 +246,23 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
   user-select: none;
+  min-width: 100px;
 }
 
-.gleam .elementRadio .input .radio-label {
+.gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
-  margin-top: 1px;
+  margin-top: -2px;
   position: absolute;
-  text-indent: 5px;
+  -webkit-user-select: none;
   user-select: none;
+  border: 1px solid #ffffff;
+  padding: 2px 5px;
+  min-width: 100px;
+}
+
+.gleam.form .elementRadio .input .radio-label:hover {
+  border: 1px dashed;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox'] {

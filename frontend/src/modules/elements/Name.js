@@ -30,10 +30,34 @@ export default class Name extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
+          data-placeholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
         />
+        <div>
+          <select>
+            <option>Prefix</option>
+            <option>Mr.</option>
+            <option>Mrs.</option>
+          </select>
+          <input
+            type="text"
+            id="fname"
+            name={`q_${config.id}[firstName]`}></input>
+          <input
+            type="text"
+            id="mname"
+            name={`q_${config.id}[middleName]`}></input>
+          <input
+            type="text"
+            id="lname"
+            name={`q_${config.id}[lastName]`}></input>
+          <input
+            type="text"
+            id="suffix"
+            name={`q_${config.id}[suffix]`}></input>
+        </div>
         <table>
           <tr>
             <td>
@@ -60,12 +84,8 @@ export default class Name extends Component {
         </table>
         <div className="clearfix">
           <EditableLabel
-            className={`sublabel ${
-              config.sublabelText === '' ||
-              typeof config.sublabelText === 'undefined'
-                ? 'emptySpan'
-                : ''
-            }`}
+            className="sublabel"
+            data-placeholder="Type a sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
