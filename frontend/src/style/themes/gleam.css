@@ -54,7 +54,7 @@ body {
   border: 1px dashed gray;
 }
 
-.gleam.form .sublabel[contentEditable='true']:not(:focus, :hover):before,
+.gleam.form .sublabel[contentEditable='true']:not(:focus):before,
 .gleam.form .label[contentEditable='true']:not(:focus):before {
   content: attr(data-placeholder);
   color: gray !important;

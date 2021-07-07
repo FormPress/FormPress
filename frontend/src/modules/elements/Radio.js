@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { cloneDeep } from 'lodash'
+
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
@@ -31,7 +33,7 @@ export default class Radio extends Component {
       config.options = [`${config.type} 1`]
     }
 
-    const newOptions = config.options
+    const newOptions = cloneDeep(config.options)
     newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
     this.props.configureQuestion({

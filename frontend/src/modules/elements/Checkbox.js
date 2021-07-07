@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { cloneDeep } from 'lodash'
+
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
@@ -15,7 +17,7 @@ export default class Checkbox extends Component {
     label: 'Label',
     options: ['Checkbox 1'],
     requiredText: 'Please fill this field.',
-    sublabelText: 'sublabel Text'
+    sublabelText: ''
   }
 
   constructor(props) {
@@ -31,7 +33,7 @@ export default class Checkbox extends Component {
       config.options = [`${config.type} 1`]
     }
 
-    const newOptions = config.options
+    const newOptions = cloneDeep(config.options)
     newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
     this.props.configureQuestion({
