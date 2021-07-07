@@ -8,7 +8,7 @@ describe('submission handler', () => {
   const formProps = [
     {
       id: 1,
-      type:"Text",
+      type:"TextBox",
       label:"Text Label"
     },
     {

@@ -2,15 +2,15 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import './Text.css'
+import './TextBox.css'
 
-export default class Text extends Component {
+export default class TextBox extends Component {
   static weight = 1
 
   static defaultConfig = {
     id: 0,
-    type: 'Text',
-    label: 'Text',
+    type: 'TextBox',
+    label: 'TextBox',
     requiredText: 'Please fill this field.',
     sublabelText: '',
     placeholder: 'Please enter the information.'

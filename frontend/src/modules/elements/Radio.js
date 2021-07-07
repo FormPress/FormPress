@@ -69,7 +69,7 @@ export default class Radio extends Component {
       display = [
         <EditableLabel
           key="1"
-          className="label"
+          className="fl label"
           mode={mode}
           labelKey={config.id}
           data-placeholder="Type a question"

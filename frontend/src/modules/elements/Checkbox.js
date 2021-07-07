@@ -25,7 +25,7 @@ export default class Checkbox extends Component {
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleAddingItem() {
+  handleAddingItem(id) {
     const { config } = this.props
     if (typeof config.options === 'undefined') {
       config.options = [`${config.type} 1`]
@@ -35,7 +35,7 @@ export default class Checkbox extends Component {
     newOptions.push(`${config.type} ${newOptions.length + 1}`)
 
     this.props.configureQuestion({
-      id: config.id,
+      id: id,
       newState: {
         options: newOptions
       }

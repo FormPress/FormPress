@@ -102,7 +102,7 @@ class Login extends Component {
                     elements: [
                       {
                         id: 1,
-                        type: 'Text',
+                        type: 'TextBox',
                         label: 'Email',
                         value: this.state.email
                       },

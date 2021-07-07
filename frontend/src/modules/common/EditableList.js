@@ -14,8 +14,8 @@ class EditableList extends Component {
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleAddingItem() {
-    this.props.handleAddingItem()
+  handleAddingItem(id) {
+    this.props.handleAddingItem(id)
   }
 
   handleDeletingItem(id) {
@@ -64,7 +64,7 @@ class EditableList extends Component {
               ? 'builderAddNewButton addNewToggle'
               : `'builderAddNewButton addNew${config.type}`
           }
-          onClick={this.handleAddingItem}>
+          onClick={() => this.handleAddingItem(parseInt(config.id))}>
           Add New {config.toggle === true ? 'Toggle' : `${config.type}`}
         </div>
       ]
@@ -102,7 +102,7 @@ class EditableList extends Component {
           })}
           <div
             className={`'builderAddNewButton addNew${config.type}`}
-            onClick={this.handleAddingItem}>
+            onClick={() => this.handleAddingItem(parseInt(config.id))}>
             Add New {`${config.type}`}
           </div>
         </ul>

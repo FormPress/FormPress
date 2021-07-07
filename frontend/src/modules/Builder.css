@@ -182,12 +182,22 @@
 }
 
 .builderStage > .formTitle {
-  height: 60px;
-  line-height: 60px;
   background-color: #fdfdfd;
-  color: #1c5c85;
-  padding-left: 16px;
   font-size: 18px;
+  display: flex;
+  flex: 1 0 auto;
+  height: 60px;
+}
+
+.builderStage > .formTitle > .label {
+  padding: 2px 5px;
+  border: 1px solid #fff;
+  width: 100%;
+  align-self: center;
+}
+
+.builderStage > .formTitle > .label:hover {
+  border: 1px dashed;
 }
 
 .builderStage > .formControls {

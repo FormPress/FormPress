@@ -15,7 +15,8 @@ import {
   faAddressCard,
   faFileAlt,
   faPlusCircle,
-  faEnvelope
+  faEnvelope,
+  faFont
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -33,7 +34,7 @@ import '../style/themes/gleam.css'
 
 //list of element icons
 const iconMap = {
-  Text: faHeading,
+  TextBox: faFont,
   TextArea: faAlignJustify,
   Checkbox: faCheckSquare,
   Button: faMousePointer,
@@ -47,7 +48,7 @@ const iconMap = {
 
 //list of element texts
 const textMap = {
-  Text: 'Text',
+  TextBox: 'TextBox',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
@@ -211,7 +212,7 @@ class Builder extends Component {
           elements: [
             {
               id: 1,
-              type: 'Text',
+              type: 'TextBox',
               label: 'First Name',
               requiredText: 'Please fill this field.'
             },
@@ -359,6 +360,7 @@ class Builder extends Component {
     }
     item.id = maxId + 1
     const newElements = elements.concat(item)
+
     this.setState({
       form: {
         ...form,
@@ -648,7 +650,7 @@ class Builder extends Component {
             </div>
           </div>
         </div>
-        <div className="content grid">
+        <div className="content">
           <div className="leftTabs col-1-16">
             {this.renderLeftVerticalTabs()}
           </div>

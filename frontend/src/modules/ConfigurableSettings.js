@@ -21,7 +21,7 @@ const policy = {
     configurableSettings: {
       default: 'Please fill this field.',
       formProps: {
-        type: 'Text',
+        type: 'TextBox',
         label: 'Error text when this field is left empty.'
       }
     }
@@ -29,12 +29,12 @@ const policy = {
   placeholder: {
     rule: {
       type: 'only',
-      exceptions: ['Text', 'TextArea', 'Email']
+      exceptions: ['TextBox', 'TextArea', 'Email']
     },
     configurableSettings: {
       default: 'Please enter the information.',
       formProps: {
-        type: 'Text',
+        type: 'TextBox',
         label: 'Describe the expected value of an input field.'
       }
     }
@@ -63,6 +63,48 @@ const policy = {
       formProps: {
         type: 'TextArea',
         label: 'Enter Dropdown options'
+      }
+    }
+  },
+  middleName: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a middle name.']
+      }
+    }
+  },
+  prefix: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title before their names.']
+      }
+    }
+  },
+  suffix: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title after their names.']
       }
     }
   }

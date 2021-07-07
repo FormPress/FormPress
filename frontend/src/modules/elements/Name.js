@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import './Name.css'
 
 export default class Name extends Component {
   static weight = 7
@@ -9,7 +10,10 @@ export default class Name extends Component {
     id: 0,
     type: 'Name',
     label: 'Full Name',
-    sublabelText: ''
+    sublabelText: '',
+    middleName: false,
+    suffix: false,
+    prefix: false
   }
 
   render() {
@@ -35,53 +39,55 @@ export default class Name extends Component {
           value={config.label}
           required={config.required}
         />
-        <div>
-          <select>
-            <option>Prefix</option>
-            <option>Mr.</option>
-            <option>Mrs.</option>
-          </select>
-          <input
-            type="text"
-            id="fname"
-            name={`q_${config.id}[firstName]`}></input>
-          <input
-            type="text"
-            id="mname"
-            name={`q_${config.id}[middleName]`}></input>
-          <input
-            type="text"
-            id="lname"
-            name={`q_${config.id}[lastName]`}></input>
-          <input
-            type="text"
-            id="suffix"
-            name={`q_${config.id}[suffix]`}></input>
+        <div className="nameContainer">
+          <span
+            className={`prefix_span${
+              typeof config.prefix !== 'undefined' && config.prefix === true
+                ? ''
+                : ' hidden'
+            }`}>
+            <select name="prefix">
+              <option>Prefix</option>
+              <option>Mr.</option>
+              <option>Mrs.</option>
+            </select>
+          </span>
+          <span className="name_span">
+            <input
+              type="text"
+              id="fname"
+              name={`q_${config.id}[firstName]`}></input>
+          </span>
+          <span
+            className={`name_span${
+              typeof config.middleName !== 'undefined' &&
+              config.middleName === true
+                ? ''
+                : ' hidden'
+            }`}>
+            <input
+              type="text"
+              id="mname"
+              name={`q_${config.id}[middleName]`}></input>
+          </span>
+          <span className="name_span">
+            <input
+              type="text"
+              id="lname"
+              name={`q_${config.id}[lastName]`}></input>
+          </span>
+          <span
+            className={`suffix_span${
+              typeof config.suffix !== 'undefined' && config.suffix === true
+                ? ''
+                : ' hidden'
+            }`}>
+            <input
+              type="text"
+              id="suffix"
+              name={`q_${config.id}[suffix]`}></input>
+          </span>
         </div>
-        <table>
-          <tr>
-            <td>
-              <label htmlFor="firstname">First name:</label>
-            </td>
-            <td>
-              <input
-                type="text"
-                id="fname"
-                name={`q_${config.id}[firstName]`}></input>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="lastname">Last name:</label>
-            </td>
-            <td>
-              <input
-                type="text"
-                id="lname"
-                name={`q_${config.id}[lastName]`}></input>
-            </td>
-          </tr>
-        </table>
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
