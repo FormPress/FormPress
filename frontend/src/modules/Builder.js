@@ -421,11 +421,11 @@ class Builder extends Component {
       )[0]
 
       if (id.split('_')[0] === 'sub') {
-        if (value !== 'sublabel text') {
-          question.sublabelText = value
-        }
+        question.sublabelText = value
       } else if (id.split('_')[0] === 'header') {
         question.sublabel = value
+      } else if (id.split('_')[0] === 'name') {
+        question[`${itemID}SublabelText`] = value
       } else {
         try {
           if (question.type === 'Button') {

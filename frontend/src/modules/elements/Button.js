@@ -45,7 +45,8 @@ export default class Button extends Component {
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}
                 value={
-                  typeof config.sublabelText !== 'undefined'
+                  typeof config.sublabelText !== 'undefined' &&
+                  config.sublabelText !== ''
                     ? config.sublabelText
                     : ''
                 }
@@ -62,7 +63,8 @@ export default class Button extends Component {
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}
                 value={
-                  typeof config.sublabelText !== 'undefined'
+                  typeof config.sublabelText !== 'undefined' &&
+                  config.sublabelText !== ''
                     ? config.sublabelText
                     : ''
                 }

@@ -46,20 +46,48 @@ export default class Name extends Component {
                 ? ''
                 : ' hidden'
             }`}>
-            <select name="prefix">
+            <select name={`prefix_${config.id}`}>
               <option>Prefix</option>
               <option>Mr.</option>
               <option>Mrs.</option>
             </select>
+            <div className="clearfix">
+              <EditableLabel
+                className="sublabel"
+                data-placeholder="Type a sublabel"
+                mode={mode}
+                labelKey={`name_${config.id}_prefix`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.prefixSublabelText !== 'undefined'
+                    ? config.prefixSublabelText
+                    : 'Prefix'
+                }
+              />
+            </div>
           </span>
-          <span className="name_span">
+          <span className="name_span first_name">
             <input
               type="text"
-              id="fname"
+              id={`fname_${config.id}`}
               name={`q_${config.id}[firstName]`}></input>
+            <div className="clearfix">
+              <EditableLabel
+                className="sublabel"
+                data-placeholder="Type a sublabel"
+                mode={mode}
+                labelKey={`name_${config.id}_firstName`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.firstNameSublabelText !== 'undefined'
+                    ? config.firstNameSublabelText
+                    : 'First Name'
+                }
+              />
+            </div>
           </span>
           <span
-            className={`name_span${
+            className={`name_span middle_name${
               typeof config.middleName !== 'undefined' &&
               config.middleName === true
                 ? ''
@@ -67,14 +95,42 @@ export default class Name extends Component {
             }`}>
             <input
               type="text"
-              id="mname"
+              id={`mname_${config.id}`}
               name={`q_${config.id}[middleName]`}></input>
+            <div className="clearfix">
+              <EditableLabel
+                className="sublabel"
+                data-placeholder="Type a sublabel"
+                mode={mode}
+                labelKey={`name_${config.id}_middleName`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.middleNameSublabelText !== 'undefined'
+                    ? config.middleNameSublabelText
+                    : 'Middle Name'
+                }
+              />
+            </div>
           </span>
-          <span className="name_span">
+          <span className="name_span last_name">
             <input
               type="text"
-              id="lname"
+              id={`lname_${config.id}`}
               name={`q_${config.id}[lastName]`}></input>
+            <div className="clearfix">
+              <EditableLabel
+                className="sublabel"
+                data-placeholder="Type a sublabel"
+                mode={mode}
+                labelKey={`name_${config.id}_lastName`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.lastNameSublabelText !== 'undefined'
+                    ? config.lastNameSublabelText
+                    : 'Last Name'
+                }
+              />
+            </div>
           </span>
           <span
             className={`suffix_span${
@@ -84,8 +140,22 @@ export default class Name extends Component {
             }`}>
             <input
               type="text"
-              id="suffix"
+              id={`suffix_${config.id}`}
               name={`q_${config.id}[suffix]`}></input>
+            <div className="clearfix">
+              <EditableLabel
+                className="sublabel"
+                data-placeholder="Type a sublabel"
+                mode={mode}
+                labelKey={`name_${config.id}_suffix`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.suffixSublabelText !== 'undefined'
+                    ? config.suffixSublabelText
+                    : 'Suffix'
+                }
+              />
+            </div>
           </span>
         </div>
         <div className="clearfix">
@@ -96,7 +166,8 @@ export default class Name extends Component {
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={
-              typeof config.sublabelText !== 'undefined'
+              typeof config.sublabelText !== 'undefined' &&
+              config.sublabelText !== ''
                 ? config.sublabelText
                 : ''
             }

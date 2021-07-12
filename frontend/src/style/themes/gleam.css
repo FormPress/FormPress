@@ -7,7 +7,7 @@ body {
   background-color: white;
   width: 750px;
   margin: 20px auto;
-  padding: 30px 90px 20px;
+  padding: 30px 50px 20px;
   box-shadow: 0 0 6px 0;
   box-sizing: border-box;
 }
@@ -261,7 +261,7 @@ body {
   border: 1px solid #ffffff;
 }
 
-.gleam .elementCheckbox .input .checkbox-label:hover {
+.builder.gleam .elementCheckbox .input .checkbox-label:hover {
   border: 1px dashed;
 }
 
@@ -407,6 +407,60 @@ body {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+.gleam .nameContainer {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  flex-flow: row nowrap;
+}
+
+.gleam .nameContainer > * {
+  flex: 1 1 100%;
+  margin: 0px 5px;
+}
+
+.gleam .nameContainer > * > * {
+  width: 100%;
+  min-height: 24px;
+  color: #333333;
+}
+
+.gleam .nameContainer .clearfix {
+  display: grid;
+}
+
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+}
+
+.gleam [name='prefix'] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 0px;
+}
+
+.gleam .nameContainer .name_span {
+}
+
+.gleam .nameContainer .prefix_span select {
+  align-self: stretch;
+  padding: 0px 8px;
+}
+
+.gleam .nameContainer .suffix_span {
+}
+
+.gleam .hidden {
+  display: none !important;
 }
 
 @media screen and (max-width: 992px) {
