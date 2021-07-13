@@ -2,16 +2,23 @@ import React, { Component } from 'react'
 import EditableLabel from './EditableLabel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { faMinusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faMinusCircle,
+  faTrash,
+  faAngleDown,
+  faAngleUp,
+  faClone
+} from '@fortawesome/free-solid-svg-icons'
 
 import './EditableList.css'
 
 class EditableList extends Component {
   constructor(props) {
     super(props)
-
     this.handleAddingItem = this.handleAddingItem.bind(this)
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
+
+    this.myRef = React.createRef()
   }
 
   handleAddingItem(id) {
@@ -22,8 +29,16 @@ class EditableList extends Component {
     this.props.handleDeletingItem(id)
   }
 
+  handleFormItemMovement = (item, movementType, itemType) => {
+    this.props.customBuilderHandlers.handleFormItemMovement(
+      item,
+      movementType,
+      itemType
+    )
+  }
+
   render() {
-    const { config, mode, options } = this.props
+    const { config, mode, options, customBuilderHandlers } = this.props
 
     if (config.type === 'Checkbox') {
       const display = [
@@ -45,15 +60,80 @@ class EditableList extends Component {
                 labelKey={`s_${config.id}_${key}`}
                 htmlFor={`q_${config.id}_${key}`}
                 handleLabelChange={this.props.handleLabelChange}
+                customBuilderHandlers={{
+                  onDelete: this.handleFormElementDeleteClick,
+                  handleDragEnd: this.handleDragEnd,
+                  handleDragStart: this.handleDragStart,
+                  handleFormItemMovement: this.handleFormItemMovement
+                }}
                 value={item}
               />
-              <span className="delete-element-button">
-                <FontAwesomeIcon
-                  icon={faMinusCircle}
-                  title="Delete Field"
-                  onClick={() => this.handleDeletingItem(parseInt(`${key}`))}
-                />
-              </span>
+              <div className="action">
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faAngleDown}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveDown',
+                        'listItem'
+                      )
+                    }
+                    className="moveButton"
+                  />
+                  <div className="popoverText">Move Down</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faAngleUp}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveUp',
+                        'listItem'
+                      )
+                    }
+                    className="moveButton"
+                    popover-data="up"
+                  />
+                  <div className="popoverText">Move Up</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faClone}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'clone',
+                        'listItem'
+                      )
+                    }
+                  />
+                  <div className="popoverText">Clone</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    onClick={() => this.handleDeletingItem(parseInt(`${key}`))}
+                  />
+                  <div className="popoverText">Delete</div>
+                </div>
+              </div>
             </div>
           )
         }),
@@ -90,13 +170,74 @@ class EditableList extends Component {
                   handleLabelChange={this.props.handleLabelChange}
                   value={item}
                 />
-                <span className="delete-element-button">
-                  <FontAwesomeIcon
-                    icon={faMinusCircle}
-                    title="Delete Field"
-                    onClick={() => this.handleDeletingItem(parseInt(`${key}`))}
-                  />
-                </span>
+                <div className="action">
+                  <div className="popover-container">
+                    <FontAwesomeIcon
+                      icon={faAngleDown}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'moveDown',
+                          'listItem'
+                        )
+                      }
+                      className="moveButton"
+                    />
+                    <div className="popoverText">Move Down</div>
+                  </div>
+                  <div className="popover-container">
+                    <FontAwesomeIcon
+                      icon={faAngleUp}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'moveUp',
+                          'listItem'
+                        )
+                      }
+                      className="moveButton"
+                      popover-data="up"
+                    />
+                    <div className="popoverText">Move Up</div>
+                  </div>
+                  <div className="popover-container">
+                    <FontAwesomeIcon
+                      icon={faClone}
+                      onClick={() =>
+                        customBuilderHandlers.handleFormItemMovement(
+                          {
+                            mode: 'sort',
+                            ref: this.myRef,
+                            ...config,
+                            listItemId: key
+                          },
+                          'clone',
+                          'listItem'
+                        )
+                      }
+                    />
+                    <div className="popoverText">Clone</div>
+                  </div>
+                  <div className="popover-container">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={() =>
+                        this.handleDeletingItem(parseInt(`${key}`))
+                      }
+                    />
+                    <div className="popoverText">Delete</div>
+                  </div>
+                </div>
               </li>
             )
           })}

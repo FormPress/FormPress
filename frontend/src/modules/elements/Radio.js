@@ -87,6 +87,7 @@ export default class Radio extends Component {
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
+            customBuilderHandlers={this.props.customBuilderHandlers}
           />
         </div>,
         <div className="clearfix" key="3">

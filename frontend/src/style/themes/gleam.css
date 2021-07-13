@@ -17,6 +17,7 @@ body {
   padding: 25px 10px;
   margin: 2px 0;
   position: relative;
+  overflow: visible;
   display: grid;
 }
 
@@ -27,6 +28,16 @@ body {
 
 .gleam.form > .element > .label {
   float: none;
+  margin-bottom: 10px;
+}
+
+.gleam.form > .element > .label > span {
+  min-width: 100px;
+  display: inline-block;
+}
+
+.gleam.form > .element > .label > span.emptySpan {
+  border: 1px dashed;
 }
 
 .gleam.form > .element > .label > .requiredMarker {
@@ -254,7 +265,7 @@ body {
   position: absolute;
   text-indent: 5px;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  max-width: 600px;
   overflow: hidden;
   user-select: none;
   min-width: 100px;
@@ -344,7 +355,7 @@ body {
 
 .gleam .elementCheckbox .toggle {
   position: relative;
-  display: block;
+  display: table;
   width: 60px;
   height: 34px;
 }

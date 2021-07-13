@@ -38,7 +38,7 @@ export default class EditableLabel extends Component {
     return (
       <div
         className={`${this.props.className}${
-          this.props.value !== '' ? ' hasContent' : ''
+          this.props.value !== '' ? ' hasContent' : ' emptySpan'
         }`}
         onInput={this.handleOnInput}
         onBlur={this.handleOnBlur}
@@ -48,9 +48,7 @@ export default class EditableLabel extends Component {
         {...extraProps}>
         {this.props.value}{' '}
         {this.props.required === true ? (
-          <span className="requiredMarker" contentEditable={false}>
-            *
-          </span>
+          <span className="requiredMarker"> *</span>
         ) : null}
       </div>
     )

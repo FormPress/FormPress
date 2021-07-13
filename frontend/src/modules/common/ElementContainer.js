@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGripHorizontal, faTrash } from '@fortawesome/free-solid-svg-icons'
+import {
+  faGripHorizontal,
+  faTrash,
+  faAngleDown,
+  faAngleUp,
+  faClone
+} from '@fortawesome/free-solid-svg-icons'
 
 export default class ElementContainer extends Component {
   constructor(props) {
@@ -12,6 +18,10 @@ export default class ElementContainer extends Component {
   handleDeleteClick(id, e) {
     e.stopPropagation()
     this.props.customBuilderHandlers.onDelete(id)
+  }
+
+  handleFormItemMovement(item, movementType) {
+    this.props.customBuilderHandlers.handleFormItemMovement(item, movementType)
   }
 
   render() {
@@ -43,22 +53,71 @@ export default class ElementContainer extends Component {
         ref={this.myRef}>
         {this.props.children}
         {mode === 'builder' ? (
-          <div className="action">
-            <div
-              className="sortHandle"
-              onDragStart={customBuilderHandlers.handleDragStart.bind(this, {
-                mode: 'sort',
-                ref: this.myRef,
-                ...config
-              })}
-              onDragEnd={customBuilderHandlers.handleDragEnd}
-              draggable>
-              <FontAwesomeIcon icon={faGripHorizontal} />
+          <div
+            className="action"
+            onDragStart={customBuilderHandlers.handleDragStart.bind(this, {
+              mode: 'sort',
+              ref: this.myRef,
+              ...config
+            })}
+            onDragEnd={customBuilderHandlers.handleDragEnd}
+            draggable>
+            <FontAwesomeIcon icon={faGripHorizontal} className="sortHandle" />
+            <div className="popover-container">
+              <FontAwesomeIcon
+                icon={faAngleDown}
+                onClick={this.handleFormItemMovement.bind(
+                  this,
+                  {
+                    mode: 'sort',
+                    ref: this.myRef,
+                    ...config
+                  },
+                  'moveDown'
+                )}
+                className="moveButton"
+              />
+              <div className="popoverText">Move Down</div>
             </div>
-            <FontAwesomeIcon
-              icon={faTrash}
-              onClick={this.handleDeleteClick.bind(this, config.id)}
-            />
+            <div className="popover-container">
+              <FontAwesomeIcon
+                icon={faAngleUp}
+                onClick={this.handleFormItemMovement.bind(
+                  this,
+                  {
+                    mode: 'sort',
+                    ref: this.myRef,
+                    ...config
+                  },
+                  'moveUp'
+                )}
+                className="moveButton"
+                popover-data="up"
+              />
+              <div className="popoverText">Move Up</div>
+            </div>
+            <div className="popover-container">
+              <FontAwesomeIcon
+                icon={faClone}
+                onClick={this.handleFormItemMovement.bind(
+                  this,
+                  {
+                    mode: 'sort',
+                    ref: this.myRef,
+                    ...config
+                  },
+                  'clone'
+                )}
+              />
+              <div className="popoverText">Clone</div>
+            </div>
+            <div className="popover-container">
+              <FontAwesomeIcon
+                icon={faTrash}
+                onClick={this.handleDeleteClick.bind(this, config.id)}
+              />
+              <div className="popoverText">Delete</div>
+            </div>
           </div>
         ) : null}
       </div>
