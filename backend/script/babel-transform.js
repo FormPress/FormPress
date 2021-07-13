@@ -130,6 +130,18 @@ const transformMap = [
     extension: '.css',
     source: path.resolve('../', 'frontend', 'src', 'modules', 'elements'),
     target: path.resolve('./', 'script', 'transformed', 'elements')
+  },
+  {
+    type: 'folder',
+    extension: '.js',
+    source: path.resolve('../', 'frontend', 'src', 'modules', 'internal'),
+    target: path.resolve('./', 'script', 'transformed', 'internal')
+  },
+  {
+    type: 'folder',
+    extension: '.css',
+    source: path.resolve('../', 'frontend', 'src', 'modules', 'internal'),
+    target: path.resolve('./', 'script', 'transformed', 'internal')
   }
 ]
 

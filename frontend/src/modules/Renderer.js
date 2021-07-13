@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import * as Elements from './elements'
+import * as StandartElements from './elements'
+import * as InternalElements from './internal'
 
 export default class Renderer extends Component {
   render() {
@@ -15,8 +16,14 @@ export default class Renderer extends Component {
       handleAddingItem,
       handleDeletingItem,
       selectedField,
-      theme
+      theme,
+      allowInternal
     } = this.props
+
+    let Elements = { ...StandartElements }
+    if (allowInternal === true) {
+      Elements = { ...StandartElements, ...InternalElements }
+    }
 
     if (this.props.dragging === true) {
       className += ' dragging'
@@ -90,5 +97,6 @@ export default class Renderer extends Component {
 
 Renderer.defaultProps = {
   mode: 'viewer',
-  theme: 'gleam'
+  theme: 'gleam',
+  allowInternal: false
 }
