@@ -11,11 +11,15 @@ import Builder from './modules/Builder'
 import Data from './modules/Data'
 import Forms from './modules/Forms'
 import Login from './modules/Login'
+import SignUp from './modules/SignUp'
 import AuthContext from './auth.context'
 import PrivateRoute from './PrivateRoute'
 import Profile from './Profile'
 import { setToken } from './helper'
 import DownloadFile from './modules/helper/DownloadFile'
+import VerifyEMail from './modules/helper/VerifyEmail'
+import ForgotPassword from './modules/helper/ForgotPassword'
+import ResetPassword from './modules/helper/ResetPassword'
 
 import { Logo } from './svg'
 
@@ -25,7 +29,6 @@ import './style/themes/infernal.css'
 const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {
   token: '',
-  name: '',
   email: '',
   user_id: 0,
   exp: '',
@@ -55,16 +58,13 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth(
-    { name, email, user_id, token, loggedIn, exp },
-    persist = true
-  ) {
-    this.setState({ name, email, user_id, token, loggedIn, exp })
+  handleSetAuth({ email, user_id, token, loggedIn, exp }, persist = true) {
+    this.setState({ email, user_id, token, loggedIn, exp })
 
     if (persist === true) {
       window.localStorage.setItem(
         'auth',
-        JSON.stringify({ name, email, user_id, token, loggedIn, exp })
+        JSON.stringify({ email, user_id, token, loggedIn, exp })
       )
     }
   }
@@ -72,7 +72,6 @@ class App extends Component {
   getAuthContextValue() {
     return {
       token: this.state.token,
-      name: this.state.name,
       email: this.state.email,
       user_id: this.state.user_id,
       loggedIn: this.state.loggedIn,
@@ -130,6 +129,11 @@ class App extends Component {
                               <NavLink to="/login" activeClassName="selected">
                                 Login
                               </NavLink>
+                            </li>,
+                            <li key="3">
+                              <NavLink to="/signup" activeClassName="selected">
+                                Sign Up
+                              </NavLink>
                             </li>
                           ]}
                     </ul>
@@ -159,12 +163,22 @@ class App extends Component {
                 <Data />
               </PrivateRoute>
               <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
+              <Route
+                path="/verify/:userId/:verificationCode"
+                component={VerifyEMail}
+              />
+              <PrivateRoute
+                path="/download/:formId/:submissionId/:questionId/:fileName"
+                component={DownloadFile}
+              />
+              <Route path="/forgotpassword" component={ForgotPassword} />
+              <Route
+                path="/resetpassword/:userId/:passwordResetCode"
+                component={ResetPassword}
+              />
             </Switch>
           </div>
-          <PrivateRoute
-            path="/download/:formId/:submissionId/:questionId/:fileName"
-            component={DownloadFile}
-          />
         </AuthContext.Provider>
       </Router>
     )

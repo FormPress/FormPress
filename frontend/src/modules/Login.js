@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
+import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
 
@@ -21,6 +22,8 @@ class Login extends Component {
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this)
+    this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
+    this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
   }
 
   handleFieldChange(elem, e) {
@@ -60,6 +63,39 @@ class Login extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
+    }
+  }
+
+  async handleLoginWithGoogleClick(response) {
+    this.setState({ state: 'loading' })
+    const tokenID = response.tokenId
+    const { success, data } = await api({
+      resource: `/api/users/loginwithgoogle`,
+      method: 'post',
+      body: { tokenID },
+      useAuth: false // login request should not have Authorization header
+    })
+
+    if (success === true) {
+      setToken(data.token)
+      this.props.auth.setAuth({
+        email: data.email,
+        exp: data.exp,
+        token: data.token,
+        user_id: data.user_id,
+        loggedIn: true
+      })
+    } else {
+      this.setState({ state: 'done', message: data.message })
+    }
+  }
+
+  handleLoginWithGoogleFail(response) {
+    console.log(response.error)
+    if (response.error === 'popup_closed_by_user') {
+      this.setState({ state: 'done', message: 'Popup closed by user' })
+    } else {
+      this.setState({ state: 'done', message: response.error })
     }
   }
 
@@ -133,21 +169,24 @@ class Login extends Component {
               {state === 'done' ? message : null}
             </p>
             <div className="forgot-pass" title="WIP">
-              <span className="wip-placeholder" title="WIP">
-                Forgot password?
+              <span className="forgot-pass-span">
+                <Link to="/forgotpassword">
+                  &nbsp;<i>Forgot password?</i>
+                </Link>
               </span>
             </div>
             <div className="or-seperator">or</div>
             <div className="google-sign-in">
-              <button className="google-sign-in-button" type="button">
-                Signin via Google
-              </button>
+              <LoginWithGoogle
+                handleLoginWithGoogleButton={this.handleLoginWithGoogleClick}
+                handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+              />
             </div>
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
-              <span className="wip-placeholder" title="WIP">
-                Signup
-              </span>
+              <Link to="/signup">
+                &nbsp;<i>SignUp</i>
+              </Link>
             </div>
             <div className="have-trouble">
               Having trouble?
