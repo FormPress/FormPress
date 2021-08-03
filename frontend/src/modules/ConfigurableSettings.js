@@ -66,6 +66,19 @@ const policy = {
       }
     }
   },
+  prefixOptions: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: ['Mr.'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Prefix Options'
+      }
+    }
+  },
   middleName: {
     rule: {
       type: 'only',

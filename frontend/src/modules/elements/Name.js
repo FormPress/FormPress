@@ -10,6 +10,7 @@ export default class Name extends Component {
     id: 0,
     type: 'Name',
     label: 'Full Name',
+    options: ['Mr.'],
     sublabelText: '',
     middleName: false,
     suffix: false,
@@ -27,6 +28,12 @@ export default class Name extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
+
+    const options =
+      Array.isArray(config.options) === true ||
+      typeof config.options !== 'undefined'
+        ? config.options
+        : ['']
 
     return (
       <ElementContainer type={config.type} {...this.props}>
@@ -46,10 +53,20 @@ export default class Name extends Component {
                 ? ''
                 : ' hidden'
             }`}>
-            <select name={`prefix_${config.id}`}>
-              <option>Prefix</option>
-              <option>Mr.</option>
-              <option>Mrs.</option>
+            <select
+              id={`prefix_${config.id}`}
+              name={`prefix_${config.id}`}
+              defaultValue="choose-disabled">
+              <option disabled value="choose-disabled">
+                Prefix
+              </option>
+              {options.map((item) => {
+                return (
+                  <option className="option-space" key={item} value={item}>
+                    {item}
+                  </option>
+                )
+              })}
             </select>
             <div className="clearfix">
               <EditableLabel

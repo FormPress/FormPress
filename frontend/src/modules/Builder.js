@@ -493,17 +493,29 @@ class Builder extends Component {
 
       let newElements
       if (movementType === 'moveDown') {
-        newElements = [
-          ...elements.slice(0, index + 2),
-          item,
-          ...elements.slice(index + 2)
-        ]
+        console.log(index, elements.length)
+        if (index === elements.length - 1) {
+          newElements = [item, ...elements]
+          newElements.unshift()
+        } else {
+          newElements = [
+            ...elements.slice(0, index + 2),
+            item,
+            ...elements.slice(index + 2)
+          ]
+        }
       } else if (movementType === 'moveUp') {
-        newElements = [
-          ...elements.slice(0, index - 1),
-          item,
-          ...elements.slice(index - 1)
-        ]
+        if (index === 0) {
+          newElements = []
+          newElements.push(...elements, item)
+          newElements.shift()
+        } else {
+          newElements = [
+            ...elements.slice(0, index - 1),
+            item,
+            ...elements.slice(index - 1)
+          ]
+        }
       } else {
         let maxId = Math.max(
           ...form.props.elements.map((element) => element.id)
@@ -725,6 +737,22 @@ class Builder extends Component {
       ) === true
     ) {
       let lines = changes.newState.dropdownOptions.split('\n')
+      changes.newState.options = []
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i] && lines[i].trim().length !== 0) {
+          changes.newState.options.push(lines[i])
+        }
+      }
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(
+        changes.newState,
+        'prefixOptions'
+      ) === true
+    ) {
+      let lines = changes.newState.prefixOptions.split('\n')
       changes.newState.options = []
 
       for (let i = 0; i < lines.length; i++) {

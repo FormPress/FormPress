@@ -15,7 +15,7 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: ['Radio 1'],
+    options: ['New Radio'],
     requiredText: 'Please fill this field.',
     sublabelText: ''
   }
@@ -30,11 +30,11 @@ export default class Radio extends Component {
   handleAddingItem() {
     const { config } = this.props
     if (typeof config.options === 'undefined') {
-      config.options = [`${config.type} 1`]
+      config.options = [`New ${config.type}`]
     }
 
     const newOptions = cloneDeep(config.options)
-    newOptions.push(`${config.type} ${newOptions.length + 1}`)
+    newOptions.push(`New ${config.type}`)
 
     this.props.configureQuestion({
       id: config.id,

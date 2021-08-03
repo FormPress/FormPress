@@ -113,6 +113,10 @@
   box-shadow: 0px 3px 10px #00000014;
 }
 
+.leftMenuContents .elementTextArea .fl.input {
+  width: 100%;
+}
+
 .elements > .elementsMessage {
   background-color: #fffcdd;
   color: #646464;
@@ -337,7 +341,7 @@
 }
 
 .leftMenuContents .element {
-  padding: 20px 0px 10px 10px;
+  padding: 20px 10px 10px 10px;
 }
 #qc_required .input {
   float: right;
