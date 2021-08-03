@@ -313,7 +313,6 @@ class Builder extends Component {
       (element) => element.id.toString() === dragIndex
     )
 
-    console.log(index)
     let newElements
 
     if (this.state.insertBefore === true) {
@@ -330,8 +329,6 @@ class Builder extends Component {
       ]
     }
 
-    console.log(newElements)
-
     if (dragMode === 'sort') {
       newElements = newElements.filter(
         (element) => element.__original__ !== true
@@ -340,8 +337,6 @@ class Builder extends Component {
         `/editor/${formId}/builder/question/${item.id}/properties`
       )
     }
-
-    console.log(newElements)
 
     this.setState({
       dragMode: 'insert',
@@ -493,7 +488,6 @@ class Builder extends Component {
 
       let newElements
       if (movementType === 'moveDown') {
-        console.log(index, elements.length)
         if (index === elements.length - 1) {
           newElements = [item, ...elements]
           newElements.unshift()

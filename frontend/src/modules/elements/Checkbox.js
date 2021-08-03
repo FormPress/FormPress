@@ -77,7 +77,6 @@ export default class Checkbox extends Component {
 
     let display
     if (mode === 'builder') {
-      console.log(config, options)
       display = [
         <EditableLabel
           key="1"
