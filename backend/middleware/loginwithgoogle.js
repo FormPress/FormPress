@@ -42,12 +42,15 @@ async function checkWithGoogle(token) {
 
 module.exports = (app) => {
   app.post('/api/users/loginwithgoogle', async (req, res) => {
-    const { tokenID } = req.body
+    const { email, tokenID } = req.body
     const googleResult = await checkWithGoogle(tokenID)
 
     const resultBody = JSON.parse(googleResult.body)
-    const email = resultBody.email
+    const resultemail = resultBody.email
 
+    if (email !== resultemail) {
+      res.status(403).json({ message: 'Token does not match' })
+    }
     const db = await getPool()
     const result = await db.query(
       `

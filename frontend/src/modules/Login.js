@@ -69,10 +69,11 @@ class Login extends Component {
   async handleLoginWithGoogleClick(response) {
     this.setState({ state: 'loading' })
     const tokenID = response.tokenId
+    const email = response.profileObj.email
     const { success, data } = await api({
       resource: `/api/users/loginwithgoogle`,
       method: 'post',
-      body: { tokenID },
+      body: { email, tokenID },
       useAuth: false // login request should not have Authorization header
     })
 

@@ -27,7 +27,6 @@ module.exports = (app) => {
     if (result.length === 0) {
       return res.status(403).json({ message: 'User not found.' })
     } else {
-      console.log('bu result', result, 'bu id', result[0].user_id)
       const user_id = result[0].id
       const passwordResetCode = genRandomString(128)
       const expireDate = new Date()

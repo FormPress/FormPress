@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import { GoogleLogin } from 'react-google-login'
 import AuthContext from '../../auth.context'
 
+const GOOGLE_CREDENTIALS_CLIENT_ID =
+  process.env.REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID
+
 class LoginWithGoogle extends Component {
   render() {
     return (
       <GoogleLogin
-        clientId="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
+        clientId={GOOGLE_CREDENTIALS_CLIENT_ID}
         render={(renderProps) => (
           <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
             Sign in via Google

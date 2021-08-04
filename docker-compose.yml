@@ -51,6 +51,7 @@ services:
       - ./frontend:/src
     environment:
       - REACT_APP_BACKEND=http://localhost:3001
+      - REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID=${GOOGLE_CREDENTIALS_CLIENT_ID}
     ports:
       - '3000:3000'
     stdin_open: true
