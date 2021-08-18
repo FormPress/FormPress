@@ -167,7 +167,7 @@ module.exports = (app) => {
       const FRONTEND =
         FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
       const htmlBody = await ejs
-        .renderFile(path.join(__dirname, '../views/htmlsubmitemail.tpl.ejs'), {
+        .renderFile(path.join(__dirname, '../views/submitemailhtml.tpl.ejs'), {
           FRONTEND: FRONTEND,
           FormTitle: form.title,
           Form: form,
@@ -180,7 +180,7 @@ module.exports = (app) => {
         })
 
       const textBody = await ejs
-        .renderFile(path.join(__dirname, '../views/textsubmitemail.tpl.ejs'), {
+        .renderFile(path.join(__dirname, '../views/submitemailtext.tpl.ejs'), {
           FRONTEND: FRONTEND,
           FormTitle: form.title,
           Form: form,
