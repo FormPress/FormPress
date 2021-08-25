@@ -420,7 +420,7 @@ class Data extends Component {
           },
           {
             label: '',
-            content: (submission) => [
+            content: () => [
               <span className="table_caret_right" key="1">
                 {'>'}
               </span>
@@ -495,11 +495,13 @@ class Data extends Component {
             value = JSON.parse(value)
             let toString = (obj) =>
               Object.entries(obj)
-                .map(([k, v]) => `${v}`)
+                .map(([v]) => `${v}`)
                 .join(' ')
             value = toString(value)
             if (value.trim() === '') value = '-'
-          } catch (e) {}
+          } catch (e) {
+            console.log(e)
+          }
         }
       }
       return (
