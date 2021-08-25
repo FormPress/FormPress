@@ -118,6 +118,7 @@ class Data extends Component {
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
+    this.IsJsonString = this.IsJsonString.bind(this)
   }
 
   handleFormClick(form) {
@@ -141,6 +142,15 @@ class Data extends Component {
     }
   }
 
+  IsJsonString(str) {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
+  }
+
   async handleSubmissionClick(submission) {
     const { id } = submission
     const form_id = this.state.selectedFormId
@@ -154,6 +164,60 @@ class Data extends Component {
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}/entries`
     })
+
+    const formWithOtherOptions = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+    })
+
+    for (let dataContent of data) {
+      for (let element of JSON.parse(formWithOtherOptions.data.props)
+        .elements) {
+        if (
+          element.id === dataContent.question_id &&
+          (element.type === 'Checkbox' || element.type === 'Radio')
+        ) {
+          const tempContent = dataContent.value
+          dataContent.value = []
+          if (this.IsJsonString(tempContent) === false) {
+            for (let elementContent of element.options) {
+              if (tempContent === elementContent) {
+                dataContent.value.push({
+                  content: elementContent,
+                  value: 'checked',
+                  type: element.type,
+                  toggle: element.toggle
+                })
+              } else {
+                dataContent.value.push({
+                  content: elementContent,
+                  value: '',
+                  type: element.type,
+                  toggle: element.toggle
+                })
+              }
+            }
+          } else {
+            for (let elementContent of element.options) {
+              if (JSON.parse(tempContent).includes(elementContent) === true) {
+                dataContent.value.push({
+                  content: elementContent,
+                  value: 'checked',
+                  type: element.type,
+                  toggle: element.toggle
+                })
+              } else {
+                dataContent.value.push({
+                  content: elementContent,
+                  value: '',
+                  type: element.type,
+                  toggle: element.toggle
+                })
+              }
+            }
+          }
+        }
+      }
+    }
 
     this.setLoadingState('entries', false)
     this.setState({ entries: data })
@@ -353,6 +417,14 @@ class Data extends Component {
               <Moment fromNow ago date={submission.created_at} key="1" />,
               <span key="2">{' ago'}</span>
             ]
+          },
+          {
+            label: '',
+            content: (submission) => [
+              <span className="table_caret_right" key="1">
+                {'>'}
+              </span>
+            ]
           }
         ]}
         data={submissions}
@@ -390,6 +462,45 @@ class Data extends Component {
         value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
       } else {
         value = entry.value
+
+        if (typeof value === 'object') {
+          value = value.map((input, index) => {
+            return (
+              <div className="input" key={index}>
+                <input
+                  type={input.type.toLowerCase()}
+                  id={'q_required_' + index}
+                  className={input.toggle === true ? 'toggle-checkbox' : ''}
+                  defaultChecked={input.value}
+                  disabled
+                  readOnly
+                />
+                {input.toggle === true ? (
+                  <span className="slider"></span>
+                ) : null}
+                <label
+                  className={
+                    input.type.toLowerCase() +
+                    '-label ' +
+                    (input.toggle === true ? 'toggle-label' : '')
+                  }
+                  htmlFor={'q_required_' + index}>
+                  {input.content}
+                </label>
+              </div>
+            )
+          })
+        } else {
+          try {
+            value = JSON.parse(value)
+            let toString = (obj) =>
+              Object.entries(obj)
+                .map(([k, v]) => `${v}`)
+                .join(' ')
+            value = toString(value)
+            if (value.trim() === '') value = '-'
+          } catch (e) {}
+        }
       }
       return (
         <div key={index} className="entry">
