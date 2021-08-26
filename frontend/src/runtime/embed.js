@@ -19,7 +19,8 @@
 */
 
 ;(async () => {
-  const scriptUrl = document.currentScript.src
+
+  const scriptUrl = document.querySelectorAll('[fp_id]')[0].src
   const arr = scriptUrl.split('/')
   const BACKEND = arr[0] + '//' + arr[2]
 
