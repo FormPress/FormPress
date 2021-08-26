@@ -14,6 +14,20 @@ const port = parseInt(process.env.SERVER_PORT || 3000)
 
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
+const singupMiddleware = require(path.resolve('middleware', 'signup'))
+const verifyEmailMiddleware = require(path.resolve('middleware', 'verifyemail'))
+const forgotPasswordMiddleware = require(path.resolve(
+  'middleware',
+  'forgotpassword'
+))
+const resetPasswordMiddleware = require(path.resolve(
+  'middleware',
+  'resetpassword'
+))
+const loginWithGoogleMiddleware = require(path.resolve(
+  'middleware',
+  'loginwithgoogle'
+))
 const authenticationMiddleware = require(path.resolve(
   'middleware',
   'authentication'
@@ -39,6 +53,11 @@ app.set('view engine', 'ejs')
 authenticationMiddleware(app)
 submissionMiddleware(app)
 loginMiddleware(app)
+singupMiddleware(app)
+verifyEmailMiddleware(app)
+forgotPasswordMiddleware(app)
+resetPasswordMiddleware(app)
+loginWithGoogleMiddleware(app)
 apiMiddleware(app)
 
 if (process.env.FP_ENV === 'production') {

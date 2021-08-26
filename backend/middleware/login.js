@@ -16,7 +16,7 @@ module.exports = (app) => {
       `
         SELECT *
         FROM \`user\`
-        WHERE email = ?
+        WHERE email = ? AND emailVerified = 1
       `,
       [email]
     )
@@ -36,7 +36,6 @@ module.exports = (app) => {
         const jwt_data = {
           user_id: user.id,
           email: user.email,
-          name: user.name,
           exp
         }
 
@@ -46,14 +45,12 @@ module.exports = (app) => {
             message: 'Login Success',
             token,
             user_id: user.id,
-            name: user.name,
             exp
           })
           res.status(200).json({
             message: 'Login Success',
             token,
             user_id: user.id,
-            name: user.name,
             exp
           })
         })

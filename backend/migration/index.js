@@ -42,7 +42,7 @@ module.exports = async (db) => {
     try {
       await fn(db)
     } catch (e) {
-      console.log('Error on doing migration')
+      console.log('Error on doing migration', e)
       process.exit()
     }
 
