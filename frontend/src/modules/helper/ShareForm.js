@@ -7,7 +7,7 @@ class ShareForm extends Component {
   render() {
     const hostname = window.location.protocol + '//' + window.location.host
     const embedCode = [
-      `<script src="${hostname}/runtime/embed.js">`,
+      `<script src="${hostname}/runtime/embed.js" fp_id="${this.props.formId}">`,
       '</script>'
     ].join('\n')
     return (

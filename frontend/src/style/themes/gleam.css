@@ -1,14 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,500&display=swap');
 
-body {
-  background-color: #f5f5f5;
-}
 .renderer.gleam {
   background-color: white;
   width: 750px;
   margin: 20px auto;
   padding: 30px 90px 20px;
-  box-shadow: 0 0 6px 0;
   box-sizing: border-box;
 }
 
@@ -39,8 +35,6 @@ body {
   width: 100%;
 }
 
-.gleam .elementText {
-}
 .gleam .elementText .label {
   float: none;
   display: block;
@@ -62,8 +56,7 @@ body {
   margin-bottom: 10px;
   width: 100%;
 }
-.gleam .elementTextArea {
-}
+
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
   border: solid 1px #c9c9c9;
@@ -114,8 +107,7 @@ body {
   background-color: #68942f;
   color: #ffffff;
 }
-.gleam .elementRadio {
-}
+
 .gleam .elementRadio ul {
   padding: 0;
   list-style: none;
