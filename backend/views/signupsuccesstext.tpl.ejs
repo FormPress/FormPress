@@ -1,0 +1,15 @@
+<%
+  let textedEmail = ''
+  const formpressText = 'FORMPRESS Open Source Data Collection\r\n\r\n'
+  const helloText = 'Welcome to FORMPRESS\r\n'
+  const textBody = 'To start using FORMPRESS please visit the link below.\r\n'
+  const verifyLink = `${FRONTEND}/verify/${USERID}/${VERIFYCODE}`
+  const footer = '\r\n\r\n\r\n2021 FORMPRESS'
+
+  textedEmail += formpressText
+  textedEmail += helloText
+  textedEmail += textBody
+  textedEmail += verifyLink
+  textedEmail += footer
+%>
+<%- textedEmail %>
