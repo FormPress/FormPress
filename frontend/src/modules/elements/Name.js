@@ -12,9 +12,37 @@ export default class Name extends Component {
     label: 'Full Name',
     options: ['Mr.'],
     sublabelText: '',
-    middleName: false,
-    suffix: false,
-    prefix: false
+    middleName: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a middle name.']
+      }
+    },
+    prefix: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title before their names.']
+      }
+    },
+    suffix: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title after their names.']
+      }
+    },
+    prefixOptions: {
+      default: ['Mr.'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Prefix Options'
+      }
+    }
   }
 
   render() {

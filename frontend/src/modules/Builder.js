@@ -77,6 +77,10 @@ const getElements = () =>
 
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
+    console.log(
+      element.defaultConfig,
+      getConfigurableSettings(element.defaultConfig.type)
+    )
     acc[element.defaultConfig.type] = {
       configurableSettings: getConfigurableSettings(element.defaultConfig.type)
     }

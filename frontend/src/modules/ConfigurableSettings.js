@@ -65,61 +65,6 @@ const policy = {
         label: 'Enter Dropdown options'
       }
     }
-  },
-  prefixOptions: {
-    rule: {
-      type: 'only',
-      exceptions: ['Name']
-    },
-    configurableSettings: {
-      default: ['Mr.'],
-      formProps: {
-        type: 'TextArea',
-        label: 'Enter Prefix Options'
-      }
-    }
-  },
-  middleName: {
-    rule: {
-      type: 'only',
-      exceptions: ['Name']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Allow users to enter a middle name.']
-      }
-    }
-  },
-  prefix: {
-    rule: {
-      type: 'only',
-      exceptions: ['Name']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Allow users to enter a title before their names.']
-      }
-    }
-  },
-  suffix: {
-    rule: {
-      type: 'only',
-      exceptions: ['Name']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Allow users to enter a title after their names.']
-      }
-    }
   }
 }
 
