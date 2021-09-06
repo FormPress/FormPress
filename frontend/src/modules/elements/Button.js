@@ -11,8 +11,7 @@ export default class Button extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Button',
-    buttonText: 'Submit',
-    sublabelText: ''
+    buttonText: 'Submit'
   }
 
   render() {

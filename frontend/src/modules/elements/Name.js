@@ -11,13 +11,11 @@ export default class Name extends Component {
     type: 'Name',
     label: 'Full Name',
     options: ['Mr.'],
-    sublabelText: '',
-    middleName: {
-      default: false,
+    prefixOptions: {
+      default: ['Mr.'],
       formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Allow users to enter a middle name.']
+        type: 'TextArea',
+        label: 'Enter Prefix Options'
       }
     },
     prefix: {
@@ -28,19 +26,20 @@ export default class Name extends Component {
         options: ['Allow users to enter a title before their names.']
       }
     },
+    middleName: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a middle name.']
+      }
+    },
     suffix: {
       default: false,
       formProps: {
         type: 'Checkbox',
         label: '',
         options: ['Allow users to enter a title after their names.']
-      }
-    },
-    prefixOptions: {
-      default: ['Mr.'],
-      formProps: {
-        type: 'TextArea',
-        label: 'Enter Prefix Options'
       }
     }
   }

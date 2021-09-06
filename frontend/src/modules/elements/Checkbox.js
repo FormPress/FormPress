@@ -16,8 +16,14 @@ export default class Checkbox extends Component {
     type: 'Checkbox',
     label: 'Label',
     options: ['New Checkbox'],
-    requiredText: 'Please fill this field.',
-    sublabelText: ''
+    toggle: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Make this field toggle?']
+      }
+    }
   }
 
   constructor(props) {

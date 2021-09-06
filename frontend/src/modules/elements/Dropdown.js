@@ -12,8 +12,13 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1'],
-    requiredText: 'Please fill this field.',
-    sublabelText: ''
+    dropdownOptions: {
+      default: ['Dropdown 1'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Dropdown options'
+      }
+    }
   }
 
   render() {

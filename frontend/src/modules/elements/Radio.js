@@ -15,9 +15,7 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: ['New Radio'],
-    requiredText: 'Please fill this field.',
-    sublabelText: ''
+    options: ['New Radio']
   }
 
   constructor(props) {

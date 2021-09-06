@@ -38,33 +38,6 @@ const policy = {
         label: 'Describe the expected value of an input field.'
       }
     }
-  },
-  toggle: {
-    rule: {
-      type: 'only',
-      exceptions: ['Checkbox']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Make this field toggle?']
-      }
-    }
-  },
-  dropdownOptions: {
-    rule: {
-      type: 'only',
-      exceptions: ['Dropdown']
-    },
-    configurableSettings: {
-      default: ['Dropdown 1'],
-      formProps: {
-        type: 'TextArea',
-        label: 'Enter Dropdown options'
-      }
-    }
   }
 }
 
