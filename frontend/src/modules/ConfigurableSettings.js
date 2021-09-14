@@ -66,6 +66,34 @@ const policy = {
       }
     }
   },
+  prefix: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title before their names.']
+      }
+    }
+  },
+  prefixTypeTextBox: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Change the type of prefix field to TextBox.']
+      }
+    }
+  },
   prefixOptions: {
     rule: {
       type: 'only',
@@ -90,20 +118,6 @@ const policy = {
         type: 'Checkbox',
         label: '',
         options: ['Allow users to enter a middle name.']
-      }
-    }
-  },
-  prefix: {
-    rule: {
-      type: 'only',
-      exceptions: ['Name']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Allow users to enter a title before their names.']
       }
     }
   },

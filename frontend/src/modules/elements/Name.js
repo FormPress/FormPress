@@ -53,21 +53,30 @@ export default class Name extends Component {
                 ? ''
                 : ' hidden'
             }`}>
-            <select
-              id={`prefix_${config.id}`}
-              name={`prefix_${config.id}`}
-              defaultValue="choose-disabled">
-              <option disabled value="choose-disabled">
-                Prefix
-              </option>
-              {options.map((item) => {
-                return (
-                  <option className="option-space" key={item} value={item}>
-                    {item}
-                  </option>
-                )
-              })}
-            </select>
+            {typeof config.prefixTypeTextBox !== 'undefined' &&
+            config.prefixTypeTextBox === true ? (
+              <input
+                id={`prefix_${config.id}`}
+                name={`prefix_${config.id}`}
+                type="text"
+              />
+            ) : (
+              <select
+                id={`prefix_${config.id}`}
+                name={`prefix_${config.id}`}
+                defaultValue="choose-disabled">
+                <option disabled value="choose-disabled">
+                  Prefix
+                </option>
+                {options.map((item) => {
+                  return (
+                    <option className="option-space" key={item} value={item}>
+                      {item}
+                    </option>
+                  )
+                })}
+              </select>
+            )}
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"

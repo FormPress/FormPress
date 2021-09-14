@@ -245,15 +245,14 @@
         valid: domElem.value.trim().length > 0
       }
 
-      const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/
-
       domElem.addEventListener('blur', () => {
         const value = domElem.value
 
         if (elem.required !== true) {
           if (domElem.value.trim().length > 0) {
-            requireds[id].valid = pattern.test(domElem.value.trim())
-            pattern.test(domElem.value.trim()) === true
+            requireds[id].valid =
+              domElem.value.length > 2 && domElem.value.indexOf('@') > -1
+            domElem.value.length > 2 && domElem.value.indexOf('@') > -1 === true
               ? containerElem.classList.remove('requiredError')
               : containerElem.classList.add('requiredError')
           } else {
@@ -262,8 +261,9 @@
           }
         } else {
           if (domElem.value.trim().length > 0) {
-            requireds[id].valid = pattern.test(domElem.value.trim())
-            pattern.test(domElem.value.trim()) === true
+            requireds[id].valid =
+              domElem.value.length > 2 && domElem.value.indexOf('@') > -1
+            domElem.value.length > 2 && domElem.value.indexOf('@') > -1 === true
               ? containerElem.classList.remove('requiredError')
               : containerElem.classList.add('requiredError')
           } else {
