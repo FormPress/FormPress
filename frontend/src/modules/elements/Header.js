@@ -35,7 +35,7 @@ export default class Header extends Component {
             labelKey={config.id}
             handleLabelChange={this.props.handleLabelChange}
             value={config.label}
-            data-placeholder="Type a header"
+            dataPlaceholder="Type a header"
           />
         </h2>
         <h4>
@@ -45,7 +45,7 @@ export default class Header extends Component {
             labelKey={`header_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.sublabel}
-            data-placeholder="Type a subheader"
+            dataPlaceholder="Type a subheader"
           />
         </h4>
       </ElementContainer>

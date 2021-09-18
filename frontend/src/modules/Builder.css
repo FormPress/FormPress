@@ -199,14 +199,9 @@
 }
 
 .builderStage > .formTitle > .label {
-  padding: 2px 5px;
-  border: 1px solid #fff;
   width: 100%;
   align-self: center;
-}
-
-.builderStage > .formTitle > .label:hover {
-  border: 1px dashed;
+  padding: 2px 5px;
 }
 
 .builderStage > .formControls {

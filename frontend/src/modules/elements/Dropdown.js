@@ -12,8 +12,7 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1'],
-    requiredText: 'Please fill this field.',
-    sublabelText: ''
+    requiredText: 'Please fill this field.'
   }
 
   render() {
@@ -43,7 +42,7 @@ export default class Dropdown extends Component {
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           value={config.label}
           required={config.required}
         />,
@@ -73,7 +72,7 @@ export default class Dropdown extends Component {
           <EditableLabel
             className="sublabel"
             mode={mode}
-            data-placeholder="Type a sublabel"
+            dataPlaceholder="Click to edit sublabel"
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={

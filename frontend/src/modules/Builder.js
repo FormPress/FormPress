@@ -956,6 +956,7 @@ class Builder extends Component {
             <EditableLabel
               className="label"
               mode="builder"
+              dataPlaceholder="Click to edit form title"
               labelKey="title"
               handleLabelChange={this.handleTitleChange}
               value={form.title}
