@@ -432,6 +432,84 @@ class Data extends Component {
     ]
   }
 
+  renderEntryElements(entry) {
+    const { forms, selectedFormId } = this.state
+    const form = forms.filter((form) => form.id === selectedFormId)[0]
+    let value = ''
+
+    console.log(entry)
+
+    let questionType = ''
+    try {
+      questionType = form.props.elements.filter(
+        (element) => element.id === entry.question_id
+      )[0].type
+    } catch (e) {
+      console.log(e)
+    }
+
+    if (questionType === 'Checkbox' || questionType === 'Radio') {
+      value = entry.value.map((input, index) => {
+        return (
+          <div className="input" key={index}>
+            <input
+              type={input.type.toLowerCase()}
+              id={'q_required_' + index}
+              className={input.toggle === true ? 'toggle-checkbox' : ''}
+              defaultChecked={input.value}
+              disabled
+              readOnly
+            />
+            {input.toggle === true ? <span className="slider"></span> : null}
+            <label
+              className={
+                input.type.toLowerCase() +
+                '-label ' +
+                (input.toggle === true ? 'toggle-label' : '')
+              }
+              htmlFor={'q_required_' + index}>
+              {input.content}
+            </label>
+          </div>
+        )
+      })
+    } else if (questionType === 'FileUpload') {
+      if (entry.value !== '') {
+        try {
+          if (
+            Object.prototype.toString.call(JSON.parse(entry.value)) ===
+              '[object Object]' ||
+            '[object Array]'
+          ) {
+            const parsedValue = JSON.parse(entry.value)
+            const uriEncodedName = encodeURI(parsedValue.fileName)
+            const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
+            value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
+          } else {
+            value = entry.value
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    } else if (questionType === 'Name') {
+      if (entry.value !== '') {
+        try {
+          value = Object.entries(JSON.parse(entry.value))
+            .map(([v, t]) => `${t}`)
+            .join(' ')
+          if (value.trim() === '') value = '-'
+        } catch (e) {
+          console.log(e)
+        }
+      }
+    } else {
+      value = entry.value
+    }
+
+    return value
+  }
+
   renderEntries() {
     const { entries, forms, selectedFormId } = this.state
 
@@ -453,57 +531,7 @@ class Data extends Component {
     }
 
     return entries.map((entry, index) => {
-      //there should be a better way to check fileUpload
-      let value = ''
-      if (entry.value.indexOf('{"uploadName":"') >= 0) {
-        const parsedValue = JSON.parse(entry.value)
-        const uriEncodedName = encodeURI(parsedValue.fileName)
-        const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
-        value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
-      } else {
-        value = entry.value
-
-        if (typeof value === 'object') {
-          value = value.map((input, index) => {
-            return (
-              <div className="input" key={index}>
-                <input
-                  type={input.type.toLowerCase()}
-                  id={'q_required_' + index}
-                  className={input.toggle === true ? 'toggle-checkbox' : ''}
-                  defaultChecked={input.value}
-                  disabled
-                  readOnly
-                />
-                {input.toggle === true ? (
-                  <span className="slider"></span>
-                ) : null}
-                <label
-                  className={
-                    input.type.toLowerCase() +
-                    '-label ' +
-                    (input.toggle === true ? 'toggle-label' : '')
-                  }
-                  htmlFor={'q_required_' + index}>
-                  {input.content}
-                </label>
-              </div>
-            )
-          })
-        } else {
-          try {
-            value = JSON.parse(value)
-            let toString = (obj) =>
-              Object.entries(obj)
-                .map(([v]) => `${v}`)
-                .join(' ')
-            value = toString(value)
-            if (value.trim() === '') value = '-'
-          } catch (e) {
-            console.log(e)
-          }
-        }
-      }
+      let value = this.renderEntryElements(entry)
       return (
         <div key={index} className="entry">
           <div className="label">{getLabel(entry.question_id)}</div>

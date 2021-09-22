@@ -259,6 +259,10 @@ body {
   float: right;
 }
 
+.gleam .elementButton input[type='submit']:hover {
+  cursor: pointer;
+}
+
 .builder.gleam .elementButton button {
   margin-top: 25px;
 }
