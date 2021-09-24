@@ -12,3 +12,12 @@
   text-align: center;
   color: #113952;
 }
+
+.sign-up-succes {
+  padding: 80px 50px 50px 50px;
+  font-size: large;
+}
+
+.signup-email {
+  font-weight: 700;
+}

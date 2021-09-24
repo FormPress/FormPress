@@ -83,9 +83,9 @@ class SignUp extends Component {
     const signUpSuccess = (
       <div>
         <div className="sign-up-succes">
-          Signup success! We have sent an e-mail to your {email} address.
-          Activate account by following that e-mail. (If you didn&apos;t recieve
-          please check spam folder)
+          <p>Signup success! We have sent an e-mail to your <span className="signup-email"><i>{email}</i></span> address.</p>
+          <p>Activate account by following that e-mail. (If you didn&apos;t recieve
+            please check spam folder)</p>
         </div>
       </div>
     )
