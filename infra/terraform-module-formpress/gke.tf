@@ -41,6 +41,7 @@ module "gke" {
   project_id                 = var.project_id
   name                       = var.cluster_name
   region                     = var.region
+  zones                      = var.zones
   http_load_balancing        = true
   horizontal_pod_autoscaling = true
   network_policy             = false
@@ -52,8 +53,8 @@ module "gke" {
     {
       name               = key
       machine_type       = var.deployments[key].machine_type
-      min_count          = 1
-      max_count          = 5
+      min_count          = var.deployments[key].min_count
+      max_count          = var.deployments[key].max_count
       local_ssd_count    = 0
       disk_size_gb       = 100
       disk_type          = "pd-standard"
@@ -61,7 +62,7 @@ module "gke" {
       auto_repair        = true
       auto_upgrade       = true
       preemptible        = false
-      initial_node_count = 1
+      initial_node_count = var.deployments[key].initial_node_count
     }
   ]
 
