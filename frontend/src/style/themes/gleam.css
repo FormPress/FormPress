@@ -69,7 +69,7 @@ body {
   border: 1px dashed gray;
 }
 .builder.gleam.form span[contentEditable='true']:hover {
-  border: 1px dashed black;
+  border: 1px dashed black !important;
 }
 .gleam.form span[contentEditable='true']:focus-visible {
   outline: none;
@@ -221,7 +221,6 @@ body {
   width: 18px;
   height: 18px;
   -webkit-appearance: none;
-  -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
   border: 1px solid #a0a0a0;
@@ -230,6 +229,8 @@ body {
   outline: none;
   background-color: #fdfdfd;
   cursor: pointer;
+  vertical-align: top;
+  margin-top: 3px;
 }
 .gleam .elementRadio ul li input:checked {
   background-color: #8cc63f;
@@ -270,7 +271,7 @@ body {
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
-  height: 44px;
+  min-height: 44px;
   background-color: #9ee048;
   border: 1px solid #9ee048;
   outline: none;
@@ -279,6 +280,8 @@ body {
 }
 
 .builder.gleam .elementButton button {
+  display: block;
+  border: 1px solid #9ee048;
   margin-top: 25px;
 }
 
@@ -294,7 +297,6 @@ body {
   color: #333333;
   display: inline-block;
   margin-top: -2px;
-  position: absolute;
   white-space: nowrap;
   max-width: 600px;
   overflow: hidden;
@@ -309,11 +311,13 @@ body {
 .gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
-  position: absolute;
+  white-space: nowrap;
+  max-width: 600px;
+  overflow: hidden;
   -webkit-user-select: none;
   user-select: none;
-  min-width: 117px;
-  margin-top: -2px;
+  min-width: 115px;
+  vertical-align: bottom;
 }
 
 .gleam.form
@@ -375,6 +379,7 @@ body {
   transition-duration: 0.3s;
   background-color: #fdfdfd;
   cursor: pointer;
+  vertical-align: top;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
