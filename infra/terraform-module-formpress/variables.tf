@@ -9,3 +9,15 @@ variable "cluster_name" {
 variable "region" {
   description = "Cluster Region"
 }
+
+variable "deployments" {
+  type = map(object({
+    machine_type = string
+  }))
+
+  default = {
+    production = {
+      "machine_type" = "g1-small"
+    }
+  }
+}
