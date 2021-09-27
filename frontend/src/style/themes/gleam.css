@@ -285,6 +285,11 @@ body {
   margin-top: 25px;
 }
 
+.builder.gleam .elementButton button span[contentEditable='true'] {
+  display: block;
+  border: 1px solid #9ee048;
+}
+
 .gleam .elementCheckbox .input,
 .gleam .elementRadio li {
   display: block;
