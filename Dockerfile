@@ -3,7 +3,7 @@ FROM node:12.14-alpine3.10 as base
 FROM base as frontend_builder
 
 ENV PATH="/node_modules/.bin:$PATH"
-ENV REACT_APP_BACKEND='https://stage.formpress.org'
+ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
 ENV REACT_APP_FP_ENV="production"
 
 ADD frontend /frontend
