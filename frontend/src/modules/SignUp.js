@@ -82,7 +82,7 @@ class SignUp extends Component {
     const { message, success, email } = this.state
     const signUpSuccess = (
       <div>
-        <div className="sign-up-succes">
+        <div className="sign-up-success">
           <p>
             Signup success! We have sent an e-mail to your{' '}
             <span className="signup-email">
@@ -155,14 +155,14 @@ class SignUp extends Component {
                     &nbsp;<i>Login</i>
                   </Link>
                 </div>
-                <div className="have-trouble">
-                  Having trouble?
-                  <span className="wip-placeholder" title="WIP">
-                    Contact Us
-                  </span>
-                </div>
               </div>
             )}
+            <div className="have-trouble">
+              Having trouble?
+              <span className="wip-placeholder" title="WIP">
+                Contact Us
+              </span>
+            </div>
           </div>
         </div>
         <div className="footer cw center grid">
