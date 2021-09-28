@@ -64,6 +64,7 @@ body {
   color: gray;
   border: 1px solid #ffffff;
   display: block;
+  word-break: break-all;
 }
 .builder.gleam.form span.emptySpan[contentEditable='true'] {
   border: 1px dashed gray;
@@ -338,6 +339,8 @@ body {
   padding: 2px 5px;
   min-width: 60px;
   display: block;
+  word-break: break-all;
+  white-space: break-spaces;
 }
 
 .gleam.form
@@ -357,6 +360,8 @@ body {
   padding: 2px 5px;
   min-width: 60px;
   display: block;
+  word-break: break-all;
+  white-space: break-spaces;
 }
 
 .gleam.form
