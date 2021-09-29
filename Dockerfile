@@ -5,6 +5,7 @@ FROM base as frontend_builder
 ENV PATH="/node_modules/.bin:$PATH"
 ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
 ENV REACT_APP_FP_ENV="production"
+ENV REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
 
 ADD frontend /frontend
 RUN cd /frontend &&\
