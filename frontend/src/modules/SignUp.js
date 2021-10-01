@@ -82,6 +82,7 @@ class SignUp extends Component {
     const { message, success, email } = this.state
     const signUpSuccess = (
       <div>
+        <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
           <p>
             Signup success! We have sent an e-mail to your{' '}
