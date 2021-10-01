@@ -11,6 +11,10 @@
     {
       name: 'required',
       check: (element) => element.required === true
+    },
+    {
+      name: '3rdparty/iframeSizer.contentWindow.min',
+      check: () => window.location !== window.parent.location
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
