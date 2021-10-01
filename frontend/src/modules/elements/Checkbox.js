@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { cloneDeep } from 'lodash'
+
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
@@ -13,7 +15,7 @@ export default class Checkbox extends Component {
     id: 0,
     type: 'Checkbox',
     label: 'Label',
-    options: ['Checkbox 1'],
+    options: ['New Checkbox'],
     requiredText: 'Please fill this field.'
   }
 
@@ -24,13 +26,17 @@ export default class Checkbox extends Component {
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
   }
 
-  handleAddingItem() {
+  handleAddingItem(id) {
     const { config } = this.props
-    const newOptions = config.options
-    newOptions.push(`${config.type} ${newOptions.length + 1}`)
+    if (typeof config.options === 'undefined') {
+      config.options = [`New ${config.type}`]
+    }
+
+    const newOptions = cloneDeep(config.options)
+    newOptions.push(`New ${config.type}`)
 
     this.props.configureQuestion({
-      id: config.id,
+      id: id,
       newState: {
         options: newOptions
       }
@@ -78,6 +84,7 @@ export default class Checkbox extends Component {
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
+          dataPlaceholder="Type a question"
           required={config.required}
         />,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
@@ -88,6 +95,7 @@ export default class Checkbox extends Component {
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
+            customBuilderHandlers={this.props.customBuilderHandlers}
           />
         </div>
       ]
@@ -98,6 +106,7 @@ export default class Checkbox extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -132,6 +141,25 @@ export default class Checkbox extends Component {
     return (
       <ElementContainer type={config.type} {...this.props}>
         {display}
+        {mode === 'viewer' ? (
+          ''
+        ) : (
+          <div className="clearfix">
+            <EditableLabel
+              className="sublabel"
+              dataPlaceholder="Click to edit sublabel"
+              mode={mode}
+              labelKey={`sub_${config.id}`}
+              handleLabelChange={this.props.handleLabelChange}
+              value={
+                typeof config.sublabelText !== 'undefined' &&
+                config.sublabelText !== ''
+                  ? config.sublabelText
+                  : ''
+              }
+            />
+          </div>
+        )}
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>

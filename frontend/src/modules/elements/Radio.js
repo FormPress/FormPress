@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { cloneDeep } from 'lodash'
+
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
@@ -13,7 +15,7 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Radio',
-    options: ['Radio 1'],
+    options: ['New Radio'],
     requiredText: 'Please fill this field.'
   }
 
@@ -26,8 +28,12 @@ export default class Radio extends Component {
 
   handleAddingItem() {
     const { config } = this.props
-    const newOptions = config.options
-    newOptions.push(`${config.type} ${newOptions.length + 1}`)
+    if (typeof config.options === 'undefined') {
+      config.options = [`New ${config.type}`]
+    }
+
+    const newOptions = cloneDeep(config.options)
+    newOptions.push(`New ${config.type}`)
 
     this.props.configureQuestion({
       id: config.id,
@@ -64,9 +70,10 @@ export default class Radio extends Component {
       display = [
         <EditableLabel
           key="1"
-          className="label"
+          className="fl label"
           mode={mode}
           labelKey={config.id}
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -79,6 +86,22 @@ export default class Radio extends Component {
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
+            customBuilderHandlers={this.props.customBuilderHandlers}
+          />
+        </div>,
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className="sublabel"
+            dataPlaceholder="Click to edit sublabel"
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined' &&
+              config.sublabelText !== ''
+                ? config.sublabelText
+                : ''
+            }
           />
         </div>
       ]
@@ -89,6 +112,7 @@ export default class Radio extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -116,7 +140,22 @@ export default class Radio extends Component {
             })}
           </ul>
         </div>,
-        <div key="3" className="fl metadata">
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className="sublabel"
+            dataPlaceholder="Click to edit sublabel"
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined' &&
+              config.sublabelText !== ''
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>,
+        <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]

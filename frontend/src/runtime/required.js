@@ -3,7 +3,7 @@
   const requireds = {}
 
   for (const elem of FORMPRESS.elements) {
-    if (elem.required !== true) {
+    if (elem.required !== true && elem.type !== 'Email') {
       continue
     }
 
@@ -86,20 +86,28 @@
         }
       })
     } else if (elem.type === 'Name') {
-      const domElem1 = containerElem.querySelector(`#fname`)
-      const domElem2 = containerElem.querySelector(`#lname`)
+      const domElem1 = containerElem.querySelector(`#fname_${id}`)
+      const domElem2 = containerElem.querySelector(`#lname_${id}`)
+      const domElem3 = containerElem.querySelector(`#prefix_${id}`)
       requireds[id] = {
         id,
         valid: !(
           domElem1.value.trim().length === 0 ||
-          domElem2.value.trim().length === 0
+          domElem2.value.trim().length === 0 ||
+          domElem.value.trim() === 'choose-disabled'
         )
       }
 
       domElem1.addEventListener('blur', () => {
         let value1 = domElem1.value
         let value2 = domElem2.value
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -111,7 +119,13 @@
       domElem2.addEventListener('blur', () => {
         let value1 = domElem1.value
         let value2 = domElem2.value
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -123,7 +137,13 @@
       domElem1.addEventListener('keyup', () => {
         let value1 = domElem1.value
         let value2 = domElem2.value
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -135,7 +155,49 @@
       domElem2.addEventListener('keyup', () => {
         let value1 = domElem1.value
         let value2 = domElem2.value
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem3.addEventListener('blur', () => {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
+        } else {
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
+        }
+      })
+
+      domElem3.addEventListener('change', function () {
+        let value1 = domElem1.value
+        let value2 = domElem2.value
+        let value3 = domElem3.value
+
+        if (
+          value1.trim().length > 0 &&
+          value2.trim().length > 0 &&
+          value3.trim() !== 'choose-disabled'
+        ) {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
         } else {
@@ -175,6 +237,59 @@
         } else {
           containerElem.classList.remove('requiredError')
           requireds[id].valid = true
+        }
+      })
+    } else if (elem.type === 'Email') {
+      requireds[id] = {
+        id,
+        valid: domElem.value.trim().length > 0
+      }
+
+      domElem.addEventListener('blur', () => {
+        const value = domElem.value
+
+        if (elem.required !== true) {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid =
+              domElem.value.length > 2 && domElem.value.indexOf('@') > -1
+            domElem.value.length > 2 && domElem.value.indexOf('@') > -1 === true
+              ? containerElem.classList.remove('requiredError')
+              : containerElem.classList.add('requiredError')
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
+        } else {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid =
+              domElem.value.length > 2 && domElem.value.indexOf('@') > -1
+            domElem.value.length > 2 && domElem.value.indexOf('@') > -1 === true
+              ? containerElem.classList.remove('requiredError')
+              : containerElem.classList.add('requiredError')
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        }
+      })
+
+      domElem.addEventListener('keyup', () => {
+        const value = domElem.value
+
+        if (elem.required !== true) {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
+        } else {
+          if (domElem.value.trim().length > 0) {
+            requireds[id].valid = pattern.test(domElem.value.trim())
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
         }
       })
     } else {

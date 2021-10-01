@@ -10,7 +10,7 @@ const props = {
     elements: [
       {
         id: 1,
-        type: 'Text',
+        type: 'TextBox',
         label: 'First Name'
       },
       {

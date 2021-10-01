@@ -1,26 +1,18 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import './FileUpload.css'
+import './Email.css'
 
-export default class FileUpload extends Component {
-  static weight = 8
+export default class Email extends Component {
+  static weight = 9
 
   static defaultConfig = {
     id: 0,
-    type: 'FileUpload',
-    label: 'File Upload',
-    requiredText: 'Please fill this field.'
-  }
-
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required?'
-      }
-    }
+    type: 'Email',
+    label: 'Email',
+    requiredText: 'Please enter a valid email.',
+    placeholder: 'Please enter the information.'
   }
 
   render() {
@@ -35,15 +27,9 @@ export default class FileUpload extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    const display = (
-      <input
-        type="file"
-        name={`q_${config.id}`}
-        id={`q_${config.id}`}
-        data-multiple-caption="{count} files selected"
-        multiple
-      />
-    )
+    if (typeof config.placeholder !== 'undefined') {
+      inputProps.placeholder = config.placeholder
+    }
 
     return (
       <ElementContainer type={config.type} {...this.props}>
@@ -51,17 +37,23 @@ export default class FileUpload extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
+          dataPlaceholder="Type a question"
           value={config.label}
           required={config.required}
         />
-        {display}
+        <div className="fl input">
+          <input
+            id={`q_${config.id}`}
+            name={`q_${config.id}`}
+            {...inputProps}
+          />
+        </div>
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
-            dataPlaceholder="Click to edit sublabel"
             mode={mode}
+            dataPlaceholder="Click to edit sublabel"
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
             value={

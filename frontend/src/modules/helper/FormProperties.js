@@ -70,7 +70,7 @@ export default class FormProperties extends Component {
               elements: [
                 {
                   id: 1,
-                  type: 'Text',
+                  type: 'TextBox',
                   label: 'Send submission notifications to',
                   value: email
                 }
@@ -86,7 +86,7 @@ export default class FormProperties extends Component {
               elements: [
                 {
                   id: 2,
-                  type: 'Text',
+                  type: 'TextBox',
                   label: 'Thank you page title',
                   value: tyPageTitle
                 }

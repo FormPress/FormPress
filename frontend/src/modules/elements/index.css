@@ -23,13 +23,8 @@
 }
 
 .form > .element > .label {
-  width: 200px;
-}
-
-.builderStage .form > .element > .label > .requiredMarker {
-  margin-left: 10px;
-  display: inline-block;
-  color: red;
+  min-width: 200px;
+  max-width: 600px;
 }
 
 .builderStage .form > .element > button,

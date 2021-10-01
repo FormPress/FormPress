@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, NavLink, Switch, Route } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { cloneDeep } from 'lodash'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -14,7 +15,9 @@ import {
   faDotCircle,
   faAddressCard,
   faFileAlt,
-  faPlusCircle
+  faPlusCircle,
+  faEnvelope,
+  faFont
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -32,26 +35,30 @@ import '../style/themes/gleam.css'
 
 //list of element icons
 const iconMap = {
-  Text: faHeading,
+  TextBox: faFont,
   TextArea: faAlignJustify,
   Checkbox: faCheckSquare,
   Button: faMousePointer,
   Dropdown: faSort,
   Radio: faDotCircle,
   Name: faAddressCard,
-  FileUpload: faFileAlt
+  FileUpload: faFileAlt,
+  Email: faEnvelope,
+  Header: faHeading
 }
 
 //list of element texts
 const textMap = {
-  Text: 'Text',
+  TextBox: 'TextBox',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
   Dropdown: 'Dropdown',
   Radio: 'Radio button',
   Name: 'Name',
-  FileUpload: 'File Upload'
+  FileUpload: 'File Upload',
+  Email: 'E-mail',
+  Header: 'Header'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -206,7 +213,7 @@ class Builder extends Component {
           elements: [
             {
               id: 1,
-              type: 'Text',
+              type: 'TextBox',
               label: 'First Name',
               requiredText: 'Please fill this field.'
             },
@@ -225,6 +232,7 @@ class Builder extends Component {
     this.handleDrop = this.handleDrop.bind(this)
     this.handleDragEnd = this.handleDragEnd.bind(this)
     this.handleSaveClick = this.handleSaveClick.bind(this)
+    this.handleFormItemMovement = this.handleFormItemMovement.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
@@ -279,6 +287,7 @@ class Builder extends Component {
     const type = e.dataTransfer.getData('text')
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
+
     let elements = [...form.props.elements]
 
     if (dragMode === 'insert') {
@@ -303,6 +312,7 @@ class Builder extends Component {
     const index = form.props.elements.findIndex(
       (element) => element.id.toString() === dragIndex
     )
+
     let newElements
 
     if (this.state.insertBefore === true) {
@@ -354,6 +364,7 @@ class Builder extends Component {
     }
     item.id = maxId + 1
     const newElements = elements.concat(item)
+
     this.setState({
       form: {
         ...form,
@@ -413,14 +424,22 @@ class Builder extends Component {
         (element) => element.id === parseInt(questionID)
       )[0]
 
-      try {
-        if (question.type === 'Button') {
-          question.buttonText = value
-        } else {
-          question.options[itemID] = value
+      if (id.split('_')[0] === 'sub') {
+        question.sublabelText = value
+      } else if (id.split('_')[0] === 'header') {
+        question.sublabel = value
+      } else if (id.split('_')[0] === 'name') {
+        question[`${itemID}SublabelText`] = value
+      } else {
+        try {
+          if (question.type === 'Button') {
+            question.buttonText = value
+          } else {
+            question.options[itemID] = value
+          }
+        } catch (e) {
+          console.log(e)
         }
-      } catch (e) {
-        console.log(e)
       }
     } else {
       const question = form.props.elements.filter(
@@ -439,6 +458,139 @@ class Builder extends Component {
     }
 
     this.setState({ form })
+  }
+
+  handleFormItemMovement(_item, movementType, itemType = 'formItem') {
+    if (itemType === 'formItem') {
+      const { formId } = this.props.match.params
+      let item = getElementsKeys()[_item.type]
+      const dragIndex = _item.id.toString()
+      const { form } = this.state
+      const sortItem = form.props.elements.filter(
+        (element) => element.id.toString() === dragIndex
+      )[0]
+
+      const elements = cloneDeep(form.props.elements)
+
+      item = sortItem
+      //mark sorted element to be deleted
+      const sortedElementOriginal = elements.filter(
+        (element) => element.id === item.id
+      )
+
+      if (movementType !== 'clone') {
+        sortedElementOriginal[0].__original__ = true
+      }
+
+      const index = form.props.elements.findIndex(
+        (element) => element.id.toString() === dragIndex
+      )
+
+      let newElements
+      if (movementType === 'moveDown') {
+        if (index === elements.length - 1) {
+          newElements = [item, ...elements]
+          newElements.unshift()
+        } else {
+          newElements = [
+            ...elements.slice(0, index + 2),
+            item,
+            ...elements.slice(index + 2)
+          ]
+        }
+      } else if (movementType === 'moveUp') {
+        if (index === 0) {
+          newElements = []
+          newElements.push(...elements, item)
+          newElements.shift()
+        } else {
+          newElements = [
+            ...elements.slice(0, index - 1),
+            item,
+            ...elements.slice(index - 1)
+          ]
+        }
+      } else {
+        let maxId = Math.max(
+          ...form.props.elements.map((element) => element.id)
+        )
+        item.id = maxId + 1
+        newElements = [
+          ...elements.slice(0, index + 1),
+          item,
+          ...elements.slice(index + 1)
+        ]
+      }
+      if (movementType !== 'clone') {
+        newElements = newElements.filter(
+          (element) => element.__original__ !== true
+        )
+      }
+      this.props.history.push(
+        `/editor/${formId}/builder/question/${item.id}/properties`
+      )
+
+      this.setState({
+        dragMode: 'insert',
+        sortItem: false,
+        dragging: false,
+        dragIndex: false,
+        form: {
+          ...form,
+          props: {
+            ...form.props,
+            elements: newElements
+          }
+        }
+      })
+    } else {
+      const form = cloneDeep(this.state.form)
+      for (let elem of form.props.elements) {
+        if (elem.id === _item.id) {
+          if (movementType === 'moveDown') {
+            if (_item.listItemId === elem.options.length - 1) {
+              elem.options.unshift(elem.options[_item.listItemId])
+              elem.options.pop()
+            } else {
+              elem.options.splice(
+                _item.listItemId + 2,
+                0,
+                elem.options[_item.listItemId]
+              )
+              elem.options.splice(_item.listItemId, 1)
+            }
+          } else if (movementType === 'moveUp') {
+            if (_item.listItemId === 0) {
+              elem.options.push(elem.options[_item.listItemId])
+              elem.options.shift()
+            } else {
+              elem.options.splice(
+                _item.listItemId - 1,
+                0,
+                elem.options[_item.listItemId]
+              )
+              elem.options.splice(_item.listItemId + 1, 1)
+            }
+          } else {
+            elem.options.splice(
+              _item.listItemId + 1,
+              0,
+              elem.options[_item.listItemId]
+            )
+          }
+        }
+      }
+
+      this.setState({
+        dragMode: 'insert',
+        sortItem: false,
+        dragging: false,
+        dragIndex: false,
+        form: {
+          ...form
+        }
+      })
+    }
   }
 
   handleTitleChange(id, value) {
@@ -588,6 +740,22 @@ class Builder extends Component {
       }
     }
 
+    if (
+      Object.prototype.hasOwnProperty.call(
+        changes.newState,
+        'prefixOptions'
+      ) === true
+    ) {
+      let lines = changes.newState.prefixOptions.split('\n')
+      changes.newState.options = []
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i] && lines[i].trim().length !== 0) {
+          changes.newState.options.push(lines[i])
+        }
+      }
+    }
+
     Object.assign(question, changes.newState)
 
     this.setState({ form })
@@ -635,7 +803,7 @@ class Builder extends Component {
             </div>
           </div>
         </div>
-        <div className="content grid">
+        <div className="content">
           <div className="leftTabs col-1-16">
             {this.renderLeftVerticalTabs()}
           </div>
@@ -788,6 +956,7 @@ class Builder extends Component {
             <EditableLabel
               className="label"
               mode="builder"
+              dataPlaceholder="Click to edit form title"
               labelKey="title"
               handleLabelChange={this.handleTitleChange}
               value={form.title}
@@ -819,7 +988,8 @@ class Builder extends Component {
             customBuilderHandlers={{
               onDelete: this.handleFormElementDeleteClick,
               handleDragEnd: this.handleDragEnd,
-              handleDragStart: this.handleDragStart
+              handleDragStart: this.handleDragStart,
+              handleFormItemMovement: this.handleFormItemMovement
             }}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}

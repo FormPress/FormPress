@@ -42,6 +42,7 @@ export default class Dropdown extends Component {
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
+          dataPlaceholder="Type a question"
           value={config.label}
           required={config.required}
         />,
@@ -66,6 +67,21 @@ export default class Dropdown extends Component {
               </select>
             </div>
           }
+        </div>,
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className="sublabel"
+            mode={mode}
+            dataPlaceholder="Click to edit sublabel"
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined' &&
+              config.sublabelText !== ''
+                ? config.sublabelText
+                : ''
+            }
+          />
         </div>
       ]
     } else {
@@ -97,7 +113,21 @@ export default class Dropdown extends Component {
             })}
           </select>
         </div>,
-        <div key="3" className="fl metadata">
+        <div className="clearfix" key="3">
+          <EditableLabel
+            className="sublabel"
+            mode={mode}
+            labelKey={`sub_${config.id}`}
+            handleLabelChange={this.props.handleLabelChange}
+            value={
+              typeof config.sublabelText !== 'undefined' &&
+              config.sublabelText !== ''
+                ? config.sublabelText
+                : ''
+            }
+          />
+        </div>,
+        <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       ]

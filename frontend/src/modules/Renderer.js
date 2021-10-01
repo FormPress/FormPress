@@ -52,6 +52,18 @@ export default class Renderer extends Component {
             extraProps.className = 'dn'
           }
 
+          if (elem.id === 'required') {
+            if (elem.value === false) extraProps.className = 'elementHider'
+          }
+
+          if (elem.id === 'prefix') {
+            if (elem.value === false) extraProps.className = 'elementHider'
+          }
+
+          if (elem.id === 'prefixTypeTextBox') {
+            if (elem.value === true) extraProps.className = 'elementHider'
+          }
+
           const renderList = [
             <Component
               key={elem.id}

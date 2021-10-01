@@ -2,7 +2,7 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button']
+      exceptions: ['Button', 'Header']
     },
     configurableSettings: {
       default: false,
@@ -16,12 +16,12 @@ const policy = {
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button']
+      exceptions: ['Button', 'Header']
     },
     configurableSettings: {
       default: 'Please fill this field.',
       formProps: {
-        type: 'Text',
+        type: 'TextBox',
         label: 'Error text when this field is left empty.'
       }
     }
@@ -29,12 +29,12 @@ const policy = {
   placeholder: {
     rule: {
       type: 'only',
-      exceptions: ['Text', 'TextArea']
+      exceptions: ['TextBox', 'TextArea', 'Email']
     },
     configurableSettings: {
-      default: 'Please enter the information',
+      default: 'Please enter the information.',
       formProps: {
-        type: 'Text',
+        type: 'TextBox',
         label: 'Describe the expected value of an input field.'
       }
     }
@@ -63,6 +63,75 @@ const policy = {
       formProps: {
         type: 'TextArea',
         label: 'Enter Dropdown options'
+      }
+    }
+  },
+  prefix: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title before their names.']
+      }
+    }
+  },
+  prefixTypeTextBox: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Change the type of prefix field to TextBox.']
+      }
+    }
+  },
+  prefixOptions: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: ['Mr.'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Prefix Options'
+      }
+    }
+  },
+  middleName: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a middle name.']
+      }
+    }
+  },
+  suffix: {
+    rule: {
+      type: 'only',
+      exceptions: ['Name']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Allow users to enter a title after their names.']
       }
     }
   }
