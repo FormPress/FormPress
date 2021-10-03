@@ -21,6 +21,7 @@ import DownloadFile from './modules/helper/DownloadFile'
 import VerifyEMail from './modules/helper/VerifyEmail'
 import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
+import Settings from './modules/helper/Settings'
 
 import { Logo } from './svg'
 
@@ -198,6 +199,7 @@ class App extends Component {
                 path="/resetpassword/:userId/:passwordResetCode"
                 component={ResetPassword}
               />
+              <Route path="/settings" component={Settings} />
             </Switch>
           </div>
         </AuthContext.Provider>

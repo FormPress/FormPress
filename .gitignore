@@ -5,6 +5,8 @@ backend/script/transformed/
 backend/formpress-2bb91771c29b.json
 frontend/public/runtime/
 frontend/node_modules
+frontend/src/modules/settings/*.plugin.js
+frontend/src/modules/settings/*.plugin.css
 k8s
 node_modules
 

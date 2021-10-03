@@ -1,0 +1,32 @@
+.content > .settings_container {
+  margin-top: 86px;
+}
+
+.settings_container > .content {
+  padding-top: 40px;
+  width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.settings_container > .content > div {
+  float: left;
+  box-sizing: border-box;
+  border: 1px dotted black;
+  min-height: 400px;
+}
+
+.settings_container > .content > div.settings_menu {
+  width: 250px;
+}
+
+.settings_container > .content > div.settings_menu > a {
+  width: 100%;
+  float: left;
+  display: block;
+}
+
+.settings_container > .content > div.settings_content {
+  margin-left: 50px;
+  width: 900px;
+}

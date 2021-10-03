@@ -1,3 +1,7 @@
+.dn {
+  display: none;
+}
+
 #root > .headerContainer {
   margin: 0 auto;
   height: 86px;
@@ -30,7 +34,7 @@
   display: inline-block;
 }
 
-.header > .profile_container > .profile > .profileSVG {
+.header > .profile_container > .profile .profileSVG {
   cursor: pointer;
 }
 

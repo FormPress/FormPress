@@ -33,6 +33,7 @@ const authenticationMiddleware = require(path.resolve(
   'authentication'
 ))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
+const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -59,6 +60,7 @@ forgotPasswordMiddleware(app)
 resetPasswordMiddleware(app)
 loginWithGoogleMiddleware(app)
 apiMiddleware(app)
+pluginMiddleware(app)
 
 if (process.env.FP_ENV === 'production') {
   app.use(express.static('/frontend/build'))
