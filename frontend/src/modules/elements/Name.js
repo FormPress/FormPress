@@ -47,7 +47,7 @@ export default class Name extends Component {
   static renderDataValue(entry) {
     if (entry.value !== '') {
       return Object.entries(JSON.parse(entry.value))
-        .map(([v, t]) => `${t}`)
+        .map(([, t]) => `${t}`)
         .join(' ')
     } else {
       return '-'

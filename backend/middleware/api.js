@@ -299,7 +299,6 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { form_id, version_id } = req.params
-      const { orderBy, desc } = req.query
       const db = await getPool()
       const result = await db.query(
         `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,

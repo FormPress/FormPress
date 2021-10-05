@@ -26,22 +26,10 @@ export default class FileUpload extends Component {
 
   static renderDataValue(entry) {
     if (entry.value !== '') {
-      try {
-        if (
-          Object.prototype.toString.call(JSON.parse(entry.value)) ===
-            '[object Object]' ||
-          '[object Array]'
-        ) {
-          const parsedValue = JSON.parse(entry.value)
-          const uriEncodedName = encodeURI(parsedValue.fileName)
-          const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
-          return <Link to={downloadLink}>{parsedValue.fileName}</Link>
-        } else {
-          return entry.value
-        }
-      } catch (e) {
-        console.log(e)
-      }
+      const parsedValue = JSON.parse(entry.value)
+      const uriEncodedName = encodeURI(parsedValue.fileName)
+      const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
+      return <Link to={downloadLink}>{parsedValue.fileName}</Link>
     } else {
       return ''
     }
