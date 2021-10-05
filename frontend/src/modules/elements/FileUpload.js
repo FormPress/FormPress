@@ -63,7 +63,7 @@ export default class FileUpload extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -72,7 +72,7 @@ export default class FileUpload extends Component {
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
-            data-placeholder="Type a sublabel"
+            dataPlaceholder="Click to edit sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}

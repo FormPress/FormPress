@@ -118,7 +118,7 @@
   width: 332px;
 }
 
-.infernal > .elementButton > input {
+.infernal > .elementButton input {
   font-family: Montserrat;
   font-weight: 700;
   font-size: 16px;
@@ -130,7 +130,7 @@
   border: none;
 }
 
-.infernal > .elementButton > input:hover {
+.infernal > .elementButton input:hover {
   color: #ffffff;
   background-color: #8cc63f;
   border: none;

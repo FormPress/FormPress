@@ -82,10 +82,19 @@ class SignUp extends Component {
     const { message, success, email } = this.state
     const signUpSuccess = (
       <div>
-        <div className="sign-up-succes">
-          Signup success! We have sent an e-mail to your {email} address.
-          Activate account by following that e-mail. (If you didn&apos;t recieve
-          please check spam folder)
+        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="sign-up-success">
+          <p>
+            Signup success! We have sent an e-mail to your{' '}
+            <span className="signup-email">
+              <i>{email}</i>
+            </span>{' '}
+            address.
+          </p>
+          <p>
+            Activate account by following that e-mail. (If you didn&apos;t
+            recieve please check spam folder)
+          </p>
         </div>
       </div>
     )
@@ -115,7 +124,7 @@ class SignUp extends Component {
                         elements: [
                           {
                             id: 1,
-                            type: 'Text',
+                            type: 'TextBox',
                             label: 'Email',
                             value: this.state.email
                           },
@@ -147,14 +156,14 @@ class SignUp extends Component {
                     &nbsp;<i>Login</i>
                   </Link>
                 </div>
-                <div className="have-trouble">
-                  Having trouble?
-                  <span className="wip-placeholder" title="WIP">
-                    Contact Us
-                  </span>
-                </div>
               </div>
             )}
+            <div className="have-trouble">
+              Having trouble?
+              <span className="wip-placeholder" title="WIP">
+                Contact Us
+              </span>
+            </div>
           </div>
         </div>
         <div className="footer cw center grid">

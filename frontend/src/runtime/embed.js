@@ -19,7 +19,9 @@
 */
 
 ;(async () => {
-  let BACKEND = false
+  const scriptUrl = document.querySelectorAll('[fp_id]')[0].src
+  const arr = scriptUrl.split('/')
+  const BACKEND = arr[0] + '//' + arr[2]
 
   const loadScript = (name) =>
     new Promise((resolve, reject) => {
@@ -30,9 +32,27 @@
       document.head.appendChild(script)
     })
 
-  // fill BACKEND variable,
-
   await loadScript('3rdparty/jquery.3.4.1.min')
+  await loadScript('3rdparty/iframeResizer.min')
+  // console.log(jQuery('script a'))
 
-  console.log(jQuery('script a'))
+  // add iframe after script tag, adding after not fp_style to ignore multiple embed
+  $('script[fp_id]').each(function (index) {
+    if (!$(this).next().attr('fp_style')) {
+      const formID = $(this).attr('fp_id')
+      const iframeID = 'fp_' + formID
+
+      $(`<style fp_style="true">
+        iframe {
+          width: 1px;
+          min-width: 100%;
+          border: none;
+          }
+      </style>
+      <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}"></iframe>
+      <script>
+        iFrameResize({ log: false }, '#${iframeID}')
+      </script>`).insertAfter(this)
+    }
+  })
 })()

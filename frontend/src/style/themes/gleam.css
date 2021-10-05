@@ -1,17 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,500&display=swap');
 
-body {
-  background-color: #f5f5f5;
-}
 .renderer.gleam {
   background-color: white;
   width: 750px;
   margin: 20px auto;
-  padding: 30px 50px 20px;
-  box-shadow: 0 0 6px 0;
+  padding: 30px 90px 20px;
   box-sizing: border-box;
 }
-
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
@@ -20,93 +15,123 @@ body {
   overflow: visible;
   display: grid;
 }
-
 .gleam.form > .element.requiredError {
   border: 1px solid red;
   background: rgba(255, 0, 0, 0.3);
 }
-
 .gleam.form > .element > .label {
   float: none;
   margin-bottom: 10px;
 }
-
 .gleam.form > .element > .label > span {
-  min-width: 100px;
+  min-width: 125px;
+  max-width: calc(100% - 20px);
   display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid #ffffff;
 }
-
-.gleam.form > .element > .label > span.emptySpan {
+.builder.gleam.form > .element > .label > span[contentEditable='true']:hover {
   border: 1px dashed;
 }
-
+.gleam.form > .element > .label > span.emptySpan {
+  border: 1px dashed gray;
+}
 .gleam.form > .element > .label > .requiredMarker {
-  margin-left: 10px;
   display: inline-block;
   color: red;
+  padding: 0;
+  margin: 0;
+  min-width: 5px !important;
+  margin-left: 5px;
 }
 .gleam .element .input {
   width: 100%;
 }
-
 .gleam.form .sublabel:not(.header) {
   position: relative;
   font-size: 12px;
-  min-width: 100px;
   display: inline-block;
   margin-top: 10px;
   max-width: 600px;
-  color: gray;
+}
+.gleam.form .sublabel:not(.header) span[contentEditable='true'] {
+  min-width: 123px;
+  min-height: 19px;
   padding: 2px 5px;
+  color: gray;
   border: 1px solid #ffffff;
+  display: block;
+  word-break: break-all;
+}
+.builder.gleam.form span.emptySpan[contentEditable='true'] {
+  border: 1px dashed gray;
+}
+.builder.gleam.form span[contentEditable='true']:hover {
+  border: 1px dashed black !important;
+}
+.gleam.form span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+.formTitle span[contentEditable='true'] {
+  min-height: 22px;
+  display: block;
+  padding: 2px 5px;
+  border: 1px solid #fff;
+}
+.formTitle span.emptySpan[contentEditable='true'] {
+  border: 1px dashed gray;
+}
+.formTitle span[contentEditable='true']:hover {
+  border: 1px dashed;
+}
+.formTitle span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+.formTitle span.emptySpan[contentEditable='true']:before {
+  content: attr(dataPlaceholder);
+  color: gray;
+  display: inline-block;
+}
+.formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
+  content: '';
+}
+.gleam .emptySpan:before {
+  content: attr(dataPlaceholder);
+  color: gray;
+  display: inline-block;
+}
+
+.gleam .emptySpan:not(:empty):before {
+  content: '';
 }
 
 .gleam.form .requiredError .sublabel:not(.header) {
   border: 1px solid #ffb2b2;
 }
-
-.builder.gleam.form .sublabel:not(.header):hover {
-  border: 1px dashed gray;
-}
-
-.gleam.form .sublabel[contentEditable='true']:not(:focus):before,
-.gleam.form .label[contentEditable='true']:not(:focus):before {
-  content: attr(data-placeholder);
-  color: gray !important;
-  user-select: none;
-  pointer-events: none;
-}
-
-.gleam.form .hasContent.sublabel[contentEditable='true']:not(:empty):before,
-.gleam.form .hasContent.label[contentEditable='true']:not(:empty):before {
-  content: '';
-}
-
 .gleam.form .header.label {
   position: relative;
   text-align: center;
-  width: 100%;
+  max-width: 728px;
+}
+.gleam.form .header.label span {
   padding: 3px 5px;
-  border: 1px solid #fff;
+  width: 100%;
+  display: block;
+  border: 1px dashed white;
 }
-
-.builder.gleam.form .header.label:hover,
-.builder.gleam.form .header.sublabel:hover {
-  border: 1px dashed gray;
-}
-
 .gleam.form .header.sublabel {
   position: relative;
   text-align: center;
-  padding: 3px 5px;
-  border: 1px solid #fff;
+  max-width: 728px;
 }
-
+.gleam.form .header.sublabel span {
+  padding: 3px 5px;
+  width: 100%;
+  display: block;
+  border: 1px dashed white;
+}
 .gleam.form .clearfix {
   clear: both;
-}
-
-.gleam .elementTextBox {
 }
 .gleam .elementTextBox .label {
   float: none;
@@ -129,17 +154,9 @@ body {
 .gleam.form .element > .fl.label {
   margin-bottom: 10px;
   width: 100%;
-  padding: 2px 5px;
-  border: 1px solid #ffffff;
 }
-
 .gleam.form .element.requiredError > .fl.label {
   border: 1px solid #ffb2b2;
-}
-.builder.gleam.form .element > .fl.label:hover {
-  border: 1px dashed gray;
-}
-.gleam .elementTextArea {
 }
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
@@ -167,7 +184,7 @@ body {
 .gleam .elementDropdown .dropdown-div .dropdown-select,
 .gleam .elementDropdown .dropdown-div .dropdown-select:focus {
   outline: 0;
-  min-width: 200px;
+  width: 200px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   border: solid 1px #c9c9c9;
   background-color: #f5f5f5;
@@ -191,8 +208,7 @@ body {
   background-color: #68942f;
   color: #ffffff;
 }
-.gleam .elementRadio {
-}
+
 .gleam .elementRadio ul {
   padding: 0;
   list-style: none;
@@ -202,7 +218,6 @@ body {
   width: 18px;
   height: 18px;
   -webkit-appearance: none;
-  -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
   border: 1px solid #a0a0a0;
@@ -211,6 +226,8 @@ body {
   outline: none;
   background-color: #fdfdfd;
   cursor: pointer;
+  vertical-align: top;
+  margin-top: 3px;
 }
 .gleam .elementRadio ul li input:checked {
   background-color: #8cc63f;
@@ -251,7 +268,7 @@ body {
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
-  height: 44px;
+  min-height: 44px;
   background-color: #9ee048;
   border: 1px solid #9ee048;
   outline: none;
@@ -264,7 +281,14 @@ body {
 }
 
 .builder.gleam .elementButton button {
+  display: block;
+  border: 1px solid #9ee048;
   margin-top: 25px;
+}
+
+.builder.gleam .elementButton button span[contentEditable='true'] {
+  display: block;
+  border: 1px solid #9ee048;
 }
 
 .gleam .elementCheckbox .input,
@@ -278,43 +302,78 @@ body {
 .gleam .elementCheckbox .input .checkbox-label {
   color: #333333;
   display: inline-block;
-  margin-top: 0px;
-  position: absolute;
-  text-indent: 5px;
+  margin-top: -2px;
   white-space: nowrap;
   max-width: 600px;
   overflow: hidden;
   user-select: none;
-  min-width: 100px;
-  border: 1px solid #ffffff;
+  min-width: 115px;
 }
 
 .gleam .elementCheckbox.requiredError .input .checkbox-label {
   border: 1px solid #ffb2b2;
 }
 
-.builder.gleam .elementCheckbox .input .checkbox-label:hover {
-  border: 1px dashed;
-}
-
 .gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
-  margin-top: -2px;
-  position: absolute;
+  white-space: nowrap;
+  max-width: 600px;
+  overflow: hidden;
   -webkit-user-select: none;
   user-select: none;
-  border: 1px solid #ffffff;
+  min-width: 115px;
+  vertical-align: bottom;
+}
+
+.gleam.form
+  .elementRadio
+  .input
+  .radio-label
+  span.emptySpan[contentEditable='true'] {
+  border: 1px dashed gray;
+}
+
+.gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
+  border: 1px dashed #ffffff;
   padding: 2px 5px;
-  min-width: 100px;
+  min-width: 60px;
+  display: block;
+  word-break: break-all;
+  white-space: break-spaces;
+}
+
+.gleam.form
+  .elementCheckbox
+  .input
+  .checkbox-label
+  span[contentEditable='true']:hover {
+  border: 1px dashed black;
+}
+
+.gleam.form
+  .elementCheckbox
+  .input
+  .checkbox-label
+  span[contentEditable='true'] {
+  border: 1px dashed #ffffff;
+  padding: 2px 5px;
+  min-width: 60px;
+  display: block;
+  word-break: break-all;
+  white-space: break-spaces;
+}
+
+.gleam.form
+  .elementRadio
+  .input
+  .radio-label
+  span[contentEditable='true']:hover {
+  border: 1px dashed black;
 }
 
 .gleam.form .elementRadio.requiredError .input .radio-label {
   border: 1px solid #ffb2b2;
-}
-
-.builder.gleam.form .elementRadio .input .radio-label:hover {
-  border: 1px dashed;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox'] {
@@ -330,6 +389,7 @@ body {
   transition-duration: 0.3s;
   background-color: #fdfdfd;
   cursor: pointer;
+  vertical-align: top;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
@@ -477,7 +537,12 @@ body {
   box-sizing: border-box;
 }
 
-.gleam [name='prefix'] {
+.gleam .nameContainer .name_span {
+}
+
+.gleam .nameContainer .prefix_span select {
+  align-self: stretch;
+  padding: 0px 8px;
   -webkit-appearance: none;
   -moz-appearance: none;
   background: transparent;
@@ -485,14 +550,6 @@ body {
   background-repeat: no-repeat;
   background-position-x: 100%;
   background-position-y: 0px;
-}
-
-.gleam .nameContainer .name_span {
-}
-
-.gleam .nameContainer .prefix_span select {
-  align-self: stretch;
-  padding: 0px 8px;
 }
 
 .gleam .nameContainer .suffix_span {

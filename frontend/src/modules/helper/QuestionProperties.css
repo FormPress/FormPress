@@ -10,3 +10,19 @@
   margin-bottom: 10px;
   margin-right: 10px;
 }
+
+#qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_prefix.elementHider ~ #qc_prefixOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_prefix.elementHider + #qc_prefixTypeTextBox {
+  display: none !important;
+}
+
+#qc_required.elementHider + #qc_requiredText.elementTextBox {
+  display: none !important;
+}

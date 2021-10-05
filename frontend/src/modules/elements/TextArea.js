@@ -37,7 +37,7 @@ export default class TextArea extends Component {
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel
           className="fl label"
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           mode={mode}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
@@ -57,7 +57,7 @@ export default class TextArea extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}

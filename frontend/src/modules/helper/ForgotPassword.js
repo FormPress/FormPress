@@ -4,6 +4,8 @@ import { LoginPicture } from '../../svg'
 import Renderer from '../Renderer'
 import AuthContext from '../../auth.context'
 
+import './ForgotPassword.css'
+
 class ForgotPassword extends Component {
   constructor(props) {
     super(props)
@@ -57,10 +59,13 @@ class ForgotPassword extends Component {
     const { message, success, email } = this.state
     const forgotSucces = (
       <div>
-        <div>
-          We have send an e-mail to {email} address. Reset your password by
-          following that e-mail. (If you didn&apos;t recieve please check spam
-          folder)
+        <div className="reset-success">
+          We have send an e-mail to{' '}
+          <span className="reset-email">
+            <i>{email}</i>
+          </span>{' '}
+          address. Reset your password by following the e-mail. (If you
+          didn&apos;t recieve please check spam folder)
         </div>
       </div>
     )

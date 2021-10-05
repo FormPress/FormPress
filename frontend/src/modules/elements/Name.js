@@ -78,7 +78,7 @@ export default class Name extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -90,25 +90,34 @@ export default class Name extends Component {
                 ? ''
                 : ' hidden'
             }`}>
-            <select
-              id={`prefix_${config.id}`}
-              name={`prefix_${config.id}`}
-              defaultValue="choose-disabled">
-              <option disabled value="choose-disabled">
-                Prefix
-              </option>
-              {options.map((item) => {
-                return (
-                  <option className="option-space" key={item} value={item}>
-                    {item}
-                  </option>
-                )
-              })}
-            </select>
+            {typeof config.prefixTypeTextBox !== 'undefined' &&
+            config.prefixTypeTextBox === true ? (
+              <input
+                id={`prefix_${config.id}`}
+                name={`prefix_${config.id}`}
+                type="text"
+              />
+            ) : (
+              <select
+                id={`prefix_${config.id}`}
+                name={`prefix_${config.id}`}
+                defaultValue="choose-disabled">
+                <option disabled value="choose-disabled">
+                  Prefix
+                </option>
+                {options.map((item) => {
+                  return (
+                    <option className="option-space" key={item} value={item}>
+                      {item}
+                    </option>
+                  )
+                })}
+              </select>
+            )}
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`name_${config.id}_prefix`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -128,7 +137,7 @@ export default class Name extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`name_${config.id}_firstName`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -154,7 +163,7 @@ export default class Name extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`name_${config.id}_middleName`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -174,7 +183,7 @@ export default class Name extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`name_${config.id}_lastName`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -199,7 +208,7 @@ export default class Name extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`name_${config.id}_suffix`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -215,7 +224,7 @@ export default class Name extends Component {
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
-            data-placeholder="Type a sublabel"
+            dataPlaceholder="Click to edit sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}

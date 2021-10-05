@@ -99,7 +99,7 @@ export default class Radio extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -118,7 +118,7 @@ export default class Radio extends Component {
         <div className="clearfix" key="3">
           <EditableLabel
             className="sublabel"
-            data-placeholder="Type a sublabel"
+            dataPlaceholder="Click to edit sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
@@ -138,7 +138,7 @@ export default class Radio extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          data-placeholder="Type a question"
+          dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -169,7 +169,7 @@ export default class Radio extends Component {
         <div className="clearfix" key="3">
           <EditableLabel
             className="sublabel"
-            data-placeholder="Type a sublabel"
+            dataPlaceholder="Click to edit sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}

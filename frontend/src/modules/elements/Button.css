@@ -5,7 +5,7 @@
   border-radius: 0;
   padding: 13px;
   width: 203px;
-  height: 44px;
+  min-height: 44px;
 }
 
 .elementButton button div {

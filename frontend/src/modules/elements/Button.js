@@ -29,7 +29,7 @@ export default class Button extends Component {
             <button {...inputProps}>
               <EditableLabel
                 className="fl label"
-                data-placeholder="Type a button text"
+                dataPlaceholder="Type a button text"
                 mode={mode}
                 labelKey={config.id}
                 handleLabelChange={this.props.handleLabelChange}
@@ -39,7 +39,7 @@ export default class Button extends Component {
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"
-                data-placeholder="Type a sublabel"
+                dataPlaceholder="Click to edit sublabel"
                 mode={mode}
                 labelKey={`sub_${config.id}`}
                 handleLabelChange={this.props.handleLabelChange}

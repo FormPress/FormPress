@@ -27,12 +27,6 @@
   max-width: 600px;
 }
 
-.builderStage .form > .element > .label > .requiredMarker {
-  margin-left: 10px;
-  display: inline-block;
-  color: red;
-}
-
 .builderStage .form > .element > button,
 .builderStage .form > .element > input[type='submit'] {
   padding: 5px 10px;

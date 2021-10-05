@@ -56,7 +56,7 @@ class EditableList extends Component {
               <EditableLabel
                 className="label checkbox-label"
                 mode={mode}
-                data-placeholder="Type an option"
+                dataPlaceholder="Type an option"
                 labelKey={`s_${config.id}_${key}`}
                 htmlFor={`q_${config.id}_${key}`}
                 handleLabelChange={this.props.handleLabelChange}
@@ -164,7 +164,7 @@ class EditableList extends Component {
                 <EditableLabel
                   className="label radio-label"
                   mode={mode}
-                  data-placeholder="Type an option"
+                  dataPlaceholder="Type an option"
                   labelKey={`s_${config.id}_${key}`}
                   htmlFor={`q_${config.id}_${key}`}
                   handleLabelChange={this.props.handleLabelChange}
