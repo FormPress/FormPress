@@ -26,6 +26,33 @@ export default class Checkbox extends Component {
     }
   }
 
+  static renderDataValue(entry) {
+    return entry.value.map((input, index) => {
+      return (
+        <div className="input" key={index}>
+          <input
+            type={input.type.toLowerCase()}
+            id={'q_required_' + index}
+            className={input.toggle === true ? 'toggle-checkbox' : ''}
+            defaultChecked={input.value}
+            disabled
+            readOnly
+          />
+          {input.toggle === true ? <span className="slider"></span> : null}
+          <label
+            className={
+              input.type.toLowerCase() +
+              '-label ' +
+              (input.toggle === true ? 'toggle-label' : '')
+            }
+            htmlFor={'q_required_' + index}>
+            {input.content}
+          </label>
+        </div>
+      )
+    })
+  }
+
   constructor(props) {
     super(props)
 

@@ -13,6 +13,10 @@ export default class TextBox extends Component {
     label: 'TextBox'
   }
 
+  static renderDataValue(entry) {
+    return entry.value
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}

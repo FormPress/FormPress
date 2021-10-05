@@ -7,6 +7,7 @@ import Moment from 'react-moment'
 import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
+import * as Elements from './elements'
 
 import './Data.css'
 
@@ -105,6 +106,7 @@ class Data extends Component {
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
+      selectedSubmissionForm: null,
       selectedSubmissionIds: [],
       submissions: [],
       entries: [],
@@ -152,25 +154,24 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
-    const { id } = submission
-    const form_id = this.state.selectedFormId
+    const { id, form_id, version } = submission
+    const selectedSubmissionForm = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
+    })
 
     this.setLoadingState('entries', true)
     this.setState({
       entries: [],
-      selectedSubmissionId: id
+      selectedSubmissionId: id,
+      selectedSubmissionForm: selectedSubmissionForm.data[0]
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}/entries`
-    })
-
-    const formWithOtherOptions = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
     for (let dataContent of data) {
-      for (let element of JSON.parse(formWithOtherOptions.data.props)
+      for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
         .elements) {
         if (
           element.id === dataContent.question_id &&
@@ -433,95 +434,26 @@ class Data extends Component {
   }
 
   renderEntryElements(entry) {
-    const { forms, selectedFormId } = this.state
-    const form = forms.filter((form) => form.id === selectedFormId)[0]
-    let value = ''
+    const { selectedSubmissionForm } = this.state
 
-    console.log(entry)
-
-    let questionType = ''
-    try {
-      questionType = form.props.elements.filter(
+    return Elements[
+      JSON.parse(selectedSubmissionForm.props).elements.filter(
         (element) => element.id === entry.question_id
       )[0].type
-    } catch (e) {
-      console.log(e)
-    }
-
-    if (questionType === 'Checkbox' || questionType === 'Radio') {
-      value = entry.value.map((input, index) => {
-        return (
-          <div className="input" key={index}>
-            <input
-              type={input.type.toLowerCase()}
-              id={'q_required_' + index}
-              className={input.toggle === true ? 'toggle-checkbox' : ''}
-              defaultChecked={input.value}
-              disabled
-              readOnly
-            />
-            {input.toggle === true ? <span className="slider"></span> : null}
-            <label
-              className={
-                input.type.toLowerCase() +
-                '-label ' +
-                (input.toggle === true ? 'toggle-label' : '')
-              }
-              htmlFor={'q_required_' + index}>
-              {input.content}
-            </label>
-          </div>
-        )
-      })
-    } else if (questionType === 'FileUpload') {
-      if (entry.value !== '') {
-        try {
-          if (
-            Object.prototype.toString.call(JSON.parse(entry.value)) ===
-              '[object Object]' ||
-            '[object Array]'
-          ) {
-            const parsedValue = JSON.parse(entry.value)
-            const uriEncodedName = encodeURI(parsedValue.fileName)
-            const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
-            value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
-          } else {
-            value = entry.value
-          }
-        } catch (e) {
-          console.log(e)
-        }
-      }
-    } else if (questionType === 'Name') {
-      if (entry.value !== '') {
-        try {
-          value = Object.entries(JSON.parse(entry.value))
-            .map(([v, t]) => `${t}`)
-            .join(' ')
-          if (value.trim() === '') value = '-'
-        } catch (e) {
-          console.log(e)
-        }
-      }
-    } else {
-      value = entry.value
-    }
-
-    return value
+    ].renderDataValue(entry)
   }
 
   renderEntries() {
-    const { entries, forms, selectedFormId } = this.state
+    const { entries, selectedSubmissionForm } = this.state
 
     if (entries.length === 0) {
       return null
     }
 
-    const form = forms.filter((form) => form.id === selectedFormId)[0]
     const getLabel = (question_id) => {
-      const matchingQuestion = form.props.elements.filter(
-        (element) => element.id === question_id
-      )
+      const matchingQuestion = JSON.parse(
+        selectedSubmissionForm.props
+      ).elements.filter((element) => element.id === question_id)
 
       if (matchingQuestion.length > 0) {
         return matchingQuestion[0].label
@@ -531,11 +463,10 @@ class Data extends Component {
     }
 
     return entries.map((entry, index) => {
-      let value = this.renderEntryElements(entry)
       return (
         <div key={index} className="entry">
           <div className="label">{getLabel(entry.question_id)}</div>
-          <div className="value">{value}</div>
+          <div className="value">{this.renderEntryElements(entry)}</div>
         </div>
       )
     })

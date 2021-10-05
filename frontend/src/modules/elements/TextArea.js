@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-
 import './TextArea.css'
 
 export default class TextArea extends Component {
@@ -12,6 +11,10 @@ export default class TextArea extends Component {
     id: 0,
     type: 'TextArea',
     label: 'TextArea'
+  }
+
+  static renderDataValue(entry) {
+    return entry.value
   }
 
   render() {

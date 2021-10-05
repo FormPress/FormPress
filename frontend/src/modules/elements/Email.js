@@ -13,6 +13,10 @@ export default class Email extends Component {
     label: 'Email'
   }
 
+  static renderDataValue(entry) {
+    return entry.value
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}

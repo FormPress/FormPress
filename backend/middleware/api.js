@@ -268,7 +268,7 @@ module.exports = (app) => {
       const { form_id } = req.params
       const { orderBy, desc } = req.query
       const db = await getPool()
-      let query = 'SELECT * FROM `submission` WHERE form_id = ?'
+      let query = 'SELECT * FROM `submission` WHERE form_id = ? AND version > 0'
 
       if (typeof orderBy !== 'undefined') {
         if (['created_at', 'deleted_at', 'updated_at'].includes(orderBy)) {
@@ -283,6 +283,28 @@ module.exports = (app) => {
       }
 
       const result = await db.query(query, [form_id])
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  // return submissions of given form id and version number
+  app.get(
+    '/api/users/:user_id/forms/:form_id/:version_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, version_id } = req.params
+      const { orderBy, desc } = req.query
+      const db = await getPool()
+      const result = await db.query(
+        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
+        [form_id, version_id]
+      )
 
       if (result.length > 0) {
         res.json(result)

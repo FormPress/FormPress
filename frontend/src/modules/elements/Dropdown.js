@@ -21,6 +21,10 @@ export default class Dropdown extends Component {
     }
   }
 
+  static renderDataValue(entry) {
+    return entry.value
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
