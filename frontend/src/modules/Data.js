@@ -114,7 +114,8 @@ class Data extends Component {
         forms: false,
         submissions: false,
         entries: false
-      }
+      },
+      parseError: false
     }
 
     this.handleFormClick = this.handleFormClick.bind(this)
@@ -155,69 +156,84 @@ class Data extends Component {
 
   async handleSubmissionClick(submission) {
     const { id, form_id, version } = submission
-    const selectedSubmissionForm = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
-    })
+    let selectedSubmissionForm
+
+    if (version === 0) {
+      selectedSubmissionForm = await api({
+        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+      })
+      selectedSubmissionForm = selectedSubmissionForm.data
+    } else {
+      selectedSubmissionForm = await api({
+        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
+      })
+      selectedSubmissionForm = selectedSubmissionForm.data[0]
+    }
 
     this.setLoadingState('entries', true)
     this.setState({
       entries: [],
       selectedSubmissionId: id,
-      selectedSubmissionForm: selectedSubmissionForm.data[0]
+      selectedSubmissionForm: selectedSubmissionForm
     })
 
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
-    for (let dataContent of data) {
-      for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
-        .elements) {
-        if (
-          element.id === dataContent.question_id &&
-          (element.type === 'Checkbox' || element.type === 'Radio')
-        ) {
-          const tempContent = dataContent.value
-          dataContent.value = []
-          if (this.IsJsonString(tempContent) === false) {
-            for (let elementContent of element.options) {
-              if (tempContent === elementContent) {
-                dataContent.value.push({
-                  content: elementContent,
-                  value: 'checked',
-                  type: element.type,
-                  toggle: element.toggle
-                })
-              } else {
-                dataContent.value.push({
-                  content: elementContent,
-                  value: '',
-                  type: element.type,
-                  toggle: element.toggle
-                })
+    try {
+      for (let dataContent of data) {
+        for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
+          .elements) {
+          if (
+            element.id === dataContent.question_id &&
+            (element.type === 'Checkbox' || element.type === 'Radio')
+          ) {
+            const tempContent = dataContent.value
+            dataContent.value = []
+            if (this.IsJsonString(tempContent) === false) {
+              for (let elementContent of element.options) {
+                if (tempContent === elementContent) {
+                  dataContent.value.push({
+                    content: elementContent,
+                    value: 'checked',
+                    type: element.type,
+                    toggle: element.toggle
+                  })
+                } else {
+                  dataContent.value.push({
+                    content: elementContent,
+                    value: '',
+                    type: element.type,
+                    toggle: element.toggle
+                  })
+                }
               }
-            }
-          } else {
-            for (let elementContent of element.options) {
-              if (JSON.parse(tempContent).includes(elementContent) === true) {
-                dataContent.value.push({
-                  content: elementContent,
-                  value: 'checked',
-                  type: element.type,
-                  toggle: element.toggle
-                })
-              } else {
-                dataContent.value.push({
-                  content: elementContent,
-                  value: '',
-                  type: element.type,
-                  toggle: element.toggle
-                })
+            } else {
+              for (let elementContent of element.options) {
+                if (JSON.parse(tempContent).includes(elementContent) === true) {
+                  dataContent.value.push({
+                    content: elementContent,
+                    value: 'checked',
+                    type: element.type,
+                    toggle: element.toggle
+                  })
+                } else {
+                  dataContent.value.push({
+                    content: elementContent,
+                    value: '',
+                    type: element.type,
+                    toggle: element.toggle
+                  })
+                }
               }
             }
           }
         }
       }
+      this.setState({ parseError: false })
+    } catch {
+      this.setState({ parseError: true })
     }
 
     this.setLoadingState('entries', false)
@@ -444,32 +460,35 @@ class Data extends Component {
   }
 
   renderEntries() {
-    const { entries, selectedSubmissionForm } = this.state
-
-    if (entries.length === 0) {
-      return null
-    }
-
-    const getLabel = (question_id) => {
-      const matchingQuestion = JSON.parse(
-        selectedSubmissionForm.props
-      ).elements.filter((element) => element.id === question_id)
-
-      if (matchingQuestion.length > 0) {
-        return matchingQuestion[0].label
-      } else {
-        return 'Deleted Question'
+    const { entries, selectedSubmissionForm, parseError } = this.state
+    if (parseError === false) {
+      if (entries.length === 0) {
+        return null
       }
-    }
 
-    return entries.map((entry, index) => {
-      return (
-        <div key={index} className="entry">
-          <div className="label">{getLabel(entry.question_id)}</div>
-          <div className="value">{this.renderEntryElements(entry)}</div>
-        </div>
-      )
-    })
+      const getLabel = (question_id) => {
+        const matchingQuestion = JSON.parse(
+          selectedSubmissionForm.props
+        ).elements.filter((element) => element.id === question_id)
+
+        if (matchingQuestion.length > 0) {
+          return matchingQuestion[0].label
+        } else {
+          return 'Deleted Question'
+        }
+      }
+
+      return entries.map((entry, index) => {
+        return (
+          <div key={index} className="entry">
+            <div className="label">{getLabel(entry.question_id)}</div>
+            <div className="value">{this.renderEntryElements(entry)}</div>
+          </div>
+        )
+      })
+    } else {
+      return <div className="entry">This submission can not parse.</div>
+    }
   }
 }
 

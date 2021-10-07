@@ -268,7 +268,7 @@ module.exports = (app) => {
       const { form_id } = req.params
       const { orderBy, desc } = req.query
       const db = await getPool()
-      let query = 'SELECT * FROM `submission` WHERE form_id = ? AND version > 0'
+      let query = 'SELECT * FROM `submission` WHERE form_id = ?'
 
       if (typeof orderBy !== 'undefined') {
         if (['created_at', 'deleted_at', 'updated_at'].includes(orderBy)) {

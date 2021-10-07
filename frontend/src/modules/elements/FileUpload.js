@@ -29,7 +29,11 @@ export default class FileUpload extends Component {
       const parsedValue = JSON.parse(entry.value)
       const uriEncodedName = encodeURI(parsedValue.fileName)
       const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
-      return <Link to={downloadLink}>{parsedValue.fileName}</Link>
+      return (
+        <Link to={downloadLink} target="_blank">
+          {parsedValue.fileName}
+        </Link>
+      )
     } else {
       return ''
     }
@@ -63,7 +67,7 @@ export default class FileUpload extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
-          dataPlaceholder="Type a question"
+          data-placeholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
@@ -72,7 +76,7 @@ export default class FileUpload extends Component {
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
-            dataPlaceholder="Click to edit sublabel"
+            data-placeholder="Type a sublabel"
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
