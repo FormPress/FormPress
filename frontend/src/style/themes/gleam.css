@@ -95,7 +95,7 @@
 .formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
   content: '';
 }
-.gleam .emptySpan:before {
+.builder.gleam .emptySpan:before {
   content: attr(dataPlaceholder);
   color: gray;
   display: inline-block;

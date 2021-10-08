@@ -104,7 +104,6 @@ export default class Radio extends Component {
 
     this.handleAddingItem = this.handleAddingItem.bind(this)
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
-    this.IsJsonString = this.IsJsonString.bind(this)
   }
 
   handleAddingItem() {
