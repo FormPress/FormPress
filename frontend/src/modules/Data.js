@@ -121,7 +121,6 @@ class Data extends Component {
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
-    this.IsJsonString = this.IsJsonString.bind(this)
   }
 
   handleFormClick(form) {
@@ -143,15 +142,6 @@ class Data extends Component {
         selectedSubmissionIds: [...selectedSubmissionIds, submission_id]
       })
     }
-  }
-
-  IsJsonString(str) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
   }
 
   async handleSubmissionClick(submission) {
@@ -189,45 +179,10 @@ class Data extends Component {
             element.id === dataContent.question_id &&
             (element.type === 'Checkbox' || element.type === 'Radio')
           ) {
-            const tempContent = dataContent.value
-            dataContent.value = []
-            if (this.IsJsonString(tempContent) === false) {
-              for (let elementContent of element.options) {
-                if (tempContent === elementContent) {
-                  dataContent.value.push({
-                    content: elementContent,
-                    value: 'checked',
-                    type: element.type,
-                    toggle: element.toggle
-                  })
-                } else {
-                  dataContent.value.push({
-                    content: elementContent,
-                    value: '',
-                    type: element.type,
-                    toggle: element.toggle
-                  })
-                }
-              }
-            } else {
-              for (let elementContent of element.options) {
-                if (JSON.parse(tempContent).includes(elementContent) === true) {
-                  dataContent.value.push({
-                    content: elementContent,
-                    value: 'checked',
-                    type: element.type,
-                    toggle: element.toggle
-                  })
-                } else {
-                  dataContent.value.push({
-                    content: elementContent,
-                    value: '',
-                    type: element.type,
-                    toggle: element.toggle
-                  })
-                }
-              }
-            }
+            dataContent.value = Elements[element.type].dataContentOrganizer(
+              dataContent.value,
+              element
+            )
           }
         }
       }

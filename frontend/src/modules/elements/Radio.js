@@ -18,6 +18,60 @@ export default class Radio extends Component {
     options: ['New Radio']
   }
 
+  static IsJsonString(str) {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
+  }
+
+  static dataContentOrganizer(dataContentValue, element) {
+    const tempContentValue = cloneDeep(dataContentValue)
+    let returnContent = []
+
+    if (this.IsJsonString(tempContentValue) === false) {
+      for (let elementContent of element.options) {
+        if (tempContentValue === elementContent) {
+          returnContent.push({
+            content: elementContent,
+            value: 'checked',
+            type: element.type,
+            toggle: element.toggle
+          })
+        } else {
+          returnContent.push({
+            content: elementContent,
+            value: '',
+            type: element.type,
+            toggle: element.toggle
+          })
+        }
+      }
+    } else {
+      for (let elementContent of element.options) {
+        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
+          returnContent.push({
+            content: elementContent,
+            value: 'checked',
+            type: element.type,
+            toggle: element.toggle
+          })
+        } else {
+          returnContent.push({
+            content: elementContent,
+            value: '',
+            type: element.type,
+            toggle: element.toggle
+          })
+        }
+      }
+    }
+
+    return returnContent
+  }
+
   static renderDataValue(entry) {
     return entry.value.map((input, index) => {
       return (
@@ -50,6 +104,7 @@ export default class Radio extends Component {
 
     this.handleAddingItem = this.handleAddingItem.bind(this)
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
+    this.IsJsonString = this.IsJsonString.bind(this)
   }
 
   handleAddingItem() {
