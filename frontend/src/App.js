@@ -4,10 +4,10 @@ import {
   Switch,
   Route,
   Link,
-  NavLink
+  NavLink,
+  Redirect
 } from 'react-router-dom'
 
-import HomePage from './modules/HomePage'
 import Builder from './modules/Builder'
 import Data from './modules/Data'
 import Forms from './modules/Forms'
@@ -86,6 +86,10 @@ class App extends Component {
 
   render() {
     const auth = this.getAuthContextValue()
+    let homeUrl = undefined
+    if (process.env.REACT_APP_HOMEURL !== '') {
+      homeUrl = process.env.REACT_APP_HOMEURL
+    }
 
     return (
       <Router>
@@ -101,13 +105,15 @@ class App extends Component {
                 <div className="col-10-16 menu">
                   <nav className="nav">
                     <ul className="menu fl">
+                      <li key="1">
+                        {homeUrl !== undefined ? (
+                          <a href={homeUrl}>Home</a>
+                        ) : (
+                          ''
+                        )}
+                      </li>
                       {auth.loggedIn === true
                         ? [
-                            <li key="1">
-                              <NavLink exact to="/" activeClassName="selected">
-                                Home
-                              </NavLink>
-                            </li>,
                             <li key="2">
                               <NavLink to="/forms" activeClassName="selected">
                                 Forms
@@ -125,11 +131,6 @@ class App extends Component {
                             </li>
                           ]
                         : [
-                            <li key="1">
-                              <NavLink exact to="/" activeClassName="selected">
-                                Home
-                              </NavLink>
-                            </li>,
                             <li key="2">
                               <NavLink to="/login" activeClassName="selected">
                                 Login
@@ -168,9 +169,6 @@ class App extends Component {
           </div>
           <div className="content">
             <Switch>
-              <Route exact path="/">
-                <HomePage />
-              </Route>
               <PrivateRoute path="/forms">
                 <Forms />
               </PrivateRoute>
@@ -198,6 +196,7 @@ class App extends Component {
                 path="/resetpassword/:userId/:passwordResetCode"
                 component={ResetPassword}
               />
+              <Redirect to="/login" />
             </Switch>
           </div>
         </AuthContext.Provider>
