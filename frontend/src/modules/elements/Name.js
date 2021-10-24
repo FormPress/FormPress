@@ -10,20 +10,28 @@ export default class Name extends Component {
     id: 0,
     type: 'Name',
     label: 'Full Name',
-    options: ['Mr.'],
-    prefixOptions: {
-      default: ['Mr.'],
-      formProps: {
-        type: 'TextArea',
-        label: 'Enter Prefix Options'
-      }
-    },
+    options: ['Mr.', 'Mrs.'],
     prefix: {
       default: false,
       formProps: {
         type: 'Checkbox',
         label: '',
         options: ['Allow users to enter a title before their names.']
+      }
+    },
+    prefixTypeTextBox: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Change the type of prefix field to TextBox.']
+      }
+    },
+    prefixOptions: {
+      default: ['Mr.', 'Mrs.'],
+      formProps: {
+        type: 'TextArea',
+        label: 'Enter Prefix Options'
       }
     },
     middleName: {
@@ -60,6 +68,13 @@ export default class Name extends Component {
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
+
+      if (
+        typeof config.value.default !== 'undefined' &&
+        config.value.default !== null
+      ) {
+        inputProps.value = config.value.default.join('\n')
+      }
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -94,13 +109,13 @@ export default class Name extends Component {
             config.prefixTypeTextBox === true ? (
               <input
                 id={`prefix_${config.id}`}
-                name={`prefix_${config.id}`}
+                name={`q_${config.id}[prefix]`}
                 type="text"
               />
             ) : (
               <select
                 id={`prefix_${config.id}`}
-                name={`prefix_${config.id}`}
+                name={`q_${config.id}[prefix]`}
                 defaultValue="choose-disabled">
                 <option disabled value="choose-disabled">
                   Prefix

@@ -23,6 +23,13 @@ export default class TextArea extends Component {
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
+
+      if (
+        typeof config.value.default !== 'undefined' &&
+        config.value.default !== null
+      ) {
+        inputProps.value = config.value.default.join('\n')
+      }
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -46,10 +53,17 @@ export default class TextArea extends Component {
         />
         <div>
           <div className="fl input">
-            <textarea
-              id={`q_${config.id}`}
-              name={`q_${config.id}`}
-              {...inputProps}></textarea>
+            {config.id === 'dropdownOptions' ? (
+              <textarea
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                {...inputProps}></textarea>
+            ) : (
+              <textarea
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                {...inputProps}></textarea>
+            )}
           </div>
           {mode === 'viewer' ? (
             ''

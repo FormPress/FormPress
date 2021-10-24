@@ -11,9 +11,9 @@ export default class Dropdown extends Component {
     id: 0,
     type: 'Dropdown',
     label: 'Dropdown',
-    options: ['Dropdown 1'],
+    options: ['Dropdown 1', 'Dropdown 2'],
     dropdownOptions: {
-      default: ['Dropdown 1'],
+      default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {
         type: 'TextArea',
         label: 'Enter Dropdown options'
