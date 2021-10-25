@@ -36,6 +36,9 @@
 .gleam.form > .element > .label > span.emptySpan {
   border: 1px dashed gray;
 }
+.gleam.form > .element.requiredError > .label > span {
+  border: 1px solid #ffb2b2;
+}
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
   color: red;
