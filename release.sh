@@ -32,5 +32,5 @@ do
   sleep 15
 done
 
-echo "Setting formpress/main image version to gcr.io/formpress/formpress${IMAGESUFFIX}:$version"
-kubectl set image deployment/$3 main=gcr.io/formpress/formpress$IMAGESUFFIX:$version
+echo "Setting formpress/formpress image version to gcr.io/formpress/formpress${IMAGESUFFIX}:$version"
+kubectl set image deployment/$3 formpress=gcr.io/formpress/formpress$IMAGESUFFIX:$version
