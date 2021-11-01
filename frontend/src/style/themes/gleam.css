@@ -98,7 +98,7 @@
 .formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
   content: '';
 }
-.gleam .emptySpan:before {
+.builder.gleam .emptySpan:before {
   content: attr(dataPlaceholder);
   color: gray;
   display: inline-block;
@@ -279,6 +279,10 @@
   float: right;
 }
 
+.gleam .elementButton input[type='submit']:hover {
+  cursor: pointer;
+}
+
 .builder.gleam .elementButton button {
   display: block;
   border: 1px solid #9ee048;
@@ -406,7 +410,6 @@
 .gleam .elementCheckbox .toggle .input .checkbox-label {
   color: #333333;
   display: inline-block;
-  margin-top: 6px;
   position: absolute;
   text-indent: 5px;
   white-space: nowrap;
@@ -458,8 +461,8 @@
 
 .gleam .elementCheckbox .toggle .input input[type='checkbox'] {
   opacity: 0;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 18px;
   z-index: 9999;
   position: relative;
 }
@@ -471,27 +474,31 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
+  background-color: #d9dedc;
   transition: 0.4s;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 18px;
+  border-radius: 16px;
+}
+
+.gleam .elementCheckbox .toggle .input input:checked + .slider:before {
+  background-color: #8cc63f;
 }
 
 .gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
   content: '';
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: 0.4s;
+  height: 22px;
+  width: 22px;
+  left: 0px;
+  bottom: -2px;
+  background-color: #bec6c4;
   transition: 0.4s;
+  border-radius: 12px;
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider {
-  background-color: #8cc63f;
+  background-color: #cae1ab;
 }
 
 .gleam .elementCheckbox .toggle .input input:focus + .slider {
@@ -499,9 +506,9 @@
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
 }
 
 .gleam .nameContainer {

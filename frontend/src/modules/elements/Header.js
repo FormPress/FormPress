@@ -8,7 +8,7 @@ export default class Header extends Component {
   static weight = 10
 
   static defaultConfig = {
-    id: 10,
+    id: 0,
     type: 'Header',
     label: 'Header',
     sublabel: 'sub header'

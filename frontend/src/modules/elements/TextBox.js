@@ -10,9 +10,11 @@ export default class TextBox extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextBox',
-    label: 'TextBox',
-    requiredText: 'Please fill this field.',
-    placeholder: 'Please enter the information.'
+    label: 'TextBox'
+  }
+
+  static renderDataValue(entry) {
+    return entry.value
   }
 
   render() {

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-
 import './TextArea.css'
 
 export default class TextArea extends Component {
@@ -11,9 +10,11 @@ export default class TextArea extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'TextArea',
-    requiredText: 'Please fill this field.',
-    placeholder: 'Please enter the information.'
+    label: 'TextArea'
+  }
+
+  static renderDataValue(entry) {
+    return entry.value
   }
 
   render() {
@@ -22,6 +23,13 @@ export default class TextArea extends Component {
 
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
+
+      if (
+        typeof config.value.default !== 'undefined' &&
+        config.value.default !== null
+      ) {
+        inputProps.value = config.value.default.join('\n')
+      }
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -45,10 +53,17 @@ export default class TextArea extends Component {
         />
         <div>
           <div className="fl input">
-            <textarea
-              id={`q_${config.id}`}
-              name={`q_${config.id}`}
-              {...inputProps}></textarea>
+            {config.id === 'dropdownOptions' ? (
+              <textarea
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                {...inputProps}></textarea>
+            ) : (
+              <textarea
+                id={`q_${config.id}`}
+                name={`q_${config.id}`}
+                {...inputProps}></textarea>
+            )}
           </div>
           {mode === 'viewer' ? (
             ''

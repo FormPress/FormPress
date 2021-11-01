@@ -292,6 +292,27 @@ module.exports = (app) => {
     }
   )
 
+  // return submissions of given form id and version number
+  app.get(
+    '/api/users/:user_id/forms/:form_id/:version_id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, version_id } = req.params
+      const db = await getPool()
+      const result = await db.query(
+        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
+        [form_id, version_id]
+      )
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
   // return csv export of incoming submission IDS
   app.post(
     '/api/users/:user_id/forms/:form_id/CSVExport',
