@@ -53,5 +53,3 @@ deploy-to-production:
   when: manual
   only:
     - master
-
-
