@@ -10,9 +10,11 @@ export default class Email extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Email',
-    label: 'Email',
-    requiredText: 'Please enter a valid email.',
-    placeholder: 'Please enter the information.'
+    label: 'Email'
+  }
+
+  static renderDataValue(entry) {
+    return entry.value
   }
 
   render() {
