@@ -3,6 +3,10 @@ set -e
 
 version=$(git log --pretty=format:'%h' -n 1)
 PROJECT="formpress"
+CLUSTER=$1
+ZONE=$2
+DEPLOYMENT=$3
+IMAGESUFFIX=$4
 
 if [[ -n $CI_JOB_STAGE ]]; then
   echo "CI env detected, setting service account key"
@@ -10,7 +14,7 @@ if [[ -n $CI_JOB_STAGE ]]; then
   gcloud auth activate-service-account deploy@formpress.iam.gserviceaccount.com --key-file=/tmp/service-account-key.json
 fi
 
-gcloud container clusters get-credentials primary --zone europe-west3-a --project $PROJECT
+gcloud container clusters get-credentials $CLUSTER --zone $ZONE --project $PROJECT
 
 n=0
 until [ "$n" -ge 20 ]
@@ -28,5 +32,5 @@ do
   sleep 15
 done
 
-echo "Setting formpress/main image version to gcr.io/formpress/formpress:$version"
-kubectl set image deployment/formpress main=gcr.io/formpress/formpress:$version
+echo "Setting formpress/formpress image version to gcr.io/formpress/formpress${IMAGESUFFIX}:$version"
+kubectl set image deployment/$3 formpress=gcr.io/formpress/formpress$IMAGESUFFIX:$version
