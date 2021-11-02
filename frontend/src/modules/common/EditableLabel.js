@@ -9,7 +9,24 @@ export default class EditableLabel extends Component {
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
   }
 
-  handleOnInput() {}
+  handleOnInput(e) {
+    const limit = 256
+    const text = e.target.innerHTML
+    if (text.length >= limit) {
+      e.target.innerHTML = text.substr(0, limit)
+      this.props.handleLabelChange(
+        this.props.labelKey,
+        e.target.innerHTML
+          .replace(/<span(.*?)>(.*?)<\/span>/, '')
+          .replace(/(<([^>]+)>)/gi, '')
+          .trim()
+      )
+
+      e.target.focus()
+      document.execCommand('selectAll', false, null)
+      document.getSelection().collapseToEnd()
+    }
+  }
 
   handleOnBlur(e) {
     this.props.handleLabelChange(

@@ -42,7 +42,7 @@ deploy-to-staging:
   stage: buildAndDeploy
   image: google/cloud-sdk:latest
   script:
-    - ./release.sh primary europe-west3 formpress ""
+    - ./release.sh primary europe-west3-a formpress ""
   when: manual
 
 deploy-to-production:
@@ -53,5 +53,3 @@ deploy-to-production:
   when: manual
   only:
     - master
-
-
