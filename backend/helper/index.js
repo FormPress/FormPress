@@ -1,6 +1,10 @@
 const path = require('path')
+const isBucketEnvSet = process.env.FILE_UPLOAD_BUCKET !== ''
 
 exports.exec = require(path.resolve('helper', 'exec'))
 exports.random = require(path.resolve('helper', 'random'))
-exports.storage = require(path.resolve('helper', 'storage'))
 exports.submissionhandler = require(path.resolve('helper', 'submissionhandler'))
+exports.storage = ''
+if (isBucketEnvSet) {
+  exports.storage = require(path.resolve('helper', 'storage'))
+}

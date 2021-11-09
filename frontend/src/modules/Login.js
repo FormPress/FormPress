@@ -117,6 +117,11 @@ class Login extends Component {
       )
     }
 
+    //Checking env var needed for Google sign-in.
+    //To be changed with capabilities middleware.
+    const isGLoginSet = false
+    const isMailEnvSet = false
+
     return (
       <div className="login-wrapper">
         <div className="loginForm">
@@ -169,20 +174,32 @@ class Login extends Component {
               {state === 'loading' ? 'Loading...' : null}
               {state === 'done' ? message : null}
             </p>
-            <div className="forgot-pass" title="WIP">
-              <span className="forgot-pass-span">
-                <Link to="/forgotpassword">
-                  &nbsp;<i>Forgot password?</i>
-                </Link>
-              </span>
-            </div>
-            <div className="or-seperator">or</div>
-            <div className="google-sign-in">
-              <LoginWithGoogle
-                handleLoginWithGoogleButton={this.handleLoginWithGoogleClick}
-                handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
-              />
-            </div>
+            {isMailEnvSet ? (
+              <div className="forgot-pass" title="WIP">
+                <span className="forgot-pass-span">
+                  <Link to="/forgotpassword">
+                    &nbsp;<i>Forgot password?</i>
+                  </Link>
+                </span>
+              </div>
+            ) : (
+              ''
+            )}
+            {isGLoginSet ? (
+              <div>
+                <div className="or-seperator">or</div>
+                <div className="google-sign-in">
+                  <LoginWithGoogle
+                    handleLoginWithGoogleButton={
+                      this.handleLoginWithGoogleClick
+                    }
+                    handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+                  />
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
               <Link to="/signup">

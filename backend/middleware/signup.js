@@ -5,6 +5,7 @@ const devPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
+let isMailEnvSet = process.env.SENDGRID_API_KEY !== ''
 
 const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 
@@ -31,7 +32,14 @@ module.exports = (app) => {
         VALUES
       ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
-
+      if (isMailEnvSet == false) {
+        await db.query(
+          `
+            UPDATE \`user\` SET \`emailVerified\` = 1 WHERE id = ?
+          `,
+          [newEntry.insertId]
+        )
+      }
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/signupsuccesshtml.tpl.ejs'),
@@ -66,13 +74,14 @@ module.exports = (app) => {
         html: htmlBody
       }
 
-      try {
-        console.log('sending verify email ', msg)
-        sgMail.send(msg)
-      } catch (e) {
-        console.log('Error while sending email ', e)
+      if (isMailEnvSet) {
+        try {
+          console.log('sending verify email ', msg)
+          sgMail.send(msg)
+        } catch (e) {
+          console.log('Error while sending email ', e)
+        }
       }
-
       res.status(200).json({
         message: 'Signup Success'
       })

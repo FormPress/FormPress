@@ -80,7 +80,8 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    const signUpSuccess = (
+    const isMailEnvSet = false //To be changed with capabilities middleware.
+    const signUpSuccess = isMailEnvSet ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
@@ -95,6 +96,16 @@ class SignUp extends Component {
             Activate account by following that e-mail. (If you didn&apos;t
             recieve please check spam folder)
           </p>
+        </div>
+      </div>
+    ) : (
+      <div>
+        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="sign-up-success">
+          <div className="signup-email">
+            <i>{email}</i>
+          </div>
+          <p>Signup success! You can now login to your account.</p>
         </div>
       </div>
     )

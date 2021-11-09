@@ -108,7 +108,17 @@ const getElementsKeys = () =>
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
+let pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
+//Removal of the elements of which the enviroment variables are unset.
+// To be changed with capabilities middleware.
+const isBucketEnvSet = false
+const isGCredEnvSet = false
+const removeUnsetElems = (element) => {
+  return element.type !== 'FileUpload'
+}
+if (isBucketEnvSet === false || isGCredEnvSet === false) {
+  pickerElements = pickerElements.filter((element) => removeUnsetElems(element))
+}
 
 class Builder extends Component {
   async componentDidMount() {
