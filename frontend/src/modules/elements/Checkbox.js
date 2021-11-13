@@ -16,7 +16,95 @@ export default class Checkbox extends Component {
     type: 'Checkbox',
     label: 'Label',
     options: ['New Checkbox'],
-    requiredText: 'Please fill this field.'
+    toggle: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Make this field toggle?']
+      }
+    }
+  }
+
+  static IsJsonString(str) {
+    try {
+      JSON.parse(str)
+    } catch (e) {
+      return false
+    }
+    return true
+  }
+
+  static dataContentOrganizer(dataContentValue, element) {
+    const tempContentValue = cloneDeep(dataContentValue)
+    let returnContent = []
+
+    if (this.IsJsonString(tempContentValue) === false) {
+      for (let elementContent of element.options) {
+        if (tempContentValue === elementContent) {
+          returnContent.push({
+            content: elementContent,
+            value: 'checked',
+            type: element.type,
+            toggle: element.toggle
+          })
+        } else {
+          returnContent.push({
+            content: elementContent,
+            value: '',
+            type: element.type,
+            toggle: element.toggle
+          })
+        }
+      }
+    } else {
+      for (let elementContent of element.options) {
+        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
+          returnContent.push({
+            content: elementContent,
+            value: 'checked',
+            type: element.type,
+            toggle: element.toggle
+          })
+        } else {
+          returnContent.push({
+            content: elementContent,
+            value: '',
+            type: element.type,
+            toggle: element.toggle
+          })
+        }
+      }
+    }
+
+    return returnContent
+  }
+
+  static renderDataValue(entry) {
+    return entry.value.map((input, index) => {
+      return (
+        <div className="input" key={index}>
+          <input
+            type={input.type.toLowerCase()}
+            id={'q_required_' + index}
+            className={input.toggle === true ? 'toggle-checkbox' : ''}
+            defaultChecked={input.value}
+            disabled
+            readOnly
+          />
+          {input.toggle === true ? <span className="slider"></span> : null}
+          <label
+            className={
+              input.type.toLowerCase() +
+              '-label ' +
+              (input.toggle === true ? 'toggle-label' : '')
+            }
+            htmlFor={'q_required_' + index}>
+            {input.content}
+          </label>
+        </div>
+      )
+    })
   }
 
   constructor(props) {

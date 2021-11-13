@@ -7,6 +7,7 @@ import Moment from 'react-moment'
 import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
+import * as Elements from './elements'
 
 import './Data.css'
 
@@ -105,6 +106,7 @@ class Data extends Component {
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
+      selectedSubmissionForm: null,
       selectedSubmissionIds: [],
       submissions: [],
       entries: [],
@@ -112,7 +114,8 @@ class Data extends Component {
         forms: false,
         submissions: false,
         entries: false
-      }
+      },
+      parseError: false
     }
 
     this.handleFormClick = this.handleFormClick.bind(this)
@@ -142,18 +145,51 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
-    const { id } = submission
-    const form_id = this.state.selectedFormId
+    const { id, form_id, version } = submission
+    let selectedSubmissionForm
+
+    if (version === 0) {
+      selectedSubmissionForm = await api({
+        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+      })
+      selectedSubmissionForm = selectedSubmissionForm.data
+    } else {
+      selectedSubmissionForm = await api({
+        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
+      })
+      selectedSubmissionForm = selectedSubmissionForm.data[0]
+    }
 
     this.setLoadingState('entries', true)
     this.setState({
       entries: [],
-      selectedSubmissionId: id
+      selectedSubmissionId: id,
+      selectedSubmissionForm: selectedSubmissionForm
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}/entries`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
+
+    try {
+      for (let dataContent of data) {
+        for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
+          .elements) {
+          if (
+            element.id === dataContent.question_id &&
+            (element.type === 'Checkbox' || element.type === 'Radio')
+          ) {
+            dataContent.value = Elements[element.type].dataContentOrganizer(
+              dataContent.value,
+              element
+            )
+          }
+        }
+      }
+      this.setState({ parseError: false })
+    } catch {
+      this.setState({ parseError: true })
+    }
 
     this.setLoadingState('entries', false)
     this.setState({ entries: data })
@@ -353,6 +389,14 @@ class Data extends Component {
               <Moment fromNow ago date={submission.created_at} key="1" />,
               <span key="2">{' ago'}</span>
             ]
+          },
+          {
+            label: '',
+            content: () => [
+              <span className="table_caret_right" key="1">
+                {'>'}
+              </span>
+            ]
           }
         ]}
         data={submissions}
@@ -360,44 +404,46 @@ class Data extends Component {
     ]
   }
 
+  renderEntryElements(entry) {
+    const { selectedSubmissionForm } = this.state
+
+    return Elements[
+      JSON.parse(selectedSubmissionForm.props).elements.filter(
+        (element) => element.id === entry.question_id
+      )[0].type
+    ].renderDataValue(entry)
+  }
+
   renderEntries() {
-    const { entries, forms, selectedFormId } = this.state
-
-    if (entries.length === 0) {
-      return null
-    }
-
-    const form = forms.filter((form) => form.id === selectedFormId)[0]
-    const getLabel = (question_id) => {
-      const matchingQuestion = form.props.elements.filter(
-        (element) => element.id === question_id
-      )
-
-      if (matchingQuestion.length > 0) {
-        return matchingQuestion[0].label
-      } else {
-        return 'Deleted Question'
+    const { entries, selectedSubmissionForm, parseError } = this.state
+    if (parseError === false) {
+      if (entries.length === 0) {
+        return null
       }
-    }
 
-    return entries.map((entry, index) => {
-      //there should be a better way to check fileUpload
-      let value = ''
-      if (entry.value.indexOf('{"uploadName":"') >= 0) {
-        const parsedValue = JSON.parse(entry.value)
-        const uriEncodedName = encodeURI(parsedValue.fileName)
-        const downloadLink = `/download/${entry.form_id}/${entry.submission_id}/${entry.question_id}/${uriEncodedName}`
-        value = <Link to={downloadLink}>{parsedValue.fileName}</Link>
-      } else {
-        value = entry.value
+      const getLabel = (question_id) => {
+        const matchingQuestion = JSON.parse(
+          selectedSubmissionForm.props
+        ).elements.filter((element) => element.id === question_id)
+
+        if (matchingQuestion.length > 0) {
+          return matchingQuestion[0].label
+        } else {
+          return 'Deleted Question'
+        }
       }
-      return (
-        <div key={index} className="entry">
-          <div className="label">{getLabel(entry.question_id)}</div>
-          <div className="value">{value}</div>
-        </div>
-      )
-    })
+
+      return entries.map((entry, index) => {
+        return (
+          <div key={index} className="entry">
+            <div className="label">{getLabel(entry.question_id)}</div>
+            <div className="value">{this.renderEntryElements(entry)}</div>
+          </div>
+        )
+      })
+    } else {
+      return <div className="entry">This submission can not parse.</div>
+    }
   }
 }
 

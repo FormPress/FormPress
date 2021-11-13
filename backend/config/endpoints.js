@@ -53,6 +53,12 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/users/:user_id/forms/:form_id/:version_id',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/1'
+    },
+    {
+      method: 'get',
       path: '/api/users/:user_id/forms/:form_id/elements',
       protected: false,
       exampleRequestPath: '/api/users/1/forms/1'
