@@ -20,7 +20,7 @@ class Settings extends Component {
 
     console.log('incoming list ', data)
 
-    data.forEach((file, key) => {
+    data.forEach((file) => {
       import('../settings/' + file).then((module) => {
         console.log('Incoming component m', module)
         const newSettingComponents = [
@@ -57,7 +57,7 @@ class Settings extends Component {
           <div className="settings_content">
             <Switch>
               {this.state.settingComponents.map((item, key) => (
-                <Route path={item.path} component={item.component} />
+                <Route path={item.path} component={item.component} key={key} />
               ))}
             </Switch>
           </div>
