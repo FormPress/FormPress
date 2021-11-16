@@ -9,4 +9,5 @@ frontend/src/modules/settings/*.plugin.js
 frontend/src/modules/settings/*.plugin.css
 k8s
 node_modules
+**/.DS_Store
 
