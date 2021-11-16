@@ -30,7 +30,6 @@ module.exports = (app) => {
     '/api/app/get/backendPluginFiles',
     mustHaveValidToken,
     async (req, res) => {
-      
       res.json('')
     }
   )
