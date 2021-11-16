@@ -12,6 +12,12 @@ class Settings extends Component {
       resource: `/api/app/get/settingsPluginfileslist`
     })
 
+    const data1 = await api({
+      resource: `/api/app/get/backendPluginFiles`
+    })
+
+    console.log('data1: ', data1.data)
+
     console.log('incoming list ', data)
 
     data.forEach((file, key) => {

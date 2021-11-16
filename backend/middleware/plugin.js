@@ -17,4 +17,17 @@ module.exports = (app) => {
       })
     }
   )
+
+  app.get(
+    '/api/app/get/backendPluginFiles',
+    mustHaveValidToken,
+    async(req, res) => {
+      fs.readdirSync('middleware/plugins', { withFileTypes: true }).forEach(function(file) {
+        if(file.name.indexOf('.plugin.js') > 0){
+          require(path.resolve('middleware/plugins', `${file.name}`))(app)
+        }
+      });
+      res.status(200).json('{"status":"dummy"}')
+    }
+  )
 }

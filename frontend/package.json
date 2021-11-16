@@ -13,7 +13,7 @@
     "react-google-login": "^5.2.2",
     "react-moment": "0.9.7",
     "react-router-dom": "5.1.2",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^4.0.3"
   },
   "scripts": {
     "start-compose": "NODE_PATH=/node_modules react-scripts start",
