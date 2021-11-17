@@ -60,12 +60,9 @@ class ForgotPassword extends Component {
     const forgotSucces = (
       <div>
         <div className="reset-success">
-          We have send an e-mail to{' '}
-          <span className="reset-email">
-            <i>{email}</i>
-          </span>{' '}
-          address. Reset your password by following the e-mail. (If you
-          didn&apos;t recieve please check spam folder)
+          We have send an e-mail to <span className="reset-email"><i>{email}</i></span> address. Reset your password by
+          following the e-mail. (If you didn&apos;t recieve please check spam
+          folder)
         </div>
       </div>
     )

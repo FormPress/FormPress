@@ -80,6 +80,12 @@ class Forms extends Component {
 
   render() {
     const { forms } = this.state
+    let roleLimit = 2
+    if (this.props.auth.permission.admin) {
+      roleLimit = 0
+    } else {
+      roleLimit = parseInt(this.props.auth.permission.formLimit)
+    }
 
     return (
       <div className="forms">
@@ -147,7 +153,10 @@ class Forms extends Component {
           />
         </div>
         <div className="newButtonContainer">
-          <Link to="/editor/new/builder">Create a new form</Link>
+          { roleLimit === 0 || roleLimit > forms.length
+            ? <Link to="/editor/new/builder">Create a new form</Link>
+            : <span className="disabledNewForm" title="Form limit reached">Create a new form</span>
+        }
         </div>
       </div>
     )

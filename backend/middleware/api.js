@@ -30,7 +30,7 @@ module.exports = (app) => {
       await db.query(
         `
           UPDATE \`form\`
-            SET props = ?, title = ?, updated_at = NOW()
+            SET props = ?, title = ?
           WHERE
             id = ?
         `,
@@ -62,9 +62,9 @@ module.exports = (app) => {
       const result = await db.query(
         `
           INSERT INTO \`form\`
-            (user_id, title, props, published_version, created_at, updated_at)
+            (user_id, title, props, published_version, created_at)
           VALUES
-            (?, ?, ?, 0, NOW(), NOW())
+            (?, ?, ?, 0, NOW())
         `,
         [user_id, form.title, JSON.stringify(form.props)]
       )
@@ -203,7 +203,7 @@ module.exports = (app) => {
         const version = parseInt(form.published_version || 0)
         const nextVersion = version + 1
 
-        const insertPublishedResult = await db.query(
+        await db.query(
           `
           INSERT INTO \`form_published\`
             (user_id, form_id, title, props, version, created_at)
@@ -213,22 +213,13 @@ module.exports = (app) => {
           [user_id, form_id, form.title, form.props, nextVersion]
         )
 
-        const publishedResult = await db.query(
-          `
-          SELECT \`created_at\`
-          FROM \`form_published\`
-          WHERE \`id\` = ?
-        `,
-          [insertPublishedResult.insertId]
-        )
-
         await db.query(
           `
           UPDATE \`form\`
-          SET published_version = ?, updated_at = ?
+          SET published_version = ?
           WHERE id = ?
         `,
-          [nextVersion, publishedResult[0].created_at, form_id]
+          [nextVersion, form_id]
         )
         res.json({ message: 'Published' })
       } else {

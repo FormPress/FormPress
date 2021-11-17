@@ -14,9 +14,14 @@ module.exports = (app) => {
 
     const result = await db.query(
       `
-        SELECT *
-        FROM \`user\`
-        WHERE email = ? AND emailVerified = 1
+        SELECT
+          u.*,
+          ur.role_id AS role_id,
+          r.permission AS permission
+        FROM \`user\` AS u
+          JOIN \`user_role\` AS ur ON u.id = ur.user_id
+          JOIN role AS r ON r.id = ur.\`role_id\`
+        WHERE u.email = ? AND u.emailVerified = 1
       `,
       [email]
     )
@@ -36,6 +41,8 @@ module.exports = (app) => {
         const jwt_data = {
           user_id: user.id,
           email: user.email,
+          user_role: user.role_id,
+          permission: JSON.parse(user.permission),
           exp
         }
 
@@ -44,13 +51,17 @@ module.exports = (app) => {
           console.log('SIGNED TOKEN ', {
             message: 'Login Success',
             token,
+            user_role: user.role_id,
             user_id: user.id,
+            permission: JSON.parse(user.permission),
             exp
           })
           res.status(200).json({
             message: 'Login Success',
             token,
+            user_role: user.role_id,
             user_id: user.id,
+            permission: JSON.parse(user.permission),
             exp
           })
         })

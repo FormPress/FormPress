@@ -17,6 +17,14 @@ exports.paramShouldMatchTokenUserId = (param) => (req, res, next) => {
   }
 }
 
+exports.mustBeAdmin = (req, res, next) => {
+  if (res.locals.auth.user_role === 1) {
+    next()
+  } else {
+    res.status(403).send({ message: 'You don\'t have admin privileges' })
+  }
+}
+
 exports.userShouldOwnSubmission = (user_id, submission_id) => async (
   req,
   res,

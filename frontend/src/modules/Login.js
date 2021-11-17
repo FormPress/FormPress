@@ -59,6 +59,8 @@ class Login extends Component {
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
+        user_role: data.user_role,
+        permission: data.permission,
         loggedIn: true
       })
     } else {
@@ -84,6 +86,8 @@ class Login extends Component {
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
+        user_role: data.user_role,
+        permission: data.permission,
         loggedIn: true
       })
     } else {

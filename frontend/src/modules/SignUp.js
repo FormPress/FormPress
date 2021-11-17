@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
@@ -80,6 +80,19 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
+    if (this.props.auth.loggedIn === true) {
+      const pathName = this.props.location.state
+        ? this.props.location.state.from.pathname
+        : '/forms'
+      return (
+        <Redirect
+          to={{
+            pathname: pathName,
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     const signUpSuccess = (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>

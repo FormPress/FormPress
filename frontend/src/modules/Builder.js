@@ -17,6 +17,7 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
+  faQuestionCircle,
   faFont
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -49,7 +50,7 @@ const iconMap = {
 
 //list of element texts
 const textMap = {
-  TextBox: 'TextBox',
+  TextBox: 'Text Box',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
@@ -827,8 +828,14 @@ class Builder extends Component {
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
+    const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+    if (permission.admin) {
+      pickerElements.forEach((elem) => {
+        permission[elem.type] = true
+      })
+    }
     let questionPropertiesReady = true
 
     if (typeof questionId !== 'undefined') {
@@ -857,28 +864,46 @@ class Builder extends Component {
             </div>
             <div className="elementList">
               {pickerElements.map((elem) => (
-                <div
-                  className="element"
-                  draggable
-                  onDragStart={this.handleDragStart.bind(this, elem)}
-                  onDragEnd={this.handleDragEnd}
-                  key={elem.type}>
-                  <span className="element-picker-icon-wrapper">
-                    <FontAwesomeIcon
-                      icon={iconMap[elem.type]}
-                      className="element-picker-icon"
-                    />
-                  </span>
-                  <span className="element-picker-text">
-                    {textMap[elem.type]}
-                  </span>
-                  <span className="add-element-button">
-                    <FontAwesomeIcon
-                      icon={faPlusCircle}
-                      title="Add Field"
-                      onClick={() => this.handleAddFormElementClick(elem.type)}
-                    />
-                  </span>
+                permission[elem.type]
+                ? <div
+                    className="element"
+                    draggable
+                    onDragStart={this.handleDragStart.bind(this, elem)}
+                    onDragEnd={this.handleDragEnd}
+                    key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="add-element-button">
+                      <FontAwesomeIcon
+                        icon={faPlusCircle}
+                        title="Add Field"
+                        onClick={() => this.handleAddFormElementClick(elem.type)}
+                      />
+                    </span>
+                  </div>
+                : <div className="element disabled-element" key={elem.type} >
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="planover-container">
+                      <FontAwesomeIcon
+                        icon={faQuestionCircle}
+                      />
+                      <div className="popoverText">Your plan does not include this element. Please contact support for upgrade.</div>
+                    </span>
                 </div>
               ))}
             </div>

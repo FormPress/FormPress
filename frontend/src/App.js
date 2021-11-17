@@ -15,12 +15,14 @@ import Login from './modules/Login'
 import SignUp from './modules/SignUp'
 import AuthContext from './auth.context'
 import PrivateRoute from './PrivateRoute'
+import AdminRoute from './AdminRoute'
 import Profile from './Profile'
 import { setToken } from './helper'
 import DownloadFile from './modules/helper/DownloadFile'
 import VerifyEMail from './modules/helper/VerifyEmail'
 import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
+import AdminPage from './modules/admin/AdminPage'
 
 import { Logo } from './svg'
 
@@ -36,6 +38,8 @@ let initialAuthObject = {
   token: '',
   email: '',
   user_id: 0,
+  user_role: 0,
+  permission: {},
   exp: '',
   loggedIn: false
 }
@@ -63,13 +67,13 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth({ email, user_id, token, loggedIn, exp }, persist = true) {
-    this.setState({ email, user_id, token, loggedIn, exp })
+  handleSetAuth({ email, user_id, user_role, token, loggedIn, exp, permission }, persist = true) {
+    this.setState({ email, user_id, user_role, token, loggedIn, exp, permission })
 
     if (persist === true) {
       window.localStorage.setItem(
         'auth',
-        JSON.stringify({ email, user_id, token, loggedIn, exp })
+        JSON.stringify({ email, user_id, user_role, token, loggedIn, exp, permission })
       )
     }
   }
@@ -79,6 +83,8 @@ class App extends Component {
       token: this.state.token,
       email: this.state.email,
       user_id: this.state.user_id,
+      user_role: this.state.user_role,
+      permission: this.state.permission,
       loggedIn: this.state.loggedIn,
       setAuth: this.handleSetAuth
     }
@@ -111,7 +117,7 @@ class App extends Component {
                         ) : (
                           ''
                         )}
-                      </li>
+                        </li>
                       {auth.loggedIn === true
                         ? [
                             <li key="2">
@@ -143,6 +149,7 @@ class App extends Component {
                             </li>
                           ]}
                     </ul>
+
                     {auth.loggedIn === true ? (
                       <div className="nav_add_new_form_container">
                         <Link
@@ -190,6 +197,9 @@ class App extends Component {
               <PrivateRoute
                 path="/download/:formId/:submissionId/:questionId/:fileName"
                 component={DownloadFile}
+              />
+              <AdminRoute
+                path="/admin" component={AdminPage}
               />
               <Route path="/forgotpassword" component={ForgotPassword} />
               <Route
