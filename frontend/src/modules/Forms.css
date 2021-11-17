@@ -22,12 +22,15 @@
 .forms table.fp_table > tbody > tr:last-child {
   border-bottom: none;
 }
-.forms table.fp_table > thead > tr > th.mw{
-width: 24px;
+
+.forms table.fp_table > thead > tr > th.mw {
+  width: 24px;
 }
-.forms table.fp_table > thead > tr > th.name{
-width: 780px;
+
+.forms table.fp_table > thead > tr > th.name {
+  width: 780px;
 }
+
 .forms table.fp_table > tbody > tr > td.name {
   color: #333333;
   font-size: 18px;
