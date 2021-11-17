@@ -67,13 +67,32 @@ class App extends Component {
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
-  handleSetAuth({ email, user_id, user_role, token, loggedIn, exp, permission }, persist = true) {
-    this.setState({ email, user_id, user_role, token, loggedIn, exp, permission })
+  handleSetAuth(
+    { email, user_id, user_role, token, loggedIn, exp, permission },
+    persist = true
+  ) {
+    this.setState({
+      email,
+      user_id,
+      user_role,
+      token,
+      loggedIn,
+      exp,
+      permission
+    })
 
     if (persist === true) {
       window.localStorage.setItem(
         'auth',
-        JSON.stringify({ email, user_id, user_role, token, loggedIn, exp, permission })
+        JSON.stringify({
+          email,
+          user_id,
+          user_role,
+          token,
+          loggedIn,
+          exp,
+          permission
+        })
       )
     }
   }
@@ -117,7 +136,7 @@ class App extends Component {
                         ) : (
                           ''
                         )}
-                        </li>
+                      </li>
                       {auth.loggedIn === true
                         ? [
                             <li key="2">
@@ -198,9 +217,7 @@ class App extends Component {
                 path="/download/:formId/:submissionId/:questionId/:fileName"
                 component={DownloadFile}
               />
-              <AdminRoute
-                path="/admin" component={AdminPage}
-              />
+              <AdminRoute path="/admin" component={AdminPage} />
               <Route path="/forgotpassword" component={ForgotPassword} />
               <Route
                 path="/resetpassword/:userId/:passwordResetCode"

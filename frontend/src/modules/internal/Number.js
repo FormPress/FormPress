@@ -11,7 +11,7 @@ export default class Number extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Number',
-    label: 'Number',
+    label: 'Number'
   }
 
   static configurableSettings = {
@@ -37,7 +37,8 @@ export default class Number extends Component {
 
     if (typeof config.min !== 'undefined') {
       inputProps.min = this.props.config.min
-    }if (typeof config.max !== 'undefined') {
+    }
+    if (typeof config.max !== 'undefined') {
       inputProps.max = this.props.config.max
     }
 

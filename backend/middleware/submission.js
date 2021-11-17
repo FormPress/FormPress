@@ -212,19 +212,21 @@ module.exports = (app) => {
       const dateObj = new Date()
       const month = dateObj.getUTCMonth() + 1 //months from 1-12
       const year = dateObj.getUTCFullYear()
-      const yearMonth = year + "-" + month
+      const yearMonth = year + '-' + month
       const formOwnerResult = await db.query(
         `SELECT \`user_id\` FROM \`form_published\` WHERE form_id = ? AND version = ?`,
         [form_id, version]
       )
       const formOwner = formOwnerResult[0].user_id
-      const checkUsageResult = await db.query(`
+      const checkUsageResult = await db.query(
+        `
         SELECT * FROM \`submission_usage\` WHERE user_id = ? AND date = ?`,
         [formOwner, yearMonth]
       )
 
       if (checkUsageResult.length === 0) {
-        await db.query(`
+        await db.query(
+          `
           INSERT INTO \`submission_usage\`
             (user_id, date, count)
           VALUES
@@ -233,13 +235,13 @@ module.exports = (app) => {
           [formOwner, yearMonth]
         )
       } else {
-        await db.query(`
+        await db.query(
+          `
         UPDATE \`submission_usage\` SET count = count + 1 WHERE user_id = ? AND date = ?
         `,
-        [formOwner,yearMonth]
+          [formOwner, yearMonth]
         )
       }
     }
-
   })
 }

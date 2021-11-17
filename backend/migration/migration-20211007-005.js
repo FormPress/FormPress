@@ -60,12 +60,13 @@ module.exports = async (db) => {
     MODIFY \`updated_at\` datetime ON UPDATE CURRENT_TIMESTAMP
   `)
 
-  await db.query(`
+  await db.query(
+    `
     UPDATE \`user\`
     SET \`emailVerified\` = 1
     WHERE email = ?
   `,
-  [adminEmail]
+    [adminEmail]
   )
 
   await db.query(`
@@ -73,10 +74,12 @@ module.exports = async (db) => {
       ADD UNIQUE (\`user_id\`)
   `)
   //fill user_role table
-  const adminUserIdResult = await db.query(`SELECT \`id\` FROM \`user\` WHERE email = '${adminEmail}'`)
+  const adminUserIdResult = await db.query(
+    `SELECT \`id\` FROM \`user\` WHERE email = '${adminEmail}'`
+  )
   const adminUserId = adminUserIdResult[0].id
   const adminRoleId = 1 // hardcoded in mustBeAdmin authorization middleware
-  const freeRoleId = 2 // hardcoded in signUp middleware for new users 
+  const freeRoleId = 2 // hardcoded in signUp middleware for new users
 
   const otherUsers = await db.query(
     `SELECT \`id\` 

@@ -13,7 +13,7 @@ const AdminRoute = ({ children, component, ...rest }) => {
             const Component = component
 
             return value.loggedIn === true ? (
-              //user_role=1 admin 
+              //user_role=1 admin
               value.user_role === 1 ? (
                 component !== undefined ? (
                   <Component {...props} />

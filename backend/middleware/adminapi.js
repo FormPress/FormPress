@@ -35,12 +35,15 @@ module.exports = (app) => {
     mustHaveValidToken,
     mustBeAdmin,
     async (req, res) => {
-
       const { role_id } = req.params
       const { name, permissions } = req.body
       const db = await getPool()
-  
-      if (typeof role_id !== 'undefined' && role_id !== null && role_id !== '0') {
+
+      if (
+        typeof role_id !== 'undefined' &&
+        role_id !== null &&
+        role_id !== '0'
+      ) {
         //existing role update
         await db.query(
           `
@@ -49,10 +52,12 @@ module.exports = (app) => {
           [name, JSON.stringify(permissions), role_id]
         )
 
-        res.status(200).send({message: 'Role saved successfully', roleId: role_id})
+        res
+          .status(200)
+          .send({ message: 'Role saved successfully', roleId: role_id })
       } else {
         //create new role
-         const result = await db.query(
+        const result = await db.query(
           `
             INSERT INTO \`role\` 
               (name, permission)
@@ -62,7 +67,12 @@ module.exports = (app) => {
           [name, JSON.stringify(permissions)]
         )
 
-        res.status(200).send({message: 'role created successfully', roleId: result.insertId})
+        res
+          .status(200)
+          .send({
+            message: 'role created successfully',
+            roleId: result.insertId
+          })
       }
     }
   )

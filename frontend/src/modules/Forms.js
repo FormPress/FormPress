@@ -153,10 +153,13 @@ class Forms extends Component {
           />
         </div>
         <div className="newButtonContainer">
-          { roleLimit === 0 || roleLimit > forms.length
-            ? <Link to="/editor/new/builder">Create a new form</Link>
-            : <span className="disabledNewForm" title="Form limit reached">Create a new form</span>
-        }
+          {roleLimit === 0 || roleLimit > forms.length ? (
+            <Link to="/editor/new/builder">Create a new form</Link>
+          ) : (
+            <span className="disabledNewForm" title="Form limit reached">
+              Create a new form
+            </span>
+          )}
         </div>
       </div>
     )

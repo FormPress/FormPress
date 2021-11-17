@@ -863,9 +863,9 @@ class Builder extends Component {
               you can click + icon
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) => (
-                permission[elem.type]
-                ? <div
+              {pickerElements.map((elem) =>
+                permission[elem.type] ? (
+                  <div
                     className="element"
                     draggable
                     onDragStart={this.handleDragStart.bind(this, elem)}
@@ -884,11 +884,14 @@ class Builder extends Component {
                       <FontAwesomeIcon
                         icon={faPlusCircle}
                         title="Add Field"
-                        onClick={() => this.handleAddFormElementClick(elem.type)}
+                        onClick={() =>
+                          this.handleAddFormElementClick(elem.type)
+                        }
                       />
                     </span>
                   </div>
-                : <div className="element disabled-element" key={elem.type} >
+                ) : (
+                  <div className="element disabled-element" key={elem.type}>
                     <span className="element-picker-icon-wrapper">
                       <FontAwesomeIcon
                         icon={iconMap[elem.type]}
@@ -899,13 +902,15 @@ class Builder extends Component {
                       {textMap[elem.type]}
                     </span>
                     <span className="planover-container">
-                      <FontAwesomeIcon
-                        icon={faQuestionCircle}
-                      />
-                      <div className="popoverText">Your plan does not include this element. Please contact support for upgrade.</div>
+                      <FontAwesomeIcon icon={faQuestionCircle} />
+                      <div className="popoverText">
+                        Your plan does not include this element. Please contact
+                        support for upgrade.
+                      </div>
                     </span>
-                </div>
-              ))}
+                  </div>
+                )
+              )}
             </div>
           </div>
         </Route>
