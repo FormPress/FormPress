@@ -116,27 +116,26 @@ class Forms extends Component {
                 label: 'Actions',
                 content: (form) => (
                   <div className="actions">
-                    <span>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        title={
-                          form.published_version
-                            ? 'View Form'
-                            : 'You have to publish form to view'
-                        }
-                        onClick={
-                          form.published_version
-                            ? this.handlePreviewClick.bind(this, form)
-                            : undefined
-                        }
-                      />
+                    <span
+                      className={`${
+                        form.published_version ? 'view' : 'inactive_view'
+                      }`}
+                      title={
+                        form.published_version
+                          ? 'View Form'
+                          : 'You have to publish form to view'
+                      }
+                      onClick={
+                        form.published_version
+                          ? this.handlePreviewClick.bind(this, form)
+                          : undefined
+                      }>
+                      <FontAwesomeIcon icon={faEye} />
                     </span>
-                    <span>
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        title="Delete Form"
-                        onClick={this.handleFormDeleteClick.bind(this, form)}
-                      />
+                    <span
+                      title="Delete Form"
+                      onClick={this.handleFormDeleteClick.bind(this, form)}>
+                      <FontAwesomeIcon icon={faTrash} />
                     </span>
                     <Link to={`/editor/${form.id}/builder`}>
                       <FontAwesomeIcon icon={faPen} title="Edit Form" />
