@@ -15,6 +15,10 @@
     {
       name: '3rdparty/iframeSizer.contentWindow.min',
       check: () => window.location !== window.parent.location
+    },
+    {
+      name: 'validate',
+      check: (element) => element.type === 'Button'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -71,8 +75,6 @@
   const extensionstoLoad = []
 
   for (const ext of extensions) {
-    const matchingElements = elements.filter(ext.check)
-
     if (elements.filter(ext.check).length > 0) {
       extensionstoLoad.push(ext.name)
     }
