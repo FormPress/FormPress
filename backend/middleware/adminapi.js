@@ -67,12 +67,10 @@ module.exports = (app) => {
           [name, JSON.stringify(permissions)]
         )
 
-        res
-          .status(200)
-          .send({
-            message: 'role created successfully',
-            roleId: result.insertId
-          })
+        res.status(200).send({
+          message: 'role created successfully',
+          roleId: result.insertId
+        })
       }
     }
   )
