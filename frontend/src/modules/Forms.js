@@ -101,14 +101,16 @@ class Forms extends Component {
                 label: 'Responses',
                 content: (form) => (
                   <div className="responseCount">{form.responseCount}</div>
-                )
+                ),
+                className: 'responses'
               },
               {
                 label: 'Created At',
                 content: (form) => [
                   <Moment fromNow ago date={form.created_at} key="1" />,
                   <span key="2">{' ago'}</span>
-                ]
+                ],
+                className: 'createdAt'
               },
               {
                 label: 'Actions',

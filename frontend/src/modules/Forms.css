@@ -24,11 +24,19 @@
 }
 
 .forms table.fp_table > thead > tr > th.mw {
-  width: 24px;
+  width: 20px;
 }
 
 .forms table.fp_table > thead > tr > th.name {
-  width: 780px;
+  width: 700px;
+}
+
+.forms table.fp_table > thead > tr > th.responses {
+  width: 140px;
+}
+
+.forms table.fp_table > thead > tr > th.createdAt {
+  width: 140px;
 }
 
 .forms table.fp_table > tbody > tr > td.name {
