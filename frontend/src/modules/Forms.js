@@ -95,7 +95,8 @@ class Forms extends Component {
               {
                 label: 'Name',
                 content: (form) => form.title,
-                className: 'name'
+                className: 'name',
+                title: ' '
               },
               {
                 label: 'Responses',
