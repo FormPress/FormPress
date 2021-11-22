@@ -581,7 +581,7 @@ module.exports = (app) => {
     })
   })
 
-  app.get('/server/capabilities', async (req, res) => {
+  app.get('/api/server/capabilities', async (req, res) => {
     const isEnvVarSet = {
       GCred: process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
       Mail: process.env.SENDGRID_API_KEY !== '',
