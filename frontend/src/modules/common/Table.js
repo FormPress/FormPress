@@ -52,13 +52,14 @@ export default class Table extends Component {
         <tr key={rowKey} {...props}>
           {this.props.columns.map((column, keyColumn) => {
             const props = {}
+            const maxNameLength = 68
 
             if (typeof column.className !== 'undefined') {
               props.className = column.className
             }
 
             if (typeof column.title !== 'undefined') {
-              if (column.content(row).length >= 68) {
+              if (column.content(row).length >= maxNameLength) {
                 props.title = column.content(row)
               }
             }
