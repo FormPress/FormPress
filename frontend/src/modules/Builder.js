@@ -22,6 +22,7 @@ import {
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
@@ -109,16 +110,6 @@ const getElementsKeys = () =>
 
 //Stuff that we render in left hand side
 let pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
-//Removal of the elements of which the enviroment variables are unset.
-// To be changed with capabilities middleware.
-const isBucketEnvSet = false
-const isGCredEnvSet = false
-const removeUnsetElems = (element) => {
-  return element.type !== 'FileUpload'
-}
-if (isBucketEnvSet === false || isGCredEnvSet === false) {
-  pickerElements = pickerElements.filter((element) => removeUnsetElems(element))
-}
 
 class Builder extends Component {
   async componentDidMount() {
@@ -141,6 +132,17 @@ class Builder extends Component {
           this.componentDidMount()
         }, 1)
       }
+    }
+
+    const capabilities = this.props.capabilities
+    if (capabilities.Bucket === false || capabilities.GCred === false) {
+      //Removal of the elements of which the environment variables are unset.
+      const removeUnavailableElems = (element) => {
+        return element.type !== 'FileUpload'
+      }
+      pickerElements = pickerElements.filter((element) =>
+        removeUnavailableElems(element)
+      )
     }
   }
 
@@ -1030,9 +1032,15 @@ class Builder extends Component {
 }
 
 const BuilderWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Builder {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Builder {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default BuilderWrapped

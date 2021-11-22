@@ -14,9 +14,10 @@ import Forms from './modules/Forms'
 import Login from './modules/Login'
 import SignUp from './modules/SignUp'
 import AuthContext from './auth.context'
+import CapabilitiesContext from './capabilities.context'
 import PrivateRoute from './PrivateRoute'
 import Profile from './Profile'
-import { setToken } from './helper'
+import { api, setToken } from './helper'
 import DownloadFile from './modules/helper/DownloadFile'
 import VerifyEMail from './modules/helper/VerifyEmail'
 import ForgotPassword from './modules/helper/ForgotPassword'
@@ -40,6 +41,13 @@ let initialAuthObject = {
   loggedIn: false
 }
 
+let capabilities = {
+  GCred: false,
+  Mail: false,
+  GLogin: false,
+  Bucket: false
+}
+
 if (auth !== null) {
   try {
     const authObject = JSON.parse(auth)
@@ -57,10 +65,20 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ...initialAuthObject
+      ...initialAuthObject,
+      capabilities
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
+  }
+
+  async componentDidMount() {
+    const result = await api({
+      resource: `/server/capabilities`,
+      method: 'get'
+    })
+    const isEnvVarSet = result.data
+    this.setState({ capabilities: isEnvVarSet })
   }
 
   handleSetAuth({ email, user_id, token, loggedIn, exp }, persist = true) {
@@ -86,6 +104,7 @@ class App extends Component {
 
   render() {
     const auth = this.getAuthContextValue()
+    // const capabilities = this.state.capabilities
     let homeUrl = undefined
     if (process.env.REACT_APP_HOMEURL !== '') {
       homeUrl = process.env.REACT_APP_HOMEURL
@@ -93,113 +112,121 @@ class App extends Component {
 
     return (
       <Router>
-        <AuthContext.Provider value={auth}>
-          <div className="headerContainer">
-            <div className="grid cw center">
-              <div className="grid header">
-                <div className="col-1-16 logo">
-                  <NavLink exact to="/">
-                    <Logo />
-                  </NavLink>
-                </div>
-                <div className="col-10-16 menu">
-                  <nav className="nav">
-                    <ul className="menu fl">
-                      <li key="1">
-                        {homeUrl !== undefined ? (
-                          <a href={homeUrl}>Home</a>
-                        ) : (
-                          ''
-                        )}
-                      </li>
-                      {auth.loggedIn === true
-                        ? [
-                            <li key="2">
-                              <NavLink to="/forms" activeClassName="selected">
-                                Forms
-                              </NavLink>
-                            </li>,
-                            <li key="3">
-                              <NavLink to="/editor" activeClassName="selected">
-                                Editor
-                              </NavLink>
-                            </li>,
-                            <li key="4">
-                              <NavLink to="/data" activeClassName="selected">
-                                Data
-                              </NavLink>
-                            </li>
-                          ]
-                        : [
-                            <li key="2">
-                              <NavLink to="/login" activeClassName="selected">
-                                Login
-                              </NavLink>
-                            </li>,
-                            <li key="3">
-                              <NavLink to="/signup" activeClassName="selected">
-                                Sign Up
-                              </NavLink>
-                            </li>
-                          ]}
-                    </ul>
-                    {auth.loggedIn === true ? (
-                      <div className="nav_add_new_form_container">
-                        <Link
-                          to="/editor/new/builder"
-                          className="nav_add_new_form_link">
-                          <div className="popover-container">
-                            <FontAwesomeIcon
-                              icon={faPlusCircle}
-                              title="Add New Form"
-                              className="nav_add_new_form_logo"
-                            />
-                            <div className="popoverText">Create a new form</div>
-                          </div>
-                        </Link>
-                      </div>
-                    ) : null}
-                  </nav>
-                </div>
-                <div className="col-5-16 profile_container">
-                  <Profile />
+        <CapabilitiesContext.Provider value={this.state.capabilities}>
+          <AuthContext.Provider value={auth}>
+            <div className="headerContainer">
+              <div className="grid cw center">
+                <div className="grid header">
+                  <div className="col-1-16 logo">
+                    <NavLink exact to="/">
+                      <Logo />
+                    </NavLink>
+                  </div>
+                  <div className="col-10-16 menu">
+                    <nav className="nav">
+                      <ul className="menu fl">
+                        <li key="1">
+                          {homeUrl !== undefined ? (
+                            <a href={homeUrl}>Home</a>
+                          ) : (
+                            ''
+                          )}
+                        </li>
+                        {auth.loggedIn === true
+                          ? [
+                              <li key="2">
+                                <NavLink to="/forms" activeClassName="selected">
+                                  Forms
+                                </NavLink>
+                              </li>,
+                              <li key="3">
+                                <NavLink
+                                  to="/editor"
+                                  activeClassName="selected">
+                                  Editor
+                                </NavLink>
+                              </li>,
+                              <li key="4">
+                                <NavLink to="/data" activeClassName="selected">
+                                  Data
+                                </NavLink>
+                              </li>
+                            ]
+                          : [
+                              <li key="2">
+                                <NavLink to="/login" activeClassName="selected">
+                                  Login
+                                </NavLink>
+                              </li>,
+                              <li key="3">
+                                <NavLink
+                                  to="/signup"
+                                  activeClassName="selected">
+                                  Sign Up
+                                </NavLink>
+                              </li>
+                            ]}
+                      </ul>
+                      {auth.loggedIn === true ? (
+                        <div className="nav_add_new_form_container">
+                          <Link
+                            to="/editor/new/builder"
+                            className="nav_add_new_form_link">
+                            <div className="popover-container">
+                              <FontAwesomeIcon
+                                icon={faPlusCircle}
+                                title="Add New Form"
+                                className="nav_add_new_form_logo"
+                              />
+                              <div className="popoverText">
+                                Create a new form
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      ) : null}
+                    </nav>
+                  </div>
+                  <div className="col-5-16 profile_container">
+                    <Profile />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="content">
-            <Switch>
-              <PrivateRoute path="/forms">
-                <Forms />
-              </PrivateRoute>
-              <PrivateRoute
-                path="/editor/:formId/builder/question/:questionId/properties"
-                component={Builder}
-              />
-              <PrivateRoute path="/editor/:formId" component={Builder} />
-              <PrivateRoute path="/editor" component={Builder} />
-              <PrivateRoute path="/data">
-                <Data />
-              </PrivateRoute>
-              <Route path="/login" component={Login} />
-              <Route path="/signup" component={SignUp} />
-              <Route
-                path="/verify/:userId/:verificationCode"
-                component={VerifyEMail}
-              />
-              <PrivateRoute
-                path="/download/:formId/:submissionId/:questionId/:fileName"
-                component={DownloadFile}
-              />
-              <Route path="/forgotpassword" component={ForgotPassword} />
-              <Route
-                path="/resetpassword/:userId/:passwordResetCode"
-                component={ResetPassword}
-              />
-              <Redirect to="/login" />
-            </Switch>
-          </div>
-        </AuthContext.Provider>
+            <div className="content">
+              <Switch>
+                <PrivateRoute path="/forms">
+                  <Forms />
+                </PrivateRoute>
+                <PrivateRoute
+                  path="/editor/:formId/builder/question/:questionId/properties"
+                  component={Builder}
+                />
+                <PrivateRoute path="/editor/:formId" component={Builder} />
+                <PrivateRoute path="/editor" component={Builder} />
+                <PrivateRoute path="/data">
+                  <Data />
+                </PrivateRoute>
+                <Route path="/login" component={Login} />
+                <Route path="/signup" component={SignUp} />
+                <Route
+                  path="/verify/:userId/:verificationCode"
+                  component={VerifyEMail}
+                />
+                <PrivateRoute
+                  path="/download/:formId/:submissionId/:questionId/:fileName"
+                  component={DownloadFile}
+                />
+                <Route path="/forgotpassword" component={ForgotPassword} />
+                <Route
+                  path="/resetpassword/:userId/:passwordResetCode"
+                  component={ResetPassword}
+                />
+                <Redirect to="/login" />
+              </Switch>
+            </div>
+          </AuthContext.Provider>
+        </CapabilitiesContext.Provider>
       </Router>
     )
   }

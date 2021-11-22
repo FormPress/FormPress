@@ -5,6 +5,7 @@ import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
@@ -117,10 +118,7 @@ class Login extends Component {
       )
     }
 
-    //Checking env var needed for Google sign-in.
-    //To be changed with capabilities middleware.
-    const isGLoginSet = false
-    const isMailEnvSet = false
+    const capabilities = this.props.capabilities
 
     return (
       <div className="login-wrapper">
@@ -174,7 +172,7 @@ class Login extends Component {
               {state === 'loading' ? 'Loading...' : null}
               {state === 'done' ? message : null}
             </p>
-            {isMailEnvSet ? (
+            {capabilities.Mail ? (
               <div className="forgot-pass" title="WIP">
                 <span className="forgot-pass-span">
                   <Link to="/forgotpassword">
@@ -185,7 +183,7 @@ class Login extends Component {
             ) : (
               ''
             )}
-            {isGLoginSet ? (
+            {capabilities.GLogin ? (
               <div>
                 <div className="or-seperator">or</div>
                 <div className="google-sign-in">
@@ -226,9 +224,15 @@ class Login extends Component {
 }
 
 const LoginWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Login {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Login {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default LoginWrapped

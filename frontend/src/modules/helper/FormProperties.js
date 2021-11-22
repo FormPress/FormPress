@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
+import CapabilitiesContext from '../../capabilities.context'
 
-export default class FormProperties extends Component {
+class FormProperties extends Component {
   constructor(props) {
     super(props)
 
@@ -36,7 +37,7 @@ export default class FormProperties extends Component {
   }
 
   render() {
-    const isMailEnvSet = false //To be changed with capabilities middleware.
+    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
@@ -57,7 +58,7 @@ export default class FormProperties extends Component {
     let tyPageText =
       'Your submission has been successfully sent and we informed the form owner about your submission.'
 
-    if (isMailEnvSet === false) {
+    if (capabilities.Mail === false) {
       tyPageText = 'Your submission has been successfully sent.'
     }
 
@@ -67,7 +68,7 @@ export default class FormProperties extends Component {
     return (
       <div>
         <h2>Form Properties</h2>
-        {isMailEnvSet ? (
+        {capabilities.Mail ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
             theme="infernal"
@@ -123,3 +124,13 @@ export default class FormProperties extends Component {
     )
   }
 }
+
+const FormPropertiesWrapped = (props) => (
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <FormProperties {...props} capabilities={capabilities} />
+    )}
+  </CapabilitiesContext.Consumer>
+)
+
+export default FormPropertiesWrapped

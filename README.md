@@ -36,11 +36,11 @@ And that's it. To verify that the process ran smoothly, in your browser, please 
 http://localhost:3000
 ```
 
-## Enviroment Variables
+## Environment Variables
 
-To get the full experience of FormPress in terms of its features, a number of enviroment variables has to be set. Nevertheless, the app will run just fine but with fewer features.
+To get the full experience of FormPress in terms of its features, a number of environment variables has to be set. Nevertheless, the app will run just fine but with fewer features.
 
-Enviromental variables are added by adding lines to **.env** file in **formpress** root directory. Open **.env** file (_if it does not exist, you can create one_) with your favourite text editor and add the following lines:
+Environment variables are added by adding lines to **.env** file in **formpress** root directory. Open **.env** file (_if it does not exist, you can create one_) with your favourite text editor and add the following lines:
 
 #### **1. JSON Web Token**
 
@@ -99,6 +99,20 @@ FILE_UPLOAD_BUCKET=BUCKET
 Features disabled if this variable is unset:
 
 - File upload
+
+#### **6. Admin Account Credentials**
+
+These are the environment variables for admin account as the name suggests.
+
+```sh
+ADMINEMAIL=someid
+ADMINPASSWORD=somepassword
+```
+
+Unless these variables are set, default credentials for the initial admin account will be:
+
+- **E-Mail**: admin@formpress.org
+- **Password**: admin
 
 ## License
 

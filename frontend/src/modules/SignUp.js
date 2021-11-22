@@ -4,6 +4,7 @@ import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 
 import './SignUp.css'
 
@@ -80,8 +81,8 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    const isMailEnvSet = false //To be changed with capabilities middleware.
-    const signUpSuccess = isMailEnvSet ? (
+    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
+    const signUpSuccess = capabilities.Mail ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
@@ -189,9 +190,15 @@ class SignUp extends Component {
 }
 
 const SignUpWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <SignUp {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <SignUp {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default SignUpWrapped
