@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, NavLink, Switch, Route } from 'react-router-dom'
+import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { cloneDeep } from 'lodash'
 import {
@@ -140,10 +140,14 @@ class Builder extends Component {
       this.setState({ loading: true })
     }
 
-    const { data } = await api({
+    const { data, status } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
+    if (status === 403) {
+      this.setState({redirect:true})
 
+      return
+    }
     if (typeof data.props === 'undefined') {
       this.setState({
         loading: false
@@ -202,6 +206,7 @@ class Builder extends Component {
     super(props)
     this.state = {
       counter: 0,
+      redirect: false,
       saving: false,
       loading: false,
       dragging: false,
@@ -774,6 +779,17 @@ class Builder extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+
+      return (
+        <Redirect
+          to={{
+            pathname: '/forms',
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     const { params } = this.props.match
     const { formId, questionId } = params
     const tabs = [

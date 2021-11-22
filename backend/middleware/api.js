@@ -6,7 +6,8 @@ const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId,
-  userShouldOwnSubmission
+  userShouldOwnSubmission,
+  userShouldOwnForm
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
@@ -132,6 +133,7 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id'),
     async (req, res) => {
       const { form_id } = req.params
       const db = await getPool()

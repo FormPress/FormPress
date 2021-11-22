@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faEye, faTrash, faPen, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
 
 import { api } from '../helper'
@@ -89,6 +89,21 @@ class Forms extends Component {
 
     return (
       <div className="forms">
+      {roleLimit === 0 || roleLimit > forms.length ? (
+        <div className="nav_add_new_form_container">
+          <Link
+            to="/editor/new/builder"
+            className="nav_add_new_form_link">
+            <div className="popover-container">
+              <FontAwesomeIcon
+                icon={faPlusCircle}
+                title="Add New Form"
+                className="nav_add_new_form_logo"
+              />
+              <div className="popoverText">Create a new form</div>
+            </div>
+          </Link>
+        </div>):""}
         <div className="headerContainer"></div>
         <div className="formsContent">
           <Table
