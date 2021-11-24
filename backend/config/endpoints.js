@@ -127,8 +127,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/server/capabilities',
+      path: '/api/server/capabilities'
     }
   ]
 }

@@ -42,10 +42,10 @@ let initialAuthObject = {
 }
 
 let capabilities = {
-  GCred: false,
-  Mail: false,
-  GLogin: false,
-  Bucket: false
+  googleServiceAccountCredentials: false,
+  sendgridApiKey: false,
+  googleCredentialsClientID: false,
+  fileUploadBucket: false
 }
 
 if (auth !== null) {
@@ -74,11 +74,11 @@ class App extends Component {
 
   async componentDidMount() {
     const result = await api({
-      resource: `/server/capabilities`,
+      resource: `/api/server/capabilities`,
       method: 'get'
     })
-    const isEnvVarSet = result.data
-    this.setState({ capabilities: isEnvVarSet })
+    const isEnvironmentVariableSet = result.data
+    this.setState({ capabilities: isEnvironmentVariableSet })
   }
 
   handleSetAuth({ email, user_id, token, loggedIn, exp }, persist = true) {
@@ -104,7 +104,6 @@ class App extends Component {
 
   render() {
     const auth = this.getAuthContextValue()
-    // const capabilities = this.state.capabilities
     let homeUrl = undefined
     if (process.env.REACT_APP_HOMEURL !== '') {
       homeUrl = process.env.REACT_APP_HOMEURL

@@ -135,7 +135,11 @@ class Builder extends Component {
     }
 
     const capabilities = this.props.capabilities
-    if (capabilities.Bucket === false || capabilities.GCred === false) {
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
       //Removal of the elements of which the environment variables are unset.
       const removeUnavailableElems = (element) => {
         return element.type !== 'FileUpload'

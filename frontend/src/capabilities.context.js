@@ -1,10 +1,10 @@
 import React from 'react'
 
 const CapabilitiesContext = React.createContext({
-  GCred: false,
-  Mail: false,
-  GLogin: false,
-  Bucket: false
+  googleServiceAccountCredentials: false,
+  sendgridApiKey: false,
+  googleCredentialsClientID: false,
+  fileUploadBucket: false
 })
 
 export default CapabilitiesContext

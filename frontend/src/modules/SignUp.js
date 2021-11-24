@@ -82,7 +82,7 @@ class SignUp extends Component {
   render() {
     const { message, success, email } = this.state
     const capabilities = this.props.capabilities //To be changed with capabilities middleware.
-    const signUpSuccess = capabilities.Mail ? (
+    const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">

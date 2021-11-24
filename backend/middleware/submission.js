@@ -8,8 +8,8 @@ const { getPool } = require(path.resolve('./', 'db'))
 const { storage, submissionhandler } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-const isEnvVarSet = {
-  Mail: process.env.SENDGRID_API_KEY !== ''
+const isEnvironmentVariableSet = {
+  sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
 
 const findQuestionType = (form, qid) => {
@@ -125,7 +125,7 @@ module.exports = (app) => {
     let tyPageTitle = 'Thank you!'
 
     let tyPageText = ''
-    if (isEnvVarSet.Mail) {
+    if (isEnvironmentVariableSet.sendgridApiKey) {
       tyPageText =
         'Your submission has been successfully sent and we informed the form owner about your submission.'
     } else {
@@ -171,7 +171,7 @@ module.exports = (app) => {
       sendEmailTo !== false &&
       sendEmailTo !== undefined &&
       sendEmailTo !== '' &&
-      isEnvVarSet.Mail !== false
+      isEnvironmentVariableSet.sendgridApiKey !== false
     ) {
       const FRONTEND =
         FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST

@@ -172,7 +172,7 @@ class Login extends Component {
               {state === 'loading' ? 'Loading...' : null}
               {state === 'done' ? message : null}
             </p>
-            {capabilities.Mail ? (
+            {capabilities.sendgridApiKey ? (
               <div className="forgot-pass" title="WIP">
                 <span className="forgot-pass-span">
                   <Link to="/forgotpassword">
@@ -183,7 +183,7 @@ class Login extends Component {
             ) : (
               ''
             )}
-            {capabilities.GLogin ? (
+            {capabilities.googleCredentialsClientID ? (
               <div>
                 <div className="or-seperator">or</div>
                 <div className="google-sign-in">

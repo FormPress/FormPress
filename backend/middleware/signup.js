@@ -5,8 +5,8 @@ const devPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
-const isEnvVarSet = {
-  Mail: process.env.SENDGRID_API_KEY !== ''
+const isEnvironmentVariableSet = {
+  sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
 const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 
@@ -33,7 +33,7 @@ module.exports = (app) => {
         VALUES
       ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
-      if (isEnvVarSet.Mail == false) {
+      if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(
           `
             UPDATE \`user\` SET \`emailVerified\` = 1 WHERE id = ?
@@ -75,7 +75,7 @@ module.exports = (app) => {
         html: htmlBody
       }
 
-      if (isEnvVarSet.Mail) {
+      if (isEnvironmentVariableSet.sendgridApiKey) {
         try {
           console.log('sending verify email ', msg)
           sgMail.send(msg)

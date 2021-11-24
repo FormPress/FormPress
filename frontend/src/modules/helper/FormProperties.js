@@ -58,7 +58,7 @@ class FormProperties extends Component {
     let tyPageText =
       'Your submission has been successfully sent and we informed the form owner about your submission.'
 
-    if (capabilities.Mail === false) {
+    if (capabilities.sendgridApiKey === false) {
       tyPageText = 'Your submission has been successfully sent.'
     }
 
@@ -68,7 +68,7 @@ class FormProperties extends Component {
     return (
       <div>
         <h2>Form Properties</h2>
-        {capabilities.Mail ? (
+        {capabilities.sendgridApiKey ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
             theme="infernal"

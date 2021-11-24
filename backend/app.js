@@ -3,11 +3,12 @@ const path = require('path')
 const fs = require('fs')
 const fileUpload = require('express-fileupload')
 
-const isEnvVarSet = {
-  GCred: process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
-  Mail: process.env.SENDGRID_API_KEY !== '',
-  GLogin: process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
-  Bucket: process.env.FILE_UPLOAD_BUCKET !== ''
+const isEnvironmentVariableSet = {
+  googleServiceAccountCredentials:
+    process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
+  sendgridApiKey: process.env.SENDGRID_API_KEY !== '',
+  googleCredentialsClientID: process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
+  fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
 }
 
 let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
@@ -63,7 +64,8 @@ apiMiddleware(app)
 loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)
-if (isEnvVarSet.Mail) {
+
+if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)
   forgotPasswordMiddleware(app)
   resetPasswordMiddleware(app)
@@ -86,22 +88,22 @@ if (process.env.FP_ENV === 'production') {
 }
 
 //Checking of environment variables. Console logs for server capabilities.
-if (isEnvVarSet.Mail === false) {
+if (isEnvironmentVariableSet.sendgridApiKey === false) {
   console.log(
     '[WARN] SendGrid environment variable is not set. E-mail delivery and related features are disabled.'
   )
 }
-if (isEnvVarSet.GLogin === false) {
+if (isEnvironmentVariableSet.googleCredentialsClientID === false) {
   console.log(
     '[WARN] Google Client ID environment variable is not set. Google Sign-In is disabled.'
   )
 }
-if (isEnvVarSet.Bucket === false) {
+if (isEnvironmentVariableSet.fileUploadBucket === false) {
   console.log(
     '[WARN] FileBucket environment variable is not set. File upload is disabled.'
   )
 }
-if (isEnvVarSet.GCred === false) {
+if (isEnvironmentVariableSet.googleServiceAccountCredentials === false) {
   console.log(
     '[WARN] Google Service Account Credentials environment variable is not set. Google Cloud service & file upload are disabled.'
   )
