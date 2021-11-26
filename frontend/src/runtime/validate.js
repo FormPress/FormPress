@@ -1,5 +1,4 @@
 ;(async () => {
-  console.log('VALIDATE LOADED')
   const valids = {}
 
   for (const elem of FORMPRESS.elements) {
@@ -43,8 +42,6 @@
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    console.log('submit on going')
-    console.log(valids)
     const keys = Object.keys(valids)
     let allValid = true
     const errorsToTrigger = []
@@ -57,9 +54,7 @@
         errorsToTrigger.push(elem.id)
       }
     }
-    console.log('errorsToTrigger ', errorsToTrigger)
     if (allValid === false) {
-      console.log('not all valid should stop submission')
       event.preventDefault()
 
       for (const elem of errorsToTrigger) {
