@@ -95,49 +95,51 @@ class Forms extends Component {
               {
                 label: 'Name',
                 content: (form) => form.title,
-                className: 'name'
+                className: 'name',
+                title: ' '
               },
               {
                 label: 'Responses',
                 content: (form) => (
                   <div className="responseCount">{form.responseCount}</div>
-                )
+                ),
+                className: 'responses'
               },
               {
                 label: 'Created At',
                 content: (form) => [
                   <Moment fromNow ago date={form.created_at} key="1" />,
                   <span key="2">{' ago'}</span>
-                ]
+                ],
+                className: 'createdAt'
               },
               {
                 label: 'Actions',
                 content: (form) => (
                   <div className="actions">
-                    <span>
-                      <FontAwesomeIcon
-                        icon={faEye}
-                        title={
-                          form.published_version
-                            ? 'View Form'
-                            : 'You have to publish form to view'
-                        }
-                        onClick={
-                          form.published_version
-                            ? this.handlePreviewClick.bind(this, form)
-                            : undefined
-                        }
-                      />
+                    <span
+                      className={`${
+                        form.published_version ? 'view' : 'inactive_view'
+                      }`}
+                      title={
+                        form.published_version
+                          ? 'View Form'
+                          : 'You have to publish form to view'
+                      }
+                      onClick={
+                        form.published_version
+                          ? this.handlePreviewClick.bind(this, form)
+                          : undefined
+                      }>
+                      <FontAwesomeIcon icon={faEye} />
                     </span>
-                    <span>
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        title="Delete Form"
-                        onClick={this.handleFormDeleteClick.bind(this, form)}
-                      />
+                    <span
+                      title="Delete Form"
+                      onClick={this.handleFormDeleteClick.bind(this, form)}>
+                      <FontAwesomeIcon icon={faTrash} />
                     </span>
-                    <Link to={`/editor/${form.id}/builder`}>
-                      <FontAwesomeIcon icon={faPen} title="Edit Form" />
+                    <Link to={`/editor/${form.id}/builder`} title="Edit Form">
+                      <FontAwesomeIcon icon={faPen} />
                     </Link>
                   </div>
                 )

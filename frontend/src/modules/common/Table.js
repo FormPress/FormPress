@@ -44,13 +44,24 @@ export default class Table extends Component {
         props.className = this.props.getTrClassName(row)
       }
 
+      if (typeof this.props.getTrTitle !== 'undefined') {
+        props.title = this.props.getTrTitle(row)
+      }
+
       return (
         <tr key={rowKey} {...props}>
           {this.props.columns.map((column, keyColumn) => {
             const props = {}
+            const maxNameLength = 68
 
             if (typeof column.className !== 'undefined') {
               props.className = column.className
+            }
+
+            if (typeof column.title !== 'undefined') {
+              if (column.content(row).length >= maxNameLength) {
+                props.title = column.content(row)
+              }
             }
 
             return (
