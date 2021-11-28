@@ -10,7 +10,7 @@ module "vpc" {
   source  = "terraform-google-modules/network/google"
   version = "~> 3.3.0"
 
-  project_id   = var.project_id
+  project_id   = var.project
   network_name = "formpress-default"
   routing_mode = "GLOBAL"
 
@@ -38,7 +38,7 @@ module "vpc" {
 
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
-  project_id                 = var.project_id
+  project_id                 = var.project
   name                       = var.cluster_name
   region                     = var.region
   zones                      = var.zones
