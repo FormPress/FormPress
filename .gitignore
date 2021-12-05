@@ -13,3 +13,4 @@ k8s
 node_modules
 **/.DS_Store
 
+ignore*.sh
