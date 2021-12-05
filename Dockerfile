@@ -8,7 +8,8 @@ ENV REACT_APP_FP_ENV="production"
 ENV REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
 ENV REACT_APP_HOMEURL="https://stage.formpress.org"
 
-ENV PLUGIN_URL
+ARG PLUGIN_URL
+ARG PRIVATE_TOKEN
 
 ADD frontend /frontend
 
