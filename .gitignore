@@ -8,7 +8,7 @@ frontend/node_modules
 
 **/settings/*.plugin.js
 **/settings/*.plugin.css
-
+**/plugins/*.plugin.js
 k8s
 node_modules
 **/.DS_Store

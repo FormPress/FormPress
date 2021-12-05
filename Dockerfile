@@ -8,7 +8,15 @@ ENV REACT_APP_FP_ENV="production"
 ENV REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
 ENV REACT_APP_HOMEURL="https://stage.formpress.org"
 
+ENV PLUGIN_URL
+
 ADD frontend /frontend
+
+RUN mkdir /scripts
+ADD scripts /scripts
+
+RUN cd /scripts && ./install_plugin.sh
+
 RUN cd /frontend &&\
   yarn &&\
   yarn build
