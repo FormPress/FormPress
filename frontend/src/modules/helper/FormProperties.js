@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
+import CapabilitiesContext from '../../capabilities.context'
 
-export default class FormProperties extends Component {
+class FormProperties extends Component {
   constructor(props) {
     super(props)
 
@@ -36,6 +37,7 @@ export default class FormProperties extends Component {
   }
 
   render() {
+    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
@@ -56,28 +58,36 @@ export default class FormProperties extends Component {
     let tyPageText =
       'Your submission has been successfully sent and we informed the form owner about your submission.'
 
+    if (capabilities.sendgridApiKey === false) {
+      tyPageText = 'Your submission has been successfully sent.'
+    }
+
     if (matchingIntegration('tyPageText').length > 0) {
       tyPageText = matchingIntegration('tyPageText')[0].value
     }
     return (
       <div>
         <h2>Form Properties</h2>
-        <Renderer
-          handleFieldChange={this.handleEmailChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 1,
-                  type: 'TextBox',
-                  label: 'Send submission notifications to',
-                  value: email
-                }
-              ]
-            }
-          }}
-        />
+        {capabilities.sendgridApiKey ? (
+          <Renderer
+            handleFieldChange={this.handleEmailChange}
+            theme="infernal"
+            form={{
+              props: {
+                elements: [
+                  {
+                    id: 1,
+                    type: 'TextBox',
+                    label: 'Send submission notifications to',
+                    value: email
+                  }
+                ]
+              }
+            }}
+          />
+        ) : (
+          ''
+        )}
         <Renderer
           handleFieldChange={this.handleTyPageTitleChange}
           theme="infernal"
@@ -103,7 +113,7 @@ export default class FormProperties extends Component {
                 {
                   id: 3,
                   type: 'TextArea',
-                  label: 'Thank you page title',
+                  label: 'Thank you page text',
                   value: tyPageText
                 }
               ]
@@ -114,3 +124,13 @@ export default class FormProperties extends Component {
     )
   }
 }
+
+const FormPropertiesWrapped = (props) => (
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <FormProperties {...props} capabilities={capabilities} />
+    )}
+  </CapabilitiesContext.Consumer>
+)
+
+export default FormPropertiesWrapped

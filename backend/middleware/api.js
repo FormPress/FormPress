@@ -580,4 +580,16 @@ module.exports = (app) => {
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
     })
   })
+
+  app.get('/api/server/capabilities', async (req, res) => {
+    const isEnvironmentVariableSet = {
+      googleServiceAccountCredentials:
+        process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
+      sendgridApiKey: process.env.SENDGRID_API_KEY !== '',
+      googleCredentialsClientID:
+        process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
+      fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
+    }
+    res.json(isEnvironmentVariableSet)
+  })
 }
