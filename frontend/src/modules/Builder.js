@@ -167,7 +167,7 @@ class Builder extends Component {
       return
     }
 
-    const props = JSON.parse(data.props)
+    const props = data.props
     const form = {
       ...data,
       props

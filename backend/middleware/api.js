@@ -12,7 +12,8 @@ const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
-const { storage } = require(path.resolve('helper'))
+const { storage, model } = require(path.resolve('helper'))
+const formModel = model.form
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   './',
   'helper',
@@ -136,24 +137,23 @@ module.exports = (app) => {
       const { form_id } = req.params
       const db = await getPool()
 
-      let query = `SELECT * FROM \`form\` WHERE id = ? LIMIT 1`
-
       if (req.query.published === 'true') {
-        query = `
+        let query = `
           SELECT *
           FROM \`form_published\`
           WHERE form_id = ?
           ORDER BY \`version\` DESC
           LIMIT 1
         `
-      }
+        const result = await db.query(query, [form_id])
 
-      const result = await db.query(query, [form_id])
-
-      if (result.length === 1) {
-        res.json(result[0])
+        if (result.length === 1) {
+          res.json(result[0])
+        } else {
+          res.json({})
+        }
       } else {
-        res.json({})
+        res.json((await formModel.get({ form_id })) || {})
       }
     }
   )
@@ -161,21 +161,8 @@ module.exports = (app) => {
   // return form questions
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     const { form_id } = req.params
-    const db = await getPool()
-    const result = await db.query(
-      `
-        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `,
-      [form_id]
-    )
 
-    if (result.length === 1) {
-      const form = result[0]
-
-      res.json(JSON.parse(form.props).elements)
-    } else {
-      res.json({})
-    }
+    res.json((await formModel.get({ form_id })).props.elements || [])
   })
 
   // publish form, takes latest form and publishes it
@@ -186,17 +173,11 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id, form_id } = req.params
       const db = await getPool()
-      const result = await db.query(
-        `
-        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `,
-        [form_id]
-      )
 
-      if (result.length === 1) {
-        const form = result[0]
+      const form = await formModel.get({ form_id })
 
-        form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
+      if (form !== false) {
+        form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
         form.props = JSON.stringify(form.props)
 
@@ -247,13 +228,8 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { form_id } = req.params
-      const db = await getPool()
-      await db.query(
-        `
-        UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
-      `,
-        [form_id]
-      )
+
+      await formModel.delete({ form_id })
 
       res.json({ message: 'deleted' })
     }
