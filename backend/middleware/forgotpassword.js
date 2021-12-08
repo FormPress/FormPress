@@ -80,10 +80,10 @@ module.exports = (app) => {
       }
 
       try {
-        console.log('sending reset password email ', msg)
+        console.log('sending password reset email ', msg)
         sgMail.send(msg)
       } catch (e) {
-        console.log('Error while sending reset password email ', e)
+        console.log('Error while sending password reset email ', e)
       }
 
       res.status(200).json({

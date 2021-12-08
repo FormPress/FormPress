@@ -24,14 +24,14 @@ export default class Name extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Change the type of prefix field to TextBox.']
+        options: ['Change the type of title field to TextBox.']
       }
     },
     prefixOptions: {
       default: ['Mr.', 'Mrs.'],
       formProps: {
         type: 'TextArea',
-        label: 'Enter Prefix Options'
+        label: 'Preset Title Options'
       }
     },
     middleName: {
