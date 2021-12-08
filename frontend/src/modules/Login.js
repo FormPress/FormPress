@@ -5,6 +5,7 @@ import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
@@ -117,6 +118,8 @@ class Login extends Component {
       )
     }
 
+    const capabilities = this.props.capabilities
+
     return (
       <div className="login-wrapper">
         <div className="loginForm">
@@ -169,20 +172,32 @@ class Login extends Component {
               {state === 'loading' ? 'Loading...' : null}
               {state === 'done' ? message : null}
             </p>
-            <div className="forgot-pass" title="WIP">
-              <span className="forgot-pass-span">
-                <Link to="/forgotpassword">
-                  &nbsp;<i>Forgot password?</i>
-                </Link>
-              </span>
-            </div>
-            <div className="or-seperator">or</div>
-            <div className="google-sign-in">
-              <LoginWithGoogle
-                handleLoginWithGoogleButton={this.handleLoginWithGoogleClick}
-                handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
-              />
-            </div>
+            {capabilities.sendgridApiKey ? (
+              <div className="forgot-pass" title="WIP">
+                <span className="forgot-pass-span">
+                  <Link to="/forgotpassword">
+                    &nbsp;<i>Forgot password?</i>
+                  </Link>
+                </span>
+              </div>
+            ) : (
+              ''
+            )}
+            {capabilities.googleCredentialsClientID ? (
+              <div>
+                <div className="or-seperator">or</div>
+                <div className="google-sign-in">
+                  <LoginWithGoogle
+                    handleLoginWithGoogleButton={
+                      this.handleLoginWithGoogleClick
+                    }
+                    handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+                  />
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
               <Link to="/signup">
@@ -209,9 +224,15 @@ class Login extends Component {
 }
 
 const LoginWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Login {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Login {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default LoginWrapped
