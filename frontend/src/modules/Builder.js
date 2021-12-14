@@ -177,12 +177,6 @@ class Builder extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
 
-    if (typeof publishedFormResult.data.props !== 'undefined') {
-      publishedFormResult.data.props = JSON.parse(
-        publishedFormResult.data.props
-      )
-    }
-
     this.setState({
       loading: false,
       form,
@@ -211,6 +205,11 @@ class Builder extends Component {
     }
 
     this.setState({ form })
+  }
+
+  setCSS(cssProp) {
+    const { form } = this.state
+    this.setState((form.props.customCSS = cssProp))
   }
 
   constructor(props) {
@@ -249,7 +248,11 @@ class Builder extends Component {
               type: 'Button',
               buttonText: 'Submit'
             }
-          ]
+          ],
+          customCSS: {
+            value: '',
+            isEncoded: false
+          }
         }
       }
     }
@@ -271,6 +274,7 @@ class Builder extends Component {
     this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
+    this.setCSS = this.setCSS.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -901,7 +905,11 @@ class Builder extends Component {
           </div>
         </Route>
         <Route path="/editor/:formId/builder/properties">
-          <FormProperties form={form} setIntegration={this.setIntegration} />
+          <FormProperties
+            form={form}
+            setIntegration={this.setIntegration}
+            setCSS={this.setCSS}
+          />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (

@@ -13,6 +13,7 @@ class FormProperties extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
+    this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -33,6 +34,13 @@ class FormProperties extends Component {
     this.props.setIntegration({
       type: 'tyPageText',
       value: e.target.value
+    })
+  }
+
+  handleCustomCSSTextChange(elem, e) {
+    this.props.setCSS({
+      value: e.target.value,
+      isEncoded: false
     })
   }
 
@@ -65,6 +73,13 @@ class FormProperties extends Component {
     if (matchingIntegration('tyPageText').length > 0) {
       tyPageText = matchingIntegration('tyPageText')[0].value
     }
+
+    let customCSS = ''
+
+    if (this.props.form.props.customCSS !== undefined) {
+      customCSS = this.props.form.props.customCSS.value
+    }
+
     return (
       <div>
         <h2>Form Properties</h2>
@@ -115,6 +130,22 @@ class FormProperties extends Component {
                   type: 'TextArea',
                   label: 'Thank you page text',
                   value: tyPageText
+                }
+              ]
+            }
+          }}
+        />
+        <Renderer
+          handleFieldChange={this.handleCustomCSSTextChange}
+          theme="infernal"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 4,
+                  type: 'TextArea',
+                  label: 'Add custom CSS',
+                  value: customCSS
                 }
               ]
             }
