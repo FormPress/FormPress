@@ -52,7 +52,12 @@ module.exports = async (db) => {
 
   await db.query(`
     ALTER TABLE \`form\`
-    MODIFY \`updated_at\` datetime ON UPDATE CURRENT_TIMESTAMP
+    MODIFY \`updated_at\` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `)
+
+  await db.query(`
+    ALTER TABLE \`form\`
+    ADD INDEX updated_at (\`updated_at\`)
   `)
 
   await db.query(`

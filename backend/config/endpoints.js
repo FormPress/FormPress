@@ -124,6 +124,13 @@ module.exports = {
         '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
       protected: true,
       exampleRequestPath: '/api/users/1/forms/1/submissions/1/questions/1'
+    },
+    {
+      method: 'get',
+      path:
+        '/api/users/:user_id/editor',
+      protected: true,
+      exampleRequestPath: '/api/users/1/editor'
     }
   ]
 }

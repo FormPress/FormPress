@@ -126,8 +126,14 @@ class Builder extends Component {
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
-      if (lastEditedFormId !== null) {
+      if (lastEditedFormId !== undefined && lastEditedFormId !== null ) {
         this.props.history.push(`/editor/${lastEditedFormId}/builder`)
+        setTimeout(() => {
+          this.componentDidMount()
+        }, 1)
+      } else {
+        const { data } = await api({resource: `/api/users/${this.props.auth.user_id}/editor`})
+        this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)

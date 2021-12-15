@@ -88,3 +88,46 @@ exports.userShouldOwnForm = (user_id, form_id) => async (req, res, next) => {
     res.status(200).json({ message: 'Form not found' })
   }
 }
+
+exports.userHavePermission = (req, res, next) => {
+  const form = req.body
+  const elements = form.props.elements
+  let isForbidden = false
+
+  for (let i = 0; i < elements.length; i++) {
+    const element = elements[i]
+    const elementType = element.type
+
+    if (!res.locals.auth.permission[elementType]) {
+      isForbidden = true
+      break
+    }
+  }
+
+  if (isForbidden) {
+
+    res.status(403).json({ message: 'You don\'t have permission for this element'})
+
+  } else {
+
+    next()
+  }
+}
+
+exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
+  const db = await getPool()
+  const result = await db.query(
+    `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ?`,
+    [req.params[user_id]]
+  )
+
+  if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+
+    next()
+
+  } else {
+
+    res.status(403).send({message: 'Form limit reached'})
+  }
+
+}

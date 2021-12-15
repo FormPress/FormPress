@@ -68,6 +68,7 @@ class Forms extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
+    window.localStorage.removeItem('lastEditedFormId')
 
     this.updateForms()
   }
