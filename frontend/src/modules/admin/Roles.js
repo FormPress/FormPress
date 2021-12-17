@@ -255,7 +255,9 @@ class Roles extends Component {
         </div>
         <div className="rolepands">
           <div className="rolepermission">{this.renderRolePermissions()}</div>
-          <div className="savedornot">{this.state.saved ? 'Saved' : 'Changes do not saved'}</div>
+          <div className="savedornot">
+            {this.state.saved ? 'Saved' : 'Changes do not saved'}
+          </div>
           <div className="servermessage">Status: {this.state.message}</div>
         </div>
       </div>
