@@ -1,4 +1,3 @@
-.header > .mainTabs > a,
 .header > .mainTabs > a {
   color: #1c5c85;
   display: inline-block;
@@ -8,8 +7,17 @@
   text-decoration: none;
 }
 
+.header > .mainTabs > a:hover {
+  background-color: #719fbd;
+}
+
 .header > .mainTabs > a.selected,
 .header > .mainTabs > a.selected {
   background-color: #1c5c85;
   color: #ffffff;
+}
+
+.mainTabs {
+  background-color: #e2e2e2;
+  padding-left: 30px;
 }

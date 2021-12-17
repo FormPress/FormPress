@@ -227,11 +227,11 @@ class Roles extends Component {
   render() {
     const { data, loaded } = this.state
     return (
-      <div>
-        <ul>
+      <div className="rolewrap">
+        <div className="col-4-16 rolelist">
           {loaded &&
             data.map((role) => (
-              <li
+              <div
                 className={
                   this.state.selectedRoleId === role.id
                     ? 'selectedrole'
@@ -241,9 +241,9 @@ class Roles extends Component {
                 value={role.id}
                 onClick={() => this.handleSelectRole(role.id)}>
                 {role.name}
-              </li>
+              </div>
             ))}
-          <li
+          <div
             className={
               this.state.selectedRoleId === 0 ? 'selectedrole' : 'role'
             }
@@ -251,11 +251,13 @@ class Roles extends Component {
             value={0}
             onClick={() => this.handleSelectRole(0, '')}>
             Create New
-          </li>
-        </ul>
-        <div>{this.renderRolePermissions()}</div>
-        <div>{this.state.saved ? 'Saved' : 'Changes do not saved'}</div>
-        <div>Status: {this.state.message}</div>
+          </div>
+        </div>
+        <div className="rolepands">
+          <div className="rolepermission">{this.renderRolePermissions()}</div>
+          <div className="savedornot">{this.state.saved ? 'Saved' : 'Changes do not saved'}</div>
+          <div className="servermessage">Status: {this.state.message}</div>
+        </div>
       </div>
     )
   }

@@ -109,9 +109,14 @@ class Login extends Component {
     const { message, state } = this.state
 
     if (this.props.auth.loggedIn === true) {
-      const pathName = this.props.location.state
+      let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
+      //can't allow to return editor, when changing accounts old accounts form can be redirected
+      if (pathName.indexOf('editor') >= 0) {
+        pathName = '/forms'
+      }
+
       return (
         <Redirect
           to={{

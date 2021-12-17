@@ -39,7 +39,7 @@ class AdminPage extends Component {
       <div className="adminpage">
         <div className="headerContainer">
           <div className="header grid center">
-            <div className="col-15-16 mainTabs">
+            <div className="col-16-16 mainTabs">
               {tabs.map((item, key) => (
                 <NavLink
                   key={key}
