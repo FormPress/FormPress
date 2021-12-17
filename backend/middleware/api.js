@@ -171,26 +171,34 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res ) => {
       const { user_id } = req.params
-      const db = await getPool()
-      const result = await db.query(
-        `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL`,
-        [user_id]
-      )
 
-      if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+      if (res.locals.auth.permission.admiin) {
+
         res.status(200).json({ message : 'new'})
+
       } else {
-        const lastForm = await db.query(
-          `SELECT \`id\` FROM \`form\` WHERE user_id = ? ORDER BY \`updated_at\` DESC LIMIT 1`,
+        const db = await getPool()
+        const result = await db.query(
+          `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL`,
           [user_id]
         )
 
-        const lastFormId = lastForm[0].id
+        if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
 
-        res.status(200).json({message : lastFormId})
+          res.status(200).json({ message : 'new'})
+
+        } else {
+          const lastForm = await db.query(
+            `SELECT \`id\` FROM \`form\` WHERE user_id = ? ORDER BY \`updated_at\` DESC LIMIT 1`,
+            [user_id]
+          )
+          const lastFormId = lastForm[0].id
+
+          res.status(200).json({message : lastFormId})
+        }
       }
-
-  })
+    }
+  )
 
   // return form questions
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
