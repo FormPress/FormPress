@@ -27,13 +27,7 @@ class Forms extends Component {
     const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms`
     })
-
-    const forms = (data || []).map((form) => {
-      return {
-        ...form,
-        props: JSON.parse(form.props)
-      }
-    })
+    const forms = data
 
     this.setLoadingState('forms', false)
     this.setState({ forms })
