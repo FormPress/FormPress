@@ -131,6 +131,11 @@ module.exports = {
         '/api/users/:user_id/editor',
       protected: true,
       exampleRequestPath: '/api/users/1/editor'
+    },
+    {
+      method: 'get',
+      path: '/api/server/capabilities',
+      protected: false
     }
   ]
 }

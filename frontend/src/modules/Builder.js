@@ -23,6 +23,7 @@ import {
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
@@ -109,7 +110,7 @@ const getElementsKeys = () =>
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
+let pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
 
 class Builder extends Component {
   async componentDidMount() {
@@ -139,6 +140,21 @@ class Builder extends Component {
         }, 1)
       }
     }
+
+    const capabilities = this.props.capabilities
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
+      //Removal of the elements of which the environment variables are unset.
+      const removeUnavailableElems = (element) => {
+        return element.type !== 'FileUpload'
+      }
+      pickerElements = pickerElements.filter((element) =>
+        removeUnavailableElems(element)
+      )
+    }
   }
 
   async loadForm(formId, seamless = false) {
@@ -162,7 +178,7 @@ class Builder extends Component {
       return
     }
 
-    const props = JSON.parse(data.props)
+    const props = data.props
     const form = {
       ...data,
       props
@@ -171,12 +187,6 @@ class Builder extends Component {
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
-
-    if (typeof publishedFormResult.data.props !== 'undefined') {
-      publishedFormResult.data.props = JSON.parse(
-        publishedFormResult.data.props
-      )
-    }
 
     this.setState({
       loading: false,
@@ -206,6 +216,11 @@ class Builder extends Component {
     }
 
     this.setState({ form })
+  }
+
+  setCSS(cssProp) {
+    const { form } = this.state
+    this.setState((form.props.customCSS = cssProp))
   }
 
   constructor(props) {
@@ -245,7 +260,11 @@ class Builder extends Component {
               type: 'Button',
               buttonText: 'Submit'
             }
-          ]
+          ],
+          customCSS: {
+            value: '',
+            isEncoded: false
+          }
         }
       }
     }
@@ -267,6 +286,7 @@ class Builder extends Component {
     this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
+    this.setCSS = this.setCSS.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -937,7 +957,11 @@ class Builder extends Component {
           </div>
         </Route>
         <Route path="/editor/:formId/builder/properties">
-          <FormProperties form={form} setIntegration={this.setIntegration} />
+          <FormProperties
+            form={form}
+            setIntegration={this.setIntegration}
+            setCSS={this.setCSS}
+          />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (
@@ -1072,9 +1096,15 @@ class Builder extends Component {
 }
 
 const BuilderWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Builder {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Builder {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default BuilderWrapped

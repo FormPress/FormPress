@@ -31,6 +31,13 @@ export default class Renderer extends Component {
 
     className += ` ${this.props.mode} ${theme}`
 
+    let encodedCSS
+    if (this.props.form.props.customCSS !== undefined) {
+      const decodedCSS = this.props.form.props.customCSS.value
+      const buff = Buffer.from(decodedCSS, 'utf8')
+      encodedCSS = buff.toString('base64')
+    }
+
     return (
       <div className={className} {...builderHandlers}>
         {this.props.form.props.elements.map((elem) => {
@@ -103,6 +110,14 @@ export default class Renderer extends Component {
           this.props.dragging === true && (
             <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
           )}
+
+        {this.props.form.props.customCSS === undefined ? null : (
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href={'data:text/css;base64, ' + encodedCSS}
+          />
+        )}
       </div>
     )
   }

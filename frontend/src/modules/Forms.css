@@ -23,9 +23,31 @@
   border-bottom: none;
 }
 
+.forms table.fp_table > thead > tr > th.mw {
+  width: 20px;
+}
+
+.forms table.fp_table > thead > tr > th.name {
+  width: 700px;
+}
+
+.forms table.fp_table > thead > tr > th.responses {
+  width: 140px;
+}
+
+.forms table.fp_table > thead > tr > th.createdAt {
+  width: 140px;
+}
+
 .forms table.fp_table > tbody > tr > td.name {
   color: #333333;
   font-size: 18px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 680px;
+  margin-top: 19.6px;
 }
 
 .forms table.fp_table .responseCount {
@@ -46,6 +68,11 @@
 
 .forms table.fp_table tr:hover .actions {
   visibility: visible;
+}
+
+.forms table.fp_table tr .actions > .inactive_view:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
 }
 
 .forms table.fp_table tr .actions > * {
