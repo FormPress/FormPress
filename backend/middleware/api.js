@@ -98,16 +98,15 @@ module.exports = (app) => {
   )
 
   //return new or last updated form
-  app.get('/api/users/:user_id/editor',
+  app.get(
+    '/api/users/:user_id/editor',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
-    async (req, res ) => {
+    async (req, res) => {
       const { user_id } = req.params
 
       if (res.locals.auth.permission.admiin) {
-
-        res.status(200).json({ message : 'new'})
-
+        res.status(200).json({ message: 'new' })
       } else {
         const db = await getPool()
         const result = await db.query(
@@ -116,9 +115,7 @@ module.exports = (app) => {
         )
 
         if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
-
-          res.status(200).json({ message : 'new'})
-
+          res.status(200).json({ message: 'new' })
         } else {
           const lastForm = await db.query(
             `SELECT \`id\` FROM \`form\` WHERE user_id = ? ORDER BY \`updated_at\` DESC LIMIT 1`,
@@ -126,7 +123,7 @@ module.exports = (app) => {
           )
           const lastFormId = lastForm[0].id
 
-          res.status(200).json({message : lastFormId})
+          res.status(200).json({ message: lastFormId })
         }
       }
     }

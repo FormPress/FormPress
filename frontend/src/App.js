@@ -26,7 +26,6 @@ import AdminPage from './modules/admin/AdminPage'
 
 import { Logo } from './svg'
 
-
 import './App.css'
 import './style/themes/infernal.css'
 
@@ -160,7 +159,9 @@ class App extends Component {
                                 </NavLink>
                               </li>,
                               <li key="3">
-                                <NavLink to="/editor" activeClassName="selected">
+                                <NavLink
+                                  to="/editor"
+                                  activeClassName="selected">
                                   Editor
                                 </NavLink>
                               </li>,
@@ -177,7 +178,9 @@ class App extends Component {
                                 </NavLink>
                               </li>,
                               <li key="3">
-                                <NavLink to="/signup" activeClassName="selected">
+                                <NavLink
+                                  to="/signup"
+                                  activeClassName="selected">
                                   Sign Up
                                 </NavLink>
                               </li>

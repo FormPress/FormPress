@@ -127,13 +127,15 @@ class Builder extends Component {
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
-      if (lastEditedFormId !== undefined && lastEditedFormId !== null ) {
+      if (lastEditedFormId !== undefined && lastEditedFormId !== null) {
         this.props.history.push(`/editor/${lastEditedFormId}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)
       } else {
-        const { data } = await api({resource: `/api/users/${this.props.auth.user_id}/editor`})
+        const { data } = await api({
+          resource: `/api/users/${this.props.auth.user_id}/editor`
+        })
         this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
           this.componentDidMount()
@@ -166,7 +168,7 @@ class Builder extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
     if (status === 403) {
-      this.setState({redirect:true})
+      this.setState({ redirect: true })
 
       return
     }
@@ -806,7 +808,6 @@ class Builder extends Component {
 
   render() {
     if (this.state.redirect) {
-
       return (
         <Redirect
           to={{

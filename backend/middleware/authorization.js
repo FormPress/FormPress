@@ -94,9 +94,7 @@ exports.userHavePermission = (req, res, next) => {
   const elements = form.props.elements
   let isForbidden = false
   if (res.locals.auth.permission.admin) {
-
     next()
-
   } else {
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i]
@@ -109,11 +107,10 @@ exports.userHavePermission = (req, res, next) => {
     }
 
     if (isForbidden) {
-
-      res.status(403).json({ message: 'You don\'t have permission for this element'})
-
+      res
+        .status(403)
+        .json({ message: "You don't have permission for this element" })
     } else {
-
       next()
     }
   }
@@ -121,9 +118,7 @@ exports.userHavePermission = (req, res, next) => {
 
 exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
   if (res.locals.auth.permission.admin) {
-
     next()
-
   } else {
     const db = await getPool()
     const result = await db.query(
@@ -132,12 +127,9 @@ exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
     )
 
     if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
-
       next()
-
     } else {
-
-      res.status(403).send({message: 'Form limit reached'})
+      res.status(403).send({ message: 'Form limit reached' })
     }
   }
 }

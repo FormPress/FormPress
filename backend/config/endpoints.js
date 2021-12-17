@@ -127,8 +127,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/users/:user_id/editor',
+      path: '/api/users/:user_id/editor',
       protected: true,
       exampleRequestPath: '/api/users/1/editor'
     },
