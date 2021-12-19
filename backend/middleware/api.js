@@ -55,7 +55,7 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     handleCreateForm
   )
-  
+
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
