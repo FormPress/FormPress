@@ -105,7 +105,10 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id } = req.params
 
-      if (res.locals.auth.permission.admin || res.locals.auth.permission.formLimit === 0) {
+      if (
+        res.locals.auth.permission.admin ||
+        res.locals.auth.permission.formLimit === 0
+      ) {
         res.status(200).json({ message: 'new' })
       } else {
         const db = await getPool()
