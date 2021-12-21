@@ -125,6 +125,12 @@ class App extends Component {
   render() {
     const auth = this.getAuthContextValue()
     let homeUrl = undefined
+    //after permission update old logged accounts create error dont have permissions
+    if (auth.permission === undefined) {
+      window.localStorage.removeItem('auth')
+      window.localStorage.removeItem('lastEditedFormId')
+      window.location.reload()
+    }
     if (process.env.REACT_APP_HOMEURL !== '') {
       homeUrl = process.env.REACT_APP_HOMEURL
     }

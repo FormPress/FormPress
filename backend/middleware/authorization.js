@@ -117,7 +117,7 @@ exports.userHavePermission = (req, res, next) => {
 }
 
 exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
-  if (res.locals.auth.permission.admin) {
+  if (res.locals.auth.permission.admin || res.locals.auth.permission.formLimit === 0) {
     next()
   } else {
     const db = await getPool()
