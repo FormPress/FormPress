@@ -37,19 +37,19 @@ class VerifyEMail extends Component {
     const { success, message, situation } = this.state
 
     const verificationInit = (
-      <div>
+      <div className="verification_back">
         <div>Please wait a moment while we verify your e-mail address.</div>
       </div>
     )
 
     const verificationFail = (
-      <div>
+      <div className="verification_back">
         <div>There seems to be a problem. {message}</div>
       </div>
     )
 
     const verificationSuccess = (
-      <div>
+      <div className="verification_back">
         <div>
           Your account have verified. You can
           <Link to="/login">
@@ -70,7 +70,7 @@ class VerifyEMail extends Component {
           </div>
           <div className="pale-border">
             <div>
-              <div className="form-header">VERFIY E-MAIL</div>
+              <div className="form-header">VERIFY E-MAIL</div>
               {situation === 'init'
                 ? verificationInit
                 : success

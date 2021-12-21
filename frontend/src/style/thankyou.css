@@ -25,23 +25,37 @@
 
 .testing {
   font-family: Montserrat;
-  font-size: 40px;
-  width: 494px;
-  height: 49px;
   color: #0071bc;
   font-size: 30px;
   font-weight: bold;
   margin-bottom: 10px;
+  width: calc(100% - 20px);
+  max-width: 640px;
+  line-height: 45px;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 .texting {
   font-weight: 500;
   font-size: 18px;
   font-family: Montserrat;
   color: #113952;
-  width: 494px;
-  height: 50px;
+  width: calc(100% - 20px);
+  max-width: 640px;
   margin-bottom: 20px;
   line-height: 1.56;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
 .note {
@@ -147,11 +161,15 @@
   .testing {
     text-align: center;
     font-size: 16px;
-    margin-bottom: 0px;
+    margin: 0 10px 10px;
+    width: calc(100% - 20px);
+    line-height: 25px;
   }
   .texting {
     text-align: center;
     font-size: 11px;
+    width: calc(100% - 20px);
+    margin: 0 10px 10px;
   }
   .submit-photo {
     width: 180px;
