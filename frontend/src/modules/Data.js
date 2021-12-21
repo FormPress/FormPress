@@ -251,7 +251,7 @@ class Data extends Component {
         <div className="formSelectorContainer center">
           <div className="formSelector cw center grid">
             <div
-              className="col-15-16"
+              className="col-15-16 formSelectorContent"
               onClick={() => {
                 this.setState({ formSelectorOpen: !formSelectorOpen })
               }}>

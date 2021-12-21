@@ -61,6 +61,8 @@ export default class QuestionProperties extends Component {
     return (
       <div>
         <h2>Question Properties</h2>
+        <h4>Selected element: {selectedField.config.type}</h4>
+
         <Renderer
           theme="infernal"
           className="questionPropertiesForm"

@@ -23,6 +23,9 @@
   line-height: 60px;
   cursor: pointer;
 }
+.data > .formSelectorContainer > .formSelector > .formSelectorContent {
+  overflow: hidden;
+}
 
 .data > .formSelectorContainer > .formSelector > .down {
   background-color: #719fbd;
@@ -35,7 +38,7 @@
   background-color: white;
   border-left: 8px solid #e2e2e2;
   border-bottom: 8px solid #719fbd;
-  max-height: 600px;
+  max-height: 520px;
   overflow: scroll;
 }
 
@@ -52,6 +55,7 @@
   height: 60px;
   line-height: 60px;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .data > .formSelectorContainer > .formSelectorOptions li:hover {
