@@ -319,7 +319,7 @@ class Builder extends Component {
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
 
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
 
     if (dragMode === 'insert') {
       //set auto increment element id
@@ -445,7 +445,7 @@ class Builder extends Component {
   handleLabelChange(id, value) {
     const form = { ...this.state.form }
 
-    form.props.elements = [...form.props.elements]
+    form.props.elements = cloneDeep([...form.props.elements])
 
     if (Number.isInteger(id) === false) {
       const questionID = id.split('_')[1]
