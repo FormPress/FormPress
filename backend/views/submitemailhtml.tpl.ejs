@@ -47,10 +47,10 @@
           let response = {}
           response.question = data.question
           if (data.type === 'Checkbox' && data.answer === 'off') {
-            response.answer = 'N/A'
+            response.answer = '-'
           } else if (data.type === 'FileUpload') {
             if (data.answer === '') {
-              response.answer = 'N/A'
+              response.answer = '-'
             } else {
               const value = JSON.parse(data.answer)
               const uriFileName = encodeURI(value.fileName)
@@ -62,7 +62,7 @@
             }
           } else {
             if (data.answer === '') {
-              response.answer = 'N/A'
+              response.answer = '-'
             } else {
               response.answer = data.answer
             }
@@ -89,7 +89,7 @@
                   <i><%= key%>: </i>
                 <%}%>
                 <% if (value === '') {%>
-                  N/A
+                  -
                 <%} else {%>
                   <%= value%>
                 <%}%>
@@ -97,8 +97,8 @@
               <%}
             } else if (response.type === 'FileUpload'){%>
               <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                <%if (response.answer === 'N/A') {%>
-                  N/A
+                <%if (response.answer === '-') {%>
+                  -
                 <%} else {%>
                   <a href="<%= response.answer.downloadLink %>"><%=response.answer.fileName%></a>
                 <%}%>
