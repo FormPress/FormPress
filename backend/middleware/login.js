@@ -48,14 +48,7 @@ module.exports = (app) => {
 
         jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
           console.log('token sign error ', err)
-          console.log('SIGNED TOKEN ', {
-            message: 'Login Success',
-            token,
-            user_role: user.role_id,
-            user_id: user.id,
-            permission: JSON.parse(user.permission),
-            exp
-          })
+
           res.status(200).json({
             message: 'Login Success',
             token,
