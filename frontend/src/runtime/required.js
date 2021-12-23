@@ -242,60 +242,34 @@
     } else if (elem.type === 'Email') {
       requireds[id] = {
         id,
-        valid: domElem.value.trim().length > 0
+        valid: typeof elem.required === 'undefined' ? true : false
       }
 
       domElem.addEventListener('blur', () => {
         const value = domElem.value
-
-        if (elem.required !== true) {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-            if (domElem.value.indexOf('@') > -1 && domElem.value.length > 3) {
-              containerElem.classList.remove('requiredError')
-            } else {
-              containerElem.classList.add('requiredError')
-            }
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
+        if (domElem.value.trim().length > 0) {
+          requireds[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
+          
+          requireds[id].valid === true
+            ? containerElem.classList.remove('requiredError')
+            : containerElem.classList.add('requiredError')
         } else {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-            if (domElem.value.indexOf('@') > -1 && domElem.value.length > 3) {
-              containerElem.classList.remove('requiredError')
-            } else {
-              containerElem.classList.add('requiredError')
-            }
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
         }
       })
 
       domElem.addEventListener('keyup', () => {
         const value = domElem.value
-
-        if (elem.required !== true) {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
+        if (domElem.value.trim().length > 0) {
+          requireds[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
+          
+          requireds[id].valid === true
+            ? containerElem.classList.remove('requiredError')
+            : containerElem.classList.add('requiredError')
         } else {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
+          containerElem.classList.remove('requiredError')
+          requireds[id].valid = true
         }
       })
     } else {

@@ -1,5 +1,12 @@
 ;(async () => {
   const valids = {}
+  let formHasRequiredField = false;
+
+  for (const elem of FORMPRESS.elements) {
+    if(elem.required === true) {
+      formHasRequiredField = true;
+    }
+  }
 
   for (const elem of FORMPRESS.elements) {
     const id = elem.id
@@ -10,15 +17,15 @@
     if (elem.type === 'Email') {
       valids[id] = {
         id,
-        valid: domElem.value.trim().length > 0
+        valid: typeof elem.required === 'undefined' ? true : false
       }
 
       domElem.addEventListener('blur', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          valids[id].valid =
-            domElem.value.length > 2 && domElem.value.indexOf('@') > -1
-          domElem.value.length > 2 && domElem.value.indexOf('@') > -1 === true
+          valids[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
+          
+          valids[id].valid === true
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
         } else {
@@ -30,7 +37,11 @@
       domElem.addEventListener('keyup', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          valids[id].valid = pattern.test(domElem.value.trim())
+          valids[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
+          
+          valids[id].valid === true
+            ? containerElem.classList.remove('requiredError')
+            : containerElem.classList.add('requiredError')
         } else {
           containerElem.classList.remove('requiredError')
           valids[id].valid = true
@@ -54,6 +65,7 @@
         errorsToTrigger.push(elem.id)
       }
     }
+
     if (allValid === false) {
       event.preventDefault()
 
@@ -63,7 +75,9 @@
 
       return false
     } else {
-      form.submit()
+      if(!formHasRequiredField){
+        form.submit()
+      }
     }
   })
 })()
