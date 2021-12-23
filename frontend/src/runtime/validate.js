@@ -1,10 +1,10 @@
 ;(async () => {
   const valids = {}
-  let formHasRequiredField = false;
+  let formHasRequiredField = false
 
   for (const elem of FORMPRESS.elements) {
-    if(elem.required === true) {
-      formHasRequiredField = true;
+    if (elem.required === true) {
+      formHasRequiredField = true
     }
   }
 
@@ -23,8 +23,10 @@
       domElem.addEventListener('blur', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          valids[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
-          
+          valids[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
+
           valids[id].valid === true
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
@@ -37,8 +39,10 @@
       domElem.addEventListener('keyup', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          valids[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
-          
+          valids[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
+
           valids[id].valid === true
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
@@ -75,7 +79,7 @@
 
       return false
     } else {
-      if(!formHasRequiredField){
+      if (!formHasRequiredField) {
         form.submit()
       }
     }

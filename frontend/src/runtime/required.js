@@ -248,8 +248,10 @@
       domElem.addEventListener('blur', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          requireds[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
-          
+          requireds[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
+
           requireds[id].valid === true
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
@@ -262,8 +264,10 @@
       domElem.addEventListener('keyup', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
-          requireds[id].valid = domElem.value.trim().length > 2 && domElem.value.trim().indexOf('@') > -1
-          
+          requireds[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
+
           requireds[id].valid === true
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
