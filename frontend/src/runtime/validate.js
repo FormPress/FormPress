@@ -17,8 +17,13 @@
     if (elem.type === 'Email') {
       valids[id] = {
         id,
-        valid: typeof elem.required === 'undefined' ? true : false
+        valid:
+          typeof elem.required === 'undefined' || elem.required === false
+            ? true
+            : false
       }
+
+      console.log(typeof elem.required)
 
       domElem.addEventListener('blur', () => {
         const value = domElem.value
@@ -60,6 +65,8 @@
     const keys = Object.keys(valids)
     let allValid = true
     const errorsToTrigger = []
+
+    console.log(valids)
 
     for (const key of keys) {
       const elem = valids[key]

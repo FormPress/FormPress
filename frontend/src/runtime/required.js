@@ -242,7 +242,10 @@
     } else if (elem.type === 'Email') {
       requireds[id] = {
         id,
-        valid: typeof elem.required === 'undefined' ? true : false
+        valid:
+          typeof elem.required === 'undefined' || elem.required === false
+            ? true
+            : false
       }
 
       domElem.addEventListener('blur', () => {
