@@ -3,7 +3,7 @@
   const requireds = {}
 
   for (const elem of FORMPRESS.elements) {
-    if (elem.required !== true) {
+    if (elem.required !== true && elem.type !== 'Email') {
       continue
     }
 
