@@ -15,9 +15,9 @@
   }
   const formpressText = 'FORMPRESS Open Source Data Collection\r\n\r\n'
   const helloText =
-    'Your "' +
+    'Your form "' +
     Form.title +
-    '" form just received a respond. Here is the details:\r\n\r\n'
+    '" just received a response. Here are the details:\r\n\r\n'
   const responses = questionData.map((data) => {
     let answer = ''
     const question = data.question + '\r\n'
@@ -67,9 +67,9 @@
   const answers = responses.join('\r\n')
 
   const footer =
-    '\r\n\r\n\r\n2021 FORMPRESS This e-mail has been sent to ' +
+    '\r\n\r\n\r\n2021 FORMPRESS This e-mail has been sent to the address ' +
     Email +
-    ', you can change it from form properties.'
+    ', you can change the address from form properties.'
   textedEmail += formpressText
   textedEmail += helloText
   textedEmail += answers
