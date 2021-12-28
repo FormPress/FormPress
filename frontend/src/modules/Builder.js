@@ -868,8 +868,8 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side into the form; or
-              you can click the + icon that pops up next to the element
+              Drag and Drop elements to right hand side into the form; or you
+              can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
               {pickerElements.map((elem) => (
