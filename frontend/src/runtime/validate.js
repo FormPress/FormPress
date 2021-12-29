@@ -23,8 +23,6 @@
             : false
       }
 
-      console.log(typeof elem.required)
-
       domElem.addEventListener('blur', () => {
         const value = domElem.value
         if (domElem.value.trim().length > 0) {
@@ -65,8 +63,6 @@
     const keys = Object.keys(valids)
     let allValid = true
     const errorsToTrigger = []
-
-    console.log(valids)
 
     for (const key of keys) {
       const elem = valids[key]
