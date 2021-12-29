@@ -30,6 +30,7 @@
   display: inline-block;
   padding: 2px 5px;
   border: 1px solid #ffffff;
+  word-break: break-word;
 }
 .builder.gleam.form > .element > .label > span[contentEditable='true']:hover {
   border: 1px dashed;
@@ -47,6 +48,7 @@
   margin: 0;
   min-width: 5px !important;
   margin-left: 5px;
+  vertical-align: top;
 }
 .gleam .element .input {
   width: 100%;
@@ -111,7 +113,7 @@
 }
 
 .gleam.form .requiredError .sublabel:not(.header) {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam.form .header.label {
   position: relative;
