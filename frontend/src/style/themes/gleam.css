@@ -57,6 +57,7 @@
   display: inline-block;
   margin-top: 10px;
   max-width: 600px;
+  word-break: break-word;
 }
 .gleam.form .sublabel:not(.header) span[contentEditable='true'] {
   min-width: 123px;
@@ -561,6 +562,12 @@
 
 .gleam .hidden {
   display: none !important;
+}
+
+.verification_back {
+  text-align: center;
+  padding: 0 40px;
+  line-height: 20px;
 }
 
 @media screen and (max-width: 992px) {
