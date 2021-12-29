@@ -118,7 +118,7 @@ class Forms extends Component {
                       title={
                         form.published_version
                           ? 'View Form'
-                          : 'You have to publish form to view'
+                          : 'Form must be published before it can be viewed'
                       }
                       onClick={
                         form.published_version
