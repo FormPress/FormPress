@@ -37,7 +37,7 @@
   border: 1px dashed gray;
 }
 .gleam.form > .element.requiredError > .label > span {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
@@ -56,6 +56,7 @@
   display: inline-block;
   margin-top: 10px;
   max-width: 600px;
+  word-break: break-word;
 }
 .gleam.form .sublabel:not(.header) span[contentEditable='true'] {
   min-width: 123px;
@@ -159,7 +160,7 @@
   width: 100%;
 }
 .gleam.form .element.requiredError > .fl.label {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
