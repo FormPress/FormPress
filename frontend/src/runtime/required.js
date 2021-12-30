@@ -89,13 +89,16 @@
       const domElem1 = containerElem.querySelector(`#fname_${id}`)
       const domElem2 = containerElem.querySelector(`#lname_${id}`)
       const domElem3 = containerElem.querySelector(`#prefix_${id}`)
+
+      let allowPrefix = true;
+
+      if(domElem3.parentElement.classList.contains('hidden')){
+        allowPrefix = false;
+      }
+
       requireds[id] = {
         id,
-        valid: !(
-          domElem1.value.trim().length === 0 ||
-          domElem2.value.trim().length === 0 ||
-          domElem.value.trim() === 'choose-disabled'
-        )
+        valid: false
       }
 
       domElem1.addEventListener('blur', () => {
@@ -105,11 +108,15 @@
 
         if (
           value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
+          value2.trim().length > 0
         ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          if(value3.trim() === 'choose-disabled' && allowPrefix === true){
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }else{
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -123,11 +130,15 @@
 
         if (
           value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
+          value2.trim().length > 0
         ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          if(value3.trim() === 'choose-disabled' && allowPrefix === true){
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }else{
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -141,11 +152,15 @@
 
         if (
           value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
+          value2.trim().length > 0
         ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          if(value3.trim() === 'choose-disabled' && allowPrefix === true){
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }else{
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -159,52 +174,58 @@
 
         if (
           value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
+          value2.trim().length > 0
         ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          if(value3.trim() === 'choose-disabled' && allowPrefix === true){
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }else{
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
         }
       })
 
-      domElem3.addEventListener('blur', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
+      if(allowPrefix){
+        domElem3.addEventListener('blur', () => {
+          let value1 = domElem1.value
+          let value2 = domElem2.value
+          let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
+          if (
+            value1.trim().length > 0 &&
+            value2.trim().length > 0 &&
+            (value3.trim() !== 'choose-disabled' && allowPrefix === true)
+          ) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        })
 
-      domElem3.addEventListener('change', function () {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
+        domElem3.addEventListener('change', function () {
+          let value1 = domElem1.value
+          let value2 = domElem2.value
+          let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
+          if (
+            value1.trim().length > 0 &&
+            value2.trim().length > 0 &&
+            value3.trim() !== 'choose-disabled'
+          ) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        })
+      }
 
       domElem1.addEventListener('focus', () => {
         elemActivated = true

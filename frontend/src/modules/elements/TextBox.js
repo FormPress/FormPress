@@ -33,8 +33,8 @@ export default class TextBox extends Component {
       inputProps.placeholder = config.placeholder
     }
 
-    if (typeof config.maxlength !== 'undefined') {
-      inputProps.maxlength = config.maxlength
+    if (typeof config.maxLength !== 'undefined') {
+      inputProps.maxLength = config.maxLength
     }
 
     return (

@@ -116,13 +116,14 @@ export default class Name extends Component {
               <select
                 id={`prefix_${config.id}`}
                 name={`q_${config.id}[prefix]`}
+                key={`q_${config.id}[prefix]`}
                 defaultValue="choose-disabled">
                 <option disabled value="choose-disabled">
                   Prefix
                 </option>
-                {options.map((item) => {
+                {options.map((item, index) => {
                   return (
-                    <option className="option-space" key={item} value={item}>
+                    <option className="option-space" key={item + '_' + index} value={item}>
                       {item}
                     </option>
                   )
