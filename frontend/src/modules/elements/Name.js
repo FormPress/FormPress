@@ -123,7 +123,10 @@ export default class Name extends Component {
                 </option>
                 {options.map((item, index) => {
                   return (
-                    <option className="option-space" key={item + '_' + index} value={item}>
+                    <option
+                      className="option-space"
+                      key={item + '_' + index}
+                      value={item}>
                       {item}
                     </option>
                   )

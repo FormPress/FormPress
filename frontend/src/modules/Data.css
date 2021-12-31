@@ -26,6 +26,7 @@
 .data > .formSelectorContainer > .formSelector > .formSelectorContent {
   max-height: 60px;
   overflow: hidden;
+  word-break: break-word;
 }
 
 .data > .formSelectorContainer > .formSelector > .down {
