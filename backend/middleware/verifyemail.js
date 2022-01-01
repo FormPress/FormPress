@@ -31,7 +31,7 @@ module.exports = (app) => {
         [user_id]
       )
       if (result.length === 1) {
-        res.status(403).json({ message: 'Email alredy verified.' })
+        res.status(403).json({ message: 'Email already verified.' })
       } else {
         res.status(403).json({ message: 'User not found.' })
       }
