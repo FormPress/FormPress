@@ -872,8 +872,8 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side to add to the form. Or
-              you can click + icon
+              Drag and Drop elements to right hand side into the form; or you
+              can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
               {pickerElements.map((elem) => (
@@ -953,9 +953,7 @@ class Builder extends Component {
           </div>
           {this.renderBuilder()}
         </Route>
-        <Route path="/editor/:formId/design">
-          Form Designer will come here
-        </Route>
+        <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>

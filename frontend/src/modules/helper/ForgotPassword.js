@@ -121,7 +121,7 @@ class ForgotPassword extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2020 formpress.org</div>
+          <div className="col-8-16">Copyright © 2021 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>

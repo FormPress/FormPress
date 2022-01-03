@@ -21,7 +21,7 @@ export default class Checkbox extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Make this field toggle?']
+        options: ['Make this field toggle']
       }
     }
   }

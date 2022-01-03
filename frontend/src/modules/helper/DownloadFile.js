@@ -30,7 +30,7 @@ class Download extends Component {
 
       this.setState({
         message:
-          'Your download has started. If not please click "Download" button again.'
+          'Your download has started. If not, please click the "Download" button again.'
       })
     }
   }

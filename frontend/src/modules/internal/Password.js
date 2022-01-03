@@ -19,7 +19,7 @@ export default class Password extends Component {
       default: true,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field required?'
+        label: 'Make this field required'
       }
     }
   }
