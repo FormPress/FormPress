@@ -105,7 +105,9 @@ class Roles extends Component {
       newPermissions[elementType] = !newPermissions[elementType]
       this.setState({ permissions: newPermissions })
     } else if (elem.type === 'TextBox') {
-      this.setState({ selectedRoleName: e.target.value })
+       if (this.state.selectedRoleId !== 2) {
+        this.setState({ selectedRoleName: e.target.value })
+       }
     } else if (elem.type === 'Number') {
       if (elem.label === 'Form Limit') {
         if (!isNaN(parseInt(e.target.value))) {

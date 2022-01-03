@@ -41,7 +41,7 @@ module.exports = async (db) => {
     INSERT INTO \`role\`
       (name, permission)
     VALUES
-      ('free', '{"admin":false}')
+      ('Default Free', '{"admin":false}')
   `)
 
   await db.query(`
