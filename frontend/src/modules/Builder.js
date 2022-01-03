@@ -17,7 +17,8 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
-  faFont
+  faFont,
+  faMinus
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -45,7 +46,8 @@ const iconMap = {
   Name: faAddressCard,
   FileUpload: faFileAlt,
   Email: faEnvelope,
-  Header: faHeading
+  Header: faHeading,
+  Separator: faMinus
 }
 
 //list of element texts
@@ -59,7 +61,8 @@ const textMap = {
   Name: 'Name',
   FileUpload: 'File Upload',
   Email: 'E-mail',
-  Header: 'Header'
+  Header: 'Header',
+  Separator: 'Separator'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
