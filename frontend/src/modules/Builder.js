@@ -333,7 +333,7 @@ class Builder extends Component {
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
 
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
 
     if (dragMode === 'insert') {
       //set auto increment element id
@@ -459,7 +459,7 @@ class Builder extends Component {
   handleLabelChange(id, value) {
     const form = { ...this.state.form }
 
-    form.props.elements = [...form.props.elements]
+    form.props.elements = cloneDeep([...form.props.elements])
 
     if (Number.isInteger(id) === false) {
       const questionID = id.split('_')[1]
@@ -902,8 +902,8 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side to add to the form. Or
-              you can click + icon
+              Drag and Drop elements to right hand side into the form; or you
+              can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
               {pickerElements.map((elem) =>
@@ -1006,9 +1006,7 @@ class Builder extends Component {
           </div>
           {this.renderBuilder()}
         </Route>
-        <Route path="/editor/:formId/design">
-          Form Designer will come here
-        </Route>
+        <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>

@@ -125,6 +125,10 @@
   margin-bottom: 10px;
 }
 
+.message-back.success {
+  color: #8cc63f;
+}
+
 .or-seperator {
   width: 100%;
   height: 19px;

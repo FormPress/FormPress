@@ -64,10 +64,10 @@ class FormProperties extends Component {
     }
 
     let tyPageText =
-      'Your submission has been successfully sent and we informed the form owner about your submission.'
+      'Your submission has been successful and we informed the form owner about it.'
 
     if (capabilities.sendgridApiKey === false) {
-      tyPageText = 'Your submission has been successfully sent.'
+      tyPageText = 'Your submission has been successful.'
     }
 
     if (matchingIntegration('tyPageText').length > 0) {
@@ -113,6 +113,7 @@ class FormProperties extends Component {
                   id: 2,
                   type: 'TextBox',
                   label: 'Thank you page title',
+                  maxLength: 128,
                   value: tyPageTitle
                 }
               ]
@@ -129,6 +130,7 @@ class FormProperties extends Component {
                   id: 3,
                   type: 'TextArea',
                   label: 'Thank you page text',
+                  maxLength: 256,
                   value: tyPageText
                 }
               ]

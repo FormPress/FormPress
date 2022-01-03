@@ -19,7 +19,7 @@ export default class FileUpload extends Component {
       default: false,
       formProps: {
         type: 'Checkbox',
-        label: 'Make this field required?'
+        label: 'Make this field required'
       }
     }
   }

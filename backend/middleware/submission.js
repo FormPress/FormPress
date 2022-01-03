@@ -126,9 +126,9 @@ module.exports = (app) => {
     let tyPageText = ''
     if (isEnvironmentVariableSet.sendgridApiKey) {
       tyPageText =
-        'Your submission has been successfully sent and we informed the form owner about your submission.'
+        'Your submission has been successful and we informed the form owner about it.'
     } else {
-      tyPageText = 'Your submission has been successfully sent.'
+      tyPageText = 'Your submission has been successful.'
     }
 
     let sendEmailTo = false
