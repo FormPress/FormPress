@@ -113,6 +113,7 @@ class FormProperties extends Component {
                   id: 2,
                   type: 'TextBox',
                   label: 'Thank you page title',
+                  maxLength: 128,
                   value: tyPageTitle
                 }
               ]
@@ -129,6 +130,7 @@ class FormProperties extends Component {
                   id: 3,
                   type: 'TextArea',
                   label: 'Thank you page text',
+                  maxLength: 256,
                   value: tyPageText
                 }
               ]
