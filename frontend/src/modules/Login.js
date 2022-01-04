@@ -182,7 +182,7 @@ class Login extends Component {
               {state === 'done' ? message : null}
             </p>
             {capabilities.sendgridApiKey ? (
-              <div className="forgot-pass" title="WIP">
+              <div className="forgot-pass" title="forgot password">
                 <span className="forgot-pass-span">
                   <Link to="/forgotpassword">
                     &nbsp;<i>Forgot password?</i>

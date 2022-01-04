@@ -57,22 +57,22 @@
   padding: 0px 10px;
 }
 
-.elementTextBox {
+.rolewrap .elementTextBox {
   padding: 30px 10px 30px 10px;
 }
 
-.elementNumber {
+.rolewrap .elementNumber {
   padding: 10px;
 }
 
-.elementCheckbox {
+.rolewrap .elementCheckbox {
   padding: 5px 10px;
 }
 
-.elementButton {
+.rolewrap .elementButton {
   padding: 10px;
 }
 
-.elementButton input {
+.rolewrap .elementButton input {
   background-color: #e2e2e2 !important;
 }
