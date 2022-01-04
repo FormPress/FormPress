@@ -125,7 +125,7 @@ exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
   } else {
     const db = await getPool()
     const result = await db.query(
-      `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ?`,
+      `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ?  AND deleted_at IS NULL`,
       [req.params[user_id]]
     )
 
