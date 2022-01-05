@@ -59,9 +59,9 @@ module.exports = (app) => {
     //create submission and get id
     const result = await db.query(
       `INSERT INTO \`submission\`
-        (form_id, created_at, updated_at, version)
+        (form_id, created_at, version)
       VALUES
-        (?, NOW(), NOW(),?)`,
+        (?, NOW(), ?)`,
       [form_id, version]
     )
     const submission_id = result.insertId
@@ -112,7 +112,6 @@ module.exports = (app) => {
 
       res.status(500).send('Error during submission handling')
     }
-    //res.send('Your Submission has been received')
 
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
@@ -214,6 +213,43 @@ module.exports = (app) => {
         sgMail.send(msg)
       } catch (e) {
         console.log('Error while sending email ', e)
+      }
+    }
+
+    //add submission_usage
+    if (version !== 0) {
+      const dateObj = new Date()
+      const month = dateObj.getUTCMonth() + 1 //months from 1-12
+      const year = dateObj.getUTCFullYear()
+      const yearMonth = year + '-' + month
+      const formOwnerResult = await db.query(
+        `SELECT \`user_id\` FROM \`form_published\` WHERE form_id = ? AND version = ?`,
+        [form_id, version]
+      )
+      const formOwner = formOwnerResult[0].user_id
+      const checkUsageResult = await db.query(
+        `
+        SELECT * FROM \`submission_usage\` WHERE user_id = ? AND date = ?`,
+        [formOwner, yearMonth]
+      )
+
+      if (checkUsageResult.length === 0) {
+        await db.query(
+          `
+          INSERT INTO \`submission_usage\`
+            (user_id, date, count)
+          VALUES
+            (?,?,1)
+          `,
+          [formOwner, yearMonth]
+        )
+      } else {
+        await db.query(
+          `
+        UPDATE \`submission_usage\` SET count = count + 1 WHERE user_id = ? AND date = ?
+        `,
+          [formOwner, yearMonth]
+        )
       }
     }
   })

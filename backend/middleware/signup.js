@@ -33,6 +33,15 @@ module.exports = (app) => {
         VALUES
       ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
+
+      //adding default role 2, it should be dynamic
+      await db.query(`
+        INSERT INTO \`user_role\`
+          (user_id)
+        VALUES
+        ('${newEntry.insertId}')
+      `)
+
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(
           `
@@ -41,6 +50,7 @@ module.exports = (app) => {
           [newEntry.insertId]
         )
       }
+
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/signupsuccesshtml.tpl.ejs'),
