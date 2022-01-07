@@ -41,6 +41,7 @@ const authenticationMiddleware = require(path.resolve(
   'authentication'
 ))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
+const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -61,6 +62,7 @@ app.set('view engine', 'ejs')
 authenticationMiddleware(app)
 loginWithGoogleMiddleware(app)
 apiMiddleware(app)
+adminApiMiddleware(app)
 loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
@@ -81,7 +81,25 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
+    if (this.props.auth.loggedIn === true) {
+      let pathName = this.props.location.state
+        ? this.props.location.state.from.pathname
+        : '/forms'
+      //can't allow to return editor, when changing accounts old accounts form can be redirected
+      if (pathName.indexOf('editor') >= 0) {
+        pathName = '/forms'
+      }
+
+      return (
+        <Redirect
+          to={{
+            pathname: pathName,
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
+    const capabilities = this.props.capabilities
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
