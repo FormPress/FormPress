@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import './Modal.css'
 
 class Modal extends Component {
-
   renderDialogue() {
     const { dialogue } = this.props.modalContent
     return (
@@ -12,7 +11,9 @@ class Modal extends Component {
           <div className={'wrapper-textbox'}>
             <input
               autoFocus={true}
-              onFocus={(e) => {e.target.select()}}
+              onFocus={(e) => {
+                e.target.select()
+              }}
               onChange={(e) => {
                 dialogue.inputOnChange(e)
               }}
@@ -23,21 +24,21 @@ class Modal extends Component {
         ) : null}
 
         <div className={'wrapper-buttons'}>
-        {dialogue.abortText ? (
-          <button className={'abort'} onClick={dialogue.abortClick}>
-            {dialogue.abortText}
-          </button>
-        ) : null}
-        {dialogue.negativeText ? (
-          <button className={'negative'} onClick={dialogue.negativeClick}>
-            {dialogue.negativeText}
-          </button>
-        ) : null}
-        {dialogue.positiveText ? (
-          <button className={'positive'} onClick={dialogue.positiveClick}>
-            {dialogue.positiveText}
-          </button>
-        ) : null}
+          {dialogue.abortText ? (
+            <button className={'abort'} onClick={dialogue.abortClick}>
+              {dialogue.abortText}
+            </button>
+          ) : null}
+          {dialogue.negativeText ? (
+            <button className={'negative'} onClick={dialogue.negativeClick}>
+              {dialogue.negativeText}
+            </button>
+          ) : null}
+          {dialogue.positiveText ? (
+            <button className={'positive'} onClick={dialogue.positiveClick}>
+              {dialogue.positiveText}
+            </button>
+          ) : null}
         </div>
       </div>
     )

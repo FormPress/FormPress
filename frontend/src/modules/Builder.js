@@ -26,7 +26,7 @@ import AuthContext from '../auth.context'
 import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
-import Modal from "./common/Modal";
+import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
@@ -159,23 +159,28 @@ class Builder extends Component {
       )
     }
 
-    this.shouldBlockNavigation = this.props.history.block(this.checkFormDifferences)
+    this.shouldBlockNavigation = this.props.history.block(
+      this.checkFormDifferences
+    )
   }
 
   componentWillUnmount() {
-    this.shouldBlockNavigation();
+    this.shouldBlockNavigation()
   }
 
-  checkFormDifferences = (currenLocation) => {
-    this.ignoreFormDifference = () => {this.props.history.push(currenLocation.pathname)} // if user still wants to proceed without saving
+  checkFormDifferences = (location) => {
+    this.ignoreFormDifference = () => {
+      this.props.history.push(location.pathname)
+    } // if user still wants to proceed without saving
 
-    const {form, savedForm} = this.state
+    const { form, savedForm } = this.state
     let isFormChanged = !isEqual(form, savedForm)
 
-    const disallowedPath = !(currenLocation.pathname.startsWith('/editor'))
+    const disallowedPath = !location.pathname.startsWith('/editor')
 
-    if (savedForm === undefined) { // default&unsaved form should allow navigation
-      return true;
+    if (savedForm === undefined) {
+      // default&unsaved form should allow navigation
+      return true
     }
 
     if (isFormChanged === true && disallowedPath === true) {
@@ -191,17 +196,15 @@ class Builder extends Component {
         negativeText: 'Discard',
         negativeClick: this.handleDiscardChangesClick
       }
-      this.setState({ modalContent, isModalOpen: true });
-      return false;
+      this.setState({ modalContent, isModalOpen: true })
+      return false
     }
-
-
 
     if (isFormChanged === false) {
-      return true;
+      return true
     }
 
-    return false; // fail-safe
+    return false // fail-safe
   }
 
   handleCloseModalClick() {
@@ -209,10 +212,10 @@ class Builder extends Component {
   }
 
   handleDiscardChangesClick() {
-    this.shouldBlockNavigation();
+    this.shouldBlockNavigation()
 
-    this.ignoreFormDifference();
-  };
+    this.ignoreFormDifference()
+  }
 
   async loadForm(formId, seamless = false) {
     if (seamless === false) {
@@ -791,7 +794,7 @@ class Builder extends Component {
       })
     }
     const savedForm = cloneDeep(this.state.form)
-    this.setState({savedForm})
+    this.setState({ savedForm })
   }
 
   async handlePublishClick() {
@@ -900,7 +903,6 @@ class Builder extends Component {
     }
 
     return (
-
       <div className="builder">
         <Modal
           isOpen={this.state.isModalOpen}

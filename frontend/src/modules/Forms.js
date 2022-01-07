@@ -67,14 +67,19 @@ class Forms extends Component {
       status: 'information'
     }
 
-    this.setState({cloneFormName: form.title + " (clone)"})
+    this.setState({ cloneFormName: form.title + ' (clone)' })
     modalContent.dialogue = {
       abortText: 'Cancel',
       abortClick: this.handleCloseModalClick,
       positiveText: 'Clone',
       positiveClick: this.formClone.bind(this, form),
-      inputValue: () => {return this.state.cloneFormName},
-      inputOnChange: (e) => {let name = e.target.value; this.setState({ cloneFormName: name })}
+      inputValue: () => {
+        return this.state.cloneFormName
+      },
+      inputOnChange: (e) => {
+        let name = e.target.value
+        this.setState({ cloneFormName: name })
+      }
     }
 
     modalContent.content = (
@@ -83,7 +88,7 @@ class Forms extends Component {
           {form.title}
         </span>{' '}
         will be cloned.
-        <br/>
+        <br />
         Please specify a name for new form:
       </div>
     )
@@ -91,7 +96,7 @@ class Forms extends Component {
     this.setState({ modalContent, isModalOpen: true })
   }
 
-   handleFormDeleteClick(form, e) {
+  handleFormDeleteClick(form, e) {
     e.preventDefault()
     const modalContent = {
       header: 'Delete form?',
@@ -134,7 +139,7 @@ class Forms extends Component {
 
     let modalContent = {}
 
-    if(data.message === 'deleted') {
+    if (data.message === 'deleted') {
       modalContent = {
         content: 'Form successfully deleted!',
         status: 'success',
@@ -142,7 +147,8 @@ class Forms extends Component {
       }
     } else {
       modalContent = {
-        content: 'There has been an error deleting this form. Please contact support.',
+        content:
+          'There has been an error deleting this form. Please contact support.',
         status: 'error',
         header: 'Error'
       }
@@ -150,7 +156,6 @@ class Forms extends Component {
     this.setState({ modalContent })
 
     this.updateForms()
-
   }
 
   async formClone(form) {
@@ -164,7 +169,7 @@ class Forms extends Component {
 
     let modalContent = {}
 
-    if(data.status === 'done') {
+    if (data.status === 'done') {
       modalContent = {
         content: 'Form cloned successfully!',
         status: 'success',
@@ -172,10 +177,11 @@ class Forms extends Component {
       }
     } else {
       modalContent = {
-        content: 'There has been an error cloning this form. Please contact support.',
+        content:
+          'There has been an error cloning this form. Please contact support.',
         status: 'error',
         header: 'Error'
-    }
+      }
     }
     this.setState({ modalContent })
 
@@ -202,119 +208,124 @@ class Forms extends Component {
     }
 
     return (
-    <div>
-      <div className="forms">
-        <Modal
-          history={this.props.history}
-          isOpen={this.state.isModalOpen}
-          modalContent={this.state.modalContent}
-          closeModal={this.handleCloseModalClick}
-        />
-        {roleLimit === 0 || roleLimit > forms.length ? (
-          <div className="nav_add_new_form_container">
-            <Link to="/editor/new/builder" className="nav_add_new_form_link">
-              <div className="popover-container">
-                <FontAwesomeIcon
-                  icon={faPlusCircle}
-                  title="Add New Form"
-                  className="nav_add_new_form_logo"
-                />
-                <div className="popoverText">Create a new form</div>
-              </div>
-            </Link>
-          </div>
-        ) : (
-          ''
-        )}
-        <div className="headerContainer"></div>
-        <div className="formsContent">
-          <Table
-            columns={[
-              {
-                label: <span> </span>,
-                content: () => <span> </span>,
-                className: 'mw'
-              },
-              {
-                label: 'Name',
-                content: (form) => form.title,
-                className: 'name',
-                title: ' '
-              },
-              {
-                label: 'Responses',
-                content: (form) => (
-                  <div className={`responseCount${form.responseCount === 0 ? ' zero' : ''}`}>{form.responseCount}</div>
-                ),
-                className: 'responses'
-              },
-              {
-                label: 'Created At',
-                content: (form) => [
-                  <Moment fromNow ago date={form.created_at} key="1"/>,
-                  <span key="2">{' ago'}</span>
-                ],
-                className: 'createdAt'
-              },
-              {
-                label: 'Actions',
-                content: (form) => (
-                  <div className="actions">
-                    <span
-                      className={`${
-                        form.published_version ? 'view' : 'inactive_view'
-                      }`}
-                      title={
-                        form.published_version
-                          ? 'View Form'
-                          : 'Form must be published before it can be viewed'
-                      }
-                      onClick={
-                        form.published_version
-                          ? this.handlePreviewClick.bind(this, form)
-                          : undefined
-                      }>
-                      <FontAwesomeIcon icon={faEye}/>
-                    </span>
-                    <span
-                      title="Delete Form"
-                      onClick={this.handleFormDeleteClick.bind(this, form)}>
-                      <FontAwesomeIcon icon={faTrash}/>
-                    </span>
-                    <Link to={`/editor/${form.id}/builder`} title="Edit Form">
-                      <FontAwesomeIcon icon={faPen}/>
-                    </Link>
-                    {roleLimit === 0 || roleLimit > forms.length ? (
-                    <span
-                      title="Clone Form"
-                      onClick={this.handleFormCloneClick.bind(this, form)}>
-                      <FontAwesomeIcon icon={faClone}/>
-                    </span>
-                    ) : (
-                      <span
-                        className="inactive_clone"
-                      title="Form limit reached"
-                      >
-                      <FontAwesomeIcon icon={faClone}/>
-                    </span>)}
-                  </div>
-                )
-              }
-            ]}
-            data={forms}
+      <div>
+        <div className="forms">
+          <Modal
+            history={this.props.history}
+            isOpen={this.state.isModalOpen}
+            modalContent={this.state.modalContent}
+            closeModal={this.handleCloseModalClick}
           />
-        </div>
-        <div className="newButtonContainer">
           {roleLimit === 0 || roleLimit > forms.length ? (
-            <Link to="/editor/new/builder">Create a new form</Link>
+            <div className="nav_add_new_form_container">
+              <Link to="/editor/new/builder" className="nav_add_new_form_link">
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faPlusCircle}
+                    title="Add New Form"
+                    className="nav_add_new_form_logo"
+                  />
+                  <div className="popoverText">Create a new form</div>
+                </div>
+              </Link>
+            </div>
           ) : (
-            <span className="disabledNewForm" title="Form limit reached">
-              Create a new form
-            </span>
+            ''
           )}
+          <div className="headerContainer"></div>
+          <div className="formsContent">
+            <Table
+              columns={[
+                {
+                  label: <span> </span>,
+                  content: () => <span> </span>,
+                  className: 'mw'
+                },
+                {
+                  label: 'Name',
+                  content: (form) => form.title,
+                  className: 'name',
+                  title: ' '
+                },
+                {
+                  label: 'Responses',
+                  content: (form) => (
+                    <div
+                      className={`responseCount${
+                        form.responseCount === 0 ? ' zero' : ''
+                      }`}>
+                      {form.responseCount}
+                    </div>
+                  ),
+                  className: 'responses'
+                },
+                {
+                  label: 'Created At',
+                  content: (form) => [
+                    <Moment fromNow ago date={form.created_at} key="1" />,
+                    <span key="2">{' ago'}</span>
+                  ],
+                  className: 'createdAt'
+                },
+                {
+                  label: 'Actions',
+                  content: (form) => (
+                    <div className="actions">
+                      <span
+                        className={`${
+                          form.published_version ? 'view' : 'inactive_view'
+                        }`}
+                        title={
+                          form.published_version
+                            ? 'View Form'
+                            : 'Form must be published before it can be viewed'
+                        }
+                        onClick={
+                          form.published_version
+                            ? this.handlePreviewClick.bind(this, form)
+                            : undefined
+                        }>
+                        <FontAwesomeIcon icon={faEye} />
+                      </span>
+                      <span
+                        title="Delete Form"
+                        onClick={this.handleFormDeleteClick.bind(this, form)}>
+                        <FontAwesomeIcon icon={faTrash} />
+                      </span>
+                      <Link to={`/editor/${form.id}/builder`} title="Edit Form">
+                        <FontAwesomeIcon icon={faPen} />
+                      </Link>
+                      {roleLimit === 0 || roleLimit > forms.length ? (
+                        <span
+                          title="Clone Form"
+                          onClick={this.handleFormCloneClick.bind(this, form)}>
+                          <FontAwesomeIcon icon={faClone} />
+                        </span>
+                      ) : (
+                        <span
+                          className="inactive_clone"
+                          title="Form limit reached">
+                          <FontAwesomeIcon icon={faClone} />
+                        </span>
+                      )}
+                    </div>
+                  )
+                }
+              ]}
+              data={forms}
+            />
+          </div>
+          <div className="newButtonContainer">
+            {roleLimit === 0 || roleLimit > forms.length ? (
+              <Link to="/editor/new/builder">Create a new form</Link>
+            ) : (
+              <span className="disabledNewForm" title="Form limit reached">
+                Create a new form
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </div>
     )
   }
 }

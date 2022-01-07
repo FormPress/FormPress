@@ -1,5 +1,5 @@
 .content {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
 
 .forms {
@@ -64,7 +64,6 @@
   line-height: 30px;
   text-align: center;
   font-weight: bold;
-
 }
 
 .forms table.fp_table .responseCount.zero {
