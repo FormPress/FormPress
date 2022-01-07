@@ -123,7 +123,11 @@ class Builder extends Component {
         window.localStorage.setItem('lastEditedFormId', formId)
       } else {
         window.scrollTo(0, 0)
+        const { form } = this.state
         this.setIntegration({ type: 'email', to: this.props.auth.email })
+
+        const savedForm = cloneDeep(form)
+        this.setState({ savedForm })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
@@ -178,8 +182,7 @@ class Builder extends Component {
 
     const disallowedPath = !location.pathname.startsWith('/editor')
 
-    if (savedForm === undefined) {
-      // default&unsaved form should allow navigation
+    if (isFormChanged === true && disallowedPath === false) {
       return true
     }
 
@@ -204,7 +207,7 @@ class Builder extends Component {
       return true
     }
 
-    return false // fail-safe
+    return true // fail-safe
   }
 
   handleCloseModalClick() {
