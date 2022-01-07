@@ -14,6 +14,7 @@
   position: relative;
   overflow: visible;
   display: grid;
+  border: 1px solid #ffffff;
 }
 .gleam.form > .element.requiredError {
   border: 1px solid red;
@@ -29,6 +30,7 @@
   display: inline-block;
   padding: 2px 5px;
   border: 1px solid #ffffff;
+  word-break: break-word;
 }
 .builder.gleam.form > .element > .label > span[contentEditable='true']:hover {
   border: 1px dashed;
@@ -37,7 +39,7 @@
   border: 1px dashed gray;
 }
 .gleam.form > .element.requiredError > .label > span {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
@@ -46,6 +48,7 @@
   margin: 0;
   min-width: 5px !important;
   margin-left: 5px;
+  vertical-align: top;
 }
 .gleam .element .input {
   width: 100%;
@@ -56,6 +59,7 @@
   display: inline-block;
   margin-top: 10px;
   max-width: 600px;
+  word-break: break-word;
 }
 .gleam.form .sublabel:not(.header) span[contentEditable='true'] {
   min-width: 123px;
@@ -109,7 +113,7 @@
 }
 
 .gleam.form .requiredError .sublabel:not(.header) {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam.form .header.label {
   position: relative;
@@ -121,6 +125,7 @@
   width: 100%;
   display: block;
   border: 1px dashed white;
+  word-break: break-word;
 }
 .gleam.form .header.sublabel {
   position: relative;
@@ -132,6 +137,7 @@
   width: 100%;
   display: block;
   border: 1px dashed white;
+  word-break: break-word;
 }
 .gleam.form .clearfix {
   clear: both;
@@ -159,7 +165,7 @@
   width: 100%;
 }
 .gleam.form .element.requiredError > .fl.label {
-  border: 1px solid #ffb2b2;
+  border: 1px solid #ffbebb;
 }
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
@@ -249,15 +255,7 @@
 .gleam .elementRadio ul li input:checked + label {
   color: #8cc63f;
 }
-.gleam .elementRadio ul li input + label {
-  display: inline-block;
-  margin-top: 1px;
-  position: absolute;
-  text-indent: 5px;
-  font-size: 16px;
-  font-family: 'Times New Roman';
-  padding: 0;
-}
+
 .gleam .elementName {
   background-color: transparent;
 }
@@ -302,7 +300,7 @@
   margin-bottom: 10px;
 }
 
-.gleam .elementCheckbox .input .checkbox-label {
+.builder.gleam .elementCheckbox .input .checkbox-label {
   color: #333333;
   display: inline-block;
   margin-top: -2px;
@@ -313,11 +311,7 @@
   min-width: 115px;
 }
 
-.gleam .elementCheckbox.requiredError .input .checkbox-label {
-  border: 1px solid #ffb2b2;
-}
-
-.gleam.form .elementRadio .input .radio-label {
+.builder.gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
   white-space: nowrap;
@@ -327,6 +321,29 @@
   user-select: none;
   min-width: 115px;
   vertical-align: bottom;
+}
+
+.renderer.gleam .elementCheckbox .input .checkbox-label {
+  color: #333333;
+  display: inline-block;
+  margin-top: -18px;
+  user-select: none;
+  word-break: break-word;
+  min-width: 115px;
+  text-indent: 23px;
+}
+
+.renderer.gleam.form .elementRadio .input .radio-label {
+  color: #333333;
+  display: inline-block;
+  word-break: break-all;
+  text-indent: 25px;
+  margin-top: -18px;
+  position: relative;
+}
+
+.gleam .elementCheckbox.requiredError .input .checkbox-label {
+  border: 1px solid #ffb2b2;
 }
 
 .gleam.form
@@ -399,20 +416,14 @@
   border: 1px solid #a0a0a0;
   background-color: #8cc63f;
 }
-.gleam
-  .elementCheckbox
-  .input
-  > input[type='checkbox']:checked
-  + .checkbox-label {
-  color: #8cc63f;
+
+.renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
+  word-break: break-word;
+  text-indent: 45px;
 }
 
-.gleam .elementCheckbox .toggle .input .checkbox-label {
-  color: #333333;
-  display: inline-block;
-  position: absolute;
-  text-indent: 5px;
-  white-space: nowrap;
+.builder.gleam .elementCheckbox .toggle .input .checkbox-label {
+  word-break: break-word;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked::before {
@@ -438,13 +449,6 @@
 .checkboxCover {
   display: inline-grid;
   width: 100%;
-}
-
-.gleam .elementCheckbox .toggle {
-  position: relative;
-  display: table;
-  width: 60px;
-  height: 34px;
 }
 
 .builder.gleam .elementCheckbox textarea#options-textarea,
@@ -545,10 +549,10 @@
 
 .gleam .nameContainer .prefix_span select {
   align-self: stretch;
-  padding: 0px 8px;
+  padding: 0px 24px 0px 4px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: transparent;
+  background-color: #fff;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
@@ -560,6 +564,12 @@
 
 .gleam .hidden {
   display: none !important;
+}
+
+.verification_back {
+  text-align: center;
+  padding: 0 40px;
+  line-height: 20px;
 }
 
 @media screen and (max-width: 992px) {

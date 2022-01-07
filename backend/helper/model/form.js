@@ -34,9 +34,9 @@ exports.create = async ({ user_id, form }) => {
   return await db.query(
     `
           INSERT INTO \`form\`
-            (user_id, title, props, published_version, created_at, updated_at)
+            (user_id, title, props, published_version, created_at)
           VALUES
-            (?, ?, ?, 0, NOW(), NOW())
+            (?, ?, ?, 0, NOW())
         `,
     [user_id, form.title, form.props]
   )
@@ -48,7 +48,7 @@ exports.update = async ({ form }) => {
   await db.query(
     `
           UPDATE \`form\`
-            SET props = ?, title = ?, updated_at = NOW()
+            SET props = ?, title = ?
           WHERE
             id = ?
         `,

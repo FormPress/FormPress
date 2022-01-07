@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, NavLink, Switch, Route } from 'react-router-dom'
+import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { cloneDeep } from 'lodash'
 import {
@@ -17,6 +17,7 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
+  faQuestionCircle,
   faFont
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -50,7 +51,7 @@ const iconMap = {
 
 //list of element texts
 const textMap = {
-  TextBox: 'TextBox',
+  TextBox: 'Text Box',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
@@ -126,8 +127,16 @@ class Builder extends Component {
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
-      if (lastEditedFormId !== null) {
+      if (lastEditedFormId !== undefined && lastEditedFormId !== null) {
         this.props.history.push(`/editor/${lastEditedFormId}/builder`)
+        setTimeout(() => {
+          this.componentDidMount()
+        }, 1)
+      } else {
+        const { data } = await api({
+          resource: `/api/users/${this.props.auth.user_id}/editor`
+        })
+        this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)
@@ -155,10 +164,14 @@ class Builder extends Component {
       this.setState({ loading: true })
     }
 
-    const { data } = await api({
+    const { data, status } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
+    if (status === 403) {
+      this.setState({ redirect: true })
 
+      return
+    }
     if (typeof data.props === 'undefined') {
       this.setState({
         loading: false
@@ -216,6 +229,7 @@ class Builder extends Component {
     super(props)
     this.state = {
       counter: 0,
+      redirect: false,
       saving: false,
       loading: false,
       dragging: false,
@@ -793,6 +807,16 @@ class Builder extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/forms',
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     const { params } = this.props.match
     const { formId, questionId } = params
     const tabs = [
@@ -847,8 +871,14 @@ class Builder extends Component {
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
+    const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+    if (permission.admin) {
+      pickerElements.forEach((elem) => {
+        permission[elem.type] = true
+      })
+    }
     let questionPropertiesReady = true
 
     if (typeof questionId !== 'undefined') {
@@ -876,31 +906,54 @@ class Builder extends Component {
               can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) => (
-                <div
-                  className="element"
-                  draggable
-                  onDragStart={this.handleDragStart.bind(this, elem)}
-                  onDragEnd={this.handleDragEnd}
-                  key={elem.type}>
-                  <span className="element-picker-icon-wrapper">
-                    <FontAwesomeIcon
-                      icon={iconMap[elem.type]}
-                      className="element-picker-icon"
-                    />
-                  </span>
-                  <span className="element-picker-text">
-                    {textMap[elem.type]}
-                  </span>
-                  <span className="add-element-button">
-                    <FontAwesomeIcon
-                      icon={faPlusCircle}
-                      title="Add Field"
-                      onClick={() => this.handleAddFormElementClick(elem.type)}
-                    />
-                  </span>
-                </div>
-              ))}
+              {pickerElements.map((elem) =>
+                permission[elem.type] ? (
+                  <div
+                    className="element"
+                    draggable
+                    onDragStart={this.handleDragStart.bind(this, elem)}
+                    onDragEnd={this.handleDragEnd}
+                    key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="add-element-button">
+                      <FontAwesomeIcon
+                        icon={faPlusCircle}
+                        title="Add Field"
+                        onClick={() =>
+                          this.handleAddFormElementClick(elem.type)
+                        }
+                      />
+                    </span>
+                  </div>
+                ) : (
+                  <div className="element disabled-element" key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="planover-container">
+                      <FontAwesomeIcon icon={faQuestionCircle} />
+                      <div className="popoverText">
+                        Your plan does not include this element. Please contact
+                        support for upgrade.
+                      </div>
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </Route>
@@ -953,9 +1006,7 @@ class Builder extends Component {
           </div>
           {this.renderBuilder()}
         </Route>
-        <Route path="/editor/:formId/design">
-          Form Designer will come here
-        </Route>
+        <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>

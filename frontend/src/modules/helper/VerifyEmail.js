@@ -26,7 +26,7 @@ class VerifyEMail extends Component {
       this.setState({ situation: 'fail', message: data.message })
     } else {
       this.setState({
-        situation: 'succes',
+        situation: 'success',
         message: 'E-mail verified!',
         success: true
       })
@@ -37,19 +37,19 @@ class VerifyEMail extends Component {
     const { success, message, situation } = this.state
 
     const verificationInit = (
-      <div>
+      <div className="verification_back">
         <div>Please wait a moment while we verify your e-mail address.</div>
       </div>
     )
 
     const verificationFail = (
-      <div>
+      <div className="verification_back">
         <div>There seems to be a problem. {message}</div>
       </div>
     )
 
     const verificationSuccess = (
-      <div>
+      <div className="verification_back">
         <div>
           Your account have verified. You can
           <Link to="/login">
@@ -76,7 +76,9 @@ class VerifyEMail extends Component {
                 : success
                 ? verificationSuccess
                 : verificationFail}
-              <p className="message-back">{message}</p>
+              <p className={`message-back ${this.state.situation}`}>
+                {message}
+              </p>
               <div className="have-account">
                 Already have an account?
                 <Link to="/login">

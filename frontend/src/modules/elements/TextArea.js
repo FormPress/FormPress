@@ -40,6 +40,10 @@ export default class TextArea extends Component {
       inputProps.placeholder = config.placeholder
     }
 
+    if (typeof config.maxLength !== 'undefined') {
+      inputProps.maxLength = config.maxLength
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <EditableLabel

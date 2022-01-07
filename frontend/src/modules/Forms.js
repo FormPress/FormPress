@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faTrash, faPen } from '@fortawesome/free-solid-svg-icons'
+import {
+  faEye,
+  faTrash,
+  faPen,
+  faPlusCircle
+} from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
 
 import { api } from '../helper'
@@ -62,6 +67,7 @@ class Forms extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
+    window.localStorage.removeItem('lastEditedFormId')
 
     this.updateForms()
   }
@@ -74,9 +80,31 @@ class Forms extends Component {
 
   render() {
     const { forms } = this.state
+    let roleLimit = 2
+    if (this.props.auth.permission.admin) {
+      roleLimit = 0
+    } else {
+      roleLimit = parseInt(this.props.auth.permission.formLimit)
+    }
 
     return (
       <div className="forms">
+        {roleLimit === 0 || roleLimit > forms.length ? (
+          <div className="nav_add_new_form_container">
+            <Link to="/editor/new/builder" className="nav_add_new_form_link">
+              <div className="popover-container">
+                <FontAwesomeIcon
+                  icon={faPlusCircle}
+                  title="Add New Form"
+                  className="nav_add_new_form_logo"
+                />
+                <div className="popoverText">Create a new form</div>
+              </div>
+            </Link>
+          </div>
+        ) : (
+          ''
+        )}
         <div className="headerContainer"></div>
         <div className="formsContent">
           <Table
@@ -143,7 +171,13 @@ class Forms extends Component {
           />
         </div>
         <div className="newButtonContainer">
-          <Link to="/editor/new/builder">Create a new form</Link>
+          {roleLimit === 0 || roleLimit > forms.length ? (
+            <Link to="/editor/new/builder">Create a new form</Link>
+          ) : (
+            <span className="disabledNewForm" title="Form limit reached">
+              Create a new form
+            </span>
+          )}
         </div>
       </div>
     )
