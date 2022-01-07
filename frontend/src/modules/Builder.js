@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -26,6 +26,7 @@ import AuthContext from '../auth.context'
 import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
+import Modal from "./common/Modal";
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
@@ -157,7 +158,61 @@ class Builder extends Component {
         removeUnavailableElems(element)
       )
     }
+
+    this.shouldBlockNavigation = this.props.history.block(this.checkFormDifferences)
   }
+
+  componentWillUnmount() {
+    this.shouldBlockNavigation();
+  }
+
+  checkFormDifferences = (currenLocation) => {
+    this.ignoreFormDifference = () => {this.props.history.push(currenLocation.pathname)} // if user still wants to proceed without saving
+
+    const {form, savedForm} = this.state
+    let isFormChanged = !isEqual(form, savedForm)
+
+    const disallowedPath = !(currenLocation.pathname.startsWith('/editor'))
+
+    if (savedForm === undefined) { // default&unsaved form should allow navigation
+      return true;
+    }
+
+    if (isFormChanged === true && disallowedPath === true) {
+      const modalContent = {
+        header: 'Unsaved Changes',
+        status: 'warning',
+        content: 'Are you sure you want to discard changes?'
+      }
+
+      modalContent.dialogue = {
+        abortText: 'Cancel',
+        abortClick: this.handleCloseModalClick,
+        negativeText: 'Discard',
+        negativeClick: this.handleDiscardChangesClick
+      }
+      this.setState({ modalContent, isModalOpen: true });
+      return false;
+    }
+
+
+
+    if (isFormChanged === false) {
+      return true;
+    }
+
+    return false; // fail-safe
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
+  }
+
+  handleDiscardChangesClick() {
+    this.shouldBlockNavigation();
+
+    this.ignoreFormDifference();
+  };
 
   async loadForm(formId, seamless = false) {
     if (seamless === false) {
@@ -185,6 +240,7 @@ class Builder extends Component {
       ...data,
       props
     }
+    const savedForm = cloneDeep(form)
 
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
@@ -193,6 +249,7 @@ class Builder extends Component {
     this.setState({
       loading: false,
       form,
+      savedForm,
       publishedForm: publishedFormResult.data
     })
   }
@@ -230,6 +287,7 @@ class Builder extends Component {
     this.state = {
       counter: 0,
       redirect: false,
+      isModalOpen: false,
       saving: false,
       loading: false,
       dragging: false,
@@ -266,7 +324,8 @@ class Builder extends Component {
           customCSS: {
             value: '',
             isEncoded: false
-          }
+          },
+          savedForm: {}
         }
       }
     }
@@ -289,6 +348,8 @@ class Builder extends Component {
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -729,6 +790,8 @@ class Builder extends Component {
         }
       })
     }
+    const savedForm = cloneDeep(this.state.form)
+    this.setState({savedForm})
   }
 
   async handlePublishClick() {
@@ -837,7 +900,13 @@ class Builder extends Component {
     }
 
     return (
+
       <div className="builder">
+        <Modal
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         <div className="headerContainer">
           <div className="header grid center">
             <div className="col-1-16">

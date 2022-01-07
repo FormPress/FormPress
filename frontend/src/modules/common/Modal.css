@@ -15,4 +15,127 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  width: 400px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.wrapper-header .close-modal {
+  float: right;
+  user-select: none;
+  cursor: pointer;
+}
+
+.wrapper-header {
+  padding: 10px 15px;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.wrapper-body {
+  background-color: #ffffff;
+  position: relative;
+  padding: 20px;
+}
+
+.wrapper-header.success {
+  background-color: #9ee048;
+}
+
+.wrapper-header.error {
+  background-color: #e85e6c;
+}
+
+.wrapper-header.information {
+  background-color: #0d6efd;
+}
+
+.wrapper-header.warning {
+  background-color: #b99610;
+}
+
+.wrapper-dialogue {
+}
+
+.wrapper-textbox input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  font-family: Montserrat;
+  border: solid 1px #f5f5f5;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+
+.wrapper-buttons {
+  display: flex;
+  justify-content: right;
+  margin-top: 15px;
+  margin-bottom: -10px;
+  margin-right: -5px;
+}
+.wrapper-buttons button {
+  margin-right: 2px;
+}
+
+.wrapper-buttons button.negative {
+  font-family: Montserrat;
+  font-weight: 700;
+  /*font-size: 16px;*/
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  width: 100px;
+  color: #be0000;
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.wrapper-buttons button.negative:hover {
+  color: #fff;
+  background-color: #be0000;
+  border: none;
+  cursor: pointer;
+}
+
+.wrapper-buttons button.positive {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  width: 100px;
+  color: #1c5c85;
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.wrapper-buttons button.positive:hover {
+  color: #fff;
+  background-color: #8cc63f;
+  border: none;
+  cursor: pointer;
+}
+
+.wrapper-buttons button.abort {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  width: 100px;
+  color: #1c5c85;
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.wrapper-buttons button.abort:hover {
+  color: #fff;
+  background-color: rgba(83, 83, 83, 0.61);
+  border: none;
+  cursor: pointer;
+}
+
+.wrapper-textbox input {
+  margin-bottom: 20px;
 }

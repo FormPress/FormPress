@@ -5,12 +5,14 @@ import {
   faEye,
   faTrash,
   faPen,
-  faPlusCircle
+  faPlusCircle,
+  faClone
 } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
 
 import { api } from '../helper'
 import Table from './common/Table'
+import Modal from './common/Modal'
 import AuthContext from '../auth.context'
 
 import './Forms.css'
@@ -45,17 +47,77 @@ class Forms extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isModalOpen: false,
+      cloneFormName: '',
+      modalContent: {},
       forms: [],
       loading: {
         forms: false,
         deletingId: false
       }
     }
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
   }
 
-  async handleFormDeleteClick(form, e) {
+  handleFormCloneClick(form, e) {
     e.preventDefault()
 
+    const modalContent = {
+      header: 'Clone form',
+      status: 'information'
+    }
+
+    this.setState({cloneFormName: form.title + " (clone)"})
+    modalContent.dialogue = {
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick,
+      positiveText: 'Clone',
+      positiveClick: this.formClone.bind(this, form),
+      inputValue: () => {return this.state.cloneFormName},
+      inputOnChange: (e) => {let name = e.target.value; this.setState({ cloneFormName: name })}
+    }
+
+    modalContent.content = (
+      <div>
+        <span style={{ color: '#719fbd', fontWeight: 'bold' }}>
+          {form.title}
+        </span>{' '}
+        will be cloned.
+        <br/>
+        Please specify a name for new form:
+      </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+   handleFormDeleteClick(form, e) {
+    e.preventDefault()
+    const modalContent = {
+      header: 'Delete form?',
+      status: 'warning'
+    }
+
+    modalContent.dialogue = {
+      negativeText: 'Delete',
+      negativeClick: this.formDelete.bind(this, form),
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick
+    }
+
+    modalContent.content = (
+      <div>
+        <span style={{ color: '#719fbd', fontWeight: 'bold' }}>
+          {form.title}
+        </span>{' '}
+        will be deleted. Are you sure you want to delete this form?
+      </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+  async formDelete(form) {
     this.setState({
       loading: {
         ...this.state.loading,
@@ -63,11 +125,59 @@ class Forms extends Component {
       }
     })
 
-    await api({
+    const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
+
     window.localStorage.removeItem('lastEditedFormId')
+
+    let modalContent = {}
+
+    if(data.message === 'deleted') {
+      modalContent = {
+        content: 'Form successfully deleted!',
+        status: 'success',
+        header: 'Success!'
+      }
+    } else {
+      modalContent = {
+        content: 'There has been an error deleting this form. Please contact support.',
+        status: 'error',
+        header: 'Error'
+      }
+    }
+    this.setState({ modalContent })
+
+    this.updateForms()
+
+  }
+
+  async formClone(form) {
+    form.id = null
+    form.title = this.state.cloneFormName
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms`,
+      method: 'post',
+      body: form
+    })
+
+    let modalContent = {}
+
+    if(data.status === 'done') {
+      modalContent = {
+        content: 'Form cloned successfully!',
+        status: 'success',
+        header: 'Success!'
+      }
+    } else {
+      modalContent = {
+        content: 'There has been an error cloning this form. Please contact support.',
+        status: 'error',
+        header: 'Error'
+    }
+    }
+    this.setState({ modalContent })
 
     this.updateForms()
   }
@@ -76,6 +186,10 @@ class Forms extends Component {
     const { id } = form
 
     window.open(`${BACKEND}/form/view/${id}`, '_blank')
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
   }
 
   render() {
@@ -88,7 +202,14 @@ class Forms extends Component {
     }
 
     return (
+    <div>
       <div className="forms">
+        <Modal
+          history={this.props.history}
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         {roleLimit === 0 || roleLimit > forms.length ? (
           <div className="nav_add_new_form_container">
             <Link to="/editor/new/builder" className="nav_add_new_form_link">
@@ -123,14 +244,14 @@ class Forms extends Component {
               {
                 label: 'Responses',
                 content: (form) => (
-                  <div className="responseCount">{form.responseCount}</div>
+                  <div className={`responseCount${form.responseCount === 0 ? ' zero' : ''}`}>{form.responseCount}</div>
                 ),
                 className: 'responses'
               },
               {
                 label: 'Created At',
                 content: (form) => [
-                  <Moment fromNow ago date={form.created_at} key="1" />,
+                  <Moment fromNow ago date={form.created_at} key="1"/>,
                   <span key="2">{' ago'}</span>
                 ],
                 className: 'createdAt'
@@ -153,16 +274,29 @@ class Forms extends Component {
                           ? this.handlePreviewClick.bind(this, form)
                           : undefined
                       }>
-                      <FontAwesomeIcon icon={faEye} />
+                      <FontAwesomeIcon icon={faEye}/>
                     </span>
                     <span
                       title="Delete Form"
                       onClick={this.handleFormDeleteClick.bind(this, form)}>
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FontAwesomeIcon icon={faTrash}/>
                     </span>
                     <Link to={`/editor/${form.id}/builder`} title="Edit Form">
-                      <FontAwesomeIcon icon={faPen} />
+                      <FontAwesomeIcon icon={faPen}/>
                     </Link>
+                    {roleLimit === 0 || roleLimit > forms.length ? (
+                    <span
+                      title="Clone Form"
+                      onClick={this.handleFormCloneClick.bind(this, form)}>
+                      <FontAwesomeIcon icon={faClone}/>
+                    </span>
+                    ) : (
+                      <span
+                        className="inactive_clone"
+                      title="Form limit reached"
+                      >
+                      <FontAwesomeIcon icon={faClone}/>
+                    </span>)}
                   </div>
                 )
               }
@@ -180,6 +314,7 @@ class Forms extends Component {
           )}
         </div>
       </div>
+    </div>
     )
   }
 }
