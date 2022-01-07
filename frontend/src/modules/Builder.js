@@ -17,9 +17,9 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
-  faQuestionCircle,
   faFont,
-  faMinus
+  faMinus,
+  faQuestionCircle,
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
