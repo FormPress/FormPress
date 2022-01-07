@@ -9,6 +9,7 @@ const Profile = () => {
   const logout = (e) => {
     e.preventDefault()
     window.localStorage.removeItem('auth')
+    window.localStorage.removeItem('lastEditedFormId')
     window.location.reload()
   }
 

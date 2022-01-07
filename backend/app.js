@@ -42,6 +42,7 @@ const authenticationMiddleware = require(path.resolve(
 ))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
+const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -63,6 +64,7 @@ authenticationMiddleware(app)
 loginWithGoogleMiddleware(app)
 apiMiddleware(app)
 pluginMiddleware(app)
+adminApiMiddleware(app)
 loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)

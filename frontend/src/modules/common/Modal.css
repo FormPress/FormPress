@@ -15,4 +15,36 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  width: 400px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.wrapper-header .close-modal{
+  float: right;
+  user-select: none;
+  cursor: pointer;
+}
+
+.wrapper-header{
+  padding: 10px 15px;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.wrapper-body{
+  background-color: #ffffff;
+  position: relative;
+  padding: 20px;
+}
+
+.wrapper-header.error{
+  background-color: #e85e6c
+}
+
+.wrapper-header.success{
+  background-color: #0d6efd;
+}
+
+.wrapper-header.warning{
+  background-color: #b99610;
 }

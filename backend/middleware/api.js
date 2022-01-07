@@ -6,7 +6,10 @@ const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId,
-  userShouldOwnSubmission
+  userShouldOwnSubmission,
+  userShouldOwnForm,
+  userHavePermission,
+  userHaveFormLimit
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
@@ -53,6 +56,7 @@ module.exports = (app) => {
     '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userHavePermission,
     handleCreateForm
   )
 
@@ -60,6 +64,8 @@ module.exports = (app) => {
     '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userHavePermission,
+    userHaveFormLimit('user_id'),
     handleCreateForm
   )
 
@@ -80,6 +86,7 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id'),
     async (req, res) => {
       const { form_id } = req.params
 
@@ -87,6 +94,41 @@ module.exports = (app) => {
         res.json((await formPublishedModel.get({ form_id })) || {})
       } else {
         res.json((await formModel.get({ form_id })) || {})
+      }
+    }
+  )
+
+  //return new or last updated form
+  app.get(
+    '/api/users/:user_id/editor',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id } = req.params
+
+      if (
+        res.locals.auth.permission.admin ||
+        res.locals.auth.permission.formLimit === 0
+      ) {
+        res.status(200).json({ message: 'new' })
+      } else {
+        const db = await getPool()
+        const result = await db.query(
+          `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL`,
+          [user_id]
+        )
+
+        if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+          res.status(200).json({ message: 'new' })
+        } else {
+          const lastForm = await db.query(
+            `SELECT \`id\` FROM \`form\` WHERE user_id = ? ORDER BY \`updated_at\` DESC LIMIT 1`,
+            [user_id]
+          )
+          const lastFormId = lastForm[0].id
+
+          res.status(200).json({ message: lastFormId })
+        }
       }
     }
   )
