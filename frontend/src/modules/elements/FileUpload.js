@@ -57,13 +57,7 @@ export default class FileUpload extends Component {
     }
 
     const display = (
-      <input
-        type="file"
-        name={`q_${config.id}`}
-        id={`q_${config.id}`}
-        data-multiple-caption="{count} files selected"
-        multiple
-      />
+      <input type="file" name={`q_${config.id}`} id={`q_${config.id}`} />
     )
 
     return (
