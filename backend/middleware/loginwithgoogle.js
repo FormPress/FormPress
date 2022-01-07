@@ -47,20 +47,30 @@ module.exports = (app) => {
 
     const resultBody = JSON.parse(googleResult.body)
     const resultemail = resultBody.email
+    const selectUserWithPermission = async (email) => {
+      const result = await db.query(
+        `
+          SELECT
+            u.*,
+            ur.role_id AS role_id,
+            r.permission AS permission
+          FROM \`user\` AS u
+            JOIN \`user_role\` AS ur ON u.id = ur.user_id
+            JOIN role AS r ON r.id = ur.\`role_id\`
+          WHERE u.email = ? AND u.emailVerified = 1
+        `,
+        [email]
+      )
+
+      return result
+    }
 
     if (email !== resultemail) {
       res.status(403).json({ message: 'Token does not match' })
     }
     const db = await getPool()
-    const result = await db.query(
-      `
-        SELECT *
-        FROM \`user\`
-        WHERE email = ? AND emailVerified = 1
-      `,
-      [email]
-    )
-    let userId = ''
+    let result = await selectUserWithPermission(email)
+
     if (result.length === 0) {
       const verifyCode = genRandomString(128)
       const newEntry = await db.query(`
@@ -69,31 +79,39 @@ module.exports = (app) => {
         VALUES
       ('${email}', NULL, NULL, '${verifyCode}', 1)
       `)
-      userId = newEntry.insertId
-    } else {
-      userId = result[0].id
+
+      //adding default role 2, it should be dynamic
+      await db.query(`
+        INSERT INTO \`user_role\`
+          (user_id)
+        VALUES
+        ('${newEntry.insertId}')
+      `)
+
+      result = await selectUserWithPermission(email)
     }
+
+    const user = result[0]
 
     const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
     const jwt_data = {
-      user_id: userId,
-      email: email,
+      user_id: user.id,
+      email: user.email,
+      user_role: user.role_id,
+      permission: JSON.parse(user.permission),
       exp
     }
 
     jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
       console.log('token sign error ', err)
-      console.log('SIGNED TOKEN ', {
-        message: 'Login Success',
-        token,
-        user_id: userId,
-        exp
-      })
+
       res.status(200).json({
         message: 'Login Success',
-        email: email,
         token,
-        user_id: userId,
+        email: user.email,
+        user_role: user.role_id,
+        user_id: user.id,
+        permission: JSON.parse(user.permission),
         exp
       })
     })
