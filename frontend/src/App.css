@@ -7,6 +7,7 @@
   right: 0;
   background-color: #f5f5f5;
   z-index: 10;
+  border-top: 6px solid #8cc63f;
 }
 
 #root > .headerContainer > .grid {
@@ -17,21 +18,45 @@
 
   width: inherit;
   margin: 0 auto;
-  padding: 12px 0;
+  padding: 6px 0;
 }
 
-.header > .profile_container > .profile {
-  line-height: 60px;
-  height: 60px;
+.header > .profile_container > .profile > .wrapper-welcome {
+  display: flex;
+  width: 224px;
+  margin-top: 5px;
+  height: 44px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  background-color: white;
+}
+
+.header > .profile_container > .profile > .wrapper-welcome > .welcome-user {
+  margin: auto -14px auto auto;
+  width: 165px;
+  font-size: 16px;
+  font-family: Montserrat;
+  font-weight: 600;
+  color: #1c5c85;
+  /*white-space: nowrap;*/
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header > .profile_container > .profile > > .wrapper-welcome > .welcome-user i {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 .header > .profile_container > .profile > * {
-  float: right;
-  display: inline-block;
+  /*float: right;*/
+  /*display: inline-block;*/
 }
 
-.header > .profile_container > .profile > .profileSVG {
+.header > .profile_container > .profile > .wrapper-welcome > .profileSVG {
   cursor: pointer;
+  margin: auto;
 }
 
 .nav {
@@ -75,8 +100,6 @@
 }
 
 .nav_add_new_form_logo {
-  float: right;
   width: 30px !important;
   height: 30px;
-  color: #113952;
 }

@@ -1,3 +1,7 @@
+.content {
+  background-color: transparent!important;
+}
+
 .forms {
 }
 
@@ -53,13 +57,18 @@
 .forms table.fp_table .responseCount {
   background-color: #1c5c85;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 18px;
   border-radius: 10px;
   width: 57px;
   height: 30px;
   line-height: 30px;
   text-align: center;
   font-weight: bold;
+
+}
+
+.forms table.fp_table .responseCount.zero {
+  background-color: #c9c9c9;
 }
 
 .forms table.fp_table tr .actions {
@@ -70,7 +79,16 @@
   visibility: visible;
 }
 
+.forms table.fp_table > tbody > tr:hover .name {
+  color: #45799a;
+}
+
 .forms table.fp_table tr .actions > .inactive_view:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.forms table.fp_table tr .actions > .inactive_clone:hover {
   color: rgb(225, 225, 225);
   background-color: #ffff;
 }
@@ -112,7 +130,8 @@
   text-decoration: none;
   background-color: #719fbd;
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .forms > .newButtonContainer > .disabledNewForm {
@@ -130,12 +149,13 @@
 }
 
 .nav_add_new_form_link {
-  height: 30px;
   display: inline-block;
   position: absolute;
   top: 25px;
-  left: 60%;
+  left: 57%;
   z-index: 10;
+  /*float: right;*/
+  color: #113952;
 }
 
 .nav_add_new_form_link .popover-container:hover > .popoverText {

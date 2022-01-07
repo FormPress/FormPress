@@ -13,10 +13,12 @@ const Profile = () => {
 
   const renderLoggedIn = (auth) => {
     return [
-      <ProfileSVG key="1" className="profileSVG" onClick={logout} />,
-      <span key="2">
-        Welcome <i>{auth.email}</i>
-      </span>
+      <div key="1" className="wrapper-welcome">
+      <div className='welcome-user' key="2">
+        Welcome, <i title={auth.email}>{auth.email.match(/^([^@]*)@/)[1]}</i>
+      </div>
+      <ProfileSVG key="3" className="profileSVG" title="Log out" onClick={logout} />
+      </div>
     ]
   }
 

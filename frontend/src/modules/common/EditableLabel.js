@@ -71,6 +71,7 @@ export default class EditableLabel extends Component {
           onKeyDown={this.handleOnKeyDown}
           onPaste={this.handleOnPaste}
           dataplaceholder={this.props.dataPlaceholder}
+          spellCheck={false}
           suppressContentEditableWarning={true}
           className={this.props.value === '' ? 'emptySpan' : null}
           {...extraProps}>
