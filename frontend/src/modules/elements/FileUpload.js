@@ -27,12 +27,13 @@ export default class FileUpload extends Component {
   static renderDataValue(entry) {
     if (entry.value !== '') {
       const parsedValue = JSON.parse(entry.value)
-      const values = parsedValue.map((file) => (
+      const values = parsedValue.map((file, index) => (
         <Link
           to={`/download/${entry.form_id}/${entry.submission_id}/${
             entry.question_id
           }/${encodeURI(file.fileName)}`}
-          target="_blank">
+          target="_blank"
+          key={index}>
           {file.fileName}
           <br />
         </Link>
