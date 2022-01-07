@@ -302,12 +302,12 @@ module.exports = (app) => {
 
   //download uploaded file
   app.get(
-    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     userShouldOwnSubmission('user_id', 'submission_id'),
     async (req, res) => {
-      const { submission_id, question_id } = req.params
+      const { submission_id, question_id, file_name } = req.params
       const db = await getPool()
       const preResult = await db.query(
         `
@@ -326,7 +326,12 @@ module.exports = (app) => {
 
         res.status(200).json({ message: 'Entry not found' })
       } else {
-        const result = JSON.parse(preResult[0].value)
+        const resultArray = JSON.parse(preResult[0].value)
+
+        let result = resultArray.find((file) => {
+          return file.fileName === file_name
+        })
+
         const uploadName = result.uploadName
         const fileName = result.fileName
 
