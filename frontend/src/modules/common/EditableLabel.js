@@ -63,7 +63,7 @@ export default class EditableLabel extends Component {
       extraProps.contentEditable = true
     }
 
-    if(this.props.required === true) {
+    if (this.props.required === true) {
       extraProps.className = 'required'
     }
 

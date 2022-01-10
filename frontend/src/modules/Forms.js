@@ -243,7 +243,11 @@ class Forms extends Component {
                 },
                 {
                   label: 'Name',
-                  content: (form) => <Link to={`/editor/${form.id}/builder`} title="Go To Form">{form.title}</Link>,
+                  content: (form) => (
+                    <Link to={`/editor/${form.id}/builder`} title="Go To Form">
+                      {form.title}
+                    </Link>
+                  ),
                   className: 'name',
                   title: ' '
                 },

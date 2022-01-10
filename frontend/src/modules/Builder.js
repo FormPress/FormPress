@@ -163,16 +163,14 @@ class Builder extends Component {
       )
     }
 
-    this.shouldBlockNavigation = this.props.history.block(
-      this.checkFormDifferences
-    )
+    this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
   }
 
   componentWillUnmount() {
     this.shouldBlockNavigation()
   }
 
-  checkFormDifferences = (location) => {
+  blockReactRoutes = (location) => {
     this.ignoreFormDifference = () => {
       this.props.history.push(location.pathname)
     } // if user still wants to proceed without saving
@@ -207,7 +205,7 @@ class Builder extends Component {
       return true
     }
 
-    return true // fail-safe
+    return false // fail-safe
   }
 
   handleCloseModalClick() {
@@ -772,7 +770,8 @@ class Builder extends Component {
       var nodeList = document.querySelectorAll('[id^="qc_"]')
       nodeList.forEach((node) => {
         node.classList.remove('selected')
-    })}
+      })
+    }
   }
 
   async handleSaveClick() {
@@ -944,7 +943,7 @@ class Builder extends Component {
             </div>
           </div>
         </div>
-        <div className="content" >
+        <div className="content">
           <div className="leftTabs col-1-16">
             {this.renderLeftVerticalTabs()}
           </div>

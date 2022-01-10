@@ -22,7 +22,7 @@
 }
 
 .label span.required:after {
-  content:" *";
+  content: ' *';
   color: red;
 }
 

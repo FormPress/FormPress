@@ -51,7 +51,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 680px;
-
 }
 
 .forms table.fp_table > tbody > tr > td.name > a {
@@ -67,12 +66,12 @@
 }
 
 .forms table.fp_table > tbody > tr {
-  transition: transform .2s;
+  transition: transform 0.2s;
 }
 
 .forms table.fp_table > tbody > tr:hover {
   transform: scale(1.03);
-  box-shadow: 0 8px 16px 0 rgba(69,121,154,0.2);
+  box-shadow: 0 8px 16px 0 rgba(69, 121, 154, 0.2);
 }
 
 .forms table.fp_table .responseCount {
@@ -98,8 +97,6 @@
 .forms table.fp_table tr:hover .actions {
   visibility: visible;
 }
-
-
 
 .forms table.fp_table tr .actions > .inactive_view:hover {
   color: rgb(225, 225, 225);
