@@ -15,7 +15,7 @@ const Profile = () => {
     return [
       <div key="1" className="wrapper-welcome">
         <div className="welcome-user" key="2">
-          Welcome, <i title={auth.email}>{auth.email.match(/^([^@]*)@/)[1]}</i>
+          Welcome, <i title={auth.email}>{auth.email}</i>
         </div>
         <ProfileSVG
           key="3"

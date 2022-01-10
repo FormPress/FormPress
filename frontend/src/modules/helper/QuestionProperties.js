@@ -63,8 +63,11 @@ export default class QuestionProperties extends Component {
         <div className="questionPropertiesMessage">
           Here you can change the question properties to your liking.
         </div>
-        <h2>Question Properties</h2>
-        <h4>Selected element: {selectedField.config.type}</h4>
+
+        <div className="question-info">
+          <div className="qlabel">{selectedField.config.label}</div>
+          <div className="qtype">{selectedField.config.type}</div>
+        </div>
 
         <Renderer
           theme="infernal"

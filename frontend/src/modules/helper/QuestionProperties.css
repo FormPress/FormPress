@@ -7,6 +7,21 @@
   height: 78px;
 }
 
+.question-info > .qlabel {
+  font-family: Montserrat;
+  box-sizing: border-box;
+  margin: 10px; /*text-wrap: normal;*/
+  display: inline-block;
+  max-width: calc(100% - 20px);
+  overflow-wrap: break-word;
+}
+
+.question-info > .qtype {
+  color: gray;
+  float: right;
+  margin: 20px;
+}
+
 .questionPropertiesForm {
   padding: 10px 0;
   position: relative;
