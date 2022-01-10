@@ -51,7 +51,28 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 680px;
-  margin-top: 19.6px;
+
+}
+
+.forms table.fp_table > tbody > tr > td.name > a {
+  color: #333333;
+  text-decoration: none;
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.forms table.fp_table > tbody > tr:hover .name > a {
+  color: #45799a;
+}
+
+.forms table.fp_table > tbody > tr {
+  transition: transform .2s;
+}
+
+.forms table.fp_table > tbody > tr:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px 0 rgba(69,121,154,0.2);
 }
 
 .forms table.fp_table .responseCount {
@@ -78,9 +99,7 @@
   visibility: visible;
 }
 
-.forms table.fp_table > tbody > tr:hover .name {
-  color: #45799a;
-}
+
 
 .forms table.fp_table tr .actions > .inactive_view:hover {
   color: rgb(225, 225, 225);
@@ -149,7 +168,7 @@
 
 .nav_add_new_form_link {
   display: inline-block;
-  position: absolute;
+  position: fixed;
   top: 25px;
   left: 57%;
   z-index: 10;

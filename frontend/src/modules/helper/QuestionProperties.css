@@ -1,3 +1,12 @@
+.questionPropertiesMessage {
+  background-color: #fffcdd;
+  color: #646464;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+  height: 78px;
+}
+
 .questionPropertiesForm {
   padding: 10px 0;
   position: relative;

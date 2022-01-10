@@ -356,6 +356,7 @@ class Builder extends Component {
     this.setCSS = this.setCSS.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
+    this.handleUnselectElement = this.handleUnselectElement.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -764,6 +765,16 @@ class Builder extends Component {
     }
   }
 
+  handleUnselectElement() {
+    const { location } = this.props.history
+
+    if (location.pathname.endsWith('/builder')) {
+      var nodeList = document.querySelectorAll('[id^="qc_"]')
+      nodeList.forEach((node) => {
+        node.classList.remove('selected')
+    })}
+  }
+
   async handleSaveClick() {
     const { form } = this.state
 
@@ -904,6 +915,7 @@ class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
+    this.handleUnselectElement()
 
     return (
       <div className="builder">
@@ -932,7 +944,7 @@ class Builder extends Component {
             </div>
           </div>
         </div>
-        <div className="content">
+        <div className="content" >
           <div className="leftTabs col-1-16">
             {this.renderLeftVerticalTabs()}
           </div>
