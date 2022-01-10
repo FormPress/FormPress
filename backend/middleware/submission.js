@@ -123,7 +123,7 @@ module.exports = (app) => {
 
       if (type === 'FileUpload') {
         const uploadPosition = keys.indexOf(key)
-        parsedValue = JSON.parse(fileUploadEntries[uploadPosition - 1])
+        const parsedValue = JSON.parse(fileUploadEntries[uploadPosition - 1])
 
         const entry_idData = await db.query(
           `SELECT \`id\` FROM \`entry\` WHERE submission_id = ? AND question_id = ?`,
