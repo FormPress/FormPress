@@ -85,6 +85,7 @@
 .formTitle span[contentEditable='true'] {
   min-height: 22px;
   display: block;
+  word-break: break-all;
   padding: 2px 5px;
   border: 1px solid transparent;
 }

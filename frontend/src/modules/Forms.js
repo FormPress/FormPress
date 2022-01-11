@@ -78,13 +78,28 @@ class Forms extends Component {
       },
       inputOnChange: (e) => {
         let name = e.target.value
+        let limit = 256
+        if (name.length >= limit) {
+          name = name.substr(0, limit)
+          name
+            .replace(/<span(.*?)>(.*?)<\/span>/, '')
+            .replace(/(<([^>]+)>)/gi, '')
+            .trim()
+        }
         this.setState({ cloneFormName: name })
       }
     }
 
     modalContent.content = (
       <div>
-        <span style={{ color: '#719fbd', fontWeight: 'bold' }}>
+        <span
+          style={{
+            color: '#719fbd',
+            fontWeight: 'bold',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all'
+          }}>
           {form.title}
         </span>{' '}
         will be cloned.
@@ -112,7 +127,14 @@ class Forms extends Component {
 
     modalContent.content = (
       <div>
-        <span style={{ color: '#719fbd', fontWeight: 'bold' }}>
+        <span
+          style={{
+            color: '#719fbd',
+            fontWeight: 'bold',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all'
+          }}>
           {form.title}
         </span>{' '}
         will be deleted. Are you sure you want to delete this form?
