@@ -124,7 +124,7 @@
   padding: 3px 5px;
   width: 100%;
   display: block;
-  border: 1px dashed white;
+  border: 1px dashed transparent;
   word-break: break-word;
 }
 .gleam.form .header.sublabel {
@@ -136,7 +136,7 @@
   padding: 3px 5px;
   width: 100%;
   display: block;
-  border: 1px dashed white;
+  border: 1px dashed transparent;
   word-break: break-word;
 }
 .gleam.form .clearfix {
