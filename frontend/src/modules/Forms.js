@@ -57,6 +57,7 @@ class Forms extends Component {
       }
     }
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleCloneFormTitleChange = this.handleCloneFormTitleChange.bind(this)
   }
 
   handleFormCloneClick(form, e) {
@@ -76,18 +77,7 @@ class Forms extends Component {
       inputValue: () => {
         return this.state.cloneFormName
       },
-      inputOnChange: (e) => {
-        let name = e.target.value
-        let limit = 256
-        if (name.length >= limit) {
-          name = name.substr(0, limit)
-          name
-            .replace(/<span(.*?)>(.*?)<\/span>/, '')
-            .replace(/(<([^>]+)>)/gi, '')
-            .trim()
-        }
-        this.setState({ cloneFormName: name })
-      }
+      inputOnChange: (e) => this.handleCloneFormTitleChange(e)
     }
 
     modalContent.content = (
@@ -142,6 +132,19 @@ class Forms extends Component {
     )
 
     this.setState({ modalContent, isModalOpen: true })
+  }
+
+  handleCloneFormTitleChange(e) {
+    let name = e.target.value
+    let limit = 256
+    if (name.length >= limit) {
+      name = name.substr(0, limit)
+      name
+        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+        .replace(/(<([^>]+)>)/gi, '')
+        .trim()
+    }
+    this.setState({ cloneFormName: name })
   }
 
   async formDelete(form) {

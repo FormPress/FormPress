@@ -18,9 +18,6 @@ table.fp_table > thead {
   text-align: left;
   font-weight: normal;
   letter-spacing: 0;
-  position: sticky;
-  position: -webkit-sticky;
-  top: 86px;
 }
 
 table.fp_table > tbody > tr > td.mw,
