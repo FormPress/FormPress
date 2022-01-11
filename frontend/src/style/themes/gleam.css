@@ -14,12 +14,18 @@
   position: relative;
   overflow: visible;
   display: grid;
-  border: 1px solid #ffffff;
+  border: 2px solid transparent;
 }
 .gleam.form > .element.requiredError {
   border: 1px solid red;
   background: rgba(255, 0, 0, 0.3);
 }
+
+.label span.required:after {
+  content: ' *';
+  color: red;
+}
+
 .gleam.form > .element > .label {
   float: none;
   margin-bottom: 10px;
@@ -29,7 +35,7 @@
   max-width: calc(100% - 20px);
   display: inline-block;
   padding: 2px 5px;
-  border: 1px solid #ffffff;
+  border: 1px solid transparent;
   word-break: break-word;
 }
 .builder.gleam.form > .element > .label > span[contentEditable='true']:hover {
@@ -37,9 +43,6 @@
 }
 .gleam.form > .element > .label > span.emptySpan {
   border: 1px dashed gray;
-}
-.gleam.form > .element.requiredError > .label > span {
-  border: 1px solid #ffbebb;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
@@ -66,7 +69,7 @@
   min-height: 19px;
   padding: 2px 5px;
   color: gray;
-  border: 1px solid #ffffff;
+  border: 1px solid transparent;
   display: block;
   word-break: break-all;
 }
@@ -83,7 +86,7 @@
   min-height: 22px;
   display: block;
   padding: 2px 5px;
-  border: 1px solid #fff;
+  border: 1px solid transparent;
 }
 .formTitle span.emptySpan[contentEditable='true'] {
   border: 1px dashed gray;
@@ -112,9 +115,6 @@
   content: '';
 }
 
-.gleam.form .requiredError .sublabel:not(.header) {
-  border: 1px solid #ffbebb;
-}
 .gleam.form .header.label {
   position: relative;
   text-align: center;
@@ -164,9 +164,7 @@
   margin-bottom: 10px;
   width: 100%;
 }
-.gleam.form .element.requiredError > .fl.label {
-  border: 1px solid #ffbebb;
-}
+
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
   border: solid 1px #c9c9c9;
@@ -355,7 +353,7 @@
 }
 
 .gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
-  border: 1px dashed #ffffff;
+  border: 1px dashed transparent;
   padding: 2px 5px;
   min-width: 60px;
   display: block;
@@ -376,7 +374,7 @@
   .input
   .checkbox-label
   span[contentEditable='true'] {
-  border: 1px dashed #ffffff;
+  border: 1px dashed transparent;
   padding: 2px 5px;
   min-width: 60px;
   display: block;

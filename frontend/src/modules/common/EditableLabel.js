@@ -63,6 +63,10 @@ export default class EditableLabel extends Component {
       extraProps.contentEditable = true
     }
 
+    if (this.props.required === true) {
+      extraProps.className = 'required'
+    }
+
     return (
       <div className={this.props.className}>
         <span
@@ -71,14 +75,12 @@ export default class EditableLabel extends Component {
           onKeyDown={this.handleOnKeyDown}
           onPaste={this.handleOnPaste}
           dataplaceholder={this.props.dataPlaceholder}
+          spellCheck={false}
           suppressContentEditableWarning={true}
           className={this.props.value === '' ? 'emptySpan' : null}
           {...extraProps}>
           {this.props.value}
         </span>
-        {this.props.required === true ? (
-          <span className="requiredMarker"> *</span>
-        ) : null}
       </div>
     )
   }

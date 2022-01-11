@@ -14,23 +14,22 @@ const Profile = () => {
   }
 
   const renderLoggedIn = (auth) => {
-    return (
-      <div className="profile">
-        <div className="profileMenuContainer">
-          <ProfileSVG key="1" className="profileSVG" />
-          <div className="profileMenuContent dn">
-            <NavLink to="/settings" activeClassName="selected">
-              Settings
-            </NavLink>
-            <a onClick={logout}>Logout</a>
-          </div>
+    return [
+      <div key="1" className="wrapper-welcome">
+        <div className="welcome-user" key="2">
+          Welcome, <i title={auth.email}>{auth.email}</i>
         </div>
-
-        <span key="2">
-          Welcome <i>{auth.email}</i>
-        </span>
+        <ProfileSVG
+          key="3"
+          className="profileSVG"
+          title="Log out"
+        />
+        <NavLink to="/settings" activeClassName="selected">
+          Settings
+        </NavLink>
+        <a onClick={logout}>Logout</a>
       </div>
-    )
+    ]
   }
 
   return (
