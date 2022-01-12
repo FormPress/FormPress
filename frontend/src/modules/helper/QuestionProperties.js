@@ -59,25 +59,26 @@ export default class QuestionProperties extends Component {
     }
 
     return (
-      <div>
+      <div className="questionProperties">
         <div className="questionPropertiesMessage">
           Here you can change the question properties to your liking.
         </div>
+        <div className="wrapper-questionProperties">
+          <div className="question-info">
+            <div className="qlabel">{selectedField.config.label}</div>
+            <div className="qtype">{selectedField.config.type}</div>
+          </div>
 
-        <div className="question-info">
-          <div className="qlabel">{selectedField.config.label}</div>
-          <div className="qtype">{selectedField.config.type}</div>
+          <Renderer
+            theme="infernal"
+            className="questionPropertiesForm"
+            selectedField={selectedField}
+            handleFieldChange={this.handleFieldChange}
+            handleAddingItem={this.handleAddingItem}
+            handleDeletingItem={this.handleDeletingItem}
+            form={form}
+          />
         </div>
-
-        <Renderer
-          theme="infernal"
-          className="questionPropertiesForm"
-          selectedField={selectedField}
-          handleFieldChange={this.handleFieldChange}
-          handleAddingItem={this.handleAddingItem}
-          handleDeletingItem={this.handleDeletingItem}
-          form={form}
-        />
       </div>
     )
   }
