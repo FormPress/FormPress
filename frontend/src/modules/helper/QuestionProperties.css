@@ -1,3 +1,8 @@
+.wrapper-questionProperties {
+  margin-top: 10px;
+  overflow-y: scroll;
+}
+
 .questionPropertiesMessage {
   background-color: #fffcdd;
   color: #646464;
@@ -27,7 +32,6 @@
   position: relative;
   display: block;
   height: 450px;
-  overflow-y: scroll;
 }
 .questionPropertiesForm > .element {
   margin-top: 10px;

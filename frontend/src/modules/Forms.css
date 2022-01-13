@@ -43,6 +43,12 @@
   width: 140px;
 }
 
+.forms table.fp_table > thead {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 86px;
+}
+
 .forms table.fp_table > tbody > tr > td.name {
   color: #333333;
   font-size: 18px;
