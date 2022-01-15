@@ -68,7 +68,14 @@ class Forms extends Component {
       status: 'information'
     }
 
-    this.setState({ cloneFormName: form.title + ' (clone)' })
+    let cloneFormName = 'Clone of ' + form.title
+
+    if (cloneFormName.length > 256) {
+      let excessChars = cloneFormName.length - 256
+      cloneFormName = cloneFormName.slice(0, -excessChars)
+    }
+
+    this.setState({ cloneFormName })
     modalContent.dialogue = {
       abortText: 'Cancel',
       abortClick: this.handleCloseModalClick,

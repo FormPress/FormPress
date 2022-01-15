@@ -65,6 +65,8 @@
   display: block;
   padding-top: 20px;
   padding-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .forms table.fp_table > tbody > tr:hover .name > a {
