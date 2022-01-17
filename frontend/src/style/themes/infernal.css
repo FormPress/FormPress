@@ -175,7 +175,7 @@
   border: solid white;
   display: inline-block;
   margin-left: 6px;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);

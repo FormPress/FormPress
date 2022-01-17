@@ -25,7 +25,7 @@
   padding: 6px;
 }
 
-.header > .profile_container > .profile > .wrapper-welcome {
+.header > .profile_container > .wrapper-welcome {
   display: inline-block;
   width: 255px;
   margin-top: 5px;
@@ -35,7 +35,7 @@
   padding: 5px;
 }
 
-.header > .profile_container > .profile > .wrapper-welcome > .welcome-user {
+.header > .profile_container > .wrapper-welcome > .welcome-user {
   margin-left: 3px;
   width: 210px;
   font-size: 16px;
@@ -48,7 +48,7 @@
   text-overflow: ellipsis;
 }
 
-.header > .profile_container > .profile > .wrapper-welcome > .profileSVG {
+.header > .profile_container > .wrapper-welcome > .profileSVG {
   cursor: pointer;
   margin-top: 8px;
   margin-right: 1px;

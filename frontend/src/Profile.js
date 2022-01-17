@@ -23,11 +23,11 @@ const Profile = () => {
           key="3"
           className="profileSVG"
           title="Log out"
+          onClick={logout}
         />
         <NavLink to="/settings" activeClassName="selected">
           Settings
         </NavLink>
-        <a onClick={logout}>Logout</a>
       </div>
     ]
   }

@@ -132,7 +132,6 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
-  height: 78px;
 }
 
 .elements > .elementList {
@@ -346,15 +345,14 @@
 .popover-container:hover > .popoverText {
   display: block;
   width: 83px;
-  height: 20px;
-  margin: 0 0 3px;
-  padding: 2px 4px 3px 3px;
+  height: 22px;
+  padding: 0px 3px;
   border-radius: 4px;
   position: absolute;
   background-color: #113952;
   color: #fff;
   text-align: center;
-  top: -25px;
+  top: -30px;
   left: -35px;
   z-index: 9999;
 }
