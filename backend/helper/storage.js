@@ -60,3 +60,11 @@ exports.downloadFile = (uploadName) => {
 
   return out
 }
+
+exports.deleteFile = (uploadName) => {
+  try {
+    fileUploadBucket.file(uploadName).delete()
+  } catch (err) {
+    next(err)
+  }
+}

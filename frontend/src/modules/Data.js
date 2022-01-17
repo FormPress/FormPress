@@ -116,6 +116,9 @@ class Data extends Component {
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
+    this.handleDeleteSubmissionClick = this.handleDeleteSubmissionClick.bind(
+      this
+    )
   }
 
   handleFormClick(form) {
@@ -219,6 +222,34 @@ class Data extends Component {
     this.setState({ selectedSubmissionIds: [] })
   }
 
+  async handleDeleteSubmissionClick() {
+    const {
+      selectedFormId,
+      submissions,
+      selectedSubmissionIds,
+      entries
+    } = this.state
+
+    this.setState({
+      submissions: submissions.filter(
+        (submission) => selectedSubmissionIds.includes(submission.id) !== true
+      )
+    })
+
+    if (selectedSubmissionIds.includes(entries[0].submission_id)) {
+      this.setState({ entries: [] })
+    }
+    this.setState({ selectedSubmissionIds: [] })
+
+    await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
+      method: 'delete',
+      body: {
+        submissionIds: this.state.selectedSubmissionIds
+      }
+    })
+  }
+
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions =
@@ -313,19 +344,31 @@ class Data extends Component {
     const csvExportClassNames = ['csvExportButton']
     let csvExportButtonText = 'Export CSV'
 
+    const deleteSubmissionButtonClassNames = ['deleteSubmissionButton']
+    let deleteSubmissionButtonText = 'Delete'
+
     if (selectedSubmissionIds.length === 0) {
       csvExportClassNames.push('disabled')
+      deleteSubmissionButtonClassNames.push('disabled')
     } else {
       csvExportButtonText = `Export CSV (${selectedSubmissionIds.length})`
+      deleteSubmissionButtonText = `Delete (${selectedSubmissionIds.length})`
     }
 
     return [
       <div className="submissionActions grid" key="actions">
-        <div className="col-10-16">
+        <div className="col-6-16">
           {submissions.length} total submission(s). <br />
           {getNumberOfSubmissionsToday(submissions)} submission(s) today.
         </div>
-        <div className="col-6-16 buttonContainer">
+        <div className="col-5-16 buttonContainer">
+          <button
+            className={deleteSubmissionButtonClassNames.join(' ')}
+            onClick={this.handleDeleteSubmissionClick}>
+            {deleteSubmissionButtonText}
+          </button>
+        </div>
+        <div className="col-5-16 buttonContainer">
           <button
             className={csvExportClassNames.join(' ')}
             onClick={this.handleCSVExportClick}>

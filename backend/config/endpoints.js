@@ -91,6 +91,15 @@ module.exports = {
       }
     },
     {
+      method: 'delete',
+      path: '/api/users/:user_id/forms/:form_id/deleteSubmission',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/deleteSubmission',
+      exampleRequestBody: {
+        submissionIds: [1]
+      }
+    },
+    {
       method: 'get',
       path:
         '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',

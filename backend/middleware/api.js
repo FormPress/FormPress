@@ -319,6 +319,61 @@ module.exports = (app) => {
     }
   )
 
+  //delete submissions
+  app.delete(
+    '/api/users/:user_id/forms/:form_id/deleteSubmission',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, user_id } = req.params
+      const ids = req.body.submissionIds
+      const db = await getPool()
+
+      await db.query(
+        `
+        DELETE FROM \`entry\`
+          WHERE form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`submission\`
+          WHERE form_id = ? AND id IN (${ids.map(() => '?').join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      const uploadName = await db.query(
+        `
+      SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ? AND submission_id IN (${ids
+        .map(() => '?')
+        .join(',')})
+      `,
+        [user_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`storage_usage\`
+          WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [user_id, form_id, ...ids]
+      )
+
+      if (uploadName.length > 0) {
+        uploadName.forEach((fileName) => {
+          storage.deleteFile(fileName.upload_name)
+        })
+      }
+    }
+  )
+
   // return entries of given submission id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
