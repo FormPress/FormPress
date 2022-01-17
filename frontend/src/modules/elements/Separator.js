@@ -14,7 +14,6 @@ export default class Separator extends Component {
 
   render() {
     const { config } = this.props
-    console.log(config)
     return (
       <ElementContainer type={config.type} {...this.props}>
         <div>
