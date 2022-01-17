@@ -324,7 +324,7 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/deleteSubmission',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
+    async (req) => {
       const { form_id, user_id } = req.params
       const ids = req.body.submissionIds
       const db = await getPool()

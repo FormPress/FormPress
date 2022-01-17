@@ -65,6 +65,6 @@ exports.deleteFile = (uploadName) => {
   try {
     fileUploadBucket.file(uploadName).delete()
   } catch (err) {
-    next(err)
+    console.log('cannot delete uploaded file', err)
   }
 }
