@@ -1,9 +1,37 @@
+.wrapper-questionProperties {
+  margin-top: 10px;
+  overflow-y: scroll;
+}
+
+.questionPropertiesMessage {
+  background-color: #fffcdd;
+  color: #646464;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+  height: 78px;
+}
+
+.question-info > .qlabel {
+  font-family: Montserrat;
+  box-sizing: border-box;
+  margin: 10px; /*text-wrap: normal;*/
+  display: inline-block;
+  max-width: calc(100% - 20px);
+  overflow-wrap: break-word;
+}
+
+.question-info > .qtype {
+  color: gray;
+  float: right;
+  margin: 20px;
+}
+
 .questionPropertiesForm {
   padding: 10px 0;
   position: relative;
   display: block;
   height: 450px;
-  overflow-y: scroll;
 }
 .questionPropertiesForm > .element {
   margin-top: 10px;

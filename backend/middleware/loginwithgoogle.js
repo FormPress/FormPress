@@ -57,7 +57,7 @@ module.exports = (app) => {
           FROM \`user\` AS u
             JOIN \`user_role\` AS ur ON u.id = ur.user_id
             JOIN role AS r ON r.id = ur.\`role_id\`
-          WHERE u.email = ? AND u.emailVerified = 1
+          WHERE u.email = ?
         `,
         [email]
       )
