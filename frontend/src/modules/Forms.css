@@ -1,3 +1,7 @@
+.content {
+  background-color: transparent !important;
+}
+
 .forms {
 }
 
@@ -39,6 +43,12 @@
   width: 140px;
 }
 
+.forms table.fp_table > thead {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 86px;
+}
+
 .forms table.fp_table > tbody > tr > td.name {
   color: #333333;
   font-size: 18px;
@@ -47,19 +57,45 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 680px;
-  margin-top: 19.6px;
+}
+
+.forms table.fp_table > tbody > tr > td.name > a {
+  color: #333333;
+  text-decoration: none;
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.forms table.fp_table > tbody > tr:hover .name > a {
+  color: #45799a;
+}
+
+.forms table.fp_table > tbody > tr {
+  transition: transform 0.2s;
+}
+
+.forms table.fp_table > tbody > tr:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px 0 rgba(69, 121, 154, 0.2);
 }
 
 .forms table.fp_table .responseCount {
   background-color: #1c5c85;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 18px;
   border-radius: 10px;
   width: 57px;
   height: 30px;
   line-height: 30px;
   text-align: center;
   font-weight: bold;
+}
+
+.forms table.fp_table .responseCount.zero {
+  background-color: #c9c9c9;
 }
 
 .forms table.fp_table tr .actions {
@@ -71,6 +107,11 @@
 }
 
 .forms table.fp_table tr .actions > .inactive_view:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.forms table.fp_table tr .actions > .inactive_clone:hover {
   color: rgb(225, 225, 225);
   background-color: #ffff;
 }
@@ -112,7 +153,8 @@
   text-decoration: none;
   background-color: #719fbd;
   display: inline-block;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .forms > .newButtonContainer > .disabledNewForm {
@@ -130,12 +172,13 @@
 }
 
 .nav_add_new_form_link {
-  height: 30px;
   display: inline-block;
-  position: absolute;
+  position: fixed;
   top: 25px;
-  left: 60%;
+  left: 57%;
   z-index: 10;
+  /*float: right;*/
+  color: #113952;
 }
 
 .nav_add_new_form_link .popover-container:hover > .popoverText {
