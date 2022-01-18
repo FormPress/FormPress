@@ -230,24 +230,29 @@ class Data extends Component {
       entries
     } = this.state
 
-    this.setState({
-      submissions: submissions.filter(
-        (submission) => selectedSubmissionIds.includes(submission.id) !== true
-      )
-    })
-
-    if (selectedSubmissionIds.includes(entries[0].submission_id)) {
-      this.setState({ entries: [] })
-    }
-    this.setState({ selectedSubmissionIds: [] })
-
-    await api({
+    const { data } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
       method: 'delete',
       body: {
         submissionIds: this.state.selectedSubmissionIds
       }
     })
+
+    if (data.success === true) {
+      this.setState({
+        submissions: submissions.filter(
+          (submission) => selectedSubmissionIds.includes(submission.id) !== true
+        )
+      })
+
+      if (selectedSubmissionIds.includes(entries[0].submission_id)) {
+        this.setState({ entries: [] })
+      }
+
+      this.setState({ selectedSubmissionIds: [] })
+    } else {
+      console.log('can not delete submission', data)
+    }
   }
 
   render() {
