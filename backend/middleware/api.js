@@ -349,11 +349,11 @@ module.exports = (app) => {
 
       const uploadName = await db.query(
         `
-      SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ? AND submission_id IN (${ids
+      SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
         .map(() => '?')
         .join(',')})
       `,
-        [user_id, ...ids]
+        [user_id, form_id, ...ids]
       )
 
       await db.query(
