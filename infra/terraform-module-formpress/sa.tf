@@ -19,6 +19,6 @@ resource "kubernetes_secret" "sa_credentials" {
   }
 
   data = {
-    "credentials.json" = module.service_accounts[each.key].key
+    "credentials.json" = base64encode(module.service_accounts[each.key].key)
   }
 }

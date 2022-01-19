@@ -77,16 +77,16 @@ describe('submission handler', () => {
 
   it('check multiple input for single question(Name)', () => {
     const input = [
-      { q_id: 'q_7[firstName]', value: 'omer' },
-      { q_id: 'q_7[lastName]', value: 'korkmaz' }
+      { q_id: 'q_7[firstName]', value: 'John' },
+      { q_id: 'q_7[lastName]', value: 'Doe' }
     ]
     const expectedOutput = [
       {q_id: 5, value: ''},
       {q_id: 9, value: 'off'},
       {q_id: 6, value: ''},
       {q_id: 7, value: {
-        firstName:"omer",
-        lastName:"korkmaz"
+        firstName:"John",
+        lastName:"Doe"
         }
       },
       {q_id: 8, value: ''},

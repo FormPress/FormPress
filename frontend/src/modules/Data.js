@@ -59,12 +59,7 @@ class Data extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
-    const forms = (data || []).map((form) => {
-      return {
-        ...form,
-        props: JSON.parse(form.props)
-      }
-    })
+    const forms = data
 
     this.setLoadingState('forms', false)
     this.setState({ forms })
@@ -157,7 +152,7 @@ class Data extends Component {
       selectedSubmissionForm = await api({
         resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
       })
-      selectedSubmissionForm = selectedSubmissionForm.data[0]
+      selectedSubmissionForm = selectedSubmissionForm.data
     }
 
     this.setLoadingState('entries', true)
@@ -173,8 +168,7 @@ class Data extends Component {
 
     try {
       for (let dataContent of data) {
-        for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
-          .elements) {
+        for (let element of this.state.selectedSubmissionForm.props.elements) {
           if (
             element.id === dataContent.question_id &&
             (element.type === 'Checkbox' || element.type === 'Radio')
@@ -257,7 +251,7 @@ class Data extends Component {
         <div className="formSelectorContainer center">
           <div className="formSelector cw center grid">
             <div
-              className="col-15-16"
+              className="col-15-16 formSelectorContent"
               onClick={() => {
                 this.setState({ formSelectorOpen: !formSelectorOpen })
               }}>
@@ -408,7 +402,7 @@ class Data extends Component {
     const { selectedSubmissionForm } = this.state
 
     return Elements[
-      JSON.parse(selectedSubmissionForm.props).elements.filter(
+      selectedSubmissionForm.props.elements.filter(
         (element) => element.id === entry.question_id
       )[0].type
     ].renderDataValue(entry)
@@ -416,15 +410,16 @@ class Data extends Component {
 
   renderEntries() {
     const { entries, selectedSubmissionForm, parseError } = this.state
+
     if (parseError === false) {
       if (entries.length === 0) {
         return null
       }
 
       const getLabel = (question_id) => {
-        const matchingQuestion = JSON.parse(
-          selectedSubmissionForm.props
-        ).elements.filter((element) => element.id === question_id)
+        const matchingQuestion = selectedSubmissionForm.props.elements.filter(
+          (element) => element.id === question_id
+        )
 
         if (matchingQuestion.length > 0) {
           return matchingQuestion[0].label

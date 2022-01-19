@@ -5,7 +5,9 @@ const devPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
-
+const isEnvironmentVariableSet = {
+  sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
+}
 const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 
 module.exports = (app) => {
@@ -31,6 +33,23 @@ module.exports = (app) => {
         VALUES
       ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
+
+      //adding default role 2, it should be dynamic
+      await db.query(`
+        INSERT INTO \`user_role\`
+          (user_id)
+        VALUES
+        ('${newEntry.insertId}')
+      `)
+
+      if (isEnvironmentVariableSet.sendgridApiKey == false) {
+        await db.query(
+          `
+            UPDATE \`user\` SET \`emailVerified\` = 1 WHERE id = ?
+          `,
+          [newEntry.insertId]
+        )
+      }
 
       const htmlBody = await ejs
         .renderFile(
@@ -66,20 +85,21 @@ module.exports = (app) => {
         html: htmlBody
       }
 
-      try {
-        console.log('sending verify email ', msg)
-        sgMail.send(msg)
-      } catch (e) {
-        console.log('Error while sending email ', e)
+      if (isEnvironmentVariableSet.sendgridApiKey) {
+        try {
+          console.log('sending verification email ', msg)
+          sgMail.send(msg)
+        } catch (e) {
+          console.log('Error while sending email ', e)
+        }
       }
-
       res.status(200).json({
         message: 'Signup Success'
       })
     } else {
       return res
         .status(403)
-        .json({ message: 'This e-mail already have an account' })
+        .json({ message: 'This e-mail is already attached to an account' })
     }
   })
 }

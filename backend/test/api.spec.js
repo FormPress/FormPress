@@ -86,6 +86,7 @@ describe('Api', () => {
     const jwt_data = {
       user_id: 1,
       email: 'test@formpress.org',
+      permission:{admin:true},
       exp
     }
     const jwt_data2 = {

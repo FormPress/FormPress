@@ -1,5 +1,7 @@
 const path = require('path')
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
+const adminPassword = process.env.ADMINPASSWORD || 'admin'
+const adminEmail = process.env.ADMINEMAIL || 'admin@formpress.org'
 
 module.exports = async (db) => {
   console.log('Executing first migration')
@@ -73,13 +75,12 @@ module.exports = async (db) => {
     ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
   `)
 
-  const hash = sha512('admin', genRandomString(128))
-
+  const hash = sha512(adminPassword, genRandomString(128))
   // insert default user email: admin@formpress.org and password: admin
   await db.query(`
     INSERT INTO \`user\`
       (name, email, password, salt)
     VALUES
-      ('Admin', 'admin@formpress.org', '${hash.passwordHash}', '${hash.salt}')
+      ('Admin', '${adminEmail}', '${hash.passwordHash}', '${hash.salt}')
   `)
 }

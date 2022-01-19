@@ -5,6 +5,7 @@ import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
@@ -59,6 +60,8 @@ class Login extends Component {
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
+        user_role: data.user_role,
+        permission: data.permission,
         loggedIn: true
       })
     } else {
@@ -84,6 +87,8 @@ class Login extends Component {
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
+        user_role: data.user_role,
+        permission: data.permission,
         loggedIn: true
       })
     } else {
@@ -104,9 +109,14 @@ class Login extends Component {
     const { message, state } = this.state
 
     if (this.props.auth.loggedIn === true) {
-      const pathName = this.props.location.state
+      let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
+      //can't allow to return editor, when changing accounts old accounts form can be redirected
+      if (pathName.indexOf('editor') >= 0) {
+        pathName = '/forms'
+      }
+
       return (
         <Redirect
           to={{
@@ -116,6 +126,8 @@ class Login extends Component {
         />
       )
     }
+
+    const capabilities = this.props.capabilities
 
     return (
       <div className="login-wrapper">
@@ -169,20 +181,32 @@ class Login extends Component {
               {state === 'loading' ? 'Loading...' : null}
               {state === 'done' ? message : null}
             </p>
-            <div className="forgot-pass" title="WIP">
-              <span className="forgot-pass-span">
-                <Link to="/forgotpassword">
-                  &nbsp;<i>Forgot password?</i>
-                </Link>
-              </span>
-            </div>
-            <div className="or-seperator">or</div>
-            <div className="google-sign-in">
-              <LoginWithGoogle
-                handleLoginWithGoogleButton={this.handleLoginWithGoogleClick}
-                handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
-              />
-            </div>
+            {capabilities.sendgridApiKey ? (
+              <div className="forgot-pass" title="forgot password">
+                <span className="forgot-pass-span">
+                  <Link to="/forgotpassword">
+                    &nbsp;<i>Forgot password?</i>
+                  </Link>
+                </span>
+              </div>
+            ) : (
+              ''
+            )}
+            {capabilities.googleCredentialsClientID ? (
+              <div>
+                <div className="or-seperator">or</div>
+                <div className="google-sign-in">
+                  <LoginWithGoogle
+                    handleLoginWithGoogleButton={
+                      this.handleLoginWithGoogleClick
+                    }
+                    handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+                  />
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
               <Link to="/signup">
@@ -192,13 +216,13 @@ class Login extends Component {
             <div className="have-trouble">
               Having trouble?
               <span className="wip-placeholder" title="WIP">
-                Contact Us
+                <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
               </span>
             </div>
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2020 formpress.org</div>
+          <div className="col-8-16">Copyright © 2021 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>
@@ -209,9 +233,15 @@ class Login extends Component {
 }
 
 const LoginWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Login {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Login {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default LoginWrapped

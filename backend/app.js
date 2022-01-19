@@ -3,6 +3,14 @@ const path = require('path')
 const fs = require('fs')
 const fileUpload = require('express-fileupload')
 
+const isEnvironmentVariableSet = {
+  googleServiceAccountCredentials:
+    process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
+  sendgridApiKey: process.env.SENDGRID_API_KEY !== '',
+  googleCredentialsClientID: process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
+  fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
+}
+
 let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
 var buff = Buffer.from(tmp, 'base64')
 let finalSecret = buff.toString('ascii')
@@ -11,19 +19,19 @@ fs.writeFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE, finalSecret)
 
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
-
-const submissionMiddleware = require(path.resolve('middleware', 'submission'))
-const loginMiddleware = require(path.resolve('middleware', 'login'))
-const singupMiddleware = require(path.resolve('middleware', 'signup'))
 const verifyEmailMiddleware = require(path.resolve('middleware', 'verifyemail'))
 const forgotPasswordMiddleware = require(path.resolve(
   'middleware',
   'forgotpassword'
 ))
+
 const resetPasswordMiddleware = require(path.resolve(
   'middleware',
   'resetpassword'
 ))
+const submissionMiddleware = require(path.resolve('middleware', 'submission'))
+const signupMiddleware = require(path.resolve('middleware', 'signup'))
+const loginMiddleware = require(path.resolve('middleware', 'login'))
 const loginWithGoogleMiddleware = require(path.resolve(
   'middleware',
   'loginwithgoogle'
@@ -34,6 +42,7 @@ const authenticationMiddleware = require(path.resolve(
 ))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
+const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -52,15 +61,19 @@ app.use(fileUpload())
 app.set('view engine', 'ejs')
 
 authenticationMiddleware(app)
-submissionMiddleware(app)
-loginMiddleware(app)
-singupMiddleware(app)
-verifyEmailMiddleware(app)
-forgotPasswordMiddleware(app)
-resetPasswordMiddleware(app)
 loginWithGoogleMiddleware(app)
 apiMiddleware(app)
 pluginMiddleware(app)
+adminApiMiddleware(app)
+loginMiddleware(app)
+signupMiddleware(app)
+submissionMiddleware(app)
+
+if (isEnvironmentVariableSet.sendgridApiKey) {
+  verifyEmailMiddleware(app)
+  forgotPasswordMiddleware(app)
+  resetPasswordMiddleware(app)
+}
 
 if (process.env.FP_ENV === 'production') {
   app.use(express.static('/frontend/build'))
@@ -76,6 +89,28 @@ if (process.env.FP_ENV === 'production') {
   })
 } else {
   app.use(express.static('/frontend/public'))
+}
+
+//Checking of environment variables. Console logs for server capabilities.
+if (isEnvironmentVariableSet.sendgridApiKey === false) {
+  console.log(
+    '[WARN] SendGrid environment variable is not set. E-mail delivery and related features are disabled.'
+  )
+}
+if (isEnvironmentVariableSet.googleCredentialsClientID === false) {
+  console.log(
+    '[WARN] Google Client ID environment variable is not set. Google Sign-In is disabled.'
+  )
+}
+if (isEnvironmentVariableSet.fileUploadBucket === false) {
+  console.log(
+    '[WARN] FileBucket environment variable is not set. File upload is disabled.'
+  )
+}
+if (isEnvironmentVariableSet.googleServiceAccountCredentials === false) {
+  console.log(
+    '[WARN] Google Service Account Credentials environment variable is not set. Google Cloud service & file upload are disabled.'
+  )
 }
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))

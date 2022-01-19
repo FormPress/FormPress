@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
+import CapabilitiesContext from '../../capabilities.context'
 
-export default class FormProperties extends Component {
+class FormProperties extends Component {
   constructor(props) {
     super(props)
 
@@ -12,6 +13,7 @@ export default class FormProperties extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
+    this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -35,7 +37,15 @@ export default class FormProperties extends Component {
     })
   }
 
+  handleCustomCSSTextChange(elem, e) {
+    this.props.setCSS({
+      value: e.target.value,
+      isEncoded: false
+    })
+  }
+
   render() {
+    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
@@ -54,30 +64,45 @@ export default class FormProperties extends Component {
     }
 
     let tyPageText =
-      'Your submission has been successfully sent and we informed the form owner about your submission.'
+      'Your submission has been successful and we informed the form owner about it.'
+
+    if (capabilities.sendgridApiKey === false) {
+      tyPageText = 'Your submission has been successful.'
+    }
 
     if (matchingIntegration('tyPageText').length > 0) {
       tyPageText = matchingIntegration('tyPageText')[0].value
     }
+
+    let customCSS = ''
+
+    if (this.props.form.props.customCSS !== undefined) {
+      customCSS = this.props.form.props.customCSS.value
+    }
+
     return (
       <div>
         <h2>Form Properties</h2>
-        <Renderer
-          handleFieldChange={this.handleEmailChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 1,
-                  type: 'TextBox',
-                  label: 'Send submission notifications to',
-                  value: email
-                }
-              ]
-            }
-          }}
-        />
+        {capabilities.sendgridApiKey ? (
+          <Renderer
+            handleFieldChange={this.handleEmailChange}
+            theme="infernal"
+            form={{
+              props: {
+                elements: [
+                  {
+                    id: 1,
+                    type: 'TextBox',
+                    label: 'Send submission notifications to',
+                    value: email
+                  }
+                ]
+              }
+            }}
+          />
+        ) : (
+          ''
+        )}
         <Renderer
           handleFieldChange={this.handleTyPageTitleChange}
           theme="infernal"
@@ -88,6 +113,7 @@ export default class FormProperties extends Component {
                   id: 2,
                   type: 'TextBox',
                   label: 'Thank you page title',
+                  maxLength: 128,
                   value: tyPageTitle
                 }
               ]
@@ -103,8 +129,25 @@ export default class FormProperties extends Component {
                 {
                   id: 3,
                   type: 'TextArea',
-                  label: 'Thank you page title',
+                  label: 'Thank you page text',
+                  maxLength: 256,
                   value: tyPageText
+                }
+              ]
+            }
+          }}
+        />
+        <Renderer
+          handleFieldChange={this.handleCustomCSSTextChange}
+          theme="infernal"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 4,
+                  type: 'TextArea',
+                  label: 'Add custom CSS',
+                  value: customCSS
                 }
               ]
             }
@@ -114,3 +157,13 @@ export default class FormProperties extends Component {
     )
   }
 }
+
+const FormPropertiesWrapped = (props) => (
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <FormProperties {...props} capabilities={capabilities} />
+    )}
+  </CapabilitiesContext.Consumer>
+)
+
+export default FormPropertiesWrapped

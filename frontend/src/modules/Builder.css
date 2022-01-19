@@ -117,6 +117,11 @@
   padding-left: 10px;
 }
 
+.builder > .content > .leftMenu > .leftMenuContents h4 {
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+
 .leftMenuContents .elementTextArea .fl.input {
   width: 100%;
 }
@@ -127,6 +132,7 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
+  height: 78px;
 }
 
 .elements > .elementList {
@@ -144,6 +150,7 @@
   color: #646464;
   width: 91%;
   cursor: move;
+  height: 50px;
 }
 
 .elements > .elementList > .element:hover {
@@ -194,8 +201,9 @@
   font-size: 18px;
   display: flex;
   flex: 1 0 auto;
-  min-height: 60px;
+  min-height: 78px;
   padding: 0;
+  color: #1c5c85;
 }
 
 .builderStage > .formTitle > .label {
@@ -210,6 +218,9 @@
   text-align: right;
   height: 32px;
   padding-right: 0;
+  box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
 .builderStage > .formControls > button {
@@ -243,8 +254,12 @@
 }
 
 .builderStage > .form {
-  box-shadow: 0px 3px 10px #00000014;
   margin: 0 auto;
+  padding: 6px;
+  border-top: 1px solid #f5f5f5;
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
 .form.builder.dragging > * * {
@@ -303,9 +318,14 @@
   font-size: 16px;
 }
 
-.form.builder > .element:hover,
-.form > .element.selected {
-  border: 1px solid black;
+.form.builder > .element.selected {
+  border: 2px solid #e5fbda;
+  border-radius: 6px;
+}
+
+.form.builder > .element:hover {
+  border-radius: 6px;
+  background-color: #e5fbda;
 }
 
 .form.builder > .element:hover > .action,
@@ -361,4 +381,40 @@
     height: 300px;
     overflow-y: scroll;
   }
+}
+
+.planover-container {
+  visibility: hidden;
+  display: inline-flex;
+  position: relative;
+}
+
+.planover-container:hover {
+  color: #fffcdd;
+}
+
+.planover-container:hover > .popoverText {
+  display: block;
+  width: 160px;
+  margin: 0 0 3px;
+  padding: 2px 4px 3px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  left: -130px;
+  top: 20px;
+}
+
+.elements > .elementList > .disabled-element:hover {
+  border: solid 1px #c9c9c9 !important;
+  color: #1c5c85 !important;
+  background-color: #c9c9c9;
+  cursor: default !important;
+}
+
+.elements > .elementList > .disabled-element:hover .planover-container {
+  visibility: visible;
 }

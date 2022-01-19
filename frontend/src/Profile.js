@@ -9,6 +9,7 @@ const Profile = () => {
   const logout = (e) => {
     e.preventDefault()
     window.localStorage.removeItem('auth')
+    window.localStorage.removeItem('lastEditedFormId')
     window.location.reload()
   }
 
@@ -25,9 +26,9 @@ const Profile = () => {
           </div>
         </div>
 
-        <span key="2">
-          Welcome <i>{auth.email}</i>
-        </span>
+        <div className="welcome-user" key="2">
+          Welcome, <i title={auth.email}>{auth.email}</i>
+        </div>
       </div>
     )
   }

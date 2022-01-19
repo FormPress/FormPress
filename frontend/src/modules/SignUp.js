@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 
 import './SignUp.css'
 
@@ -80,7 +81,26 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    const signUpSuccess = (
+    if (this.props.auth.loggedIn === true) {
+      let pathName = this.props.location.state
+        ? this.props.location.state.from.pathname
+        : '/forms'
+      //can't allow to return editor, when changing accounts old accounts form can be redirected
+      if (pathName.indexOf('editor') >= 0) {
+        pathName = '/forms'
+      }
+
+      return (
+        <Redirect
+          to={{
+            pathname: pathName,
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
+    const capabilities = this.props.capabilities
+    const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
@@ -95,6 +115,16 @@ class SignUp extends Component {
             Activate account by following that e-mail. (If you didn&apos;t
             recieve please check spam folder)
           </p>
+        </div>
+      </div>
+    ) : (
+      <div>
+        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="sign-up-success">
+          <div className="signup-email">
+            <i>{email}</i>
+          </div>
+          <p>Signup success! You can now login to your account.</p>
         </div>
       </div>
     )
@@ -161,13 +191,13 @@ class SignUp extends Component {
             <div className="have-trouble">
               Having trouble?
               <span className="wip-placeholder" title="WIP">
-                Contact Us
+                <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
               </span>
             </div>
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2020 formpress.org</div>
+          <div className="col-8-16">Copyright © 2021 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>
@@ -178,9 +208,15 @@ class SignUp extends Component {
 }
 
 const SignUpWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <SignUp {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <SignUp {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default SignUpWrapped

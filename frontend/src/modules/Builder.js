@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Link, NavLink, Switch, Route } from 'react-router-dom'
+import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -17,13 +17,17 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
-  faFont
+  faFont,
+  faMinus,
+  faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
 import AuthContext from '../auth.context'
+import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
+import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
@@ -44,12 +48,13 @@ const iconMap = {
   Name: faAddressCard,
   FileUpload: faFileAlt,
   Email: faEnvelope,
-  Header: faHeading
+  Header: faHeading,
+  Separator: faMinus
 }
 
 //list of element texts
 const textMap = {
-  TextBox: 'TextBox',
+  TextBox: 'Text Box',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
@@ -58,7 +63,8 @@ const textMap = {
   Name: 'Name',
   FileUpload: 'File Upload',
   Email: 'E-mail',
-  Header: 'Header'
+  Header: 'Header',
+  Separator: 'Separator'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -108,7 +114,7 @@ const getElementsKeys = () =>
   }, {})
 
 //Stuff that we render in left hand side
-const pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
+let pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
 
 class Builder extends Component {
   async componentDidMount() {
@@ -120,18 +126,99 @@ class Builder extends Component {
         window.localStorage.setItem('lastEditedFormId', formId)
       } else {
         window.scrollTo(0, 0)
+        const { form } = this.state
         this.setIntegration({ type: 'email', to: this.props.auth.email })
+
+        const savedForm = cloneDeep(form)
+        this.setState({ savedForm })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
-      if (lastEditedFormId !== null) {
+      if (lastEditedFormId !== undefined && lastEditedFormId !== null) {
         this.props.history.push(`/editor/${lastEditedFormId}/builder`)
+        setTimeout(() => {
+          this.componentDidMount()
+        }, 1)
+      } else {
+        const { data } = await api({
+          resource: `/api/users/${this.props.auth.user_id}/editor`
+        })
+        this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)
       }
     }
+
+    const capabilities = this.props.capabilities
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
+      //Removal of the elements of which the environment variables are unset.
+      const removeUnavailableElems = (element) => {
+        return element.type !== 'FileUpload'
+      }
+      pickerElements = pickerElements.filter((element) =>
+        removeUnavailableElems(element)
+      )
+    }
+
+    this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
+  }
+
+  componentWillUnmount() {
+    this.shouldBlockNavigation()
+  }
+
+  blockReactRoutes = (location) => {
+    this.ignoreFormDifference = () => {
+      this.props.history.push(location.pathname)
+    } // if user still wants to proceed without saving
+
+    const { form, savedForm } = this.state
+    let isFormChanged = !isEqual(form, savedForm)
+
+    const disallowedPath = !location.pathname.startsWith('/editor')
+
+    if (isFormChanged === true && disallowedPath === false) {
+      return true
+    }
+
+    if (isFormChanged === true && disallowedPath === true) {
+      const modalContent = {
+        header: 'Unsaved Changes',
+        status: 'warning',
+        content: 'Are you sure you want to discard changes?'
+      }
+
+      modalContent.dialogue = {
+        abortText: 'Cancel',
+        abortClick: this.handleCloseModalClick,
+        negativeText: 'Discard',
+        negativeClick: this.handleDiscardChangesClick
+      }
+      this.setState({ modalContent, isModalOpen: true })
+      return false
+    }
+
+    if (isFormChanged === false) {
+      return true
+    }
+
+    return false // fail-safe
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
+  }
+
+  handleDiscardChangesClick() {
+    this.shouldBlockNavigation()
+
+    this.ignoreFormDifference()
   }
 
   async loadForm(formId, seamless = false) {
@@ -139,10 +226,14 @@ class Builder extends Component {
       this.setState({ loading: true })
     }
 
-    const { data } = await api({
+    const { data, status } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
+    if (status === 403) {
+      this.setState({ redirect: true })
 
+      return
+    }
     if (typeof data.props === 'undefined') {
       this.setState({
         loading: false
@@ -151,25 +242,21 @@ class Builder extends Component {
       return
     }
 
-    const props = JSON.parse(data.props)
+    const props = data.props
     const form = {
       ...data,
       props
     }
+    const savedForm = cloneDeep(form)
 
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
 
-    if (typeof publishedFormResult.data.props !== 'undefined') {
-      publishedFormResult.data.props = JSON.parse(
-        publishedFormResult.data.props
-      )
-    }
-
     this.setState({
       loading: false,
       form,
+      savedForm,
       publishedForm: publishedFormResult.data
     })
   }
@@ -197,10 +284,17 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setCSS(cssProp) {
+    const { form } = this.state
+    this.setState((form.props.customCSS = cssProp))
+  }
+
   constructor(props) {
     super(props)
     this.state = {
       counter: 0,
+      redirect: false,
+      isModalOpen: false,
       saving: false,
       loading: false,
       dragging: false,
@@ -233,7 +327,12 @@ class Builder extends Component {
               type: 'Button',
               buttonText: 'Submit'
             }
-          ]
+          ],
+          customCSS: {
+            value: '',
+            isEncoded: false
+          },
+          savedForm: {}
         }
       }
     }
@@ -255,6 +354,10 @@ class Builder extends Component {
     this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
+    this.setCSS = this.setCSS.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
+    this.handleUnselectElement = this.handleUnselectElement.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -299,7 +402,7 @@ class Builder extends Component {
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
 
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
 
     if (dragMode === 'insert') {
       //set auto increment element id
@@ -425,7 +528,7 @@ class Builder extends Component {
   handleLabelChange(id, value) {
     const form = { ...this.state.form }
 
-    form.props.elements = [...form.props.elements]
+    form.props.elements = cloneDeep([...form.props.elements])
 
     if (Number.isInteger(id) === false) {
       const questionID = id.split('_')[1]
@@ -663,6 +766,17 @@ class Builder extends Component {
     }
   }
 
+  handleUnselectElement() {
+    const { location } = this.props.history
+
+    if (location.pathname.endsWith('/builder')) {
+      var nodeList = document.querySelectorAll('[id^="qc_"]')
+      nodeList.forEach((node) => {
+        node.classList.remove('selected')
+      })
+    }
+  }
+
   async handleSaveClick() {
     const { form } = this.state
 
@@ -695,6 +809,8 @@ class Builder extends Component {
         }
       })
     }
+    const savedForm = cloneDeep(this.state.form)
+    this.setState({ savedForm })
   }
 
   async handlePublishClick() {
@@ -773,6 +889,16 @@ class Builder extends Component {
   }
 
   render() {
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/forms',
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     const { params } = this.props.match
     const { formId, questionId } = params
     const tabs = [
@@ -791,9 +917,15 @@ class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
+    this.handleUnselectElement()
 
     return (
       <div className="builder">
+        <Modal
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         <div className="headerContainer">
           <div className="header grid center">
             <div className="col-1-16">
@@ -827,8 +959,14 @@ class Builder extends Component {
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
+    const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+    if (permission.admin) {
+      pickerElements.forEach((elem) => {
+        permission[elem.type] = true
+      })
+    }
     let questionPropertiesReady = true
 
     if (typeof questionId !== 'undefined') {
@@ -852,40 +990,67 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side to add to the form. Or
-              you can click + icon
+              Drag and Drop elements to right hand side into the form; or you
+              can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) => (
-                <div
-                  className="element"
-                  draggable
-                  onDragStart={this.handleDragStart.bind(this, elem)}
-                  onDragEnd={this.handleDragEnd}
-                  key={elem.type}>
-                  <span className="element-picker-icon-wrapper">
-                    <FontAwesomeIcon
-                      icon={iconMap[elem.type]}
-                      className="element-picker-icon"
-                    />
-                  </span>
-                  <span className="element-picker-text">
-                    {textMap[elem.type]}
-                  </span>
-                  <span className="add-element-button">
-                    <FontAwesomeIcon
-                      icon={faPlusCircle}
-                      title="Add Field"
-                      onClick={() => this.handleAddFormElementClick(elem.type)}
-                    />
-                  </span>
-                </div>
-              ))}
+              {pickerElements.map((elem) =>
+                permission[elem.type] ? (
+                  <div
+                    className="element"
+                    draggable
+                    onDragStart={this.handleDragStart.bind(this, elem)}
+                    onDragEnd={this.handleDragEnd}
+                    key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="add-element-button">
+                      <FontAwesomeIcon
+                        icon={faPlusCircle}
+                        title="Add Field"
+                        onClick={() =>
+                          this.handleAddFormElementClick(elem.type)
+                        }
+                      />
+                    </span>
+                  </div>
+                ) : (
+                  <div className="element disabled-element" key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="planover-container">
+                      <FontAwesomeIcon icon={faQuestionCircle} />
+                      <div className="popoverText">
+                        Your plan does not include this element. Please contact
+                        support for upgrade.
+                      </div>
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </Route>
         <Route path="/editor/:formId/builder/properties">
-          <FormProperties form={form} setIntegration={this.setIntegration} />
+          <FormProperties
+            form={form}
+            setIntegration={this.setIntegration}
+            setCSS={this.setCSS}
+          />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (
@@ -929,9 +1094,7 @@ class Builder extends Component {
           </div>
           {this.renderBuilder()}
         </Route>
-        <Route path="/editor/:formId/design">
-          Form Designer will come here
-        </Route>
+        <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>
@@ -1020,9 +1183,15 @@ class Builder extends Component {
 }
 
 const BuilderWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Builder {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Builder {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default BuilderWrapped

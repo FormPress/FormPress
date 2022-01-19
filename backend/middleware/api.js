@@ -6,13 +6,18 @@ const { getPool } = require(path.resolve('./', 'db'))
 const {
   mustHaveValidToken,
   paramShouldMatchTokenUserId,
-  userShouldOwnSubmission
+  userShouldOwnSubmission,
+  userShouldOwnForm,
+  userHavePermission,
+  userHaveFormLimit
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
-const { storage } = require(path.resolve('helper'))
+const { storage, model } = require(path.resolve('helper'))
+const formModel = model.form
+const formPublishedModel = model.formpublished
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   './',
   'helper',
@@ -22,29 +27,11 @@ const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
-    const db = await getPool()
     const { user_id } = req.params
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       // Existing form should update!!!
-      await db.query(
-        `
-          UPDATE \`form\`
-            SET props = ?, title = ?, updated_at = NOW()
-          WHERE
-            id = ?
-        `,
-        [JSON.stringify(form.props), form.title, form.id]
-      )
-
-      const result = await db.query(
-        `
-        SELECT \`updated_at\`
-        FROM \`form\`
-        WHERE id = ?
-      `,
-        [form.id]
-      )
+      const result = await formModel.update({ form })
 
       const responseObject = {
         status: 'updated',
@@ -59,15 +46,7 @@ module.exports = (app) => {
       res.json(responseObject)
     } else {
       // New Form
-      const result = await db.query(
-        `
-          INSERT INTO \`form\`
-            (user_id, title, props, published_version, created_at, updated_at)
-          VALUES
-            (?, ?, ?, 0, NOW(), NOW())
-        `,
-        [user_id, form.title, JSON.stringify(form.props)]
-      )
+      const result = await formModel.create({ user_id, form })
 
       res.json({ status: 'done', id: result.insertId })
     }
@@ -77,12 +56,15 @@ module.exports = (app) => {
     '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userHavePermission,
     handleCreateForm
   )
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userHavePermission,
+    userHaveFormLimit('user_id'),
     handleCreateForm
   )
 
@@ -93,37 +75,8 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const user_id = req.params.user_id
-      const db = await getPool()
-      const result = await db.query(
-        `
-        SELECT
-          id,
-          user_id,
-          title,
-          props,
-          published_version,
-          created_at,
-          (
-            SELECT
-                COUNT(*)
-            FROM
-                submission
-            WHERE
-                form_id = \`form\`.\`id\`
-          ) as responseCount
-        FROM \`form\`
-        WHERE
-          user_id = ? AND 
-          deleted_at IS NULL
-      `,
-        [user_id]
-      )
 
-      if (result.length > 0) {
-        res.json(result)
-      } else {
-        res.json([])
-      }
+      res.json((await formModel.list({ user_id })) || [])
     }
   )
 
@@ -132,28 +85,49 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id'),
     async (req, res) => {
       const { form_id } = req.params
-      const db = await getPool()
-
-      let query = `SELECT * FROM \`form\` WHERE id = ? LIMIT 1`
 
       if (req.query.published === 'true') {
-        query = `
-          SELECT *
-          FROM \`form_published\`
-          WHERE form_id = ?
-          ORDER BY \`version\` DESC
-          LIMIT 1
-        `
-      }
-
-      const result = await db.query(query, [form_id])
-
-      if (result.length === 1) {
-        res.json(result[0])
+        res.json((await formPublishedModel.get({ form_id })) || {})
       } else {
-        res.json({})
+        res.json((await formModel.get({ form_id })) || {})
+      }
+    }
+  )
+
+  //return new or last updated form
+  app.get(
+    '/api/users/:user_id/editor',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { user_id } = req.params
+
+      if (
+        res.locals.auth.permission.admin ||
+        res.locals.auth.permission.formLimit === 0
+      ) {
+        res.status(200).json({ message: 'new' })
+      } else {
+        const db = await getPool()
+        const result = await db.query(
+          `SELECT COUNT(\`id\`) AS \`count\` FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL`,
+          [user_id]
+        )
+
+        if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+          res.status(200).json({ message: 'new' })
+        } else {
+          const lastForm = await db.query(
+            `SELECT \`id\` FROM \`form\` WHERE user_id = ? ORDER BY \`updated_at\` DESC LIMIT 1`,
+            [user_id]
+          )
+          const lastFormId = lastForm[0].id
+
+          res.status(200).json({ message: lastFormId })
+        }
       }
     }
   )
@@ -161,21 +135,8 @@ module.exports = (app) => {
   // return form questions
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     const { form_id } = req.params
-    const db = await getPool()
-    const result = await db.query(
-      `
-        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `,
-      [form_id]
-    )
 
-    if (result.length === 1) {
-      const form = result[0]
-
-      res.json(JSON.parse(form.props).elements)
-    } else {
-      res.json({})
-    }
+    res.json((await formModel.get({ form_id })).props.elements || [])
   })
 
   // publish form, takes latest form and publishes it
@@ -185,51 +146,14 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { user_id, form_id } = req.params
-      const db = await getPool()
-      const result = await db.query(
-        `
-        SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-      `,
-        [form_id]
-      )
 
-      if (result.length === 1) {
-        const form = result[0]
+      const form = await formModel.get({ form_id })
 
-        form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
+      if (form !== false) {
+        form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
-        form.props = JSON.stringify(form.props)
+        await formPublishedModel.create({ user_id, form })
 
-        const version = parseInt(form.published_version || 0)
-        const nextVersion = version + 1
-
-        const insertPublishedResult = await db.query(
-          `
-          INSERT INTO \`form_published\`
-            (user_id, form_id, title, props, version, created_at)
-          VALUES
-            (?, ?, ?, ?, ?, NOW())
-        `,
-          [user_id, form_id, form.title, form.props, nextVersion]
-        )
-
-        const publishedResult = await db.query(
-          `
-          SELECT \`created_at\`
-          FROM \`form_published\`
-          WHERE \`id\` = ?
-        `,
-          [insertPublishedResult.insertId]
-        )
-
-        await db.query(
-          `
-          UPDATE \`form\`
-          SET published_version = ?, updated_at = ?
-          WHERE id = ?
-        `,
-          [nextVersion, publishedResult[0].created_at, form_id]
-        )
         res.json({ message: 'Published' })
       } else {
         // TODO: handle status 404, it is set to 200 because of
@@ -247,13 +171,8 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { form_id } = req.params
-      const db = await getPool()
-      await db.query(
-        `
-        UPDATE \`form\` SET deleted_at = NOW() WHERE id = ? LIMIT 1
-      `,
-        [form_id]
-      )
+
+      await formModel.delete({ form_id })
 
       res.json({ message: 'deleted' })
     }
@@ -299,13 +218,9 @@ module.exports = (app) => {
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const { form_id, version_id } = req.params
-      const db = await getPool()
-      const result = await db.query(
-        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
-        [form_id, version_id]
-      )
+      const result = await formPublishedModel.get({ form_id, version_id })
 
-      if (result.length > 0) {
+      if (result !== false) {
         res.json(result)
       } else {
         res.json([])
@@ -339,13 +254,7 @@ module.exports = (app) => {
       `,
         [form_id, ...ids]
       )
-      const formResult = await db.query(
-        `
-        SELECT * FROM \`form\`
-          WHERE id = ?
-      `,
-        [form_id]
-      )
+      const formResult = await formModel.get({ form_id })
 
       /*
         TODO: returning HTTP200 here is wrong. This is done since unit tests
@@ -354,14 +263,12 @@ module.exports = (app) => {
         We should add more SQL behaviour to config/endpoints.js and
         properly extend unit tests
       */
-      if (formResult.length === 0) {
+      if (formResult === false) {
         //form not found
         return res.status(200).json({ message: 'Form not found' })
       }
 
-      formResult[0].props = JSON.parse(formResult[0].props)
-
-      const form = formResult[0]
+      const form = formResult
       const CSVData = {}
       const submissions = {}
 
@@ -498,41 +405,33 @@ module.exports = (app) => {
     }
   )
 
+  // preview a form
   app.get('/form/view/:id', async (req, res) => {
-    const id = req.params.id
-    const db = await getPool()
-    const result = await db.query(
-      `
-      SELECT * FROM \`form\` WHERE id = ? LIMIT 1
-    `,
-      [id]
-    )
+    const form_id = req.params.id
+    const result = await formModel.get({ form_id })
 
-    if (result.length === 0) {
+    if (result === false) {
       return res.status(404).send('Form not found')
     }
 
-    let form = result[0]
+    let form = result
 
     if (req.query.preview !== 'true' && form.published_version !== null) {
-      const publishedResult = await db.query(
-        `
-        SELECT * FROM \`form_published\`
-        WHERE form_id = ? AND version = ?
-      `,
-        [id, form.published_version]
-      )
+      const publishedResult = await formPublishedModel.get({
+        form_id,
+        version_id: form.published_version
+      })
 
-      if (publishedResult.length > 0) {
-        form = publishedResult[0]
+      if (publishedResult !== false) {
+        form = publishedResult
       } else {
         console.error(
-          `Published version can't be found form_id = ${id} version = ${form.published_version}`
+          `Published version can't be found form_id = ${form_id} version = ${form.published_version}`
         )
       }
     }
 
-    form.props = updateFormPropsWithNewlyAddedProps(JSON.parse(form.props))
+    form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
@@ -566,8 +465,8 @@ module.exports = (app) => {
     //form table has "published_version" vs form_published has "version"
     const postTarget =
       form.version === undefined
-        ? `${BACKEND}/form/submit/${id}`
-        : `${BACKEND}/form/submit/${id}/${form.version}`
+        ? `${BACKEND}/form/submit/${form_id}`
+        : `${BACKEND}/form/submit/${form_id}/${form.version}`
 
     res.render('form.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,
@@ -575,9 +474,21 @@ module.exports = (app) => {
       form: str,
       postTarget,
       BACKEND,
-      FORMID: id,
+      FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
     })
+  })
+
+  app.get('/api/server/capabilities', async (req, res) => {
+    const isEnvironmentVariableSet = {
+      googleServiceAccountCredentials:
+        process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
+      sendgridApiKey: process.env.SENDGRID_API_KEY !== '',
+      googleCredentialsClientID:
+        process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
+      fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
+    }
+    res.json(isEnvironmentVariableSet)
   })
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 
+const excludedKeys = ["Button", "Header", "Separator"]
 const keys = Object.keys(Elements)
 for (const key of keys) {
   const Component = Elements[key]
@@ -17,7 +18,7 @@ for (const key of keys) {
     })
 
     test('Has a valid <name> attribute', () => { //what is valid? "q_{id}"
-      if (key !== "Button" && key !== 'Header') { //button element dont have name attribute
+      if (!excludedKeys.includes(key)) { //these elements dont have name attribute
         const component = create(<Component config={ Component.defaultConfig } mode={ "not build" }/>)
         if (key === "Name") {//Name has 2 values; first name and last name. Test should reconsidered for multiple value fields
           const myTestObject = component.root

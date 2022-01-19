@@ -2,27 +2,27 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header']
+      exceptions: ['Button', 'Header', 'Separator']
     },
     configurableSettings: {
       default: false,
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Make this field required?']
+        options: ['Make this field required']
       }
     }
   },
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header']
+      exceptions: ['Button', 'Header', 'Separator']
     },
     configurableSettings: {
       default: 'Please fill this field.',
       formProps: {
         type: 'TextBox',
-        label: 'Error text when this field is left empty.'
+        label: 'Error message when this field is left empty.'
       }
     }
   },
@@ -35,7 +35,7 @@ const policy = {
       default: 'Please enter the information.',
       formProps: {
         type: 'TextBox',
-        label: 'Describe the expected value of an input field.'
+        label: 'Describe the expected value of this input field.'
       }
     }
   }
