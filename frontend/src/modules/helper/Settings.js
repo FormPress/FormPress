@@ -38,6 +38,7 @@ class Settings extends Component {
       <div className="settings_container">
         <div className="content">
           <div className="settings_menu">
+            <h2>User settings</h2>
             {this.state.settingComponents.map((item, key) => (
               <NavLink
                 key={key}
