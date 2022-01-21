@@ -28,6 +28,9 @@ FROM base as final
 ENV SERVER_PORT=3001
 ENV FP_ENV=production
 
+ARG PLUGIN_URL
+ARG PRIVATE_TOKEN
+
 RUN mkdir /src
 RUN mkdir /frontend
 
