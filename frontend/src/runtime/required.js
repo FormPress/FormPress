@@ -269,8 +269,8 @@
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
         } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
 
@@ -285,8 +285,8 @@
             ? containerElem.classList.remove('requiredError')
             : containerElem.classList.add('requiredError')
         } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
     } else {

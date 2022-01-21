@@ -260,11 +260,15 @@
 
 .data > .dataContent > .entriesViewer > .entry > .label {
   color: #a0a0a0;
+  word-break: break-word;
+  text-indent: 0px;
+  padding-left: 12px;
 }
 .data > .dataContent > .entriesViewer > .entry > .value {
   color: #113952;
   margin-left: 12px;
   text-indent: 0px;
+  word-break: break-word;
 }
 
 .data .text_center input[type='checkbox'] {
