@@ -2,7 +2,7 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header']
+      exceptions: ['Button', 'Header', 'Separator']
     },
     configurableSettings: {
       default: false,
@@ -16,7 +16,7 @@ const policy = {
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header']
+      exceptions: ['Button', 'Header', 'Separator']
     },
     configurableSettings: {
       default: 'Please fill this field.',
