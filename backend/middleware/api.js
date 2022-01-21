@@ -59,6 +59,7 @@ module.exports = (app) => {
     userHavePermission,
     handleCreateForm
   )
+
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,

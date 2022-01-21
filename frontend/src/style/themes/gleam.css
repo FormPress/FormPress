@@ -235,7 +235,7 @@
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
-  margin-top: 3px;
+  margin-top: 7px;
 }
 .gleam .elementRadio ul li input:checked {
   background-color: #8cc63f;
@@ -409,6 +409,7 @@
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
+  margin-top: 4px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {

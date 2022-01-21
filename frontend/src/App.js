@@ -232,6 +232,8 @@ class App extends Component {
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
+
+                <Route path="/settings" component={Settings} />
                 <Redirect to="/login" />
               </Switch>
             </div>

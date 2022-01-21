@@ -55,6 +55,7 @@ class Modal extends Component {
             onClick={(e) => {
               e.stopPropagation()
             }}>
+
             <div className={`wrapper-header ${modalContent.status}`}>
               {modalContent.header}
               <span className="close-modal" onClick={this.props.closeModal}>
