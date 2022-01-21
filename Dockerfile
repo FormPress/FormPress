@@ -36,6 +36,11 @@ COPY --from=frontend_builder /frontend/src /frontend/src
 
 WORKDIR /src
 ADD backend /src
+
+RUN mkdir /scripts
+ADD scripts /scripts
+RUN cd /scripts && FORMPRESS_HOME="/src" BACKEND_PATH="/" sh ./install_plugin.sh
+
 RUN yarn install
 
 EXPOSE 3001
