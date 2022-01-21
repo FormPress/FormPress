@@ -3,17 +3,18 @@
   position: relative;
 }
 
-.profileMenuContainer:hover > .profileMenuContent {
+.profileMenuContainer:hover .profileMenuContent {
   display: block;
   background-color: white;
   position: absolute;
   top: 54px;
+  right: 116px;
   line-height: normal;
   min-height: 50px;
   padding: 0 10px 10px 10px;
 }
 
-.profileMenuContainer > .profileMenuContent > a {
+.profileMenuContainer .profileMenuContent > a {
   float: left;
   display: block;
   width: 100%;
@@ -21,6 +22,6 @@
   margin-top: 10px;
 }
 
-.profileMenuContainer > .profileMenuContent > a:hover {
+.profileMenuContainer .profileMenuContent > a:hover {
   text-decoration: underline;
 }

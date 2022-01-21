@@ -17,17 +17,18 @@ const Profile = () => {
     return (
       <div className="profile">
         <div className="profileMenuContainer">
-          <ProfileSVG key="1" className="profileSVG" />
-          <div className="profileMenuContent dn">
-            <NavLink to="/settings" activeClassName="selected">
-              Settings
-            </NavLink>
-            <a onClick={logout}>Logout</a>
+          <div key="1" className="wrapper-welcome">
+            <div className="welcome-user" key="2">
+              Welcome, <i title={auth.email}>{auth.email}</i>
+            </div>
+            <ProfileSVG key="1" className="profileSVG" />
+            <div className="profileMenuContent dn">
+              <NavLink to="/settings" activeClassName="selected">
+                Settings
+              </NavLink>
+              <a onClick={logout}>Logout</a>
+            </div>
           </div>
-        </div>
-
-        <div className="welcome-user" key="2">
-          Welcome, <i title={auth.email}>{auth.email}</i>
         </div>
       </div>
     )

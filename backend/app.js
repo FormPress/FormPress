@@ -29,6 +29,12 @@ const resetPasswordMiddleware = require(path.resolve(
   'middleware',
   'resetpassword'
 ))
+
+const changePasswordMiddleware = require(path.resolve(
+  'middleware',
+  'changepassword'
+))
+
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const signupMiddleware = require(path.resolve('middleware', 'signup'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
@@ -68,6 +74,7 @@ adminApiMiddleware(app)
 loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)
+changePasswordMiddleware(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)

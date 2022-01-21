@@ -57,7 +57,7 @@ class ForgotPassword extends Component {
 
   render() {
     const { message, success, email } = this.state
-    const forgotSucces = (
+    const forgotSuccess = (
       <div>
         <div className="reset-success">
           We have send an e-mail to{' '}
@@ -82,7 +82,7 @@ class ForgotPassword extends Component {
             <div>
               <div className="form-header">FORGOT PASSWORD</div>
               {success ? (
-                forgotSucces
+                forgotSuccess
               ) : (
                 <form onSubmit={this.handleForgotPasswordButtonClick}>
                   <Renderer
