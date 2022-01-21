@@ -1,8 +1,9 @@
 FROM node:12.14-alpine3.10 as base
 
+RUN apk update && apk add curl bash
+
 FROM base as frontend_builder
 
-RUN apk update && apk add curl bash
 ENV PATH="/node_modules/.bin:$PATH"
 ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
 ENV REACT_APP_FP_ENV="production"
