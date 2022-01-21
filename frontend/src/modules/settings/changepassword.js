@@ -11,7 +11,7 @@ export default class ChangePassword extends Component {
     super(props)
 
     this.state = {
-    	situation: 'init',
+      situation: 'init',
       message: '',
       current_password: '',
       new_password: '',
@@ -21,7 +21,13 @@ export default class ChangePassword extends Component {
 
   handleFieldChange = (elem, e) => {
     const stateKey =
-      elem.id === 1 ? 'current_password' : elem.id === 2 ? 'new_password' : elem.id === 3 ? 'new_password_again' : null
+      elem.id === 1
+        ? 'current_password'
+        : elem.id === 2
+        ? 'new_password'
+        : elem.id === 3
+        ? 'new_password_again'
+        : null
 
     if (stateKey === null) {
       return
@@ -66,9 +72,7 @@ export default class ChangePassword extends Component {
 
     const changeSuccess = (
       <div>
-        <div>
-          You successfully changed your password.
-        </div>
+        <div>You successfully changed your password.</div>
       </div>
     )
 

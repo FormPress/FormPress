@@ -22,7 +22,7 @@
 }
 
 .settings_container > .content > div.settings_menu > h2,
-.settings_container > .content > div.settings_content h2{
+.settings_container > .content > div.settings_content h2 {
   margin-bottom: 30px;
   font-size: 24px;
   font-weight: 500;
@@ -51,26 +51,27 @@
   width: 850px;
 }
 
-.payment div{
+.payment div {
   display: inline-block;
   line-height: 40px;
 }
 
-.payment{
+.payment {
   width: 100%;
 }
 
-.payment thead, .payment tbody{
+.payment thead,
+.payment tbody {
   line-height: 50px;
 }
 
-.cancel_subscription{
+.cancel_subscription {
   color: #be0000;
   cursor: pointer;
   margin-right: 5px;
 }
 
-.upgrade_subscription{
+.upgrade_subscription {
   color: #7aad37;
   cursor: pointer;
   margin-left: 5px;
@@ -78,7 +79,7 @@
 
 .refund_button.disabled,
 .cancel_subscription.disabled,
-.upgrade_subscription.disabled{
+.upgrade_subscription.disabled {
   cursor: not-allowed;
   -webkit-user-select: none;
   user-select: none;

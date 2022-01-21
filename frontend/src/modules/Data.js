@@ -400,13 +400,13 @@ class Data extends Component {
 
   renderEntryElements(entry) {
     const { selectedSubmissionForm } = this.state
-    try{
+    try {
       return Elements[
         selectedSubmissionForm.props.elements.filter(
           (element) => element.id === entry.question_id
         )[0].type
       ].renderDataValue(entry)
-    }catch(e){
+    } catch (e) {
       return 'This data is corrupted.'
     }
   }
