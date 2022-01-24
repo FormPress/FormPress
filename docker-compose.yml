@@ -37,6 +37,9 @@ services:
       - FILE_UPLOAD_BUCKET=${FILE_UPLOAD_BUCKET}
       - ADMINEMAIL=${ADMINEMAIL}
       - ADMINPASSWORD=${ADMINPASSWORD}
+      - API_KEY=${API_KEY}
+      - API_URI=${API_URI}
+      - SECRET_KEY=${SECRET_KEY}
     ports:
       - '3001:3001'
     links:
