@@ -1,8 +1,9 @@
 FROM node:12.14-alpine3.10 as base
 
+RUN apk update && apk add curl bash
+
 FROM base as frontend_builder
 
-RUN apk update && apk add curl bash
 ENV PATH="/node_modules/.bin:$PATH"
 ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
 ENV REACT_APP_FP_ENV="production"
@@ -28,6 +29,9 @@ FROM base as final
 ENV SERVER_PORT=3001
 ENV FP_ENV=production
 
+ARG PLUGIN_URL
+ARG PRIVATE_TOKEN
+
 RUN mkdir /src
 RUN mkdir /frontend
 
@@ -36,6 +40,11 @@ COPY --from=frontend_builder /frontend/src /frontend/src
 
 WORKDIR /src
 ADD backend /src
+
+RUN mkdir /scripts
+ADD scripts /scripts
+RUN cd /scripts && FORMPRESS_HOME="/src" BACKEND_PATH="/" sh ./install_plugin.sh
+
 RUN yarn install
 
 EXPOSE 3001
