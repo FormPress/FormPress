@@ -46,26 +46,31 @@ class Modal extends Component {
 
   render() {
     const modalContent = this.props.modalContent
+    const customContentPresent = this.props.children !== undefined
 
     if (this.props.isOpen === true) {
       return ReactDOM.createPortal(
         <div className="modal-overlay" onClick={this.props.closeModal}>
-          <div
-            className="modal-wrapper"
-            onClick={(e) => {
-              e.stopPropagation()
-            }}>
-            <div className={`wrapper-header ${modalContent.status}`}>
-              {modalContent.header}
-              <span className="close-modal" onClick={this.props.closeModal}>
-                x
-              </span>
+          {customContentPresent ? (
+            this.props.children
+          ) : (
+            <div
+              className="modal-wrapper"
+              onClick={(e) => {
+                e.stopPropagation()
+              }}>
+              <div className={`wrapper-header ${modalContent.status}`}>
+                {modalContent.header}
+                <span className="close-modal" onClick={this.props.closeModal}>
+                  x
+                </span>
+              </div>
+              <div className="wrapper-body">
+                {modalContent.content}
+                {modalContent.dialogue ? this.renderDialogue() : null}
+              </div>
             </div>
-            <div className="wrapper-body">
-              {modalContent.content}
-              {modalContent.dialogue ? this.renderDialogue() : null}
-            </div>
-          </div>
+          )}
         </div>,
         document.getElementById('portal')
       )
