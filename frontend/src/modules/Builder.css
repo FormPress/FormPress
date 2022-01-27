@@ -363,7 +363,7 @@
 #qc_required .input {
   float: right;
 }
-@media only screen and (max-height: 1200px) and (min-height: 800px){
+@media only screen and (max-height: 1200px) and (min-height: 800px) {
   .elements > .elementList {
     position: relative;
     display: block;

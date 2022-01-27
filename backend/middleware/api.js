@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs')
 
-
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
