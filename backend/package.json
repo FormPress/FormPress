@@ -23,6 +23,7 @@
     "@fortawesome/react-fontawesome": "0.1.8",
     "@google-cloud/storage": "5.3.0",
     "@sendgrid/mail": "6.4.0",
+    "archiver": "^5.3.0",
     "csv-writer": "1.6.0",
     "ejs": "3.0.1",
     "express": "4.17.1",

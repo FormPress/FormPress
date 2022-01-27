@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const archiver = require('archiver');
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -9,7 +10,8 @@ const {
   userShouldOwnSubmission,
   userShouldOwnForm,
   userHavePermission,
-  userHaveFormLimit
+  userHaveFormLimit,
+  mustBeAdmin
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
@@ -491,4 +493,28 @@ module.exports = (app) => {
     }
     res.json(isEnvironmentVariableSet)
   })
+
+  // returns the forms of specified user in zip format
+  app.get(
+    '/api/users/:user_id/export/forms',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const user_id = req.params.user_id
+      const formsArray = await formModel.list({ user_id }) || []
+      const archive = archiver('zip');
+
+      archive.on('finish', function() {
+        return res.end();
+      });
+
+      formsArray.forEach((form) => {
+        archive.append(JSON.stringify(form), { name: `form_${form.id}.json` });
+      })
+
+      archive.pipe(res);
+      await archive.finalize();
+    })
+
+
 }
