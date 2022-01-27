@@ -363,6 +363,15 @@
 #qc_required .input {
   float: right;
 }
+@media only screen and (max-height: 1200px) and (min-height: 800px){
+  .elements > .elementList {
+    position: relative;
+    display: block;
+    height: 625px;
+    overflow-y: scroll;
+  }
+}
+
 @media only screen and (max-height: 800px) and (min-height: 600px) {
   .elements > .elementList {
     position: relative;
