@@ -261,6 +261,12 @@ class Builder extends Component {
     })
   }
 
+  setFormTags(tags) {
+    const { form } = this.state
+    form.props.tags = tags
+    this.setState({ form })
+  }
+
   setIntegration(_integration) {
     const form = { ...this.state.form }
 
@@ -332,7 +338,7 @@ class Builder extends Component {
             value: '',
             isEncoded: false
           },
-          savedForm: {}
+          tags: []
         }
       }
     }
@@ -355,6 +361,7 @@ class Builder extends Component {
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
+    this.setFormTags = this.setFormTags.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
@@ -1050,6 +1057,7 @@ class Builder extends Component {
             form={form}
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
+            setFormTags={this.setFormTags}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
