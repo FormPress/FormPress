@@ -21,7 +21,7 @@ module.exports = async (db) => {
     `)
 
     console.log('Result of creating migration table shit ', result)
-  }
+  } 
 
   const migrations = fs
     .readdirSync(path.resolve('./', 'migration'))
