@@ -405,7 +405,7 @@ module.exports = (app) => {
     }
   )
 
-  // preview a form
+  // view or preview a form
   app.get('/form/view/:id', async (req, res) => {
     const form_id = req.params.id
     const result = await formModel.get({ form_id })
@@ -432,6 +432,20 @@ module.exports = (app) => {
     }
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
+
+    const db = await getPool()
+    const userRoleResult = await db.query(
+      `
+    SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
+    `,
+      [form.user_id]
+    )
+
+    let showBranding = false
+
+    if (userRoleResult[0].role_id === 2) {
+      showBranding = true
+    }
 
     // Update frontend form renderer TODO: don't do this on production!
     transform()
@@ -480,7 +494,7 @@ module.exports = (app) => {
       form: str,
       postTarget,
       BACKEND,
-      showBranding: true, // TODO: remove this, it's only for testing
+      showBranding,
       FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
