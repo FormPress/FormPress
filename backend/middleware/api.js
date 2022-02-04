@@ -460,6 +460,12 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
+    if (req.query.embed !== 'true') {
+      style += ' body {background-color: #f5f5f5;} '
+      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
+      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    }
+
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
     //form table has "published_version" vs form_published has "version"
@@ -474,6 +480,7 @@ module.exports = (app) => {
       form: str,
       postTarget,
       BACKEND,
+      showBranding: true, // TODO: remove this, it's only for testing
       FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`

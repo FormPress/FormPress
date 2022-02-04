@@ -36,6 +36,7 @@ import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
+import PreviewForm from './helper/PreviewForm'
 
 //list of element icons
 const iconMap = {
@@ -304,6 +305,7 @@ class Builder extends Component {
       insertBefore: false,
       selectedFieldId: false,
       publishedForm: {},
+      savedForm: {},
       form: {
         id: null,
         user_id: null,
@@ -331,8 +333,7 @@ class Builder extends Component {
           customCSS: {
             value: '',
             isEncoded: false
-          },
-          savedForm: {}
+          }
         }
       }
     }
@@ -1098,6 +1099,9 @@ class Builder extends Component {
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>
+        <Route path="/editor/:formId/preview">
+          <PreviewForm formID={formId} />
+        </Route>
       </Switch>
     )
   }
@@ -1141,7 +1145,9 @@ class Builder extends Component {
           <button onClick={this.handleSaveClick} {...saveButtonProps}>
             {saving === true ? 'Saving...' : 'Save'}
           </button>
-          <button onClick={this.handlePreviewClick}>Preview</button>
+          <NavLink to={`/editor/${params.formId}/preview`}>
+            <button>Preview</button>
+          </NavLink>
           <button className="publish" onClick={this.handlePublishClick}>
             {publishing === true ? 'Publishing...' : 'Publish'}
             {isPublishRequired === true ? (
@@ -1177,6 +1183,24 @@ class Builder extends Component {
             mode="builder"
           />
         )}
+        {this.props.auth.user_role === 2 ? (
+          <div
+            className="branding"
+            title="Upgrade your plan to remove branding.">
+            <img
+              alt="Formpress Logo"
+              src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
+              className="formpress-logo"
+            />
+            <div
+              className="branding-text"
+              title="Visit FORMPRESS and start building awesome forms!">
+              This form has been created on FORMPRESS. <br />
+              <a href="https://app.formpress.org">Click here</a> to create your
+              own form now! It is free!
+            </div>
+          </div>
+        ) : null}
       </div>
     )
   }
