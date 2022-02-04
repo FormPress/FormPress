@@ -1100,7 +1100,7 @@ class Builder extends Component {
           <ShareForm formId={formId} />
         </Route>
         <Route path="/editor/:formId/preview">
-          <PreviewForm formID={formId} />
+          <PreviewForm formID={formId} history={this.props.history} />
         </Route>
       </Switch>
     )
