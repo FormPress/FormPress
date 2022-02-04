@@ -2,6 +2,9 @@ const express = require('express')
 const path = require('path')
 const fs = require('fs')
 const fileUpload = require('express-fileupload')
+const transform = require(path.resolve('script', 'babel-transform'))
+transform()
+
 
 const isEnvironmentVariableSet = {
   googleServiceAccountCredentials:

@@ -13,7 +13,6 @@ const {
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage, model } = require(path.resolve('helper'))
 const formModel = model.form
@@ -448,7 +447,6 @@ module.exports = (app) => {
     }
 
     // Update frontend form renderer TODO: don't do this on production!
-    transform()
     const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
       .default
 
