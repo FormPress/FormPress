@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class PreviewForm extends Component {
   render() {
-    console.log('im rendered')
     const BACKEND = process.env.REACT_APP_BACKEND
     const { formID } = this.props
 
