@@ -224,7 +224,8 @@
 }
 
 .builderStage > .formControls > button,
-.builderStage > .formControls > a > button {
+.builderStage > .formControls > a > button,
+.builderStage > .formControls > span > button {
   border: none;
   height: 32px;
   line-height: 32px;
@@ -235,6 +236,10 @@
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
+}
+.builderStage > .formControls > span > button.preview-disabled-button {
+  color: gray;
+  cursor: default;
 }
 
 .builderStage > .formControls > button.publish {

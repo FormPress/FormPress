@@ -31,12 +31,12 @@ import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
+import PreviewForm from './helper/PreviewForm'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
-import PreviewForm from './helper/PreviewForm'
 
 //list of element icons
 const iconMap = {
@@ -345,7 +345,6 @@ class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handleFormItemMovement = this.handleFormItemMovement.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
-    this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
@@ -837,13 +836,6 @@ class Builder extends Component {
     this.setState({ publishing: false })
   }
 
-  handlePreviewClick() {
-    const BACKEND = process.env.REACT_APP_BACKEND
-    const { id } = this.state.form
-
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
-  }
-
   configureQuestion(changes) {
     const form = { ...this.state.form }
 
@@ -1145,9 +1137,19 @@ class Builder extends Component {
           <button onClick={this.handleSaveClick} {...saveButtonProps}>
             {saving === true ? 'Saving...' : 'Save'}
           </button>
-          <NavLink to={`/editor/${params.formId}/preview`}>
-            <button>Preview</button>
-          </NavLink>
+          {typeof this.state.form.id === 'number' ? (
+            <NavLink to={`/editor/${params.formId}/preview`}>
+              <button>Preview</button>
+            </NavLink>
+          ) : (
+            <span>
+              <button
+                className="preview-disabled-button"
+                title="Form has to be saved before it can be previewed.">
+                Preview
+              </button>
+            </span>
+          )}
           <button className="publish" onClick={this.handlePublishClick}>
             {publishing === true ? 'Publishing...' : 'Publish'}
             {isPublishRequired === true ? (
