@@ -58,7 +58,7 @@ class FormProperties extends Component {
     const regexp = /^([\w-]+)/g
 
     if (e.target[0].value.match(regexp) !== null) {
-      tag = e.target[0].value.match(regexp)
+      tag = e.target[0].value.match(regexp)[0]
     }
     tagsArray.push(tag)
 
@@ -74,7 +74,7 @@ class FormProperties extends Component {
   }
 
   render() {
-    console.log(this.state.tagsArray)
+    console.log(this.props.form.props.tags)
     const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const integrations = this.props.form.props.integrations || []
 
