@@ -38,7 +38,7 @@ module.exports = async (db) => {
     }
 
     console.log(`Running ${migration}`)
-    const fn = require(path.resolve('./', 'migration', migration))
+    const fn = require(path.resolve('./', 'migration', migration)) 
     try {
       await fn(db)
     } catch (e) {
