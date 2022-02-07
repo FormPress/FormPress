@@ -226,14 +226,13 @@ class App extends Component {
                   component={DownloadFile}
                 />
                 <AdminRoute path="/admin" component={AdminPage} />
-                <Route path="/settings" component={Settings} />
+                <PrivateRoute path="/settings" component={Settings} />
                 <Route path="/forgotpassword" component={ForgotPassword} />
                 <Route
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
 
-                <Route path="/settings" component={Settings} />
                 <Redirect to="/login" />
               </Switch>
             </div>

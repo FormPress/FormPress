@@ -425,3 +425,13 @@
 .elements > .elementList > .disabled-element:hover .planover-container {
   visibility: visible;
 }
+
+.terms-checkbox {
+  margin-right: 8px;
+}
+
+.terms {
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}

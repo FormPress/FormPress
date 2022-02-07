@@ -11,6 +11,7 @@ const {
   userHavePermission,
   userHaveFormLimit
 } = require(path.resolve('middleware', 'authorization'))
+
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const transform = require(path.resolve('script', 'babel-transform'))
