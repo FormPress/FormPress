@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -480,7 +479,7 @@ module.exports = (app) => {
 
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-    //form table has "published_version" vs form_published has "version"
+    //form table has "published_version" while form_published has "version"
     const postTarget =
       form.version === undefined
         ? `${BACKEND}/form/submit/${form_id}`
