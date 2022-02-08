@@ -30,6 +30,7 @@ variable "deployments" {
     bucket_name                      = string
     google_client_id                 = string
     sendgrid_api_key                 = string
+    env_var                          = map(string)
   }))
 
   default = {
@@ -46,7 +47,8 @@ variable "deployments" {
       "hostname"                         = "app.formpress.org",
       "bucket_name"                      = "file_upload_bucket",
       "google_client_id"                 = "",
-      "sendgrid_api_key"                 = ""
+      "sendgrid_api_key"                 = "",
+      "env_var"                          = {}
     }
   }
 }
