@@ -1198,7 +1198,7 @@ class Builder extends Component {
               className="branding-text"
               title="Visit FORMPRESS and start building awesome forms!">
               This form has been created on FORMPRESS. <br />
-              <a href="https://app.formpress.org">Click here</a> to create your
+              <a href="#">Click here</a> to create your
               own form now! It is free!
             </div>
           </div>
