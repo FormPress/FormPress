@@ -43,7 +43,7 @@
   border: 1px dashed;
 }
 .gleam.form > .element > .label > span.emptySpan {
-  border: 1px dashed gray;
+  border: 1px dashed transparent;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
