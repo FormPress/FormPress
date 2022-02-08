@@ -640,8 +640,12 @@
   margin: auto 0 auto 90px;
 }
 .renderer.gleam:after {
+  /* the password warning after the form */
   border-top: 1px solid #f5f5f5;
   content: 'Never submit passwords via FORMPRESS forms.';
   color: black;
-  padding: 15px 70px 0 70px;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  padding-top: 20px;
 }

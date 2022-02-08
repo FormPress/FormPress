@@ -15,7 +15,9 @@ class PreviewForm extends Component {
           <div className="preview-warning-navback">
             <button
               className="preview-warning-navback-button"
-              onClick={() => this.props.history.goBack()}>
+              onClick={() =>
+                this.props.history.push(`/editor/${formID}/builder`)
+              }>
               <FontAwesomeIcon icon={faChevronLeft} size="1x" />
               &nbsp;BACK
             </button>
