@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
-
+import Modal from './common/Modal'
 import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
@@ -110,12 +110,15 @@ class Data extends Component {
         submissions: false,
         entries: false
       },
-      parseError: false
+      parseError: false,
+      isModalOpen: false,
+      modalContent: {}
     }
 
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
   }
 
   handleFormClick(form) {
@@ -219,6 +222,100 @@ class Data extends Component {
     this.setState({ selectedSubmissionIds: [] })
   }
 
+  handleDeleteSubmissionClick(e) {
+    e.preventDefault()
+    const { selectedSubmissionIds } = this.state
+    const modalContent = {
+      header:
+        selectedSubmissionIds.length > 1
+          ? `Delete ${selectedSubmissionIds.length} submissions?`
+          : 'Delete submission?',
+      status: 'warning'
+    }
+
+    modalContent.dialogue = {
+      negativeText: 'Delete',
+      negativeClick: this.deleteSubmission.bind(this),
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick
+    }
+
+    modalContent.content = (
+      <div>
+        {selectedSubmissionIds.length > 1
+          ? `Selected submissions and the attached file uploads will be `
+          : 'Selected submission and the attached file uploads will be '}
+        <span
+          style={{
+            color: '#be0000',
+            fontWeight: 'bold',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all'
+          }}>
+          PERMANENTLY
+        </span>{' '}
+        {selectedSubmissionIds.length > 1
+          ? 'deleted. Are you sure you want to delete selected submissions?'
+          : 'deleted. Are you sure you want to delete selected submission?'}
+      </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+  async deleteSubmission() {
+    const {
+      selectedFormId,
+      submissions,
+      selectedSubmissionIds,
+      entries
+    } = this.state
+
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
+      method: 'delete',
+      body: {
+        submissionIds: this.state.selectedSubmissionIds
+      }
+    })
+
+    let modalContent = {}
+    if (data.success === true) {
+      modalContent = {
+        content: 'Submission successfully deleted!',
+        status: 'success',
+        header: 'Success!'
+      }
+      this.setState({ modalContent })
+
+      this.setState({
+        submissions: submissions.filter(
+          (submission) => selectedSubmissionIds.includes(submission.id) !== true
+        )
+      })
+
+      if (selectedSubmissionIds.includes(entries[0].submission_id)) {
+        this.setState({ entries: [] })
+      }
+
+      this.setState({ selectedSubmissionIds: [] })
+    } else {
+      modalContent = {
+        content:
+          'There has been an error deleting submissions. Please contact support.',
+        status: 'error',
+        header: 'Error'
+      }
+      this.setState({ modalContent })
+      console.log('ERROR WHILE DELETING SUBMISSION', data)
+    }
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
+  }
+
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions =
@@ -234,6 +331,12 @@ class Data extends Component {
 
     return (
       <div className="data">
+        <Modal
+          history={this.props.history}
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         <div className="headerContainer">
           <div className="header cw grid center">
             <div className="col-1-16">
@@ -313,22 +416,38 @@ class Data extends Component {
     const csvExportClassNames = ['csvExportButton']
     let csvExportButtonText = 'Export CSV'
 
+    const deleteSubmissionButtonClassNames = ['deleteSubmissionButton']
+    let deleteSubmissionButtonText = 'Delete'
+
     if (selectedSubmissionIds.length === 0) {
       csvExportClassNames.push('disabled')
+      deleteSubmissionButtonClassNames.push('disabled')
     } else {
       csvExportButtonText = `Export CSV (${selectedSubmissionIds.length})`
+      deleteSubmissionButtonText = `Delete (${selectedSubmissionIds.length})`
     }
 
     return [
       <div className="submissionActions grid" key="actions">
-        <div className="col-10-16">
+        <div className="col-6-16">
           {submissions.length} total submission(s). <br />
           {getNumberOfSubmissionsToday(submissions)} submission(s) today.
         </div>
-        <div className="col-6-16 buttonContainer">
+        <div className="col-5-16 buttonContainer">
+          <button
+            className={deleteSubmissionButtonClassNames.join(' ')}
+            {...(selectedSubmissionIds.length !== 0 && {
+              onClick: this.handleDeleteSubmissionClick.bind(this)
+            })}>
+            {deleteSubmissionButtonText}
+          </button>
+        </div>
+        <div className="col-5-16 buttonContainer">
           <button
             className={csvExportClassNames.join(' ')}
-            onClick={this.handleCSVExportClick}>
+            {...(selectedSubmissionIds.length !== 0 && {
+              onClick: this.handleCSVExportClick
+            })}>
             {csvExportButtonText}
           </button>
         </div>

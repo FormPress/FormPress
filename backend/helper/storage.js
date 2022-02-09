@@ -8,34 +8,45 @@ const storage = new Storage({
 })
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
-exports.uploadFile = (uploadedFile, submit_id) =>
-  new Promise((resolve, reject) => {
+exports.uploadFile = (uploadedFile, submit_id) => {
+  let uploadedFiles = []
+  let results = []
+  if (uploadedFile instanceof Array) {
+    uploadedFiles = uploadedFile
+  } else {
+    uploadedFiles.push(uploadedFile)
+  }
+  for (let eachFile of uploadedFiles) {
     let fileExtension = ''
-    if (uploadedFile.name.indexOf('.') > -1) {
-      fileExtension = uploadedFile.name.match(/\.[^.]+$/)[0]
+    if (eachFile.name.indexOf('.') > -1) {
+      fileExtension = eachFile.name.match(/\.[^.]+$/)[0]
     }
+    let fileName = submit_id.toString() + '/' + uuidv4() + fileExtension
+    let file = fileUploadBucket.file(fileName)
+    let size = eachFile.size
+    new Promise((resolve, reject) => {
+      let stream = new Duplex()
 
-    const fileName = submit_id.toString() + '/' + uuidv4() + fileExtension
-    const file = fileUploadBucket.file(fileName)
-    const stream = new Duplex()
+      stream.push(eachFile.data)
+      stream.push(null)
 
-    stream.push(uploadedFile.data)
-    stream.push(null)
-
-    stream
-      .pipe(file.createWriteStream())
-      .on('error', (error) => {
-        reject(error)
-      })
-      .on('finish', () => {
-        resolve(
-          JSON.stringify({
-            uploadName: fileName,
-            fileName: uploadedFile.name
-          })
-        )
-      })
-  })
+      stream
+        .pipe(file.createWriteStream())
+        .on('error', (error) => {
+          reject(error)
+        })
+        .on('finish', () => {
+          resolve()
+        })
+    })
+    results.push({
+      uploadName: fileName,
+      fileName: eachFile.name,
+      fileSize: size
+    })
+  }
+  return JSON.stringify(results)
+}
 
 exports.downloadFile = (uploadName) => {
   const fileToDownload = fileUploadBucket.file(uploadName)
@@ -48,4 +59,12 @@ exports.downloadFile = (uploadName) => {
     .pipe(out)
 
   return out
+}
+
+exports.deleteFile = (uploadName) => {
+  try {
+    fileUploadBucket.file(uploadName).delete()
+  } catch (err) {
+    console.log('cannot delete uploaded file', err)
+  }
 }

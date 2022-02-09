@@ -54,12 +54,15 @@
               response.answer = '-'
             } else {
               const value = JSON.parse(data.answer)
-              const uriFileName = encodeURI(value.fileName)
-              const downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
-        
-              response.answer = {}
-              response.answer.downloadLink = downloadLink
-              response.answer.fileName = value.fileName
+              response.answer = []
+              value.forEach((file)=>{
+                let uriFileName = encodeURI(file.fileName)
+                let downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
+                response.answer.push({
+                  downloadLink: downloadLink,
+                  fileName: file.fileName
+                })
+              })
             }
           } else {
             if (data.answer === '') {
@@ -100,8 +103,13 @@
               <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
                 <%if (response.answer === '-') {%>
                   -
-                <%} else {%>
-                  <a href="<%= response.answer.downloadLink %>"><%=response.answer.fileName%></a>
+                <%} else {%> 
+                  <% 
+                  response.answer.forEach((answer)=>{%>
+                    <a href="<%= answer.downloadLink %>"><%=answer.fileName%></a><br/><%
+                  })
+                  %>
+                  
                 <%}%>
               </div>
             <%} else {%>
