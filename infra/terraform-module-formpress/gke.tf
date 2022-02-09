@@ -7,8 +7,7 @@ provider "kubernetes" {
 }
 
 module "vpc" {
-  source  = "terraform-google-modules/network/google"
-  version = "~> 3.3.0"
+  source = "terraform-google-modules/network/google"
 
   project_id   = var.project
   network_name = "formpress-default"
