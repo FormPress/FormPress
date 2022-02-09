@@ -31,6 +31,7 @@ import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
+import PreviewForm from './helper/PreviewForm'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 
@@ -310,6 +311,7 @@ class Builder extends Component {
       insertBefore: false,
       selectedFieldId: false,
       publishedForm: {},
+      savedForm: {},
       form: {
         id: null,
         user_id: null,
@@ -350,7 +352,6 @@ class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handleFormItemMovement = this.handleFormItemMovement.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
-    this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
@@ -843,13 +844,6 @@ class Builder extends Component {
     this.setState({ publishing: false })
   }
 
-  handlePreviewClick() {
-    const BACKEND = process.env.REACT_APP_BACKEND
-    const { id } = this.state.form
-
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
-  }
-
   configureQuestion(changes) {
     const form = { ...this.state.form }
 
@@ -1106,6 +1100,9 @@ class Builder extends Component {
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
         </Route>
+        <Route path="/editor/:formId/preview">
+          <PreviewForm formID={formId} history={this.props.history} />
+        </Route>
       </Switch>
     )
   }
@@ -1149,7 +1146,19 @@ class Builder extends Component {
           <button onClick={this.handleSaveClick} {...saveButtonProps}>
             {saving === true ? 'Saving...' : 'Save'}
           </button>
-          <button onClick={this.handlePreviewClick}>Preview</button>
+          {typeof this.state.form.id === 'number' ? (
+            <NavLink to={`/editor/${params.formId}/preview`}>
+              <button>Preview</button>
+            </NavLink>
+          ) : (
+            <span>
+              <button
+                className="preview-disabled-button"
+                title="Form has to be saved before it can be previewed.">
+                Preview
+              </button>
+            </span>
+          )}
           <button className="publish" onClick={this.handlePublishClick}>
             {publishing === true ? 'Publishing...' : 'Publish'}
             {isPublishRequired === true ? (
@@ -1185,6 +1194,24 @@ class Builder extends Component {
             mode="builder"
           />
         )}
+        {this.props.auth.user_role === 2 ? (
+          <div
+            className="branding"
+            title="Upgrade your plan to remove branding.">
+            <img
+              alt="Formpress Logo"
+              src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
+              className="formpress-logo"
+            />
+            <div
+              className="branding-text"
+              title="Visit FORMPRESS and start building awesome forms!">
+              This form has been created on FORMPRESS. <br />
+              <a href="#">Click here</a> to create your own form now! It is
+              free!
+            </div>
+          </div>
+        ) : null}
       </div>
     )
   }

@@ -223,7 +223,9 @@
   -moz-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
-.builderStage > .formControls > button {
+.builderStage > .formControls > button,
+.builderStage > .formControls > a > button,
+.builderStage > .formControls > span > button {
   border: none;
   height: 32px;
   line-height: 32px;
@@ -234,6 +236,10 @@
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
+}
+.builderStage > .formControls > span > button.preview-disabled-button {
+  color: gray;
+  cursor: default;
 }
 
 .builderStage > .formControls > button.publish {
@@ -417,4 +423,8 @@
 
 .elements > .elementList > .disabled-element:hover .planover-container {
   visibility: visible;
+}
+
+.builderStage > .branding {
+  position: relative !important;
 }

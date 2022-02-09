@@ -3,7 +3,7 @@
 .renderer.gleam {
   background-color: white;
   width: 750px;
-  margin: 20px auto;
+  margin: 20px auto 90px auto;
   padding: 30px 90px 20px;
   box-sizing: border-box;
 }
@@ -31,6 +31,7 @@
   margin-bottom: 10px;
 }
 .gleam.form > .element > .label > span {
+  font-family: Montserrat;
   min-width: 125px;
   max-width: calc(100% - 20px);
   display: inline-block;
@@ -42,7 +43,7 @@
   border: 1px dashed;
 }
 .gleam.form > .element > .label > span.emptySpan {
-  border: 1px dashed gray;
+  border: 1px dashed transparent;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
@@ -265,6 +266,8 @@
 .gleam .elementButton input[type='submit']:focus,
 .builder.gleam .elementButton button,
 .builder.gleam .elementButton button:focus {
+  font-family: Montserrat;
+  font-weight: bold;
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
@@ -577,4 +580,72 @@
     width: auto;
     padding: 10px;
   }
+
+  .branding {
+    margin: 0;
+    width: auto;
+    padding: 10px;
+  }
+
+  .branding > .branding-text {
+    margin: auto;
+    /*width: auto;*/
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .branding {
+    justify-content: center;
+  }
+  .branding > .branding-text {
+    display: none;
+  }
+
+  .branding > img {
+    width: auto;
+    margin: auto;
+  }
+}
+
+.branding {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  position: -ms-device-fixed;
+  z-index: 20;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+}
+
+.branding > img {
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .Group_170 {
+  /* This is formpress logo svg. */
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .branding-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  color: black !important;
+  text-align: right;
+  margin: auto 0 auto 90px;
+}
+.renderer.gleam:after {
+  /* the password warning after the form */
+  border-top: 1px solid #f5f5f5;
+  content: 'Never submit passwords via FORMPRESS forms.';
+  color: black;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  padding-top: 20px;
 }

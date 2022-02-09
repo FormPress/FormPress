@@ -139,7 +139,7 @@ resource "kubernetes_deployment" "formpress" {
             value_from {
               secret_key_ref {
                 name = "sa-credentials-${each.key}"
-                key  = "credentials.json"
+                key  = "credentialsbase64"
               }
             }
           }
@@ -172,6 +172,15 @@ resource "kubernetes_deployment" "formpress" {
           env {
             name  = "SENDGRID_API_KEY"
             value = each.value.sendgrid_api_key
+          }
+
+          dynamic "env" {
+            for_each = each.value.env_var
+
+            content {
+              name  = env.key
+              value = env.value
+            }
           }
 
           resources {
