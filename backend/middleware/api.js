@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -13,7 +12,6 @@ const {
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage, model } = require(path.resolve('helper'))
 const formModel = model.form
@@ -405,7 +403,7 @@ module.exports = (app) => {
     }
   )
 
-  // preview a form
+  // view or preview a form
   app.get('/form/view/:id', async (req, res) => {
     const form_id = req.params.id
     const result = await formModel.get({ form_id })
@@ -433,8 +431,21 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
+    const db = await getPool()
+    const userRoleResult = await db.query(
+      `
+    SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
+    `,
+      [form.user_id]
+    )
+
+    let showBranding = false
+
+    if (userRoleResult[0].role_id === 2) {
+      showBranding = true
+    }
+
     // Update frontend form renderer TODO: don't do this on production!
-    transform()
     const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
       .default
 
@@ -460,9 +471,15 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
+    if (req.query.embed !== 'true') {
+      style += ' body {background-color: #f5f5f5;} '
+      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
+      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    }
+
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-    //form table has "published_version" vs form_published has "version"
+    //form table has "published_version" while form_published has "version"
     const postTarget =
       form.version === undefined
         ? `${BACKEND}/form/submit/${form_id}`
@@ -474,6 +491,7 @@ module.exports = (app) => {
       form: str,
       postTarget,
       BACKEND,
+      showBranding,
       FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`

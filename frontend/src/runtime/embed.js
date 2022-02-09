@@ -49,7 +49,7 @@
           border: none;
           }
       </style>
-      <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}"></iframe>
+      <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true"></iframe>
       <script>
         iFrameResize({ log: false }, '#${iframeID}')
       </script>`).insertAfter(this)

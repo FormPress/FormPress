@@ -16,7 +16,7 @@ exports.get = async ({ form_id }) => {
   const db = await getPool()
   const result = await db.query(
     `
-      SELECT * FROM \`form\` WHERE id = ? LIMIT 1
+      SELECT * FROM \`form\` WHERE id = ? AND deleted_at IS NULL LIMIT 1
     `,
     [form_id]
   )
