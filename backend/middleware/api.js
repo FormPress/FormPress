@@ -317,6 +317,62 @@ module.exports = (app) => {
     }
   )
 
+  //delete submissions
+  app.delete(
+    '/api/users/:user_id/forms/:form_id/deleteSubmission',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, user_id } = req.params
+      const ids = req.body.submissionIds
+      const db = await getPool()
+
+      await db.query(
+        `
+        DELETE FROM \`entry\`
+          WHERE form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`submission\`
+          WHERE form_id = ? AND id IN (${ids.map(() => '?').join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      const uploadName = await db.query(
+        `
+      SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
+        .map(() => '?')
+        .join(',')})
+      `,
+        [user_id, form_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`storage_usage\`
+          WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [user_id, form_id, ...ids]
+      )
+
+      if (uploadName.length > 0) {
+        uploadName.forEach((fileName) => {
+          storage.deleteFile(fileName.upload_name)
+        })
+      }
+      res.json({ success: true })
+    }
+  )
+
   // return entries of given submission id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
@@ -342,12 +398,12 @@ module.exports = (app) => {
 
   //download uploaded file
   app.get(
-    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     userShouldOwnSubmission('user_id', 'submission_id'),
     async (req, res) => {
-      const { submission_id, question_id } = req.params
+      const { submission_id, question_id, file_name } = req.params
       const db = await getPool()
       const preResult = await db.query(
         `
@@ -366,7 +422,12 @@ module.exports = (app) => {
 
         res.status(200).json({ message: 'Entry not found' })
       } else {
-        const result = JSON.parse(preResult[0].value)
+        const resultArray = JSON.parse(preResult[0].value)
+
+        let result = resultArray.find((file) => {
+          return file.fileName === file_name
+        })
+
         const uploadName = result.uploadName
         const fileName = result.fileName
 
