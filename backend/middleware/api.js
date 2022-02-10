@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -14,7 +13,6 @@ const {
 
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const transform = require(path.resolve('script', 'babel-transform'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { storage, model } = require(path.resolve('helper'))
 const formModel = model.form
@@ -321,6 +319,62 @@ module.exports = (app) => {
     }
   )
 
+  //delete submissions
+  app.delete(
+    '/api/users/:user_id/forms/:form_id/deleteSubmission',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, user_id } = req.params
+      const ids = req.body.submissionIds
+      const db = await getPool()
+
+      await db.query(
+        `
+        DELETE FROM \`entry\`
+          WHERE form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`submission\`
+          WHERE form_id = ? AND id IN (${ids.map(() => '?').join(',')})
+      `,
+        [form_id, ...ids]
+      )
+
+      const uploadName = await db.query(
+        `
+      SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
+        .map(() => '?')
+        .join(',')})
+      `,
+        [user_id, form_id, ...ids]
+      )
+
+      await db.query(
+        `
+        DELETE FROM \`storage_usage\`
+          WHERE user_id = ? AND form_id = ? AND submission_id IN (${ids
+            .map(() => '?')
+            .join(',')})
+      `,
+        [user_id, form_id, ...ids]
+      )
+
+      if (uploadName.length > 0) {
+        uploadName.forEach((fileName) => {
+          storage.deleteFile(fileName.upload_name)
+        })
+      }
+      res.json({ success: true })
+    }
+  )
+
   // return entries of given submission id
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
@@ -346,12 +400,12 @@ module.exports = (app) => {
 
   //download uploaded file
   app.get(
-    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     userShouldOwnSubmission('user_id', 'submission_id'),
     async (req, res) => {
-      const { submission_id, question_id } = req.params
+      const { submission_id, question_id, file_name } = req.params
       const db = await getPool()
       const preResult = await db.query(
         `
@@ -370,7 +424,12 @@ module.exports = (app) => {
 
         res.status(200).json({ message: 'Entry not found' })
       } else {
-        const result = JSON.parse(preResult[0].value)
+        const resultArray = JSON.parse(preResult[0].value)
+
+        let result = resultArray.find((file) => {
+          return file.fileName === file_name
+        })
+
         const uploadName = result.uploadName
         const fileName = result.fileName
 
@@ -407,7 +466,7 @@ module.exports = (app) => {
     }
   )
 
-  // preview a form
+  // view or preview a form
   app.get('/form/view/:id', async (req, res) => {
     const form_id = req.params.id
     const result = await formModel.get({ form_id })
@@ -435,8 +494,21 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
+    const db = await getPool()
+    const userRoleResult = await db.query(
+      `
+    SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
+    `,
+      [form.user_id]
+    )
+
+    let showBranding = false
+
+    if (userRoleResult[0].role_id === 2) {
+      showBranding = true
+    }
+
     // Update frontend form renderer TODO: don't do this on production!
-    transform()
     const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
       .default
 
@@ -462,9 +534,15 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
+    if (req.query.embed !== 'true') {
+      style += ' body {background-color: #f5f5f5;} '
+      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
+      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    }
+
     const { FP_ENV, FP_HOST } = process.env
     const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-    //form table has "published_version" vs form_published has "version"
+    //form table has "published_version" while form_published has "version"
     const postTarget =
       form.version === undefined
         ? `${BACKEND}/form/submit/${form_id}`
@@ -476,6 +554,7 @@ module.exports = (app) => {
       form: str,
       postTarget,
       BACKEND,
+      showBranding,
       FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`

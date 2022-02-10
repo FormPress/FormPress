@@ -106,7 +106,7 @@
   > .submissionActions
   > .buttonContainer {
   text-align: right;
-  padding-right: 0;
+  padding: 16px 0px 16px;
 }
 
 .data
@@ -117,12 +117,30 @@
   border: none;
   background-color: #8cc63f;
   color: white;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   text-align: center;
   border-radius: 10px;
   padding: 8px 12px;
   cursor: pointer;
+  width: 92px;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .submissionActions
+  .deleteSubmissionButton {
+  border: none;
+  background-color: #113952;
+  color: white;
+  font-size: 9px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  width: 92px;
 }
 
 .data
@@ -130,6 +148,15 @@
   > .submissionSelector
   > .submissionActions
   .csvExportButton.disabled {
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .submissionActions
+  .deleteSubmissionButton.disabled {
   cursor: not-allowed;
   background-color: #ccc;
 }

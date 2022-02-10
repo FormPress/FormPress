@@ -5,6 +5,8 @@ const request = require('supertest')
 const sinon = require('sinon')
 const jwt = require('jsonwebtoken')
 const cheerio = require('cheerio')
+const transform = require(path.resolve('script', 'babel-transform'))
+transform()
 
 process.env.JWT_SECRET = 'somesecretforunittesting'
 process.env.FILE_UPLOAD_BUCKET = 'someBucketName'
