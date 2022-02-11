@@ -119,17 +119,15 @@ module.exports = (app) => {
       res.status(500).send('Error during submission handling')
     }
 
-    let fileUploadCounter = -1;
+    let fileUploadCounter = -1
 
     for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
       const type = findQuestionType(form, question_id)
 
       if (type === 'FileUpload') {
-        fileUploadCounter++;
-        const uploadPosition = keys.indexOf(key)
-
-        let parsedValue = "";
+        fileUploadCounter++
+        let parsedValue = ''
 
         parsedValue = JSON.parse(fileUploadEntries[fileUploadCounter])
 
