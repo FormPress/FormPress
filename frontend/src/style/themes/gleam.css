@@ -222,11 +222,15 @@
   padding: 0;
   list-style: none;
 }
+.renderer.gleam .elementRadio ul li input {
+  margin-top: 0px;
+}
 .gleam .elementRadio ul li input {
   position: relative;
   width: 18px;
   height: 18px;
   -webkit-appearance: none;
+  -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
   border: 1px solid #a0a0a0;
@@ -236,7 +240,9 @@
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
-  margin-top: 7px;
+  margin-top: 3px;
+  display: inline-block;
+  margin-right: 5px;
 }
 .gleam .elementRadio ul li input:checked {
   background-color: #8cc63f;
@@ -327,21 +333,26 @@
 
 .renderer.gleam .elementCheckbox .input .checkbox-label {
   color: #333333;
-  display: inline-block;
-  margin-top: -18px;
+  margin-top: 0px;
+  max-width: calc( 100% - 25px);
+  overflow: hidden;
   user-select: none;
-  word-break: break-word;
-  min-width: 115px;
-  text-indent: 23px;
+  min-width: 60px;
+  display: inline-block;
+  word-break: break-all;
+  white-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
   color: #333333;
+  margin-top: 0px;
+  max-width: calc( 100% - 25px);
+  overflow: hidden;
+  user-select: none;
+  min-width: 60px;
   display: inline-block;
   word-break: break-all;
-  text-indent: 25px;
-  margin-top: -18px;
-  position: relative;
+  white-space: break-spaces;
 }
 
 .gleam .elementCheckbox.requiredError .input .checkbox-label {
@@ -412,7 +423,8 @@
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
-  margin-top: 4px;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
@@ -421,8 +433,7 @@
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
-  text-indent: 45px;
+  max-width: calc( 100% - 50px);
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
@@ -436,7 +447,7 @@
   color: #ffffff;
   position: absolute;
   left: 4px;
-  top: 5px;
+  top: 2px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
