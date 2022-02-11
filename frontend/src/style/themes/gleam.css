@@ -334,7 +334,7 @@
 .renderer.gleam .elementCheckbox .input .checkbox-label {
   color: #333333;
   margin-top: 0px;
-  max-width: calc( 100% - 25px);
+  max-width: calc(100% - 25px);
   overflow: hidden;
   user-select: none;
   min-width: 60px;
@@ -346,7 +346,7 @@
 .renderer.gleam.form .elementRadio .input .radio-label {
   color: #333333;
   margin-top: 0px;
-  max-width: calc( 100% - 25px);
+  max-width: calc(100% - 25px);
   overflow: hidden;
   user-select: none;
   min-width: 60px;
@@ -433,7 +433,7 @@
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
-  max-width: calc( 100% - 50px);
+  max-width: calc(100% - 50px);
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
