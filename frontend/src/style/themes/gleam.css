@@ -436,7 +436,7 @@
   color: #ffffff;
   position: absolute;
   left: 4px;
-  top: 1px;
+  top: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
