@@ -20,7 +20,7 @@ module.exports = async (db) => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `)
 
-    console.log('REsult of creating migration table shit ', result)
+    console.log('Result of creating migration table shit ', result)
   }
 
   const migrations = fs

@@ -90,10 +90,12 @@ module.exports = (app) => {
       }
       preformatInputs.push({ q_id: key, value: value })
     }
+
     const formattedInput = submissionhandler.formatInput(
       form.props.elements,
       preformatInputs
     )
+
     try {
       for (const data of formattedInput) {
         //save answer
@@ -117,13 +119,17 @@ module.exports = (app) => {
       res.status(500).send('Error during submission handling')
     }
 
+    let fileUploadCounter = -1
+
     for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
       const type = findQuestionType(form, question_id)
 
       if (type === 'FileUpload') {
-        const uploadPosition = keys.indexOf(key)
-        const parsedValue = JSON.parse(fileUploadEntries[uploadPosition - 1])
+        fileUploadCounter++
+        let parsedValue = ''
+
+        parsedValue = JSON.parse(fileUploadEntries[fileUploadCounter])
 
         const entry_idData = await db.query(
           `SELECT \`id\` FROM \`entry\` WHERE submission_id = ? AND question_id = ?`,
@@ -149,6 +155,7 @@ module.exports = (app) => {
         )
       }
     }
+
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )

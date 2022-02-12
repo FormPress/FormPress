@@ -210,7 +210,7 @@ class Login extends Component {
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
               <Link to="/signup">
-                &nbsp;<i>SignUp</i>
+                <i>SignUp</i>
               </Link>
             </div>
             <div className="have-trouble">

@@ -1,7 +1,9 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 import AuthContext from './auth.context'
 import { ProfileSVG } from './svg'
+import './Profile.css'
 
 const Profile = () => {
   const logout = (e) => {
@@ -12,29 +14,30 @@ const Profile = () => {
   }
 
   const renderLoggedIn = (auth) => {
-    return [
-      <div key="1" className="wrapper-welcome">
-        <div className="welcome-user" key="2">
-          Welcome, <i title={auth.email}>{auth.email}</i>
+    return (
+      <div className="profile">
+        <div className="profileMenuContainer">
+          <div key="1" className="wrapper-welcome">
+            <div className="welcome-user" key="2">
+              Welcome, <i title={auth.email}>{auth.email}</i>
+            </div>
+            <ProfileSVG key="1" className="profileSVG" />
+            <div className="profileMenuContent dn">
+              <NavLink to="/settings" activeClassName="selected">
+                Settings
+              </NavLink>
+              <a onClick={logout}>Logout</a>
+            </div>
+          </div>
         </div>
-        <ProfileSVG
-          key="3"
-          className="profileSVG"
-          title="Log out"
-          onClick={logout}
-        />
       </div>
-    ]
+    )
   }
 
   return (
     <AuthContext.Consumer>
       {(value) => {
-        return (
-          <div className="profile">
-            {value.loggedIn === true ? renderLoggedIn(value) : null}
-          </div>
-        )
+        return value.loggedIn === true ? renderLoggedIn(value) : null
       }}
     </AuthContext.Consumer>
   )

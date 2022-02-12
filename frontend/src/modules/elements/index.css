@@ -25,7 +25,6 @@
 
 .form > .element > .label {
   min-width: 200px;
-  max-width: 600px;
 }
 
 .builderStage .form > .element > button,

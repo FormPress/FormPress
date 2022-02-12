@@ -19,6 +19,15 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+.wrapper-large {
+  left: 50%;
+  position: absolute;
+  top: 0%;
+  transform: translate(-50%, 0%);
+  width: 80%;
+  max-width: 1200px;
+}
+
 .wrapper-header .close-modal {
   float: right;
   user-select: none;

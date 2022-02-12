@@ -8,9 +8,11 @@
 
 .data > .formSelectorContainer {
   height: 60px;
-  top: 132px;
+  top: 116px;
   width: 100%;
   position: fixed;
+  z-index: 9999;
+  border-top: 18px solid #f5f5f5;
 }
 
 .data > .formSelectorContainer > .formSelector {
@@ -177,10 +179,18 @@
   line-height: 1.83;
 }
 
+.data > .dataContent > .entriesViewer > .entry .value .input {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
 .data > .dataContent > .entriesViewer > .entry .value input[type='checkbox'] {
   width: 18px;
   height: 18px;
   -webkit-appearance: none;
+  -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
   border: 1px solid #a0a0a0;
@@ -189,8 +199,9 @@
   transition-duration: 0.3s;
   background-color: #fdfdfd;
   cursor: pointer;
-  overflow: hidden;
-  margin-top: 2px;
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .data
@@ -220,16 +231,15 @@
 
 .data > .dataContent > .entriesViewer > .entry .value .checkbox-label {
   color: #333333;
-  display: inline-block;
   margin-top: 0px;
-  position: absolute;
-  text-indent: 5px;
-  white-space: nowrap;
-  max-width: 600px;
+  max-width: calc(100% - 25px);
   overflow: hidden;
   user-select: none;
-  min-width: 100px;
-  border: 1px solid #ffffff;
+  min-width: 60px;
+  display: inline-block;
+  word-break: break-all;
+  white-space: break-spaces;
+  padding-right: 5px;
 }
 
 .data > .dataContent > .entriesViewer > .entry .value input[type='radio'] {
@@ -246,6 +256,10 @@
   outline: none;
   background-color: #fdfdfd;
   cursor: pointer;
+  vertical-align: top;
+  margin-top: 3px;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .data
@@ -276,22 +290,31 @@
 
 .data > .dataContent > .entriesViewer > .entry .value .radio-label {
   color: #333333;
-  margin-top: -2px;
-  position: absolute;
-  -webkit-user-select: none;
+  margin-top: 0px;
+  max-width: calc(100% - 25px);
+  overflow: hidden;
   user-select: none;
-  border: 1px solid #ffffff;
-  min-width: 100px;
-  text-indent: 5px;
+  min-width: 60px;
+  display: inline-block;
+  word-break: break-all;
+  white-space: break-spaces;
 }
 
 .data > .dataContent > .entriesViewer > .entry > .label {
   color: #a0a0a0;
+  word-break: break-word;
+  text-indent: 0px;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  padding-right: 10px;
 }
 .data > .dataContent > .entriesViewer > .entry > .value {
   color: #113952;
   margin-left: 12px;
   text-indent: 0px;
+  word-break: break-word;
+  position: relative;
+  display: block;
 }
 
 .data .text_center input[type='checkbox'] {
@@ -342,13 +365,15 @@
   + .slider {
   position: absolute;
   cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #d9dedc;
   transition: 0.4s;
   width: 40px;
   height: 18px;
   border-radius: 16px;
-  margin-top: -24px;
-  display: block;
 }
 
 .data
@@ -358,16 +383,14 @@
   .value
   input[type='checkbox'].toggle-checkbox:checked
   + .slider:before {
-  transform: translateX(18px);
   background-color: #8cc63f;
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
 }
 
 .data > .dataContent > .entriesViewer > .entry .value .toggle-label {
-  color: #333333;
-  display: inline-block;
-  position: absolute;
-  text-indent: 5px;
-  white-space: nowrap;
+  max-width: calc(100% - 50px);
 }
 
 .data

@@ -51,7 +51,11 @@ class Modal extends Component {
       return ReactDOM.createPortal(
         <div className="modal-overlay" onClick={this.props.closeModal}>
           <div
-            className="modal-wrapper"
+            className={
+              this.props.contentHtml === true
+                ? 'modal-wrapper wrapper-large'
+                : 'modal-wrapper'
+            }
             onClick={(e) => {
               e.stopPropagation()
             }}>
@@ -61,10 +65,18 @@ class Modal extends Component {
                 x
               </span>
             </div>
-            <div className="wrapper-body">
-              {modalContent.content}
-              {modalContent.dialogue ? this.renderDialogue() : null}
-            </div>
+            {this.props.contentHtml === true ? (
+              <div
+                className="wrapper-body"
+                dangerouslySetInnerHTML={{
+                  __html: modalContent.content
+                }}></div>
+            ) : (
+              <div className="wrapper-body">
+                {modalContent.content}
+                {modalContent.dialogue ? this.renderDialogue() : null}
+              </div>
+            )}
           </div>
         </div>,
         document.getElementById('portal')

@@ -519,12 +519,15 @@ class Data extends Component {
 
   renderEntryElements(entry) {
     const { selectedSubmissionForm } = this.state
-
-    return Elements[
-      selectedSubmissionForm.props.elements.filter(
-        (element) => element.id === entry.question_id
-      )[0].type
-    ].renderDataValue(entry)
+    try {
+      return Elements[
+        selectedSubmissionForm.props.elements.filter(
+          (element) => element.id === entry.question_id
+        )[0].type
+      ].renderDataValue(entry)
+    } catch (e) {
+      return 'This data is corrupted.'
+    }
   }
 
   renderEntries() {

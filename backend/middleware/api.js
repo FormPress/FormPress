@@ -10,6 +10,7 @@ const {
   userHavePermission,
   userHaveFormLimit
 } = require(path.resolve('middleware', 'authorization'))
+
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const port = parseInt(process.env.SERVER_PORT || 3000)
@@ -57,6 +58,7 @@ module.exports = (app) => {
     userHavePermission,
     handleCreateForm
   )
+
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
