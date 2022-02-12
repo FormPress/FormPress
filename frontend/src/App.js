@@ -22,6 +22,7 @@ import DownloadFile from './modules/helper/DownloadFile'
 import VerifyEMail from './modules/helper/VerifyEmail'
 import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
+import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 
 import { Logo } from './svg'
@@ -225,11 +226,13 @@ class App extends Component {
                   component={DownloadFile}
                 />
                 <AdminRoute path="/admin" component={AdminPage} />
+                <PrivateRoute path="/settings" component={Settings} />
                 <Route path="/forgotpassword" component={ForgotPassword} />
                 <Route
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
+
                 <Redirect to="/login" />
               </Switch>
             </div>

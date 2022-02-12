@@ -32,6 +32,12 @@ const resetPasswordMiddleware = require(path.resolve(
   'middleware',
   'resetpassword'
 ))
+
+const changePasswordMiddleware = require(path.resolve(
+  'middleware',
+  'changepassword'
+))
+
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const signupMiddleware = require(path.resolve('middleware', 'signup'))
 const loginMiddleware = require(path.resolve('middleware', 'login'))
@@ -44,6 +50,7 @@ const authenticationMiddleware = require(path.resolve(
   'authentication'
 ))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
+const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
 
 app.use(function (req, res, next) {
@@ -65,10 +72,12 @@ app.set('view engine', 'ejs')
 authenticationMiddleware(app)
 loginWithGoogleMiddleware(app)
 apiMiddleware(app)
+pluginMiddleware(app)
 adminApiMiddleware(app)
 loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)
+changePasswordMiddleware(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)

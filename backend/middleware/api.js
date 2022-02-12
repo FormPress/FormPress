@@ -13,6 +13,7 @@ const {
   userHaveFormLimit,
   mustBeAdmin
 } = require(path.resolve('middleware', 'authorization'))
+
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
@@ -64,6 +65,7 @@ module.exports = (app) => {
     userHavePermission,
     handleCreateForm
   )
+
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,

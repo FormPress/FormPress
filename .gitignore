@@ -6,6 +6,14 @@ backend/script/transformed/*
 backend/formpress-2bb91771c29b.json
 frontend/public/runtime/
 frontend/node_modules
+
+**/settings/*.plugin.js
+**/settings/*.plugin.css
+**/plugins/*.plugin.js
+**/migration/*.plugin.js
+
 k8s
 node_modules
+**/.DS_Store
 
+ignore*.sh
