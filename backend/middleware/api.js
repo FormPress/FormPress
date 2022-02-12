@@ -15,7 +15,11 @@ const {
 } = require(path.resolve('middleware', 'authorization'))
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
+const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
+  .default
 const port = parseInt(process.env.SERVER_PORT || 3000)
+const { FP_ENV, FP_HOST } = process.env
+const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
 const { storage, model } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
@@ -509,9 +513,6 @@ module.exports = (app) => {
       showBranding = true
     }
 
-    // Update frontend form renderer TODO: don't do this on production!
-    const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
-      .default
 
     const str = reactDOMServer.renderToStaticMarkup(
       React.createElement(Renderer, {
@@ -541,8 +542,6 @@ module.exports = (app) => {
       style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
     }
 
-    const { FP_ENV, FP_HOST } = process.env
-    const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
     //form table has "published_version" while form_published has "version"
     const postTarget =
       form.version === undefined
@@ -559,6 +558,51 @@ module.exports = (app) => {
       FORMID: form_id,
       USERID: form.user_id,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`
+    })
+  })
+
+  app.get('/templates/view/:id', async (req, res) => {
+    const form_id = req.params.id
+
+    if(form_id === 'undefined') {
+      return res.status(404)
+    }
+
+    let rawTemplate = fs.readFileSync(
+      path.resolve('../', `frontend/src/templates/forms/tpl-${form_id}.json`)
+    )
+    let form = JSON.parse(rawTemplate)
+
+    const str = reactDOMServer.renderToStaticMarkup(
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer'
+      })
+    )
+
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/common.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+    )
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/modules/elements/index.css')
+    )
+    style += ' body {background-color: #f5f5f5;} '
+    style += ' form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16); margin: 35px;}'
+
+    res.render('template.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      title: form.title,
+      form: str,
+      postTarget: `${BACKEND}/templates/submit/${form_id}`,
+      BACKEND,
+      FORMID: form_id,
     })
   })
 
