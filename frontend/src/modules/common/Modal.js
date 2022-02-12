@@ -54,34 +54,34 @@ class Modal extends Component {
           {customContentPresent ? (
             this.props.children
           ) : (
-          <div
-            className={
-              this.props.contentHtml === true
-                ? 'modal-wrapper wrapper-large'
-                : 'modal-wrapper'
-            }
-            onClick={(e) => {
-              e.stopPropagation()
-            }}>
-            <div className={`wrapper-header ${modalContent.status}`}>
-              {modalContent.header}
-              <span className="close-modal" onClick={this.props.closeModal}>
-                x
-              </span>
-            </div>
-            {this.props.contentHtml === true ? (
-              <div
-                className="wrapper-body"
-                dangerouslySetInnerHTML={{
-                  __html: modalContent.content
-                }}></div>
-            ) : (
-              <div className="wrapper-body">
-                {modalContent.content}
-                {modalContent.dialogue ? this.renderDialogue() : null}
+            <div
+              className={
+                this.props.contentHtml === true
+                  ? 'modal-wrapper wrapper-large'
+                  : 'modal-wrapper'
+              }
+              onClick={(e) => {
+                e.stopPropagation()
+              }}>
+              <div className={`wrapper-header ${modalContent.status}`}>
+                {modalContent.header}
+                <span className="close-modal" onClick={this.props.closeModal}>
+                  x
+                </span>
               </div>
-            )}
-          </div>
+              {this.props.contentHtml === true ? (
+                <div
+                  className="wrapper-body"
+                  dangerouslySetInnerHTML={{
+                    __html: modalContent.content
+                  }}></div>
+              ) : (
+                <div className="wrapper-body">
+                  {modalContent.content}
+                  {modalContent.dialogue ? this.renderDialogue() : null}
+                </div>
+              )}
+            </div>
           )}
         </div>,
         document.getElementById('portal')

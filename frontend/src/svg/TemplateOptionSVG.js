@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react'
 
 const TemplateOptionSVG = (props) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={92} height={92} {...props}>
@@ -10,7 +10,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(816 257)"
         style={{
-          fill: "#719fbd",
+          fill: '#719fbd'
         }}
       />
       <rect
@@ -20,7 +20,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(856 274)"
         style={{
-          fill: "#c9c9c9",
+          fill: '#c9c9c9'
         }}
       />
       <rect
@@ -30,7 +30,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(856 291)"
         style={{
-          fill: "#e2e2e2",
+          fill: '#e2e2e2'
         }}
       />
       <rect
@@ -40,7 +40,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(856 308)"
         style={{
-          fill: "#c9c9c9",
+          fill: '#c9c9c9'
         }}
       />
       <rect
@@ -50,7 +50,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(816 274)"
         style={{
-          fill: "#e2e2e2",
+          fill: '#e2e2e2'
         }}
       />
       <rect
@@ -60,7 +60,7 @@ const TemplateOptionSVG = (props) => (
         rx={2}
         transform="translate(816 326)"
         style={{
-          fill: "#68942f",
+          fill: '#68942f'
         }}
       />
     </g>

@@ -192,24 +192,24 @@ class FormProperties extends Component {
         />
         <div className="tags-wrapper">
           <div className="tags-label">
-          <span>Tags</span>
-        </div>
+            <span>Tags</span>
+          </div>
           <div className="tags-list">
             {!tags
               ? null
               : tags.map((tag, i) => (
-                <span
-                  key={i}
-                  onClick={this.handleRemoveTag.bind(this, i)}
-                  className="tag">
-                  {tag}
-                </span>
-              ))}
+                  <span
+                    key={i}
+                    onClick={this.handleRemoveTag.bind(this, i)}
+                    className="tag">
+                    {tag}
+                  </span>
+                ))}
           </div>
           <div className="tag-controls">
             <form onSubmit={this.handleAddTag}>
-              <input type="text" maxLength="24"/>
-              <input type="submit" value="Add"/>
+              <input type="text" maxLength="24" />
+              <input type="submit" value="Add" />
             </form>
           </div>
         </div>

@@ -19,7 +19,8 @@ import {
   faEnvelope,
   faFont,
   faMinus,
-  faQuestionCircle, faPen
+  faQuestionCircle,
+  faPen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -35,8 +36,7 @@ import Modal from './common/Modal'
 import Templates from './Templates'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
-import {TemplateOptionSVG} from "../svg";
-
+import { TemplateOptionSVG } from '../svg'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
@@ -126,7 +126,7 @@ class Builder extends Component {
       const { formId } = this.props.match.params
 
       // && this.props.history.location.pathname.includes('builder')
-      if(this.props.history.location.pathname.endsWith('/new')){
+      if (this.props.history.location.pathname.endsWith('/new')) {
         this.setState({ isTemplateModalOpen: true })
       }
 
@@ -307,15 +307,15 @@ class Builder extends Component {
   setCSS(cssProp) {
     const form = { ...this.state.form }
     form.props.customCSS = cssProp
-    this.setState({form})
+    this.setState({ form })
   }
 
   cloneTemplate = (template) => {
-    this.setState({loading: true})
+    this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props
     this.setState({ form, isTemplateModalOpen: false })
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
 
   constructor(props) {
@@ -387,7 +387,9 @@ class Builder extends Component {
     this.setCSS = this.setCSS.bind(this)
     this.setFormTags = this.setFormTags.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
-    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(this)
+    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
+      this
+    )
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
@@ -915,7 +917,8 @@ class Builder extends Component {
   }
 
   render() {
-    const isInTemplates = this.props.history.location.pathname.indexOf('/template') !== -1
+    const isInTemplates =
+      this.props.history.location.pathname.indexOf('/template') !== -1
 
     if (this.state.redirect) {
       return (
@@ -930,7 +933,6 @@ class Builder extends Component {
     const { params } = this.props.match
     const { formId, questionId } = params
 
-
     let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
@@ -940,10 +942,9 @@ class Builder extends Component {
       }
     ]
 
-    if(isInTemplates) {
+    if (isInTemplates) {
       tabs = []
     }
-
 
     if (typeof questionId !== 'undefined') {
       tabs.push({
@@ -965,7 +966,9 @@ class Builder extends Component {
         <div className="headerContainer">
           <div className="header grid center">
             <div className="col-1-16">
-              <Link to="/forms" className={`back ${isInTemplates ? ' dn' : ''}` }>
+              <Link
+                to="/forms"
+                className={`back ${isInTemplates ? ' dn' : ''}`}>
                 <FontAwesomeIcon icon={faChevronLeft} />
               </Link>
             </div>
@@ -1001,41 +1004,39 @@ class Builder extends Component {
         isOpen={this.state.isTemplateModalOpen}
         modalContent={modalContent}
         closeModal={closeModal}>
-            <div
-              className="new-form-dialogue"
-              onClick={(e) => {
-                e.stopPropagation()
-              }}>
-              <div className="modal-title">Create a new form</div>
-              <div className="options-wrapper">
-                <NavLink
-                  className="option-container"
-                  to="/editor/new/template"
-                  activeClassName="selected"
-                >
-                  <div className="option" onClick={closeModal}>
-                    <TemplateOptionSVG />
-                  </div>
-                  <span className="option-label">USE A TEMPLATE</span>
-                </NavLink>
-
-                <NavLink
-                  className="option-container"
-                  to="/editor/new/builder"
-                  activeClassName="selected"
-                >
-                  <div className="option" onClick={closeModal}>
-                    <FontAwesomeIcon
-                      className="option-img"
-                      icon={faPen}
-                      color={'#1c5c85'}
-                      size="5x"
-                    />
-                  </div>
-                  <span className="option-label">CREATE FROM SCRATCH</span>
-                </NavLink>
+        <div
+          className="new-form-dialogue"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className="modal-title">Create a new form</div>
+          <div className="options-wrapper">
+            <NavLink
+              className="option-container"
+              to="/editor/new/template"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <TemplateOptionSVG />
               </div>
-            </div>
+              <span className="option-label">USE A TEMPLATE</span>
+            </NavLink>
+
+            <NavLink
+              className="option-container"
+              to="/editor/new/builder"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <FontAwesomeIcon
+                  className="option-img"
+                  icon={faPen}
+                  color={'#1c5c85'}
+                  size="5x"
+                />
+              </div>
+              <span className="option-label">CREATE FROM SCRATCH</span>
+            </NavLink>
+          </div>
+        </div>
       </Modal>
     )
   }

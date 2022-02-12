@@ -37,7 +37,7 @@
   border: none;
 }
 
-.tags-wrapper{
+.tags-wrapper {
   padding: 20px 10px 10px 10px;
 }
 .tags-list {
@@ -61,7 +61,7 @@
   font-weight: bold;
   font-size: 14px;
   padding-left: 10px;
-  padding-bottom:5px;
+  padding-bottom: 5px;
   cursor: pointer;
 }
 

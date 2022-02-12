@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const archiver = require('archiver');
+const archiver = require('archiver')
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -515,7 +515,6 @@ module.exports = (app) => {
       showBranding = true
     }
 
-
     const str = reactDOMServer.renderToStaticMarkup(
       React.createElement(Renderer, {
         className: 'form',
@@ -566,7 +565,7 @@ module.exports = (app) => {
   app.get('/templates/view/:id', async (req, res) => {
     const form_id = req.params.id
 
-    if(form_id === 'undefined') {
+    if (form_id === 'undefined') {
       return res.status(404)
     }
 
@@ -604,7 +603,7 @@ module.exports = (app) => {
       form: str,
       postTarget: `${BACKEND}/templates/submit/${form_id}`,
       BACKEND,
-      FORMID: form_id,
+      FORMID: form_id
     })
   })
 
@@ -627,20 +626,19 @@ module.exports = (app) => {
     mustBeAdmin,
     async (req, res) => {
       const user_id = req.params.user_id
-      const formsArray = await formModel.list({ user_id }) || []
-      const archive = archiver('zip');
+      const formsArray = (await formModel.list({ user_id })) || []
+      const archive = archiver('zip')
 
-      archive.on('finish', function() {
-        return res.end();
-      });
-
-      formsArray.forEach((form) => {
-        archive.append(JSON.stringify(form), { name: `form_${form.id}.json` });
+      archive.on('finish', function () {
+        return res.end()
       })
 
-      archive.pipe(res);
-      await archive.finalize();
-    })
+      formsArray.forEach((form) => {
+        archive.append(JSON.stringify(form), { name: `form_${form.id}.json` })
+      })
 
-
+      archive.pipe(res)
+      await archive.finalize()
+    }
+  )
 }
