@@ -337,6 +337,11 @@
 .form > .element.selected > .action {
   display: inline-flex;
   float: right;
+  opacity: 0.5;
+}
+
+.form > .element.selected > .action:hover{
+  opacity: 1;
 }
 
 .popoverText {

@@ -12,26 +12,33 @@
   height: 78px;
 }
 
+.question-info{
+  display: flow-root;
+}
+
 .question-info > .qlabel {
   font-family: Montserrat;
   box-sizing: border-box;
-  margin: 10px; /*text-wrap: normal;*/
-  display: inline-block;
-  max-width: calc(100% - 20px);
-  overflow-wrap: break-word;
+  margin: 10px;
+  display: inline;
+  float: left;
+  max-width: calc(100% - 131px);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
 }
 
 .question-info > .qtype {
   color: gray;
   float: right;
-  margin: 20px;
+  margin: 10px 20px;
 }
 
 .questionPropertiesForm {
   padding: 10px 0;
   position: relative;
   display: block;
-  height: 450px;
+  height: 440px;
 }
 .questionPropertiesForm > .element {
   margin-top: 10px;
@@ -41,6 +48,10 @@
 .questionPropertiesForm > .element > .label {
   margin-bottom: 10px;
   margin-right: 10px;
+}
+
+.questionPropertiesForm .element:last-child{
+  padding-bottom: 20px;
 }
 
 #qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
