@@ -25,6 +25,7 @@
   line-height: 60px;
   cursor: pointer;
 }
+
 .data > .formSelectorContainer > .formSelector > .formSelectorContent {
   max-height: 60px;
   overflow: hidden;
