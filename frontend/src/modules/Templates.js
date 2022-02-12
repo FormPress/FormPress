@@ -31,7 +31,7 @@ class Templates extends Component {
     }, 500)
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate() {
     if (this.state.selectedTemplate === {}) {
       const initialTemplate = document.getElementById(`tpl-1`)
       initialTemplate.click()
