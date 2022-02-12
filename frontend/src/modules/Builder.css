@@ -309,7 +309,7 @@
 }
 
 .form.builder > .element .fl.input li .action:hover,
-.form.builder > .element .fl.input .checkbox-label + .action:hover{
+.form.builder > .element .fl.input .checkbox-label + .action:hover {
   opacity: 1;
 }
 
@@ -347,7 +347,7 @@
 }
 
 .form.builder > .element > .action:hover,
-.form > .element.selected > .action:hover{
+.form > .element.selected > .action:hover {
   opacity: 1;
 }
 

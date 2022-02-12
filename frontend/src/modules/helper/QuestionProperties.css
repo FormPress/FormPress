@@ -12,7 +12,7 @@
   height: 78px;
 }
 
-.question-info{
+.question-info {
   display: flow-root;
 }
 
@@ -50,7 +50,7 @@
   margin-right: 10px;
 }
 
-.questionPropertiesForm .element:last-child{
+.questionPropertiesForm .element:last-child {
   padding-bottom: 20px;
 }
 
