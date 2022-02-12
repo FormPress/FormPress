@@ -499,10 +499,6 @@
   border-radius: 16px;
 }
 
-.gleam .elementCheckbox .toggle .input input:checked + .slider:before {
-  background-color: #8cc63f;
-}
-
 .gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
   content: '';
@@ -524,6 +520,7 @@
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider:before {
+  background-color: #8cc63f;
   -webkit-transform: translateX(18px);
   -ms-transform: translateX(18px);
   transform: translateX(18px);
