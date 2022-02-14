@@ -6,7 +6,7 @@ if (typeof require.context === 'undefined') {
   require.context = (
     base = '.',
     scanSubDirectories = false,
-    regularExpression = /\.js$/
+    regularExpression = /\.json$/
   ) => {
     const files = {}
 
