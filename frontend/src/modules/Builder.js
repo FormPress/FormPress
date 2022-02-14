@@ -920,6 +920,10 @@ class Builder extends Component {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
 
+    const noComponentPresent = this.props.history.location.pathname.endsWith(
+      '/new'
+    )
+
     if (this.state.redirect) {
       return (
         <Redirect
@@ -964,11 +968,12 @@ class Builder extends Component {
         />
         {this.renderTemplateModal()}
         <div className="headerContainer">
-          <div className="header grid center">
+          <div
+            className={`header grid center ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             <div className="col-1-16">
-              <Link
-                to="/forms"
-                className={`back ${isInTemplates ? ' dn' : ''}`}>
+              <Link to="/forms" className="back">
                 <FontAwesomeIcon icon={faChevronLeft} />
               </Link>
             </div>
@@ -986,7 +991,10 @@ class Builder extends Component {
           </div>
         </div>
         <div className="content">
-          <div className={`leftTabs col-1-16${isInTemplates ? ' dn' : ''}`}>
+          <div
+            className={`leftTabs col-1-16 ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             {this.renderLeftVerticalTabs()}
           </div>
           {this.renderMainContent()}
