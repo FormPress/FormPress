@@ -6,8 +6,7 @@ const path = require('path')
 const options = {
   plugins: [
     '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-transform-modules-commonjs',
-    'transform-require-context'
+    '@babel/plugin-transform-modules-commonjs'
   ],
   presets: ['@babel/preset-react']
 }
