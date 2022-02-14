@@ -1,3 +1,4 @@
+// detects the environment, acts as a polyfill for webpack's require.context
 if (typeof require.context === 'undefined') {
   const fs = require('fs')
   const path = require('path')
