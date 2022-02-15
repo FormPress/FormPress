@@ -3,7 +3,7 @@
 .renderer.gleam {
   background-color: white;
   width: 750px;
-  margin: 20px auto;
+  margin: 20px auto 90px auto;
   padding: 30px 90px 20px;
   box-sizing: border-box;
 }
@@ -18,7 +18,7 @@
 }
 .gleam.form > .element.requiredError {
   border: 1px solid red;
-  background: rgba(255, 0, 0, 0.3);
+  background-color: #ffbebb;
 }
 
 .label span.required:after {
@@ -31,6 +31,7 @@
   margin-bottom: 10px;
 }
 .gleam.form > .element > .label > span {
+  font-family: Montserrat;
   min-width: 125px;
   max-width: calc(100% - 20px);
   display: inline-block;
@@ -42,7 +43,7 @@
   border: 1px dashed;
 }
 .gleam.form > .element > .label > span.emptySpan {
-  border: 1px dashed gray;
+  border: 1px dashed transparent;
 }
 .gleam.form > .element > .label > .requiredMarker {
   display: inline-block;
@@ -221,11 +222,15 @@
   padding: 0;
   list-style: none;
 }
+.renderer.gleam .elementRadio ul li input {
+  margin-top: 0px;
+}
 .gleam .elementRadio ul li input {
   position: relative;
   width: 18px;
   height: 18px;
   -webkit-appearance: none;
+  -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
   border: 1px solid #a0a0a0;
@@ -236,6 +241,8 @@
   cursor: pointer;
   vertical-align: top;
   margin-top: 3px;
+  display: inline-block;
+  margin-right: 5px;
 }
 .gleam .elementRadio ul li input:checked {
   background-color: #8cc63f;
@@ -265,6 +272,8 @@
 .gleam .elementButton input[type='submit']:focus,
 .builder.gleam .elementButton button,
 .builder.gleam .elementButton button:focus {
+  font-family: Montserrat;
+  font-weight: bold;
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
@@ -324,21 +333,26 @@
 
 .renderer.gleam .elementCheckbox .input .checkbox-label {
   color: #333333;
-  display: inline-block;
-  margin-top: -18px;
+  margin-top: 0px;
+  max-width: calc(100% - 25px);
+  overflow: hidden;
   user-select: none;
-  word-break: break-word;
-  min-width: 115px;
-  text-indent: 23px;
+  min-width: 60px;
+  display: inline-block;
+  word-break: break-all;
+  white-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
   color: #333333;
+  margin-top: 0px;
+  max-width: calc(100% - 25px);
+  overflow: hidden;
+  user-select: none;
+  min-width: 60px;
   display: inline-block;
   word-break: break-all;
-  text-indent: 25px;
-  margin-top: -18px;
-  position: relative;
+  white-space: break-spaces;
 }
 
 .gleam .elementCheckbox.requiredError .input .checkbox-label {
@@ -409,6 +423,8 @@
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
@@ -417,8 +433,7 @@
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
-  text-indent: 45px;
+  max-width: calc(100% - 50px);
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
@@ -432,7 +447,7 @@
   color: #ffffff;
   position: absolute;
   left: 4px;
-  top: 1px;
+  top: 2px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
@@ -484,10 +499,6 @@
   border-radius: 16px;
 }
 
-.gleam .elementCheckbox .toggle .input input:checked + .slider:before {
-  background-color: #8cc63f;
-}
-
 .gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
   content: '';
@@ -509,6 +520,7 @@
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider:before {
+  background-color: #8cc63f;
   -webkit-transform: translateX(18px);
   -ms-transform: translateX(18px);
   transform: translateX(18px);
@@ -577,4 +589,72 @@
     width: auto;
     padding: 10px;
   }
+
+  .branding {
+    margin: 0;
+    width: auto;
+    padding: 10px;
+  }
+
+  .branding > .branding-text {
+    margin: auto;
+    /*width: auto;*/
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .branding {
+    justify-content: center;
+  }
+  .branding > .branding-text {
+    display: none;
+  }
+
+  .branding > img {
+    width: auto;
+    margin: auto;
+  }
+}
+
+.branding {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  position: -ms-device-fixed;
+  z-index: 20;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+}
+
+.branding > img {
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .Group_170 {
+  /* This is formpress logo svg. */
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .branding-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  color: black !important;
+  text-align: right;
+  margin: auto 0 auto 90px;
+}
+.renderer.gleam:after {
+  /* the password warning after the form */
+  border-top: 1px solid #f5f5f5;
+  content: 'Never submit passwords via FORMPRESS forms.';
+  color: black;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  padding-top: 20px;
 }

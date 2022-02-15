@@ -132,7 +132,6 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
-  height: 78px;
 }
 
 .elements > .elementList {
@@ -223,7 +222,9 @@
   -moz-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
-.builderStage > .formControls > button {
+.builderStage > .formControls > button,
+.builderStage > .formControls > a > button,
+.builderStage > .formControls > span > button {
   border: none;
   height: 32px;
   line-height: 32px;
@@ -234,6 +235,10 @@
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
+}
+.builderStage > .formControls > span > button.preview-disabled-button {
+  color: gray;
+  cursor: default;
 }
 
 .builderStage > .formControls > button.publish {
@@ -300,6 +305,12 @@
 .form.builder > .element .fl.input li:hover .action,
 .form.builder > .element .fl.input:hover .checkbox-label + .action {
   display: block;
+  opacity: 0.7;
+}
+
+.form.builder > .element .fl.input li .action:hover,
+.form.builder > .element .fl.input .checkbox-label + .action:hover {
+  opacity: 1;
 }
 
 .form.builder .element .action > * {
@@ -332,6 +343,12 @@
 .form > .element.selected > .action {
   display: inline-flex;
   float: right;
+  opacity: 0.7;
+}
+
+.form.builder > .element > .action:hover,
+.form > .element.selected > .action:hover {
+  opacity: 1;
 }
 
 .popoverText {
@@ -346,15 +363,14 @@
 .popover-container:hover > .popoverText {
   display: block;
   width: 83px;
-  height: 20px;
-  margin: 0 0 3px;
-  padding: 2px 4px 3px 3px;
+  height: 22px;
+  padding: 3px 3px 0px;
   border-radius: 4px;
   position: absolute;
   background-color: #113952;
   color: #fff;
   text-align: center;
-  top: -25px;
+  top: -30px;
   left: -35px;
   z-index: 9999;
 }
@@ -365,6 +381,15 @@
 #qc_required .input {
   float: right;
 }
+@media only screen and (max-height: 1200px) and (min-height: 800px) {
+  .elements > .elementList {
+    position: relative;
+    display: block;
+    height: 625px;
+    overflow-y: scroll;
+  }
+}
+
 @media only screen and (max-height: 800px) and (min-height: 600px) {
   .elements > .elementList {
     position: relative;
@@ -417,4 +442,18 @@
 
 .elements > .elementList > .disabled-element:hover .planover-container {
   visibility: visible;
+}
+
+.terms-checkbox {
+  margin-right: 8px;
+}
+
+.terms {
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.builderStage > .branding {
+  position: relative !important;
 }

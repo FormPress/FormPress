@@ -73,6 +73,9 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
+
+    const fileUploadEntries = []
+
     for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
       const type = findQuestionType(form, question_id)
@@ -81,15 +84,18 @@ module.exports = (app) => {
       //upload file to GCS
       if (type === 'FileUpload') {
         value = await storage.uploadFile(req.files[key], submission_id)
+        fileUploadEntries.push(value)
       } else {
         value = req.body[key]
       }
       preformatInputs.push({ q_id: key, value: value })
     }
+
     const formattedInput = submissionhandler.formatInput(
       form.props.elements,
       preformatInputs
     )
+
     try {
       for (const data of formattedInput) {
         //save answer
@@ -111,6 +117,43 @@ module.exports = (app) => {
       console.error(error)
 
       res.status(500).send('Error during submission handling')
+    }
+
+    let fileUploadCounter = -1
+
+    for (const key of keys) {
+      const question_id = parseInt(key.split('_')[1])
+      const type = findQuestionType(form, question_id)
+
+      if (type === 'FileUpload') {
+        fileUploadCounter++
+        let parsedValue = ''
+
+        parsedValue = JSON.parse(fileUploadEntries[fileUploadCounter])
+
+        const entry_idData = await db.query(
+          `SELECT \`id\` FROM \`entry\` WHERE submission_id = ? AND question_id = ?`,
+          [submission_id, question_id]
+        )
+
+        const user_idData = await db.query(
+          `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
+          [form_id]
+        )
+
+        const fileSize = parsedValue[0].fileSize
+        const uploadName = parsedValue[0].uploadName
+        const user_id = user_idData[0].user_id
+        const entry_id = entry_idData[0].id
+
+        await db.query(
+          `INSERT INTO \`storage_usage\`
+            (user_id, form_id, submission_id, entry_id, upload_name, size, created_at)
+          VALUES
+            (?, ?, ?, ?, ?, ?, NOW())`,
+          [user_id, form_id, submission_id, entry_id, uploadName, fileSize]
+        )
+      }
     }
 
     let style = fs.readFileSync(
