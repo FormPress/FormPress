@@ -19,7 +19,8 @@ import {
   faEnvelope,
   faFont,
   faMinus,
-  faQuestionCircle
+  faQuestionCircle,
+  faPen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -27,13 +28,15 @@ import AuthContext from '../auth.context'
 import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
-import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
 import PreviewForm from './helper/PreviewForm'
+import Modal from './common/Modal'
+import Templates from './Templates'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
+import { TemplateOptionSVG } from '../svg'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
@@ -121,6 +124,11 @@ class Builder extends Component {
   async componentDidMount() {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
+
+      // && this.props.history.location.pathname.includes('builder')
+      if (this.props.history.location.pathname.endsWith('/new')) {
+        this.setState({ isTemplateModalOpen: true })
+      }
 
       if (formId !== 'new') {
         await this.loadForm(formId)
@@ -216,6 +224,11 @@ class Builder extends Component {
     this.setState({ isModalOpen: false, modalContent: {} })
   }
 
+  handleCloseTemplateModalClick() {
+    this.props.history.push('/editor/new/builder')
+    this.setState({ isTemplateModalOpen: false, modalContent: {} })
+  }
+
   handleDiscardChangesClick() {
     this.shouldBlockNavigation()
 
@@ -262,6 +275,12 @@ class Builder extends Component {
     })
   }
 
+  setFormTags(tags) {
+    const form = { ...this.state.form }
+    form.props.tags = tags
+    this.setState({ form })
+  }
+
   setIntegration(_integration) {
     const form = { ...this.state.form }
 
@@ -286,8 +305,17 @@ class Builder extends Component {
   }
 
   setCSS(cssProp) {
-    const { form } = this.state
-    this.setState((form.props.customCSS = cssProp))
+    const form = { ...this.state.form }
+    form.props.customCSS = cssProp
+    this.setState({ form })
+  }
+
+  cloneTemplate = (template) => {
+    this.setState({ loading: true })
+    const form = { ...this.state.form }
+    form.props = template.props
+    this.setState({ form, isTemplateModalOpen: false })
+    this.setState({ loading: false })
   }
 
   constructor(props) {
@@ -298,6 +326,7 @@ class Builder extends Component {
       isModalOpen: false,
       saving: false,
       loading: false,
+      modalContent: {},
       dragging: false,
       dragIndex: false,
       dragMode: 'insert',
@@ -333,7 +362,8 @@ class Builder extends Component {
           customCSS: {
             value: '',
             isEncoded: false
-          }
+          },
+          tags: []
         }
       }
     }
@@ -355,9 +385,14 @@ class Builder extends Component {
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
+    this.setFormTags = this.setFormTags.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
+      this
+    )
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
+    this.cloneTemplate = this.cloneTemplate.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -882,6 +917,13 @@ class Builder extends Component {
   }
 
   render() {
+    const isInTemplates =
+      this.props.history.location.pathname.indexOf('/template') !== -1
+
+    const noComponentPresent = this.props.history.location.pathname.endsWith(
+      '/new'
+    )
+
     if (this.state.redirect) {
       return (
         <Redirect
@@ -894,7 +936,8 @@ class Builder extends Component {
     }
     const { params } = this.props.match
     const { formId, questionId } = params
-    const tabs = [
+
+    let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
         name: 'formProperties',
@@ -902,6 +945,10 @@ class Builder extends Component {
         path: `/editor/${formId}/builder/properties`
       }
     ]
+
+    if (isInTemplates) {
+      tabs = []
+    }
 
     if (typeof questionId !== 'undefined') {
       tabs.push({
@@ -919,8 +966,12 @@ class Builder extends Component {
           modalContent={this.state.modalContent}
           closeModal={this.handleCloseModalClick}
         />
+        {this.renderTemplateModal()}
         <div className="headerContainer">
-          <div className="header grid center">
+          <div
+            className={`header grid center ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             <div className="col-1-16">
               <Link to="/forms" className="back">
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -940,12 +991,61 @@ class Builder extends Component {
           </div>
         </div>
         <div className="content">
-          <div className="leftTabs col-1-16">
+          <div
+            className={`leftTabs col-1-16 ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             {this.renderLeftVerticalTabs()}
           </div>
           {this.renderMainContent()}
         </div>
       </div>
+    )
+  }
+
+  renderTemplateModal() {
+    let modalContent = {}
+    const closeModal = this.handleCloseTemplateModalClick
+
+    return (
+      <Modal
+        isOpen={this.state.isTemplateModalOpen}
+        modalContent={modalContent}
+        closeModal={closeModal}>
+        <div
+          className="new-form-dialogue"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className="modal-title">Create a new form</div>
+          <div className="options-wrapper">
+            <NavLink
+              className="option-container"
+              to="/editor/new/template"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <TemplateOptionSVG />
+              </div>
+              <span className="option-label">USE A TEMPLATE</span>
+            </NavLink>
+
+            <NavLink
+              className="option-container"
+              to="/editor/new/builder"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <FontAwesomeIcon
+                  className="option-img"
+                  icon={faPen}
+                  color={'#1c5c85'}
+                  size="5x"
+                />
+              </div>
+              <span className="option-label">CREATE FROM SCRATCH</span>
+            </NavLink>
+          </div>
+        </div>
+      </Modal>
     )
   }
 
@@ -1043,6 +1143,7 @@ class Builder extends Component {
             form={form}
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
+            setFormTags={this.setFormTags}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
@@ -1090,6 +1191,9 @@ class Builder extends Component {
         <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
+        </Route>
+        <Route path="/editor/:formId/template">
+          <Templates formId={formId} cloneTemplate={this.cloneTemplate} />
         </Route>
         <Route path="/editor/:formId/preview">
           <PreviewForm formID={formId} history={this.props.history} />

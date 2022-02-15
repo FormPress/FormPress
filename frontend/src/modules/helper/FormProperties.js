@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
 import CapabilitiesContext from '../../capabilities.context'
+import './FormProperties.css'
 
 class FormProperties extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class FormProperties extends Component {
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
+    this.handleAddTag = this.handleAddTag.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -44,7 +46,35 @@ class FormProperties extends Component {
     })
   }
 
+  handleAddTag(e) {
+    e.preventDefault()
+    let tagsArray = []
+
+    if (this.props.form.props.tags !== undefined) {
+      const { tags } = this.props.form.props
+      tagsArray = [...tags]
+    }
+    let tag = ''
+    const regexp = /^([\w-]+)/g
+
+    if (e.target[0].value.match(regexp) !== null) {
+      tag = e.target[0].value.match(regexp)[0]
+    }
+    tagsArray.push(tag)
+
+    this.props.setFormTags(tagsArray)
+
+    e.target[0].value = ''
+  }
+
+  handleRemoveTag(i) {
+    const tagsArray = [...this.props.form.props.tags]
+    tagsArray.splice(i, 1)
+    this.props.setFormTags(tagsArray)
+  }
+
   render() {
+    console.log(this.props.form.props.tags)
     const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const integrations = this.props.form.props.integrations || []
 
@@ -78,6 +108,13 @@ class FormProperties extends Component {
 
     if (this.props.form.props.customCSS !== undefined) {
       customCSS = this.props.form.props.customCSS.value
+    }
+
+    let tags = []
+    if (this.props.form.props.tags !== undefined) {
+      if (this.props.form.props.tags.length !== 0) {
+        tags = this.props.form.props.tags
+      }
     }
 
     return (
@@ -153,6 +190,29 @@ class FormProperties extends Component {
             }
           }}
         />
+        <div className="tags-wrapper">
+          <div className="tags-label">
+            <span>Tags</span>
+          </div>
+          <div className="tags-list">
+            {!tags
+              ? null
+              : tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    onClick={this.handleRemoveTag.bind(this, i)}
+                    className="tag">
+                    {tag}
+                  </span>
+                ))}
+          </div>
+          <div className="tag-controls">
+            <form onSubmit={this.handleAddTag}>
+              <input type="text" maxLength="24" />
+              <input type="submit" value="Add" />
+            </form>
+          </div>
+        </div>
       </div>
     )
   }

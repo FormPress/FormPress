@@ -1,0 +1,61 @@
+{
+  "id": 2,
+  "user_id": null,
+  "title": "Attendance Check",
+  "props": {
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Event Attendance / RSVP",
+        "sublabel": "",
+        "separator": false
+      },
+      {
+        "id": 1,
+        "type": "TextBox",
+        "label": "Full Name",
+        "requiredText": "",
+        "required": true,
+        "sublabelText": ""
+      },
+      {
+        "id": 4,
+        "type": "TextBox",
+        "label": "Phone / E-mail",
+        "required": true,
+        "requiredText": ""
+      },
+      {
+        "id": 6,
+        "type": "Radio",
+        "label": "Will you be attending?",
+        "options": ["Yes, I am", "It's not certain still", "No, I'm not"],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 7,
+        "type": "TextBox",
+        "label": "How many guests will you bring with you?",
+        "required": false
+      },
+      {
+        "id": 5,
+        "type": "TextArea",
+        "label": "Would you like to tell us anything else?",
+        "required": false
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit"
+      }
+    ],
+    "customCSS": {
+      "value": "",
+      "isEncoded": false
+    },
+    "tags": ["registration"]
+  }
+}
