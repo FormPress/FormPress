@@ -619,7 +619,6 @@ module.exports = (app) => {
     res.json(isEnvironmentVariableSet)
   })
 
-
   // uptime check
   app.get('/api/health', async (req, res) => {
     try {
@@ -636,7 +635,6 @@ module.exports = (app) => {
       res.status(500).json({ message: 'DB error' })
     }
   })
-
 
   // returns the forms of specified user in zip format
   app.get(
