@@ -1,25 +1,53 @@
 .profileMenuContainer {
   height: 60px;
+  width: 200px;
   position: relative;
+}
+
+.profileMenuContainer .profileMenuContent {
+  display: none;
+  background-color: white;
+  position: absolute;
+  top: 58px;
+  width: 245px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+  padding: 5px;
 }
 
 .profileMenuContainer:hover .profileMenuContent {
   display: block;
-  background-color: white;
-  position: absolute;
-  top: 54px;
-  right: 116px;
-  line-height: normal;
-  min-height: 50px;
-  padding: 0 10px 10px 10px;
 }
 
-.profileMenuContainer .profileMenuContent > a {
-  float: left;
-  display: block;
-  width: 100%;
+.profileMenuContent > .profileMenuEntry {
+  margin: 3px 0 3px 0;
+  padding: 10px;
+  color: black;
+  font-weight: 500;
+  line-height: 0.98;
   cursor: pointer;
-  margin-top: 10px;
+}
+.profileMenuEntry:hover > a,
+.profileMenuEntry:hover > span {
+  color: #0071bc;
+}
+
+.profileMenuEntry:hover {
+  background-color: #f5f5f5;
+  border-radius: 7px;
+}
+
+.profileMenuEntry > svg {
+  float: left;
+}
+
+.profileMenuEntry > a,
+.profileMenuEntry > span {
+  /*background: white;*/
+  border: none;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  font-family: Montserrat;
 }
 
 .profileMenuContainer .profileMenuContent > a:hover {

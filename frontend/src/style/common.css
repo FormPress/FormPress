@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 .dn {
-  display: none !important;
+  display: none;
 }
 .fl {
   float: left;

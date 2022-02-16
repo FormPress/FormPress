@@ -1302,8 +1302,8 @@ class Builder extends Component {
               className="branding-text"
               title="Visit FORMPRESS and start building awesome forms!">
               This form has been created on FORMPRESS. <br />
-              <a href="#">Click here</a> to create your own form now! It is
-              free!
+              <span className="fake-link">Click here</span> to create your own
+              form now! It is free!
             </div>
           </div>
         ) : null}

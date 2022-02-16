@@ -74,8 +74,7 @@ class FormProperties extends Component {
   }
 
   render() {
-    console.log(this.props.form.props.tags)
-    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
+    const capabilities = this.props.capabilities
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>

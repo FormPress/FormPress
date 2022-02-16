@@ -520,3 +520,8 @@
 .builderStage > .branding {
   position: relative !important;
 }
+
+.fake-link {
+  color: #0645ad;
+  text-decoration: underline;
+}

@@ -163,6 +163,4 @@ class Templates extends Component {
   }
 }
 
-Templates.propTypes = {}
-
 export default Templates
