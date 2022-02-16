@@ -1,6 +1,7 @@
 .template-component-wrapper {
   background: white;
-  height: 670px;
+  height: 770px;
+  overflow: hidden;
 }
 
 .leftColumn {
@@ -108,8 +109,8 @@
 }
 
 .templates-wrapper {
-  height: 100%;
-  padding: 15px;
+  height: 650px;
+  padding-left: 15px;
   overflow-y: scroll;
   background: #fdfdfd;
 }
