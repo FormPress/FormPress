@@ -619,6 +619,25 @@ module.exports = (app) => {
     res.json(isEnvironmentVariableSet)
   })
 
+
+  // uptime check
+  app.get('/api/health', async (req, res) => {
+    try {
+      const db = await getPool()
+      const result = await db.query(`SHOW TABLES`)
+
+      if (result.length > 0) {
+        res.status(200).json({ message: 'ok' })
+      } else {
+        res.status(500).json({ message: 'DB error' })
+      }
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ message: 'DB error' })
+    }
+  })
+
+
   // returns the forms of specified user in zip format
   app.get(
     '/api/users/:user_id/export/forms',
