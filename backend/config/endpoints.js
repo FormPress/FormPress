@@ -145,6 +145,11 @@ module.exports = {
       method: 'get',
       path: '/api/server/capabilities',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/health',
+      protected: false
     }
   ]
 }

@@ -91,7 +91,7 @@
   color: #ffffff;
 }
 
-.content {
+#root > .content {
   margin-top: 86px;
   position: relative;
   z-index: 9;
