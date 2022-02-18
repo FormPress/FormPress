@@ -125,7 +125,6 @@ class Builder extends Component {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
 
-      // && this.props.history.location.pathname.includes('builder')
       if (this.props.history.location.pathname.endsWith('/new')) {
         this.setState({ isTemplateModalOpen: true })
       }
@@ -314,6 +313,8 @@ class Builder extends Component {
     this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props
+    form.title = template.title
+    form.props.integrations[0] = { type: 'email', to: this.props.auth.email }
     this.setState({ form, isTemplateModalOpen: false })
     this.setState({ loading: false })
   }

@@ -3,6 +3,12 @@
   "user_id": null,
   "title": "Support Request",
   "props": {
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 7,

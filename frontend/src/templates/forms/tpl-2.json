@@ -3,6 +3,12 @@
   "user_id": null,
   "title": "Attendance Check",
   "props": {
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
