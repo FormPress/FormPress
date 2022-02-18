@@ -117,7 +117,7 @@ class FormProperties extends Component {
     }
 
     return (
-      <div>
+      <div className="formProperties">
         <h2>Form Properties</h2>
         {capabilities.sendgridApiKey ? (
           <Renderer

@@ -386,17 +386,17 @@
   .elements > .elementList {
     position: relative;
     display: block;
-    height: 625px;
-    overflow-y: scroll;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
-@media only screen and (max-height: 800px) and (min-height: 600px) {
+@media only screen and (max-height: 900px) and (min-height: 200px) {
   .elements > .elementList {
     position: relative;
     display: block;
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 
@@ -405,7 +405,7 @@
     position: relative;
     display: block;
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 

@@ -1,3 +1,7 @@
+.leftMenuContents > .formProperties {
+  overflow-y: auto;
+}
+
 .tag-controls form {
   display: flex;
 }
