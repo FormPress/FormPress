@@ -65,7 +65,8 @@ class Templates extends Component {
   }
 
   filterAndCount = (category) => {
-    const { filterText, templates } = this.state
+    const { templates } = this.state
+    const filterText = this.state.filterText.toLowerCase()
 
     const templateGroup = templates.filter(
       (template) =>
