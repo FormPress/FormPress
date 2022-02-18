@@ -84,7 +84,7 @@
       },
       {
         "id": 7,
-        "type": "Email",
+        "type": "TextBox",
         "label": "Company"
       },
       {
