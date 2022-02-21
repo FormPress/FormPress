@@ -57,10 +57,12 @@ class FormProperties extends Component {
     let tag = ''
     const regexp = /^([\w-]+)/g
 
-    if (e.target[0].value.match(regexp) !== null) {
-      tag = e.target[0].value.match(regexp)[0]
+    const filteredTag = e.target[0].value.match(regexp)
+
+    if (filteredTag !== null) {
+      tag = filteredTag[0]
+      tagsArray.push(tag)
     }
-    tagsArray.push(tag)
 
     this.props.setFormTags(tagsArray)
 
