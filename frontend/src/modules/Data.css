@@ -4,8 +4,9 @@
 
 .data > .formSelectorContainer {
   height: 60px;
-  top: 116px;
-  width: 100%;
+  top: 113px;
+  width: fit-content;
+  width: -moz-fit-content;
   position: sticky;
   z-index: 1;
   border-top: 18px solid #f5f5f5;
