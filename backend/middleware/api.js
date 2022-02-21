@@ -489,7 +489,9 @@ module.exports = (app) => {
         console.error(
           `Published version can't be found form_id = ${form_id} version = ${form.published_version}`
         )
-        error.errorReport(`Published version can't be found form_id = ${form_id} version = ${form.published_version}`)
+        error.errorReport(
+          `Published version can't be found form_id = ${form_id} version = ${form.published_version}`
+        )
       }
     }
 
