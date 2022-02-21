@@ -5,7 +5,7 @@ const ejs = require('ejs')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { storage, submissionhandler } = require(path.resolve('helper'))
+const { storage, submissionhandler, error } = require(path.resolve('helper'))
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
@@ -112,9 +112,10 @@ module.exports = (app) => {
           [form_id, submission_id, question_id, value]
         )
       }
-    } catch (error) {
+    } catch (err) {
       console.error('Error during submission')
-      console.error(error)
+      console.error(err)
+      error.errorReport(err)
 
       res.status(500).send('Error during submission handling')
     }
@@ -228,6 +229,7 @@ module.exports = (app) => {
         })
         .catch((err) => {
           console.log('can not render html body', err)
+          error.errorReport(err)
         })
 
       const textBody = await ejs
@@ -241,6 +243,7 @@ module.exports = (app) => {
         })
         .catch((err) => {
           console.log('can not render text body', err)
+          error.errorReport(err)
         })
 
       const msg = {
