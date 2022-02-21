@@ -56,24 +56,24 @@
   padding-bottom: 7px;
 }
 
-.tags-list span {
+.tags-list > .tag {
   background: #5cb85c;
   color: #fff;
-  padding: 5px 10px;
+  padding: 4px;
   font-size: 16px;
   border-radius: 3px;
   margin: 3px 3px 2px 0;
 }
 
-.tags-list span:after {
-  content: 'x';
-  float: right;
-  font-weight: bold;
-  font-size: 14px;
-  padding-left: 10px;
-  padding-bottom: 5px;
+.tags-list > .tag > .tag-close {
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0 5px;
+  padding: 0 2px 0 2px;
 }
+
 
 .tags-label {
   font-family: Montserrat;

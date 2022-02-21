@@ -199,11 +199,14 @@ class FormProperties extends Component {
             {!tags
               ? null
               : tags.map((tag, i) => (
-                  <span
-                    key={i}
-                    onClick={this.handleRemoveTag.bind(this, i)}
-                    className="tag">
+                  <span key={i} className="tag">
                     {tag}
+                    <span
+                      key={i}
+                      className="tag-close"
+                      onClick={this.handleRemoveTag.bind(this, i)}>
+                      x
+                    </span>
                   </span>
                 ))}
           </div>
