@@ -37,11 +37,22 @@ module.exports = (app) => {
       const incomingHash = sha512(password, user.salt)
 
       if (user.password === incomingHash.passwordHash) {
+        let isAdmin = false
+        const admin = await db.query(
+          `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
+          [user.email]
+        )
+
+        if (admin.length > 0) {
+          isAdmin = true
+        }
+
         const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
         const jwt_data = {
           user_id: user.id,
           email: user.email,
           user_role: user.role_id,
+          admin: isAdmin,
           permission: JSON.parse(user.permission),
           exp
         }
@@ -53,6 +64,7 @@ module.exports = (app) => {
             message: 'Login Success',
             token,
             user_role: user.role_id,
+            admin: isAdmin,
             user_id: user.id,
             permission: JSON.parse(user.permission),
             exp
