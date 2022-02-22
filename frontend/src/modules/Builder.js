@@ -1033,8 +1033,9 @@ class Builder extends Component {
             <NavLink
               className="option-container"
               to="/editor/new/builder"
-              activeClassName="selected">
-              <div className="option" onClick={closeModal}>
+              activeClassName="selected"
+              onClick={closeModal}>
+              <div className="option">
                 <FontAwesomeIcon
                   className="option-img"
                   icon={faPen}
