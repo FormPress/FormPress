@@ -1020,28 +1020,30 @@ class Builder extends Component {
           }}>
           <div className="modal-title">Create a new form</div>
           <div className="options-wrapper">
-            <div className="option-container">
+            <NavLink
+              className="option-container"
+              to="/editor/new/template"
+              activeClassName="selected">
               <div className="option" onClick={closeModal}>
-                <NavLink to="/editor/new/template" activeClassName="selected">
-                  <TemplateOptionSVG />
-                </NavLink>
+                <TemplateOptionSVG />
               </div>
               <span className="option-label">USE A TEMPLATE</span>
-            </div>
+            </NavLink>
 
-            <div className="option-container">
+            <NavLink
+              className="option-container"
+              to="/editor/new/builder"
+              activeClassName="selected">
               <div className="option" onClick={closeModal}>
-                <NavLink to="/editor/new/builder" activeClassName="selected">
-                  <FontAwesomeIcon
-                    className="option-img"
-                    icon={faPen}
-                    color={'#1c5c85'}
-                    size="5x"
-                  />
-                </NavLink>
+                <FontAwesomeIcon
+                  className="option-img"
+                  icon={faPen}
+                  color={'#1c5c85'}
+                  size="5x"
+                />
               </div>
               <span className="option-label">CREATE FROM SCRATCH</span>
-            </div>
+            </NavLink>
           </div>
         </div>
       </Modal>
