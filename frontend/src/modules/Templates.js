@@ -31,13 +31,6 @@ class Templates extends Component {
     }, 500)
   }
 
-  componentDidUpdate() {
-    if (this.state.selectedTemplate === {}) {
-      const initialTemplate = document.getElementById(`tpl-1`)
-      initialTemplate.click()
-    }
-  }
-
   handleFilterTextChange = (e) => {
     this.setState({
       filterText: e.target.value
