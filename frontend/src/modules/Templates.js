@@ -39,22 +39,9 @@ class Templates extends Component {
 
   handleTemplateSelect = (template) => {
     const selectedTemplate = template
+    const iframe = document.getElementById('template-iframe')
     this.setState({ selectedTemplate })
-    console.log(this.state.selectedTemplate)
-
-    const thisTemplateCard = document.getElementById(`tpl-${template.id}`)
-    const allTemplateCards = document.querySelectorAll('[id^="tpl-"]')
-
-    if (thisTemplateCard.classList.contains('selected') === false) {
-      const iframe = document.getElementById('template-iframe')
-      iframe.classList.remove('iframe-ready')
-    }
-
-    allTemplateCards.forEach((node) => {
-      node.classList.remove('selected')
-    })
-
-    thisTemplateCard.classList.add('selected')
+    iframe.classList.remove('iframe-ready')
   }
 
   filterAndCount = (category) => {
@@ -82,9 +69,6 @@ class Templates extends Component {
         category = 'Other'
       }
 
-      if (template.title.toLowerCase().indexOf(filterText) === -1) {
-        return
-      }
       if (category !== lastCategory) {
         templatesMainContent.push(
           <div key={category} className="template-group">
@@ -99,7 +83,9 @@ class Templates extends Component {
         <div
           key={template.id}
           id={`tpl-${template.id}`}
-          className="template-card"
+          className={`template-card ${
+            template.title.toLowerCase().indexOf(filterText) === -1 ? ' dn' : ''
+          } ${selectedTemplate.id === template.id ? 'selected' : ''}`}
           onClick={() => this.handleTemplateSelect(template)}>
           <div className="screen">
             <TemplatePlaceholder className="template-placeholder" />
@@ -148,7 +134,8 @@ class Templates extends Component {
             <iframe
               id={'template-iframe'}
               src={`${BACKEND}/templates/view/${selectedTemplate.id}`}
-              title={`FP_FORM_${76}`}
+              title={`FP_FORM_${selectedTemplate.id}`}
+              className={'template-iframe'}
             />
           </div>
         </div>
