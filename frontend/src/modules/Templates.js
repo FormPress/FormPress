@@ -33,6 +33,12 @@ class Templates extends Component {
 
   handleTemplateSelect = (template) => {
     const selectedTemplate = template
+    const thisTemplateCard = document.getElementById(
+      `tpl-${selectedTemplate.id}`
+    )
+    if (thisTemplateCard.classList.contains('selected')) {
+      return null
+    }
     const iframe = document.getElementById('template-iframe')
     this.setState({ selectedTemplate })
     iframe.classList.remove('iframe-ready')
@@ -62,14 +68,19 @@ class Templates extends Component {
       if (category === undefined || '') {
         category = 'Other'
       }
-
+      let templateCount = this.filterAndCount(category)
       if (category !== lastCategory) {
         templatesMainContent.push(
-          <div key={category} className="template-group">
+          <div
+            key={category}
+            className="template-group"
+            style={
+              templateCount > 0
+                ? { display: 'inline-block' }
+                : { display: 'none' }
+            }>
             {category} Forms{' '}
-            <span className="template-count">
-              {this.filterAndCount(category)}
-            </span>
+            <span className="template-count">{templateCount}</span>
           </div>
         )
       }
