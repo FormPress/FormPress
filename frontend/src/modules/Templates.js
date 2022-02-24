@@ -18,17 +18,11 @@ class Templates extends Component {
   }
 
   componentDidMount() {
-    this.setState({ templates })
-
+    this.setState({ templates, selectedTemplate: templates[0] })
     const iframe = document.getElementById('template-iframe')
     iframe.onload = function () {
       iframe.classList.add('iframe-ready')
     }
-
-    setTimeout(() => {
-      const initialTemplate = document.getElementById(`tpl-1`)
-      initialTemplate.click()
-    }, 500)
   }
 
   handleFilterTextChange = (e) => {
