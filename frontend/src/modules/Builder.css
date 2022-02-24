@@ -265,6 +265,9 @@
   box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
   -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
   -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  position: relative;
+  height: 460px;
+  overflow-y: auto;
 }
 
 .form.builder.dragging > * * {
