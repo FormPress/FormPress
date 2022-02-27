@@ -47,7 +47,7 @@
 }
 
 .settings_container > .content > div.settings_content {
-  padding: 16px;
+  padding: 0 16px 16px;
   width: 850px;
 }
 
