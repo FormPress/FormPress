@@ -1,0 +1,137 @@
+{
+  "id": 1,
+  "user_id": null,
+  "title": "Customer Satisfaction Report",
+  "props": {
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Customer Satisfaction Report",
+        "sublabel": ""
+      },
+      {
+        "id": 4,
+        "type": "TextArea",
+        "label": "First of all, could you tell us what exact product/service/plan of ours did you purchase or use?",
+        "required": true,
+        "requiredText": ""
+      },
+      {
+        "id": 5,
+        "type": "Radio",
+        "label": "Based on your overall experience, how would you rate our product / service?",
+        "options": [
+          "Pretty bad",
+          "Somewhat bad",
+          "Mediocre",
+          "Decent",
+          "Excellent"
+        ],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 10,
+        "type": "Radio",
+        "label": "How would you rate the general smoothness of our product (ease of use, user interface, functionality, etc.)?",
+        "options": [
+          "Overwhelmingly difficult",
+          "Somewhat difficult",
+          "Survivable",
+          "Fairly smooth",
+          "As smooth as it gets"
+        ],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 6,
+        "type": "Radio",
+        "label": "Would you be willing to use our product / service in the future?",
+        "options": [
+          "Absolutely not",
+          "Unlikely",
+          "Maybe",
+          "Probably",
+          "Definitely"
+        ],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "Would you recommend our product / service?",
+        "options": [
+          "Absolutely not",
+          "Unlikely",
+          "Maybe",
+          "Probably",
+          "Definitely"
+        ],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 8,
+        "type": "Radio",
+        "label": "How long have you been using our product / service?",
+        "options": ["Days only", "Weeks", "Months", "Over a year"],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 9,
+        "type": "Radio",
+        "label": "And, how often do you use our product / service?",
+        "options": [
+          "Every day",
+          "Few times a week",
+          "Few times a month",
+          "Well, never yet"
+        ],
+        "required": true,
+        "requiredText": "Please pick an option."
+      },
+      {
+        "id": 11,
+        "type": "TextArea",
+        "label": "Overall, what would you say about the pros of our product / service?",
+        "required": false
+      },
+      {
+        "id": 12,
+        "type": "TextArea",
+        "label": "What about the cons?"
+      },
+      {
+        "id": 13,
+        "type": "TextArea",
+        "label": "If you'd like to add any comments or suggestions to help us improve our product / service, please feel comfortable to do so! We'd very much appreciate it.",
+        "required": false
+      },
+      {
+        "id": 14,
+        "type": "TextBox",
+        "label": "We value your feedbacks and opinions. If you took the time to take this survey, thank you very much !"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit"
+      }
+    ],
+    "customCSS": {
+      "value": "",
+      "isEncoded": false
+    },
+    "tags": ["feedback"]
+  }
+}

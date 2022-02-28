@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom'
 import AuthContext from './auth.context'
 import { ProfileSVG } from './svg'
 import './Profile.css'
+import SettingsSVG from './svg/SettingsSVG'
+import LogoutSVG from './svg/LogoutSVG'
 
 const Profile = () => {
   const logout = (e) => {
@@ -23,10 +25,18 @@ const Profile = () => {
             </div>
             <ProfileSVG key="1" className="profileSVG" />
             <div className="profileMenuContent dn">
-              <NavLink to="/settings" activeClassName="selected">
-                Settings
-              </NavLink>
-              <a onClick={logout}>Logout</a>
+              <div className="profileMenuEntry">
+                <NavLink to="/settings" activeClassName="selected">
+                  <SettingsSVG />
+                  Settings
+                </NavLink>
+              </div>
+              <div className="profileMenuEntry">
+                <span onClick={logout}>
+                  <LogoutSVG width={16} heigth={16} />
+                  Logout
+                </span>
+              </div>
             </div>
           </div>
         </div>
