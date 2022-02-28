@@ -123,6 +123,7 @@
   max-width: 728px;
 }
 .gleam.form .header.label span {
+  font-family: Montserrat;
   padding: 3px 5px;
   width: 100%;
   display: block;

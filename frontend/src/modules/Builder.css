@@ -29,6 +29,7 @@
   text-align: center;
   cursor: pointer;
   display: inline-block;
+  border: none;
 }
 
 .builder .header > .mainTabs > a,
@@ -385,17 +386,17 @@
   .elements > .elementList {
     position: relative;
     display: block;
-    height: 625px;
-    overflow-y: scroll;
+    height: 100%;
+    overflow-y: auto;
   }
 }
 
-@media only screen and (max-height: 800px) and (min-height: 600px) {
+@media only screen and (max-height: 900px) and (min-height: 200px) {
   .elements > .elementList {
     position: relative;
     display: block;
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 
@@ -404,7 +405,7 @@
     position: relative;
     display: block;
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 
@@ -444,6 +445,68 @@
   visibility: visible;
 }
 
+.new-form-dialogue {
+  border-radius: 8px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 380px;
+  box-shadow: 0 0 16px 0 rgba(19, 38, 55, 0.1);
+  background-color: white;
+}
+
+.new-form-dialogue > .options-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.new-form-dialogue > .modal-title {
+  margin-top: 48px;
+  margin-bottom: 42px;
+  font-family: Montserrat;
+  font-size: 23px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #1c5c85;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  width: 172px;
+  height: 172px;
+  margin: auto;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  text-align: center;
+  text-align: -moz-center;
+  padding: 40px;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  cursor: pointer;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option-label {
+  display: inherit;
+  text-align: center;
+  font-family: Montserrat;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.83;
+  letter-spacing: normal;
+  color: #1c5c85;
+}
+
+.new-form-dialogue a {
+  text-decoration: none;
+}
+
 .terms-checkbox {
   margin-right: 8px;
 }
@@ -456,4 +519,9 @@
 
 .builderStage > .branding {
   position: relative !important;
+}
+
+.fake-link {
+  color: #0645ad;
+  text-decoration: underline;
 }
