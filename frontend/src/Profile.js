@@ -26,14 +26,16 @@ const Profile = () => {
             <ProfileSVG key="1" className="profileSVG" />
             <div className="profileMenuContent dn">
               <div className="profileMenuEntry">
-                <SettingsSVG />
                 <NavLink to="/settings" activeClassName="selected">
+                  <SettingsSVG />
                   Settings
                 </NavLink>
               </div>
               <div className="profileMenuEntry">
-                <LogoutSVG width={16} heigth={16} />
-                <a onClick={logout}>Logout</a>
+                <span onClick={logout}>
+                  <LogoutSVG width={16} heigth={16} />
+                  Logout
+                </span>
               </div>
             </div>
           </div>

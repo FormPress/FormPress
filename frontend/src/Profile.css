@@ -36,15 +36,15 @@
   border-radius: 7px;
 }
 
-.profileMenuEntry > svg {
+.profileMenuEntry > a > svg,
+.profileMenuEntry > span > svg {
   float: left;
 }
 
 .profileMenuEntry > a,
 .profileMenuEntry > span {
-  /*background: white;*/
   border: none;
-  padding: 10px;
+  padding: 10px 120px 10px 10px;
   text-decoration: none;
   color: black;
   font-family: Montserrat;
