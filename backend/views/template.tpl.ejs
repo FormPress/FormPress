@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <%- headerAppend %>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+</head>
+<body>
+  <form
+    method="POST"
+    action="<%= postTarget %>"
+    id="FORMPRESS_FORM_<%= FORMID %>"
+    encType="multipart/form-data"
+  >
+    <%- form %>
+  </form>
+  <script>
+    var FORMID = "<%= FORMID %>"
+  </script>
+</body>
+</html>
