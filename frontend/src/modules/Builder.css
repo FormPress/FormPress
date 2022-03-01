@@ -445,7 +445,8 @@
 }
 
 .terms-checkbox {
-  margin-right: 8px;
+  margin-right: 8px !important;
+  vertical-align: baseline;
 }
 
 .terms {
