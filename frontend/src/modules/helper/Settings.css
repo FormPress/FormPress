@@ -86,7 +86,7 @@
   margin: auto;
 }
 
-.payment .actions_container:before{
+.payment .actions_container:before {
   content: '...';
   position: relative;
   color: #c9c9c9;
@@ -100,11 +100,11 @@
   border-radius: 50%;
 }
 
-.payment .actions_container:hover{
+.payment .actions_container:hover {
   background-color: #9ee048;
 }
 
-.payment .actions_container:hover:before{
+.payment .actions_container:hover:before {
   color: #fff;
 }
 
@@ -139,7 +139,7 @@
   color: #be0000;
   cursor: pointer;
   margin-right: 5px;
-  display: block !important; 
+  display: block !important;
 }
 
 .upgrade_subscription {
@@ -150,7 +150,7 @@
 
 .refund_button {
   cursor: pointer;
-  display: block !important; 
+  display: block !important;
 }
 
 .refund_button.disabled,
