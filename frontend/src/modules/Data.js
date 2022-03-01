@@ -352,33 +352,34 @@ class Data extends Component {
           </div>
         </div>
         <div className="formSelectorContainer center">
-          <div className="formSelector cw center grid">
-            <div
-              className="col-15-16 formSelectorContent"
-              onClick={() => {
-                this.setState({ formSelectorOpen: !formSelectorOpen })
-              }}>
+          <div
+            className="formSelector cw center grid"
+            onClick={() => {
+              this.setState({ formSelectorOpen: !formSelectorOpen })
+            }}>
+            <div className="col-15-16 formSelectorContent">
               {formSelectorText}
             </div>
             <div className="col-1-16 down">
               <FontAwesomeIcon icon={faChevronDown} />
             </div>
           </div>
-          {formSelectorOpen === true ? (
-            <div className="formSelectorOptions cw center grid">
-              <div className="col-16-16">
-                <ul>
-                  {forms.map((form, index) => (
-                    <li
-                      key={index}
-                      onClick={this.handleFormClick.bind(this, form)}>
-                      {form.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div
+            className={`formSelectorOptions cw center grid ${
+              formSelectorOpen ? '' : 'dn'
+            }`}>
+            <div className="col-16-16">
+              <ul>
+                {forms.map((form, index) => (
+                  <li
+                    key={index}
+                    onClick={this.handleFormClick.bind(this, form)}>
+                    {form.title}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ) : null}
+          </div>
         </div>
         <div className="cw center grid dataContent">
           <div className="submissionSelector col-5-16">
