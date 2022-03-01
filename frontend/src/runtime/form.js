@@ -18,7 +18,7 @@
     },
     {
       name: 'validate',
-      check: (element) => element.type === 'Button'
+      check: () => formHasValidators === true
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -53,15 +53,15 @@
   console.log('MAIN FORM RUNTIME LOADED')
   console.log('SHOULD LOAD FORM ID QUESTIONS ', FORMID)
 
-  const result = await api({
+  const elementsQuery = await api({
     resource: `/api/users/${USERID}/forms/${FORMID}/elements`
   })
 
-  if (result.success === false) {
-    return alert('Error while loading questions')
+  if (elementsQuery.success === false) {
+    return alert('Error while loading questions.')
   }
 
-  const elements = result.data
+  const elements = elementsQuery.data
 
   // set global FORMPRESS object
   window.FORMPRESS = {
@@ -71,6 +71,30 @@
     BACKEND,
     elements
   }
+
+  const validatorsQuery = await api({
+    resource: `/api/form/element/validators?elements=${elements
+      .map((e) => e.type)
+      .sort()
+      .join(',')}`
+  })
+
+  if (validatorsQuery.success === false) {
+    return alert('Error while loading element validators.')
+  }
+
+  const validators = validatorsQuery.data
+
+  window.FP_ELEMENT_HELPERS = JSON.parse(validators, (key, value) => {
+    if (value !== 'unset') {
+      return eval(value)
+    }
+    return value
+  })
+
+  const formHasValidators = !Object.values(window.FP_ELEMENT_HELPERS).every(
+    (value) => value === 'unset'
+  )
 
   const extensionstoLoad = []
 
