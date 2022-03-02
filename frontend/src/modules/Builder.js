@@ -902,6 +902,20 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  removeUnavailableElems = (elem) => {
+    const capabilities = this.props.capabilities
+    const elementsToRemove = []
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
+      elementsToRemove.push('FileUpload')
+    }
+
+    return !elementsToRemove.includes(elem.type)
+  }
+
   render() {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
@@ -1034,19 +1048,6 @@ class Builder extends Component {
         </div>
       </Modal>
     )
-  }
-
-  removeUnavailableElems = (elem) => {
-    const capabilities = this.props.capabilities
-
-    if (
-      capabilities.fileUploadBucket === false ||
-      capabilities.googleServiceAccountCredentials === false
-    ) {
-      return elem.type !== 'FileUpload'
-    }
-
-    return true
   }
 
   renderLeftMenuContents() {
