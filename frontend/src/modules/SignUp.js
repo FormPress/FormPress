@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import { api } from '../helper'
+import { Redirect, Link } from 'react-router-dom'
+import { api, setToken } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import AuthContext from '../auth.context'
 import CapabilitiesContext from '../capabilities.context'
-
+import LoginWithGoogle from './helper/LoginWithGoogle'
 import './SignUp.css'
 
 class SignUp extends Component {
@@ -23,6 +23,8 @@ class SignUp extends Component {
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
+    this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
+    this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
   }
 
   handleFieldChange(elem, e) {
@@ -79,8 +81,57 @@ class SignUp extends Component {
     }
   }
 
+  async handleLoginWithGoogleClick(response) {
+    this.setState({ state: 'loading' })
+    const tokenID = response.tokenId
+    const email = response.profileObj.email
+    const { success, data } = await api({
+      resource: `/api/users/loginwithgoogle`,
+      method: 'post',
+      body: { email, tokenID },
+      useAuth: false // login request should not have Authorization header
+    })
+
+    if (success === true) {
+      setToken(data.token)
+      this.props.auth.setAuth({
+        email: data.email,
+        exp: data.exp,
+        token: data.token,
+        user_id: data.user_id,
+        loggedIn: true
+      })
+    } else {
+      this.setState({ state: 'done', message: data.message })
+    }
+  }
+
+  handleLoginWithGoogleFail(response) {
+    console.log(response.error)
+    if (response.error === 'popup_closed_by_user') {
+      this.setState({ state: 'done', message: 'Popup closed by user' })
+    } else {
+      this.setState({ state: 'done', message: response.error })
+    }
+  }
+
   render() {
     const { message, success, email } = this.state
+
+    if (this.props.auth.loggedIn === true) {
+      const pathName = this.props.location.state
+        ? this.props.location.state.from.pathname
+        : '/forms'
+      return (
+        <Redirect
+          to={{
+            pathname: pathName,
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
+
     const capabilities = this.props.capabilities //To be changed with capabilities middleware.
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
@@ -161,6 +212,23 @@ class SignUp extends Component {
                     }}
                   />
                 </form>
+                {capabilities.googleCredentialsClientID ? (
+                  <div>
+                    <div className="or-seperator">or</div>
+                    <div className="google-sign-in">
+                      <LoginWithGoogle
+                        handleLoginWithGoogleButton={
+                          this.handleLoginWithGoogleClick
+                        }
+                        handleLoginWithGoogleFail={
+                          this.handleLoginWithGoogleFail
+                        }
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  ''
+                )}
                 <p className="message-back">{message}</p>
                 <div className="have-account">
                   Already have an account?
