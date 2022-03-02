@@ -99,6 +99,8 @@ class SignUp extends Component {
         exp: data.exp,
         token: data.token,
         user_id: data.user_id,
+        user_role: data.user_role,
+        permission: data.permission,
         loggedIn: true
       })
     } else {
@@ -135,8 +137,7 @@ class SignUp extends Component {
         />
       )
     }
-
-    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
+    const capabilities = this.props.capabilities
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
