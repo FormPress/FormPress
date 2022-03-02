@@ -29,13 +29,14 @@ const policy = {
   placeholder: {
     rule: {
       type: 'only',
-      exceptions: ['TextBox', 'TextArea', 'Email']
+      exceptions: ['TextBox', 'TextArea', 'Email', 'Dropdown']
     },
     configurableSettings: {
-      default: 'Please enter the information.',
+      default: '',
       formProps: {
         type: 'TextBox',
-        label: 'Describe the expected value of this input field.'
+        label: 'Placeholder Text',
+        placeholder: 'Enter a placeholder text'
       }
     }
   }

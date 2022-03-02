@@ -184,7 +184,7 @@ class FormProperties extends Component {
                 {
                   id: 4,
                   type: 'TextArea',
-                  label: 'Add custom CSS',
+                  label: 'Custom CSS',
                   value: customCSS
                 }
               ]
