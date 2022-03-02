@@ -159,21 +159,6 @@ class Builder extends Component {
       }
     }
 
-    const capabilities = this.props.capabilities
-
-    if (
-      capabilities.fileUploadBucket === false ||
-      capabilities.googleServiceAccountCredentials === false
-    ) {
-      //Removal of the elements of which the environment variables are unset.
-      const removeUnavailableElems = (element) => {
-        return element.type !== 'FileUpload'
-      }
-      pickerElements = pickerElements.filter((element) =>
-        removeUnavailableElems(element)
-      )
-    }
-
     this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
   }
 
@@ -1051,6 +1036,19 @@ class Builder extends Component {
     )
   }
 
+  removeUnavailableElems = (elem) => {
+    const capabilities = this.props.capabilities
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
+      return elem.type !== 'FileUpload'
+    }
+
+    return true
+  }
+
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
@@ -1089,54 +1087,56 @@ class Builder extends Component {
               can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) =>
-                permission[elem.type] ? (
-                  <div
-                    className="element"
-                    draggable
-                    onDragStart={this.handleDragStart.bind(this, elem)}
-                    onDragEnd={this.handleDragEnd}
-                    key={elem.type}>
-                    <span className="element-picker-icon-wrapper">
-                      <FontAwesomeIcon
-                        icon={iconMap[elem.type]}
-                        className="element-picker-icon"
-                      />
-                    </span>
-                    <span className="element-picker-text">
-                      {textMap[elem.type]}
-                    </span>
-                    <span className="add-element-button">
-                      <FontAwesomeIcon
-                        icon={faPlusCircle}
-                        title="Add Field"
-                        onClick={() =>
-                          this.handleAddFormElementClick(elem.type)
-                        }
-                      />
-                    </span>
-                  </div>
-                ) : (
-                  <div className="element disabled-element" key={elem.type}>
-                    <span className="element-picker-icon-wrapper">
-                      <FontAwesomeIcon
-                        icon={iconMap[elem.type]}
-                        className="element-picker-icon"
-                      />
-                    </span>
-                    <span className="element-picker-text">
-                      {textMap[elem.type]}
-                    </span>
-                    <span className="planover-container">
-                      <FontAwesomeIcon icon={faQuestionCircle} />
-                      <div className="popoverText">
-                        Your plan does not include this element. Please contact
-                        support for upgrade.
-                      </div>
-                    </span>
-                  </div>
-                )
-              )}
+              {pickerElements
+                .filter((elem) => this.removeUnavailableElems(elem))
+                .map((elem) =>
+                  permission[elem.type] ? (
+                    <div
+                      className="element"
+                      draggable
+                      onDragStart={this.handleDragStart.bind(this, elem)}
+                      onDragEnd={this.handleDragEnd}
+                      key={elem.type}>
+                      <span className="element-picker-icon-wrapper">
+                        <FontAwesomeIcon
+                          icon={iconMap[elem.type]}
+                          className="element-picker-icon"
+                        />
+                      </span>
+                      <span className="element-picker-text">
+                        {textMap[elem.type]}
+                      </span>
+                      <span className="add-element-button">
+                        <FontAwesomeIcon
+                          icon={faPlusCircle}
+                          title="Add Field"
+                          onClick={() =>
+                            this.handleAddFormElementClick(elem.type)
+                          }
+                        />
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="element disabled-element" key={elem.type}>
+                      <span className="element-picker-icon-wrapper">
+                        <FontAwesomeIcon
+                          icon={iconMap[elem.type]}
+                          className="element-picker-icon"
+                        />
+                      </span>
+                      <span className="element-picker-text">
+                        {textMap[elem.type]}
+                      </span>
+                      <span className="planover-container">
+                        <FontAwesomeIcon icon={faQuestionCircle} />
+                        <div className="popoverText">
+                          Your plan does not include this element. Please
+                          contact support for upgrade.
+                        </div>
+                      </span>
+                    </div>
+                  )
+                )}
             </div>
           </div>
         </Route>
