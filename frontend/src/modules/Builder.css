@@ -196,6 +196,10 @@
   color: #68942f;
 }
 
+.builderStage {
+  margin-bottom: 50px;
+}
+
 .builderStage > .formTitle {
   background-color: #fdfdfd;
   font-size: 18px;
