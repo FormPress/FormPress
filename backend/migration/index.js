@@ -9,6 +9,7 @@ module.exports = async (db) => {
   console.log('Result of tables ', result)
   const tables = result.map((row) => row[`Tables_in_${dbName}`])
   console.log('Tables trimmed ', tables)
+
   if (tables.indexOf('migration') === -1) {
     console.log('Creating migration table')
     const result = await db.query(`
@@ -20,7 +21,7 @@ module.exports = async (db) => {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `)
 
-    console.log('REsult of creating migration table shit ', result)
+    console.log('Result of creating migration table shit ', result)
   }
 
   const migrations = fs

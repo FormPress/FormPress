@@ -12,12 +12,12 @@ export default class EditableLabel extends Component {
 
   handleOnInput(e) {
     const limit = 256
-    const text = e.target.innerHTML
+    const text = e.target.innerText
     if (text.length >= limit) {
-      e.target.innerHTML = text.substr(0, limit)
+      e.target.innerText = text.substr(0, limit)
       this.props.handleLabelChange(
         this.props.labelKey,
-        e.target.innerHTML
+        e.target.innerText
           .replace(/<span(.*?)>(.*?)<\/span>/, '')
           .replace(/(<([^>]+)>)/gi, '')
           .trim()
@@ -32,7 +32,7 @@ export default class EditableLabel extends Component {
   handleOnBlur(e) {
     this.props.handleLabelChange(
       this.props.labelKey,
-      e.target.innerHTML
+      e.target.innerText
         .replace(/<span(.*?)>(.*?)<\/span>/, '')
         .replace(/(<([^>]+)>)/gi, '')
         .trim()
@@ -63,6 +63,10 @@ export default class EditableLabel extends Component {
       extraProps.contentEditable = true
     }
 
+    if (this.props.required === true) {
+      extraProps.className = 'required'
+    }
+
     return (
       <div className={this.props.className}>
         <span
@@ -71,14 +75,12 @@ export default class EditableLabel extends Component {
           onKeyDown={this.handleOnKeyDown}
           onPaste={this.handleOnPaste}
           dataplaceholder={this.props.dataPlaceholder}
+          spellCheck={false}
           suppressContentEditableWarning={true}
           className={this.props.value === '' ? 'emptySpan' : null}
           {...extraProps}>
           {this.props.value}
         </span>
-        {this.props.required === true ? (
-          <span className="requiredMarker"> *</span>
-        ) : null}
       </div>
     )
   }

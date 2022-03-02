@@ -24,14 +24,14 @@ export default class Name extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Change the type of prefix field to TextBox.']
+        options: ['Change the type of title field to TextBox.']
       }
     },
     prefixOptions: {
       default: ['Mr.', 'Mrs.'],
       formProps: {
         type: 'TextArea',
-        label: 'Enter Prefix Options'
+        label: 'Preset Title Options'
       }
     },
     middleName: {
@@ -116,13 +116,17 @@ export default class Name extends Component {
               <select
                 id={`prefix_${config.id}`}
                 name={`q_${config.id}[prefix]`}
+                key={`q_${config.id}[prefix]`}
                 defaultValue="choose-disabled">
                 <option disabled value="choose-disabled">
                   Prefix
                 </option>
-                {options.map((item) => {
+                {options.map((item, index) => {
                   return (
-                    <option className="option-space" key={item} value={item}>
+                    <option
+                      className="option-space"
+                      key={item + '_' + index}
+                      value={item}>
                       {item}
                     </option>
                   )

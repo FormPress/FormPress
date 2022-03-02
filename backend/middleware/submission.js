@@ -59,9 +59,9 @@ module.exports = (app) => {
     //create submission and get id
     const result = await db.query(
       `INSERT INTO \`submission\`
-        (form_id, created_at, updated_at, version)
+        (form_id, created_at, version)
       VALUES
-        (?, NOW(), NOW(),?)`,
+        (?, NOW(), ?)`,
       [form_id, version]
     )
     const submission_id = result.insertId
@@ -73,6 +73,9 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
+
+    const fileUploadEntries = []
+
     for (const key of keys) {
       const question_id = parseInt(key.split('_')[1])
       const type = findQuestionType(form, question_id)
@@ -81,15 +84,18 @@ module.exports = (app) => {
       //upload file to GCS
       if (type === 'FileUpload') {
         value = await storage.uploadFile(req.files[key], submission_id)
+        fileUploadEntries.push(value)
       } else {
         value = req.body[key]
       }
       preformatInputs.push({ q_id: key, value: value })
     }
+
     const formattedInput = submissionhandler.formatInput(
       form.props.elements,
       preformatInputs
     )
+
     try {
       for (const data of formattedInput) {
         //save answer
@@ -112,7 +118,43 @@ module.exports = (app) => {
 
       res.status(500).send('Error during submission handling')
     }
-    //res.send('Your Submission has been received')
+
+    let fileUploadCounter = -1
+
+    for (const key of keys) {
+      const question_id = parseInt(key.split('_')[1])
+      const type = findQuestionType(form, question_id)
+
+      if (type === 'FileUpload') {
+        fileUploadCounter++
+        let parsedValue = ''
+
+        parsedValue = JSON.parse(fileUploadEntries[fileUploadCounter])
+
+        const entry_idData = await db.query(
+          `SELECT \`id\` FROM \`entry\` WHERE submission_id = ? AND question_id = ?`,
+          [submission_id, question_id]
+        )
+
+        const user_idData = await db.query(
+          `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
+          [form_id]
+        )
+
+        const fileSize = parsedValue[0].fileSize
+        const uploadName = parsedValue[0].uploadName
+        const user_id = user_idData[0].user_id
+        const entry_id = entry_idData[0].id
+
+        await db.query(
+          `INSERT INTO \`storage_usage\`
+            (user_id, form_id, submission_id, entry_id, upload_name, size, created_at)
+          VALUES
+            (?, ?, ?, ?, ?, ?, NOW())`,
+          [user_id, form_id, submission_id, entry_id, uploadName, fileSize]
+        )
+      }
+    }
 
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
@@ -127,9 +169,9 @@ module.exports = (app) => {
     let tyPageText = ''
     if (isEnvironmentVariableSet.sendgridApiKey) {
       tyPageText =
-        'Your submission has been successfully sent and we informed the form owner about your submission.'
+        'Your submission has been successful and we informed the form owner about it.'
     } else {
-      tyPageText = 'Your submission has been successfully sent.'
+      tyPageText = 'Your submission has been successful.'
     }
 
     let sendEmailTo = false
@@ -216,5 +258,62 @@ module.exports = (app) => {
         console.log('Error while sending email ', e)
       }
     }
+
+    //add submission_usage
+    if (version !== 0) {
+      const dateObj = new Date()
+      const month = dateObj.getUTCMonth() + 1 //months from 1-12
+      const year = dateObj.getUTCFullYear()
+      const yearMonth = year + '-' + month
+      const formOwnerResult = await db.query(
+        `SELECT \`user_id\` FROM \`form_published\` WHERE form_id = ? AND version = ?`,
+        [form_id, version]
+      )
+      const formOwner = formOwnerResult[0].user_id
+      const checkUsageResult = await db.query(
+        `
+        SELECT * FROM \`submission_usage\` WHERE user_id = ? AND date = ?`,
+        [formOwner, yearMonth]
+      )
+
+      if (checkUsageResult.length === 0) {
+        await db.query(
+          `
+          INSERT INTO \`submission_usage\`
+            (user_id, date, count)
+          VALUES
+            (?,?,1)
+          `,
+          [formOwner, yearMonth]
+        )
+      } else {
+        await db.query(
+          `
+        UPDATE \`submission_usage\` SET count = count + 1 WHERE user_id = ? AND date = ?
+        `,
+          [formOwner, yearMonth]
+        )
+      }
+    }
+  })
+
+  app.post('/templates/submit/:id', async (req, res) => {
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+    let tyPageText =
+      'Your submission has been successful and we informed the form owner about it.'
+
+    res.render('submit-success.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle: tyPageTitle,
+      tyText: tyPageText
+    })
   })
 }

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
-
+import Modal from './common/Modal'
 import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
@@ -59,12 +59,7 @@ class Data extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms`
     })
 
-    const forms = (data || []).map((form) => {
-      return {
-        ...form,
-        props: JSON.parse(form.props)
-      }
-    })
+    const forms = data
 
     this.setLoadingState('forms', false)
     this.setState({ forms })
@@ -115,12 +110,15 @@ class Data extends Component {
         submissions: false,
         entries: false
       },
-      parseError: false
+      parseError: false,
+      isModalOpen: false,
+      modalContent: {}
     }
 
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
   }
 
   handleFormClick(form) {
@@ -157,7 +155,7 @@ class Data extends Component {
       selectedSubmissionForm = await api({
         resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
       })
-      selectedSubmissionForm = selectedSubmissionForm.data[0]
+      selectedSubmissionForm = selectedSubmissionForm.data
     }
 
     this.setLoadingState('entries', true)
@@ -173,8 +171,7 @@ class Data extends Component {
 
     try {
       for (let dataContent of data) {
-        for (let element of JSON.parse(this.state.selectedSubmissionForm.props)
-          .elements) {
+        for (let element of this.state.selectedSubmissionForm.props.elements) {
           if (
             element.id === dataContent.question_id &&
             (element.type === 'Checkbox' || element.type === 'Radio')
@@ -225,6 +222,100 @@ class Data extends Component {
     this.setState({ selectedSubmissionIds: [] })
   }
 
+  handleDeleteSubmissionClick(e) {
+    e.preventDefault()
+    const { selectedSubmissionIds } = this.state
+    const modalContent = {
+      header:
+        selectedSubmissionIds.length > 1
+          ? `Delete ${selectedSubmissionIds.length} submissions?`
+          : 'Delete submission?',
+      status: 'warning'
+    }
+
+    modalContent.dialogue = {
+      negativeText: 'Delete',
+      negativeClick: this.deleteSubmission.bind(this),
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick
+    }
+
+    modalContent.content = (
+      <div>
+        {selectedSubmissionIds.length > 1
+          ? `Selected submissions and the attached file uploads will be `
+          : 'Selected submission and the attached file uploads will be '}
+        <span
+          style={{
+            color: '#be0000',
+            fontWeight: 'bold',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all'
+          }}>
+          PERMANENTLY
+        </span>{' '}
+        {selectedSubmissionIds.length > 1
+          ? 'deleted. Are you sure you want to delete selected submissions?'
+          : 'deleted. Are you sure you want to delete selected submission?'}
+      </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+  async deleteSubmission() {
+    const {
+      selectedFormId,
+      submissions,
+      selectedSubmissionIds,
+      entries
+    } = this.state
+
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
+      method: 'delete',
+      body: {
+        submissionIds: this.state.selectedSubmissionIds
+      }
+    })
+
+    let modalContent = {}
+    if (data.success === true) {
+      modalContent = {
+        content: 'Submission successfully deleted!',
+        status: 'success',
+        header: 'Success!'
+      }
+      this.setState({ modalContent })
+
+      this.setState({
+        submissions: submissions.filter(
+          (submission) => selectedSubmissionIds.includes(submission.id) !== true
+        )
+      })
+
+      if (selectedSubmissionIds.includes(entries[0].submission_id)) {
+        this.setState({ entries: [] })
+      }
+
+      this.setState({ selectedSubmissionIds: [] })
+    } else {
+      modalContent = {
+        content:
+          'There has been an error deleting submissions. Please contact support.',
+        status: 'error',
+        header: 'Error'
+      }
+      this.setState({ modalContent })
+      console.log('ERROR WHILE DELETING SUBMISSION', data)
+    }
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
+  }
+
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions =
@@ -240,6 +331,12 @@ class Data extends Component {
 
     return (
       <div className="data">
+        <Modal
+          history={this.props.history}
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         <div className="headerContainer">
           <div className="header cw grid center">
             <div className="col-1-16">
@@ -255,33 +352,34 @@ class Data extends Component {
           </div>
         </div>
         <div className="formSelectorContainer center">
-          <div className="formSelector cw center grid">
-            <div
-              className="col-15-16"
-              onClick={() => {
-                this.setState({ formSelectorOpen: !formSelectorOpen })
-              }}>
+          <div
+            className="formSelector cw center grid"
+            onClick={() => {
+              this.setState({ formSelectorOpen: !formSelectorOpen })
+            }}>
+            <div className="col-15-16 formSelectorContent">
               {formSelectorText}
             </div>
             <div className="col-1-16 down">
               <FontAwesomeIcon icon={faChevronDown} />
             </div>
           </div>
-          {formSelectorOpen === true ? (
-            <div className="formSelectorOptions cw center grid">
-              <div className="col-16-16">
-                <ul>
-                  {forms.map((form, index) => (
-                    <li
-                      key={index}
-                      onClick={this.handleFormClick.bind(this, form)}>
-                      {form.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div
+            className={`formSelectorOptions cw center grid ${
+              formSelectorOpen ? '' : 'dn'
+            }`}>
+            <div className="col-16-16">
+              <ul>
+                {forms.map((form, index) => (
+                  <li
+                    key={index}
+                    onClick={this.handleFormClick.bind(this, form)}>
+                    {form.title}
+                  </li>
+                ))}
+              </ul>
             </div>
-          ) : null}
+          </div>
         </div>
         <div className="cw center grid dataContent">
           <div className="submissionSelector col-5-16">
@@ -319,22 +417,38 @@ class Data extends Component {
     const csvExportClassNames = ['csvExportButton']
     let csvExportButtonText = 'Export CSV'
 
+    const deleteSubmissionButtonClassNames = ['deleteSubmissionButton']
+    let deleteSubmissionButtonText = 'Delete'
+
     if (selectedSubmissionIds.length === 0) {
       csvExportClassNames.push('disabled')
+      deleteSubmissionButtonClassNames.push('disabled')
     } else {
       csvExportButtonText = `Export CSV (${selectedSubmissionIds.length})`
+      deleteSubmissionButtonText = `Delete (${selectedSubmissionIds.length})`
     }
 
     return [
       <div className="submissionActions grid" key="actions">
-        <div className="col-10-16">
+        <div className="col-6-16">
           {submissions.length} total submission(s). <br />
           {getNumberOfSubmissionsToday(submissions)} submission(s) today.
         </div>
-        <div className="col-6-16 buttonContainer">
+        <div className="col-5-16 buttonContainer">
+          <button
+            className={deleteSubmissionButtonClassNames.join(' ')}
+            {...(selectedSubmissionIds.length !== 0 && {
+              onClick: this.handleDeleteSubmissionClick.bind(this)
+            })}>
+            {deleteSubmissionButtonText}
+          </button>
+        </div>
+        <div className="col-5-16 buttonContainer">
           <button
             className={csvExportClassNames.join(' ')}
-            onClick={this.handleCSVExportClick}>
+            {...(selectedSubmissionIds.length !== 0 && {
+              onClick: this.handleCSVExportClick
+            })}>
             {csvExportButtonText}
           </button>
         </div>
@@ -406,25 +520,29 @@ class Data extends Component {
 
   renderEntryElements(entry) {
     const { selectedSubmissionForm } = this.state
-
-    return Elements[
-      JSON.parse(selectedSubmissionForm.props).elements.filter(
-        (element) => element.id === entry.question_id
-      )[0].type
-    ].renderDataValue(entry)
+    try {
+      return Elements[
+        selectedSubmissionForm.props.elements.filter(
+          (element) => element.id === entry.question_id
+        )[0].type
+      ].renderDataValue(entry)
+    } catch (e) {
+      return 'This data is corrupted.'
+    }
   }
 
   renderEntries() {
     const { entries, selectedSubmissionForm, parseError } = this.state
+
     if (parseError === false) {
       if (entries.length === 0) {
         return null
       }
 
       const getLabel = (question_id) => {
-        const matchingQuestion = JSON.parse(
-          selectedSubmissionForm.props
-        ).elements.filter((element) => element.id === question_id)
+        const matchingQuestion = selectedSubmissionForm.props.elements.filter(
+          (element) => element.id === question_id
+        )
 
         if (matchingQuestion.length > 0) {
           return matchingQuestion[0].label

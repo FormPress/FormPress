@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import Separator from './Separator'
 import './Header.css'
 
 export default class Header extends Component {
@@ -11,7 +12,15 @@ export default class Header extends Component {
     id: 0,
     type: 'Header',
     label: 'Header',
-    sublabel: 'sub header'
+    sublabel: 'sub header',
+    separator: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Add a separator between headers?']
+      }
+    }
   }
 
   render() {
@@ -38,6 +47,7 @@ export default class Header extends Component {
             dataPlaceholder="Type a header"
           />
         </h2>
+        {config.separator === true ? <Separator {...this.props} /> : null}
         <h4>
           <EditableLabel
             className="header sublabel"

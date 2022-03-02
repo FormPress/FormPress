@@ -1,32 +1,53 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 import AuthContext from './auth.context'
 import { ProfileSVG } from './svg'
+import './Profile.css'
+import SettingsSVG from './svg/SettingsSVG'
+import LogoutSVG from './svg/LogoutSVG'
 
 const Profile = () => {
   const logout = (e) => {
     e.preventDefault()
     window.localStorage.removeItem('auth')
+    window.localStorage.removeItem('lastEditedFormId')
     window.location.reload()
   }
 
   const renderLoggedIn = (auth) => {
-    return [
-      <ProfileSVG key="1" className="profileSVG" onClick={logout} />,
-      <span key="2">
-        Welcome <i>{auth.email}</i>
-      </span>
-    ]
+    return (
+      <div className="profile">
+        <div className="profileMenuContainer">
+          <div key="1" className="wrapper-welcome">
+            <div className="welcome-user" key="2">
+              Welcome, <i title={auth.email}>{auth.email}</i>
+            </div>
+            <ProfileSVG key="1" className="profileSVG" />
+            <div className="profileMenuContent dn">
+              <div className="profileMenuEntry">
+                <NavLink to="/settings" activeClassName="selected">
+                  <SettingsSVG />
+                  Settings
+                </NavLink>
+              </div>
+              <div className="profileMenuEntry">
+                <span onClick={logout}>
+                  <LogoutSVG width={16} heigth={16} />
+                  Logout
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
     <AuthContext.Consumer>
       {(value) => {
-        return (
-          <div className="profile">
-            {value.loggedIn === true ? renderLoggedIn(value) : null}
-          </div>
-        )
+        return value.loggedIn === true ? renderLoggedIn(value) : null
       }}
     </AuthContext.Consumer>
   )

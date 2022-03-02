@@ -52,7 +52,7 @@
   font-style: italic;
   font-weight: 500;
   font-size: 12px;
-  margin-top: -130px;
+  margin-top: -143px;
   margin-bottom: 100px;
   margin-left: 300px;
 }
@@ -123,6 +123,10 @@
   text-align: center;
   color: #ff5050;
   margin-bottom: 10px;
+}
+
+.message-back.success {
+  color: #8cc63f;
 }
 
 .or-seperator {

@@ -33,6 +33,15 @@ module.exports = (app) => {
         VALUES
       ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
+
+      //adding default role 2, it should be dynamic
+      await db.query(`
+        INSERT INTO \`user_role\`
+          (user_id)
+        VALUES
+        ('${newEntry.insertId}')
+      `)
+
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(
           `
@@ -41,6 +50,7 @@ module.exports = (app) => {
           [newEntry.insertId]
         )
       }
+
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/signupsuccesshtml.tpl.ejs'),
@@ -77,7 +87,7 @@ module.exports = (app) => {
 
       if (isEnvironmentVariableSet.sendgridApiKey) {
         try {
-          console.log('sending verify email ', msg)
+          console.log('sending verification email ', msg)
           sgMail.send(msg)
         } catch (e) {
           console.log('Error while sending email ', e)
@@ -89,7 +99,7 @@ module.exports = (app) => {
     } else {
       return res
         .status(403)
-        .json({ message: 'This e-mail already have an account' })
+        .json({ message: 'This e-mail is already attached to an account' })
     }
   })
 }

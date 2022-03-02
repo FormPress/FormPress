@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Link, NavLink, Switch, Route } from 'react-router-dom'
+import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEqual } from 'lodash'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -17,7 +17,10 @@ import {
   faFileAlt,
   faPlusCircle,
   faEnvelope,
-  faFont
+  faFont,
+  faMinus,
+  faQuestionCircle,
+  faPen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -28,8 +31,12 @@ import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
+import PreviewForm from './helper/PreviewForm'
+import Modal from './common/Modal'
+import Templates from './Templates'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
+import { TemplateOptionSVG } from '../svg'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
@@ -45,12 +52,13 @@ const iconMap = {
   Name: faAddressCard,
   FileUpload: faFileAlt,
   Email: faEnvelope,
-  Header: faHeading
+  Header: faHeading,
+  Separator: faMinus
 }
 
 //list of element texts
 const textMap = {
-  TextBox: 'TextBox',
+  TextBox: 'Text Box',
   TextArea: 'Text Area',
   Checkbox: 'Checkbox',
   Button: 'Button',
@@ -59,7 +67,8 @@ const textMap = {
   Name: 'Name',
   FileUpload: 'File Upload',
   Email: 'E-mail',
-  Header: 'Header'
+  Header: 'Header',
+  Separator: 'Separator'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -116,18 +125,34 @@ class Builder extends Component {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
 
+      if (this.props.history.location.pathname.endsWith('/new')) {
+        this.setState({ isTemplateModalOpen: true })
+      }
+
       if (formId !== 'new') {
         await this.loadForm(formId)
         window.localStorage.setItem('lastEditedFormId', formId)
       } else {
         window.scrollTo(0, 0)
+        const { form } = this.state
         this.setIntegration({ type: 'email', to: this.props.auth.email })
+
+        const savedForm = cloneDeep(form)
+        this.setState({ savedForm })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
 
-      if (lastEditedFormId !== null) {
+      if (lastEditedFormId !== undefined && lastEditedFormId !== null) {
         this.props.history.push(`/editor/${lastEditedFormId}/builder`)
+        setTimeout(() => {
+          this.componentDidMount()
+        }, 1)
+      } else {
+        const { data } = await api({
+          resource: `/api/users/${this.props.auth.user_id}/editor`
+        })
+        this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
           this.componentDidMount()
         }, 1)
@@ -148,6 +173,65 @@ class Builder extends Component {
         removeUnavailableElems(element)
       )
     }
+
+    this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
+  }
+
+  componentWillUnmount() {
+    this.shouldBlockNavigation()
+  }
+
+  blockReactRoutes = (location) => {
+    this.ignoreFormDifference = () => {
+      this.props.history.push(location.pathname)
+    } // if user still wants to proceed without saving
+
+    const { form, savedForm } = this.state
+    let isFormChanged = !isEqual(form, savedForm)
+
+    const disallowedPath = !location.pathname.startsWith('/editor')
+
+    if (isFormChanged === true && disallowedPath === false) {
+      return true
+    }
+
+    if (isFormChanged === true && disallowedPath === true) {
+      const modalContent = {
+        header: 'Unsaved Changes',
+        status: 'warning',
+        content: 'Are you sure you want to discard changes?'
+      }
+
+      modalContent.dialogue = {
+        abortText: 'Cancel',
+        abortClick: this.handleCloseModalClick,
+        negativeText: 'Discard',
+        negativeClick: this.handleDiscardChangesClick
+      }
+      this.setState({ modalContent, isModalOpen: true })
+      return false
+    }
+
+    if (isFormChanged === false) {
+      return true
+    }
+
+    return false // fail-safe
+  }
+
+  handleCloseModalClick() {
+    this.setState({ isModalOpen: false, modalContent: {} })
+  }
+
+  handleCloseTemplateModalClick() {
+    this.props.history.push('/editor/new/builder')
+    this.setState({ isTemplateModalOpen: false, modalContent: {} })
+  }
+
+  handleDiscardChangesClick() {
+    this.shouldBlockNavigation()
+
+    this.ignoreFormDifference()
   }
 
   async loadForm(formId, seamless = false) {
@@ -155,10 +239,14 @@ class Builder extends Component {
       this.setState({ loading: true })
     }
 
-    const { data } = await api({
+    const { data, status } = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
     })
+    if (status === 403) {
+      this.setState({ redirect: true })
 
+      return
+    }
     if (typeof data.props === 'undefined') {
       this.setState({
         loading: false
@@ -167,27 +255,29 @@ class Builder extends Component {
       return
     }
 
-    const props = JSON.parse(data.props)
+    const props = data.props
     const form = {
       ...data,
       props
     }
+    const savedForm = cloneDeep(form)
 
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
 
-    if (typeof publishedFormResult.data.props !== 'undefined') {
-      publishedFormResult.data.props = JSON.parse(
-        publishedFormResult.data.props
-      )
-    }
-
     this.setState({
       loading: false,
       form,
+      savedForm,
       publishedForm: publishedFormResult.data
     })
+  }
+
+  setFormTags(tags) {
+    const form = { ...this.state.form }
+    form.props.tags = tags
+    this.setState({ form })
   }
 
   setIntegration(_integration) {
@@ -213,12 +303,31 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setCSS(cssProp) {
+    const form = { ...this.state.form }
+    form.props.customCSS = cssProp
+    this.setState({ form })
+  }
+
+  cloneTemplate = (template) => {
+    this.setState({ loading: true })
+    const form = { ...this.state.form }
+    form.props = template.props
+    form.title = template.title
+    form.props.integrations[0] = { type: 'email', to: this.props.auth.email }
+    this.setState({ form, isTemplateModalOpen: false })
+    this.setState({ loading: false })
+  }
+
   constructor(props) {
     super(props)
     this.state = {
       counter: 0,
+      redirect: false,
+      isModalOpen: false,
       saving: false,
       loading: false,
+      modalContent: {},
       dragging: false,
       dragIndex: false,
       dragMode: 'insert',
@@ -226,6 +335,7 @@ class Builder extends Component {
       insertBefore: false,
       selectedFieldId: false,
       publishedForm: {},
+      savedForm: {},
       form: {
         id: null,
         user_id: null,
@@ -249,7 +359,12 @@ class Builder extends Component {
               type: 'Button',
               buttonText: 'Submit'
             }
-          ]
+          ],
+          customCSS: {
+            value: '',
+            isEncoded: false
+          },
+          tags: []
         }
       }
     }
@@ -261,7 +376,6 @@ class Builder extends Component {
     this.handleSaveClick = this.handleSaveClick.bind(this)
     this.handleFormItemMovement = this.handleFormItemMovement.bind(this)
     this.handlePublishClick = this.handlePublishClick.bind(this)
-    this.handlePreviewClick = this.handlePreviewClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
@@ -271,6 +385,15 @@ class Builder extends Component {
     this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
+    this.setCSS = this.setCSS.bind(this)
+    this.setFormTags = this.setFormTags.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
+      this
+    )
+    this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
+    this.handleUnselectElement = this.handleUnselectElement.bind(this)
+    this.cloneTemplate = this.cloneTemplate.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -315,7 +438,7 @@ class Builder extends Component {
     let item = getElementsKeys()[type]
     const { form, dragIndex, dragMode, sortItem } = this.state
 
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
 
     if (dragMode === 'insert') {
       //set auto increment element id
@@ -441,7 +564,7 @@ class Builder extends Component {
   handleLabelChange(id, value) {
     const form = { ...this.state.form }
 
-    form.props.elements = [...form.props.elements]
+    form.props.elements = cloneDeep([...form.props.elements])
 
     if (Number.isInteger(id) === false) {
       const questionID = id.split('_')[1]
@@ -679,6 +802,17 @@ class Builder extends Component {
     }
   }
 
+  handleUnselectElement() {
+    const { location } = this.props.history
+
+    if (location.pathname.endsWith('/builder')) {
+      var nodeList = document.querySelectorAll('[id^="qc_"]')
+      nodeList.forEach((node) => {
+        node.classList.remove('selected')
+      })
+    }
+  }
+
   async handleSaveClick() {
     const { form } = this.state
 
@@ -711,6 +845,8 @@ class Builder extends Component {
         }
       })
     }
+    const savedForm = cloneDeep(this.state.form)
+    this.setState({ savedForm })
   }
 
   async handlePublishClick() {
@@ -734,13 +870,6 @@ class Builder extends Component {
     }
 
     this.setState({ publishing: false })
-  }
-
-  handlePreviewClick() {
-    const BACKEND = process.env.REACT_APP_BACKEND
-    const { id } = this.state.form
-
-    window.open(`${BACKEND}/form/view/${id}?preview=true`, '_blank')
   }
 
   configureQuestion(changes) {
@@ -789,9 +918,27 @@ class Builder extends Component {
   }
 
   render() {
+    const isInTemplates =
+      this.props.history.location.pathname.indexOf('/template') !== -1
+
+    const noComponentPresent = this.props.history.location.pathname.endsWith(
+      '/new'
+    )
+
+    if (this.state.redirect) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/forms',
+            state: { from: this.props.location }
+          }}
+        />
+      )
+    }
     const { params } = this.props.match
     const { formId, questionId } = params
-    const tabs = [
+
+    let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
         name: 'formProperties',
@@ -800,6 +947,10 @@ class Builder extends Component {
       }
     ]
 
+    if (isInTemplates) {
+      tabs = []
+    }
+
     if (typeof questionId !== 'undefined') {
       tabs.push({
         name: 'questionProperties',
@@ -807,11 +958,21 @@ class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
+    this.handleUnselectElement()
 
     return (
       <div className="builder">
+        <Modal
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
+        {this.renderTemplateModal()}
         <div className="headerContainer">
-          <div className="header grid center">
+          <div
+            className={`header grid center ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             <div className="col-1-16">
               <Link to="/forms" className="back">
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -831,7 +992,10 @@ class Builder extends Component {
           </div>
         </div>
         <div className="content">
-          <div className="leftTabs col-1-16">
+          <div
+            className={`leftTabs col-1-16 ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             {this.renderLeftVerticalTabs()}
           </div>
           {this.renderMainContent()}
@@ -840,11 +1004,64 @@ class Builder extends Component {
     )
   }
 
+  renderTemplateModal() {
+    let modalContent = {}
+    const closeModal = this.handleCloseTemplateModalClick
+
+    return (
+      <Modal
+        isOpen={this.state.isTemplateModalOpen}
+        modalContent={modalContent}
+        closeModal={closeModal}>
+        <div
+          className="new-form-dialogue"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className="modal-title">Create a new form</div>
+          <div className="options-wrapper">
+            <NavLink
+              className="option-container"
+              to="/editor/new/template"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <TemplateOptionSVG />
+              </div>
+              <span className="option-label">USE A TEMPLATE</span>
+            </NavLink>
+
+            <NavLink
+              className="option-container"
+              to="/editor/new/builder"
+              activeClassName="selected"
+              onClick={closeModal}>
+              <div className="option">
+                <FontAwesomeIcon
+                  className="option-img"
+                  icon={faPen}
+                  color={'#1c5c85'}
+                  size="5x"
+                />
+              </div>
+              <span className="option-label">CREATE FROM SCRATCH</span>
+            </NavLink>
+          </div>
+        </div>
+      </Modal>
+    )
+  }
+
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
+    const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+    if (permission.admin) {
+      pickerElements.forEach((elem) => {
+        permission[elem.type] = true
+      })
+    }
     let questionPropertiesReady = true
 
     if (typeof questionId !== 'undefined') {
@@ -868,40 +1085,68 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side to add to the form. Or
-              you can click + icon
+              Drag and Drop elements to right hand side into the form; or you
+              can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) => (
-                <div
-                  className="element"
-                  draggable
-                  onDragStart={this.handleDragStart.bind(this, elem)}
-                  onDragEnd={this.handleDragEnd}
-                  key={elem.type}>
-                  <span className="element-picker-icon-wrapper">
-                    <FontAwesomeIcon
-                      icon={iconMap[elem.type]}
-                      className="element-picker-icon"
-                    />
-                  </span>
-                  <span className="element-picker-text">
-                    {textMap[elem.type]}
-                  </span>
-                  <span className="add-element-button">
-                    <FontAwesomeIcon
-                      icon={faPlusCircle}
-                      title="Add Field"
-                      onClick={() => this.handleAddFormElementClick(elem.type)}
-                    />
-                  </span>
-                </div>
-              ))}
+              {pickerElements.map((elem) =>
+                permission[elem.type] ? (
+                  <div
+                    className="element"
+                    draggable
+                    onDragStart={this.handleDragStart.bind(this, elem)}
+                    onDragEnd={this.handleDragEnd}
+                    key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="add-element-button">
+                      <FontAwesomeIcon
+                        icon={faPlusCircle}
+                        title="Add Field"
+                        onClick={() =>
+                          this.handleAddFormElementClick(elem.type)
+                        }
+                      />
+                    </span>
+                  </div>
+                ) : (
+                  <div className="element disabled-element" key={elem.type}>
+                    <span className="element-picker-icon-wrapper">
+                      <FontAwesomeIcon
+                        icon={iconMap[elem.type]}
+                        className="element-picker-icon"
+                      />
+                    </span>
+                    <span className="element-picker-text">
+                      {textMap[elem.type]}
+                    </span>
+                    <span className="planover-container">
+                      <FontAwesomeIcon icon={faQuestionCircle} />
+                      <div className="popoverText">
+                        Your plan does not include this element. Please contact
+                        support for upgrade.
+                      </div>
+                    </span>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </Route>
         <Route path="/editor/:formId/builder/properties">
-          <FormProperties form={form} setIntegration={this.setIntegration} />
+          <FormProperties
+            form={form}
+            setIntegration={this.setIntegration}
+            setCSS={this.setCSS}
+            setFormTags={this.setFormTags}
+          />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (
@@ -945,11 +1190,15 @@ class Builder extends Component {
           </div>
           {this.renderBuilder()}
         </Route>
-        <Route path="/editor/:formId/design">
-          Form Designer will come here
-        </Route>
+        <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
+        </Route>
+        <Route path="/editor/:formId/template">
+          <Templates formId={formId} cloneTemplate={this.cloneTemplate} />
+        </Route>
+        <Route path="/editor/:formId/preview">
+          <PreviewForm formID={formId} history={this.props.history} />
         </Route>
       </Switch>
     )
@@ -994,7 +1243,19 @@ class Builder extends Component {
           <button onClick={this.handleSaveClick} {...saveButtonProps}>
             {saving === true ? 'Saving...' : 'Save'}
           </button>
-          <button onClick={this.handlePreviewClick}>Preview</button>
+          {typeof this.state.form.id === 'number' ? (
+            <NavLink to={`/editor/${params.formId}/preview`}>
+              <button>Preview</button>
+            </NavLink>
+          ) : (
+            <span>
+              <button
+                className="preview-disabled-button"
+                title="Form has to be saved before it can be previewed.">
+                Preview
+              </button>
+            </span>
+          )}
           <button className="publish" onClick={this.handlePublishClick}>
             {publishing === true ? 'Publishing...' : 'Publish'}
             {isPublishRequired === true ? (
@@ -1030,6 +1291,24 @@ class Builder extends Component {
             mode="builder"
           />
         )}
+        {this.props.auth.user_role === 2 ? (
+          <div
+            className="branding"
+            title="Upgrade your plan to remove branding.">
+            <img
+              alt="Formpress Logo"
+              src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
+              className="formpress-logo"
+            />
+            <div
+              className="branding-text"
+              title="Visit FORMPRESS and start building awesome forms!">
+              This form has been created on FORMPRESS. <br />
+              <span className="fake-link">Click here</span> to create your own
+              form now! It is free!
+            </div>
+          </div>
+        ) : null}
       </div>
     )
   }

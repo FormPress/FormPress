@@ -20,11 +20,11 @@
   font-size: 14px;
   color: #646464;
   margin-top: 10px;
+  word-break: break-word;
 }
 
 .form > .element > .label {
   min-width: 200px;
-  max-width: 600px;
 }
 
 .builderStage .form > .element > button,

@@ -11,7 +11,7 @@ class Download extends Component {
   }
 
   async startDownload(fileName) {
-    const resource = `/api/users/${this.props.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}`
+    const resource = `/api/users/${this.props.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}/${fileName}`
 
     const { status, data } = await api({
       resource: resource,
@@ -30,7 +30,7 @@ class Download extends Component {
 
       this.setState({
         message:
-          'Your download has started. If not please click "Download" button again.'
+          'Your download has started. If not, please click the "Download" button again.'
       })
     }
   }

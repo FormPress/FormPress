@@ -1,0 +1,98 @@
+{
+  "id": 3,
+  "user_id": null,
+  "title": "Employment Form",
+  "props": {
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Job Application Form",
+        "sublabel": "Thank you for your interest in working within our company. Please fill out below form to apply for any open position."
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": false,
+        "prefixTypeTextBox": {
+          "default": false,
+          "formProps": {
+            "type": "Checkbox",
+            "label": "",
+            "options": ["Change the type of prefix field to TextBox."]
+          }
+        },
+        "prefixOptions": {
+          "default": ["Mr.", "Mrs."],
+          "formProps": {
+            "type": "TextArea",
+            "label": "Enter Prefix Options"
+          }
+        },
+        "middleName": false,
+        "suffix": false,
+        "firstNameSublabelText": "First Name",
+        "required": false
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "Email",
+        "placeholder": "john.doe@example.com"
+      },
+      {
+        "id": 6,
+        "type": "Dropdown",
+        "label": "Position",
+        "options": [
+          "Frontend Developer",
+          "Backend Developer",
+          "Fullstack Developer",
+          "QA Engineer",
+          "QA Automation Engineer",
+          "UI/UX Developer",
+          "Customer Support Representative",
+          "Director of Software Engineering",
+          "Director of Infrastructure"
+        ],
+        "dropdownOptions": "Frontend Developer\nBackend Developer\nFullstack Developer\nQA Engineer\nQA Automation Engineer\nUI/UX Developer\nCustomer Support Representative\nDirector of Software Engineering\nDirector of Infrastructure\n"
+      },
+      {
+        "id": 7,
+        "type": "TextBox",
+        "label": "Available Date",
+        "placeholder": "DATETIME"
+      },
+      {
+        "id": 8,
+        "type": "Radio",
+        "label": "What is your current employment status?",
+        "options": ["Employed", "Unemployed", "Student", "Freelancer"]
+      },
+      {
+        "id": 9,
+        "type": "Email",
+        "label": "Reference Email",
+        "placeholder": "john.doe@example.com"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Apply"
+      }
+    ],
+    "customCSS": {
+      "value": "",
+      "isEncoded": false
+    },
+    "tags": ["application"]
+  }
+}

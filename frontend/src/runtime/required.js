@@ -3,7 +3,7 @@
   const requireds = {}
 
   for (const elem of FORMPRESS.elements) {
-    if (elem.required !== true) {
+    if (elem.required !== true && elem.type !== 'Email') {
       continue
     }
 
@@ -89,13 +89,16 @@
       const domElem1 = containerElem.querySelector(`#fname_${id}`)
       const domElem2 = containerElem.querySelector(`#lname_${id}`)
       const domElem3 = containerElem.querySelector(`#prefix_${id}`)
+
+      let allowPrefix = true
+
+      if (domElem3.parentElement.classList.contains('hidden')) {
+        allowPrefix = false
+      }
+
       requireds[id] = {
         id,
-        valid: !(
-          domElem1.value.trim().length === 0 ||
-          domElem2.value.trim().length === 0 ||
-          domElem.value.trim() === 'choose-disabled'
-        )
+        valid: false
       }
 
       domElem1.addEventListener('blur', () => {
@@ -103,13 +106,14 @@
         let value2 = domElem2.value
         let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -121,13 +125,14 @@
         let value2 = domElem2.value
         let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -139,13 +144,14 @@
         let value2 = domElem2.value
         let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
@@ -157,54 +163,58 @@
         let value2 = domElem2.value
         let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
+        if (value1.trim().length > 0 && value2.trim().length > 0) {
+          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          } else {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          }
         } else {
           containerElem.classList.add('requiredError')
           requireds[id].valid = false
         }
       })
 
-      domElem3.addEventListener('blur', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
+      if (allowPrefix) {
+        domElem3.addEventListener('blur', () => {
+          let value1 = domElem1.value
+          let value2 = domElem2.value
+          let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
+          if (
+            value1.trim().length > 0 &&
+            value2.trim().length > 0 &&
+            value3.trim() !== 'choose-disabled' &&
+            allowPrefix === true
+          ) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        })
 
-      domElem3.addEventListener('change', function () {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
+        domElem3.addEventListener('change', function () {
+          let value1 = domElem1.value
+          let value2 = domElem2.value
+          let value3 = domElem3.value
 
-        if (
-          value1.trim().length > 0 &&
-          value2.trim().length > 0 &&
-          value3.trim() !== 'choose-disabled'
-        ) {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
+          if (
+            value1.trim().length > 0 &&
+            value2.trim().length > 0 &&
+            value3.trim() !== 'choose-disabled'
+          ) {
+            containerElem.classList.remove('requiredError')
+            requireds[id].valid = true
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        })
+      }
 
       domElem1.addEventListener('focus', () => {
         elemActivated = true
@@ -242,60 +252,41 @@
     } else if (elem.type === 'Email') {
       requireds[id] = {
         id,
-        valid: domElem.value.trim().length > 0
+        valid:
+          typeof elem.required === 'undefined' || elem.required === false
+            ? true
+            : false
       }
 
       domElem.addEventListener('blur', () => {
         const value = domElem.value
+        if (domElem.value.trim().length > 0) {
+          requireds[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
 
-        if (elem.required !== true) {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-            if (domElem.value.indexOf('@') > -1 && domElem.value.length > 3) {
-              containerElem.classList.remove('requiredError')
-            } else {
-              containerElem.classList.add('requiredError')
-            }
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
+          requireds[id].valid === true
+            ? containerElem.classList.remove('requiredError')
+            : containerElem.classList.add('requiredError')
         } else {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-            if (domElem.value.indexOf('@') > -1 && domElem.value.length > 3) {
-              containerElem.classList.remove('requiredError')
-            } else {
-              containerElem.classList.add('requiredError')
-            }
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
 
       domElem.addEventListener('keyup', () => {
         const value = domElem.value
+        if (domElem.value.trim().length > 0) {
+          requireds[id].valid =
+            domElem.value.trim().length > 2 &&
+            domElem.value.trim().indexOf('@') > -1
 
-        if (elem.required !== true) {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
+          requireds[id].valid === true
+            ? containerElem.classList.remove('requiredError')
+            : containerElem.classList.add('requiredError')
         } else {
-          if (domElem.value.trim().length > 0) {
-            requireds[id].valid =
-              domElem.value.indexOf('@') > -1 && domElem.value.length > 3
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
+          containerElem.classList.add('requiredError')
+          requireds[id].valid = false
         }
       })
     } else {

@@ -29,6 +29,7 @@
   text-align: center;
   cursor: pointer;
   display: inline-block;
+  border: none;
 }
 
 .builder .header > .mainTabs > a,
@@ -117,6 +118,11 @@
   padding-left: 10px;
 }
 
+.builder > .content > .leftMenu > .leftMenuContents h4 {
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+
 .leftMenuContents .elementTextArea .fl.input {
   width: 100%;
 }
@@ -144,6 +150,7 @@
   color: #646464;
   width: 91%;
   cursor: move;
+  height: 50px;
 }
 
 .elements > .elementList > .element:hover {
@@ -194,8 +201,9 @@
   font-size: 18px;
   display: flex;
   flex: 1 0 auto;
-  min-height: 60px;
+  min-height: 78px;
   padding: 0;
+  color: #1c5c85;
 }
 
 .builderStage > .formTitle > .label {
@@ -210,9 +218,14 @@
   text-align: right;
   height: 32px;
   padding-right: 0;
+  box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
-.builderStage > .formControls > button {
+.builderStage > .formControls > button,
+.builderStage > .formControls > a > button,
+.builderStage > .formControls > span > button {
   border: none;
   height: 32px;
   line-height: 32px;
@@ -223,6 +236,10 @@
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
+}
+.builderStage > .formControls > span > button.preview-disabled-button {
+  color: gray;
+  cursor: default;
 }
 
 .builderStage > .formControls > button.publish {
@@ -243,8 +260,12 @@
 }
 
 .builderStage > .form {
-  box-shadow: 0px 3px 10px #00000014;
   margin: 0 auto;
+  padding: 6px;
+  border-top: 1px solid #f5f5f5;
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
 .form.builder.dragging > * * {
@@ -285,6 +306,12 @@
 .form.builder > .element .fl.input li:hover .action,
 .form.builder > .element .fl.input:hover .checkbox-label + .action {
   display: block;
+  opacity: 0.7;
+}
+
+.form.builder > .element .fl.input li .action:hover,
+.form.builder > .element .fl.input .checkbox-label + .action:hover {
+  opacity: 1;
 }
 
 .form.builder .element .action > * {
@@ -303,15 +330,26 @@
   font-size: 16px;
 }
 
-.form.builder > .element:hover,
-.form > .element.selected {
-  border: 1px solid black;
+.form.builder > .element.selected {
+  border: 2px solid #e5fbda;
+  border-radius: 6px;
+}
+
+.form.builder > .element:hover {
+  border-radius: 6px;
+  background-color: #e5fbda;
 }
 
 .form.builder > .element:hover > .action,
 .form > .element.selected > .action {
   display: inline-flex;
   float: right;
+  opacity: 0.7;
+}
+
+.form.builder > .element > .action:hover,
+.form > .element.selected > .action:hover {
+  opacity: 1;
 }
 
 .popoverText {
@@ -326,15 +364,14 @@
 .popover-container:hover > .popoverText {
   display: block;
   width: 83px;
-  height: 20px;
-  margin: 0 0 3px;
-  padding: 2px 4px 3px 3px;
+  height: 22px;
+  padding: 3px 3px 0px;
   border-radius: 4px;
   position: absolute;
   background-color: #113952;
   color: #fff;
   text-align: center;
-  top: -25px;
+  top: -30px;
   left: -35px;
   z-index: 9999;
 }
@@ -345,12 +382,21 @@
 #qc_required .input {
   float: right;
 }
-@media only screen and (max-height: 800px) and (min-height: 600px) {
+@media only screen and (max-height: 1200px) and (min-height: 800px) {
+  .elements > .elementList {
+    position: relative;
+    display: block;
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
+@media only screen and (max-height: 900px) and (min-height: 200px) {
   .elements > .elementList {
     position: relative;
     display: block;
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 }
 
@@ -359,6 +405,123 @@
     position: relative;
     display: block;
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
+}
+
+.planover-container {
+  visibility: hidden;
+  display: inline-flex;
+  position: relative;
+}
+
+.planover-container:hover {
+  color: #fffcdd;
+}
+
+.planover-container:hover > .popoverText {
+  display: block;
+  width: 160px;
+  margin: 0 0 3px;
+  padding: 2px 4px 3px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  font-size: 10px;
+  left: -130px;
+  top: 20px;
+}
+
+.elements > .elementList > .disabled-element:hover {
+  border: solid 1px #c9c9c9 !important;
+  color: #1c5c85 !important;
+  background-color: #c9c9c9;
+  cursor: default !important;
+}
+
+.elements > .elementList > .disabled-element:hover .planover-container {
+  visibility: visible;
+}
+
+.new-form-dialogue {
+  border-radius: 8px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 380px;
+  box-shadow: 0 0 16px 0 rgba(19, 38, 55, 0.1);
+  background-color: white;
+}
+
+.new-form-dialogue > .options-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.new-form-dialogue > .modal-title {
+  margin-top: 48px;
+  margin-bottom: 42px;
+  font-family: Montserrat;
+  font-size: 23px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #1c5c85;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  width: 172px;
+  height: 172px;
+  margin: auto;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  text-align: center;
+  text-align: -moz-center;
+  padding: 40px;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  cursor: pointer;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option-label {
+  display: inherit;
+  text-align: center;
+  font-family: Montserrat;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.83;
+  letter-spacing: normal;
+  color: #1c5c85;
+}
+
+.new-form-dialogue a {
+  text-decoration: none;
+}
+
+.terms-checkbox {
+  margin-right: 8px;
+}
+
+.terms {
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.builderStage > .branding {
+  position: relative !important;
+}
+
+.fake-link {
+  color: #0645ad;
+  text-decoration: underline;
 }

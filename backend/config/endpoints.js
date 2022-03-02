@@ -91,6 +91,15 @@ module.exports = {
       }
     },
     {
+      method: 'delete',
+      path: '/api/users/:user_id/forms/:form_id/deleteSubmission',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/deleteSubmission',
+      exampleRequestBody: {
+        submissionIds: [1]
+      }
+    },
+    {
       method: 'get',
       path:
         '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
@@ -121,13 +130,37 @@ module.exports = {
     {
       method: 'get',
       path:
-        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id',
+        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
       protected: true,
-      exampleRequestPath: '/api/users/1/forms/1/submissions/1/questions/1'
+      exampleRequestPath:
+        '/api/users/1/forms/1/submissions/1/questions/1/photo.png'
     },
     {
       method: 'get',
-      path: '/api/server/capabilities'
+      path: '/api/users/:user_id/editor',
+      protected: true,
+      exampleRequestPath: '/api/users/1/editor'
+    },
+    {
+      method: 'get',
+      path: '/api/server/capabilities',
+      protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/health',
+      protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/users/:user_id/export/forms',
+      protected: false,
+      exampleRequestPath: '/api/users/1/export/forms'
+    },
+    {
+      method: 'get',
+      path: '/templates/view/:id',
+      protected: false
     }
   ]
 }
