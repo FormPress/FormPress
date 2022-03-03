@@ -58,7 +58,7 @@ export default class FileUpload extends Component {
       inputProps.onChange = this.props.onChange
     }
     const label = (
-      <label for={`q_${config.id}`} class="file-upload-label">
+      <label htmlFor={`q_${config.id}`} className="file-upload-label">
         <FontAwesomeIcon icon={faFileAlt} /> Browse...
       </label>
     )
