@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import './FileUpload.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileAlt } from '@fortawesome/free-solid-svg-icons'
 
 export default class FileUpload extends Component {
   static weight = 8
@@ -55,8 +57,12 @@ export default class FileUpload extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
-
-    const display = (
+    const label = (
+      <label for={`q_${config.id}`} class="file-upload-label">
+        <FontAwesomeIcon icon={faFileAlt} /> Browse...
+      </label>
+    )
+    const input = (
       <input type="file" name={`q_${config.id}`} id={`q_${config.id}`} />
     )
 
@@ -71,7 +77,8 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        {display}
+        {label}
+        {input}
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
