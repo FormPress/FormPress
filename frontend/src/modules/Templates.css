@@ -1,6 +1,6 @@
 .template-component-wrapper {
   background: white;
-  height: 770px;
+  height: calc(100vh - 130px);
   overflow: hidden;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .rightColumn > .selected-template-wrapper {
-  height: 700px;
+  height: calc(100vh - 130px);
 }
 .rightColumn > .selected-template-wrapper > iframe {
   background: whitesmoke;
@@ -109,7 +109,7 @@
 }
 
 .templates-wrapper {
-  height: 650px;
+  height: calc(100vh - 240px);
   padding-left: 15px;
   overflow-y: scroll;
   background: #fdfdfd;
