@@ -146,6 +146,27 @@ module.exports = (app) => {
     res.json((await formModel.get({ form_id })).props.elements || [])
   })
 
+  //return form validators
+  app.get('/api/form/element/validators', async (req, res) => {
+    const elementQuery = req.query.elements.split(',')
+
+    const elementValidators = {}
+
+    elementQuery.forEach((element) => {
+      elementValidators[element] =
+        require(path.resolve('script', 'transformed', 'elements', `${element}`))
+          .default.helpers || 'unset'
+    })
+
+    const output = JSON.stringify(
+      elementValidators, //transform element helper functions to string
+      (key, value) => (typeof value === 'function' ? value.toString() : value),
+      2
+    )
+
+    res.json(output)
+  })
+
   // publish form, takes latest form and publishes it
   app.post(
     '/api/users/:user_id/forms/:form_id/publish',

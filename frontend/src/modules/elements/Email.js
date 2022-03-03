@@ -13,6 +13,19 @@ export default class Email extends Component {
     label: 'Email'
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const email = document.getElementById(`q_${id}`)
+      return email.value
+    },
+    isValid: (value) => {
+      return value.trim().indexOf('@') > -1
+    },
+    isFilled: (value) => {
+      return value.trim() !== ''
+    }
+  }
+
   static renderDataValue(entry) {
     return entry.value
   }
