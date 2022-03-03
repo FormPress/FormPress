@@ -2,6 +2,7 @@ const path = require('path')
 const jwt = require('jsonwebtoken')
 
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
+const { error } = require(path.resolve('helper'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -59,6 +60,7 @@ module.exports = (app) => {
 
         jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
           console.log('token sign error ', err)
+          error.errorReport(err)
 
           res.status(200).json({
             message: 'Login Success',

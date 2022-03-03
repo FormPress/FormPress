@@ -5,6 +5,7 @@ const devPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
+const { error } = require(path.resolve('helper'))
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
@@ -62,6 +63,7 @@ module.exports = (app) => {
         )
         .catch((err) => {
           console.log('can not render html body', err)
+          error.errorReport(err)
         })
 
       const textBody = await ejs
@@ -75,6 +77,7 @@ module.exports = (app) => {
         )
         .catch((err) => {
           console.log('can not render text body', err)
+          error.errorReport(err)
         })
 
       const msg = {
@@ -91,6 +94,7 @@ module.exports = (app) => {
           sgMail.send(msg)
         } catch (e) {
           console.log('Error while sending email ', e)
+          error.errorReport(e)
         }
       }
       res.status(200).json({

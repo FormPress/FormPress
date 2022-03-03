@@ -5,6 +5,7 @@ const devPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 
 const { genRandomString } = require(path.resolve('helper')).random
+const { error } = require(path.resolve('helper'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -56,6 +57,7 @@ module.exports = (app) => {
         )
         .catch((err) => {
           console.log('can not render html body', err)
+          error.errorReport(err)
         })
 
       const textBody = await ejs
@@ -69,6 +71,7 @@ module.exports = (app) => {
         )
         .catch((err) => {
           console.log('can not render text body', err)
+          error.errorReport(err)
         })
 
       const msg = {
@@ -84,6 +87,7 @@ module.exports = (app) => {
         sgMail.send(msg)
       } catch (e) {
         console.log('Error while sending password reset email ', e)
+        error.errorReport(e)
       }
 
       res.status(200).json({

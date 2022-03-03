@@ -7,6 +7,7 @@ exports.exec = require(path.resolve('helper', 'exec'))
 exports.random = require(path.resolve('helper', 'random'))
 exports.submissionhandler = require(path.resolve('helper', 'submissionhandler'))
 exports.model = require(path.resolve('helper', 'model'))
+exports.error = require(path.resolve('helper', 'error'))
 exports.storage = ''
 
 if (isEnvironmentVariableSet.fileUploadBucket) {
