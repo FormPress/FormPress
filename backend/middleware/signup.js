@@ -38,9 +38,9 @@ module.exports = (app) => {
       //adding default role 2, it should be dynamic
       await db.query(`
         INSERT INTO \`user_role\`
-          (user_id)
+          (user_id, role_id)
         VALUES
-        ('${newEntry.insertId}')
+        ('${newEntry.insertId}', '2')
       `)
 
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
