@@ -71,7 +71,7 @@ class ShareForm extends Component {
 
                   <FacebookShareButton
                     title="Checkout my form"
-                    url="formpress.org">
+                    url={`${hostname}/form/view/${this.props.formId}`}>
                     <FacebookIcon size={32} round />
                   </FacebookShareButton>
 
