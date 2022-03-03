@@ -65,26 +65,28 @@ class ShareForm extends Component {
                 <div className="shareFormButtonCover">
                   <TwitterShareButton
                     title="Checkout my form"
-                    url={`${hostname}/form/view/${this.props.formId}`}>
-                    <TwitterIcon size={32} round />
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <TwitterIcon size={48} round />
                   </TwitterShareButton>
-
                   <FacebookShareButton
                     title="Checkout my form"
-                    url={`${hostname}/form/view/${this.props.formId}`}>
-                    <FacebookIcon size={32} round />
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <FacebookIcon size={48} round />
                   </FacebookShareButton>
 
                   <LinkedinShareButton
                     title="Checkout my form"
-                    url={`${hostname}/form/view/${this.props.formId}`}>
-                    <LinkedinIcon size={32} round />
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <LinkedinIcon size={48} round />
                   </LinkedinShareButton>
 
                   <WhatsappShareButton
                     title="Checkout my form"
                     url={`${hostname}/form/view/${this.props.formId}`}>
-                    <WhatsappIcon size={32} round />
+                    <WhatsappIcon size={48} round />
                   </WhatsappShareButton>
                 </div>
               </div>
