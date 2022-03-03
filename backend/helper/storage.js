@@ -1,6 +1,8 @@
 const { Storage } = require('@google-cloud/storage')
 const { v4: uuidv4 } = require('uuid')
 const { Duplex, PassThrough } = require('stream')
+const path = require('path')
+const { error } = require(path.resolve('helper'))
 
 const storage = new Storage({
   keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
@@ -55,6 +57,7 @@ exports.downloadFile = (uploadName) => {
     .createReadStream()
     .on('error', function (err) {
       console.log('Could not download file', err)
+      error.errorReport(err)
     })
     .pipe(out)
 
@@ -66,5 +69,6 @@ exports.deleteFile = (uploadName) => {
     fileUploadBucket.file(uploadName).delete()
   } catch (err) {
     console.log('cannot delete uploaded file', err)
+    error.errorReport(err)
   }
 }
