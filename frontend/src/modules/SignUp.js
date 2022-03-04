@@ -238,7 +238,7 @@ class SignUp extends Component {
                 <div className="have-account">
                   Already have an account?
                   <Link to="/login">
-                    &nbsp;<i>Login</i>
+                    <i>Login</i>
                   </Link>
                 </div>
               </div>

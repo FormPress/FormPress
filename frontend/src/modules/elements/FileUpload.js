@@ -57,11 +57,7 @@ export default class FileUpload extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
-    const label = (
-      <label htmlFor={`q_${config.id}`} className="file-upload-label">
-        <FontAwesomeIcon icon={faFileAlt} /> Browse...
-      </label>
-    )
+
     const input = (
       <input type="file" name={`q_${config.id}`} id={`q_${config.id}`} />
     )
@@ -77,7 +73,6 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        {label}
         {input}
         <div className="clearfix">
           <EditableLabel
