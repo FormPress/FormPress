@@ -40,12 +40,16 @@
   color: black;
   font-size: 24px;
   background-color: white;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
 }
 
 .wrapper-body {
   background-color: #f5f5f5;
   position: relative;
   padding: 20px;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
 }
 
 .wrapper-header.success {
