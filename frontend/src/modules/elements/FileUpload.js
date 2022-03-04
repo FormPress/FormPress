@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import './FileUpload.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileAlt } from '@fortawesome/free-solid-svg-icons'
 
 export default class FileUpload extends Component {
   static weight = 8
