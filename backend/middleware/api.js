@@ -21,7 +21,7 @@ const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { FP_ENV, FP_HOST } = process.env
 const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-const { storage, model } = require(path.resolve('helper'))
+const { storage, model, error } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
@@ -496,6 +496,9 @@ module.exports = (app) => {
         console.error(
           `Published version can't be found form_id = ${form_id} version = ${form.published_version}`
         )
+        error.errorReport(
+          `Published version can't be found form_id = ${form_id} version = ${form.published_version}`
+        )
       }
     }
 
@@ -630,8 +633,9 @@ module.exports = (app) => {
       } else {
         res.status(500).json({ message: 'DB error' })
       }
-    } catch (error) {
-      console.error(error)
+    } catch (err) {
+      console.error(err)
+      error.errorReport(err)
       res.status(500).json({ message: 'DB error' })
     }
   })
