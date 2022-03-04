@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 .renderer.gleam {
   background-color: white;
@@ -271,10 +271,10 @@
 }
 .gleam .elementButton input[type='submit'],
 .gleam .elementButton input[type='submit']:focus,
-.builder.gleam .elementButton button,
-.builder.gleam .elementButton button:focus {
+.elementButton button,
+.elementButton button:focus {
   font-family: Montserrat;
-  font-weight: bold;
+  font-weight: bolder;
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
