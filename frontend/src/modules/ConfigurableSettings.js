@@ -19,10 +19,11 @@ const policy = {
       exceptions: ['Button', 'Header', 'Separator']
     },
     configurableSettings: {
-      default: 'Please fill this field.',
+      default: 'Required field',
       formProps: {
         type: 'TextBox',
-        label: 'Error message when this field is left empty.'
+        label: 'Error message when this field is left empty.',
+        placeholder: 'Required field'
       }
     }
   },
