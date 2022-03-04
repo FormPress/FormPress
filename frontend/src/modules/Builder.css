@@ -247,6 +247,12 @@
   cursor: default;
 }
 
+.builderStage > .formControls > .publish-disabled-button {
+  color: grey;
+  background: white;
+  cursor: default;
+}
+
 .builderStage > .formControls > button.publish {
   background-color: #8cc63f;
   color: #ffffff;

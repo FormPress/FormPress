@@ -1257,12 +1257,20 @@ class Builder extends Component {
               </button>
             </span>
           )}
-          <button className="publish" onClick={this.handlePublishClick}>
-            {publishing === true ? 'Publishing...' : 'Publish'}
-            {isPublishRequired === true ? (
-              <div className="publishRequired"></div>
-            ) : null}
-          </button>
+          {typeof this.state.form.id === 'number' ? (
+            <button className="publish" onClick={this.handlePublishClick}>
+              {publishing === true ? 'Publishing...' : 'Publish'}
+              {isPublishRequired === true ? (
+                <div className="publishRequired"></div>
+              ) : null}
+            </button>
+          ) : (
+            <button
+              className="publish-disabled-button"
+              title="Form has to be saved before it can be published.">
+              Publish
+            </button>
+          )}
         </div>
         {loading === true ? (
           'Loading...'
