@@ -252,7 +252,7 @@ class EditableList extends Component {
       return (
         <select className="dropdown-select" name={`q_${config.id}`}>
           <option selected disabled>
-            Choose one
+            {config.placeholder}
           </option>
           {options.map((item, key) => {
             return (
