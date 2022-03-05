@@ -137,6 +137,10 @@
 
 .elements > .elementList {
   margin-top: 20px;
+  position: relative;
+  display: block;
+  height: calc(100vh - 250px);
+  overflow-y: auto;
 }
 
 .elements > .elementList > .element {
@@ -196,6 +200,10 @@
   color: #68942f;
 }
 
+.builderStage {
+  margin-bottom: 50px;
+}
+
 .builderStage > .formTitle {
   background-color: #fdfdfd;
   font-size: 18px;
@@ -213,21 +221,22 @@
 }
 
 .builderStage > .formControls {
+  margin-bottom: 10px;
   background-color: #fdfdfd;
   text-align: right;
   height: 33.3px;
   padding-right: 0;
+  border-top: solid 1px #f5f5f5;
 }
 
 .builderStage > .formControls > button,
 .builderStage > .formControls > a > button,
 .builderStage > .formControls > span > button {
   border: none;
-  height: 32px;
-  line-height: 32px;
+  height: 30px;
   font-size: 14px;
   font-weight: bold;
-  background-color: white;
+  background-color: #fdfdfd;
   cursor: pointer;
   color: #8cc63f;
   padding: 0 20px;
@@ -235,6 +244,12 @@
 }
 .builderStage > .formControls > span > button.preview-disabled-button {
   color: gray;
+  cursor: default;
+}
+
+.builderStage > .formControls > .publish-disabled-button {
+  color: grey;
+  background: white;
   cursor: default;
 }
 
@@ -383,32 +398,6 @@
 }
 #qc_required .input {
   float: right;
-}
-@media only screen and (max-height: 1200px) and (min-height: 800px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 100%;
-    overflow-y: auto;
-  }
-}
-
-@media only screen and (max-height: 900px) and (min-height: 200px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 400px;
-    overflow-y: auto;
-  }
-}
-
-@media only screen and (max-height: 600px) and (min-height: 400px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 300px;
-    overflow-y: auto;
-  }
 }
 
 .planover-container {
