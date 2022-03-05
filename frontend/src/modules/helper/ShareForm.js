@@ -64,27 +64,27 @@ class ShareForm extends Component {
               <div className="shareFormButtonArea">
                 <div className="shareFormButtonCover">
                   <TwitterShareButton
-                    title="Here's my most recent form, ready to be filled out!"
+                    title="Here is my most recent form, ready to be filled out!"
                     url={`${hostname}/form/view/${this.props.formId}`}
                     className="shareButton">
                     <TwitterIcon size={48} round />
                   </TwitterShareButton>
                   <FacebookShareButton
-                    quote="Here's my most recent form, ready to be filled out!"
+                    quote="Here is my most recent form, ready to be filled out!"
                     url={`${hostname}/form/view/${this.props.formId}`}
                     className="shareButton">
                     <FacebookIcon size={48} round />
                   </FacebookShareButton>
 
                   <LinkedinShareButton
-                    title="Here's my most recent form, ready to be filled out!"
+                    title="Here is my most recent form, ready to be filled out!"
                     url={`${hostname}/form/view/${this.props.formId}`}
                     className="shareButton">
                     <LinkedinIcon size={48} round />
                   </LinkedinShareButton>
 
                   <WhatsappShareButton
-                    title="Here's my most recent form, ready to be filled out!"
+                    title="Here is my most recent form, ready to be filled out!"
                     url={`${hostname}/form/view/${this.props.formId}`}>
                     <WhatsappIcon size={48} round />
                   </WhatsappShareButton>
