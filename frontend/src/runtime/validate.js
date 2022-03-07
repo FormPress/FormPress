@@ -13,7 +13,6 @@
     const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
 
     if (elemHelpers === 'unset') {
-      console.log(`No validator found for ${elem.type} ${id}`)
       continue
     }
 
