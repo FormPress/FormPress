@@ -659,6 +659,7 @@
   width: 100%;
   padding-top: 20px;
 }
+
 input[type='file'] {
   width: min-content;
 }
