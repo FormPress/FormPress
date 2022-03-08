@@ -10,7 +10,7 @@
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
-  margin: 2px 0;
+  margin: 2px 15px 2px 0px;
   position: relative;
   overflow: visible;
   display: grid;
