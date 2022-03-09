@@ -10,51 +10,49 @@
 
   for (const elem of FORMPRESS.elements) {
     const id = elem.id
-    let elemActivated = false
+    const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
+
+    if (elemHelpers === 'unset') {
+      continue
+    }
+
+    let value = elemHelpers.getElementValue(id)
+
+    valids[id] = {
+      id,
+      valid: elemHelpers.isValid(value)
+    }
+
     const domElem = document.getElementById(`q_${id}`)
     const containerElem = document.getElementById(`qc_${id}`)
 
-    if (elem.type === 'Email') {
-      valids[id] = {
-        id,
-        valid:
-          typeof elem.required === 'undefined' || elem.required === false
-            ? true
-            : false
+    domElem.addEventListener('blur', () => {
+      let value = elemHelpers.getElementValue(id)
+      valids[id].valid = elemHelpers.isValid(value)
+
+      if (elemHelpers.isFilled(value)) {
+        valids[id].valid === true
+          ? containerElem.classList.remove('requiredError')
+          : containerElem.classList.add('requiredError')
+      } else {
+        containerElem.classList.remove('requiredError')
+        valids[id].valid = true
       }
+    })
 
-      domElem.addEventListener('blur', () => {
-        const value = domElem.value
-        if (domElem.value.trim().length > 0) {
-          valids[id].valid =
-            domElem.value.trim().length > 2 &&
-            domElem.value.trim().indexOf('@') > -1
+    domElem.addEventListener('keyup', () => {
+      let value = elemHelpers.getElementValue(id)
+      valids[id].valid = elemHelpers.isValid(value)
 
-          valids[id].valid === true
-            ? containerElem.classList.remove('requiredError')
-            : containerElem.classList.add('requiredError')
-        } else {
-          containerElem.classList.remove('requiredError')
-          valids[id].valid = true
-        }
-      })
-
-      domElem.addEventListener('keyup', () => {
-        const value = domElem.value
-        if (domElem.value.trim().length > 0) {
-          valids[id].valid =
-            domElem.value.trim().length > 2 &&
-            domElem.value.trim().indexOf('@') > -1
-
-          valids[id].valid === true
-            ? containerElem.classList.remove('requiredError')
-            : containerElem.classList.add('requiredError')
-        } else {
-          containerElem.classList.remove('requiredError')
-          valids[id].valid = true
-        }
-      })
-    }
+      if (elemHelpers.isFilled(value)) {
+        valids[id].valid === true
+          ? containerElem.classList.remove('requiredError')
+          : containerElem.classList.add('requiredError')
+      } else {
+        containerElem.classList.remove('requiredError')
+        valids[id].valid = true
+      }
+    })
   }
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
