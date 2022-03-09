@@ -161,6 +161,12 @@ module.exports = {
       method: 'get',
       path: '/templates/view/:id',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/form/element/validators',
+      protected: false,
+      exampleRequestPath: 'api/form/element/validators?elements=Button,Email'
     }
   ]
 }
