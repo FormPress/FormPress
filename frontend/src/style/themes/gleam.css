@@ -659,7 +659,16 @@
   width: 100%;
   padding-top: 20px;
 }
-
 input[type='file'] {
-  width: min-content;
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 90px;
+}
+.inputContainer > span {
+  margin-left: 5px;
 }
