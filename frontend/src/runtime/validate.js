@@ -16,11 +16,9 @@
       continue
     }
 
-    let value = elemHelpers.getElementValue(id)
-
     valids[id] = {
       id,
-      valid: elemHelpers.isValid(value)
+      valid: true
     }
 
     const domElem = document.getElementById(`q_${id}`)
