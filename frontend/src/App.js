@@ -38,6 +38,7 @@ let initialAuthObject = {
   user_role: 0,
   permission: {},
   exp: '',
+  admin: false,
   loggedIn: false
 }
 
@@ -82,7 +83,7 @@ class App extends Component {
   }
 
   handleSetAuth(
-    { email, user_id, user_role, token, loggedIn, exp, permission },
+    { email, user_id, user_role, token, admin, loggedIn, exp, permission },
     persist = true
   ) {
     this.setState({
@@ -90,6 +91,7 @@ class App extends Component {
       user_id,
       user_role,
       token,
+      admin,
       loggedIn,
       exp,
       permission
@@ -103,6 +105,7 @@ class App extends Component {
           user_id,
           user_role,
           token,
+          admin,
           loggedIn,
           exp,
           permission
@@ -118,6 +121,7 @@ class App extends Component {
       user_id: this.state.user_id,
       user_role: this.state.user_role,
       permission: this.state.permission,
+      admin: this.state.admin,
       loggedIn: this.state.loggedIn,
       setAuth: this.handleSetAuth
     }

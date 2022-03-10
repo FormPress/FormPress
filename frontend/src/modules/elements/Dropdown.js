@@ -16,7 +16,7 @@ export default class Dropdown extends Component {
       default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {
         type: 'TextArea',
-        label: 'Enter Dropdown options'
+        label: 'Dropdown options'
       }
     }
   }
@@ -65,7 +65,7 @@ export default class Dropdown extends Component {
                 name={`q_${config.id}`}
                 defaultValue="choose-disabled">
                 <option disabled value="choose-disabled">
-                  Choose one
+                  {config.placeholder}
                 </option>
                 {options.map((item) => {
                   return (
@@ -112,7 +112,7 @@ export default class Dropdown extends Component {
             name={`q_${config.id}`}
             defaultValue="choose-disabled">
             <option disabled value="choose-disabled">
-              Choose one
+              {config.placeholder}
             </option>
             {options.map((item) => {
               return (

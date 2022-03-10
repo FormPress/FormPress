@@ -19,7 +19,8 @@ import {
   faEnvelope,
   faFont,
   faMinus,
-  faQuestionCircle
+  faQuestionCircle,
+  faPen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -27,13 +28,15 @@ import AuthContext from '../auth.context'
 import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
-import Modal from './common/Modal'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
 import PreviewForm from './helper/PreviewForm'
+import Modal from './common/Modal'
+import Templates from './Templates'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
+import { TemplateOptionSVG } from '../svg'
 
 import './Builder.css'
 import '../style/themes/gleam.css'
@@ -122,6 +125,10 @@ class Builder extends Component {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
 
+      if (this.props.history.location.pathname.endsWith('/new')) {
+        this.setState({ isTemplateModalOpen: true })
+      }
+
       if (formId !== 'new') {
         await this.loadForm(formId)
         window.localStorage.setItem('lastEditedFormId', formId)
@@ -150,21 +157,6 @@ class Builder extends Component {
           this.componentDidMount()
         }, 1)
       }
-    }
-
-    const capabilities = this.props.capabilities
-
-    if (
-      capabilities.fileUploadBucket === false ||
-      capabilities.googleServiceAccountCredentials === false
-    ) {
-      //Removal of the elements of which the environment variables are unset.
-      const removeUnavailableElems = (element) => {
-        return element.type !== 'FileUpload'
-      }
-      pickerElements = pickerElements.filter((element) =>
-        removeUnavailableElems(element)
-      )
     }
 
     this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
@@ -216,6 +208,11 @@ class Builder extends Component {
     this.setState({ isModalOpen: false, modalContent: {} })
   }
 
+  handleCloseTemplateModalClick() {
+    this.props.history.push('/editor/new/builder')
+    this.setState({ isTemplateModalOpen: false, modalContent: {} })
+  }
+
   handleDiscardChangesClick() {
     this.shouldBlockNavigation()
 
@@ -262,6 +259,12 @@ class Builder extends Component {
     })
   }
 
+  setFormTags(tags) {
+    const form = { ...this.state.form }
+    form.props.tags = tags
+    this.setState({ form })
+  }
+
   setIntegration(_integration) {
     const form = { ...this.state.form }
 
@@ -286,8 +289,19 @@ class Builder extends Component {
   }
 
   setCSS(cssProp) {
-    const { form } = this.state
-    this.setState((form.props.customCSS = cssProp))
+    const form = { ...this.state.form }
+    form.props.customCSS = cssProp
+    this.setState({ form })
+  }
+
+  cloneTemplate = (template) => {
+    this.setState({ loading: true })
+    const form = { ...this.state.form }
+    form.props = template.props
+    form.title = template.title
+    form.props.integrations[0] = { type: 'email', to: this.props.auth.email }
+    this.setState({ form, isTemplateModalOpen: false })
+    this.setState({ loading: false })
   }
 
   constructor(props) {
@@ -298,6 +312,7 @@ class Builder extends Component {
       isModalOpen: false,
       saving: false,
       loading: false,
+      modalContent: {},
       dragging: false,
       dragIndex: false,
       dragMode: 'insert',
@@ -333,7 +348,8 @@ class Builder extends Component {
           customCSS: {
             value: '',
             isEncoded: false
-          }
+          },
+          tags: []
         }
       }
     }
@@ -355,9 +371,14 @@ class Builder extends Component {
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
+    this.setFormTags = this.setFormTags.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
+      this
+    )
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
+    this.cloneTemplate = this.cloneTemplate.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -881,7 +902,28 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  removeUnavailableElems = (elem) => {
+    const capabilities = this.props.capabilities
+    const elementsToRemove = []
+
+    if (
+      capabilities.fileUploadBucket === false ||
+      capabilities.googleServiceAccountCredentials === false
+    ) {
+      elementsToRemove.push('FileUpload')
+    }
+
+    return !elementsToRemove.includes(elem.type)
+  }
+
   render() {
+    const isInTemplates =
+      this.props.history.location.pathname.indexOf('/template') !== -1
+
+    const noComponentPresent = this.props.history.location.pathname.endsWith(
+      '/new'
+    )
+
     if (this.state.redirect) {
       return (
         <Redirect
@@ -894,7 +936,8 @@ class Builder extends Component {
     }
     const { params } = this.props.match
     const { formId, questionId } = params
-    const tabs = [
+
+    let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
         name: 'formProperties',
@@ -902,6 +945,10 @@ class Builder extends Component {
         path: `/editor/${formId}/builder/properties`
       }
     ]
+
+    if (isInTemplates) {
+      tabs = []
+    }
 
     if (typeof questionId !== 'undefined') {
       tabs.push({
@@ -919,8 +966,12 @@ class Builder extends Component {
           modalContent={this.state.modalContent}
           closeModal={this.handleCloseModalClick}
         />
+        {this.renderTemplateModal()}
         <div className="headerContainer">
-          <div className="header grid center">
+          <div
+            className={`header grid center ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             <div className="col-1-16">
               <Link to="/forms" className="back">
                 <FontAwesomeIcon icon={faChevronLeft} />
@@ -940,12 +991,62 @@ class Builder extends Component {
           </div>
         </div>
         <div className="content">
-          <div className="leftTabs col-1-16">
+          <div
+            className={`leftTabs col-1-16 ${
+              isInTemplates || noComponentPresent ? ' dn' : null
+            }`}>
             {this.renderLeftVerticalTabs()}
           </div>
           {this.renderMainContent()}
         </div>
       </div>
+    )
+  }
+
+  renderTemplateModal() {
+    let modalContent = {}
+    const closeModal = this.handleCloseTemplateModalClick
+
+    return (
+      <Modal
+        isOpen={this.state.isTemplateModalOpen}
+        modalContent={modalContent}
+        closeModal={closeModal}>
+        <div
+          className="new-form-dialogue"
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className="modal-title">Create a new form</div>
+          <div className="options-wrapper">
+            <NavLink
+              className="option-container"
+              to="/editor/new/template"
+              activeClassName="selected">
+              <div className="option" onClick={closeModal}>
+                <TemplateOptionSVG />
+              </div>
+              <span className="option-label">USE A TEMPLATE</span>
+            </NavLink>
+
+            <NavLink
+              className="option-container"
+              to="/editor/new/builder"
+              activeClassName="selected"
+              onClick={closeModal}>
+              <div className="option">
+                <FontAwesomeIcon
+                  className="option-img"
+                  icon={faPen}
+                  color={'#1c5c85'}
+                  size="5x"
+                />
+              </div>
+              <span className="option-label">CREATE FROM SCRATCH</span>
+            </NavLink>
+          </div>
+        </div>
+      </Modal>
     )
   }
 
@@ -987,54 +1088,56 @@ class Builder extends Component {
               can click the + icon that pops up next to the element
             </div>
             <div className="elementList">
-              {pickerElements.map((elem) =>
-                permission[elem.type] ? (
-                  <div
-                    className="element"
-                    draggable
-                    onDragStart={this.handleDragStart.bind(this, elem)}
-                    onDragEnd={this.handleDragEnd}
-                    key={elem.type}>
-                    <span className="element-picker-icon-wrapper">
-                      <FontAwesomeIcon
-                        icon={iconMap[elem.type]}
-                        className="element-picker-icon"
-                      />
-                    </span>
-                    <span className="element-picker-text">
-                      {textMap[elem.type]}
-                    </span>
-                    <span className="add-element-button">
-                      <FontAwesomeIcon
-                        icon={faPlusCircle}
-                        title="Add Field"
-                        onClick={() =>
-                          this.handleAddFormElementClick(elem.type)
-                        }
-                      />
-                    </span>
-                  </div>
-                ) : (
-                  <div className="element disabled-element" key={elem.type}>
-                    <span className="element-picker-icon-wrapper">
-                      <FontAwesomeIcon
-                        icon={iconMap[elem.type]}
-                        className="element-picker-icon"
-                      />
-                    </span>
-                    <span className="element-picker-text">
-                      {textMap[elem.type]}
-                    </span>
-                    <span className="planover-container">
-                      <FontAwesomeIcon icon={faQuestionCircle} />
-                      <div className="popoverText">
-                        Your plan does not include this element. Please contact
-                        support for upgrade.
-                      </div>
-                    </span>
-                  </div>
-                )
-              )}
+              {pickerElements
+                .filter((elem) => this.removeUnavailableElems(elem))
+                .map((elem) =>
+                  permission[elem.type] ? (
+                    <div
+                      className="element"
+                      draggable
+                      onDragStart={this.handleDragStart.bind(this, elem)}
+                      onDragEnd={this.handleDragEnd}
+                      key={elem.type}>
+                      <span className="element-picker-icon-wrapper">
+                        <FontAwesomeIcon
+                          icon={iconMap[elem.type]}
+                          className="element-picker-icon"
+                        />
+                      </span>
+                      <span className="element-picker-text">
+                        {textMap[elem.type]}
+                      </span>
+                      <span className="add-element-button">
+                        <FontAwesomeIcon
+                          icon={faPlusCircle}
+                          title="Add Field"
+                          onClick={() =>
+                            this.handleAddFormElementClick(elem.type)
+                          }
+                        />
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="element disabled-element" key={elem.type}>
+                      <span className="element-picker-icon-wrapper">
+                        <FontAwesomeIcon
+                          icon={iconMap[elem.type]}
+                          className="element-picker-icon"
+                        />
+                      </span>
+                      <span className="element-picker-text">
+                        {textMap[elem.type]}
+                      </span>
+                      <span className="planover-container">
+                        <FontAwesomeIcon icon={faQuestionCircle} />
+                        <div className="popoverText">
+                          Your plan does not include this element. Please
+                          contact support for upgrade.
+                        </div>
+                      </span>
+                    </div>
+                  )
+                )}
             </div>
           </div>
         </Route>
@@ -1043,6 +1146,7 @@ class Builder extends Component {
             form={form}
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
+            setFormTags={this.setFormTags}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
@@ -1090,6 +1194,9 @@ class Builder extends Component {
         <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} />
+        </Route>
+        <Route path="/editor/:formId/template">
+          <Templates formId={formId} cloneTemplate={this.cloneTemplate} />
         </Route>
         <Route path="/editor/:formId/preview">
           <PreviewForm formID={formId} history={this.props.history} />
@@ -1150,18 +1257,26 @@ class Builder extends Component {
               </button>
             </span>
           )}
-          <button className="publish" onClick={this.handlePublishClick}>
-            {publishing === true ? 'Publishing...' : 'Publish'}
-            {isPublishRequired === true ? (
-              <div className="publishRequired"></div>
-            ) : null}
-          </button>
+          {typeof this.state.form.id === 'number' ? (
+            <button className="publish" onClick={this.handlePublishClick}>
+              {publishing === true ? 'Publishing...' : 'Publish'}
+              {isPublishRequired === true ? (
+                <div className="publishRequired"></div>
+              ) : null}
+            </button>
+          ) : (
+            <button
+              className="publish-disabled-button"
+              title="Form has to be saved before it can be published.">
+              Publish
+            </button>
+          )}
         </div>
         {loading === true ? (
           'Loading...'
         ) : (
           <Renderer
-            className={`col-16-16 form${dragging === true ? ' dragging' : ''}`}
+            className={`col-16-16 form`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
@@ -1198,8 +1313,8 @@ class Builder extends Component {
               className="branding-text"
               title="Visit FORMPRESS and start building awesome forms!">
               This form has been created on FORMPRESS. <br />
-              <a href="#">Click here</a> to create your own form now! It is
-              free!
+              <span className="fake-link">Click here</span> to create your own
+              form now! It is free!
             </div>
           </div>
         ) : null}

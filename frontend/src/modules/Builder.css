@@ -29,6 +29,7 @@
   text-align: center;
   cursor: pointer;
   display: inline-block;
+  border: none;
 }
 
 .builder .header > .mainTabs > a,
@@ -136,6 +137,10 @@
 
 .elements > .elementList {
   margin-top: 20px;
+  position: relative;
+  display: block;
+  height: calc(100vh - 273px);
+  overflow-y: auto;
 }
 
 .elements > .elementList > .element {
@@ -195,12 +200,20 @@
   color: #68942f;
 }
 
+.builderStage {
+  margin-bottom: 50px;
+  height: calc(100vh - 176px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0px 3px 10px #00000014;
+}
+
 .builderStage > .formTitle {
   background-color: #fdfdfd;
   font-size: 18px;
   display: flex;
   flex: 1 0 auto;
-  min-height: 78px;
+  min-height: 60px;
   padding: 0;
   color: #1c5c85;
 }
@@ -212,25 +225,22 @@
 }
 
 .builderStage > .formControls {
-  margin-top: 10px;
-  background-color: white;
+  margin-bottom: 10px;
+  background-color: #fdfdfd;
   text-align: right;
-  height: 32px;
+  height: 24px;
   padding-right: 0;
-  box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
-  -webkit-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.08);
+  border-top: solid 1px #f5f5f5;
 }
 
 .builderStage > .formControls > button,
 .builderStage > .formControls > a > button,
 .builderStage > .formControls > span > button {
   border: none;
-  height: 32px;
-  line-height: 32px;
+  height: 24px;
   font-size: 14px;
   font-weight: bold;
-  background-color: white;
+  background-color: #fdfdfd;
   cursor: pointer;
   color: #8cc63f;
   padding: 0 20px;
@@ -238,6 +248,12 @@
 }
 .builderStage > .formControls > span > button.preview-disabled-button {
   color: gray;
+  cursor: default;
+}
+
+.builderStage > .formControls > .publish-disabled-button {
+  color: grey;
+  background: white;
   cursor: default;
 }
 
@@ -262,9 +278,6 @@
   margin: 0 auto;
   padding: 6px;
   border-top: 1px solid #f5f5f5;
-  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
-  -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
-  -moz-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
 }
 
 .form.builder.dragging > * * {
@@ -381,32 +394,6 @@
 #qc_required .input {
   float: right;
 }
-@media only screen and (max-height: 1200px) and (min-height: 800px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 625px;
-    overflow-y: scroll;
-  }
-}
-
-@media only screen and (max-height: 800px) and (min-height: 600px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 400px;
-    overflow-y: scroll;
-  }
-}
-
-@media only screen and (max-height: 600px) and (min-height: 400px) {
-  .elements > .elementList {
-    position: relative;
-    display: block;
-    height: 300px;
-    overflow-y: scroll;
-  }
-}
 
 .planover-container {
   visibility: hidden;
@@ -444,6 +431,68 @@
   visibility: visible;
 }
 
+.new-form-dialogue {
+  border-radius: 8px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 650px;
+  height: 380px;
+  box-shadow: 0 0 16px 0 rgba(19, 38, 55, 0.1);
+  background-color: white;
+}
+
+.new-form-dialogue > .options-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.new-form-dialogue > .modal-title {
+  margin-top: 48px;
+  margin-bottom: 42px;
+  font-family: Montserrat;
+  font-size: 23px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: center;
+  color: #1c5c85;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  width: 172px;
+  height: 172px;
+  margin: auto;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  text-align: center;
+  text-align: -moz-center;
+  padding: 40px;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option {
+  cursor: pointer;
+}
+
+.new-form-dialogue > .options-wrapper > .option-container > .option-label {
+  display: inherit;
+  text-align: center;
+  font-family: Montserrat;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.83;
+  letter-spacing: normal;
+  color: #1c5c85;
+}
+
+.new-form-dialogue a {
+  text-decoration: none;
+}
+
 .terms-checkbox {
   margin-right: 8px !important;
   vertical-align: baseline;
@@ -457,4 +506,9 @@
 
 .builderStage > .branding {
   position: relative !important;
+}
+
+.fake-link {
+  color: #0645ad;
+  text-decoration: underline;
 }

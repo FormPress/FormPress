@@ -1,6 +1,6 @@
 .wrapper-questionProperties {
   margin-top: 10px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .questionPropertiesMessage {

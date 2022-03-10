@@ -1,7 +1,19 @@
 import React, { Component } from 'react'
 import CopyToClipboard from '../common/CopyToClipboard'
-
 import './ShareForm.css'
+import {
+  FacebookIcon,
+  LinkedinIcon,
+  TwitterIcon,
+  WhatsappIcon
+} from 'react-share'
+
+import {
+  FacebookShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  WhatsappShareButton
+} from 'react-share'
 
 class ShareForm extends Component {
   render() {
@@ -51,15 +63,31 @@ class ShareForm extends Component {
               <h5 className="shareFormFooterTitle">Share your form via</h5>
               <div className="shareFormButtonArea">
                 <div className="shareFormButtonCover">
-                  <button type="button" className="shareButton">
-                    <i className="fa fa-envelope"></i>
-                  </button>
-                  <button type="button" className="shareButton">
-                    <i className="fa fa-facebook-f"></i>
-                  </button>
-                  <button type="button" className="shareButton">
-                    <i className="fa fa-twitter"></i>
-                  </button>
+                  <TwitterShareButton
+                    title="Here is my most recent form, ready to be filled out!"
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <TwitterIcon size={48} round />
+                  </TwitterShareButton>
+                  <FacebookShareButton
+                    quote="Here is my most recent form, ready to be filled out!"
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <FacebookIcon size={48} round />
+                  </FacebookShareButton>
+
+                  <LinkedinShareButton
+                    title="Here is my most recent form, ready to be filled out!"
+                    url={`${hostname}/form/view/${this.props.formId}`}
+                    className="shareButton">
+                    <LinkedinIcon size={48} round />
+                  </LinkedinShareButton>
+
+                  <WhatsappShareButton
+                    title="Here is my most recent form, ready to be filled out!"
+                    url={`${hostname}/form/view/${this.props.formId}`}>
+                    <WhatsappIcon size={48} round />
+                  </WhatsappShareButton>
                 </div>
               </div>
             </div>

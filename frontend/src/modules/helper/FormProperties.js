@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
 import CapabilitiesContext from '../../capabilities.context'
+import './FormProperties.css'
 
 class FormProperties extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class FormProperties extends Component {
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
+    this.handleAddTag = this.handleAddTag.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -44,8 +46,37 @@ class FormProperties extends Component {
     })
   }
 
+  handleAddTag(e) {
+    e.preventDefault()
+    let tagsArray = []
+
+    if (this.props.form.props.tags !== undefined) {
+      const { tags } = this.props.form.props
+      tagsArray = [...tags]
+    }
+    let tag = ''
+    const regexp = /^([\w-]+)/g
+
+    const filteredTag = e.target[0].value.match(regexp)
+
+    if (filteredTag !== null) {
+      tag = filteredTag[0]
+      tagsArray.push(tag)
+    }
+
+    this.props.setFormTags(tagsArray)
+
+    e.target[0].value = ''
+  }
+
+  handleRemoveTag(i) {
+    const tagsArray = [...this.props.form.props.tags]
+    tagsArray.splice(i, 1)
+    this.props.setFormTags(tagsArray)
+  }
+
   render() {
-    const capabilities = this.props.capabilities //To be changed with capabilities middleware.
+    const capabilities = this.props.capabilities
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
@@ -80,8 +111,15 @@ class FormProperties extends Component {
       customCSS = this.props.form.props.customCSS.value
     }
 
+    let tags = []
+    if (this.props.form.props.tags !== undefined) {
+      if (this.props.form.props.tags.length !== 0) {
+        tags = this.props.form.props.tags
+      }
+    }
+
     return (
-      <div>
+      <div className="formProperties">
         <h2>Form Properties</h2>
         {capabilities.sendgridApiKey ? (
           <Renderer
@@ -146,13 +184,39 @@ class FormProperties extends Component {
                 {
                   id: 4,
                   type: 'TextArea',
-                  label: 'Add custom CSS',
+                  label: 'Custom CSS',
                   value: customCSS
                 }
               ]
             }
           }}
         />
+        <div className="tags-wrapper">
+          <div className="tags-label">
+            <span>Tags</span>
+          </div>
+          <div className="tags-list">
+            {!tags
+              ? null
+              : tags.map((tag, i) => (
+                  <span key={i} className="tag">
+                    {tag}
+                    <span
+                      key={i}
+                      className="tag-close"
+                      onClick={this.handleRemoveTag.bind(this, i)}>
+                      x
+                    </span>
+                  </span>
+                ))}
+          </div>
+          <div className="tag-controls">
+            <form onSubmit={this.handleAddTag}>
+              <input type="text" maxLength="24" />
+              <input type="submit" value="Add" />
+            </form>
+          </div>
+        </div>
       </div>
     )
   }

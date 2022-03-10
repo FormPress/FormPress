@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 .renderer.gleam {
   background-color: white;
@@ -10,7 +10,7 @@
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
-  margin: 2px 0;
+  margin: 2px 15px 2px 0px;
   position: relative;
   overflow: visible;
   display: grid;
@@ -123,6 +123,7 @@
   max-width: 728px;
 }
 .gleam.form .header.label span {
+  font-family: Montserrat;
   padding: 3px 5px;
   width: 100%;
   display: block;
@@ -270,10 +271,10 @@
 }
 .gleam .elementButton input[type='submit'],
 .gleam .elementButton input[type='submit']:focus,
-.builder.gleam .elementButton button,
-.builder.gleam .elementButton button:focus {
+.elementButton button,
+.elementButton button:focus {
   font-family: Montserrat;
-  font-weight: bold;
+  font-weight: bolder;
   padding: 5px 10px;
   font-size: 16px;
   width: 130px;
@@ -657,4 +658,17 @@
   text-align: center;
   width: 100%;
   padding-top: 20px;
+}
+input[type='file'] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 90px;
+}
+.inputContainer > span {
+  margin-left: 5px;
 }

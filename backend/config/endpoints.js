@@ -150,6 +150,23 @@ module.exports = {
       method: 'get',
       path: '/api/health',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/users/:user_id/export/forms',
+      protected: false,
+      exampleRequestPath: '/api/users/1/export/forms'
+    },
+    {
+      method: 'get',
+      path: '/templates/view/:id',
+      protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/form/element/validators',
+      protected: false,
+      exampleRequestPath: 'api/form/element/validators?elements=Button,Email'
     }
   ]
 }

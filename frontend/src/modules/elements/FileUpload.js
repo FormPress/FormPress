@@ -55,6 +55,27 @@ export default class FileUpload extends Component {
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
+    const script = (
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+          var inputElement_${config.id} = document.getElementById('q_${config.id}');
+          var selectedFile_${config.id};
+            inputElement_${config.id}.addEventListener('change', function() {
+              var fileDisplay = document.getElementById('fileDisplay_${config.id}');
+              if(inputElement_${config.id}.files.length==0) {
+                inputElement_${config.id}.files = selectedFile_${config.id};
+                fileDisplay.innerHTML = inputElement_${config.id}.files[0].name + ' selected';
+              }
+              else {
+                selectedFile_${config.id} = inputElement_${config.id}.files;
+                fileDisplay.innerHTML = inputElement_${config.id}.files[0].name + ' selected';
+              }
+            }
+          );`
+        }}
+      />
+    )
 
     const display = (
       <input type="file" name={`q_${config.id}`} id={`q_${config.id}`} />
@@ -71,7 +92,13 @@ export default class FileUpload extends Component {
           value={config.label}
           required={config.required}
         />
-        {display}
+        <div className="inputContainer">
+          <label htmlFor={`q_${config.id}`} className="custom-file-upload">
+            Browse...
+          </label>
+          {display}
+          <span id={'fileDisplay_' + config.id}>No File Chosen</span>
+        </div>
         <div className="clearfix">
           <EditableLabel
             className="sublabel"
@@ -88,6 +115,7 @@ export default class FileUpload extends Component {
           />
         </div>
         <div className="fl metadata">
+          {script}
           <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>

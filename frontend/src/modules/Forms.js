@@ -250,7 +250,7 @@ class Forms extends Component {
           />
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
-              <Link to="/editor/new/builder" className="nav_add_new_form_link">
+              <Link to="/editor/new" className="nav_add_new_form_link">
                 <div className="popover-container">
                   <FontAwesomeIcon
                     icon={faPlusCircle}
@@ -353,7 +353,7 @@ class Forms extends Component {
           </div>
           <div className="newButtonContainer">
             {roleLimit === 0 || roleLimit > forms.length ? (
-              <Link to="/editor/new/builder">Create a new form</Link>
+              <Link to="/editor/new">Create a new form</Link>
             ) : (
               <span className="disabledNewForm" title="Form limit reached">
                 Create a new form

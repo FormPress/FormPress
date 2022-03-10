@@ -62,6 +62,7 @@ class Login extends Component {
         user_id: data.user_id,
         user_role: data.user_role,
         permission: data.permission,
+        admin: data.admin,
         loggedIn: true
       })
     } else {
@@ -89,6 +90,7 @@ class Login extends Component {
         user_id: data.user_id,
         user_role: data.user_role,
         permission: data.permission,
+        admin: data.admin,
         loggedIn: true
       })
     } else {
