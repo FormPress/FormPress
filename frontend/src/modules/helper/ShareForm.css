@@ -64,17 +64,5 @@
   display: flex;
 }
 .shareButton {
-  width: 32px;
-  height: 32px;
-  margin: 0px 5px;
-  color: #8cc63f;
-  background-color: #f5f5f5;
-  outline: 0;
-  border: 0;
-}
-.shareButton:active {
-  color: #f5f5f5;
-  background-color: #8cc63f;
-  outline: 0;
-  border: 0;
+  margin-right: 20px;
 }
