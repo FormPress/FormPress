@@ -1276,7 +1276,7 @@ class Builder extends Component {
           'Loading...'
         ) : (
           <Renderer
-            className={`col-16-16 form${dragging === true ? ' dragging' : ''}`}
+            className={`col-16-16 form`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
