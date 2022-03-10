@@ -207,18 +207,14 @@ class App extends Component {
             </div>
             <div className="content">
               <Switch>
-                <PrivateRoute path="/forms">
-                  <Forms />
-                </PrivateRoute>
+                <PrivateRoute path="/forms" component={Forms} />
                 <PrivateRoute
                   path="/editor/:formId/builder/question/:questionId/properties"
                   component={Builder}
                 />
                 <PrivateRoute path="/editor/:formId" component={Builder} />
                 <PrivateRoute path="/editor" component={Builder} />
-                <PrivateRoute path="/data">
-                  <Data />
-                </PrivateRoute>
+                <PrivateRoute path="/data" component={Data} />
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={SignUp} />
                 <Route
