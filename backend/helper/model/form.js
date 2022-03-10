@@ -83,7 +83,17 @@ exports.list = async ({ user_id }) => {
                 submission
             WHERE
                 form_id = \`form\`.\`id\`
-          ) as responseCount
+          ) as responseCount,
+          (
+            SELECT
+                COUNT(*)
+            FROM
+                submission
+            WHERE
+                form_id = \`form\`.\`id\`
+            AND
+                  \`read\` = 0
+          ) as unreadCount
         FROM \`form\`
         WHERE
           user_id = ? AND 
