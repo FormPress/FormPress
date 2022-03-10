@@ -66,15 +66,13 @@ export default class FileUpload extends Component {
               if(inputElement_${config.id}.files.length==0) {
                 inputElement_${config.id}.files = selectedFile_${config.id};
                 fileDisplay.innerHTML = inputElement_${config.id}.files[0].name + ' selected';
-                console.log('if block',inputElement_${config.id}.files);
               }
               else {
                 selectedFile_${config.id} = inputElement_${config.id}.files;
                 fileDisplay.innerHTML = inputElement_${config.id}.files[0].name + ' selected';
-               console.log('else block',selectedFile_${config.id});
-           }
+              }
             }
-            );`
+          );`
         }}
       />
     )
