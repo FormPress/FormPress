@@ -95,6 +95,14 @@
   color: #a0a0a0;
 }
 
+.data > .dataContent > .submissionSelector > .submissionActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e2e2e2;
+}
+
 .data > .dataContent > .submissionSelector > .submissionActions > * {
   padding: 16px;
   color: #646464;
@@ -105,9 +113,11 @@
   > .dataContent
   > .submissionSelector
   > .submissionActions
-  > .buttonContainer {
-  text-align: right;
-  padding: 16px 0px 16px;
+  > .buttonContainer
+  > button {
+  font-size: 13px;
+  width: 100px;
+  height: 40px;
 }
 
 .data
@@ -160,6 +170,20 @@
   .deleteSubmissionButton.disabled {
   cursor: not-allowed;
   background-color: #ccc;
+}
+
+.data > .dataContent > .submissionSelector > .fp_table > tbody > .submission {
+  color: #1c5c85;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .fp_table
+  > tbody
+  > .submission.read
+  * {
+  color: grey;
 }
 
 .data > .dataContent > .entriesViewer,
@@ -424,4 +448,97 @@
   font-size: 16px;
   margin: auto;
   position: relative;
+}
+
+.dataContent > .submissionSelector > .unreadSwitchContainer > .unreadSwitch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 24px;
+}
+
+.dataContent
+  > .submissionSelector
+  > .unreadSwitchContainer
+  > .unreadSwitch
+  input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.unreadSwitchContainer > .unreadSwitch > .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.unreadSwitchContainer > .unreadSwitch > .slider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.unreadSwitchContainer > .unreadSwitch > input:checked + .slider {
+  background-color: #1c5c85;
+}
+
+.unreadSwitchContainer > .unreadSwitch > input:focus + .slider {
+  box-shadow: 0 0 1px #1c5c85;
+}
+
+.dataContent > .submissionSelector > .unreadSwitchContainer {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  margin-bottom: 5px;
+}
+
+.dataContent > .submissionSelector > .unreadSwitchContainer > label {
+  margin-right: 5px;
+}
+
+.dataContent
+  > .submissionSelector
+  > .unreadSwitchContainer
+  > .unreadSwitchLabel {
+  color: #646464;
+}
+
+.dataContent
+  > .submissionSelector
+  > .unreadSwitchContainer
+  > .unreadSwitchLabel.active {
+  color: #1c5c85;
+}
+
+.dataContent
+  > .submissionSelector
+  > .unreadSwitchContainer
+  > .unreadSwitch
+  > input:checked
+  + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
