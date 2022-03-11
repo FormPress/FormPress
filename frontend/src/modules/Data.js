@@ -8,8 +8,7 @@ import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
-import createHistory from 'history/createBrowserHistory'
-
+import { createBrowserHistory } from 'history'
 import './Data.css'
 
 const getStartOfToday = () => {
@@ -119,7 +118,7 @@ class Data extends Component {
 
   componentDidMount() {
     // clear location state on page refresh
-    const history = createHistory()
+    const history = createBrowserHistory()
     if (history.location.state) {
       let state = undefined
       history.replace({ ...history.location, state })
