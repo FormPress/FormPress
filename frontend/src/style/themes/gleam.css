@@ -17,11 +17,11 @@
   border: 2px solid transparent;
 }
 .gleam.form > .element.requiredError {
-  border: 1px solid red;
   background-color: #ffbebb;
+  border-radius: 3px;
 }
 
-.gleam.form > .element.invalidError > .input {
+.gleam.form > .element.invalidError > .input > input {
   border-radius: 5px;
   border: 2px solid red;
 }
