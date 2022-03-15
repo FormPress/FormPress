@@ -12,7 +12,7 @@
     const id = elem.id
     const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
 
-    if (elemHelpers === 'unset') {
+    if (elemHelpers.isValid === undefined) {
       continue
     }
 

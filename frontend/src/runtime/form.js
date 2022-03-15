@@ -92,9 +92,15 @@
     return value
   })
 
-  const formHasValidators = !Object.values(window.FP_ELEMENT_HELPERS).every(
-    (value) => value === 'unset'
-  )
+  let formHasValidators = false
+
+  for (const helper in FP_ELEMENT_HELPERS) {
+    if (FP_ELEMENT_HELPERS.hasOwnProperty(helper)) {
+      if (FP_ELEMENT_HELPERS[helper].isValid) {
+        formHasValidators = true
+      }
+    }
+  }
 
   const extensionstoLoad = []
 
