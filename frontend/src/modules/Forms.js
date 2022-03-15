@@ -58,6 +58,7 @@ class Forms extends Component {
     }
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloneFormTitleChange = this.handleCloneFormTitleChange.bind(this)
+    this.handleCountSubmissions = this.handleCountSubmissions.bind(this)
   }
 
   handleFormCloneClick(form, e) {
@@ -230,6 +231,29 @@ class Forms extends Component {
     this.setState({ isModalOpen: false, modalContent: {} })
   }
 
+  handleCountSubmissions(value) {
+    let newValue = value
+    if (value >= 1000) {
+      const suffixes = ['', 'k', 'm', 'b', 't']
+      const suffixNum = Math.floor((('' + value).length - 1) / 3)
+      let shortValue = ''
+      let precision = 3
+      shortValue = parseFloat(
+        (suffixNum !== 0
+          ? value / Math.pow(1000, suffixNum)
+          : value
+        ).toPrecision(precision)
+      )
+      if (shortValue / 10 < 1) {
+        shortValue = shortValue.toFixed(2)
+      } else if (shortValue / 100 < 1) {
+        shortValue = shortValue.toFixed(1)
+      }
+      newValue = shortValue + suffixes[suffixNum]
+    }
+    return newValue
+  }
+
   render() {
     const { forms } = this.state
     let roleLimit = 2
@@ -286,11 +310,28 @@ class Forms extends Component {
                 {
                   label: 'Responses',
                   content: (form) => (
-                    <div
-                      className={`responseCount${
-                        form.responseCount === 0 ? ' zero' : ''
-                      }`}>
-                      {form.responseCount}
+                    <div className="responsesContainer">
+                      <Link
+                        to={{
+                          pathname: '/data',
+                          state: {
+                            form_id: form.id,
+                            submissionFilterSelectors: { showUnread: false }
+                          }
+                        }}
+                        className={`responseCount${
+                          form.responseCount === 0 ? ' zero' : ''
+                        }`}
+                        title="View this submissions of this form.">
+                        {this.handleCountSubmissions(form.responseCount)}
+                      </Link>
+                      {form.unreadCount > 0 ? (
+                        <span
+                          className="unreadBadge"
+                          title="Unread submissions">
+                          {form.unreadCount > 99 ? '99' : form.unreadCount}
+                        </span>
+                      ) : null}
                     </div>
                   ),
                   className: 'responses'
