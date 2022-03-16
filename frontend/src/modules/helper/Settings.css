@@ -94,7 +94,7 @@
   width: 24px;
   height: 24px;
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   padding: 26px 0 0 3px;
   cursor: pointer;
   border-radius: 50%;
