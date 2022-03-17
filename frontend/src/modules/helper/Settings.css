@@ -122,6 +122,10 @@
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 15%);
 }
 
+.payment .hidden{
+  display: none;
+}
+
 .payment_invoice {
   background-image: url(https://static.formpress.org/images/invoice-icon.png);
   background-position: center center;
