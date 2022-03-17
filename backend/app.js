@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const fs = require('fs')
-const cors = require('cors');
+const cors = require('cors')
 
 const fileUpload = require('express-fileupload')
 const transform = require(path.resolve('script', 'babel-transform'))
@@ -66,7 +66,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use(cors());
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(fileUpload())

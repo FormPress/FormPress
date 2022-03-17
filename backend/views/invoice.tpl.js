@@ -1,6 +1,5 @@
-module.exports = (data) => {
-	const today = new Date();
-	return `
+module.exports = () => {
+  return `
 		<!DOCTYPE html>
 		<html lang="en">
 			<head>
