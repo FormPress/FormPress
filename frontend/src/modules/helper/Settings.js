@@ -12,11 +12,8 @@ class Settings extends Component {
       resource: `/api/app/get/settingsPluginfileslist`
     })
 
-    console.log('incoming list ', data)
-
     data.forEach((file) => {
       import('../settings/' + file).then((module) => {
-        console.log('Incoming component m', module)
         const newSettingComponents = [
           ...this.state.settingComponents,
           {
@@ -26,7 +23,6 @@ class Settings extends Component {
           }
         ]
 
-        console.log('Setting newSettingComponents ', newSettingComponents)
         this.setState({
           settingComponents: newSettingComponents
         })
