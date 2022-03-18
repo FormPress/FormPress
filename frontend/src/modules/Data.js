@@ -8,7 +8,7 @@ import { api } from '../helper'
 import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
-
+import { createBrowserHistory } from 'history'
 import './Data.css'
 
 const getStartOfToday = () => {
@@ -86,18 +86,66 @@ class Data extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
+    let submissions = data
+    const { submissionFilterSelectors } = this.state
+    const filterActive = !Object.values(submissionFilterSelectors).every(
+      (selector) => selector === false
+    )
+
+    if (filterActive) {
+      let submissionFilterParams = {}
+
+      if (submissionFilterSelectors.showUnread) {
+        submissionFilterParams.read = 0
+      }
+      submissions = submissions.filter((submission) => {
+        let result = true
+        Object.keys(submissionFilterParams).forEach((key) => {
+          if (submissionFilterParams[key] !== undefined) {
+            if (submission[key] !== submissionFilterParams[key]) {
+              result = false
+            }
+          }
+        })
+
+        return result
+      })
+    }
+
     this.setLoadingState('submissions', false)
-    this.setState({ submissions: data })
+    this.setState({ submissions })
   }
 
   componentDidMount() {
-    this.updateForms()
+    // clear location state on page refresh
+    const history = createBrowserHistory()
+    if (history.location.state) {
+      let state = undefined
+      history.replace({ ...history.location, state })
+    }
+
+    if (this.props.location.state) {
+      const { form_id, submissionFilterSelectors } = this.props.location.state
+
+      this.updateForms()
+
+      this.setState({
+        selectedFormId: form_id
+      })
+      this.setState({
+        submissionFilterSelectors
+      })
+      this.updateSubmissions(form_id)
+    } else {
+      this.updateForms()
+    }
   }
 
   constructor(props) {
     super(props)
     this.state = {
       formSelectorOpen: false,
+      submissionFilterSelectors: { showUnread: false },
       forms: [],
       selectedFormId: null,
       selectedSubmission: null,
@@ -119,6 +167,7 @@ class Data extends Component {
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
   }
 
   handleFormClick(form) {
@@ -143,6 +192,7 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
+    const { submissionFilterSelectors } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
 
@@ -205,7 +255,16 @@ class Data extends Component {
       })
     })
 
-    this.updateSubmissionsSeamless(form_id)
+    const filterActive = !Object.values(submissionFilterSelectors).every(
+      (selector) => selector === false
+    )
+
+    // If filter is active, send request to backend but do not update state
+    if (filterActive) {
+      document.querySelector(`.s_${id}`).classList.add('read')
+    } else {
+      this.updateSubmissionsSeamless(form_id)
+    }
   }
 
   async handleCSVExportClick() {
@@ -316,10 +375,17 @@ class Data extends Component {
     this.setState({ isModalOpen: false, modalContent: {} })
   }
 
+  handleUnreadFilterToggle(e) {
+    const { selectedFormId, submissionFilterSelectors } = this.state
+    e.value = !e.value
+    submissionFilterSelectors.showUnread = e.value
+    this.setState({ submissionFilterSelectors })
+    this.updateSubmissions(selectedFormId)
+  }
+
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
-    const submissions =
-      loading.submissions === true ? 'Loading...' : this.renderSubmissions()
+    const submissions = this.renderSubmissions()
     const entries =
       loading.entries === true ? 'Loading...' : this.renderEntries()
     let formSelectorText = 'Please select form'
@@ -382,13 +448,7 @@ class Data extends Component {
           </div>
         </div>
         <div className="cw center grid dataContent">
-          <div className="submissionSelector col-5-16">
-            {this.state.submissions.length === 0 ? (
-              <div className="noData">No data</div>
-            ) : (
-              submissions
-            )}
-          </div>
+          <div className="submissionSelector col-5-16">{submissions}</div>
           <div className="entriesViewer col-11-16">{entries}</div>
         </div>
       </div>
@@ -399,7 +459,10 @@ class Data extends Component {
     const {
       submissions,
       selectedSubmissionId,
-      selectedSubmissionIds
+      selectedSubmissionIds,
+      selectedFormId,
+      submissionFilterSelectors,
+      loading
     } = this.state
     let checkAllProps = { checked: true }
 
@@ -410,8 +473,8 @@ class Data extends Component {
       }
     }
 
-    if (submissions.length === 0) {
-      return null
+    if (selectedFormId === null) {
+      return <div className="noData">No data</div>
     }
 
     const csvExportClassNames = ['csvExportButton']
@@ -453,68 +516,102 @@ class Data extends Component {
           </button>
         </div>
       </div>,
-      <Table
-        key="table"
-        onTrClick={this.handleSubmissionClick}
-        getTrClassName={(submission) =>
-          submission.id === selectedSubmissionId ? 'selected' : undefined
-        }
-        columns={[
-          {
-            label: (
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  if (e.target.checked === true) {
-                    this.setState({
-                      selectedSubmissionIds: submissions.map(
-                        (submission) => submission.id
-                      )
-                    })
-                  } else {
-                    this.setState({
-                      selectedSubmissionIds: []
-                    })
-                  }
-                }}
-                {...checkAllProps}
-              />
-            ),
-            content: (submission) => {
-              const props = { checked: false }
+      <div key="unreadSwitchContainer" className="unreadSwitchContainer">
+        <label className="unreadSwitch" id="unreadSwitch">
+          <input
+            type="checkbox"
+            name="unreadSwitch"
+            checked={submissionFilterSelectors.showUnread}
+            value="unread"
+            onChange={this.handleUnreadFilterToggle}
+          />
+          <span className="slider round" />
+        </label>
+        <label
+          key="unreadSwitchLabel"
+          className={`unreadSwitchLabel ${
+            submissionFilterSelectors.showUnread ? ' active' : ''
+          } `}>
+          Show unread only
+        </label>
+      </div>,
+      loading.submissions === false && submissions.length > 0 ? (
+        <Table
+          key="table"
+          onTrClick={this.handleSubmissionClick}
+          getTrClassName={(submission) => {
+            let classNames = ['submission', `s_${submission.id}`]
+            if (selectedSubmissionId === submission.id) {
+              classNames.push('selected')
+            }
 
-              if (selectedSubmissionIds.includes(submission.id)) {
-                props.checked = true
-              }
+            if (submission.read === 1) {
+              classNames.push('read')
+            }
 
-              return (
+            return classNames.join(' ')
+          }}
+          columns={[
+            {
+              label: (
                 <input
                   type="checkbox"
-                  onChange={this.toggleSubmission.bind(this, submission.id)}
-                  {...props}
+                  onChange={(e) => {
+                    if (e.target.checked === true) {
+                      this.setState({
+                        selectedSubmissionIds: submissions.map(
+                          (submission) => submission.id
+                        )
+                      })
+                    } else {
+                      this.setState({
+                        selectedSubmissionIds: []
+                      })
+                    }
+                  }}
+                  {...checkAllProps}
                 />
-              )
+              ),
+              content: (submission) => {
+                const props = { checked: false }
+
+                if (selectedSubmissionIds.includes(submission.id)) {
+                  props.checked = true
+                }
+
+                return (
+                  <input
+                    type="checkbox"
+                    onChange={this.toggleSubmission.bind(this, submission.id)}
+                    {...props}
+                  />
+                )
+              },
+              className: 'text_center'
             },
-            className: 'text_center'
-          },
-          {
-            label: 'Response Date',
-            content: (submission) => [
-              <Moment fromNow ago date={submission.created_at} key="1" />,
-              <span key="2">{' ago'}</span>
-            ]
-          },
-          {
-            label: '',
-            content: () => [
-              <span className="table_caret_right" key="1">
-                {'>'}
-              </span>
-            ]
-          }
-        ]}
-        data={submissions}
-      />
+            {
+              label: 'Response Date',
+              content: (submission) => [
+                <Moment fromNow ago date={submission.created_at} key="1" />,
+                <span key="2">{' ago'}</span>
+              ]
+            },
+            {
+              label: '',
+              content: () => [
+                <span className="table_caret_right" key="1">
+                  {'>'}
+                </span>
+              ]
+            }
+          ]}
+          data={submissions}
+        />
+      ) : loading.submissions === true ? (
+        'Loading...'
+      ) : (
+        'No submissions'
+      )
     ]
   }
 

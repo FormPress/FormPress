@@ -47,6 +47,7 @@
   position: sticky;
   position: -webkit-sticky;
   top: 86px;
+  z-index: 10;
 }
 
 .forms table.fp_table > tbody > tr > td.name {
@@ -72,8 +73,26 @@
 .forms table.fp_table > tbody > tr:hover .name > a {
   color: #45799a;
 }
+.forms table.fp_table > tbody > tr > td.responses > .responsesContainer {
+  display: flex;
+}
+.unreadBadge {
+  min-width: 20px;
+  height: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  line-height: 1.36;
+  background-color: #d93434ff;
+  border-radius: 50%;
+  transform: translate(-12px, -6px);
+  border: 0.15rem solid white;
+  text-rendering: optimizeLegibility;
+}
 
 .forms table.fp_table > tbody > tr {
+  line-height: 20px;
   transition: transform 0.2s;
 }
 
@@ -83,8 +102,25 @@
 }
 
 .forms table.fp_table .responseCount {
+  /*background-color: #1c5c85;*/
+  display: block;
+  text-decoration: none;
+  color: #1c5c85;
+  font-size: 16px;
+  border-radius: 12px;
+  width: 54px;
+  height: 29px;
+  line-height: 28px;
+  text-align: center;
+  font-weight: bold;
+  border: 2px solid;
+}
+
+.forms table.fp_table .unreadCount {
+  display: block;
+  text-decoration: none;
   background-color: #1c5c85;
-  color: #ffffff;
+  color: white;
   font-size: 18px;
   border-radius: 10px;
   width: 57px;
@@ -94,7 +130,7 @@
   font-weight: bold;
 }
 
-.forms table.fp_table .responseCount.zero {
+.forms table.fp_table .unreadCount.zero {
   background-color: #c9c9c9;
 }
 

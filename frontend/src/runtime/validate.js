@@ -30,10 +30,10 @@
 
       if (elemHelpers.isFilled(value)) {
         valids[id].valid === true
-          ? containerElem.classList.remove('requiredError')
-          : containerElem.classList.add('requiredError')
+          ? containerElem.classList.remove('invalidError')
+          : containerElem.classList.add('invalidError')
       } else {
-        containerElem.classList.remove('requiredError')
+        containerElem.classList.remove('invalidError')
         valids[id].valid = true
       }
     })
@@ -44,10 +44,10 @@
 
       if (elemHelpers.isFilled(value)) {
         valids[id].valid === true
-          ? containerElem.classList.remove('requiredError')
-          : containerElem.classList.add('requiredError')
+          ? containerElem.classList.remove('invalidError')
+          : containerElem.classList.add('invalidError')
       } else {
-        containerElem.classList.remove('requiredError')
+        containerElem.classList.remove('invalidError')
         valids[id].valid = true
       }
     })
@@ -73,7 +73,7 @@
       event.preventDefault()
 
       for (const elem of errorsToTrigger) {
-        document.getElementById(`qc_${elem}`).classList.add('requiredError')
+        document.getElementById(`qc_${elem}`).classList.add('invalidError')
       }
 
       return false
