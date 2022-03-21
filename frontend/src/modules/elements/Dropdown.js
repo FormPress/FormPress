@@ -25,6 +25,17 @@ export default class Dropdown extends Component {
     return entry.value
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const dropdown = document.getElementById(`q_${id}`)
+
+      return dropdown.value
+    },
+    isFilled: (value) => {
+      return value.trim() !== 'choose-disabled'
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
