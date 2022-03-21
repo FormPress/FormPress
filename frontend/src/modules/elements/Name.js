@@ -62,6 +62,29 @@ export default class Name extends Component {
     }
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const values = []
+
+      const firstName = document.querySelector(`#fname_${id}`)
+      const lastName = document.querySelector(`#lname_${id}`)
+      const prefix = document.querySelector(`#prefix_${id}`)
+
+      values.push(firstName, lastName)
+
+      if (prefix.parentElement.classList.contains('hidden') === false) {
+        values.push(prefix)
+      }
+
+      return values
+    },
+    isFilled: (value) => {
+      return !value.some(
+        (item) => item.value.trim() === '' || item.value === 'choose-disabled'
+      )
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
