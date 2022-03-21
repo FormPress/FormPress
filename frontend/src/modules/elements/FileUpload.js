@@ -44,6 +44,16 @@ export default class FileUpload extends Component {
     }
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const fileUpload = document.getElementById(`q_${id}`)
+      return fileUpload.value
+    },
+    isFilled: (value) => {
+      return value.trim() !== ''
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
