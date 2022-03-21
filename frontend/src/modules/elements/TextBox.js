@@ -17,6 +17,16 @@ export default class TextBox extends Component {
     return entry.value
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const textBox = document.getElementById(`q_${id}`)
+      return textBox.value
+    },
+    isFilled: (value) => {
+      return value.trim() !== ''
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
