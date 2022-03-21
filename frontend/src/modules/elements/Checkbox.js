@@ -35,6 +35,18 @@ export default class Checkbox extends Component {
     return true
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const nodeList = document.getElementsByName(`q_${id}`)
+      const checkboxes = Array.from(nodeList)
+
+      return checkboxes
+    },
+    isFilled: (value) => {
+      return value.every((item) => item.checked)
+    }
+  }
+
   static dataContentOrganizer(dataContentValue, element) {
     const tempContentValue = cloneDeep(dataContentValue)
     let returnContent = []
