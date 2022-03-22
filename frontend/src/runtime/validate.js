@@ -1,11 +1,8 @@
 ;(async () => {
   const valids = {}
-  let formHasRequiredField = false
 
-  for (const elem of FORMPRESS.elements) {
-    if (elem.required === true) {
-      formHasRequiredField = true
-    }
+  const additionalElemEventListeners = {
+    Email: ['input']
   }
 
   for (const elem of FORMPRESS.elements) {
@@ -21,10 +18,9 @@
       valid: true
     }
 
-    const domElem = document.getElementById(`q_${id}`)
     const containerElem = document.getElementById(`qc_${id}`)
 
-    domElem.addEventListener('blur', () => {
+    containerElem.addEventListener('change', () => {
       let value = elemHelpers.getElementValue(id)
       valids[id].valid = elemHelpers.isValid(value)
 
@@ -38,19 +34,23 @@
       }
     })
 
-    domElem.addEventListener('keyup', () => {
-      let value = elemHelpers.getElementValue(id)
-      valids[id].valid = elemHelpers.isValid(value)
+    if (additionalElemEventListeners[elem.type]) {
+      additionalElemEventListeners[elem.type].forEach((eventListener) => {
+        containerElem.addEventListener(eventListener, () => {
+          let value = elemHelpers.getElementValue(id)
+          valids[id].valid = elemHelpers.isValid(value)
 
-      if (elemHelpers.isFilled(value)) {
-        valids[id].valid === true
-          ? containerElem.classList.remove('invalidError')
-          : containerElem.classList.add('invalidError')
-      } else {
-        containerElem.classList.remove('invalidError')
-        valids[id].valid = true
-      }
-    })
+          if (elemHelpers.isFilled(value)) {
+            valids[id].valid === true
+              ? containerElem.classList.remove('invalidError')
+              : containerElem.classList.add('invalidError')
+          } else {
+            containerElem.classList.remove('invalidError')
+            valids[id].valid = true
+          }
+        })
+      })
+    }
   }
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
@@ -70,17 +70,26 @@
     }
 
     if (allValid === false) {
-      event.preventDefault()
+      FORMPRESS.validateGoodToGo = false
 
       for (const elem of errorsToTrigger) {
         document.getElementById(`qc_${elem}`).classList.add('invalidError')
       }
 
-      return false
-    } else {
-      if (!formHasRequiredField) {
-        form.submit()
+      const firstRequiredError = document.querySelector(`.requiredError`)
+      const firstInvalidError = document.querySelector(`.invalidError`)
+
+      if (firstInvalidError) {
+        // required errors have the priority
+        if (!firstRequiredError) {
+          firstInvalidError.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          })
+        }
       }
+    } else {
+      FORMPRESS.validateGoodToGo = true
     }
   })
 })()
