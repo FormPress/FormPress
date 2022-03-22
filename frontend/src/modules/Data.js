@@ -124,7 +124,7 @@ class Data extends Component {
       history.replace({ ...history.location, state })
     }
 
-    if (this.props.location.state) {
+    if (this.props.location.state?.form_id) {
       const { form_id, submissionFilterSelectors } = this.props.location.state
 
       this.updateForms()
@@ -132,9 +132,13 @@ class Data extends Component {
       this.setState({
         selectedFormId: form_id
       })
-      this.setState({
-        submissionFilterSelectors
-      })
+
+      if (submissionFilterSelectors) {
+        this.setState({
+          submissionFilterSelectors
+        })
+      }
+
       this.updateSubmissions(form_id)
     } else {
       this.updateForms()
