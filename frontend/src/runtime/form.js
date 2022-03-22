@@ -69,7 +69,9 @@
     formId: FORMID,
     userId: USERID,
     BACKEND,
-    elements
+    elements,
+    requiredGoodToGo: true,
+    validateGoodToGo: true
   }
 
   const validatorsQuery = await api({
@@ -111,5 +113,15 @@
   }
 
   await Promise.all(extensionstoLoad.map(loadScript))
+
+  const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    if (FORMPRESS.requiredGoodToGo && FORMPRESS.validateGoodToGo) {
+      form.submit()
+    } else {
+      console.log('FORM IS NOT VALID')
+    }
+  })
   console.log('All dependencies are loaded')
 })()
