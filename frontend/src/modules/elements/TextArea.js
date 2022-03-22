@@ -18,13 +18,8 @@ export default class TextArea extends Component {
   }
 
   static helpers = {
-    getElementValue: (id) => {
-      const textArea = document.getElementById(`q_${id}`)
-      return textArea.value
-    },
-    isFilled: (value) => {
-      return value.trim() !== ''
-    }
+    getElementValue: 'defaultInputHelpers',
+    isFilled: 'defaultInputHelpers'
   }
 
   render() {

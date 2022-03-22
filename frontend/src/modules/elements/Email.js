@@ -14,15 +14,10 @@ export default class Email extends Component {
   }
 
   static helpers = {
-    getElementValue: (id) => {
-      const email = document.getElementById(`q_${id}`)
-      return email.value
-    },
+    getElementValue: 'defaultInputHelpers',
+    isFilled: 'defaultInputHelpers',
     isValid: (value) => {
       return value.trim().indexOf('@') > -1
-    },
-    isFilled: (value) => {
-      return value.trim() !== ''
     }
   }
 
