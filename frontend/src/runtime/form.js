@@ -88,7 +88,7 @@
   const validators = validatorsQuery.data
 
   window.FP_ELEMENT_HELPERS = JSON.parse(validators, (key, value) => {
-    if (value !== 'unset') {
+    if (value !== 'unset' && value !== 'defaultInputHelpers') {
       return eval(value)
     }
     return value
