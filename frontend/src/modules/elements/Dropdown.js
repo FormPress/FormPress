@@ -26,14 +26,8 @@ export default class Dropdown extends Component {
   }
 
   static helpers = {
-    getElementValue: (id) => {
-      const dropdown = document.getElementById(`q_${id}`)
-
-      return dropdown.value
-    },
-    isFilled: (value) => {
-      return value.trim() !== 'choose-disabled'
-    }
+    getElementValue: 'defaultInputHelpers',
+    isFilled: 'defaultInputHelpers'
   }
 
   render() {
@@ -74,8 +68,8 @@ export default class Dropdown extends Component {
                 className="dropdown-select"
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
-                defaultValue="choose-disabled">
-                <option disabled value="choose-disabled">
+                defaultValue="">
+                <option disabled value="">
                   {config.placeholder}
                 </option>
                 {options.map((item) => {
@@ -121,8 +115,8 @@ export default class Dropdown extends Component {
             className="dropdown-select"
             id={`q_${config.id}`}
             name={`q_${config.id}`}
-            defaultValue="choose-disabled">
-            <option disabled value="choose-disabled">
+            defaultValue="">
+            <option disabled value="">
               {config.placeholder}
             </option>
             {options.map((item) => {

@@ -79,9 +79,7 @@ export default class Name extends Component {
       return values
     },
     isFilled: (value) => {
-      return !value.some(
-        (item) => item.value.trim() === '' || item.value === 'choose-disabled'
-      )
+      return !value.some((item) => item.value.trim() === '')
     }
   }
 
@@ -140,8 +138,8 @@ export default class Name extends Component {
                 id={`prefix_${config.id}`}
                 name={`q_${config.id}[prefix]`}
                 key={`q_${config.id}[prefix]`}
-                defaultValue="choose-disabled">
-                <option disabled value="choose-disabled">
+                defaultValue="">
+                <option disabled value="">
                   Prefix
                 </option>
                 {options.map((item, index) => {
