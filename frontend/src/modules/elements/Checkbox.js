@@ -43,7 +43,7 @@ export default class Checkbox extends Component {
       return checkboxes
     },
     isFilled: (value) => {
-      return value.every((item) => item.checked)
+      return !value.every((item) => item.checked === false)
     }
   }
 
