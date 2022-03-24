@@ -14,7 +14,7 @@
 }
 
 .sign-up-success {
-  padding: 80px 50px 50px 50px;
+  padding: 0px 20px;
   font-size: large;
   color: #00d101;
   text-align: center;
@@ -22,7 +22,4 @@
 
 .signup-email {
   font-weight: 700;
-}
-.or-seperator {
-  margin-top: 35px;
 }

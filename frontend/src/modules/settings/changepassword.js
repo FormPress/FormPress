@@ -72,7 +72,7 @@ export default class ChangePassword extends Component {
 
     const changeSuccess = (
       <div>
-        <div>You successfully changed your password.</div>
+        <div className="reset-success">You successfully changed your password.</div>
       </div>
     )
 
@@ -127,7 +127,7 @@ export default class ChangePassword extends Component {
                   />
                 </form>
               )}
-              <p className="message-back">{message}</p>
+              <p className={`message-back message-${message.toLowerCase()}`}>{message}</p>
             </div>
           </div>
         </div>

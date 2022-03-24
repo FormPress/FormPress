@@ -10,7 +10,7 @@ class ResetPassword extends Component {
     super(props)
 
     this.state = {
-      message: 'Loading',
+      message: '',
       email: '',
       situation: 'init',
       codeCorrect: false
@@ -116,7 +116,7 @@ class ResetPassword extends Component {
                   />
                 </form>
               )}
-              <p className="message-back">{message}</p>
+              <p className={`message-back message-${message.toLowerCase()}`}>{message}</p>
               <div className="have-trouble">
                 Having trouble?
                 <span className="wip-placeholder" title="WIP">

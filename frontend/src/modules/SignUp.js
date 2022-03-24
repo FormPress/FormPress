@@ -51,7 +51,7 @@ class SignUp extends Component {
     const { email, password } = this.state
 
     const simpleEmailRegex = /^\S{1,}@\S{2,}\.\S{2,}$/
-    if (email === '') {
+    if (!email) {
       this.setState({ message: 'Please use a valid email' })
 
       return
@@ -61,7 +61,7 @@ class SignUp extends Component {
       return
     }
 
-    if (password === '' || password !== this.state.passwordRe) {
+    if (!password || password !== this.state.passwordRe) {
       this.setState({ message: 'Password should match' })
 
       return
@@ -74,7 +74,7 @@ class SignUp extends Component {
       body: { email, password }
     })
 
-    if (success === true) {
+    if (success) {
       this.setState({ success: true, state: 'done', message: data.message })
     } else {
       this.setState({ state: 'done', message: data.message })
@@ -119,7 +119,7 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    if (this.props.auth.loggedIn === true) {
+    if (this.props.auth.loggedIn) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -199,8 +199,7 @@ class SignUp extends Component {
                           {
                             id: 2,
                             type: 'Password',
-                            label: 'Password',
-                            value: this.state.password
+                            label: 'Password'
                           },
                           {
                             id: 3,
@@ -218,7 +217,7 @@ class SignUp extends Component {
                   />
                 </form>
                 {capabilities.googleCredentialsClientID ? (
-                  <div>
+                  <div className="for-sign-up">
                     <div className="or-seperator">or</div>
                     <div className="google-sign-in">
                       <LoginWithGoogle

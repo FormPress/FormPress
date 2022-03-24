@@ -14,6 +14,7 @@ const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 module.exports = (app) => {
   app.post('/api/users/signup', async (req, res) => {
     const { email, password } = req.body
+
     const db = await getPool()
 
     const result = await db.query(
@@ -22,7 +23,7 @@ module.exports = (app) => {
         FROM \`user\`
         WHERE email = ?
       `,
-      [email]
+      [email.toLowerCase()]
     )
 
     if (result.length === 0) {
@@ -32,7 +33,7 @@ module.exports = (app) => {
         INSERT INTO \`user\`
           (email, password, salt, emailVerificationCode)
         VALUES
-      ('${email}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
+      ('${email.toLowerCase()}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
       `)
 
       //adding default role 2, it should be dynamic

@@ -195,7 +195,7 @@ class Login extends Component {
               ''
             )}
             {capabilities.googleCredentialsClientID ? (
-              <div>
+              <div className="for-login">
                 <div className="or-seperator">or</div>
                 <div className="google-sign-in">
                   <LoginWithGoogle
