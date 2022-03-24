@@ -9,28 +9,12 @@
     TextBox: ['input']
   }
 
-  const defaultInputHelpers = {
-    getElementValue: (id) => {
-      const input = document.getElementById(`q_${id}`)
-      return input.value
-    },
-    isFilled: (value) => {
-      return value.trim().length > 0
-    }
-  }
-
   for (const elem of FORMPRESS.elements) {
     if (elem.required !== true) {
       continue
     }
 
     const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
-
-    Object.keys(elemHelpers).forEach((key) => {
-      if (elemHelpers[key] === 'defaultInputHelpers') {
-        elemHelpers[key] = defaultInputHelpers[key]
-      }
-    })
 
     if (elemHelpers.isFilled === undefined) {
       continue

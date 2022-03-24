@@ -94,6 +94,25 @@
     return value
   })
 
+  const defaultInputHelpers = {
+    getElementValue: (id) => {
+      const input = document.getElementById(`q_${id}`)
+      return input.value
+    },
+    isFilled: (value) => {
+      return value.trim().length > 0
+    }
+  }
+
+  // set default input helpers
+  for (const elemHelpers in FP_ELEMENT_HELPERS) {
+    for (const helper in FP_ELEMENT_HELPERS[elemHelpers]) {
+      if (FP_ELEMENT_HELPERS[elemHelpers][helper] === 'defaultInputHelpers') {
+        FP_ELEMENT_HELPERS[elemHelpers][helper] = defaultInputHelpers[helper]
+      }
+    }
+  }
+
   let formHasValidators = false
 
   for (const helper in FP_ELEMENT_HELPERS) {
