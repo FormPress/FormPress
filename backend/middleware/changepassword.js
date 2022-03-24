@@ -21,7 +21,7 @@ module.exports = (app) => {
       ) {
         res.status(403).json({ message: 'Current password is wrong.' })
       } else {
-        let pattern = /^(?=.*\d).{8,}$/;
+        let pattern = /^.{8,}$/;
         if(!pattern.test(new_password)){
           res.status(403).json({ message: 'New password must contain at least 8 characters.' })
         }else{
