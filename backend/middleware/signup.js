@@ -33,7 +33,9 @@ module.exports = (app) => {
         INSERT INTO \`user\`
           (email, password, salt, emailVerificationCode)
         VALUES
-      ('${email.toLowerCase()}', '${hash.passwordHash}', '${hash.salt}', '${verifyCode}')
+      ('${email.toLowerCase()}', '${hash.passwordHash}', '${
+        hash.salt
+      }', '${verifyCode}')
       `)
 
       //adding default role 2, it should be dynamic

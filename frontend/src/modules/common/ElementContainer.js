@@ -8,8 +8,8 @@ import {
   faClone
 } from '@fortawesome/free-solid-svg-icons'
 
- export default function ElementContainer(props) {
-  const myRef = React.createRef();
+export default function ElementContainer(props) {
+  const myRef = React.createRef()
 
   function handleDeleteClick(id, e) {
     e.stopPropagation()

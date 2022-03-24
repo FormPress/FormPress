@@ -5,7 +5,7 @@ import ElementContainer from '../common/ElementContainer'
 
 import './Password.css'
 
-function Password (props){
+function Password(props) {
   const { config, mode } = props
   const inputProps = {}
 
@@ -32,14 +32,14 @@ function Password (props){
           type="password"
           id={`q_${config.id}`}
           name={`q_${config.id}`}
-          {...inputProps || ''}
+          {...(inputProps || '')}
         />
       </div>
     </ElementContainer>
   )
 }
 
-Password.weight = 1;
+Password.weight = 1
 Password.defaultConfig = {
   id: 0,
   type: 'Password',
@@ -55,4 +55,4 @@ Password.configurableSettings = {
   }
 }
 
-export default Password;
+export default Password

@@ -127,11 +127,11 @@
 }
 
 .message-back.message-success,
-.message-back.succesfully{
+.message-back.succesfully {
   color: #8cc63f;
 }
 
-.message-back.warning{
+.message-back.warning {
   color: #ffbb33;
 }
 
@@ -143,19 +143,19 @@
   color: #a0a0a0;
 }
 
-.for-login .or-seperator{
+.for-login .or-seperator {
   margin-top: -20px;
 }
 
-.for-sign-up .or-seperator{
+.for-sign-up .or-seperator {
   margin-top: 0px;
 }
 
-.for-login + .do-not-have{
+.for-login + .do-not-have {
   margin-top: 70px;
 }
 
-.for-sign-up ~ .have-account{
+.for-sign-up ~ .have-account {
   margin-bottom: 20px;
 }
 

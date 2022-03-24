@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function EditableLabel(props){
+export default function EditableLabel(props) {
   function handleOnInput(e) {
     const limit = 256
     const text = e.target.innerText
