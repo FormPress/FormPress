@@ -23,11 +23,9 @@ module.exports = (app) => {
       } else {
         let pattern = /^.{8,}$/
         if (!pattern.test(new_password)) {
-          res
-            .status(403)
-            .json({
-              message: 'New password must contain at least 8 characters.'
-            })
+          res.status(403).json({
+            message: 'New password must contain at least 8 characters.'
+          })
         } else {
           const hash = sha512(new_password, genRandomString(128))
           await db.query(
