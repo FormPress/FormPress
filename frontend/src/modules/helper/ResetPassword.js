@@ -61,7 +61,7 @@ class ResetPassword extends Component {
 
     const resetSuccess = (
       <div>
-        <div>
+        <div className="message-back">
           You successfully changed your password. You can
           <Link to="/login">
             &nbsp;<i>login</i>

@@ -127,7 +127,8 @@
 }
 
 .message-back.message-success,
-.message-back.succesfully {
+.message-back.succesfully,
+.message-back.success{
   color: #8cc63f;
 }
 
