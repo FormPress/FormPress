@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { api } from '../../helper'
+
 import Renderer from '../Renderer'
 
 export default class ChangePassword extends Component {
