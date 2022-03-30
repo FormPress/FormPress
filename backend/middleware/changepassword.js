@@ -36,7 +36,7 @@ module.exports = (app) => {
             `,
             [hash.passwordHash, hash.salt, user_id]
           )
-          res.status(200).json({ message: 'Password changed succesfully.' })
+          res.status(200).json({ message: 'Password changed succesfully' })
         }
       }
     } else {

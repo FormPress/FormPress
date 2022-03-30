@@ -67,6 +67,15 @@ class SignUp extends Component {
       return
     }
 
+    let pattern = /^.{8,}$/
+    if (!pattern.test(password)) {
+      this.setState({
+        message: 'New password must contain at least 8 characters.'
+      })
+
+      return
+    }
+
     this.setState({ state: 'loading', message: 'Processing' })
     const { success, data } = await api({
       resource: `/api/users/signup`,
