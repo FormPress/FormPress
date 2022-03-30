@@ -25,7 +25,7 @@ module.exports = (app) => {
             res.status(403).json({
               message: 'New password must contain at least 8 characters.'
             })
-          }else{
+          } else {
             const expireDate = new Date(
               Date.parse(result[0].passwordResetCodeExpireAt)
             )
