@@ -20,24 +20,31 @@ module.exports = (app) => {
         if (result[0].passwordResetCode !== password_reset_code) {
           res.status(403).json({ message: 'Your URL seems wrong' })
         } else {
-          const expireDate = new Date(
-            Date.parse(result[0].passwordResetCodeExpireAt)
-          )
-          const currentDate = new Date(Date.now())
-
-          if (currentDate > expireDate) {
-            res.status(403).json({ message: 'Reset Link Expired' })
+          let pattern = /^.{8,}$/
+          if (!pattern.test(password)) {
+            res.status(403).json({
+              message: 'New password must contain at least 8 characters.'
+            })
           } else {
-            const hash = sha512(password, genRandomString(128))
-            await db.query(
-              `
-          UPDATE \`user\`
-          SET \`password\` = ?, \`salt\` = ?, \`emailVerified\` = 1
-          WHERE id = ?
-        `,
-              [hash.passwordHash, hash.salt, user_id]
+            const expireDate = new Date(
+              Date.parse(result[0].passwordResetCodeExpireAt)
             )
-            res.status(200).json({ message: 'Password changed succesfully' })
+            const currentDate = new Date(Date.now())
+
+            if (currentDate > expireDate) {
+              res.status(403).json({ message: 'Reset Link Expired' })
+            } else {
+              const hash = sha512(password, genRandomString(128))
+              await db.query(
+                `
+            UPDATE \`user\`
+            SET \`password\` = ?, \`salt\` = ?, \`emailVerified\` = 1
+            WHERE id = ?
+          `,
+                [hash.passwordHash, hash.salt, user_id]
+              )
+              res.status(200).json({ message: 'Password changed succesfully' })
+            }
           }
         }
       } else {

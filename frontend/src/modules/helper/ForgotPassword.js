@@ -110,11 +110,13 @@ class ForgotPassword extends Component {
                   />
                 </form>
               )}
-              <p className="message-back">{message}</p>
+              <p className={`message-back message-${message.toLowerCase()}`}>
+                {message}
+              </p>
               <div className="have-trouble">
                 Having trouble?
                 <span className="wip-placeholder" title="WIP">
-                  Contact Us
+                  <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
                 </span>
               </div>
             </div>

@@ -1,22 +1,13 @@
-import React, { Component } from 'react'
+import React from 'react'
 
-export default class EditableLabel extends Component {
-  constructor(props) {
-    super(props)
-
-    this.handleOnInput = this.handleOnInput.bind(this)
-    this.handleOnBlur = this.handleOnBlur.bind(this)
-    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
-    this.handleOnPaste = this.handleOnPaste.bind(this)
-  }
-
-  handleOnInput(e) {
+export default function EditableLabel(props) {
+  function handleOnInput(e) {
     const limit = 256
     const text = e.target.innerText
     if (text.length >= limit) {
       e.target.innerText = text.substr(0, limit)
-      this.props.handleLabelChange(
-        this.props.labelKey,
+      props.handleLabelChange(
+        props.labelKey,
         e.target.innerText
           .replace(/<span(.*?)>(.*?)<\/span>/, '')
           .replace(/(<([^>]+)>)/gi, '')
@@ -29,9 +20,9 @@ export default class EditableLabel extends Component {
     }
   }
 
-  handleOnBlur(e) {
-    this.props.handleLabelChange(
-      this.props.labelKey,
+  function handleOnBlur(e) {
+    props.handleLabelChange(
+      props.labelKey,
       e.target.innerText
         .replace(/<span(.*?)>(.*?)<\/span>/, '')
         .replace(/(<([^>]+)>)/gi, '')
@@ -39,14 +30,14 @@ export default class EditableLabel extends Component {
     )
   }
 
-  handleOnKeyDown(e) {
+  function handleOnKeyDown(e) {
     if (e.key === 'Enter') {
       e.preventDefault()
       e.target.blur()
     }
   }
 
-  handleOnPaste(e) {
+  function handleOnPaste(e) {
     e.preventDefault()
 
     // get text representation of clipboard
@@ -56,32 +47,30 @@ export default class EditableLabel extends Component {
     document.execCommand('insertHTML', false, text)
   }
 
-  render() {
-    const extraProps = {}
+  const extraProps = {}
 
-    if (this.props.mode === 'builder') {
-      extraProps.contentEditable = true
-    }
-
-    if (this.props.required === true) {
-      extraProps.className = 'required'
-    }
-
-    return (
-      <div className={this.props.className}>
-        <span
-          onInput={this.handleOnInput}
-          onBlur={this.handleOnBlur}
-          onKeyDown={this.handleOnKeyDown}
-          onPaste={this.handleOnPaste}
-          dataplaceholder={this.props.dataPlaceholder}
-          spellCheck={false}
-          suppressContentEditableWarning={true}
-          className={this.props.value === '' ? 'emptySpan' : null}
-          {...extraProps}>
-          {this.props.value}
-        </span>
-      </div>
-    )
+  if (props.mode === 'builder') {
+    extraProps.contentEditable = true
   }
+
+  if (props.required === true) {
+    extraProps.className = 'required'
+  }
+
+  return (
+    <div className={props.className}>
+      <span
+        onInput={handleOnInput.bind(this)}
+        onBlur={handleOnBlur.bind(this)}
+        onKeyDown={handleOnKeyDown.bind(this)}
+        onPaste={handleOnPaste.bind(this)}
+        dataplaceholder={props.dataPlaceholder}
+        spellCheck={false}
+        suppressContentEditableWarning={true}
+        className={props.value === '' ? 'emptySpan' : null}
+        {...extraProps}>
+        {props.value}
+      </span>
+    </div>
+  )
 }

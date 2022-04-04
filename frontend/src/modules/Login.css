@@ -52,7 +52,7 @@
   font-style: italic;
   font-weight: 500;
   font-size: 12px;
-  margin-top: -143px;
+  margin-top: -99px;
   margin-bottom: 100px;
   margin-left: 300px;
 }
@@ -86,6 +86,7 @@
   letter-spacing: normal;
   text-align: center;
   color: #113952;
+  font-style: italic;
 }
 
 .have-trouble {
@@ -125,8 +126,14 @@
   margin-bottom: 10px;
 }
 
+.message-back.message-success,
+.message-back.succesfully,
 .message-back.success {
   color: #8cc63f;
+}
+
+.message-back.warning {
+  color: #ffbb33;
 }
 
 .or-seperator {
@@ -135,7 +142,22 @@
   font-family: Montserrat;
   text-align: center;
   color: #a0a0a0;
-  margin-top: 35px;
+}
+
+.for-login .or-seperator {
+  margin-top: -20px;
+}
+
+.for-sign-up .or-seperator {
+  margin-top: 0px;
+}
+
+.for-login + .do-not-have {
+  margin-top: 70px;
+}
+
+.for-sign-up ~ .have-account {
+  margin-bottom: 20px;
 }
 
 .google-sign-in {

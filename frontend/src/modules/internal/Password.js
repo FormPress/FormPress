@@ -1,60 +1,58 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
 import './Password.css'
 
-export default class Password extends Component {
-  static weight = 1
+function Password(props) {
+  const { config, mode } = props
+  const inputProps = {}
 
-  static defaultConfig = {
-    id: 0,
-    type: 'Password',
-    label: 'Password'
+  if (typeof config.value !== 'undefined') {
+    inputProps.value = config.value
   }
 
-  static configurableSettings = {
-    required: {
-      default: true,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required'
-      }
-    }
+  if (typeof props.onChange !== 'undefined') {
+    inputProps.onChange = props.onChange
   }
 
-  render() {
-    const { config, mode } = this.props
-    const inputProps = {}
-
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
-
-    if (typeof this.props.onChange !== 'undefined') {
-      inputProps.onChange = this.props.onChange
-    }
-
-    return (
-      <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
+  return (
+    <ElementContainer type={config.type} {...props}>
+      <EditableLabel
+        className="fl label"
+        mode={mode}
+        labelKey={config.id}
+        handleLabelChange={props.handleLabelChange}
+        value={config.label}
+        required={config.required}
+      />
+      <div className="fl input">
+        <input
+          type="password"
+          id={`q_${config.id}`}
+          name={`q_${config.id}`}
+          {...(inputProps || '')}
         />
-        <div className="fl input">
-          <input
-            type="password"
-            id={`q_${config.id}`}
-            name={`q_${config.id}`}
-            {...inputProps}
-          />
-        </div>
-      </ElementContainer>
-    )
+      </div>
+    </ElementContainer>
+  )
+}
+
+Password.weight = 1
+Password.defaultConfig = {
+  id: 0,
+  type: 'Password',
+  label: 'Password'
+}
+Password.configurableSettings = {
+  required: {
+    default: true,
+    formProps: {
+      type: 'Checkbox',
+      label: 'Make this field required'
+    }
   }
 }
+
+export default Password

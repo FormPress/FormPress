@@ -179,10 +179,6 @@ class Login extends Component {
                 }}
               />
             </form>
-            <p className="message-back">
-              {state === 'loading' ? 'Loading...' : null}
-              {state === 'done' ? message : null}
-            </p>
             {capabilities.sendgridApiKey ? (
               <div className="forgot-pass" title="forgot password">
                 <span className="forgot-pass-span">
@@ -195,7 +191,7 @@ class Login extends Component {
               ''
             )}
             {capabilities.googleCredentialsClientID ? (
-              <div>
+              <div className="for-login">
                 <div className="or-seperator">or</div>
                 <div className="google-sign-in">
                   <LoginWithGoogle
@@ -209,6 +205,10 @@ class Login extends Component {
             ) : (
               ''
             )}
+            <p className="message-back">
+              {state === 'loading' ? 'Loading...' : null}
+              {state === 'done' ? message : null}
+            </p>
             <div className="do-not-have">
               Don&apos;t have an account?{' '}
               <Link to="/signup">

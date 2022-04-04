@@ -21,16 +21,23 @@ module.exports = (app) => {
       ) {
         res.status(403).json({ message: 'Current password is wrong.' })
       } else {
-        const hash = sha512(new_password, genRandomString(128))
-        await db.query(
-          `
+        let pattern = /^.{8,}$/
+        if (!pattern.test(new_password)) {
+          res.status(403).json({
+            message: 'New password must contain at least 8 characters.'
+          })
+        } else {
+          const hash = sha512(new_password, genRandomString(128))
+          await db.query(
+            `
               UPDATE \`user\`
               SET \`password\` = ?, \`salt\` = ?, \`emailVerified\` = 1
               WHERE id = ?
             `,
-          [hash.passwordHash, hash.salt, user_id]
-        )
-        res.status(200).json({ message: 'Password changed succesfully.' })
+            [hash.passwordHash, hash.salt, user_id]
+          )
+          res.status(200).json({ message: 'Password changed succesfully' })
+        }
       }
     } else {
       res.status(403).json({ message: 'User not found' })
