@@ -69,7 +69,9 @@
     formId: FORMID,
     userId: USERID,
     BACKEND,
-    elements
+    elements,
+    requiredGoodToGo: true,
+    validateGoodToGo: true
   }
 
   const validatorsQuery = await api({
@@ -86,15 +88,40 @@
   const validators = validatorsQuery.data
 
   window.FP_ELEMENT_HELPERS = JSON.parse(validators, (key, value) => {
-    if (value !== 'unset') {
+    if (value !== 'unset' && value !== 'defaultInputHelpers') {
       return eval(value)
     }
     return value
   })
 
-  const formHasValidators = !Object.values(window.FP_ELEMENT_HELPERS).every(
-    (value) => value === 'unset'
-  )
+  const defaultInputHelpers = {
+    getElementValue: (id) => {
+      const input = document.getElementById(`q_${id}`)
+      return input.value
+    },
+    isFilled: (value) => {
+      return value.trim().length > 0
+    }
+  }
+
+  // set default input helpers
+  for (const elemHelpers in FP_ELEMENT_HELPERS) {
+    for (const helper in FP_ELEMENT_HELPERS[elemHelpers]) {
+      if (FP_ELEMENT_HELPERS[elemHelpers][helper] === 'defaultInputHelpers') {
+        FP_ELEMENT_HELPERS[elemHelpers][helper] = defaultInputHelpers[helper]
+      }
+    }
+  }
+
+  let formHasValidators = false
+
+  for (const helper in FP_ELEMENT_HELPERS) {
+    if (FP_ELEMENT_HELPERS.hasOwnProperty(helper)) {
+      if (FP_ELEMENT_HELPERS[helper].isValid) {
+        formHasValidators = true
+      }
+    }
+  }
 
   const extensionstoLoad = []
 
@@ -105,5 +132,15 @@
   }
 
   await Promise.all(extensionstoLoad.map(loadScript))
+
+  const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
+  form.addEventListener('submit', (event) => {
+    event.preventDefault()
+    if (FORMPRESS.requiredGoodToGo && FORMPRESS.validateGoodToGo) {
+      form.submit()
+    } else {
+      console.log('FORM IS NOT VALID')
+    }
+  })
   console.log('All dependencies are loaded')
 })()

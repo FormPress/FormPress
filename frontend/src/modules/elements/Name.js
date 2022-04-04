@@ -62,6 +62,27 @@ export default class Name extends Component {
     }
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const values = []
+
+      const firstName = document.querySelector(`#fname_${id}`)
+      const lastName = document.querySelector(`#lname_${id}`)
+      const prefix = document.querySelector(`#prefix_${id}`)
+
+      values.push(firstName, lastName)
+
+      if (prefix.parentElement.classList.contains('hidden') === false) {
+        values.push(prefix)
+      }
+
+      return values
+    },
+    isFilled: (value) => {
+      return !value.some((item) => item.value.trim() === '')
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -117,8 +138,8 @@ export default class Name extends Component {
                 id={`prefix_${config.id}`}
                 name={`q_${config.id}[prefix]`}
                 key={`q_${config.id}[prefix]`}
-                defaultValue="choose-disabled">
-                <option disabled value="choose-disabled">
+                defaultValue="">
+                <option disabled value="">
                   Prefix
                 </option>
                 {options.map((item, index) => {

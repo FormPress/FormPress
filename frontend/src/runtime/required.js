@@ -2,331 +2,62 @@
   console.log('REQUIRED LOADED')
   const requireds = {}
 
+  const additionalElemEventListeners = {
+    Email: ['input'],
+    Name: ['input'],
+    TextArea: ['input'],
+    TextBox: ['input']
+  }
+
   for (const elem of FORMPRESS.elements) {
     if (elem.required !== true) {
       continue
     }
 
-    const id = elem.id
-    let elemActivated = false
-    const domElem = document.getElementById(`q_${id}`)
-    const containerElem = document.getElementById(`qc_${id}`)
+    const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
 
-    if (elem.type === 'Checkbox' || elem.type === 'Radio') {
-      const domNames = document.getElementsByName(`q_${id}`)
-
-      requireds[id] = {
-        id,
-        valid: false
-      }
-
-      domNames.forEach((domName) => {
-        domName.addEventListener('blur', () => {
-          if (domName.checked) {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          } else {
-            let checkedInputLength = 0
-            domNames.forEach((domName) => {
-              if (domName.checked == true) {
-                checkedInputLength++
-              }
-            })
-            if (checkedInputLength == 0) {
-              containerElem.classList.add('requiredError')
-              requireds[id].valid = false
-            }
-          }
-        })
-
-        domName.addEventListener('change', function () {
-          if (domName.checked) {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          } else {
-            let checkedInputLength = 0
-            domNames.forEach((domName) => {
-              if (domName.checked == true) {
-                checkedInputLength++
-              }
-            })
-            if (checkedInputLength == 0) {
-              containerElem.classList.add('requiredError')
-              requireds[id].valid = false
-            }
-          }
-        })
-      })
-    } else if (elem.type === 'Dropdown') {
-      requireds[id] = {
-        id,
-        valid: domElem.value.trim() !== 'choose-disabled'
-      }
-
-      domElem.addEventListener('blur', () => {
-        const value = domElem.value
-
-        if (value.trim() !== 'choose-disabled') {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-      domElem.addEventListener('change', function () {
-        const value = domElem.value
-
-        if (value.trim() !== 'choose-disabled') {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-    } else if (elem.type === 'Name') {
-      const domElem1 = containerElem.querySelector(`#fname_${id}`)
-      const domElem2 = containerElem.querySelector(`#lname_${id}`)
-      const domElem3 = containerElem.querySelector(`#prefix_${id}`)
-
-      let allowPrefix = true
-
-      if (domElem3.parentElement.classList.contains('hidden')) {
-        allowPrefix = false
-      }
-
-      requireds[id] = {
-        id,
-        valid: false
-      }
-
-      domElem1.addEventListener('blur', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
-
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
-          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-
-      domElem2.addEventListener('blur', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
-
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
-          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-
-      domElem1.addEventListener('keyup', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
-
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
-          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-
-      domElem2.addEventListener('keyup', () => {
-        let value1 = domElem1.value
-        let value2 = domElem2.value
-        let value3 = domElem3.value
-
-        if (value1.trim().length > 0 && value2.trim().length > 0) {
-          if (value3.trim() === 'choose-disabled' && allowPrefix === true) {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          } else {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          }
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-
-      if (allowPrefix) {
-        domElem3.addEventListener('blur', () => {
-          let value1 = domElem1.value
-          let value2 = domElem2.value
-          let value3 = domElem3.value
-
-          if (
-            value1.trim().length > 0 &&
-            value2.trim().length > 0 &&
-            value3.trim() !== 'choose-disabled' &&
-            allowPrefix === true
-          ) {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
-        })
-
-        domElem3.addEventListener('change', function () {
-          let value1 = domElem1.value
-          let value2 = domElem2.value
-          let value3 = domElem3.value
-
-          if (
-            value1.trim().length > 0 &&
-            value2.trim().length > 0 &&
-            value3.trim() !== 'choose-disabled'
-          ) {
-            containerElem.classList.remove('requiredError')
-            requireds[id].valid = true
-          } else {
-            containerElem.classList.add('requiredError')
-            requireds[id].valid = false
-          }
-        })
-      }
-
-      domElem1.addEventListener('focus', () => {
-        elemActivated = true
-      })
-
-      domElem2.addEventListener('focus', () => {
-        elemActivated = true
-      })
-    } else if (elem.type === 'FileUpload') {
-      requireds[id] = {
-        id,
-        valid: domElem.value.trim().length > 0
-      }
-
-      domElem.addEventListener('blur', () => {
-        const value = domElem.value
-
-        if (domElem.value.trim().length === 0) {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        }
-      })
-      domElem.addEventListener('change', function () {
-        if (domElem.value.trim().length === 0) {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        }
-      })
-    } else if (elem.type === 'Email') {
-      requireds[id] = {
-        id,
-        valid:
-          typeof elem.required === 'undefined' || elem.required === false
-            ? true
-            : false
-      }
-
-      domElem.addEventListener('blur', () => {
-        const value = domElem.value
-        if (domElem.value.trim().length > 0) {
-          requireds[id].valid =
-            domElem.value.trim().length > 2 &&
-            domElem.value.trim().indexOf('@') > -1
-
-          requireds[id].valid === true
-            ? containerElem.classList.remove('requiredError')
-            : containerElem.classList.add('requiredError')
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-
-      domElem.addEventListener('keyup', () => {
-        const value = domElem.value
-        if (domElem.value.trim().length > 0) {
-          requireds[id].valid =
-            domElem.value.trim().length > 2 &&
-            domElem.value.trim().indexOf('@') > -1
-
-          requireds[id].valid === true
-            ? containerElem.classList.remove('requiredError')
-            : containerElem.classList.add('requiredError')
-        } else {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        }
-      })
-    } else {
-      requireds[id] = {
-        id,
-        valid: domElem.value.trim().length > 0
-      }
-
-      domElem.addEventListener('blur', () => {
-        const value = domElem.value
-
-        if (value.trim().length === 0) {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        }
-      })
-
-      domElem.addEventListener('keyup', () => {
-        const value = domElem.value
-        console.log('OnChange oldi', value)
-        if (value.trim().length === 0) {
-          containerElem.classList.add('requiredError')
-          requireds[id].valid = false
-        } else {
-          containerElem.classList.remove('requiredError')
-          requireds[id].valid = true
-        }
-      })
+    if (elemHelpers.isFilled === undefined) {
+      continue
     }
 
-    if (
-      elem.type !== 'Name' &&
-      elem.type !== 'Checkbox' &&
-      elem.type !== 'Radio'
-    ) {
-      domElem.addEventListener('focus', () => {
-        elemActivated = true
+    const id = elem.id
+    const containerElem = document.getElementById(`qc_${id}`)
+    let value = elemHelpers.getElementValue(id)
+
+    requireds[id] = {
+      id,
+      valid: elemHelpers.isFilled(value)
+    }
+
+    containerElem.addEventListener('change', () => {
+      let value = elemHelpers.getElementValue(id)
+      requireds[id].valid = elemHelpers.isFilled(value)
+      let isFilled = elemHelpers.isFilled(value)
+
+      if (isFilled) {
+        requireds[id].valid = true
+        containerElem.classList.remove('requiredError')
+      } else {
+        containerElem.classList.add('requiredError')
+        requireds[id].valid = false
+      }
+    })
+
+    if (additionalElemEventListeners[elem.type]) {
+      additionalElemEventListeners[elem.type].forEach((eventListener) => {
+        containerElem.addEventListener(eventListener, () => {
+          let value = elemHelpers.getElementValue(id)
+          requireds[id].valid = elemHelpers.isFilled(value)
+          let isFilled = elemHelpers.isFilled(value)
+
+          if (isFilled) {
+            requireds[id].valid = true
+            containerElem.classList.remove('requiredError')
+          } else {
+            containerElem.classList.add('requiredError')
+            requireds[id].valid = false
+          }
+        })
       })
     }
   }
@@ -334,8 +65,6 @@
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    console.log('submit on going')
-    console.log(requireds)
     const keys = Object.keys(requireds)
     let allValid = true
     const errorsToTrigger = []
@@ -348,18 +77,24 @@
         errorsToTrigger.push(elem.id)
       }
     }
-    console.log('errorsToTrigger ', errorsToTrigger)
+
     if (allValid === false) {
-      console.log('not all valid should stop submission')
-      event.preventDefault()
+      FORMPRESS.requiredGoodToGo = false
 
       for (const elem of errorsToTrigger) {
         document.getElementById(`qc_${elem}`).classList.add('requiredError')
       }
 
-      return false
+      const firstRequiredError = document.querySelector(`.requiredError`)
+
+      if (firstRequiredError) {
+        firstRequiredError.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        })
+      }
     } else {
-      form.submit()
+      FORMPRESS.requiredGoodToGo = true
     }
   })
 })()
