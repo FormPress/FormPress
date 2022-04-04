@@ -17,6 +17,10 @@ export default class TextBox extends Component {
     return entry.value
   }
 
+  static helpers = {
+    getElementValue: 'defaultInputHelpers',
+    isFilled: 'defaultInputHelpers'
+  }
   render() {
     const { config, mode } = this.props
     const inputProps = {}

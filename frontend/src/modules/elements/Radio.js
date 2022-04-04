@@ -99,6 +99,19 @@ export default class Radio extends Component {
     })
   }
 
+  static helpers = {
+    getElementValue: (id) => {
+      const nodeList = document.getElementsByName(`q_${id}`)
+      const radioButtons = Array.from(nodeList)
+      console.log(radioButtons, 'radioButtons')
+
+      return radioButtons
+    },
+    isFilled: (value) => {
+      return !value.every((item) => item.checked === false)
+    }
+  }
+
   constructor(props) {
     super(props)
 

@@ -25,6 +25,11 @@ export default class Dropdown extends Component {
     return entry.value
   }
 
+  static helpers = {
+    getElementValue: 'defaultInputHelpers',
+    isFilled: 'defaultInputHelpers'
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -63,8 +68,8 @@ export default class Dropdown extends Component {
                 className="dropdown-select"
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
-                defaultValue="choose-disabled">
-                <option disabled value="choose-disabled">
+                defaultValue="">
+                <option disabled value="">
                   {config.placeholder}
                 </option>
                 {options.map((item) => {
@@ -110,8 +115,8 @@ export default class Dropdown extends Component {
             className="dropdown-select"
             id={`q_${config.id}`}
             name={`q_${config.id}`}
-            defaultValue="choose-disabled">
-            <option disabled value="choose-disabled">
+            defaultValue="">
+            <option disabled value="">
               {config.placeholder}
             </option>
             {options.map((item) => {

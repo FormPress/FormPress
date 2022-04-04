@@ -362,10 +362,6 @@
   white-space: break-spaces;
 }
 
-.gleam .elementCheckbox.requiredError .input .checkbox-label {
-  border: 1px solid #ffb2b2;
-}
-
 .gleam.form
   .elementRadio
   .input
