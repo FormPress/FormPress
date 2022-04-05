@@ -19,14 +19,14 @@
       {
         "id": 4,
         "type": "TextArea",
-        "label": "First of all, could you tell us what exact product/service/plan of ours did you purchase or use?",
+        "label": "Firstly, what service of ours have you been using?",
         "required": true,
         "requiredText": ""
       },
       {
         "id": 5,
         "type": "Radio",
-        "label": "Based on your overall experience, how would you rate our product / service?",
+        "label": "Overall, how would you rate our service?",
         "options": [
           "Pretty bad",
           "Somewhat bad",
@@ -40,7 +40,7 @@
       {
         "id": 10,
         "type": "Radio",
-        "label": "How would you rate the general smoothness of our product (ease of use, user interface, functionality, etc.)?",
+        "label": "How would you rate our service in terms of smoothness(UI, UX, functionality, etc.)?",
         "options": [
           "Overwhelmingly difficult",
           "Somewhat difficult",
@@ -54,7 +54,7 @@
       {
         "id": 6,
         "type": "Radio",
-        "label": "Would you be willing to use our product / service in the future?",
+        "label": "Would you be willing to use our service in the future?",
         "options": [
           "Absolutely not",
           "Unlikely",
@@ -68,7 +68,7 @@
       {
         "id": 7,
         "type": "Radio",
-        "label": "Would you recommend our product / service?",
+        "label": "Would you recommend our service to others?",
         "options": [
           "Absolutely not",
           "Unlikely",
@@ -82,15 +82,20 @@
       {
         "id": 8,
         "type": "Radio",
-        "label": "How long have you been using our product / service?",
-        "options": ["Days only", "Weeks", "Months", "Over a year"],
+        "label": "How long have you been using our service?",
+        "options": [
+          "Days only",
+          "Weeks",
+          "Months",
+          "Over a year"
+        ],
         "required": true,
         "requiredText": "Please pick an option."
       },
       {
         "id": 9,
         "type": "Radio",
-        "label": "And, how often do you use our product / service?",
+        "label": "And, how often do you use our service?",
         "options": [
           "Every day",
           "Few times a week",
@@ -103,7 +108,7 @@
       {
         "id": 11,
         "type": "TextArea",
-        "label": "Overall, what would you say about the pros of our product / service?",
+        "label": "Overall, what would you say about the pros of our service?",
         "required": false
       },
       {
@@ -114,13 +119,13 @@
       {
         "id": 13,
         "type": "TextArea",
-        "label": "If you'd like to add any comments or suggestions to help us improve our product / service, please feel comfortable to do so! We'd very much appreciate it.",
+        "label": "If you wish to add any comments or suggestions, feel free to do so! We'd very much appreciate it.",
         "required": false
       },
       {
         "id": 14,
         "type": "TextBox",
-        "label": "We value your feedbacks and opinions. If you took the time to take this survey, thank you very much !"
+        "label": "We value your feedback. If you took the time for this survey, thank you very much !"
       },
       {
         "id": 2,
@@ -132,6 +137,8 @@
       "value": "",
       "isEncoded": false
     },
-    "tags": ["feedback"]
+    "tags": [
+      "feedback"
+    ]
   }
 }
