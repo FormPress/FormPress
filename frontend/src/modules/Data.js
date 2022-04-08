@@ -175,7 +175,7 @@ class Data extends Component {
   }
 
   handleFormClick(form) {
-    this.setState({ formSelectorOpen: false })
+    this.setState({ formSelectorOpen: false, selectedSubmissionIds: []})
     this.updateSubmissions(form.id)
   }
 
