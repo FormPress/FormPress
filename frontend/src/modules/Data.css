@@ -67,10 +67,77 @@
   border: 1px solid black;
 }
 
-.data > .dataContent {
+.data > .dataContent, .data > .dataStatistics {
   margin-top: 60px;
   background-color: white;
   box-shadow: 0 4px 1px 0 rgba(69, 121, 154, 0.2);
+}
+
+.data > .dataStatistics > .selectedSubmissionStatistics{
+  font-family: sans-serif;
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+.data .statisticsContainer .questionContainer {
+  border-top: 1px solid #eaeaea;
+}
+
+.data .statisticsContainer .questionContainer .question{
+  padding: 20px 0 10px;
+}
+
+.recharts-legend-wrapper{
+  top: 35px !important;
+}
+
+.data > .dataStatistics > .selectedSubmissionStatistics > .submissionResponsesContainer{
+  position: relative;
+  width: 100%;
+  background-color: #f8f8f8;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.recharts-legend-item-text{
+  width: 200px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.data > .dataStatistics > .selectedSubmissionStatistics > .submissionResponsesContainer > .submissionResponsesDetails{
+  display: flex;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: space-around;
+  outline: transparent solid 1px;
+  flex-flow: row nowrap;
+}
+.data > .dataStatistics > .selectedSubmissionStatistics > .submissionResponsesContainer > .submissionResponsesDetails > *{
+  width: 33%;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.data .detailLabel{
+  font-size: 28px;
+  color: #1c5c85;
+  line-height: 32px;
+  margin-bottom: 5px;
+}
+
+.data .detailSublabel{
+  font-size: 15px;
+  color: #616161;
+  line-height: 20px;
 }
 
 .data > .dataContent table.fp_table > tbody > tr {

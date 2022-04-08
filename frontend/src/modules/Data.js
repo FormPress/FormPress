@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
@@ -9,6 +9,8 @@ import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
+
+import { LineChart, Line, XAxis, YAxis, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import './Data.css'
 
 const getStartOfToday = () => {
@@ -25,6 +27,42 @@ const getNumberOfSubmissionsToday = (submissions) => {
     .map((submission) => new Date(submission.created_at).getTime())
     .filter((ts) => ts > startOfToday).length
 }
+
+//dummy variables and functions start
+
+const data1 = [];
+const data2 = [];
+
+const rand = 300;
+for (let i = 0; i < 7; i++) {
+  let d = {
+    year: 2000 + i,
+    value: { x: Math.random() * (rand + 50) + 100 }
+  };
+
+  data1.push(d);
+}
+
+for (let i = 0; i < 7; i++) {
+  let d = {
+    year: 2000 + i,
+    value: { x: Math.random() * (rand + 50) + 100 }
+  };
+
+  data2.push(d);
+}
+
+const getXValueData1 = (data) => {
+  const index = data1.findIndex((obj) => obj.year === data.year);
+  return data1[index].value.x;
+};
+
+const getXValueData2 = (data) => {
+  const index = data2.findIndex((obj) => obj.year === data.year);
+  return data2[index].value.x;
+};
+
+//dummy variables and functions end
 
 function download(filename, text) {
   var element = document.createElement('a')
@@ -387,6 +425,43 @@ class Data extends Component {
     this.updateSubmissions(selectedFormId)
   }
 
+  COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF'];
+
+  pieData = [
+      {
+          "name": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.",
+          "value": 68.85
+      },
+      {
+          "name": "Firefox",
+          "value": 7.91
+      },
+      {
+          "name": "Edge",
+          "value": 6.85
+      },
+      {
+          "name": "Internet Explorer",
+          "value": 6.14
+      },
+      {
+          "name": "Others",
+          "value": 10.25
+      }
+  ];
+
+  CustomTooltip = ({ active, payload, label }) => {
+      if (active) {
+          return (
+              <div className="custom-tooltip" style={{ backgroundColor: '#ffff', padding: '5px', border: '1px solid #cccc' }}>
+                  <label>{`${payload[0].name} : ${payload[0].value}%`}</label>
+              </div>
+          );
+      }
+
+      return null;
+  };
+
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions = this.renderSubmissions()
@@ -398,6 +473,15 @@ class Data extends Component {
       formSelectorText = forms.filter((form) => form.id === selectedFormId)[0]
         .title
     }
+
+    let tabs = [
+      { name: 'responses', text: 'Responses', path: '/data' },
+      {
+        name: 'statistics',
+        text: 'Statistics',
+        path: '/data/statistics'
+      }
+    ]
 
     return (
       <div className="data">
@@ -415,9 +499,15 @@ class Data extends Component {
               </Link>
             </div>
             <div className="col-15-16 mainTabs">
-              <a href="#/" className="selected">
-                Responses
-              </a>
+              {tabs.map((item, key) => (
+                <NavLink
+                  key={key}
+                  exact
+                  to={`${item.path}`}
+                  activeClassName="selected">
+                  {item.text}
+                </NavLink>
+              ))}
             </div>
           </div>
         </div>
@@ -451,10 +541,66 @@ class Data extends Component {
             </div>
           </div>
         </div>
-        <div className="cw center grid dataContent">
-          <div className="submissionSelector col-5-16">{submissions}</div>
-          <div className="entriesViewer col-11-16">{entries}</div>
-        </div>
+        {
+          this.props.history.location.pathname.endsWith('/data') ?
+          <div className="cw center grid dataContent">
+            <div className="submissionSelector col-5-16">{submissions}</div>
+            <div className="entriesViewer col-11-16">{entries}</div>
+          </div> :
+          <div className="cw center grid dataStatistics">
+            <div className="selectedSubmissionStatistics col-16-16">
+              <div className="submissionResponsesContainer">
+                <div class="submissionResponsesDetails">
+                  <div>
+                    <div class="detailLabel">10</div>
+                    <div class="detailSublabel">Response(s)</div>
+                  </div>
+                  <div>
+                    <div class="detailLabel">00:15</div>
+                    <div class="detailSublabel">Average completion time</div>
+                  </div>
+                  <div>
+                    <div class="detailLabel">Active</div>
+                    <div class="detailSublabel">Status</div>
+                  </div>
+                </div>
+              </div>
+              <div className="statisticsContainer">
+                <div className="questionContainer">
+                  <div className="question">1. Question 1</div>
+                  <PieChart width={730} height={300}>
+                    <Pie data={this.pieData} color="#000000" dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={120} fill="#8884d8" >
+                      {
+                        this.pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={this.COLORS[index % this.COLORS.length]} />)
+                      }
+                    </Pie>
+                    <Tooltip content={<this.CustomTooltip />} />
+                    <Legend layout="vertical" verticalAlign="text-bottom" align="left" />
+                  </PieChart>
+                </div>
+                <div className="questionContainer">
+                  <div className="question">2. Question 2</div>
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={data2}
+                    margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+                  >
+                    <Line
+                      type="monotone"
+                      dataKey={getXValueData1}
+                      stroke="#8884d8"
+                      dot={false}
+                    />
+                    <Line type="monotone" dataKey={getXValueData2} stroke="red" dot={false} />
+                    <XAxis dataKey="year" />
+                    <YAxis />
+                  </LineChart>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
       </div>
     )
   }
