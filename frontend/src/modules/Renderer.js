@@ -63,6 +63,10 @@ export default class Renderer extends Component {
             if (elem.value === false) extraProps.className = 'elementHider'
           }
 
+          if (elem.id === 'hasDataset') {
+            if (elem.value === false) extraProps.className = 'elementHider'
+          }
+
           if (elem.id === 'prefix') {
             if (elem.value.default === false)
               extraProps.className = 'elementHider'
