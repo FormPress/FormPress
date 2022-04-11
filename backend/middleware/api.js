@@ -661,6 +661,24 @@ module.exports = (app) => {
     }
   })
 
+  // a public endpoint to return datasets
+  app.get('/api/datasets', async (req, res) => {
+    const datasetName = req.query.dataset
+
+    try {
+      const datasetModule = require(`./frontend/src/modules/datasets/${datasetName}.json`)
+      res.jsonp({
+        datasetName,
+        datasetModule
+      })
+    } catch (err) {
+      console.error(err)
+      res
+        .status(500)
+        .json({ message: 'Error while retrieving the dataset from server.' })
+    }
+  })
+
   // returns the forms of specified user in zip format
   app.get(
     '/api/users/:user_id/export/forms',
