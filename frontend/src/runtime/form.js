@@ -19,6 +19,10 @@
     {
       name: 'validate',
       check: () => formHasValidators === true
+    },
+    {
+      name: 'datasets',
+      check: (element) => element.hasDataset === true
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
