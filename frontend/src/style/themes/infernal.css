@@ -182,3 +182,11 @@
 .infernal .elementCheckbox .input > input:active {
   border: 1px solid #a0a0a0;
 }
+
+.infernal > .elementDropdown > .dropdown-div > select#q_dataset {
+  text-transform: capitalize;
+}
+
+.infernal > .elementDropdown > .dropdown-div > select#q_dataset > option {
+  text-transform: capitalize;
+}
