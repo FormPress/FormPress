@@ -5,6 +5,14 @@ import ElementContainer from '../common/ElementContainer'
 import './Dropdown.css'
 
 export default class Dropdown extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      dataset: [],
+      datasetName: ''
+    }
+  }
+
   static weight = 5
 
   static defaultConfig = {
@@ -12,6 +20,7 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1', 'Dropdown 2'],
+    placeholder: '',
     dropdownOptions: {
       default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {
@@ -48,6 +57,27 @@ export default class Dropdown extends Component {
         ? config.options
         : ['']
 
+    if (mode !== 'renderer') {
+      if (config.hasDataset === true) {
+        if (this.state.datasetName !== config.dataset) {
+          fetch(`http://localhost:3001/api/datasets?dataset=${config.dataset}`)
+            .then((response) => {
+              return response.json()
+            })
+            .then((data) => {
+              this.setState({
+                dataset: data.datasetModule,
+                datasetName: data.datasetName
+              })
+            })
+        }
+      } else {
+        if (this.state.dataset.length !== 0) {
+          this.setState({ dataset: [] })
+        }
+      }
+    }
+
     var display
     if (mode === 'builder') {
       display = [
@@ -68,17 +98,35 @@ export default class Dropdown extends Component {
                 className="dropdown-select"
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
-                defaultValue="">
-                <option disabled value="">
-                  {config.placeholder}
-                </option>
-                {options.map((item) => {
-                  return (
-                    <option className="option-space" key={item} value={item}>
-                      {item}
-                    </option>
-                  )
-                })}
+                defaultValue="choose-disabled"
+                onChange={inputProps.onChange}
+                data-fp-list={config.hasDataset ? config.dataset : null}>
+                {config.placeholder ? (
+                  <option disabled value="choose-disabled">
+                    {config.placeholder}
+                  </option>
+                ) : null}
+                {this.state.dataset.length > 0
+                  ? this.state.dataset.map((item) => {
+                      return (
+                        <option
+                          className="option-space"
+                          key={item}
+                          value={item}>
+                          {item}
+                        </option>
+                      )
+                    })
+                  : options.map((item) => {
+                      return (
+                        <option
+                          className="option-space"
+                          key={item}
+                          value={item}>
+                          {item}
+                        </option>
+                      )
+                    })}
               </select>
             </div>
           }
@@ -115,17 +163,23 @@ export default class Dropdown extends Component {
             className="dropdown-select"
             id={`q_${config.id}`}
             name={`q_${config.id}`}
-            defaultValue="">
-            <option disabled value="">
-              {config.placeholder}
-            </option>
-            {options.map((item) => {
-              return (
-                <option className="option-space" key={item} value={item}>
-                  {item}
-                </option>
-              )
-            })}
+            defaultValue={config.value}
+            onChange={inputProps.onChange}
+            data-fp-list={config.hasDataset ? config.dataset : null}>
+            {config.placeholder ? (
+              <option disabled value="choose-disabled">
+                {config.placeholder}
+              </option>
+            ) : null}
+            {config.hasDataset
+              ? null
+              : options.map((item) => {
+                  return (
+                    <option className="option-space" key={item} value={item}>
+                      {item}
+                    </option>
+                  )
+                })}
           </select>
         </div>,
         <div className="clearfix" key="3">
