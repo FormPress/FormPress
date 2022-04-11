@@ -46,6 +46,7 @@
 }
 
 .questionPropertiesForm > .element > .label {
+  width: 100%;
   margin-bottom: 10px;
   margin-right: 10px;
 }
@@ -68,4 +69,15 @@
 
 #qc_required.elementHider + #qc_requiredText.elementTextBox {
   display: none !important;
+}
+
+#qc_hasDataset + #qc_dropdownOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_hasDataset.elementHider + #qc_dataset.elementDropdown {
+  display: none !important;
+}
+
+#qc_dataset {
 }
