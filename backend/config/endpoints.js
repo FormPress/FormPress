@@ -167,6 +167,12 @@ module.exports = {
       path: '/api/form/element/validators',
       protected: false,
       exampleRequestPath: 'api/form/element/validators?elements=Button,Email'
+    },
+    {
+      method: 'get',
+      path: '/api/datasets',
+      protected: false,
+      exampleRequestPath: 'api/datasets?dataset=countries'
     }
   ]
 }
