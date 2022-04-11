@@ -1,14 +1,9 @@
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  outline: 0;
   box-shadow: none;
-  border-style: ridge;
+  border-style: double;
   background: #ffffff;
   flex: 1;
-  padding: 0 0.5em;
+  padding: 2px;
   color: #0071bc;
   cursor: pointer;
 }
