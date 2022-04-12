@@ -9,8 +9,7 @@ export default class Dropdown extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      dataset: [],
-      datasetName: ''
+      datasets: []
     }
   }
 
@@ -22,29 +21,30 @@ export default class Dropdown extends Component {
   }
 
   componentDidUpdate() {
+    const availableDatasets = this.state.datasets
     const { config } = this.props
-    if (config.hasDataset === true) {
+
+    if (
+      config.hasDataset === true &&
+      availableDatasets[config.dataset] === undefined
+    ) {
       this.populateDropdownWithDataset(config.dataset)
-    } else {
-      if (this.state.dataset.length !== 0) {
-        this.setState({ dataset: [], datasetName: '' })
-      }
     }
   }
 
   populateDropdownWithDataset = (requestedDataset) => {
-    if (this.state.datasetName !== requestedDataset) {
-      fetch(`${BACKEND}/api/datasets?dataset=${requestedDataset}`)
-        .then((response) => {
-          return response.json()
+    const availableDatasets = this.state.datasets
+
+    fetch(`${BACKEND}/api/datasets?dataset=${requestedDataset}`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((response) => {
+        availableDatasets[requestedDataset] = response[requestedDataset]
+        this.setState({
+          datasets: availableDatasets
         })
-        .then((response) => {
-          this.setState({
-            dataset: response[requestedDataset],
-            datasetName: requestedDataset
-          })
-        })
-    }
+      })
   }
 
   static weight = 5
@@ -119,8 +119,8 @@ export default class Dropdown extends Component {
                     {config.placeholder}
                   </option>
                 ) : null}
-                {this.state.dataset && this.state.dataset.length > 0
-                  ? this.state.dataset.map((item) => {
+                {config.hasDataset && this.state.datasets[config.dataset]
+                  ? this.state.datasets[config.dataset].map((item) => {
                       return (
                         <option
                           className="option-space"
