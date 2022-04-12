@@ -1,3 +1,5 @@
+import datasets from '../datasets'
+
 const policy = {
   required: {
     rule: {
@@ -66,13 +68,13 @@ const policy = {
         type: 'Dropdown',
         label: 'Choose a data set',
         placeholder: false,
-        options: ['countries', 'months']
+        options: datasets
       }
     }
   }
 }
 
-exports.getConfigurableSettings = (questionType) => {
+export const getConfigurableSettings = (questionType) => {
   let willReturnObject = {}
 
   Object.keys(policy).map(function (objectKey) {
