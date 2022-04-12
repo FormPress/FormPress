@@ -40,6 +40,35 @@ const policy = {
         placeholder: 'Enter a placeholder text'
       }
     }
+  },
+  hasDataset: {
+    rule: {
+      type: 'only',
+      exceptions: ['Dropdown']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Predefined options']
+      }
+    }
+  },
+  dataset: {
+    rule: {
+      type: 'only',
+      exceptions: ['Dropdown']
+    },
+    configurableSettings: {
+      default: 'countries',
+      formProps: {
+        type: 'Dropdown',
+        label: 'Choose a data set',
+        placeholder: false,
+        options: ['countries', 'months']
+      }
+    }
   }
 }
 
