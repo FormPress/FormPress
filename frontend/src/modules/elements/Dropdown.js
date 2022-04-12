@@ -119,7 +119,7 @@ export default class Dropdown extends Component {
                     {config.placeholder}
                   </option>
                 ) : null}
-                {this.state.dataset
+                {this.state.dataset && this.state.dataset.length > 0
                   ? this.state.dataset.map((item) => {
                       return (
                         <option
