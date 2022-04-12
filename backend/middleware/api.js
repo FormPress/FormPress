@@ -663,19 +663,21 @@ module.exports = (app) => {
 
   // a public endpoint to return datasets
   app.get('/api/datasets', async (req, res) => {
-    const datasetName = req.query.dataset
+    const datasetQuery = req.query.dataset.split(',')
+
+    const jsonpResponse = {}
 
     try {
-      const datasetModule = require(path.resolve(
-        'script',
-        'transformed',
-        'datasets',
-        `${datasetName}.json`
-      ))
-      res.jsonp({
-        datasetName,
-        datasetModule
+      datasetQuery.forEach((dataset) => {
+        jsonpResponse[dataset] =
+          require(path.resolve(
+            'script',
+            'transformed',
+            'datasets',
+            `${dataset}.json`
+          )) || {}
       })
+      res.jsonp(jsonpResponse)
     } catch (err) {
       console.error(err)
       res

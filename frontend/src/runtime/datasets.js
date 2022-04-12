@@ -13,12 +13,12 @@
     }
   }
 
-  for (const dataset of requiredDatasets) {
-    const script = document.createElement('script')
-    script.src = `${BACKEND}/api/datasets?dataset=${dataset}&callback=processJSONP`
-    script.async = true
-    document.body.appendChild(script)
-  }
+  const script = document.createElement('script')
+  script.src = `${BACKEND}/api/datasets?dataset=${requiredDatasets
+    .sort()
+    .join(',')}&callback=processJSONP`
+  script.async = true
+  document.body.appendChild(script)
 
   const fillDatasets = (element, dataset) => {
     dataset.forEach((option) => {
@@ -30,13 +30,9 @@
   }
 
   window.processJSONP = (response) => {
-    console.log(response)
-    const selectedLists = document.querySelectorAll(
-      `[data-fp-list=${response.datasetName}]`
-    )
-
-    selectedLists.forEach((element) => {
-      fillDatasets(element, response.datasetModule)
+    elemsWithDatalist.forEach((element) => {
+      const dataset = response[element.dataset.fpList]
+      fillDatasets(element, dataset)
     })
   }
 })()

@@ -68,8 +68,8 @@ export default class Dropdown extends Component {
             })
             .then((data) => {
               this.setState({
-                dataset: data.datasetModule,
-                datasetName: data.datasetName
+                dataset: data[config.dataset],
+                datasetName: config.dataset
               })
             })
         }
