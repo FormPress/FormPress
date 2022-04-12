@@ -669,7 +669,6 @@ module.exports = (app) => {
       const datasetModule = require(path.resolve(
         'script',
         'transformed',
-        'modules',
         'datasets',
         `${datasetName}.json`
       ))
