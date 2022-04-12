@@ -40,6 +40,8 @@ export default class Dropdown extends Component {
   }
 
   render() {
+    const BACKEND = process.env.REACT_APP_BACKEND
+
     const { config, mode } = this.props
     const inputProps = {}
 
@@ -60,7 +62,7 @@ export default class Dropdown extends Component {
     if (mode !== 'renderer') {
       if (config.hasDataset === true) {
         if (this.state.datasetName !== config.dataset) {
-          fetch(`http://localhost:3001/api/datasets?dataset=${config.dataset}`)
+          fetch(`${BACKEND}/api/datasets?dataset=${config.dataset}`)
             .then((response) => {
               return response.json()
             })

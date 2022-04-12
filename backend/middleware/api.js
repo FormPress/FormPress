@@ -666,7 +666,12 @@ module.exports = (app) => {
     const datasetName = req.query.dataset
 
     try {
-      const datasetModule = require(`./frontend/src/modules/datasets/${datasetName}.json`)
+      const datasetModule = require(path.resolve(
+        'script',
+        'transformed',
+        'datasets',
+        `${datasetName}.json`
+      ))
       res.jsonp({
         datasetName,
         datasetModule
