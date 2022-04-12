@@ -75,7 +75,7 @@ export default class Dropdown extends Component {
         }
       } else {
         if (this.state.dataset.length !== 0) {
-          this.setState({ dataset: [] })
+          this.setState({ dataset: [], datasetName: '' })
         }
       }
     }
