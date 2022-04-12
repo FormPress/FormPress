@@ -13,7 +13,7 @@ select::-ms-expand {
 .dropdown-div {
   position: relative;
   display: inline-flex;
-  width: 50%;
+  width: 100%;
   height: 3em;
   line-height: 3;
   overflow: hidden;
