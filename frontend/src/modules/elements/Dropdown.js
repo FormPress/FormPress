@@ -3,6 +3,7 @@ import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
 import './Dropdown.css'
+const BACKEND = process.env.REACT_APP_BACKEND
 
 export default class Dropdown extends Component {
   constructor(props) {
@@ -10,6 +11,39 @@ export default class Dropdown extends Component {
     this.state = {
       dataset: [],
       datasetName: ''
+    }
+  }
+
+  componentDidMount() {
+    const { config } = this.props
+    if (config.hasDataset === true) {
+      this.populateDropdownWithDataset(config.dataset)
+    }
+  }
+
+  componentDidUpdate() {
+    const { config } = this.props
+    if (config.hasDataset === true) {
+      this.populateDropdownWithDataset(config.dataset)
+    } else {
+      if (this.state.dataset.length !== 0) {
+        this.setState({ dataset: [], datasetName: '' })
+      }
+    }
+  }
+
+  populateDropdownWithDataset = (requestedDataset) => {
+    if (this.state.datasetName !== requestedDataset) {
+      fetch(`${BACKEND}/api/datasets?dataset=${requestedDataset}`)
+        .then((response) => {
+          return response.json()
+        })
+        .then((response) => {
+          this.setState({
+            dataset: response[requestedDataset],
+            datasetName: requestedDataset
+          })
+        })
     }
   }
 
@@ -40,8 +74,6 @@ export default class Dropdown extends Component {
   }
 
   render() {
-    const BACKEND = process.env.REACT_APP_BACKEND
-
     const { config, mode } = this.props
     const inputProps = {}
 
@@ -58,27 +90,6 @@ export default class Dropdown extends Component {
       typeof config.options !== 'undefined'
         ? config.options
         : ['']
-
-    if (mode !== 'renderer') {
-      if (config.hasDataset === true) {
-        if (this.state.datasetName !== config.dataset) {
-          fetch(`${BACKEND}/api/datasets?dataset=${config.dataset}`)
-            .then((response) => {
-              return response.json()
-            })
-            .then((data) => {
-              this.setState({
-                dataset: data[config.dataset],
-                datasetName: config.dataset
-              })
-            })
-        }
-      } else {
-        if (this.state.dataset.length !== 0) {
-          this.setState({ dataset: [], datasetName: '' })
-        }
-      }
-    }
 
     var display
     if (mode === 'builder') {
@@ -108,7 +119,7 @@ export default class Dropdown extends Component {
                     {config.placeholder}
                   </option>
                 ) : null}
-                {this.state.dataset.length > 0
+                {this.state.dataset
                   ? this.state.dataset.map((item) => {
                       return (
                         <option
