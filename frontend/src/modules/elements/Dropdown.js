@@ -111,11 +111,11 @@ export default class Dropdown extends Component {
                 className="dropdown-select"
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
-                defaultValue="choose-disabled"
+                defaultValue=""
                 onChange={inputProps.onChange}
                 data-fp-list={config.hasDataset ? config.dataset : null}>
                 {config.placeholder ? (
-                  <option disabled value="choose-disabled">
+                  <option disabled value="">
                     {config.placeholder}
                   </option>
                 ) : null}
@@ -176,11 +176,11 @@ export default class Dropdown extends Component {
             className="dropdown-select"
             id={`q_${config.id}`}
             name={`q_${config.id}`}
-            defaultValue={config.value ? config.value : 'choose-disabled'}
+            defaultValue={config.value ? config.value : ''}
             onChange={inputProps.onChange}
             data-fp-list={config.hasDataset ? config.dataset : null}>
             {config.placeholder ? (
-              <option disabled value="choose-disabled">
+              <option disabled value="">
                 {config.placeholder}
               </option>
             ) : null}
