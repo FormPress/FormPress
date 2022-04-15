@@ -54,7 +54,7 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1', 'Dropdown 2'],
-    placeholder: '',
+    placeholder: 'Choose an option',
     dropdownOptions: {
       default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {
@@ -114,7 +114,7 @@ export default class Dropdown extends Component {
                 defaultValue=""
                 onChange={inputProps.onChange}
                 data-fp-list={config.hasDataset ? config.dataset : null}>
-                {config.placeholder ? (
+                {config.placeholder !== false ? (
                   <option disabled value="">
                     {config.placeholder}
                   </option>
@@ -179,7 +179,7 @@ export default class Dropdown extends Component {
             defaultValue={config.value ? config.value : ''}
             onChange={inputProps.onChange}
             data-fp-list={config.hasDataset ? config.dataset : null}>
-            {config.placeholder ? (
+            {config.placeholder !== false ? (
               <option disabled value="">
                 {config.placeholder}
               </option>
