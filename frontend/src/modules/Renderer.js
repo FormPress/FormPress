@@ -59,11 +59,8 @@ export default class Renderer extends Component {
             extraProps.className = 'dn'
           }
 
-          // conditionally hide elements for QuestionProperties page
-          if (elem.id === 'required') {
-            if (elem.value === false) {
-              extraProps.className = 'elementHider'
-            }
+          if (elem.hidden) {
+            extraProps.className = 'dn'
           }
 
           if (elem.id === 'hasDataset') {
