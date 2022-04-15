@@ -8,7 +8,6 @@ export default class QuestionProperties extends Component {
     super(props)
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.elementHider = this.elementHider.bind(this)
   }
 
   handleFieldChange(elem, e) {
@@ -31,34 +30,6 @@ export default class QuestionProperties extends Component {
           [elemId]: newValue
         }
       })
-    }
-  }
-
-  elementHider(formElems) {
-    const { selectedField } = this.props
-    const elemType = selectedField.config.type
-
-    if (!formElems.find((elem) => elem.id === 'required')?.value) {
-      formElems.find((elem) => elem.id === 'requiredText').hidden = true
-    }
-
-    switch (elemType) {
-      case 'Dropdown':
-        if (formElems.find((elem) => elem.id === 'hasDataset').value) {
-          formElems.find((elem) => elem.id === 'dropdownOptions').hidden = true
-        } else {
-          formElems.find((elem) => elem.id === 'dataset').hidden = true
-        }
-        break
-      case 'Name':
-        if (!formElems.find((elem) => elem.id === 'prefix').value) {
-          formElems.find(
-            (elem) => elem.id === 'prefixTypeTextBox'
-          ).hidden = true
-
-          formElems.find((elem) => elem.id === 'prefixOptions').hidden = true
-        }
-        break
     }
   }
 
@@ -90,8 +61,6 @@ export default class QuestionProperties extends Component {
         })
       )
     }
-
-    this.elementHider(form.props.elements)
 
     return (
       <div className="questionProperties">

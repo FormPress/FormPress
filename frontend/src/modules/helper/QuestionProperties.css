@@ -54,3 +54,30 @@
 .questionPropertiesForm .element:last-child {
   padding-bottom: 20px;
 }
+
+#qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_prefix.elementHider ~ #qc_prefixOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_prefix.elementHider + #qc_prefixTypeTextBox {
+  display: none !important;
+}
+
+#qc_required.elementHider + #qc_requiredText.elementTextBox {
+  display: none !important;
+}
+
+#qc_hasDataset + #qc_dropdownOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_hasDataset.elementHider + #qc_dataset.elementDropdown {
+  display: none !important;
+}
+
+#qc_dataset {
+}
