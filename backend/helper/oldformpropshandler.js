@@ -4,6 +4,7 @@ const { getConfigurableSettings } = require(path.resolve(
   './',
   'script',
   'transformed',
+  'modules',
   'ConfigurableSettings'
 ))
 
