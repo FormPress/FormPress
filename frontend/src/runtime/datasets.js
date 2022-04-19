@@ -23,8 +23,8 @@
   const fillDatasets = (element, dataset) => {
     dataset.forEach((option) => {
       const optionElement = document.createElement('option')
-      optionElement.value = option
-      optionElement.innerText = option
+      optionElement.value = option.value
+      optionElement.innerText = option.display
       element.appendChild(optionElement)
     })
   }
