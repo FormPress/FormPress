@@ -14,6 +14,7 @@
     encType="multipart/form-data"
   >
     <%- form %>
+    <input type="text" name="completion_time" id="completion_time" value="0" />
   </form>
   <% if(showBranding === true) {%>
     <%- include ("branding.tpl.ejs") %>
@@ -22,6 +23,13 @@
     var FORMID = "<%= FORMID %>"
     var BACKEND = "<%= BACKEND %>"
     var USERID = "<%= USERID %>"
+  </script>
+  <script>
+    var el = document.getElementById('completion_time');
+
+    setInterval(function(){
+      el.value = parseInt(el.value) + 1;
+    }, 1000);
   </script>
   <script src="<%= RUNTIMEJSURL %>"></script>
 </body>
