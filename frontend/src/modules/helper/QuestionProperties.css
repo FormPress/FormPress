@@ -60,6 +60,10 @@
 .questionPropertiesForm .elementRadio > .input > ul > li {
   display: block;
   padding-bottom: 10px;
+  padding-left: 5px;
+}
+.questionPropertiesForm .elementRadio > .input > ul > li > label {
+  margin-left: 5px;
 }
 
 .questionPropertiesForm > .elementHeader {
