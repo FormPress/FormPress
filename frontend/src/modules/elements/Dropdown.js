@@ -54,7 +54,10 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1', 'Dropdown 2'],
-    placeholder: 'Choose an option',
+    placeholder: 'Choose an option'
+  }
+
+  static configurableSettings = {
     dropdownOptions: {
       default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {

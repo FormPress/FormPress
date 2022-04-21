@@ -88,15 +88,11 @@ const getElements = () =>
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     let mergedObject = getConfigurableSettings(element.defaultConfig.type)
-    for (var key in element.defaultConfig) {
-      if (
-        Object.prototype.hasOwnProperty.call(
-          element.defaultConfig[key],
-          'default'
-        ) === true
-      ) {
-        Object.assign(mergedObject, { [key]: element.defaultConfig[key] })
-      }
+
+    for (const key in element.configurableSettings) {
+      Object.assign(mergedObject, {
+        [key]: element.configurableSettings[key]
+      })
     }
     acc[element.defaultConfig.type] = {
       configurableSettings: mergedObject

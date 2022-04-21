@@ -12,7 +12,10 @@ export default class Header extends Component {
     id: 0,
     type: 'Header',
     label: 'Header',
-    sublabel: 'sub header',
+    sublabel: 'sub header'
+  }
+
+  static configurableSettings = {
     separator: {
       default: false,
       formProps: {

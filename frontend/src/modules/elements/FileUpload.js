@@ -14,16 +14,6 @@ export default class FileUpload extends Component {
     requiredText: 'Please fill this field.'
   }
 
-  static configurableSettings = {
-    required: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: 'Make this field required'
-      }
-    }
-  }
-
   static renderDataValue(entry) {
     if (entry.value !== '') {
       const parsedValue = JSON.parse(entry.value)
