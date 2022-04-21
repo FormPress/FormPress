@@ -6,7 +6,8 @@
     Email: ['input'],
     Name: ['input'],
     TextArea: ['input'],
-    TextBox: ['input']
+    TextBox: ['input'],
+    Address: ['input']
   }
 
   for (const elem of FORMPRESS.elements) {
