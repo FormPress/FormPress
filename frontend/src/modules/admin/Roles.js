@@ -17,7 +17,8 @@ const textMap = {
   FileUpload: 'File Upload',
   Email: 'E-mail',
   Header: 'Header',
-  Separator: 'Separator'
+  Separator: 'Separator',
+  Address: 'Address'
 }
 
 class Roles extends Component {
