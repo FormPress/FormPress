@@ -20,7 +20,8 @@ import {
   faFont,
   faMinus,
   faQuestionCircle,
-  faPen
+  faPen,
+  faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -54,7 +55,7 @@ const iconMap = {
   Email: faEnvelope,
   Header: faHeading,
   Separator: faMinus,
-  Address: faAddressCard
+  Address: faMapMarkerAlt
 }
 
 //list of element texts
