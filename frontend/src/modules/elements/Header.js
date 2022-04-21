@@ -6,7 +6,7 @@ import Separator from './Separator'
 import './Header.css'
 
 export default class Header extends Component {
-  static weight = 10
+  static weight = 11
 
   static defaultConfig = {
     id: 0,

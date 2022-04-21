@@ -5,7 +5,7 @@ import ElementContainer from '../common/ElementContainer'
 import './FileUpload.css'
 
 export default class FileUpload extends Component {
-  static weight = 8
+  static weight = 9
 
   static defaultConfig = {
     id: 0,

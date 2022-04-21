@@ -25,7 +25,7 @@ export default class Address extends Component {
       })
   }
 
-  static weight = 12
+  static weight = 8
 
   static defaultConfig = {
     id: 0,
@@ -51,12 +51,12 @@ export default class Address extends Component {
         sublabel: 'Show / hide fields'
       }
     },
-    street1: {
+    street: {
       default: true,
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Street Line 1']
+        options: ['Street Line']
       }
     },
     street2: {
@@ -144,7 +144,7 @@ export default class Address extends Component {
           required={config.required}
         />
 
-        {config.street1 ? (
+        {config.street ? (
           <span className={`address-section adr-street`}>
             <input
               id={`address-street_${config.id}`}
@@ -161,7 +161,7 @@ export default class Address extends Component {
                 value={
                   typeof config.streetSublabelText !== 'undefined'
                     ? config.streetSublabelText
-                    : 'Street Line 1'
+                    : 'Street Line'
                 }
               />
             </div>

@@ -5,7 +5,7 @@ import ElementContainer from '../common/ElementContainer'
 import './Separator.css'
 
 export default class Separator extends Component {
-  static weight = 11
+  static weight = 12
 
   static defaultConfig = {
     id: 0,
