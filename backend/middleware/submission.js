@@ -57,9 +57,6 @@ module.exports = (app) => {
     form.props = JSON.parse(form.props)
 
     //create submission and get id
-
-    console.log('req.body', req.body)
-
     const result = await db.query(
       `INSERT INTO \`submission\`
         (form_id, created_at, version, completion_time)

@@ -14,7 +14,7 @@
     encType="multipart/form-data"
   >
     <%- form %>
-    <input type="text" name="completion_time" id="completion_time" value="0" />
+    <input type="hidden" name="completion_time" id="completion_time" value="0" />
   </form>
   <% if(showBranding === true) {%>
     <%- include ("branding.tpl.ejs") %>

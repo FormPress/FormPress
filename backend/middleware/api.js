@@ -83,26 +83,13 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
+      const db = await getPool();
       const user_id = req.params.user_id
-      const formResults = await formModel.list({ user_id })
+      const formResults = await db.query(`SELECT f.*, fb.id AS published_id FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ?`, [user_id]);
 
-      if (formResults.length === 0) {
+      if ( formResults === false ) {
         res.json([])
       } else {
-        for (const result of formResults) {
-          if (result.published_version > 0) {
-            let form_id = result.id
-            let version_id = result.published_version
-            let formPublishedResult = await formPublishedModel.get({
-              user_id,
-              form_id,
-              version_id
-            })
-            result.published_id = formPublishedResult.id
-          } else {
-            result.published_id = 0
-          }
-        }
         res.json(formResults)
       }
     }
@@ -350,6 +337,7 @@ module.exports = (app) => {
           for (let element of JSON.parse(result.props).elements) {
             let elementTemplate = {
               label: element.label,
+              elementType: element.type,
               chartType: elementCharts[element.type],
               chartItems: []
             }
@@ -362,94 +350,102 @@ module.exports = (app) => {
                   submission.id,
                   element.id
                 ])
-                if (questionStatistics[0].value !== '') {
-                  elementTemplate.chartItems.push(questionStatistics[0].value)
+                if (questionStatistics.length > 0) {
+                  if(elementTemplate.elementType === 'Name'){
+                    elementTemplate.chartItems.push(Object.values(JSON.parse(questionStatistics[0].value)).join(' ').trim())
+                  }else{
+                    elementTemplate.chartItems.push(questionStatistics[0].value)
+                  }
+                }else{
+                  elementTemplate.chartItems = [];
                 }
               }
 
-              switch (elementTemplate.chartType) {
-                case 'lastFive':
-                  elementTemplate.responseCount =
-                    elementTemplate.chartItems.length
-                  elementTemplate.chartItems = elementTemplate.chartItems.slice(
-                    -5
-                  )
-                  statistics.elements.push(elementTemplate)
+              if(elementTemplate.chartItems.length > 0){
+                switch (elementTemplate.chartType) {
+                  case 'lastFive':
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+                    elementTemplate.chartItems = elementTemplate.chartItems.slice(
+                      -5
+                    )
+                    statistics.elements.push(elementTemplate)
 
-                  break
-                case 'pieChart':
-                  willReturnArray = []
-                  for (const [key, value] of Object.entries(
-                    elementTemplate.chartItems.reduce((obj, chartItem) => {
-                      if (!obj[chartItem]) {
-                        obj[chartItem] = 1
-                      } else {
-                        obj[chartItem] = obj[chartItem] + 1
-                      }
-                      return obj
-                    }, {})
-                  )) {
-                    willReturnObject = {}
-                    willReturnObject.name = key
-                    willReturnObject.value =
-                      (value * 100) / elementTemplate.chartItems.length
-
-                    willReturnArray.push(willReturnObject)
-                  }
-
-                  elementTemplate.chartItems = willReturnArray
-
-                  for (const [
-                    index,
-                    value
-                  ] of elementTemplate.chartItems.entries()) {
-                    value.color = colors[index]
-                  }
-
-                  statistics.elements.push(elementTemplate)
-                  break
-                case 'barChart':
-                  willReturnArray = []
-                  for (const [key, value] of Object.entries(
-                    elementTemplate.chartItems.reduce((obj, chartItem) => {
-                      if (!testStringIsJson.hasJsonStructure(chartItem)) {
+                    break
+                  case 'pieChart':
+                    willReturnArray = []
+                    for (const [key, value] of Object.entries(
+                      elementTemplate.chartItems.reduce((obj, chartItem) => {
                         if (!obj[chartItem]) {
                           obj[chartItem] = 1
                         } else {
                           obj[chartItem] = obj[chartItem] + 1
                         }
-                      } else {
-                        testStringIsJson
-                          .safeJsonParse(chartItem)
-                          .map((item) => {
-                            if (!obj[item]) {
-                              obj[item] = 1
-                            } else {
-                              obj[item] = obj[item] + 1
-                            }
-                          })
-                      }
-                      return obj
-                    }, {})
-                  )) {
-                    willReturnObject = {}
-                    willReturnObject.name = key
-                    willReturnObject.value = value
+                        return obj
+                      }, {})
+                    )) {
+                      willReturnObject = {}
+                      willReturnObject.name = key
+                      willReturnObject.value =
+                        (value * 100) / elementTemplate.chartItems.length
 
-                    willReturnArray.push(willReturnObject)
-                  }
+                      willReturnArray.push(willReturnObject)
+                    }
 
-                  elementTemplate.chartItems = willReturnArray
+                    elementTemplate.chartItems = willReturnArray
 
-                  for (const [
-                    index,
-                    value
-                  ] of elementTemplate.chartItems.entries()) {
-                    value.color = colors[index]
-                  }
+                    for (const [
+                      index,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
+                      value.color = colors[index]
+                    }
 
-                  statistics.elements.push(elementTemplate)
-                  break
+                    statistics.elements.push(elementTemplate)
+                    break
+                  case 'barChart':
+                    willReturnArray = []
+                    for (const [key, value] of Object.entries(
+                      elementTemplate.chartItems.reduce((obj, chartItem) => {
+                        if (!testStringIsJson.hasJsonStructure(chartItem)) {
+                          if (!obj[chartItem]) {
+                            obj[chartItem] = 1
+                          } else {
+                            obj[chartItem] = obj[chartItem] + 1
+                          }
+                        } else {
+                          testStringIsJson
+                            .safeJsonParse(chartItem)
+                            .map((item) => {
+                              if (!obj[item]) {
+                                obj[item] = 1
+                              } else {
+                                obj[item] = obj[item] + 1
+                              }
+                            })
+                        }
+                        return obj
+                      }, {})
+                    )) {
+                      willReturnObject = {}
+                      willReturnObject.name = key
+                      willReturnObject.value = value
+
+                      willReturnArray.push(willReturnObject)
+                    }
+
+                    elementTemplate.chartItems = willReturnArray
+
+                    for (const [
+                      index,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
+                      value.color = colors[index]
+                    }
+
+                    statistics.elements.push(elementTemplate)
+                    break
+                }
               }
             }
           }
