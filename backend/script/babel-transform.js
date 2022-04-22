@@ -20,6 +20,7 @@ const frontend3rdpartyTarget = path.resolve(frontendRuntimeTarget, '3rdparty')
 
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
+  path.resolve(path.resolve('./', 'script', 'transformed', 'modules')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
   frontendRuntimeTarget,
   frontend3rdpartyTarget
@@ -37,6 +38,18 @@ const transformMap = [
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'runtime'),
     target: frontendRuntimeTarget
+  },
+  {
+    type: 'folder',
+    extension: '.js',
+    source: path.resolve('../', 'frontend', 'src', 'datasets'),
+    target: path.resolve('./', 'script', 'transformed', 'datasets')
+  },
+  {
+    type: 'folder_copy',
+    extension: '.json',
+    source: path.resolve('../', 'frontend', 'src', 'datasets'),
+    target: path.resolve('./', 'script', 'transformed', 'datasets')
   },
   {
     type: 'folder_copy',
@@ -62,6 +75,7 @@ const transformMap = [
       './',
       'script',
       'transformed',
+      'modules',
       'ConfigurableSettings.js'
     )
   },
@@ -205,7 +219,5 @@ const transformFrontend = () => {
     }
   }
 }
-
-transformFrontend()
 
 module.exports = transformFrontend

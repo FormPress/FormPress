@@ -679,6 +679,31 @@ module.exports = (app) => {
     }
   })
 
+  // a public endpoint to return datasets
+  app.get('/api/datasets', async (req, res) => {
+    const datasetQuery = req.query.dataset.split(',')
+
+    const jsonpResponse = {}
+
+    try {
+      datasetQuery.forEach((dataset) => {
+        jsonpResponse[dataset] =
+          require(path.resolve(
+            'script',
+            'transformed',
+            'datasets',
+            `${dataset}.json`
+          )) || {}
+      })
+      res.jsonp(jsonpResponse)
+    } catch (err) {
+      console.error(err)
+      res
+        .status(500)
+        .json({ message: 'Error while retrieving the dataset from server.' })
+    }
+  })
+
   // returns the forms of specified user in zip format
   app.get(
     '/api/users/:user_id/export/forms',
