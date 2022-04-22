@@ -83,11 +83,14 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
-      const db = await getPool();
+      const db = await getPool()
       const user_id = req.params.user_id
-      const formResults = await db.query(`SELECT f.*, fb.id AS published_id FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ?`, [user_id]);
+      const formResults = await db.query(
+        `SELECT f.*, fb.id AS published_id FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ?`,
+        [user_id]
+      )
 
-      if ( formResults === false ) {
+      if (formResults === false) {
         res.json([])
       } else {
         res.json(formResults)
@@ -351,17 +354,21 @@ module.exports = (app) => {
                   element.id
                 ])
                 if (questionStatistics.length > 0) {
-                  if(elementTemplate.elementType === 'Name'){
-                    elementTemplate.chartItems.push(Object.values(JSON.parse(questionStatistics[0].value)).join(' ').trim())
-                  }else{
+                  if (elementTemplate.elementType === 'Name') {
+                    elementTemplate.chartItems.push(
+                      Object.values(JSON.parse(questionStatistics[0].value))
+                        .join(' ')
+                        .trim()
+                    )
+                  } else {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
                   }
-                }else{
-                  elementTemplate.chartItems = [];
+                } else {
+                  elementTemplate.chartItems = []
                 }
               }
 
-              if(elementTemplate.chartItems.length > 0){
+              if (elementTemplate.chartItems.length > 0) {
                 switch (elementTemplate.chartType) {
                   case 'lastFive':
                     elementTemplate.responseCount =
