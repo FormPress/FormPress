@@ -1023,7 +1023,8 @@ class Builder extends Component {
             <NavLink
               className="option-container"
               to="/editor/new/template"
-              activeClassName="selected">
+              activeClassName="selected"
+              onClick={closeModal}>
               <div className="option" onClick={closeModal}>
                 <TemplateOptionSVG />
               </div>
