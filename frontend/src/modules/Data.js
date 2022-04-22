@@ -469,7 +469,7 @@ class Data extends Component {
             padding: '5px',
             border: '1px solid #cccc'
           }}>
-          <label>{`${payload[0].name} : ${payload[0].value}%`}</label>
+          <label>{`${payload[0].name} : ${payload[0].value.toFixed(2)}%`}</label>
         </div>
       )
     }

@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -86,14 +87,14 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
       const formResults = await db.query(
-        `SELECT f.*, fb.id AS published_id FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ?`,
+        `SELECT f.*, fb.id AS published_id,( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ? AND deleted_at IS NULL`,
         [user_id]
       )
 
-      if (formResults === false) {
+      if (formResults.length === 0) {
         res.json([])
       } else {
-        res.json(formResults)
+        return res.json(formResults.map(hydrateForm))
       }
     }
   )
