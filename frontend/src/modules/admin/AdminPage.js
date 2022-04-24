@@ -7,7 +7,6 @@ import Status from './Status'
 
 import './AdminPage.css'
 
-//api/server/capabilities for status tab
 class AdminPage extends Component {
   renderAdminContent() {
     return (

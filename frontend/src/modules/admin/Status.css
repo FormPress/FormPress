@@ -1,0 +1,24 @@
+.status {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: #e2e2e2;
+  color: #333333;
+}
+
+.statuswrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+    padding: 30px;
+    background-color: #f5f5f5;
+}
+
+.statuslist {
+    grid-column: span 1;
+    display: inline-block;
+    width: 400px;
+    height: 600px;
+    overflow: scroll;
+}
