@@ -105,6 +105,60 @@ module.exports = (app) => {
   )
 
   app.put(
+    '/api/admin/users/:user_id',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { user_id } = req.params
+      const { roleId } = req.body
+      const db = await getPool()
+      let result = null;
+
+      if (
+        typeof user_id !== 'undefined' &&
+        user_id !== null &&
+        user_id !== '0'
+      ) {
+        result = await db.query(
+          `
+          SELECT * FROM \`user\` WHERE id = ?
+        `,
+          [user_id]
+        )
+      }
+      if (result.length === 1 && 
+        typeof roleId !== 'undefined' &&
+        roleId !== null &&
+        roleId !== '0' ) {
+          const response = await db.query(
+            `
+            SELECT * FROM \`role\` WHERE id = ?
+          `,
+            [roleId]
+          )
+
+          if (response.length === 1) {
+            await db.query(
+              `
+                UPDATE \`user_role\`
+                SET \`role_id\` = ?
+                WHERE user_id = ?
+              `,
+              [roleId, user_id]
+            )
+            res.status(200).json({ message: 'Role changed succesfully' })
+          } else {
+            res.status(403).json({
+              message: 'Role id must be valid.'
+            })
+          }
+      } else {
+        res.status(403).json({ message: 'User not found' })
+      }
+    }
+  )
+
+  app.put(
     '/api/admin/users/:user_id/changepassword',
     mustHaveValidToken,
     mustBeAdmin,

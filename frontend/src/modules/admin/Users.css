@@ -3,6 +3,14 @@
   color: #ffffff;
 }
 
+.userwrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  padding: 30px;
+  background-color: #f5f5f5;
+}
+
 .userlist {
     grid-column: span 1;
     display: inline-block;
@@ -19,18 +27,53 @@
     color: #ffffff;
   }
   
-  .user {
+.user {
     background-color: #e2e2e2;
     color: #333333;
   }
   
-  .user:hover {
+.user:hover {
     cursor: pointer;
     background-color: #719fbd;
   }
-  .userpands {
+
+.userpands {
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 20px;
     grid-column: span 3;
   }
+
+.userdetail {
+    grid-column: span 1;
+}
+
+.savedornot {
+  grid-column: span 1;
+  padding: 0px 10px;
+}
+
+.servermessage {
+  grid-column: span 1;
+  padding: 0px 10px;
+}
+
+.userwrap .elementTextBox {
+  padding: 30px 10px 30px 10px;
+}
+
+.userwrap .elementNumber {
+  padding: 10px;
+}
+
+.userwrap .elementCheckbox {
+  padding: 5px 10px;
+}
+
+.userwrap .elementButton {
+  padding: 10px;
+}
+
+.userwrap .elementButton input {
+  background-color: #e2e2e2 !important;
+}

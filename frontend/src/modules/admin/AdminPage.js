@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { NavLink, Switch, Route } from 'react-router-dom'
 import AuthContext from '../../auth.context'
 import Roles from './Roles'
-import User from './User'
+import Users from './Users'
 import Status from './Status'
 
 import './AdminPage.css'
@@ -12,7 +12,7 @@ class AdminPage extends Component {
   renderAdminContent() {
     return (
       <Switch>
-        <Route path="/admin/users"><User /></Route>
+        <Route path="/admin/users"><Users /></Route>
         <Route path="/admin/roles"><Roles /></Route>
         <Route path="/admin/status"><Status /></Route>
       </Switch>
