@@ -88,7 +88,7 @@ module.exports = (app) => {
       const db = await getPool()
       const result = await db.query(`
         SELECT
-            u.id, u.email, u.emailVerified,
+            u.id, u.email, u.emailVerified, u.isActive, 
             ur.role_id AS role_id,
             r.permission AS permission
           FROM \`user\` AS u
@@ -110,7 +110,7 @@ module.exports = (app) => {
     mustBeAdmin,
     async (req, res) => {
       const { user_id } = req.params
-      const { roleId } = req.body
+      const { roleId, isActive } = req.body
       const db = await getPool()
       let result = null;
 
@@ -126,32 +126,46 @@ module.exports = (app) => {
           [user_id]
         )
       }
-      if (result.length === 1 && 
-        typeof roleId !== 'undefined' &&
-        roleId !== null &&
-        roleId !== '0' ) {
-          const response = await db.query(
-            `
-            SELECT * FROM \`role\` WHERE id = ?
-          `,
-            [roleId]
-          )
-
-          if (response.length === 1) {
-            await db.query(
+      if (result.length === 1) {
+          if (typeof roleId !== 'undefined' &&
+          roleId !== null &&
+          roleId !== '0' ) {
+            const response = await db.query(
               `
-                UPDATE \`user_role\`
-                SET \`role_id\` = ?
-                WHERE user_id = ?
-              `,
-              [roleId, user_id]
+              SELECT * FROM \`role\` WHERE id = ?
+            `,
+              [roleId]
             )
-            res.status(200).json({ message: 'Role changed succesfully' })
-          } else {
-            res.status(403).json({
-              message: 'Role id must be valid.'
-            })
+  
+            if (response.length === 1) {
+              await db.query(
+                `
+                  UPDATE \`user_role\`
+                  SET \`role_id\` = ?
+                  WHERE user_id = ?
+                `,
+                [roleId, user_id]
+              )
+            } else {
+              res.status(403).json({
+                message: 'Role id must be valid.'
+              })
+            }
           }
+          if (typeof isActive !== 'undefined' && 
+          isActive !== null && 
+          (isActive == 0 || isActive == 1)) {
+              await db.query(
+                `
+                  UPDATE \`user\`
+                  SET \`isActive\` = ?
+                  WHERE id = ?
+                `,
+                [isActive, user_id]
+              )         
+          }
+
+          res.status(200).json({ message: 'User changed succesfully' })
       } else {
         res.status(403).json({ message: 'User not found' })
       }

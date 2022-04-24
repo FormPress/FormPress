@@ -14,6 +14,7 @@ class Users extends Component {
       selectedUserId: 0,
       roleId: 0,
       emailVerified: 0,
+      isActive: '',
       message: ''
     }
 
@@ -37,43 +38,46 @@ class Users extends Component {
 
   handleFieldChange(elem, e) {
     this.setState({ saved: false })
-    if (elem.label === 'Role Id') {
-      if (!isNaN(parseInt(e.target.value))) {
+    if (elem.label === 'Role Id' && !isNaN(parseInt(e.target.value))) {
         this.setState({ roleId: e.target.value })
-      }
+    }
+    if (elem.label === 'Is Active' && !isNaN(parseInt(e.target.value))) {
+      this.setState({ isActive: e.target.value })
     }
   }
 
   handleSelectUser(userId, incMessage = '') {
     const { data } = this.state
-    let user = null;
     const user_id = parseInt(userId)
     if (user_id !== 0) {
-      user = data.filter((user) => user.id === user_id)[0]
+      const user = data.filter((user) => user.id === user_id)[0]
+
+      this.setState({
+        selectedUserId: user_id,
+        roleId: user.role_id,
+        emailVerified: user.emailVerified,
+        isActive: user.isActive,
+        message: incMessage,
+        saved: true
+      })
     }
-    this.setState({
-      selectedUserId: user_id,
-      roleId: user.role_id,
-      emailVerified: user.emailVerified,
-      message: incMessage,
-      saved: true
-    })
   }
 
   async handleSave(e) {
     e.preventDefault()
-    const { selectedUserId, roleId } = this.state
-    if (roleId !== 0) {
+    const { selectedUserId, roleId, isActive } = this.state
+ 
+    if (selectedUserId !== 0) {
       const { data } = await api({
         resource: `/api/admin/users/${selectedUserId}`,
         method: 'put',
-        body: { roleId }
+        body: {roleId, isActive}
       })
       this.setState({ saved: true, message: data.message })
       await this.listUser()
       this.handleSelectUser(data.id, data.message)
     } else {
-      this.setState({ message: 'Please set a valid role id' })
+      this.setState({ message: 'Please select a user' })
     }
   }
 
@@ -109,23 +113,21 @@ class Users extends Component {
                     {
                       id: 1,
                       type: 'Number',
-                      label: 'Id',
-                      value: this.state.selectedUserId
+                      label: 'Role Id',
+                      value: this.state.roleId,
+                      min: 1,
+                      max: 200
                     },
                     {
                       id: 2,
                       type: 'Number',
-                      label: 'Role Id',
-                      value: this.state.roleId
+                      label: 'Is Active',
+                      value: this.state.isActive,
+                      min: 0,
+                      max: 1
                     },
                     {
                       id: 3,
-                      type: 'Number',
-                      label: 'Email Verified',
-                      value: this.state.emailVerified,
-                    },
-                    {
-                      id: 4,
                       type: 'Button',
                       buttonText: 'SAVE',
                     }
