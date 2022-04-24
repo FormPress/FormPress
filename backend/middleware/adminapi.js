@@ -1,11 +1,16 @@
 const path = require('path')
 
 const { getPool } = require(path.resolve('./', 'db'))
+const { genRandomString, sha512 } = require(path.resolve('helper')).random
+const { error } = require(path.resolve('helper'))
+const jwt = require('jsonwebtoken')
 
 const { mustHaveValidToken, mustBeAdmin } = require(path.resolve(
   'middleware',
   'authorization'
 ))
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 module.exports = (app) => {
   app.get(
@@ -71,6 +76,145 @@ module.exports = (app) => {
           message: 'role created successfully',
           roleId: result.insertId
         })
+      }
+    }
+  )
+
+  app.get(
+    '/api/admin/users',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT
+            u.id, u.email, u.emailVerified,
+            ur.role_id AS role_id,
+            r.permission AS permission
+          FROM \`user\` AS u
+            JOIN \`user_role\` AS ur ON u.id = ur.user_id
+            JOIN role AS r ON r.id = ur.\`role_id\`
+      `)
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  app.put(
+    '/api/admin/users/:user_id/changepassword',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { user_id } = req.params
+      const { new_password } = req.body
+      const db = await getPool()
+      let result = null;
+
+      if (
+        typeof user_id !== 'undefined' &&
+        user_id !== null &&
+        user_id !== '0'
+      ) {
+        result = await db.query(
+          `
+          SELECT * FROM \`user\` WHERE id = ?
+        `,
+          [user_id]
+        )
+      }
+      if (result.length === 1) {
+        let pattern = /^.{8,}$/
+        if (!pattern.test(new_password)) {
+          res.status(403).json({
+            message: 'New password must contain at least 8 characters.'
+          })
+        } else {
+          const hash = sha512(new_password, genRandomString(128))
+          await db.query(
+            `
+              UPDATE \`user\`
+              SET \`password\` = ?, \`salt\` = ?, \`emailVerified\` = 1
+              WHERE id = ?
+            `,
+            [hash.passwordHash, hash.salt, user_id]
+          )
+          res.status(200).json({ message: 'Password changed succesfully' })
+        }
+
+      } else {
+        res.status(403).json({ message: 'User not found' })
+      }
+    }
+  )
+
+  app.post(
+    '/api/admin/users/:user_id/login-as-user',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { user_id } = req.params
+      const db = await getPool()
+      let result = null;
+
+      if (
+        typeof user_id !== 'undefined' &&
+        user_id !== null &&
+        user_id !== '0'
+      ) {
+        result = await db.query(
+          `
+          SELECT
+            u.*,
+            ur.role_id AS role_id,
+            r.permission AS permission
+          FROM \`user\` AS u
+            JOIN \`user_role\` AS ur ON u.id = ur.user_id
+            JOIN role AS r ON r.id = ur.\`role_id\`
+          WHERE u.id = ? AND u.emailVerified = 1
+        `,
+          [user_id]
+        )
+      }
+      if (result.length === 1) {
+        const user = result[0];
+        const admin = await db.query(
+          `SELECT \`id\` FROM \`admins\` WHERE email = ?`,
+          [res.locals.auth.email]
+        )
+
+        const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
+        const jwt_data = {
+          user_id: user.id,
+          email: user.email,
+          user_role: user.role_id,
+          admin: false,
+          inPersonate: admin[0].id,
+          permission: JSON.parse(user.permission),
+          exp
+        }
+
+        jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+          console.log('token sign error ', err)
+          error.errorReport(err)
+
+          res.status(200).json({
+            message: 'Login Success',
+            token,
+            user_role: user.role_id,
+            admin: false,
+            inPersonate: admin[0].id,
+            user_id: user.id,
+            permission: JSON.parse(user.permission),
+            exp
+          })
+        })
+
+      } else {
+        res.status(403).json({ message: 'User not found' })
       }
     }
   )

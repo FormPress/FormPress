@@ -1,9 +1,15 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
+const { mustHaveValidToken } = require(path.resolve(
+  'middleware',
+  'authorization'
+))
 
 module.exports = (app) => {
-  app.post('/api/users/changepassword/', async (req, res) => {
+  app.post('/api/users/changepassword/',
+  mustHaveValidToken,
+  async (req, res) => {
     const { user_id } = res.locals.auth
     const { current_password, new_password } = req.body
     const db = await getPool()
