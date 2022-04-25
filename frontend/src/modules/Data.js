@@ -796,7 +796,7 @@ class Data extends Component {
           </label>
         </article>
         <label>
-          {this.state.selectedFormSelectedPublishedVersion > 0 ? (
+          {this.state.selectedFormPublishedVersion > 0 ? (
             <select
               className="formVersionSelector"
               onChange={(e) => this.formVersionSelector(e.target.value)}
