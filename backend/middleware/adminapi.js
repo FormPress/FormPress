@@ -157,7 +157,7 @@ module.exports = (app) => {
         if (
           typeof isActive !== 'undefined' &&
           isActive !== null &&
-          (isActive == 0 || isActive == 1)
+          (isActive === 0 || isActive === 1)
         ) {
           await db.query(
             `

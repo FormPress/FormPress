@@ -9,10 +9,12 @@ class Status extends Component {
     super(props)
     this.state = {
       loaded: false,
-      googleServiceAccountCredentials: null,
-      sendgridApiKey: null,
-      googleCredentialsClientID: null,
-      fileUploadBucket: null
+      status: {
+        googleServiceAccountCredentials: '',
+        sendgridApiKey: '',
+        googleCredentialsClientID: '',
+        fileUploadBucket: ''
+      }
     }
 
     this.capabilities = this.capabilities.bind(this)
@@ -24,18 +26,22 @@ class Status extends Component {
       method: 'get'
     })
 
+    const newStatus = { ...this.state.status }
+
     if (result.data.googleServiceAccountCredentials) {
-      this.setState({ loaded: true, googleServiceAccountCredentials: 'true' })
+      newStatus.googleServiceAccountCredentials = 'true'
     }
     if (result.data.sendgridApiKey) {
-      this.setState({ loaded: true, sendgridApiKey: 'true' })
+      newStatus.sendgridApiKey = 'true'
     }
     if (result.data.googleCredentialsClientID) {
-      this.setState({ loaded: true, googleCredentialsClientID: 'true' })
+      newStatus.googleCredentialsClientID = 'true'
     }
     if (result.data.fileUploadBucket) {
-      this.setState({ loaded: true, fileUploadBucket: 'true' })
+      newStatus.fileUploadBucket = 'true'
     }
+
+    this.setState({ loaded: true, status: newStatus })
   }
 
   async componentDidMount() {
@@ -48,16 +54,17 @@ class Status extends Component {
         <div className="col-2-16 statuslist">
           <div className="status">
             Google Service Account Credentials:{' '}
-            {this.state.googleServiceAccountCredentials}
+            {this.state.status.googleServiceAccountCredentials}
           </div>
           <div className="status">
-            Sendgrid Api Key: {this.state.sendgridApiKey}
+            Sendgrid Api Key: {this.state.status.sendgridApiKey}
           </div>
           <div className="status">
-            Google Credentials Client ID: {this.state.googleCredentialsClientID}
+            Google Credentials Client ID:{' '}
+            {this.state.status.googleCredentialsClientID}
           </div>
           <div className="status">
-            File Upload Bucket: {this.state.fileUploadBucket}
+            File Upload Bucket: {this.state.status.fileUploadBucket}
           </div>
         </div>
       </div>
