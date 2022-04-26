@@ -47,10 +47,6 @@
   width: 100%;
 }
 
-.adr-zip {
-  max-width: 5rem;
-}
-
 .address-flex-row {
   display: flex;
   clear: both;

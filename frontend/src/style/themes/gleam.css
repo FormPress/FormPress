@@ -190,6 +190,7 @@
   background-color: transparent;
 }
 .gleam .elementDropdown {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
   background-color: transparent;
 }
 .gleam .elementDropdown .dropdown-div {
@@ -549,7 +550,7 @@
 
 .gleam .nameContainer > * {
   flex: 1 1 100%;
-  margin: 0px 5px;
+  padding: 0 2px 0 2px;
 }
 
 .gleam .nameContainer > * > * {
@@ -731,10 +732,6 @@ input[type='file'] {
 .adr-zip > input,
 .adr-city > input {
   width: 100%;
-}
-
-.adr-zip {
-  max-width: 5rem;
 }
 
 .address-flex-row {

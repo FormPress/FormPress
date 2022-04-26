@@ -1,6 +1,6 @@
 select {
   box-shadow: none;
-  border-style: double;
+  border-style: solid;
   background: #ffffff;
   flex: 1;
   padding: 2px;
@@ -10,6 +10,11 @@ select {
 select::-ms-expand {
   display: none;
 }
+
+.elementDropdown {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+}
+
 .dropdown-div {
   position: relative;
   display: inline-flex;

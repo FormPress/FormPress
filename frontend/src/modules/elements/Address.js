@@ -64,7 +64,7 @@ export default class Address extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Street Line 1']
+        options: ['Street Line 2']
       }
     },
 
