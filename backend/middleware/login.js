@@ -32,12 +32,15 @@ module.exports = (app) => {
       const hash = sha512(password, salt)
       console.log(`DEBUG INSERT: ${email} `, hash, salt)
 
-      return res.status(403).json({ message: 'Email/Password does not match' })
+      return res.status(403).json({ message: 'Email not verified' })
     } else {
       const user = result[0]
       const incomingHash = sha512(password, user.salt)
 
       if (user.password === incomingHash.passwordHash) {
+        if (user.isActive !== 1) {
+          res.status(403).json({ message: 'You have been blocked because of not following our TOS. If you think this is an error contact our support team.' })
+        }
         let isAdmin = false
         const admin = await db.query(
           `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
