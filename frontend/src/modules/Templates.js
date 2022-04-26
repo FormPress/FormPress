@@ -36,18 +36,21 @@ class Templates extends Component {
       this.setState({ selectedTemplate: templates[0] })
     } else if (URItitle === 'clone') {
       const decodedTitle = decodeURIComponent(url[url.length - 2])
-      const selectedTemplate = templates.find(
+      const foundTemplate = templates.find(
         (template) => template.title === decodedTitle
       )
-      console.log('cloning', selectedTemplate)
 
-      this.setState({ templateToBeCloned: selectedTemplate })
+      this.setState({ templateToBeCloned: foundTemplate })
     } else {
       const decodedTitle = decodeURIComponent(url[url.length - 2])
-      const selectedTemplate = templates.find(
+      const foundTemplate = templates.find(
         (template) => template.title === decodedTitle
       )
-      this.setState({ selectedTemplate })
+      if (foundTemplate) {
+        this.setState({ selectedTemplate: foundTemplate })
+      } else {
+        this.setState({ selectedTemplate: templates[0] })
+      }
     }
 
     const iframe = document.getElementById('template-iframe')
