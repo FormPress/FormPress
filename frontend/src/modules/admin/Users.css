@@ -12,40 +12,40 @@
 }
 
 .userlist {
-    grid-column: span 1;
-    display: inline-block;
-    width: 300px;
-    height: 600px;
-    overflow: scroll;
-  }
+  grid-column: span 1;
+  display: inline-block;
+  width: 300px;
+  height: 600px;
+  overflow: scroll;
+}
 
 .user,
 .selecteduser {
-    padding: 10px;
-    margin: 5px;
-    border-radius: 8px;
-    color: #ffffff;
-  }
-  
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  color: #ffffff;
+}
+
 .user {
-    background-color: #e2e2e2;
-    color: #333333;
-  }
-  
+  background-color: #e2e2e2;
+  color: #333333;
+}
+
 .user:hover {
-    cursor: pointer;
-    background-color: #719fbd;
-  }
+  cursor: pointer;
+  background-color: #719fbd;
+}
 
 .userpands {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 20px;
-    grid-column: span 3;
-  }
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  grid-column: span 3;
+}
 
 .userdetail {
-    grid-column: span 1;
+  grid-column: span 1;
 }
 
 .savedornot {

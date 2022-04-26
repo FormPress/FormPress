@@ -12,7 +12,7 @@ class Status extends Component {
       googleServiceAccountCredentials: null,
       sendgridApiKey: null,
       googleCredentialsClientID: null,
-      fileUploadBucket: null,
+      fileUploadBucket: null
     }
 
     this.capabilities = this.capabilities.bind(this)
@@ -25,16 +25,16 @@ class Status extends Component {
     })
 
     if (result.data.googleServiceAccountCredentials) {
-      this.setState({ loaded: true, googleServiceAccountCredentials: 'true'})
+      this.setState({ loaded: true, googleServiceAccountCredentials: 'true' })
     }
     if (result.data.sendgridApiKey) {
-      this.setState({ loaded: true, sendgridApiKey: 'true'})
+      this.setState({ loaded: true, sendgridApiKey: 'true' })
     }
     if (result.data.googleCredentialsClientID) {
-      this.setState({ loaded: true, googleCredentialsClientID: 'true'})
+      this.setState({ loaded: true, googleCredentialsClientID: 'true' })
     }
     if (result.data.fileUploadBucket) {
-      this.setState({ loaded: true, fileUploadBucket: 'true'})
+      this.setState({ loaded: true, fileUploadBucket: 'true' })
     }
   }
 
@@ -46,17 +46,18 @@ class Status extends Component {
     return (
       <div className="statuswrap">
         <div className="col-2-16 statuslist">
-          <div className='status'>
-          Google Service Account Credentials: {this.state.googleServiceAccountCredentials}
+          <div className="status">
+            Google Service Account Credentials:{' '}
+            {this.state.googleServiceAccountCredentials}
           </div>
-          <div className='status'>
-          Sendgrid Api Key: {this.state.sendgridApiKey}
+          <div className="status">
+            Sendgrid Api Key: {this.state.sendgridApiKey}
           </div>
-          <div className='status'>
-          Google Credentials Client ID: {this.state.googleCredentialsClientID}
+          <div className="status">
+            Google Credentials Client ID: {this.state.googleCredentialsClientID}
           </div>
-          <div className='status'>
-          File Upload Bucket: {this.state.fileUploadBucket}
+          <div className="status">
+            File Upload Bucket: {this.state.fileUploadBucket}
           </div>
         </div>
       </div>
@@ -65,11 +66,9 @@ class Status extends Component {
 }
 
 const StatusWrapped = (props) => (
-    <AuthContext.Consumer>
-      {(value) => (
-        <Status {...props} auth={value} />
-      )}
-    </AuthContext.Consumer>
-  )
+  <AuthContext.Consumer>
+    {(value) => <Status {...props} auth={value} />}
+  </AuthContext.Consumer>
+)
 
 export default StatusWrapped

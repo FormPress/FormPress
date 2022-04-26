@@ -39,7 +39,12 @@ module.exports = (app) => {
 
       if (user.password === incomingHash.passwordHash) {
         if (user.isActive !== 1) {
-          res.status(403).json({ message: 'You have been blocked because of not following our TOS. If you think this is an error contact our support team.' })
+          res
+            .status(403)
+            .json({
+              message:
+                'You have been blocked because of not following our TOS. If you think this is an error contact our support team.'
+            })
         }
         let isAdmin = false
         const admin = await db.query(

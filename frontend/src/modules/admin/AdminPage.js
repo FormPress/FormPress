@@ -11,9 +11,15 @@ class AdminPage extends Component {
   renderAdminContent() {
     return (
       <Switch>
-        <Route path="/admin/users"><Users /></Route>
-        <Route path="/admin/roles"><Roles /></Route>
-        <Route path="/admin/status"><Status /></Route>
+        <Route path="/admin/users">
+          <Users />
+        </Route>
+        <Route path="/admin/roles">
+          <Roles />
+        </Route>
+        <Route path="/admin/status">
+          <Status />
+        </Route>
       </Switch>
     )
   }

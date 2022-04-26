@@ -112,7 +112,7 @@ module.exports = (app) => {
       const { user_id } = req.params
       const { roleId, isActive } = req.body
       const db = await getPool()
-      let result = null;
+      let result = null
 
       if (
         typeof user_id !== 'undefined' &&
@@ -127,45 +127,49 @@ module.exports = (app) => {
         )
       }
       if (result.length === 1) {
-          if (typeof roleId !== 'undefined' &&
+        if (
+          typeof roleId !== 'undefined' &&
           roleId !== null &&
-          roleId !== '0' ) {
-            const response = await db.query(
-              `
+          roleId !== '0'
+        ) {
+          const response = await db.query(
+            `
               SELECT * FROM \`role\` WHERE id = ?
             `,
-              [roleId]
-            )
-  
-            if (response.length === 1) {
-              await db.query(
-                `
+            [roleId]
+          )
+
+          if (response.length === 1) {
+            await db.query(
+              `
                   UPDATE \`user_role\`
                   SET \`role_id\` = ?
                   WHERE user_id = ?
                 `,
-                [roleId, user_id]
-              )
-            } else {
-              res.status(403).json({
-                message: 'Role id must be valid.'
-              })
-            }
+              [roleId, user_id]
+            )
+          } else {
+            res.status(403).json({
+              message: 'Role id must be valid.'
+            })
           }
-          if (typeof isActive !== 'undefined' && 
-          isActive !== null && 
-          (isActive == 0 || isActive == 1)) {
-              await db.query(
-                `
+        }
+        if (
+          typeof isActive !== 'undefined' &&
+          isActive !== null &&
+          (isActive == 0 || isActive == 1)
+        ) {
+          await db.query(
+            `
                   UPDATE \`user\`
                   SET \`isActive\` = ?
                   WHERE id = ?
                 `,
-                [isActive, user_id]
-              )         
-          }
+            [isActive, user_id]
+          )
+        }
 
-          res.status(200).json({ message: 'User changed succesfully' })
+        res.status(200).json({ message: 'User changed succesfully' })
       } else {
         res.status(403).json({ message: 'User not found' })
       }
@@ -180,7 +184,7 @@ module.exports = (app) => {
       const { user_id } = req.params
       const { new_password } = req.body
       const db = await getPool()
-      let result = null;
+      let result = null
 
       if (
         typeof user_id !== 'undefined' &&
@@ -212,7 +216,6 @@ module.exports = (app) => {
           )
           res.status(200).json({ message: 'Password changed succesfully' })
         }
-
       } else {
         res.status(403).json({ message: 'User not found' })
       }
@@ -226,7 +229,7 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id } = req.params
       const db = await getPool()
-      let result = null;
+      let result = null
 
       if (
         typeof user_id !== 'undefined' &&
@@ -248,7 +251,7 @@ module.exports = (app) => {
         )
       }
       if (result.length === 1) {
-        const user = result[0];
+        const user = result[0]
         const admin = await db.query(
           `SELECT \`id\` FROM \`admins\` WHERE email = ?`,
           [res.locals.auth.email]
@@ -280,7 +283,6 @@ module.exports = (app) => {
             exp
           })
         })
-
       } else {
         res.status(403).json({ message: 'User not found' })
       }
