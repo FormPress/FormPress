@@ -631,6 +631,24 @@ module.exports = (app) => {
     })
   })
 
+  app.get('/api/get/templates', async (req, res) => {
+    const files = fs.readdirSync(
+      path.resolve('../', 'frontend/src/templates/forms')
+    )
+    const templates = []
+    files.forEach((file) => {
+      if (file.endsWith('.json')) {
+        const rawTemplate = fs.readFileSync(
+          path.resolve('../', `frontend/src/templates/forms/${file}`)
+        )
+        const form = JSON.parse(rawTemplate)
+        templates.push(form)
+      }
+    })
+
+    res.send(templates)
+  })
+
   app.get('/api/server/capabilities', async (req, res) => {
     const isEnvironmentVariableSet = {
       googleServiceAccountCredentials:
