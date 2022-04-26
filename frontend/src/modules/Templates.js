@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import templates from '../templates/forms'
 import TemplatePlaceholder from '../svg/TemplatePlaceholder'
+import { api } from '../helper'
+
 import './Templates.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -17,8 +18,17 @@ class Templates extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({ templates, selectedTemplate: templates[0] })
+  async componentDidMount() {
+    const { data } = await api({ resource: `/api/get/templates` })
+
+    const templates = data
+
+    if (templates.length > 0) {
+      this.setState({ templates, selectedTemplate: templates[0] })
+    } else {
+      console.error('No templates found')
+    }
+
     const iframe = document.getElementById('template-iframe')
     iframe.onload = function () {
       iframe.classList.add('iframe-ready')
