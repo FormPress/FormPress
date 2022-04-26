@@ -631,7 +631,7 @@ module.exports = (app) => {
     })
   })
 
-  app.get('/api/get/templates', mustHaveValidToken, async (req, res) => {
+  app.get('/api/get/templates', async (req, res) => {
     const files = fs.readdirSync(
       path.resolve('../', 'frontend/src/templates/forms')
     )
