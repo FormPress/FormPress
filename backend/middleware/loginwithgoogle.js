@@ -1,11 +1,8 @@
 const path = require('path')
 const https = require('https')
-const jwt = require('jsonwebtoken')
 const { genRandomString } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
-const { error } = require(path.resolve('helper'))
-
-const JWT_SECRET = process.env.JWT_SECRET
+const { token } = require(path.resolve('helper')).token
 
 async function checkWithGoogle(token) {
   const checkUrl = '/oauth2/v3/tokeninfo?id_token=' + token
@@ -104,30 +101,15 @@ module.exports = (app) => {
       isAdmin = true
     }
 
-    const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
     const jwt_data = {
       user_id: user.id,
       email: user.email,
       user_role: user.role_id,
       admin: isAdmin,
       permission: JSON.parse(user.permission),
-      exp
     }
 
-    jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
-      console.log('token sign error ', err)
-      error.errorReport(err)
-
-      res.status(200).json({
-        message: 'Login Success',
-        token,
-        email: user.email,
-        user_role: user.role_id,
-        admin: isAdmin,
-        user_id: user.id,
-        permission: JSON.parse(user.permission),
-        exp
-      })
-    })
+    const data = await token(jwt_data);
+    return res.status(200).json(data)
   })
 }

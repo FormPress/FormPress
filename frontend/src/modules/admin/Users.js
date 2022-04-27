@@ -17,14 +17,9 @@ class Users extends Component {
       isActive: '',
       message: ''
     }
-
-    this.handleSave = this.handleSave.bind(this)
-    this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.listUser = this.listUser.bind(this)
-    this.handleLoginAsUser = this.handleLoginAsUser.bind(this)
   }
 
-  async listUser() {
+  getUserList = async () => {
     this.setState({ loaded: false })
     const { data } = await api({
       resource: `/api/admin/users`
@@ -33,11 +28,11 @@ class Users extends Component {
     this.setState({ loaded: true, data })
   }
 
-  async componentDidMount() {
-    await this.listUser()
+  componentDidMount() {
+    this.getUserList()
   }
 
-  handleFieldChange(elem, e) {
+  handleFieldChange = (elem, e) => { 
     this.setState({ saved: false })
     if (elem.label === 'Role Id' && !isNaN(parseInt(e.target.value))) {
       this.setState({ roleId: e.target.value })
@@ -47,7 +42,7 @@ class Users extends Component {
     }
   }
 
-  handleSelectUser(userId, incMessage = '') {
+  handleSelectUser = (userId, incMessage = '') => {
     const { data } = this.state
     const user_id = parseInt(userId)
     if (user_id !== 0) {
@@ -55,7 +50,7 @@ class Users extends Component {
 
       this.setState({
         selectedUserId: user_id,
-        roleId: user.role_id,
+        roleId: parseInt(user.role_id),
         emailVerified: user.emailVerified,
         isActive: user.isActive,
         message: incMessage,
@@ -64,7 +59,7 @@ class Users extends Component {
     }
   }
 
-  async handleSave(e) {
+  handleSave = async (e) => {
     e.preventDefault()
     const { selectedUserId, roleId, isActive } = this.state
 
@@ -74,15 +69,23 @@ class Users extends Component {
         method: 'put',
         body: { roleId, isActive }
       })
-      this.setState({ saved: true, message: data.message })
-      await this.listUser()
-      this.handleSelectUser(data.id, data.message)
+      
+      const copyData = [...this.state.data];
+      const selectedUser = copyData.find((user) => user.id === selectedUserId);
+
+      selectedUser.role_id = parseInt(roleId);
+      selectedUser.isActive = parseInt(isActive);
+      
+      const updatedData = copyData.map((user)=> selectedUserId === user.id ? selectedUser : user)
+
+      this.setState({ saved: true, message: data.message, data:updatedData })
+      this.handleSelectUser(selectedUserId, data.message)
     } else {
       this.setState({ message: 'Please select a user' })
     }
   }
 
-  async handleLoginAsUser() {
+  handleLoginAsUser = async () => {
     const { selectedUserId } = this.state
 
     if (selectedUserId !== 0) {
