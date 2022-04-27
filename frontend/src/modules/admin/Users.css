@@ -77,3 +77,18 @@
 .userwrap .elementButton input {
   background-color: #e2e2e2 !important;
 }
+
+.loginAsUser {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  width: 120px;
+  color: #ffffff;
+  background-color: #bbc9b9;
+  color: #333333;
+}
+
+.loginAsUser:hover {
+  cursor: pointer;
+  background-color: #79bd71;
+}

@@ -157,7 +157,7 @@ module.exports = (app) => {
         if (
           typeof isActive !== 'undefined' &&
           isActive !== null &&
-          (isActive === 0 || isActive === 1)
+          (parseInt(isActive) === 0 || 1)
         ) {
           await db.query(
             `
@@ -253,7 +253,7 @@ module.exports = (app) => {
       if (result.length === 1) {
         const user = result[0]
         const admin = await db.query(
-          `SELECT \`id\` FROM \`admins\` WHERE email = ?`,
+          `SELECT \`id\` FROM \`user\` WHERE email = ?`,
           [res.locals.auth.email]
         )
 
@@ -275,9 +275,61 @@ module.exports = (app) => {
           res.status(200).json({
             message: 'Login Success',
             token,
+            email: user.email,
             user_role: user.role_id,
             admin: false,
             inPersonate: admin[0].id,
+            user_id: user.id,
+            permission: JSON.parse(user.permission),
+            exp
+          })
+        })
+      } else {
+        res.status(403).json({ message: 'User not found' })
+      }
+    }
+  )
+
+  app.post(
+    '/api/admin/users/logout-as-user',
+    mustHaveValidToken,
+    async (req, res) => {
+      const db = await getPool()
+      const result = await db.query(
+        `
+        SELECT
+          u.*,
+          ur.role_id AS role_id,
+          r.permission AS permission
+        FROM \`user\` AS u
+          JOIN \`user_role\` AS ur ON u.id = ur.user_id
+          JOIN role AS r ON r.id = ur.\`role_id\`
+        WHERE u.id = ? AND u.emailVerified = 1
+      `,
+        [res.locals.auth.inPersonate]
+      )
+      if (result.length === 1) {
+        const user = result[0]
+        const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
+        const jwt_data = {
+          user_id: user.id,
+          email: user.email,
+          user_role: user.role_id,
+          admin: true,
+          permission: JSON.parse(user.permission),
+          exp
+        }
+
+        jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+          console.log('token sign error ', err)
+          error.errorReport(err)
+
+          res.status(200).json({
+            message: 'Login Success',
+            token,
+            email: user.email,
+            user_role: user.role_id,
+            admin: true,
             user_id: user.id,
             permission: JSON.parse(user.permission),
             exp

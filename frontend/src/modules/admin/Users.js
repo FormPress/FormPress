@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
-import { api } from '../../helper'
+import { api, setToken } from '../../helper'
 import Renderer from '../Renderer'
 
 import './Users.css'
@@ -21,6 +21,7 @@ class Users extends Component {
     this.handleSave = this.handleSave.bind(this)
     this.handleFieldChange = this.handleFieldChange.bind(this)
     this.listUser = this.listUser.bind(this)
+    this.handleLoginAsUser = this.handleLoginAsUser.bind(this)
   }
 
   async listUser() {
@@ -81,6 +82,36 @@ class Users extends Component {
     }
   }
 
+  async handleLoginAsUser() {
+    const { selectedUserId } = this.state
+
+    if (selectedUserId !== 0) {
+      const { success, data } = await api({
+        resource: `/api/admin/users/${selectedUserId}/login-as-user/`,
+        method: 'post'
+      })
+
+      if (success === true) {
+        setToken(data.token)
+        this.props.auth.setAuth({
+          email: data.email,
+          name: data.name,
+          exp: data.exp,
+          token: data.token,
+          inPersonate: data.inPersonate,
+          user_id: data.user_id,
+          user_role: data.user_role,
+          permission: data.permission,
+          admin: data.admin,
+          loggedIn: true
+        })
+      }
+      this.setState({ state: 'done', message: data.message })
+    } else {
+      this.setState({ message: 'Please select a user' })
+    }
+  }
+
   render() {
     const { data, loaded } = this.state
     return (
@@ -103,6 +134,13 @@ class Users extends Component {
               ))}
           </div>
           <div className="userpands">
+            <div className="userdetail">
+              <div
+                className="loginAsUser"
+                onClick={() => this.handleLoginAsUser()}>
+                Login As User
+              </div>
+            </div>
             <div className="userdetail">
               <form onSubmit={this.handleSave}>
                 <Renderer
