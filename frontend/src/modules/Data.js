@@ -225,7 +225,8 @@ class Data extends Component {
       selectedFormId: form.id,
       selectedFormPublishedId: form.published_id,
       selectedFormPublishedVersion: form.published_version,
-      selectedFormSelectedPublishedVersion: form.published_version
+      selectedFormSelectedPublishedVersion: form.published_version,
+      selectedSubmissionIds: []
     })
     this.updateSubmissionStatistics(form.id, form.published_version)
     this.updateSubmissions(form.id, form.published_version)
