@@ -30,27 +30,17 @@ class Templates extends Component {
     }
 
     const url = window.location.pathname.split('/')
-    const URItitle = url[url.length - 1]
+    const title = decodeURIComponent(url[url.indexOf('template') + 1])
+    const externalCloneCommand = url.includes('clone')
 
-    if (URItitle === 'template') {
-      this.setState({ selectedTemplate: templates[0] })
-    } else if (URItitle === 'clone') {
-      const decodedTitle = decodeURIComponent(url[url.length - 2])
-      const foundTemplate = templates.find(
-        (template) => template.title === decodedTitle
-      )
-
-      this.setState({ templateToBeCloned: foundTemplate })
-    } else {
-      const decodedTitle = decodeURIComponent(url[url.length - 2])
-      const foundTemplate = templates.find(
-        (template) => template.title === decodedTitle
-      )
-      if (foundTemplate) {
-        this.setState({ selectedTemplate: foundTemplate })
-      } else {
-        this.setState({ selectedTemplate: templates[0] })
+    if (title !== 'undefined') {
+      const selectedTemplate = templates.find((t) => t.title === title)
+      this.setState({ selectedTemplate })
+      if (externalCloneCommand) {
+        this.setState({ templateToBeCloned: selectedTemplate })
       }
+    } else {
+      this.setState({ selectedTemplate: templates[0] })
     }
 
     const iframe = document.getElementById('template-iframe')
