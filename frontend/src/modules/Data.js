@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import moment from 'moment'
+import _ from 'lodash'
 import Moment from 'react-moment'
 import Modal from './common/Modal'
 import { api } from '../helper'
@@ -9,6 +11,18 @@ import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
+
+import {
+  XAxis,
+  YAxis,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar
+} from 'recharts'
 import './Data.css'
 
 const getStartOfToday = () => {
@@ -73,20 +87,24 @@ class Data extends Component {
     this.setState({ submissions: data })
   }
 
-  async updateSubmissions(form_id) {
+  async updateSubmissions(form_id, version) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
       selectedFormId: form_id,
+      selectedFormSelectedPublishedVersion: version,
       selectedSubmissionId: null,
       entries: []
     })
 
+    let submissions = []
+
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/submissions?orderBy=created_at&desc=true`
     })
 
-    let submissions = data
+    submissions = data
+
     const { submissionFilterSelectors } = this.state
     const filterActive = !Object.values(submissionFilterSelectors).every(
       (selector) => selector === false
@@ -116,6 +134,16 @@ class Data extends Component {
     this.setState({ submissions })
   }
 
+  async updateSubmissionStatistics(form_id, version) {
+    const { data } = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/statistics`
+    })
+
+    this.setState({
+      statistics: data
+    })
+  }
+
   componentDidMount() {
     // clear location state on page refresh
     const history = createBrowserHistory()
@@ -125,12 +153,19 @@ class Data extends Component {
     }
 
     if (this.props.location.state?.form_id) {
-      const { form_id, submissionFilterSelectors } = this.props.location.state
+      const {
+        form_id,
+        submissionFilterSelectors,
+        selectedFormPublishedId,
+        selectedFormSelectedPublishedVersion
+      } = this.props.location.state
 
       this.updateForms()
 
       this.setState({
-        selectedFormId: form_id
+        selectedFormId: form_id,
+        selectedFormPublishedId: selectedFormPublishedId,
+        selectedFormSelectedPublishedVersion: selectedFormSelectedPublishedVersion
       })
 
       if (submissionFilterSelectors) {
@@ -139,7 +174,11 @@ class Data extends Component {
         })
       }
 
-      this.updateSubmissions(form_id)
+      this.updateSubmissionStatistics(
+        form_id,
+        selectedFormSelectedPublishedVersion
+      )
+      this.updateSubmissions(form_id, selectedFormSelectedPublishedVersion)
     } else {
       this.updateForms()
     }
@@ -152,9 +191,14 @@ class Data extends Component {
       submissionFilterSelectors: { showUnread: false },
       forms: [],
       selectedFormId: null,
+      selectedFormPublishedId: null,
+      selectedFormPublishedVersion: null,
+      selectedFormSelectedPublishedVersion: null,
+      selectedFormSelectedPublishedVersionStatistics: [],
       selectedSubmission: null,
       selectedSubmissionForm: null,
       selectedSubmissionIds: [],
+      statistics: {},
       submissions: [],
       entries: [],
       loading: {
@@ -172,11 +216,19 @@ class Data extends Component {
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
+    this.formVersionSelector = this.formVersionSelector.bind(this)
   }
 
-  handleFormClick(form) {
-    this.setState({ formSelectorOpen: false })
-    this.updateSubmissions(form.id)
+  async handleFormClick(form) {
+    this.setState({
+      formSelectorOpen: false,
+      selectedFormId: form.id,
+      selectedFormPublishedId: form.published_id,
+      selectedFormPublishedVersion: form.published_version,
+      selectedFormSelectedPublishedVersion: form.published_version
+    })
+    this.updateSubmissionStatistics(form.id, form.published_version)
+    this.updateSubmissions(form.id, form.published_version)
   }
 
   toggleSubmission(submission_id) {
@@ -269,6 +321,22 @@ class Data extends Component {
     } else {
       this.updateSubmissionsSeamless(form_id)
     }
+  }
+
+  async formVersionSelector(value) {
+    let versionData = await api({
+      resource: `/api/users/${this.props.auth.user_id}/forms/${this.state.selectedFormId}/${this.state.selectedFormSelectedPublishedVersion}`
+    })
+
+    this.setState({
+      selectedFormPublishedId: versionData.id,
+      selectedFormSelectedPublishedVersion: value
+    })
+
+    this.updateSubmissions(
+      this.state.selectedFormId,
+      this.state.selectedFormSelectedPublishedVersion
+    )
   }
 
   async handleCSVExportClick() {
@@ -380,11 +448,35 @@ class Data extends Component {
   }
 
   handleUnreadFilterToggle(e) {
-    const { selectedFormId, submissionFilterSelectors } = this.state
+    const {
+      submissionFilterSelectors,
+      selectedFormId,
+      selectedFormSelectedPublishedVersion
+    } = this.state
     e.value = !e.value
     submissionFilterSelectors.showUnread = e.value
     this.setState({ submissionFilterSelectors })
-    this.updateSubmissions(selectedFormId)
+    this.updateSubmissions(selectedFormId, selectedFormSelectedPublishedVersion)
+  }
+
+  CustomTooltip = ({ active, payload, label }) => {
+    if (active) {
+      return (
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: '#ffff',
+            padding: '5px',
+            border: '1px solid #cccc'
+          }}>
+          <label>{`${payload[0].name} : ${payload[0].value.toFixed(
+            2
+          )}%`}</label>
+        </div>
+      )
+    }
+
+    return null
   }
 
   render() {
@@ -395,9 +487,22 @@ class Data extends Component {
     let formSelectorText = 'Please select form'
 
     if (selectedFormId !== null && forms.length > 0) {
-      formSelectorText = forms.filter((form) => form.id === selectedFormId)[0]
-        .title
+      const formSelector = forms.filter((form) => {
+        if (form.id === selectedFormId) {
+          return form
+        }
+      })
+      formSelectorText = formSelector[0].title
     }
+
+    let tabs = [
+      { name: 'responses', text: 'Responses', path: '/data' },
+      {
+        name: 'statistics',
+        text: 'Statistics',
+        path: '/data/statistics'
+      }
+    ]
 
     return (
       <div className="data">
@@ -415,9 +520,15 @@ class Data extends Component {
               </Link>
             </div>
             <div className="col-15-16 mainTabs">
-              <a href="#/" className="selected">
-                Responses
-              </a>
+              {tabs.map((item, key) => (
+                <NavLink
+                  key={key}
+                  exact
+                  to={`${item.path}`}
+                  activeClassName="selected">
+                  {item.text}
+                </NavLink>
+              ))}
             </div>
           </div>
         </div>
@@ -451,10 +562,147 @@ class Data extends Component {
             </div>
           </div>
         </div>
-        <div className="cw center grid dataContent">
-          <div className="submissionSelector col-5-16">{submissions}</div>
-          <div className="entriesViewer col-11-16">{entries}</div>
-        </div>
+        {this.props.history.location.pathname.endsWith('/data') ? (
+          <div className="cw center grid dataContent">
+            <div className="submissionSelector col-5-16">{submissions}</div>
+            <div className="entriesViewer col-11-16">{entries}</div>
+          </div>
+        ) : (
+          <div className="cw center grid dataStatistics">
+            <div className="selectedSubmissionStatistics col-16-16">
+              <div className="submissionResponsesContainer">
+                {_.isEmpty(this.state.statistics) === false ? (
+                  <div className="submissionResponsesDetails">
+                    <div>
+                      <div className="detailLabel">
+                        {this.state.statistics.responses}
+                      </div>
+                      <div className="detailSublabel">Response(s)</div>
+                    </div>
+                    <div>
+                      <div className="detailLabel">
+                        {moment()
+                          .startOf('day')
+                          .seconds(
+                            this.state.statistics.average_completion_time
+                          )
+                          .format('mm:ss')}
+                      </div>
+                      <div className="detailSublabel">
+                        Average completion time
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="detailLabel">Active</div>
+                      <div className="detailSublabel">Status</div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="noData">No submission(s)</div>
+                )}
+              </div>
+              {_.isEmpty(this.state.statistics) === false ? (
+                <div className="statisticsContainer">
+                  {this.state.statistics.elements.map((question, i) => {
+                    if (question.chartType === 'lastFive') {
+                      return (
+                        <div className="questionContainer" key={i}>
+                          <div className="question">{question.label}</div>
+                          <div className="response_container">
+                            <div className="response_count_container">
+                              <div className="response_count_title">
+                                {question.responseCount}
+                              </div>
+                              <div className="response_count">Response(s)</div>
+                            </div>
+                            <div className="last_responses_container">
+                              <div className="last_responses_title">
+                                Last Response(s)
+                              </div>
+                              <div className="last_responses">
+                                {question.chartItems.map((response, index) => {
+                                  return (
+                                    <div key={index} title={response}>
+                                      &quot;{response}&quot;
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    } else if (question.chartType === 'pieChart') {
+                      return (
+                        <div className="questionContainer" key={i}>
+                          <div className="question">{question.label}</div>
+                          <PieChart width={730} height={300}>
+                            <Pie
+                              data={question.chartItems}
+                              color="#000000"
+                              dataKey="value"
+                              nameKey="name"
+                              cx="50%"
+                              cy="50%"
+                              outerRadius={120}
+                              fill="#8884d8">
+                              {question.chartItems.map((chartItem, index) => (
+                                <Cell
+                                  key={`cell-${index}`}
+                                  fill={chartItem.color}
+                                />
+                              ))}
+                            </Pie>
+                            <Tooltip content={<this.CustomTooltip />} />
+                            <Legend
+                              layout="vertical"
+                              verticalAlign="text-bottom"
+                              align="left"
+                            />
+                          </PieChart>
+                        </div>
+                      )
+                    } else if (question.chartType === 'barChart') {
+                      return (
+                        <div className="questionContainer" key={i}>
+                          <div className="question">{question.label}</div>
+                          <BarChart
+                            width={730}
+                            height={300}
+                            data={question.chartItems}
+                            barCategoryGap={5}>
+                            <XAxis
+                              type="category"
+                              stroke="#000000"
+                              dataKey="name"
+                            />
+                            <YAxis
+                              type="number"
+                              stroke="#000000"
+                              dataKey="value"
+                            />
+                            <Tooltip />
+                            <Bar
+                              dataKey="value"
+                              fill="#00a0fc"
+                              stroke="#000000"
+                              strokeWidth={1}
+                              barSize={20}>
+                              {question.chartItems.map((chartItem, index) => (
+                                <Cell key={index} fill={chartItem.color} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </div>
+                      )
+                    }
+                  })}
+                </div>
+              ) : null}
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -470,10 +718,19 @@ class Data extends Component {
     } = this.state
     let checkAllProps = { checked: true }
 
-    for (const { id } of submissions) {
-      if (selectedSubmissionIds.includes(id) === false) {
-        checkAllProps.checked = false
-        break
+    let options = Array.from(
+      Array(this.state.selectedFormPublishedVersion).keys(),
+      (x) => x + 1
+    )
+    options.pop()
+    options = options.reverse()
+
+    if (submissions.length > 0) {
+      for (const { id } of submissions) {
+        if (selectedSubmissionIds.includes(id) === false) {
+          checkAllProps.checked = false
+          break
+        }
       }
     }
 
@@ -521,22 +778,52 @@ class Data extends Component {
         </div>
       </div>,
       <div key="unreadSwitchContainer" className="unreadSwitchContainer">
-        <label className="unreadSwitch" id="unreadSwitch">
-          <input
-            type="checkbox"
-            name="unreadSwitch"
-            checked={submissionFilterSelectors.showUnread}
-            value="unread"
-            onChange={this.handleUnreadFilterToggle}
-          />
-          <span className="slider round" />
-        </label>
-        <label
-          key="unreadSwitchLabel"
-          className={`unreadSwitchLabel ${
-            submissionFilterSelectors.showUnread ? ' active' : ''
-          } `}>
-          Show unread only
+        <article>
+          <label className="unreadSwitch" id="unreadSwitch">
+            <input
+              type="checkbox"
+              name="unreadSwitch"
+              checked={submissionFilterSelectors.showUnread}
+              value="unread"
+              onChange={this.handleUnreadFilterToggle}
+            />
+            <span className="slider round" />
+          </label>
+          <label
+            key="unreadSwitchLabel"
+            className={`unreadSwitchLabel ${
+              submissionFilterSelectors.showUnread ? ' active' : ''
+            } `}>
+            Show unread only
+          </label>
+        </article>
+        <label>
+          {this.state.selectedFormPublishedVersion > 0 ? (
+            <select
+              className="formVersionSelector"
+              onChange={(e) => this.formVersionSelector(e.target.value)}
+              value={this.state.selectedFormSelectedPublishedVersion}>
+              <optgroup label="Frequently used versions">
+                <option value={options.length + 1}>Latest</option>
+                <option value="0">Preview</option>
+              </optgroup>
+              <optgroup label="Other versions">
+                {options.map((item) => {
+                  return (
+                    <option className="option-space" key={item} value={item}>
+                      {'v' + item}
+                    </option>
+                  )
+                })}
+              </optgroup>
+            </select>
+          ) : (
+            <select className="formVersionSelector">
+              <optgroup label="Frequently used versions">
+                <option value="0">Preview</option>
+              </optgroup>
+            </select>
+          )}
         </label>
       </div>,
       loading.submissions === false && submissions.length > 0 ? (
