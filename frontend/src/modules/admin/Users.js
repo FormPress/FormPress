@@ -32,7 +32,7 @@ class Users extends Component {
     this.getUserList()
   }
 
-  handleFieldChange = (elem, e) => { 
+  handleFieldChange = (elem, e) => {
     this.setState({ saved: false })
     if (elem.label === 'Role Id' && !isNaN(parseInt(e.target.value))) {
       this.setState({ roleId: e.target.value })
@@ -69,16 +69,18 @@ class Users extends Component {
         method: 'put',
         body: { roleId, isActive }
       })
-      
-      const copyData = [...this.state.data];
-      const selectedUser = copyData.find((user) => user.id === selectedUserId);
 
-      selectedUser.role_id = parseInt(roleId);
-      selectedUser.isActive = parseInt(isActive);
-      
-      const updatedData = copyData.map((user)=> selectedUserId === user.id ? selectedUser : user)
+      const copyData = [...this.state.data]
+      const selectedUser = copyData.find((user) => user.id === selectedUserId)
 
-      this.setState({ saved: true, message: data.message, data:updatedData })
+      selectedUser.role_id = parseInt(roleId)
+      selectedUser.isActive = parseInt(isActive)
+
+      const updatedData = copyData.map((user) =>
+        selectedUserId === user.id ? selectedUser : user
+      )
+
+      this.setState({ saved: true, message: data.message, data: updatedData })
       this.handleSelectUser(selectedUserId, data.message)
     } else {
       this.setState({ message: 'Please select a user' })

@@ -6,15 +6,15 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 exports.token = (jwt_data) => {
   const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
-  jwt_data = {...jwt_data, exp};
+  jwt_data = { ...jwt_data, exp }
 
-  const token = jwt.sign(jwt_data, JWT_SECRET);
+  const token = jwt.sign(jwt_data, JWT_SECRET)
 
   if (token) {
-    const data = { ...jwt_data, token, message: 'Login Success'}
-    return data;
+    const data = { ...jwt_data, token, message: 'Login Success' }
+    return data
   } else {
     error.errorReport('token sign error')
-    return null;
+    return null
   }
 }

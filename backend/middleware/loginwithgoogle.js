@@ -106,10 +106,10 @@ module.exports = (app) => {
       email: user.email,
       user_role: user.role_id,
       admin: isAdmin,
-      permission: JSON.parse(user.permission),
+      permission: JSON.parse(user.permission)
     }
 
-    const data = await token(jwt_data);
+    const data = await token(jwt_data)
     return res.status(200).json(data)
   })
 }

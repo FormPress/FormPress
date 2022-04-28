@@ -210,7 +210,9 @@ module.exports = (app) => {
             `,
             [hash.passwordHash, hash.salt, user_id]
           )
-          return res.status(200).json({ message: 'Password changed succesfully' })
+          return res
+            .status(200)
+            .json({ message: 'Password changed succesfully' })
         }
       } else {
         return res.status(403).json({ message: 'User not found' })
@@ -259,10 +261,10 @@ module.exports = (app) => {
           user_role: user.role_id,
           admin: false,
           inPersonate: admin[0].id,
-          permission: JSON.parse(user.permission),
+          permission: JSON.parse(user.permission)
         }
 
-        const data = await token(jwt_data);
+        const data = await token(jwt_data)
         return res.status(200).json(data)
       } else {
         return res.status(403).json({ message: 'User not found' })
@@ -295,10 +297,10 @@ module.exports = (app) => {
           email: user.email,
           user_role: user.role_id,
           admin: true,
-          permission: JSON.parse(user.permission),
+          permission: JSON.parse(user.permission)
         }
 
-        const data = await token(jwt_data);
+        const data = await token(jwt_data)
         return res.status(200).json(data)
       } else {
         return res.status(403).json({ message: 'Invalid Token' })
