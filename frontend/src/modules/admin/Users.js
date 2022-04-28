@@ -16,7 +16,7 @@ class Users extends Component {
       roleId: 0,
       emailVerified: 0,
       message: '',
-      roles: [],
+      roles: []
     }
   }
 
@@ -34,14 +34,13 @@ class Users extends Component {
     const { data } = await api({
       resource: `/api/admin/roles`
     })
-    let result = [];
+    let result = []
 
     data.forEach((role) => {
-      result.push(role.id); 
+      result.push(role.id)
     })
 
     this.setState({ loaded: true, roles: result })
-
   }
 
   componentDidMount() {
@@ -79,7 +78,7 @@ class Users extends Component {
   onWatchUserStatusInDidUpdate = (prevProps, prevState) => {
     const isChanged = prevState.isActive !== this.state.isActive
 
-    if(isChanged){
+    if (isChanged) {
       this.handleSave()
     }
   }
@@ -92,9 +91,9 @@ class Users extends Component {
     this.setState({ saved: false })
     const { selectedUserId } = this.state
     if (selectedUserId !== 0) {
-      this.setState(prevState => ({
+      this.setState((prevState) => ({
         isActive: Number(!prevState.isActive)
-      }));
+      }))
     } else {
       this.setState({ message: 'Please select a user' })
     }
@@ -119,7 +118,7 @@ class Users extends Component {
       selectedUser.isActive = parseInt(isActive)
 
       const updatedData = copyData.map((user) =>
-        selectedUserId === user.id ? user = selectedUser : user
+        selectedUserId === user.id ? (user = selectedUser) : user
       )
 
       this.setState({ saved: true, message: data.message, data: updatedData })
@@ -203,7 +202,7 @@ class Users extends Component {
                           type: 'Dropdown',
                           label: 'Role Id',
                           options: this.state.roles,
-                          placeholder: this.state.roleId,
+                          placeholder: this.state.roleId
                         },
                         {
                           id: 3,
@@ -217,10 +216,10 @@ class Users extends Component {
               </form>
             </div>
             <div className="userdetail">
-            <div>User: {this.state.isActive === 1 ? "Active" : "Suspended"}</div>
-              <div
-                className= "statusUser" 
-                onClick={(e) => this.changeStatus(e)}>
+              <div>
+                User: {this.state.isActive === 1 ? 'Active' : 'Suspended'}
+              </div>
+              <div className="statusUser" onClick={(e) => this.changeStatus(e)}>
                 Change Status
               </div>
             </div>
