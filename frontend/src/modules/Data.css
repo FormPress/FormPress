@@ -67,10 +67,182 @@
   border: 1px solid black;
 }
 
-.data > .dataContent {
+.data > .dataContent,
+.data > .dataStatistics {
   margin-top: 60px;
   background-color: white;
   box-shadow: 0 4px 1px 0 rgba(69, 121, 154, 0.2);
+}
+
+.data > .dataStatistics > .selectedSubmissionStatistics {
+  font-family: sans-serif;
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+.data .statisticsContainer .questionContainer {
+  border-top: 1px solid #eaeaea;
+}
+
+.data .statisticsContainer .questionContainer .question {
+  padding: 20px 0 10px;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.data .statisticsContainer .questionContainer .response_container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .response_container
+  .response_count_container {
+  display: flex;
+  flex: 0 0 40%;
+  flex-flow: column wrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0px;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .response_container
+  .response_count_container
+  .response_count_title {
+  font-size: 28px;
+  line-height: 36px;
+  text-align: center;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .response_container
+  .response_count_container
+  .response_count {
+  white-space: nowrap;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .response_container
+  .last_responses_container {
+  min-height: 49px;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0 0 60%;
+}
+
+.data .statisticsContainer .questionContainer .last_responses_container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: row wrap;
+  width: 100%;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .last_responses_container
+  .last_responses_title {
+  color: #595959;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.data
+  .statisticsContainer
+  .questionContainer
+  .last_responses_container
+  .last_responses {
+  font-size: 14px;
+  align-items: center;
+  line-height: 2;
+  font-style: italic;
+  color: rgb(0, 0, 0);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}
+
+.recharts-legend-wrapper {
+  top: 35px !important;
+}
+
+.data
+  > .dataStatistics
+  > .selectedSubmissionStatistics
+  > .submissionResponsesContainer {
+  position: relative;
+  width: 100%;
+  background-color: #f8f8f8;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.recharts-legend-item-text {
+  width: 200px;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.data
+  > .dataStatistics
+  > .selectedSubmissionStatistics
+  > .submissionResponsesContainer
+  > .submissionResponsesDetails {
+  display: flex;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: space-around;
+  outline: transparent solid 1px;
+  flex-flow: row nowrap;
+}
+.data
+  > .dataStatistics
+  > .selectedSubmissionStatistics
+  > .submissionResponsesContainer
+  > .submissionResponsesDetails
+  > * {
+  width: 33%;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+}
+.data .detailLabel {
+  font-size: 28px;
+  color: #1c5c85;
+  line-height: 32px;
+  margin-bottom: 5px;
+}
+
+.data .detailSublabel {
+  font-size: 15px;
+  color: #616161;
+  line-height: 20px;
 }
 
 .data > .dataContent table.fp_table > tbody > tr {
@@ -450,7 +622,7 @@
   position: relative;
 }
 
-.dataContent > .submissionSelector > .unreadSwitchContainer > .unreadSwitch {
+.dataContent > .submissionSelector > .unreadSwitchContainer .unreadSwitch {
   position: relative;
   display: inline-block;
   width: 45px;
@@ -460,14 +632,14 @@
 .dataContent
   > .submissionSelector
   > .unreadSwitchContainer
-  > .unreadSwitch
+  .unreadSwitch
   input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-.unreadSwitchContainer > .unreadSwitch > .slider {
+.unreadSwitchContainer .unreadSwitch > .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -479,7 +651,7 @@
   transition: 0.4s;
 }
 
-.unreadSwitchContainer > .unreadSwitch > .slider:before {
+.unreadSwitchContainer .unreadSwitch > .slider:before {
   position: absolute;
   content: '';
   height: 16px;
@@ -491,11 +663,11 @@
   transition: 0.4s;
 }
 
-.unreadSwitchContainer > .unreadSwitch > input:checked + .slider {
+.unreadSwitchContainer .unreadSwitch > input:checked + .slider {
   background-color: #1c5c85;
 }
 
-.unreadSwitchContainer > .unreadSwitch > input:focus + .slider {
+.unreadSwitchContainer .unreadSwitch > input:focus + .slider {
   box-shadow: 0 0 1px #1c5c85;
 }
 
@@ -504,30 +676,45 @@
   align-items: center;
   padding: 5px;
   margin-bottom: 5px;
+  justify-content: space-between;
 }
 
-.dataContent > .submissionSelector > .unreadSwitchContainer > label {
+.dataContent > .submissionSelector > .unreadSwitchContainer label {
   margin-right: 5px;
 }
 
-.dataContent
-  > .submissionSelector
-  > .unreadSwitchContainer
-  > .unreadSwitchLabel {
+.dataContent > .submissionSelector > .unreadSwitchContainer .unreadSwitchLabel {
   color: #646464;
+  vertical-align: sub;
+}
+
+.dataContent .formVersionSelector {
+  text-align: center;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.dataContent .formVersionSelector::before {
+  content: '\2713';
+  display: block;
+  text-align: center;
+  color: #333333;
+  font-size: 16px;
+  margin: auto;
+  position: relative;
 }
 
 .dataContent
   > .submissionSelector
   > .unreadSwitchContainer
-  > .unreadSwitchLabel.active {
+  .unreadSwitchLabel.active {
   color: #1c5c85;
 }
 
 .dataContent
   > .submissionSelector
   > .unreadSwitchContainer
-  > .unreadSwitch
+  .unreadSwitch
   > input:checked
   + .slider:before {
   -webkit-transform: translateX(20px);

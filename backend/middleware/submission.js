@@ -68,10 +68,10 @@ module.exports = (app) => {
     //create submission and get id
     const result = await db.query(
       `INSERT INTO \`submission\`
-        (form_id, created_at, version)
+        (form_id, created_at, version, completion_time)
       VALUES
-        (?, NOW(), ?)`,
-      [form_id, version]
+        (?, NOW(), ?, ?)`,
+      [form_id, version, parseInt(req.body.completion_time)]
     )
     const submission_id = result.insertId
 
