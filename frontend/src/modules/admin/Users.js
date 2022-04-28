@@ -11,34 +11,51 @@ class Users extends Component {
     this.state = {
       saved: true,
       loaded: false,
+      userListIsloaded: false,
       selectedUserId: 0,
       roleId: 0,
       emailVerified: 0,
-      isActive: '',
-      message: ''
+      message: '',
+      roles: [],
     }
   }
 
   getUserList = async () => {
-    this.setState({ loaded: false })
+    this.setState({ userListIsloaded: false })
     const { data } = await api({
       resource: `/api/admin/users`
     })
 
-    this.setState({ loaded: true, data })
+    this.setState({ userListIsloaded: true, data })
+  }
+
+  getRoleList = async () => {
+    this.setState({ loaded: false })
+    const { data } = await api({
+      resource: `/api/admin/roles`
+    })
+    let result = [];
+
+    data.forEach((role) => {
+      result.push(role.id); 
+    })
+
+    this.setState({ loaded: true, roles: result })
+
   }
 
   componentDidMount() {
     this.getUserList()
+    this.getRoleList()
   }
 
   handleFieldChange = (elem, e) => {
     this.setState({ saved: false })
     if (elem.label === 'Role Id' && !isNaN(parseInt(e.target.value))) {
-      this.setState({ roleId: e.target.value })
+      this.setState({ roleId: parseInt(e.target.value) })
     }
     if (elem.label === 'Is Active' && !isNaN(parseInt(e.target.value))) {
-      this.setState({ isActive: e.target.value })
+      this.setState({ isActive: parseInt(e.target.value) })
     }
   }
 
@@ -59,8 +76,33 @@ class Users extends Component {
     }
   }
 
+  onWatchUserStatusInDidUpdate = (prevProps, prevState) => {
+    const isChanged = prevState.isActive !== this.state.isActive
+
+    if(isChanged){
+      this.handleSave()
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.onWatchUserStatusInDidUpdate(prevProps, prevState)
+  }
+
+  changeStatus = () => {
+    this.setState({ saved: false })
+    const { selectedUserId } = this.state
+    if (selectedUserId !== 0) {
+      this.setState(prevState => ({
+        isActive: Number(!prevState.isActive)
+      }));
+    } else {
+      this.setState({ message: 'Please select a user' })
+    }
+  }
+
   handleSave = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
+    this.setState({ saved: false })
     const { selectedUserId, roleId, isActive } = this.state
 
     if (selectedUserId !== 0) {
@@ -77,7 +119,7 @@ class Users extends Component {
       selectedUser.isActive = parseInt(isActive)
 
       const updatedData = copyData.map((user) =>
-        selectedUserId === user.id ? selectedUser : user
+        selectedUserId === user.id ? user = selectedUser : user
       )
 
       this.setState({ saved: true, message: data.message, data: updatedData })
@@ -118,12 +160,12 @@ class Users extends Component {
   }
 
   render() {
-    const { data, loaded } = this.state
+    const { data, userListIsloaded } = this.state
     return (
       <div className="userwrap">
         <div>
           <div className="col-4-16 userlist">
-            {loaded &&
+            {userListIsloaded &&
               data.map((user) => (
                 <div
                   className={
@@ -158,19 +200,10 @@ class Users extends Component {
                       elements: [
                         {
                           id: 1,
-                          type: 'Number',
+                          type: 'Dropdown',
                           label: 'Role Id',
-                          value: this.state.roleId,
-                          min: 1,
-                          max: 200
-                        },
-                        {
-                          id: 2,
-                          type: 'Number',
-                          label: 'Is Active',
-                          value: this.state.isActive,
-                          min: 0,
-                          max: 1
+                          options: this.state.roles,
+                          placeholder: this.state.roleId,
                         },
                         {
                           id: 3,
@@ -182,6 +215,14 @@ class Users extends Component {
                   }}
                 />
               </form>
+            </div>
+            <div className="userdetail">
+            <div>User: {this.state.isActive === 1 ? "Active" : "Suspended"}</div>
+              <div
+                className= "statusUser" 
+                onClick={(e) => this.changeStatus(e)}>
+                Change Status
+              </div>
             </div>
             <div className="savedornot">
               {this.state.saved ? 'Saved' : 'Changes do not saved'}

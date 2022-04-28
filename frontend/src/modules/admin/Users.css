@@ -78,17 +78,31 @@
   background-color: #e2e2e2 !important;
 }
 
-.loginAsUser {
+.loginAsUser,
+.statusUser {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
-  width: 120px;
-  color: #ffffff;
-  background-color: #bbc9b9;
   color: #333333;
 }
 
-.loginAsUser:hover {
+.loginAsUser {
+  width: 140px;
+  background-color: #bbc9b9;
+}
+
+.statusUser {
+  width: 140px;
+  background-color: #c9bdb9;
+}
+
+.loginAsUser:hover, 
+.statusUser:hover {
   cursor: pointer;
+  color: #ffffff;
   background-color: #79bd71;
+}
+
+.statusUser:hover {
+  background-color: #c65c5c;
 }
