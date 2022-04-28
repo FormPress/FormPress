@@ -295,6 +295,7 @@ class Builder extends Component {
   }
 
   cloneTemplate = (template) => {
+    this.props.history.push('/editor/new/builder')
     this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props
@@ -1196,7 +1197,12 @@ class Builder extends Component {
           <ShareForm formId={formId} />
         </Route>
         <Route path="/editor/:formId/template">
-          <Templates formId={formId} cloneTemplate={this.cloneTemplate} />
+          <Templates
+            formId={formId}
+            cloneTemplate={this.cloneTemplate}
+            history={this.props.history}
+            location={this.props.location}
+          />
         </Route>
         <Route path="/editor/:formId/preview">
           <PreviewForm formID={formId} history={this.props.history} />
