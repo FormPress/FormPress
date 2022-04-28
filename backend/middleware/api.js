@@ -87,7 +87,7 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
       const formResults = await db.query(
-        `SELECT f.*, fb.id AS published_id,( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ? AND deleted_at IS NULL`,
+        `SELECT f.*, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount FROM form AS f WHERE f.user_id = 22 AND deleted_at IS NULL`,
         [user_id]
       )
 
