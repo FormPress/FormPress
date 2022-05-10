@@ -67,6 +67,8 @@
 
   const elements = elementsQuery.data
 
+  window.userAgent = navigator.userAgent.toLowerCase()
+
   // set global FORMPRESS object
   window.FORMPRESS = {
     api,

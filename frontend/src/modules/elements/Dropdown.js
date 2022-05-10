@@ -54,7 +54,10 @@ export default class Dropdown extends Component {
     type: 'Dropdown',
     label: 'Dropdown',
     options: ['Dropdown 1', 'Dropdown 2'],
-    placeholder: 'Choose an option',
+    placeholder: 'Choose an option'
+  }
+
+  static configurableSettings = {
     dropdownOptions: {
       default: ['Dropdown 1', 'Dropdown 2'],
       formProps: {
@@ -120,13 +123,13 @@ export default class Dropdown extends Component {
                   </option>
                 ) : null}
                 {config.hasDataset && this.state.datasets[config.dataset]
-                  ? this.state.datasets[config.dataset].map((item) => {
+                  ? this.state.datasets[config.dataset].map((item, index) => {
                       return (
                         <option
                           className="option-space"
-                          key={item}
-                          value={item}>
-                          {item}
+                          key={index}
+                          value={item.value}>
+                          {item.display}
                         </option>
                       )
                     })

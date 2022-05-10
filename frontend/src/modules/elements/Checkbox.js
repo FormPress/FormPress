@@ -15,7 +15,10 @@ export default class Checkbox extends Component {
     id: 0,
     type: 'Checkbox',
     label: 'Label',
-    options: ['New Checkbox'],
+    options: ['New Checkbox']
+  }
+
+  static configurableSettings = {
     toggle: {
       default: false,
       formProps: {

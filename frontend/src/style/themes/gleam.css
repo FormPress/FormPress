@@ -4,13 +4,13 @@
   background-color: white;
   width: 750px;
   margin: 20px auto 90px auto;
-  padding: 30px 90px 20px;
+  padding: 30px 45px 20px;
   box-sizing: border-box;
 }
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
-  margin: 2px 15px 2px 0px;
+  margin: 2px 0;
   position: relative;
   overflow: visible;
   display: grid;
@@ -190,6 +190,7 @@
   background-color: transparent;
 }
 .gleam .elementDropdown {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
   background-color: transparent;
 }
 .gleam .elementDropdown .dropdown-div {
@@ -272,6 +273,16 @@
 .gleam .elementName {
   background-color: transparent;
 }
+
+.elementName > .nameContainer > * > input,
+.elementName > .nameContainer > * > select {
+  height: 32px;
+  border: solid 1px #c9c9c9;
+  border-radius: 3px;
+  outline: 0;
+  background-color: #f5f5f5;
+}
+
 .gleam .elementFileUpload {
   background-color: transparent;
 }
@@ -539,7 +550,7 @@
 
 .gleam .nameContainer > * {
   flex: 1 1 100%;
-  margin: 0px 5px;
+  padding: 0 2px 0 2px;
 }
 
 .gleam .nameContainer > * > * {
@@ -566,7 +577,6 @@
   padding: 0px 24px 0px 4px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-color: #fff;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
@@ -673,4 +683,59 @@ input[type='file'] {
 }
 .inputContainer > span {
   margin-left: 5px;
+}
+
+.address-section > input,
+.address-section > select {
+  height: 2.3rem;
+  border-radius: 3px;
+  background-color: #f5f5f5;
+  border: solid 1px #c9c9c9;
+}
+
+.address-section {
+  display: inline-block;
+  float: left;
+  margin: 0 0 10px 0;
+}
+
+.elementAddress {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+}
+
+.address-section.adr-street {
+  width: 100%;
+  padding: 0 2px 0 2px;
+}
+
+.address-section > input {
+  background-color: #f5f5f5;
+  border: solid 1px #c9c9c9;
+  height: 2.3rem;
+  border-radius: 3px;
+}
+
+.adr-street > input {
+  width: 99%;
+}
+
+.adr-state,
+.adr-country,
+.adr-city,
+.adr-zip {
+  padding: 0 2px 0 2px;
+}
+
+.adr-state > input,
+.adr-state > select,
+.adr-country > select,
+.adr-zip > input,
+.adr-city > input {
+  width: 100%;
+}
+
+.address-flex-row {
+  display: flex;
+  clear: both;
+  justify-content: space-between;
 }

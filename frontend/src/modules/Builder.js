@@ -20,7 +20,8 @@ import {
   faFont,
   faMinus,
   faQuestionCircle,
-  faPen
+  faPen,
+  faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -53,7 +54,8 @@ const iconMap = {
   FileUpload: faFileAlt,
   Email: faEnvelope,
   Header: faHeading,
-  Separator: faMinus
+  Separator: faMinus,
+  Address: faMapMarkerAlt
 }
 
 //list of element texts
@@ -68,7 +70,8 @@ const textMap = {
   FileUpload: 'File Upload',
   Email: 'E-mail',
   Header: 'Header',
-  Separator: 'Separator'
+  Separator: 'Separator',
+  Address: 'Address'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -88,15 +91,11 @@ const getElements = () =>
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     let mergedObject = getConfigurableSettings(element.defaultConfig.type)
-    for (var key in element.defaultConfig) {
-      if (
-        Object.prototype.hasOwnProperty.call(
-          element.defaultConfig[key],
-          'default'
-        ) === true
-      ) {
-        Object.assign(mergedObject, { [key]: element.defaultConfig[key] })
-      }
+
+    for (const key in element.configurableSettings) {
+      Object.assign(mergedObject, {
+        [key]: element.configurableSettings[key]
+      })
     }
     acc[element.defaultConfig.type] = {
       configurableSettings: mergedObject
@@ -566,6 +565,8 @@ class Builder extends Component {
         question.sublabel = value
       } else if (id.split('_')[0] === 'name') {
         question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'address') {
+        question[`${itemID}SublabelText`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -1023,7 +1024,8 @@ class Builder extends Component {
             <NavLink
               className="option-container"
               to="/editor/new/template"
-              activeClassName="selected">
+              activeClassName="selected"
+              onClick={closeModal}>
               <div className="option" onClick={closeModal}>
                 <TemplateOptionSVG />
               </div>
@@ -1223,6 +1225,7 @@ class Builder extends Component {
       publishing
     } = this.state
     const { params } = this.props.match
+    console.log('selectedField', this.state.selectedField)
     let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = form.updated_at !== publishedForm.created_at
@@ -1234,6 +1237,17 @@ class Builder extends Component {
 
     return (
       <div className="builderStage col-10-16 grid">
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          @font-face {
+            font-family: "Twemoji Country Flags";
+            unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067,
+            U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+            src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
+          }`
+          }}
+        />
         <div className="formTitle col-16-16">
           {loading === false ? (
             <EditableLabel
