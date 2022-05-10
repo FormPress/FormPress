@@ -24,9 +24,23 @@ class Templates extends Component {
     const templates = data
 
     if (templates.length > 0) {
-      this.setState({ templates, selectedTemplate: templates[0] })
+      this.setState({ templates })
     } else {
       console.error('No templates found')
+    }
+
+    const url = window.location.pathname.split('/')
+    const title = decodeURIComponent(url[url.indexOf('template') + 1])
+    const externalCloneCommand = url.includes('clone')
+
+    if (title !== 'undefined') {
+      const selectedTemplate = templates.find((t) => t.title === title)
+      this.setState({ selectedTemplate })
+      if (externalCloneCommand) {
+        this.setState({ templateToBeCloned: selectedTemplate })
+      }
+    } else {
+      this.setState({ selectedTemplate: templates[0] })
     }
 
     const iframe = document.getElementById('template-iframe')
@@ -68,6 +82,9 @@ class Templates extends Component {
   }
 
   render() {
+    if (this.state.templateToBeCloned) {
+      this.props.cloneTemplate(this.state.templateToBeCloned)
+    }
     const { templates, selectedTemplate } = this.state
     const filterText = this.state.filterText.toLowerCase()
     const templatesMainContent = []
@@ -95,8 +112,9 @@ class Templates extends Component {
         )
       }
       templatesMainContent.push(
-        <div
+        <NavLink
           key={template.id}
+          to={`/editor/new/template/${template.title}`}
           id={`tpl-${template.id}`}
           className={`template-card ${
             template.title.toLowerCase().indexOf(filterText) === -1 ? ' dn' : ''
@@ -108,7 +126,7 @@ class Templates extends Component {
           <div key={template.id} className="template-info">
             <div className="template-title">{template.title}</div>
           </div>
-        </div>
+        </NavLink>
       )
       lastCategory = category
     })
@@ -130,20 +148,14 @@ class Templates extends Component {
         <div className="rightColumn">
           <div className="selected-template-title">
             {this.state.selectedTemplate.title}
-            <NavLink
-              to={{
-                pathname: `/editor/${this.props.formId || 'new'}/builder`
-              }}
-              activeClassName="selected">
-              <button
-                className="cloneButton"
-                onClick={() =>
-                  this.props.cloneTemplate(this.state.selectedTemplate)
-                }>
-                {' '}
-                Clone Template!{' '}
-              </button>
-            </NavLink>
+            <button
+              className="cloneButton"
+              onClick={() =>
+                this.props.cloneTemplate(this.state.selectedTemplate)
+              }>
+              {' '}
+              Clone Template!{' '}
+            </button>
           </div>
           <div className="selected-template-wrapper">
             <iframe
