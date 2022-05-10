@@ -8,7 +8,7 @@
   display: none;
   background-color: white;
   position: absolute;
-  top: 58px;
+  top: 50px;
   width: 245px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
   padding: 5px;
@@ -52,4 +52,35 @@
 
 .profileMenuContainer .profileMenuContent > a:hover {
   text-decoration: underline;
+}
+
+.header > .profile_container > .profile .wrapper-welcome {
+  display: inline-block;
+  width: 255px;
+  margin-top: 5px;
+  height: 40px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
+  background-color: white;
+  padding: 5px;
+}
+
+.header > .profile_container > .profile .wrapper-welcome > .welcome-user {
+  margin-left: 3px;
+  width: 210px;
+  font-size: 16px;
+  font-family: Montserrat;
+  font-weight: 600;
+  color: #1c5c85;
+  float: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 6px 0 6px 2px;
+}
+
+.header > .profile_container > .profile .wrapper-welcome > .profileSVG {
+  cursor: pointer;
+  margin-top: 5px;
+  margin-right: 1px;
+  float: right;
 }
