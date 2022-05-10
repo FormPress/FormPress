@@ -227,7 +227,7 @@ export default class Radio extends Component {
                     name={`q_${config.id}`}
                     value={item}
                     onChange={inputProps.onChange}
-                    checked={config.value === item}></input>
+                    defaultChecked={config.value === item}></input>
                   <label
                     className="radio-label"
                     htmlFor={`q_${config.id}_${key}`}>
