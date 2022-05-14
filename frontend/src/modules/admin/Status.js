@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
 import { api } from '../../helper'
+import CapabilitiesContext from '../../capabilities.context'
 
 import './Status.css'
 
@@ -73,9 +74,15 @@ class Status extends Component {
 }
 
 const StatusWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Status {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <CapabilitiesContext.Consumer>
+    {(capabilities) => (
+      <AuthContext.Consumer>
+        {(value) => (
+          <Status {...props} auth={value} capabilities={capabilities} />
+        )}
+      </AuthContext.Consumer>
+    )}
+  </CapabilitiesContext.Consumer>
 )
 
 export default StatusWrapped
