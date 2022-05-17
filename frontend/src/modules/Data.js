@@ -697,6 +697,30 @@ class Data extends Component {
                           </BarChart>
                         </div>
                       )
+                    } else if (question.chartType === 'average') {
+                      return (
+                        <div className="questionContainer" key={i}>
+                          <div className="question">{question.label}</div>
+                          <div className="response_container">
+                            <div className="response_count_container">
+                              <div className="response_count_title">
+                                {question.responseCount}
+                              </div>
+                              <div className="response_count">Response(s)</div>
+                            </div>
+                            <div className="last_responses_container">
+                              <div className="last_responses_title">
+                                Average value
+                              </div>
+                              <div className="last_responses">
+                                <div title={question.responseAverage}>
+                                  &quot;{question.responseAverage}&quot;
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     }
                   })}
                 </div>
@@ -916,6 +940,7 @@ class Data extends Component {
         )[0].type
       ].renderDataValue(entry)
     } catch (e) {
+      console.log(e)
       return 'This data is corrupted.'
     }
   }

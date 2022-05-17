@@ -103,6 +103,7 @@
   align-items: center;
   flex-flow: row wrap;
   width: 100%;
+  padding: 5px 0 10px;
 }
 
 .data
@@ -735,4 +736,51 @@
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.data > .dataContent > .entriesViewer > .entry .value .nps {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  max-width: fit-content;
+  padding: 0;
+}
+
+.data > .dataContent > .entriesViewer > .entry .value .nps li {
+  display: inline-flex;
+}
+
+.data > .dataContent > .entriesViewer > .entry .value .nps [type='radio'] {
+  display: none;
+}
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  .nps
+  .net-promoter-score-label {
+  display: inline-block;
+  border: 1px solid #1c5c85;
+  background-color: #fff;
+  color: #1c5c85;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+}
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  .nps-input:checked
+  + label {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
 }

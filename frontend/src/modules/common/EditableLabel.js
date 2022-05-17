@@ -2,8 +2,13 @@ import React from 'react'
 
 export default function EditableLabel(props) {
   function handleOnInput(e) {
-    const limit = 256
     const text = e.target.innerText
+    let limit = 256
+
+    if (typeof props.limit !== undefined) {
+      limit = props.limit
+    }
+
     if (text.length >= limit) {
       e.target.innerText = text.substr(0, limit)
       props.handleLabelChange(

@@ -1,0 +1,43 @@
+.elementNetPromoterScore ul {
+	list-style: none;
+	display: flex;
+	justify-content: space-evenly;
+	padding: 0 30px;
+}
+
+.elementNetPromoterScore ul li {
+	display: inline-flex;
+}
+
+.elementNetPromoterScore .first-child .sublabel {
+	text-align: center;
+}
+
+.elementNetPromoterScore [type='radio'] {
+	display: none;
+}
+
+.elementNetPromoterScore .net-promoter-score-label {
+	display: inline-block;
+	border: 1px solid #1c5c85;
+	background-color: #fff;
+	color: #1c5c85;
+	width: 40px;
+	height: 30px;
+	margin: 0 5px;
+	user-select: none;
+	text-align: center;
+	line-height: 28px;
+}
+
+.elementNetPromoterScore .net-promoter-score-label:hover {
+	border: 1px solid #1c5c85;
+	background-color: #1c5c85;
+	color: #fff;
+}
+
+.elementNetPromoterScore input[type='radio']:checked + label {
+	border: 1px solid #1c5c85;
+	background-color: #1c5c85;
+	color: #fff;
+}
