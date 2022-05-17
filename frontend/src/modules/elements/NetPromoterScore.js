@@ -3,7 +3,6 @@ import React, { Component } from 'react'
 import { cloneDeep } from 'lodash'
 
 import EditableLabel from '../common/EditableLabel'
-import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
 
 import './NetPromoterScore.css'
@@ -112,13 +111,6 @@ export default class NetPromoterScore extends Component {
 
   render() {
     const { config, mode } = this.props
-
-    const options =
-      Array.isArray(config.options) === true ||
-      typeof config.options !== 'undefined'
-        ? config.options
-        : ['']
-
     const inputProps = {}
 
     if (typeof this.props.onChange !== 'undefined') {
