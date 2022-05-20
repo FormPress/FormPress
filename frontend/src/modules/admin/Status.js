@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
-import { api } from '../../helper'
 import CapabilitiesContext from '../../capabilities.context'
 
 import './Status.css'
