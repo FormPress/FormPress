@@ -61,7 +61,7 @@ const Profile = () => {
                   Settings
                 </NavLink>
               </div>
-              {auth.inPersonate ? (
+              {auth.impersonate ? (
                 <div className="profileMenuEntry">
                   <span onClick={logoutAsUser}>
                     <LogoutSVG width={16} heigth={16} />

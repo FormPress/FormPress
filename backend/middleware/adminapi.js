@@ -260,7 +260,7 @@ module.exports = (app) => {
           email: user.email,
           user_role: user.role_id,
           admin: false,
-          inPersonate: admin[0].id,
+          impersonate: admin[0].id,
           permission: JSON.parse(user.permission)
         }
 
@@ -288,7 +288,7 @@ module.exports = (app) => {
           JOIN role AS r ON r.id = ur.\`role_id\`
         WHERE u.id = ? AND u.emailVerified = 1
       `,
-        [res.locals.auth.inPersonate]
+        [res.locals.auth.impersonate]
       )
       if (result.length === 1) {
         const user = result[0]
