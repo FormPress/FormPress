@@ -18,7 +18,8 @@ const textMap = {
   Email: 'E-mail',
   Header: 'Header',
   Separator: 'Separator',
-  Address: 'Address'
+  Address: 'Address',
+  NetPromoterScore: 'Net Promoter Score'
 }
 
 class Roles extends Component {

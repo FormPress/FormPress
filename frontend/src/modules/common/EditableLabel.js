@@ -5,7 +5,7 @@ export default function EditableLabel(props) {
     const text = e.target.innerText
     let limit = 256
 
-    if (typeof props.limit !== undefined) {
+    if (typeof props.limit !== 'undefined') {
       limit = props.limit
     }
 
