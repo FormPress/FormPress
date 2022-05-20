@@ -12,17 +12,23 @@ class Status extends Component {
         <div className="col-2-16 statuslist">
           <div className="status">
             Google Service Account Credentials:{' '}
-            {this.props.capabilities.googleServiceAccountCredentials ? 'true' : 'false'}
+            {this.props.capabilities.googleServiceAccountCredentials
+              ? 'true'
+              : 'false'}
           </div>
           <div className="status">
-            Sendgrid Api Key: {this.props.capabilities.sendgridApiKey ? 'true' : 'false'}
+            Sendgrid Api Key:{' '}
+            {this.props.capabilities.sendgridApiKey ? 'true' : 'false'}
           </div>
           <div className="status">
             Google Credentials Client ID:{' '}
-            {this.props.capabilities.googleCredentialsClientID ? 'true' : 'false'}
+            {this.props.capabilities.googleCredentialsClientID
+              ? 'true'
+              : 'false'}
           </div>
           <div className="status">
-            File Upload Bucket: {this.props.capabilities.fileUploadBucket ? 'true' : 'false'}
+            File Upload Bucket:{' '}
+            {this.props.capabilities.fileUploadBucket ? 'true' : 'false'}
           </div>
         </div>
       </div>
