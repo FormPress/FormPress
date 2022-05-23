@@ -91,8 +91,16 @@
     width: 350px;
   }
 }
-@media only screen and (min-width: 320px) and (max-width: 480px) {
+@media only screen and (max-width: 480px) {
   .not-found-container {
+    width: 100%;
+  }
+  .not-found-container .not-found-img,
+  .not-found-container .not-found-text {
+    text-align: center;
+    padding: 0;
+    display: block;
+    margin: auto;
     width: 100%;
   }
 }
