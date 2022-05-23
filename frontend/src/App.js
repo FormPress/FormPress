@@ -236,6 +236,21 @@ class App extends Component {
                 />
                 <PrivateRoute
                   exact
+                  path="/editor/:formId/design"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/preview"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/share"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
                   path="/editor/:formId/builder/properties"
                   component={Builder}
                 />
