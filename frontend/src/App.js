@@ -224,12 +224,19 @@ class App extends Component {
                   path="/editor/:formId/builder/question/:questionId/properties"
                   component={Builder}
                 />
-
-                <Redirect
-                  exact
-                  from="/editor/:formId"
-                  to="/editor/:formId/builder"
-                />
+                {window.location.pathname.endsWith('/new') ? (
+                  <PrivateRoute
+                    exact
+                    path="/editor/:formId"
+                    component={Builder}
+                  />
+                ) : (
+                  <Redirect
+                    exact
+                    from="/editor/:formId"
+                    to="/editor/:formId/builder"
+                  />
+                )}
                 <PrivateRoute
                   exact
                   path="/editor/:formId/builder"
@@ -256,7 +263,13 @@ class App extends Component {
                   component={Builder}
                 />
                 <PrivateRoute exact path="/editor" component={Builder} />
-                <PrivateRoute exact path="/data" component={Data} />
+                <PrivateRoute exact strict path="/data" component={Data} />
+                <PrivateRoute
+                  exact
+                  strict
+                  path="/data/statistics"
+                  component={Data}
+                />
                 <PrivateRoute path="/settings" component={Settings} />
 
                 <Route exact path="/login" component={Login} />
