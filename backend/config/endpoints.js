@@ -59,6 +59,18 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/users/:user_id/forms/:form_id/:version_id/submissions',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/1/submissions'
+    },
+    {
+      method: 'get',
+      path: '/api/users/:user_id/forms/:form_id/:version_id/statistics',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/1/statistics'
+    },
+    {
+      method: 'get',
       path: '/api/users/:user_id/forms/:form_id/elements',
       protected: false,
       exampleRequestPath: '/api/users/1/forms/1'
@@ -164,9 +176,20 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/get/templates',
+      protected: false
+    },
+    {
+      method: 'get',
       path: '/api/form/element/validators',
       protected: false,
       exampleRequestPath: 'api/form/element/validators?elements=Button,Email'
+    },
+    {
+      method: 'get',
+      path: '/api/datasets',
+      protected: false,
+      exampleRequestPath: 'api/datasets?dataset=countries'
     }
   ]
 }

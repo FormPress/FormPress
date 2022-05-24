@@ -38,16 +38,36 @@
   padding: 10px 0;
   position: relative;
   display: block;
-  height: 440px;
 }
+
 .questionPropertiesForm > .element {
   margin-top: 10px;
   padding: 0 10px;
 }
 
 .questionPropertiesForm > .element > .label {
+  width: 100%;
   margin-bottom: 10px;
   margin-right: 10px;
+  font-weight: bold;
+}
+
+.questionPropertiesForm > .elementRadio > .input > ul {
+  margin-top: 5px;
+  padding: 0;
+}
+
+.questionPropertiesForm .elementRadio > .input > ul > li {
+  display: block;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+.questionPropertiesForm .elementRadio > .input > ul > li > label {
+  margin-left: 5px;
+}
+
+.questionPropertiesForm > .elementHeader {
+  margin-top: -30px;
 }
 
 .questionPropertiesForm .element:last-child {
@@ -68,4 +88,15 @@
 
 #qc_required.elementHider + #qc_requiredText.elementTextBox {
   display: none !important;
+}
+
+#qc_hasDataset + #qc_dropdownOptions.elementTextArea {
+  display: none !important;
+}
+
+#qc_hasDataset.elementHider + #qc_dataset.elementDropdown {
+  display: none !important;
+}
+
+#qc_dataset {
 }

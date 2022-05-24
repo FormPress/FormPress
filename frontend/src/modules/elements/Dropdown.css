@@ -1,24 +1,24 @@
 select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  outline: 0;
   box-shadow: none;
-  border-style: ridge;
+  border-style: solid;
   background: #ffffff;
   flex: 1;
-  padding: 0 0.5em;
+  padding: 2px;
   color: #0071bc;
   cursor: pointer;
 }
 select::-ms-expand {
   display: none;
 }
+
+.elementDropdown {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+}
+
 .dropdown-div {
   position: relative;
   display: inline-flex;
-  width: 50%;
+  width: 100%;
   height: 3em;
   line-height: 3;
   overflow: hidden;

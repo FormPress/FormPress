@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -21,7 +22,9 @@ const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { FP_ENV, FP_HOST } = process.env
 const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-const { storage, model, error } = require(path.resolve('helper'))
+const { storage, model, error, testStringIsJson } = require(path.resolve(
+  'helper'
+))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
@@ -81,9 +84,18 @@ module.exports = (app) => {
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
+      const db = await getPool()
       const user_id = req.params.user_id
+      const formResults = await db.query(
+        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 ) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
+        [user_id]
+      )
 
-      res.json((await formModel.list({ user_id })) || [])
+      if (formResults.length === 0) {
+        res.json([])
+      } else {
+        return res.json(formResults.map(hydrateForm))
+      }
     }
   )
 
@@ -239,7 +251,272 @@ module.exports = (app) => {
     }
   )
 
+  // return statistics of given form id and version number
+  app.get(
+    '/api/users/:user_id/forms/:form_id/:version_id/statistics',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const elementCharts = {
+        TextBox: 'lastFive',
+        TextArea: 'lastFive',
+        Separator: 'none',
+        Radio: 'pieChart',
+        Name: 'lastFive',
+        Header: 'none',
+        FileUpload: 'none',
+        Email: 'lastFive',
+        DropDown: 'barChart',
+        Checkbox: 'barChart',
+        Button: 'none',
+        NetPromoterScore: 'average'
+      }
+
+      const colors = [
+        '#1D91C0',
+        '#67001F',
+        '#CB181D',
+        '#78C679',
+        '#F46D43',
+        '#A6CEE3',
+        '#FD8D3C',
+        '#A6D854',
+        '#D4B9DA',
+        '#6A51A3',
+        '#7F0000',
+        '#D9D9D9',
+        '#FFF7BC',
+        '#000000',
+        '#F0F0F0',
+        '#C7EAE5',
+        '#003C30',
+        '#F16913',
+        '#FFF7FB',
+        '#8C6BB1',
+        '#C7E9B4',
+        '#762A83',
+        '#FC9272',
+        '#AE017E',
+        '#F7F7F7',
+        '#DF65B0',
+        '#EF3B2C',
+        '#74C476',
+        '#E5F5F9',
+        '#F7FCFD'
+      ]
+
+      const { form_id, version_id } = req.params
+      if (version_id > 0) {
+        let statistics = {
+          responses: 0,
+          title: '',
+          average_completion_time: 0,
+          elements: []
+        }
+        const db = await getPool()
+        let query =
+          'SELECT * FROM `submission` WHERE form_id = ? AND version = ?'
+        let submissions = await db.query(query, [form_id, version_id])
+
+        let willReturnObject = {},
+          willReturnArray = []
+
+        if (submissions.length > 0) {
+          statistics.responses = submissions.length
+
+          query =
+            'SELECT AVG(completion_time) AS average_completion_time FROM `submission` WHERE form_id = ? AND version = ?'
+          const a_c_t = await db.query(query, [form_id, version_id])
+
+          statistics.average_completion_time = Math.round(
+            a_c_t[0].average_completion_time
+          )
+
+          query =
+            'SELECT * FROM `form_published` WHERE form_id = ? AND version = ?'
+          let result = await db.query(query, [form_id, version_id])
+          result = result[0]
+
+          statistics.title = result.title
+
+          for (let element of JSON.parse(result.props).elements) {
+            let elementTemplate = {
+              label: element.label,
+              elementType: element.type,
+              chartType: elementCharts[element.type],
+              chartItems: []
+            }
+            if (elementTemplate.chartType !== 'none') {
+              for (let submission of submissions) {
+                query =
+                  'SELECT * FROM `entry` WHERE form_id = ? AND submission_id = ? AND question_id = ?'
+                let questionStatistics = await db.query(query, [
+                  form_id,
+                  submission.id,
+                  element.id
+                ])
+                if (questionStatistics.length > 0) {
+                  if (elementTemplate.elementType === 'Name') {
+                    elementTemplate.chartItems.push(
+                      Object.values(JSON.parse(questionStatistics[0].value))
+                        .join(' ')
+                        .trim()
+                    )
+                  } else {
+                    elementTemplate.chartItems.push(questionStatistics[0].value)
+                  }
+                } else {
+                  elementTemplate.chartItems = []
+                }
+              }
+
+              if (elementTemplate.chartItems.length > 0) {
+                switch (elementTemplate.chartType) {
+                  case 'lastFive':
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+                    elementTemplate.chartItems = elementTemplate.chartItems.slice(
+                      -5
+                    )
+                    statistics.elements.push(elementTemplate)
+
+                    break
+                  case 'pieChart':
+                    willReturnArray = []
+                    for (const [key, value] of Object.entries(
+                      elementTemplate.chartItems.reduce((obj, chartItem) => {
+                        if (!obj[chartItem]) {
+                          obj[chartItem] = 1
+                        } else {
+                          obj[chartItem] = obj[chartItem] + 1
+                        }
+                        return obj
+                      }, {})
+                    )) {
+                      willReturnObject = {}
+                      willReturnObject.name = key
+                      willReturnObject.value =
+                        (value * 100) / elementTemplate.chartItems.length
+
+                      willReturnArray.push(willReturnObject)
+                    }
+
+                    elementTemplate.chartItems = willReturnArray
+
+                    for (const [
+                      index,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
+                      value.color = colors[index]
+                    }
+
+                    statistics.elements.push(elementTemplate)
+                    break
+                  case 'barChart':
+                    willReturnArray = []
+                    for (const [key, value] of Object.entries(
+                      elementTemplate.chartItems.reduce((obj, chartItem) => {
+                        if (!testStringIsJson.hasJsonStructure(chartItem)) {
+                          if (!obj[chartItem]) {
+                            obj[chartItem] = 1
+                          } else {
+                            obj[chartItem] = obj[chartItem] + 1
+                          }
+                        } else {
+                          testStringIsJson
+                            .safeJsonParse(chartItem)
+                            .map((item) => {
+                              if (!obj[item]) {
+                                obj[item] = 1
+                              } else {
+                                obj[item] = obj[item] + 1
+                              }
+                            })
+                        }
+                        return obj
+                      }, {})
+                    )) {
+                      willReturnObject = {}
+                      willReturnObject.name = key
+                      willReturnObject.value = value
+
+                      willReturnArray.push(willReturnObject)
+                    }
+
+                    elementTemplate.chartItems = willReturnArray
+
+                    for (const [
+                      index,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
+                      value.color = colors[index]
+                    }
+
+                    statistics.elements.push(elementTemplate)
+                    break
+
+                  case 'average':
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+                    elementTemplate.responseAverage =
+                      (
+                        elementTemplate.chartItems.reduce(
+                          (a, b) => parseInt(a) + parseInt(b),
+                          0
+                        ) / elementTemplate.chartItems.length
+                      ).toFixed(2) || 0
+                    statistics.elements.push(elementTemplate)
+
+                    break
+                }
+              }
+            }
+          }
+
+          res.json(statistics)
+        } else {
+          res.json([])
+        }
+      } else {
+        res.json([])
+      }
+    }
+  )
+
   // return submissions of given form id and version number
+  app.get(
+    '/api/users/:user_id/forms/:form_id/:version_id/submissions',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id, version_id } = req.params
+      const { orderBy, desc } = req.query
+      const db = await getPool()
+      let query = 'SELECT * FROM `submission` WHERE form_id = ? AND version = ?'
+
+      if (typeof orderBy !== 'undefined') {
+        if (['created_at', 'deleted_at', 'updated_at'].includes(orderBy)) {
+          query += ` ORDER BY ${orderBy}`
+
+          if (desc === 'true') {
+            query += ' DESC'
+          } else {
+            query += ' ASC'
+          }
+        }
+      }
+
+      const result = await db.query(query, [form_id, version_id])
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  // return form of given form id and version number
   app.get(
     '/api/users/:user_id/forms/:form_id/:version_id',
     mustHaveValidToken,
@@ -631,6 +908,24 @@ module.exports = (app) => {
     })
   })
 
+  app.get('/api/get/templates', async (req, res) => {
+    const files = fs.readdirSync(
+      path.resolve('../', 'frontend/src/templates/forms')
+    )
+    const templates = []
+    files.forEach((file) => {
+      if (file.endsWith('.json')) {
+        const rawTemplate = fs.readFileSync(
+          path.resolve('../', `frontend/src/templates/forms/${file}`)
+        )
+        const form = JSON.parse(rawTemplate)
+        templates.push(form)
+      }
+    })
+
+    res.send(templates)
+  })
+
   app.get('/api/server/capabilities', async (req, res) => {
     const isEnvironmentVariableSet = {
       googleServiceAccountCredentials:
@@ -658,6 +953,31 @@ module.exports = (app) => {
       console.error(err)
       error.errorReport(err)
       res.status(500).json({ message: 'DB error' })
+    }
+  })
+
+  // a public endpoint to return datasets
+  app.get('/api/datasets', async (req, res) => {
+    const datasetQuery = req.query.dataset.split(',')
+
+    const jsonpResponse = {}
+
+    try {
+      datasetQuery.forEach((dataset) => {
+        jsonpResponse[dataset] =
+          require(path.resolve(
+            'script',
+            'transformed',
+            'datasets',
+            `${dataset}.json`
+          )) || {}
+      })
+      res.jsonp(jsonpResponse)
+    } catch (err) {
+      console.error(err)
+      res
+        .status(500)
+        .json({ message: 'Error while retrieving the dataset from server.' })
     }
   })
 

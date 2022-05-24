@@ -224,6 +224,7 @@ class App extends Component {
                   path="/editor/:formId/builder/question/:questionId/properties"
                   component={Builder}
                 />
+
                 <Redirect
                   exact
                   from="/editor/:formId"
@@ -260,6 +261,7 @@ class App extends Component {
 
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={SignUp} />
+
                 <Route
                   path="/verify/:userId/:verificationCode"
                   component={VerifyEMail}

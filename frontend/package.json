@@ -15,7 +15,8 @@
     "react-moment": "0.9.7",
     "react-router-dom": "5.1.2",
     "react-scripts": "^4.0.3",
-    "react-share": "^4.4.0"
+    "react-share": "^4.4.0",
+    "recharts": "^2.1.9"
   },
   "scripts": {
     "start-compose": "NODE_PATH=/node_modules react-scripts start",

@@ -19,6 +19,10 @@
     {
       name: 'validate',
       check: () => formHasValidators === true
+    },
+    {
+      name: 'datasets',
+      check: (element) => element.hasDataset === true
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -62,6 +66,8 @@
   }
 
   const elements = elementsQuery.data
+
+  window.userAgent = navigator.userAgent.toLowerCase()
 
   // set global FORMPRESS object
   window.FORMPRESS = {

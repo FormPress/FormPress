@@ -6,13 +6,16 @@ import Separator from './Separator'
 import './Header.css'
 
 export default class Header extends Component {
-  static weight = 10
+  static weight = 11
 
   static defaultConfig = {
     id: 0,
     type: 'Header',
     label: 'Header',
-    sublabel: 'sub header',
+    sublabel: 'sub header'
+  }
+
+  static configurableSettings = {
     separator: {
       default: false,
       formProps: {
