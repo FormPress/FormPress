@@ -739,3 +739,47 @@ input[type='file'] {
   clear: both;
   justify-content: space-between;
 }
+
+.renderer.gleam .elementNetPromoterScore ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0 30px;
+}
+
+.renderer.gleam .elementNetPromoterScore ul li {
+  display: inline-flex;
+}
+
+.renderer.gleam .elementNetPromoterScore .first-child .sublabel {
+  text-align: center;
+}
+
+.renderer.gleam .elementNetPromoterScore [type='radio'] {
+  display: none;
+}
+
+.renderer.gleam .elementNetPromoterScore .net-promoter-score-label {
+  display: inline-block;
+  border: 1px solid #1c5c85;
+  background-color: #fff;
+  color: #1c5c85;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+}
+
+.renderer.gleam .elementNetPromoterScore .net-promoter-score-label:hover {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
+}
+
+.renderer.gleam .elementNetPromoterScore input[type='radio']:checked + label {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
+}

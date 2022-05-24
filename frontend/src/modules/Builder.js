@@ -21,7 +21,8 @@ import {
   faMinus,
   faQuestionCircle,
   faPen,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faSignal
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -55,7 +56,8 @@ const iconMap = {
   Email: faEnvelope,
   Header: faHeading,
   Separator: faMinus,
-  Address: faMapMarkerAlt
+  Address: faMapMarkerAlt,
+  NetPromoterScore: faSignal
 }
 
 //list of element texts
@@ -71,7 +73,8 @@ const textMap = {
   Email: 'E-mail',
   Header: 'Header',
   Separator: 'Separator',
-  Address: 'Address'
+  Address: 'Address',
+  NetPromoterScore: 'Net Promoter Score'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -566,6 +569,8 @@ class Builder extends Component {
       } else if (id.split('_')[0] === 'name') {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'address') {
+        question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'net') {
         question[`${itemID}SublabelText`] = value
       } else {
         try {
@@ -1225,7 +1230,6 @@ class Builder extends Component {
       publishing
     } = this.state
     const { params } = this.props.match
-    console.log('selectedField', this.state.selectedField)
     let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = form.updated_at !== publishedForm.created_at
