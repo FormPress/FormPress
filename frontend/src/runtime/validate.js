@@ -1,5 +1,5 @@
 ;(async () => {
-  const valids = {}
+  FORMPRESS.valids = {}
 
   const additionalElemEventListeners = {
     Email: ['input']
@@ -13,24 +13,26 @@
       continue
     }
 
-    valids[id] = {
-      id,
-      valid: true
-    }
-
     const containerElem = document.getElementById(`qc_${id}`)
+    const elementPageNumber = containerElem.parentElement.dataset.fpPagenumber
+
+    FORMPRESS.valids[id] = {
+      id,
+      valid: true,
+      page: elementPageNumber
+    }
 
     containerElem.addEventListener('change', () => {
       let value = elemHelpers.getElementValue(id)
-      valids[id].valid = elemHelpers.isValid(value)
+      FORMPRESS.valids[id].valid = elemHelpers.isValid(value)
 
       if (elemHelpers.isFilled(value)) {
-        valids[id].valid === true
+        FORMPRESS.valids[id].valid === true
           ? containerElem.classList.remove('invalidError')
           : containerElem.classList.add('invalidError')
       } else {
         containerElem.classList.remove('invalidError')
-        valids[id].valid = true
+        FORMPRESS.valids[id].valid = true
       }
     })
 
@@ -38,15 +40,15 @@
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
         containerElem.addEventListener(eventListener, () => {
           let value = elemHelpers.getElementValue(id)
-          valids[id].valid = elemHelpers.isValid(value)
+          FORMPRESS.valids[id].valid = elemHelpers.isValid(value)
 
           if (elemHelpers.isFilled(value)) {
-            valids[id].valid === true
+            FORMPRESS.valids[id].valid === true
               ? containerElem.classList.remove('invalidError')
               : containerElem.classList.add('invalidError')
           } else {
             containerElem.classList.remove('invalidError')
-            valids[id].valid = true
+            FORMPRESS.valids[id].valid = true
           }
         })
       })
@@ -56,12 +58,12 @@
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    const keys = Object.keys(valids)
+    const keys = Object.keys(FORMPRESS.valids)
     let allValid = true
     const errorsToTrigger = []
 
     for (const key of keys) {
-      const elem = valids[key]
+      const elem = FORMPRESS.valids[key]
 
       if (elem.valid === false) {
         allValid = false
