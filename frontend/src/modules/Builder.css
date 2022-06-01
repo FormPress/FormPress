@@ -271,7 +271,7 @@
 }
 
 .builderStage > .form {
-  margin: 0 auto;
+  margin: 0 auto 25px;
   padding: 30px 45px 20px;
   border-top: 1px solid #f5f5f5;
 }
@@ -524,4 +524,59 @@
     opacity: 0.1;
     height: 80px;
   }
+}
+
+.builderStage > .pagebreak-new-placeholder {
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  width: fit-content;
+  margin: auto;
+}
+
+.elementPageBreak + .dropPlaceHolder {
+  display: none;
+}
+
+.elementPageBreak.reflection > .action:hover > .action-up,
+.elementPageBreak.reflection > .action:hover > .action-down,
+.elementPageBreak.reflection > .action:hover > .sortHandle,
+.elementPageBreak.reflection > .action:hover > .action-clone {
+  display: none !important;
+}
+
+.elementPageBreak.reflection > .action > .action-up,
+.elementPageBreak.reflection > .action > .action-down,
+.elementPageBreak.reflection > .action > .sortHandle,
+.elementPageBreak.reflection > .action > .action-clone {
+  display: none !important;
+}
+
+.builderStage > .form:empty:before {
+  content: 'Drag and drop elements here.';
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f9f9f9;
+  border: dashed 2px grey;
+  height: 11rem;
+  text-align: center;
+  display: grid;
+  justify-content: center;
+  padding: 7.3rem;
+  border-radius: 6px;
+}
+
+.builderStage > .form:empty:before:hover {
+  border: solid 2px #6dae19;
+}
+
+.elementPageBreak.emptyPage:before {
+  content: 'Drag and drop elements here.';
+  background-color: #f9f9f9;
+  border: dashed 2px grey;
+  height: 8rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  padding: 3.3rem;
+  border-radius: 6px;
 }

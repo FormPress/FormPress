@@ -15,6 +15,7 @@
   overflow: visible;
   display: grid;
   border: 2px solid transparent;
+  font-family: 'Montserrat', sans-serif;
 }
 .gleam.form > .element.requiredError {
   background-color: #ffbebb;
@@ -305,12 +306,6 @@
 
 .gleam .elementButton input[type='submit']:hover {
   cursor: pointer;
-}
-
-.builder.gleam .elementButton button {
-  display: block;
-  border: 1px solid #9ee048;
-  margin-top: 25px;
 }
 
 .builder.gleam .elementButton button span[contentEditable='true'] {
@@ -738,4 +733,51 @@ input[type='file'] {
   display: flex;
   clear: both;
   justify-content: space-between;
+}
+
+.form-hidden {
+  display: none;
+}
+
+.gleam .pagebreak-separator {
+  color: #f5f5f5;
+}
+
+.gleam .pagebreak-button {
+  display: inline-block;
+}
+
+.gleam .pagebreak-button > button,
+.gleam .pagebreak-button > input[type='button'],
+.gleam .pagebreak-button > input[type='submit'] {
+  color: white;
+  cursor: pointer;
+  /*background-color: #12bc00;*/
+  background-color: #6dae19;
+  border-color: #6dae19;
+  width: 6.6rem;
+  height: 2.6rem;
+  text-align: center;
+  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.gleam .pagebreak-navControls {
+  padding-top: 10px;
+}
+
+.gleam .pagebreak-pageCount {
+  text-align: center;
+  color: #c4bfbf;
+}
+
+.gleam .pagebreak-next {
+  float: right;
+}
+
+.gleam .pagebreak-submit {
+  float: right;
 }
