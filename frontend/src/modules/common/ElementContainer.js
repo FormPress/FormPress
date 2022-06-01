@@ -58,7 +58,7 @@ export default function ElementContainer(props) {
           onDragEnd={customBuilderHandlers.handleDragEnd}
           draggable>
           <FontAwesomeIcon icon={faGripHorizontal} className="sortHandle" />
-          <div className="popover-container">
+          <div className="popover-container action-down">
             <FontAwesomeIcon
               icon={faAngleDown}
               onClick={handleFormItemMovement.bind(
@@ -74,7 +74,7 @@ export default function ElementContainer(props) {
             />
             <div className="popoverText">Move Down</div>
           </div>
-          <div className="popover-container">
+          <div className="popover-container action-up">
             <FontAwesomeIcon
               icon={faAngleUp}
               onClick={handleFormItemMovement.bind(
@@ -91,7 +91,7 @@ export default function ElementContainer(props) {
             />
             <div className="popoverText">Move Up</div>
           </div>
-          <div className="popover-container">
+          <div className="popover-container action-clone">
             <FontAwesomeIcon
               icon={faClone}
               onClick={handleFormItemMovement.bind(
@@ -106,7 +106,7 @@ export default function ElementContainer(props) {
             />
             <div className="popoverText">Clone</div>
           </div>
-          <div className="popover-container">
+          <div className="popover-container action-delete">
             <FontAwesomeIcon
               icon={faTrash}
               onClick={handleDeleteClick.bind(this, config.id)}
