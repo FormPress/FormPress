@@ -268,7 +268,8 @@ module.exports = (app) => {
         Email: 'lastFive',
         DropDown: 'barChart',
         Checkbox: 'barChart',
-        Button: 'none'
+        Button: 'none',
+        NetPromoterScore: 'average'
       }
 
       const colors = [
@@ -452,6 +453,20 @@ module.exports = (app) => {
                     }
 
                     statistics.elements.push(elementTemplate)
+                    break
+
+                  case 'average':
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+                    elementTemplate.responseAverage =
+                      (
+                        elementTemplate.chartItems.reduce(
+                          (a, b) => parseInt(a) + parseInt(b),
+                          0
+                        ) / elementTemplate.chartItems.length
+                      ).toFixed(2) || 0
+                    statistics.elements.push(elementTemplate)
+
                     break
                 }
               }

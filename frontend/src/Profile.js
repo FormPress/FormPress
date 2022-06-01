@@ -21,7 +21,8 @@ const Profile = () => {
         <div className="profileMenuContainer">
           <div key="1" className="wrapper-welcome">
             <div className="welcome-user" key="2">
-              Welcome, <i title={auth.email}>{auth.email}</i>
+              Welcome,
+              <i title={auth.email}> {auth.email.match(/[^@]+/)}</i>
             </div>
             <ProfileSVG key="1" className="profileSVG" />
             <div className="profileMenuContent dn">

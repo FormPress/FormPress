@@ -21,7 +21,8 @@ import {
   faMinus,
   faQuestionCircle,
   faPen,
-  faMapMarkerAlt
+  faMapMarkerAlt,
+  faSignal
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -56,6 +57,7 @@ const iconMap = {
   Header: faHeading,
   Separator: faMinus,
   Address: faMapMarkerAlt,
+  NetPromoterScore: faSignal,
   PageBreak: faPlusCircle
 }
 
@@ -73,6 +75,7 @@ const textMap = {
   Header: 'Header',
   Separator: 'Separator',
   Address: 'Address',
+  NetPromoterScore: 'Net Promoter Score',
   PageBreak: 'Page Break'
 }
 const getElements = () =>
@@ -586,6 +589,8 @@ class Builder extends Component {
       } else if (id.split('_')[0] === 'name') {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'address') {
+        question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'net') {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'pbButton') {
         question[`${itemID}ButtonText`] = value

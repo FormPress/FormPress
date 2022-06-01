@@ -24,6 +24,7 @@ import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
+import NotFoundPage from './modules/common/NotFoundPage'
 
 import { Logo } from './svg'
 
@@ -140,6 +141,12 @@ class App extends Component {
       homeUrl = process.env.REACT_APP_HOMEURL
     }
 
+    let redirectPage = <Redirect to="/login" />
+
+    if (auth.loggedIn === true) {
+      redirectPage = <Redirect path="*" to="/404" />
+    }
+
     return (
       <Router>
         <CapabilitiesContext.Provider value={this.state.capabilities}>
@@ -207,17 +214,55 @@ class App extends Component {
             </div>
             <div className="content">
               <Switch>
-                <PrivateRoute path="/forms" component={Forms} />
+                <PrivateRoute exact path="/">
+                  <Redirect to="/forms" />
+                </PrivateRoute>
+
+                <PrivateRoute exact strict path="/forms" component={Forms} />
                 <PrivateRoute
+                  exact
                   path="/editor/:formId/builder/question/:questionId/properties"
                   component={Builder}
                 />
                 <PrivateRoute path="/editor/:formId" component={Builder} />
-                <PrivateRoute path="/editor" component={Builder} />
-                <PrivateRoute path="/data" component={Data} />
-                <PrivateRoute path="/data/statistics" component={Data} />
-                <Route path="/login" component={Login} />
-                <Route path="/signup" component={SignUp} />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/builder"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/design"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/preview"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/share"
+                  component={Builder}
+                />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/builder/properties"
+                  component={Builder}
+                />
+                <PrivateRoute exact path="/editor" component={Builder} />
+                <PrivateRoute exact strict path="/data" component={Data} />
+                <PrivateRoute
+                  exact
+                  strict
+                  path="/data/statistics"
+                  component={Data}
+                />
+                <PrivateRoute path="/settings" component={Settings} />
+
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/signup" component={SignUp} />
+
                 <Route
                   path="/verify/:userId/:verificationCode"
                   component={VerifyEMail}
@@ -227,14 +272,18 @@ class App extends Component {
                   component={DownloadFile}
                 />
                 <AdminRoute path="/admin" component={AdminPage} />
-                <PrivateRoute path="/settings" component={Settings} />
-                <Route path="/forgotpassword" component={ForgotPassword} />
+                <Route
+                  exact
+                  path="/forgotpassword"
+                  component={ForgotPassword}
+                />
                 <Route
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
 
-                <Redirect to="/login" />
+                <Route path="/404" component={NotFoundPage} />
+                {redirectPage}
               </Switch>
             </div>
           </AuthContext.Provider>
