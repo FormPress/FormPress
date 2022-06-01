@@ -23,6 +23,10 @@
     {
       name: 'datasets',
       check: (element) => element.hasDataset === true
+    },
+    {
+      name: 'multistep',
+      check: (element) => element.type === 'PageBreak'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
