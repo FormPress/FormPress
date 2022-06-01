@@ -55,7 +55,8 @@ const iconMap = {
   Email: faEnvelope,
   Header: faHeading,
   Separator: faMinus,
-  Address: faMapMarkerAlt
+  Address: faMapMarkerAlt,
+  PageBreak: faPlusCircle
 }
 
 //list of element texts
@@ -71,7 +72,8 @@ const textMap = {
   Email: 'E-mail',
   Header: 'Header',
   Separator: 'Separator',
-  Address: 'Address'
+  Address: 'Address',
+  PageBreak: 'Page Break'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -159,6 +161,9 @@ class Builder extends Component {
     }
 
     this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
+
+    const isWindows = navigator.platform.indexOf('Win') > -1
+    this.setState({ isWindows })
   }
 
   componentWillUnmount() {
@@ -379,6 +384,7 @@ class Builder extends Component {
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
+    this.handleAddNewPage = this.handleAddNewPage.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -511,6 +517,10 @@ class Builder extends Component {
     })
   }
 
+  handleAddNewPage() {
+    this.handleAddFormElementClick('PageBreak')
+  }
+
   handleDragEnd(e) {
     e.stopPropagation()
     e.preventDefault()
@@ -529,7 +539,17 @@ class Builder extends Component {
     const id = e.target.id.replace('qc_', '')
     const middleTop = top + height / 2
     const diff = clientY - middleTop
-    const insertBefore = diff < 0
+    let insertBefore = diff < 0
+
+    if (e.target.classList.contains('elementPageBreak')) {
+      const emptyPage = e.target.classList.contains('emptyPage')
+
+      if (emptyPage) {
+        insertBefore = !e.target.classList.contains('reflection')
+      } else {
+        return
+      }
+    }
 
     if (
       id !== '' &&
@@ -567,6 +587,8 @@ class Builder extends Component {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'address') {
         question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'pbButton') {
+        question[`${itemID}ButtonText`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -626,8 +648,7 @@ class Builder extends Component {
       let newElements
       if (movementType === 'moveDown') {
         if (index === elements.length - 1) {
-          newElements = [item, ...elements]
-          newElements.unshift()
+          return
         } else {
           newElements = [
             ...elements.slice(0, index + 2),
@@ -764,13 +785,15 @@ class Builder extends Component {
       this.setState({
         dragging: false
       })
-      var nodeList = document.querySelectorAll('[id^="qc_"]')
-      nodeList.forEach((node) => {
+      const allElemNodes = document.querySelectorAll('[id^="qc_"]')
+      allElemNodes.forEach((node) => {
         node.classList.remove('selected')
       })
 
-      var node = document.getElementById(elemID.id)
-      node.classList.add('selected')
+      const selectedElemNodes = document.querySelectorAll(`[id^="qc_${id}"]`)
+      selectedElemNodes.forEach((node) => {
+        node.classList.add('selected')
+      })
     }
   }
 
@@ -1225,7 +1248,6 @@ class Builder extends Component {
       publishing
     } = this.state
     const { params } = this.props.match
-    console.log('selectedField', this.state.selectedField)
     let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = form.updated_at !== publishedForm.created_at
@@ -1237,17 +1259,20 @@ class Builder extends Component {
 
     return (
       <div className="builderStage col-10-16 grid">
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
+        {this.state.isWindows ? (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
           @font-face {
             font-family: "Twemoji Country Flags";
             unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067,
             U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
             src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
           }`
-          }}
-        />
+            }}
+          />
+        ) : null}
+
         <div className="formTitle col-16-16">
           {loading === false ? (
             <EditableLabel
@@ -1306,7 +1331,8 @@ class Builder extends Component {
               onDelete: this.handleFormElementDeleteClick,
               handleDragEnd: this.handleDragEnd,
               handleDragStart: this.handleDragStart,
-              handleFormItemMovement: this.handleFormItemMovement
+              handleFormItemMovement: this.handleFormItemMovement,
+              handleAddNewPage: this.handleAddNewPage
             }}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}
