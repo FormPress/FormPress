@@ -74,6 +74,15 @@
   padding-bottom: 20px;
 }
 
+.questionPropertiesForm .dropdown-div {
+}
+
+.questionPropertiesForm .dropdown-div .dropdown-select {
+  color: #333;
+  height: 40px;
+  border-radius: 5px;
+}
+
 #qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
   display: none !important;
 }

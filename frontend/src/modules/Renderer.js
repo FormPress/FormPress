@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+const { cloneDeep } = require('lodash')
 import * as StandartElements from './elements'
 import * as InternalElements from './internal'
 
@@ -8,6 +9,7 @@ export default class Renderer extends Component {
     const {
       dragging,
       dragMode,
+      draggingItemType,
       sortItem,
       customBuilderHandlers,
       configureQuestion,
@@ -36,6 +38,12 @@ export default class Renderer extends Component {
       const decodedCSS = this.props.form.props.customCSS.value
       const buff = Buffer.from(decodedCSS, 'utf8')
       encodedCSS = buff.toString('base64')
+    }
+
+    let DraggingElement
+
+    if (draggingItemType) {
+      DraggingElement = Elements[draggingItemType]
     }
 
     return (
@@ -102,11 +110,15 @@ export default class Renderer extends Component {
           ) {
             if (this.props.insertBefore === true) {
               renderList.unshift(
-                <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
+                <div key="dropPlaceHolder" className="dropPlaceHolder">
+                  <DraggingElement config={DraggingElement.defaultConfig} />
+                </div>
               )
             } else {
               renderList.push(
-                <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
+                <div key="dropPlaceHolder" className="dropPlaceHolder">
+                  <DraggingElement config={DraggingElement.defaultConfig} />
+                </div>
               )
             }
           }
@@ -116,7 +128,9 @@ export default class Renderer extends Component {
 
         {this.props.form.props.elements.length === 0 &&
           this.props.dragging === true && (
-            <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
+            <div key="dropPlaceHolder" className="dropPlaceHolder">
+              <DraggingElement config={DraggingElement.defaultConfig} />
+            </div>
           )}
 
         {this.props.form.props.customCSS === undefined ? null : (

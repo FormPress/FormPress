@@ -5,3 +5,7 @@
   background-color: #ffffff;
   resize: none;
 }
+
+.elementTextArea textarea:focus-visible {
+  outline-color: #c9c9c9;
+}
