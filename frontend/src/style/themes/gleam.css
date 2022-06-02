@@ -447,11 +447,13 @@
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
+  word-break: break-word;
   max-width: calc(100% - 50px);
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
   word-break: break-word;
+  max-width: calc(100% - 50px);
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked::before {

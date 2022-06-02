@@ -109,6 +109,7 @@
   font-size: 18px;
   margin-top: 50px;
   padding-bottom: 40px;
+  width: 100%;
 }
 
 .login-wrapper > .footer a {
@@ -179,4 +180,9 @@
   color: #be0000;
   background-color: #ffffff;
   border: solid 1px #ae2317;
+}
+@media only screen and (max-width: 767px) {
+  .loginForm {
+    width: 100%;
+  }
 }
