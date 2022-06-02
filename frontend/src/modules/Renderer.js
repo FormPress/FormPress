@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-const { cloneDeep } = require('lodash')
 import * as StandartElements from './elements'
 import * as InternalElements from './internal'
 
@@ -40,10 +39,15 @@ export default class Renderer extends Component {
       encodedCSS = buff.toString('base64')
     }
 
-    let DraggingElement
+    let DraggingElement, dropPlaceHolder
 
     if (draggingItemType) {
       DraggingElement = Elements[draggingItemType]
+      dropPlaceHolder = (
+        <div key="dropPlaceHolder" className="dropPlaceHolder">
+          <DraggingElement config={DraggingElement.defaultConfig} />
+        </div>
+      )
     }
 
     return (
@@ -109,17 +113,9 @@ export default class Renderer extends Component {
             this.props.dragging === true
           ) {
             if (this.props.insertBefore === true) {
-              renderList.unshift(
-                <div key="dropPlaceHolder" className="dropPlaceHolder">
-                  <DraggingElement config={DraggingElement.defaultConfig} />
-                </div>
-              )
+              renderList.unshift(dropPlaceHolder)
             } else {
-              renderList.push(
-                <div key="dropPlaceHolder" className="dropPlaceHolder">
-                  <DraggingElement config={DraggingElement.defaultConfig} />
-                </div>
-              )
+              renderList.push(dropPlaceHolder)
             }
           }
 
@@ -127,11 +123,8 @@ export default class Renderer extends Component {
         })}
 
         {this.props.form.props.elements.length === 0 &&
-          this.props.dragging === true && (
-            <div key="dropPlaceHolder" className="dropPlaceHolder">
-              <DraggingElement config={DraggingElement.defaultConfig} />
-            </div>
-          )}
+          this.props.dragging === true &&
+          dropPlaceHolder}
 
         {this.props.form.props.customCSS === undefined ? null : (
           <link
