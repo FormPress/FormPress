@@ -178,12 +178,9 @@ class Builder extends Component {
       form.props.elements,
       savedForm.props.elements,
       'isFormChanged:',
-      !_.isEqual(form.props.elements, savedForm.props.elements)
+      !isEqual(form.props.elements, savedForm.props.elements)
     )
-    let isFormChanged = !_.isEqual(
-      form.props.elements,
-      savedForm.props.elements
-    )
+    let isFormChanged = !isEqual(form.props.elements, savedForm.props.elements)
 
     const disallowedPath = !location.pathname.startsWith('/editor')
 

@@ -245,7 +245,6 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
-    const { submissionFilterSelectors } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
 
