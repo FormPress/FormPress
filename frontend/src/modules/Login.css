@@ -3,6 +3,13 @@
   width: 500px;
   margin: 40px auto 0;
 }
+.login-wrapper > .footer .col-8-16 {
+  text-align: center;
+}
+.loginForm form {
+  width: 332px;
+  margin: auto;
+}
 .wellcome-message {
   text-align: center;
   color: #113952;
@@ -12,8 +19,7 @@
   font-size: 16px;
 }
 .loginForm .element {
-  margin-left: 85px;
-  margin-bottom: 15px;
+  margin: 0 auto 15px;
 }
 
 .content {
@@ -52,9 +58,12 @@
   font-style: italic;
   font-weight: 500;
   font-size: 12px;
-  margin-top: -99px;
-  margin-bottom: 100px;
-  margin-left: 300px;
+  margin: -99px auto 100px;
+  width: 322px;
+}
+
+.forgot-pass .forgot-pass-span {
+  float: right;
 }
 
 .google-sign-in > button {
@@ -67,6 +76,8 @@
   color: #be0000;
   background-color: #f5f5f5;
   border: none;
+  margin: auto;
+  display: block;
 }
 .google-sign-in > button:hover {
   color: #ffffff;
@@ -162,7 +173,7 @@
 }
 
 .google-sign-in {
-  margin: 10px 0px 10px 85px;
+  margin: 10px auto;
 }
 
 .google-sign-in-button:hover {
@@ -184,5 +195,14 @@
 @media only screen and (max-width: 767px) {
   .loginForm {
     width: 100%;
+  }
+  .login-wrapper > .footer .col-8-16 {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .login-wrapper > .footer {
+    margin-top: 25px;
+    padding-bottom: 0px;
   }
 }
