@@ -174,7 +174,16 @@ class Builder extends Component {
     } // if user still wants to proceed without saving
 
     const { form, savedForm } = this.state
-    let isFormChanged = !isEqual(form, savedForm)
+    console.log(
+      form.props.elements,
+      savedForm.props.elements,
+      'isFormChanged:',
+      !_.isEqual(form.props.elements, savedForm.props.elements)
+    )
+    let isFormChanged = !_.isEqual(
+      form.props.elements,
+      savedForm.props.elements
+    )
 
     const disallowedPath = !location.pathname.startsWith('/editor')
 
@@ -248,6 +257,7 @@ class Builder extends Component {
       props
     }
     const savedForm = cloneDeep(form)
+    console.log(form, savedForm)
 
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
@@ -339,6 +349,8 @@ class Builder extends Component {
             {
               id: 1,
               type: 'TextBox',
+              placeholder: '',
+              required: false,
               label: 'First Name',
               requiredText: 'Please fill this field.'
             },
