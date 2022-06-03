@@ -12,6 +12,7 @@
   background-color: #f5f5f5;
   z-index: 10;
   border-top: 6px solid #8cc63f;
+  z-index: 11;
 }
 
 #root > .headerContainer > .grid {

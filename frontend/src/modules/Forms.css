@@ -211,8 +211,7 @@
   position: fixed;
   top: 25px;
   left: 57%;
-  z-index: 10;
-  /*float: right;*/
+  z-index: 12;
   color: #113952;
 }
 
