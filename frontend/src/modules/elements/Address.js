@@ -29,10 +29,18 @@ export default class Address extends Component {
 
   static defaultConfig = {
     id: 0,
-    type: 'Address',
-    label: 'Address information',
+    city: true,
+    countriesType: 'International',
+    country: true,
     hasDataset: true,
-    placeholder: 'Address information'
+    label: 'Address information',
+    placeholder: 'Address information',
+    state: true,
+    street: true,
+    street2: true,
+    title: false,
+    type: 'Address',
+    zip: true
   }
 
   static configurableSettings = {

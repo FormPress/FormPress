@@ -9,7 +9,6 @@
   width: 1200px;
   margin: 0 auto;
   z-index: 1;
-  position: relative;
 }
 
 .forms table.fp_table > thead > tr > th:first-child,
