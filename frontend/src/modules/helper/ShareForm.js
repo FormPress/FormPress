@@ -24,7 +24,7 @@ class ShareForm extends Component {
     ].join('\n')
     return (
       <div className="col-15-16 shareForm">
-        <div className="shareFormTab col-8-16">
+        <div className="shareFormTab col-5-16">
           <div className="shareFormTabCover">
             <h2 className="shareFormTitle">Share Your Form</h2>
             <div className="shareFormMessage">
@@ -92,6 +92,17 @@ class ShareForm extends Component {
               </div>
             </div>
           </div>
+        </div>
+        <div className="col-10-16 share-iframe-container">
+          <div class="shareFormMessage">
+            Be sure that your latest changes have been saved and published
+            before sharing. Otherwise your form will be seen latest saved
+            version.
+          </div>
+          <iframe
+            src={`http://localhost:3001/form/view/${this.props.formId}`}
+            className={'share-iframe'}
+          />
         </div>
       </div>
     )
