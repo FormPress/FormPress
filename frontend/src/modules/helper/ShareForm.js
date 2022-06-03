@@ -94,7 +94,7 @@ class ShareForm extends Component {
           </div>
         </div>
         <div className="col-10-16 share-iframe-container">
-          <div class="shareFormMessage">
+          <div className="shareFormMessage">
             Be sure that your latest changes have been saved and published
             before sharing. Otherwise your form will be seen latest saved
             version.
