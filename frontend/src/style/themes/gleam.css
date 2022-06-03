@@ -295,13 +295,14 @@
   font-weight: bolder;
   padding: 5px 10px;
   font-size: 16px;
-  width: 130px;
-  min-height: 44px;
+  width: 7rem;
+  min-height: 2.6rem;
   background-color: #9ee048;
   border: 1px solid #9ee048;
   outline: none;
   color: #ffffff;
   float: right;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .gleam .elementButton input[type='submit']:hover {
@@ -796,17 +797,18 @@ input[type='file'] {
 .gleam .pagebreak-button > input[type='submit'] {
   color: white;
   cursor: pointer;
-  /*background-color: #12bc00;*/
-  background-color: #6dae19;
-  border-color: #6dae19;
-  width: 6.6rem;
+  background-color: #9ee048;
+  width: 7rem;
   height: 2.6rem;
   text-align: center;
-  box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.08);
-  border-radius: 5px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   flex-direction: column;
+  border: none;
+  border-radius: unset;
+  font-weight: bolder;
+  font-size: 16px;
 }
 
 .gleam .pagebreak-navControls {
