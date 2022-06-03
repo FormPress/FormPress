@@ -209,7 +209,7 @@
   box-sizing: content-box;
   padding: 5px 0;
 }
-.gleam .elementDropdown .dropdown-div .dropdown-select .option-space {
+.gleam .elementDropdown .dropdown-div .dropdown-select option {
   background-color: #fdfdfd;
   color: #333333;
   padding: 5px 80px;
@@ -218,10 +218,10 @@
   -moz-appearance: none;
   appearance: none;
 }
-.gleam .elementDropdown .dropdown-div .dropdown-select .option-space:checked {
+.gleam .elementDropdown .dropdown-div .dropdown-select option:checked {
   color: #68942f;
 }
-.gleam .elementDropdown .dropdown-div .dropdown-select .option-space:hover {
+.gleam .elementDropdown .dropdown-div .dropdown-select option:hover {
   background-color: #68942f;
   color: #ffffff;
 }
@@ -433,7 +433,6 @@
   border: 1px solid #a0a0a0;
   border-radius: 4px;
   outline: none;
-  transition-duration: 0.3s;
   background-color: #fdfdfd;
   cursor: pointer;
   vertical-align: top;
@@ -693,6 +692,12 @@ input[type='file'] {
   border-radius: 3px;
   background-color: #f5f5f5;
   border: solid 1px #c9c9c9;
+  color: #333;
+  outline: 0;
+}
+
+.gleam .elementAddress .address-section > select option:checked {
+  color: #68942f;
 }
 
 .address-section {
@@ -715,6 +720,10 @@ input[type='file'] {
   border: solid 1px #c9c9c9;
   height: 2.3rem;
   border-radius: 3px;
+}
+
+.address-section > input:focus-visible {
+  outline: 0;
 }
 
 .adr-street > input {

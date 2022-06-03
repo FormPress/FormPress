@@ -5,7 +5,7 @@
 .builder > .headerContainer,
 .forms > .headerContainer,
 .data > .headerContainer {
-  height: 30px;
+  height: 31px;
   top: 86px;
   width: 100%;
   position: fixed;
