@@ -174,12 +174,6 @@ class Builder extends Component {
     } // if user still wants to proceed without saving
 
     const { form, savedForm } = this.state
-    console.log(
-      form.props.elements,
-      savedForm.props.elements,
-      'isFormChanged:',
-      !isEqual(form.props.elements, savedForm.props.elements)
-    )
     let isFormChanged = !isEqual(form.props.elements, savedForm.props.elements)
 
     const disallowedPath = !location.pathname.startsWith('/editor')
@@ -254,7 +248,6 @@ class Builder extends Component {
       props
     }
     const savedForm = cloneDeep(form)
-    console.log(form, savedForm)
 
     const publishedFormResult = await api({
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`

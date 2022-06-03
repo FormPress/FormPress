@@ -245,6 +245,7 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
+    const { submissionFilterSelectors, submissions } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
 
@@ -307,7 +308,22 @@ class Data extends Component {
       })
     })
 
-    document.querySelector(`.s_${id}`).classList.add('read')
+    const filterActive = !Object.values(submissionFilterSelectors).every(
+      (selector) => selector === false
+    )
+
+    // If filter is active, send request to backend but do not update state
+    if (filterActive) {
+      document.querySelector(`.s_${id}`).classList.add('read')
+    } else {
+      submissions.map((submission) => {
+        if (submission.id === id) {
+          submission.read = 1
+        }
+      })
+
+      this.setState({ submissions })
+    }
   }
 
   async formVersionSelector(value) {
