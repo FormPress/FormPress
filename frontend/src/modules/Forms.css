@@ -9,7 +9,6 @@
   width: 1200px;
   margin: 0 auto;
   z-index: 1;
-  position: relative;
 }
 
 .forms table.fp_table > thead > tr > th:first-child,
@@ -212,8 +211,7 @@
   position: fixed;
   top: 25px;
   left: 57%;
-  z-index: 10;
-  /*float: right;*/
+  z-index: 12;
   color: #113952;
 }
 
@@ -232,4 +230,10 @@
   left: -43px;
   z-index: 9999;
   font-size: 12px;
+}
+
+@media only screen and (max-width: 767px) {
+  .nav_add_new_form_link {
+    left: 70%;
+  }
 }

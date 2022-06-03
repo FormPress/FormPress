@@ -5,7 +5,7 @@
 .builder > .headerContainer,
 .forms > .headerContainer,
 .data > .headerContainer {
-  height: 30px;
+  height: 31px;
   top: 86px;
   width: 100%;
   position: fixed;
@@ -282,12 +282,12 @@
 
 .form.builder > .dropPlaceHolder {
   pointer-events: none;
-  height: 80px;
   width: 100%;
-  background-color: blue;
-  opacity: 0.1;
+  padding: 25px 10px;
+  margin: 2px 0;
+  opacity: 0.4;
   border-radius: 6px;
-  animation: 0.15s cubic-bezier(0.08, -1.12, 0.79, 1.23) elementShift;
+  background-color: #e5fbda;
 }
 
 .form.builder > .element {

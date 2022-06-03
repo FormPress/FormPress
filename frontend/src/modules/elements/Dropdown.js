@@ -133,11 +133,11 @@ export default class Dropdown extends Component {
                         </option>
                       )
                     })
-                  : options.map((item) => {
+                  : options.map((item, index) => {
                       return (
                         <option
                           className="option-space"
-                          key={item}
+                          key={index}
                           value={item}>
                           {item}
                         </option>

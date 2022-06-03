@@ -9,7 +9,6 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
-  height: 78px;
 }
 
 .question-info {
@@ -72,6 +71,16 @@
 
 .questionPropertiesForm .element:last-child {
   padding-bottom: 20px;
+}
+
+.questionPropertiesForm .dropdown-div {
+}
+
+.questionPropertiesForm .dropdown-div .dropdown-select {
+  color: #333;
+  height: 40px;
+  border-radius: 5px;
+  outline: 0;
 }
 
 #qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {

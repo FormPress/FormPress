@@ -174,7 +174,7 @@ class Builder extends Component {
     } // if user still wants to proceed without saving
 
     const { form, savedForm } = this.state
-    let isFormChanged = !isEqual(form, savedForm)
+    let isFormChanged = !isEqual(form.props.elements, savedForm.props.elements)
 
     const disallowedPath = !location.pathname.startsWith('/editor')
 
@@ -318,6 +318,7 @@ class Builder extends Component {
       modalContent: {},
       dragging: false,
       dragIndex: false,
+      draggingItemType: '',
       dragMode: 'insert',
       sortItem: false,
       insertBefore: false,
@@ -339,7 +340,9 @@ class Builder extends Component {
             {
               id: 1,
               type: 'TextBox',
-              label: 'First Name',
+              placeholder: '',
+              required: false,
+              label: 'TextBox',
               requiredText: 'Please fill this field.'
             },
             {
@@ -405,6 +408,7 @@ class Builder extends Component {
 
     const dragState = {
       dragMode,
+      draggingItemType: _item.type,
       selectedFieldId: false,
       dragging: true
     }
@@ -1312,6 +1316,7 @@ class Builder extends Component {
               handleDragStart: this.handleDragStart,
               handleFormItemMovement: this.handleFormItemMovement
             }}
+            draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}
             dragIndex={this.state.dragIndex}
