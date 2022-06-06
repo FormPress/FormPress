@@ -2,7 +2,7 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 import { getConfigurableSettings } from '../modules/ConfigurableSettings'
-const excludedKeys = ["Button", "Header", "Separator"]
+const excludedKeys = ['Button', 'Header', 'Separator', 'PageBreak']
 
 const keys = Object.keys(Elements)
 for (const key of keys) {
@@ -10,8 +10,8 @@ for (const key of keys) {
     test('Does it have a valid configurable settings', () => {
       if (!excludedKeys.includes(key)) {
         //this will be returned attr name with configSettings
-        expect(getConfigurableSettings(key)).toHaveProperty('required');
-        expect(getConfigurableSettings(key)).toHaveProperty('requiredText');
+        expect(getConfigurableSettings(key)).toHaveProperty('required')
+        expect(getConfigurableSettings(key)).toHaveProperty('requiredText')
       }
     })
   })

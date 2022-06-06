@@ -15,6 +15,7 @@
   overflow: visible;
   display: grid;
   border: 2px solid transparent;
+  font-family: 'Montserrat', sans-serif;
 }
 .gleam.form > .element.requiredError {
   background-color: #ffbebb;
@@ -190,7 +191,7 @@
   background-color: transparent;
 }
 .gleam .elementDropdown {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
   background-color: transparent;
 }
 .gleam .elementDropdown .dropdown-div {
@@ -294,28 +295,24 @@
   font-weight: bolder;
   padding: 5px 10px;
   font-size: 16px;
-  width: 130px;
-  min-height: 44px;
+  width: 7rem;
+  min-height: 2.6rem;
   background-color: #9ee048;
   border: 1px solid #9ee048;
   outline: none;
   color: #ffffff;
   float: right;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .gleam .elementButton input[type='submit']:hover {
   cursor: pointer;
 }
 
-.builder.gleam .elementButton button {
-  display: block;
-  border: 1px solid #9ee048;
-  margin-top: 25px;
-}
-
 .builder.gleam .elementButton button span[contentEditable='true'] {
   display: block;
   border: 1px solid #9ee048;
+  overflow-wrap: break-word;
 }
 
 .gleam .elementCheckbox .input,
@@ -707,7 +704,7 @@ input[type='file'] {
 }
 
 .elementAddress {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 
 .address-section.adr-street {
@@ -793,4 +790,73 @@ input[type='file'] {
   border: 1px solid #1c5c85;
   background-color: #1c5c85;
   color: #fff;
+}
+
+.form-hidden {
+  display: none;
+}
+
+.gleam .pagebreak-separator {
+  color: #f5f5f5;
+  width: 100%;
+}
+
+.gleam .pagebreak-button {
+  display: inline-block;
+}
+
+.gleam .pagebreak-button > button,
+.gleam .pagebreak-button > input[type='button'],
+.gleam .pagebreak-button > input[type='submit'] {
+  color: white;
+  cursor: pointer;
+  background-color: #9ee048;
+  width: 7rem;
+  min-height: 2.6rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  border: none;
+  font-weight: bolder;
+  font-size: 16px;
+}
+
+.gleam .pagebreak-navControls {
+  padding-top: 10px;
+}
+
+.gleam .pagebreak-pageCount {
+  text-align: center;
+  color: #c4bfbf;
+}
+
+.gleam .pagebreak-next {
+  float: right;
+}
+
+.gleam .pagebreak-submit {
+  float: right;
+}
+
+.gleam .pagebreak-navControls > .pagebreak-button > button > div,
+.gleam .pagebreak-navControls > .pagebreak-button > input[type='button'] > div,
+.gleam .pagebreak-navControls > .pagebreak-button > input[type='submit'] > div {
+  padding: 0.3rem;
+}
+
+.gleam .pagebreak-navControls > .pagebreak-button > button > div > span,
+.gleam
+  .pagebreak-navControls
+  > .pagebreak-button
+  > input[type='button']
+  > div
+  > span,
+.gleam
+  .pagebreak-navControls
+  > .pagebreak-button
+  > input[type='submit']
+  > div
+  > span {
+  display: block;
+  border: #9ee048 solid 1px;
+  width: 5.7rem;
+  overflow-wrap: break-word;
 }

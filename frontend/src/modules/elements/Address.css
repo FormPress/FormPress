@@ -13,7 +13,7 @@
 }
 
 .elementAddress {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 
 .address-section.adr-street {
