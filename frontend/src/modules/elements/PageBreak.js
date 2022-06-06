@@ -109,10 +109,7 @@ export default class PageBreak extends Component {
       switch (config.style) {
         case 'start':
           display = (
-            <div className="pagebreak-navControls">
-              {builderPreviousButton}
-              {builderNextButton}
-            </div>
+            <div className="pagebreak-navControls">{builderNextButton}</div>
           )
           break
         case 'end':
@@ -123,16 +120,7 @@ export default class PageBreak extends Component {
             </div>
           )
           break
-        case 'both':
-          display = (
-            <div className="pagebreak-navControls">
-              {builderPreviousButton}
-              {builderNextButton}
-              {builderSubmitButton}
-            </div>
-          )
-          break
-        default:
+        case 'between':
           display = (
             <div className="pagebreak-navControls">
               {builderPreviousButton}
@@ -147,7 +135,6 @@ export default class PageBreak extends Component {
           display = (
             <div className="pagebreak-navControls">
               {rendererPreviousButton}
-              {rendererNextButton}
             </div>
           )
           break
@@ -159,16 +146,7 @@ export default class PageBreak extends Component {
             </div>
           )
           break
-        case 'both':
-          display = (
-            <div className="pagebreak-navControls">
-              {rendererPreviousButton}
-              {rendererNextButton}
-              {rendererSubmitButton}
-            </div>
-          )
-          break
-        default:
+        case 'between':
           display = (
             <div className="pagebreak-navControls">
               {rendererPreviousButton}

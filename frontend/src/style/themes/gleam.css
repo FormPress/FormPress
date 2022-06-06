@@ -191,7 +191,7 @@
   background-color: transparent;
 }
 .gleam .elementDropdown {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
   background-color: transparent;
 }
 .gleam .elementDropdown .dropdown-div {
@@ -703,7 +703,7 @@ input[type='file'] {
 }
 
 .elementAddress {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 
 .address-section.adr-street {

@@ -12,7 +12,7 @@ select::-ms-expand {
 }
 
 .elementDropdown {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 
 .dropdown-div {
