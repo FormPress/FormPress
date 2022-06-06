@@ -8,6 +8,7 @@ export default class Renderer extends Component {
     const {
       dragging,
       dragMode,
+      draggingItemType,
       sortItem,
       customBuilderHandlers,
       configureQuestion,
@@ -37,6 +38,18 @@ export default class Renderer extends Component {
       const buff = Buffer.from(decodedCSS, 'utf8')
       encodedCSS = buff.toString('base64')
     }
+
+    let DraggingElement, dropPlaceHolder
+
+    if (draggingItemType) {
+      DraggingElement = Elements[draggingItemType]
+      dropPlaceHolder = (
+        <div key="dropPlaceHolder" className="dropPlaceHolder">
+          <DraggingElement config={DraggingElement.defaultConfig} />
+        </div>
+      )
+    }
+
 
     // handle multi-page form
     const formPagesCount =
@@ -169,23 +182,19 @@ export default class Renderer extends Component {
               this.props.dragging === true
             ) {
               if (this.props.insertBefore === true) {
-                renderList.unshift(
-                  <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
-                )
+                renderList.unshift(dropPlaceHolder)
               } else {
-                renderList.push(
-                  <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
-                )
+                renderList.push(dropPlaceHolder)
               }
             }
 
             return renderList.length === 1 ? renderList[0] : renderList
           })}
 
-          {this.props.form.props.elements.length === 0 &&
-            this.props.dragging === true && (
-              <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
-            )}
+
+        {this.props.form.props.elements.length === 0 &&
+          this.props.dragging === true &&
+          dropPlaceHolder}
 
           {this.props.form.props.customCSS === undefined ? null : (
             <link

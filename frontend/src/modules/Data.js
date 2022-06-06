@@ -76,15 +76,7 @@ class Data extends Component {
     const forms = data
 
     this.setLoadingState('forms', false)
-    this.setState({ forms })
-  }
-
-  async updateSubmissionsSeamless(form_id) {
-    const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
-    })
-
-    this.setState({ submissions: data })
+    this.setState({ forms }, this.componenDidMountWorker)
   }
 
   async updateSubmissions(form_id, version) {
@@ -152,35 +144,38 @@ class Data extends Component {
       history.replace({ ...history.location, state })
     }
 
+    this.updateForms()
+  }
+
+  componenDidMountWorker() {
     if (this.props.location.state?.form_id) {
-      const {
-        form_id,
-        submissionFilterSelectors,
+      const { form_id, submissionFilterSelectors } = this.props.location.state
+
+      let selectedFormId,
         selectedFormPublishedId,
         selectedFormSelectedPublishedVersion
-      } = this.props.location.state
 
-      this.updateForms()
-
-      this.setState({
-        selectedFormId: form_id,
-        selectedFormPublishedId: selectedFormPublishedId,
-        selectedFormSelectedPublishedVersion: selectedFormSelectedPublishedVersion
+      this.state.forms.map((form) => {
+        if (form.id === form_id) {
+          selectedFormId = form_id
+          selectedFormPublishedId = form.published_id
+          selectedFormSelectedPublishedVersion = form.published_version
+        }
       })
 
-      if (submissionFilterSelectors) {
-        this.setState({
-          submissionFilterSelectors
-        })
-      }
+      this.setState({
+        selectedFormId,
+        submissionFilterSelectors,
+        selectedFormPublishedId,
+        selectedFormPublishedVersion: selectedFormSelectedPublishedVersion,
+        selectedFormSelectedPublishedVersion
+      })
 
       this.updateSubmissionStatistics(
         form_id,
         selectedFormSelectedPublishedVersion
       )
       this.updateSubmissions(form_id, selectedFormSelectedPublishedVersion)
-    } else {
-      this.updateForms()
     }
   }
 
@@ -217,6 +212,7 @@ class Data extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
     this.formVersionSelector = this.formVersionSelector.bind(this)
+    this.componenDidMountWorker = this.componenDidMountWorker.bind(this)
   }
 
   async handleFormClick(form) {
@@ -249,7 +245,7 @@ class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
-    const { submissionFilterSelectors } = this.state
+    const { submissionFilterSelectors, submissions } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
 
@@ -320,7 +316,13 @@ class Data extends Component {
     if (filterActive) {
       document.querySelector(`.s_${id}`).classList.add('read')
     } else {
-      this.updateSubmissionsSeamless(form_id)
+      submissions.map((submission) => {
+        if (submission.id === id) {
+          submission.read = 1
+        }
+      })
+
+      this.setState({ submissions })
     }
   }
 

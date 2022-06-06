@@ -11,8 +11,8 @@ export default class Header extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Header',
-    label: 'Header',
-    sublabel: 'sub header'
+    label: '',
+    sublabel: ''
   }
 
   static configurableSettings = {
