@@ -13,7 +13,7 @@ export default class PageBreak extends Component {
     type: 'PageBreak',
     nextButtonText: 'Next',
     previousButtonText: 'Previous',
-    submitButtonText: 'Submit!',
+    submitButtonText: 'Submit',
     style: 'start'
   }
 
