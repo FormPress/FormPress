@@ -204,7 +204,7 @@
   margin-bottom: 50px;
 }
 
-.builderStage > .formTitle {
+.builderStage .formTitle {
   background-color: #fdfdfd;
   font-size: 18px;
   display: flex;
@@ -212,54 +212,55 @@
   min-height: 60px;
   padding: 0;
   color: #1c5c85;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
-.builderStage > .formTitle > .label {
+.builderStage .formTitle > .label {
   width: 100%;
   align-self: center;
   padding: 2px 5px;
 }
 
-.builderStage > .formControls {
+.builderStage .formControls {
   margin-bottom: 10px;
   background-color: #fdfdfd;
   text-align: right;
   height: 24px;
   padding-right: 0;
   border-top: solid 1px #f5f5f5;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
-.builderStage > .formControls > button,
-.builderStage > .formControls > a > button,
-.builderStage > .formControls > span > button {
+.builderStage .formControls > button,
+.builderStage .formControls > a > button,
+.builderStage .formControls > span > button {
   border: none;
   height: 24px;
   font-size: 14px;
   font-weight: bold;
-  background-color: #fdfdfd;
+  background-color: transparent;
   cursor: pointer;
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
 }
-.builderStage > .formControls > span > button.preview-disabled-button {
+.builderStage .formControls > span > button.preview-disabled-button {
   color: gray;
   cursor: default;
 }
 
-.builderStage > .formControls > .publish-disabled-button {
+.builderStage .formControls > .publish-disabled-button {
   color: grey;
-  background: white;
   cursor: default;
 }
 
-.builderStage > .formControls > button.publish {
+.builderStage .formControls > button.publish {
   background-color: #8cc63f;
   color: #ffffff;
   position: relative;
 }
 
-.builderStage > .formControls > button.publish > .publishRequired {
+.builderStage .formControls > button.publish > .publishRequired {
   background-color: red;
   width: 10px;
   height: 10px;

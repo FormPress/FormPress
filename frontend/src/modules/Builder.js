@@ -1281,50 +1281,51 @@ class Builder extends Component {
             }}
           />
         ) : null}
-
-        <div className="formTitle col-16-16">
-          {loading === false ? (
-            <EditableLabel
-              className="label"
-              mode="builder"
-              dataPlaceholder="Click to edit form title"
-              labelKey="title"
-              handleLabelChange={this.handleTitleChange}
-              value={form.title}
-            />
-          ) : null}
-        </div>
-        <div className="col-16-16 formControls">
-          <button onClick={this.handleSaveClick} {...saveButtonProps}>
-            {saving === true ? 'Saving...' : 'Save'}
-          </button>
-          {typeof this.state.form.id === 'number' ? (
-            <NavLink to={`/editor/${params.formId}/preview`}>
-              <button>Preview</button>
-            </NavLink>
-          ) : (
-            <span>
-              <button
-                className="preview-disabled-button"
-                title="Form has to be saved before it can be previewed.">
-                Preview
+        <div className="builderStageHeader">
+          <div className="formTitle col-16-16">
+            {loading === false ? (
+              <EditableLabel
+                className="label"
+                mode="builder"
+                dataPlaceholder="Click to edit form title"
+                labelKey="title"
+                handleLabelChange={this.handleTitleChange}
+                value={form.title}
+              />
+            ) : null}
+          </div>
+          <div className="col-16-16 formControls">
+            <button onClick={this.handleSaveClick} {...saveButtonProps}>
+              {saving === true ? 'Saving...' : 'Save'}
+            </button>
+            {typeof this.state.form.id === 'number' ? (
+              <NavLink to={`/editor/${params.formId}/preview`}>
+                <button>Preview</button>
+              </NavLink>
+            ) : (
+              <span>
+                <button
+                  className="preview-disabled-button"
+                  title="Form has to be saved before it can be previewed.">
+                  Preview
+                </button>
+              </span>
+            )}
+            {typeof this.state.form.id === 'number' ? (
+              <button className="publish" onClick={this.handlePublishClick}>
+                {publishing === true ? 'Publishing...' : 'Publish'}
+                {isPublishRequired === true ? (
+                  <div className="publishRequired"></div>
+                ) : null}
               </button>
-            </span>
-          )}
-          {typeof this.state.form.id === 'number' ? (
-            <button className="publish" onClick={this.handlePublishClick}>
-              {publishing === true ? 'Publishing...' : 'Publish'}
-              {isPublishRequired === true ? (
-                <div className="publishRequired"></div>
-              ) : null}
-            </button>
-          ) : (
-            <button
-              className="publish-disabled-button"
-              title="Form has to be saved before it can be published.">
-              Publish
-            </button>
-          )}
+            ) : (
+              <button
+                className="publish-disabled-button"
+                title="Form has to be saved before it can be published.">
+                Publish
+              </button>
+            )}
+          </div>
         </div>
         {loading === true ? (
           'Loading...'
