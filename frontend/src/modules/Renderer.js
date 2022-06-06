@@ -50,7 +50,6 @@ export default class Renderer extends Component {
       )
     }
 
-
     // handle multi-page form
     const formPagesCount =
       this.props.form.props.elements.filter((e) => e.type === 'PageBreak')
@@ -191,10 +190,9 @@ export default class Renderer extends Component {
             return renderList.length === 1 ? renderList[0] : renderList
           })}
 
-
-        {this.props.form.props.elements.length === 0 &&
-          this.props.dragging === true &&
-          dropPlaceHolder}
+          {this.props.form.props.elements.length === 0 &&
+            this.props.dragging === true &&
+            dropPlaceHolder}
 
           {this.props.form.props.customCSS === undefined ? null : (
             <link
