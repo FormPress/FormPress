@@ -14,13 +14,8 @@
   background-color: #9ee048;
   width: 7rem;
   min-height: 2.6rem;
-  text-align: center;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   border: none;
-  border-radius: unset;
   font-weight: bolder;
   font-size: 16px;
 }
