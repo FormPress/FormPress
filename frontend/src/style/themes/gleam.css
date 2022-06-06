@@ -810,7 +810,7 @@ input[type='file'] {
   cursor: pointer;
   background-color: #9ee048;
   width: 7rem;
-  height: 2.6rem;
+  min-height: 2.6rem;
   text-align: center;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   display: flex;
@@ -837,4 +837,15 @@ input[type='file'] {
 
 .gleam .pagebreak-submit {
   float: right;
+}
+
+.gleam .pagebreak-navControls > .pagebreak-button > button > div {
+  padding: 0.3rem;
+}
+
+.gleam .pagebreak-navControls > .pagebreak-button > button > div > span {
+  display: block;
+  border: #9ee048 solid 1px;
+  width: 5.7rem;
+  overflow-wrap: break-word;
 }

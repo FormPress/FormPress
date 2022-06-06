@@ -133,9 +133,7 @@ export default class PageBreak extends Component {
       switch (config.style) {
         case 'start':
           display = (
-            <div className="pagebreak-navControls">
-              {rendererPreviousButton}
-            </div>
+            <div className="pagebreak-navControls">{rendererNextButton}</div>
           )
           break
         case 'end':
