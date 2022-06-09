@@ -23,13 +23,22 @@ export default class Header extends Component {
         label: '',
         options: ['Add a separator between headers?']
       }
+    },
+    alignment: {
+      default: 'Center',
+      formProps: {
+        type: 'Radio',
+        options: ['Center', 'Left', 'Right'],
+        label: 'Heading aligment'
+      }
     }
   }
 
   render() {
     const { config, mode } = this.props
     const inputProps = {}
-
+    const alignmentClassName = `align${config.alignment}`
+    console.log(config)
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
     }
@@ -42,7 +51,7 @@ export default class Header extends Component {
       <ElementContainer type={config.type} {...this.props}>
         <h2>
           <EditableLabel
-            className="header label"
+            className={'header label ' + alignmentClassName}
             mode={mode}
             labelKey={config.id}
             handleLabelChange={this.props.handleLabelChange}
@@ -53,7 +62,7 @@ export default class Header extends Component {
         {config.separator === true ? <Separator {...this.props} /> : null}
         <h4>
           <EditableLabel
-            className="header sublabel"
+            className={'header sublabel ' + alignmentClassName}
             mode={mode}
             labelKey={`header_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
