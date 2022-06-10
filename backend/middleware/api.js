@@ -842,8 +842,8 @@ module.exports = (app) => {
 
     if (req.query.embed !== 'true') {
       style += ' body {background-color: #f5f5f5;} '
-      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
-      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+      style += ' .form {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);} '
+      style += ' .branding {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);}  '
     }
 
     //form table has "published_version" while form_published has "version"
