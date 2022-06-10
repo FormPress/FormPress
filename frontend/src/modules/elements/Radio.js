@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { cloneDeep } from 'lodash'
-
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
+import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './Radio.css'
 
@@ -16,6 +16,11 @@ export default class Radio extends Component {
     type: 'Radio',
     label: 'Radio',
     options: ['New Radio']
+  }
+
+  static metaData = {
+    icon: faDotCircle,
+    displayText: 'Radio button'
   }
 
   static IsJsonString(str) {

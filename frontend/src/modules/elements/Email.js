@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+
 import './Email.css'
 
 export default class Email extends Component {
@@ -11,6 +13,11 @@ export default class Email extends Component {
     id: 0,
     type: 'Email',
     label: 'Email'
+  }
+
+  static metaData = {
+    icon: faEnvelope,
+    displayText: 'E-mail'
   }
 
   static helpers = {

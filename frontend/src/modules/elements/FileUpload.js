@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+
 import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import './FileUpload.css'
+import { faFileAlt } from '@fortawesome/free-solid-svg-icons'
 
+import './FileUpload.css'
 export default class FileUpload extends Component {
   static weight = 9
 
@@ -12,6 +14,11 @@ export default class FileUpload extends Component {
     type: 'FileUpload',
     label: 'File Upload',
     requiredText: 'Please fill this field.'
+  }
+
+  static metaData = {
+    icon: faFileAlt,
+    displayText: 'File Upload'
   }
 
   static renderDataValue(entry) {

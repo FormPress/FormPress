@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 
 import { cloneDeep } from 'lodash'
-
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
+import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
 
 import './Checkbox.css'
 
@@ -16,6 +16,11 @@ export default class Checkbox extends Component {
     type: 'Checkbox',
     label: 'Label',
     options: ['New Checkbox']
+  }
+
+  static metaData = {
+    icon: faCheckSquare,
+    displayText: 'Checkbox'
   }
 
   static configurableSettings = {

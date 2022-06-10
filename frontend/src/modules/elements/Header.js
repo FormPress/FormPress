@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import Separator from './Separator'
+import { faHeading } from '@fortawesome/free-solid-svg-icons'
+
 import './Header.css'
 
 export default class Header extends Component {
@@ -13,6 +15,11 @@ export default class Header extends Component {
     type: 'Header',
     label: '',
     sublabel: ''
+  }
+
+  static metaData = {
+    icon: faHeading,
+    displayText: 'Header'
   }
 
   static configurableSettings = {

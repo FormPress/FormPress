@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
+
 import './Name.css'
 
 export default class Name extends Component {
@@ -11,6 +14,11 @@ export default class Name extends Component {
     type: 'Name',
     label: 'Full Name',
     options: ['Mr.', 'Mrs.']
+  }
+
+  static metaData = {
+    icon: faAddressCard,
+    displayText: 'Name'
   }
 
   static configurableSettings = {

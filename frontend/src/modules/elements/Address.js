@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 import './Address.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -41,6 +43,11 @@ export default class Address extends Component {
     title: false,
     type: 'Address',
     zip: true
+  }
+
+  static metaData = {
+    icon: faMapMarkerAlt,
+    displayText: 'Address'
   }
 
   static configurableSettings = {

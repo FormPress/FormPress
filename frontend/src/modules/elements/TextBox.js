@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faFont } from '@fortawesome/free-solid-svg-icons'
+
 import './TextBox.css'
 
 export default class TextBox extends Component {
@@ -11,6 +13,11 @@ export default class TextBox extends Component {
     id: 0,
     type: 'TextBox',
     label: 'TextBox'
+  }
+
+  static metaData = {
+    icon: faFont,
+    displayText: 'Text Box'
   }
 
   static renderDataValue(entry) {

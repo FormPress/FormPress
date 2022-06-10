@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faSort } from '@fortawesome/free-solid-svg-icons'
 
 import './Dropdown.css'
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -55,6 +57,11 @@ export default class Dropdown extends Component {
     label: 'Dropdown',
     options: ['Dropdown 1', 'Dropdown 2'],
     placeholder: 'Choose an option'
+  }
+
+  static metaData = {
+    icon: faSort,
+    displayText: 'Dropdown'
   }
 
   static configurableSettings = {
