@@ -29,7 +29,7 @@ export default class Header extends Component {
       formProps: {
         type: 'Radio',
         options: ['Center', 'Left', 'Right'],
-        label: 'Heading aligment'
+        label: 'Header aligment'
       }
     }
   }
