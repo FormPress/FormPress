@@ -17,11 +17,8 @@ const {
 
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const Renderer = require(path.resolve(
-  'script',
-  'transformed',
-  'Renderer'
-)).default
+const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
+  .default
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { FP_ENV, FP_HOST } = process.env
 const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
@@ -378,8 +375,9 @@ module.exports = (app) => {
                   case 'lastFive':
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
-                    elementTemplate.chartItems =
-                      elementTemplate.chartItems.slice(-5)
+                    elementTemplate.chartItems = elementTemplate.chartItems.slice(
+                      -5
+                    )
                     statistics.elements.push(elementTemplate)
 
                     break
@@ -598,8 +596,8 @@ module.exports = (app) => {
         CSVData[submissionId][questionId] = entry.value
       }
 
-      const createCsvStringifier =
-        require('csv-writer').createObjectCsvStringifier
+      const createCsvStringifier = require('csv-writer')
+        .createObjectCsvStringifier
       const header = [
         { id: 'submissionId', title: 'ID' },
         { id: 'createdAt', title: 'CREATED_AT' }
