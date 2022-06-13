@@ -2,7 +2,7 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 
-const excludedKeys = ['Button', 'Header', 'Separator', 'Address']
+const excludedKeys = ['Button', 'Header', 'Separator', 'Address', 'PageBreak']
 const keys = Object.keys(Elements)
 for (const key of keys) {
   const Component = Elements[key]
