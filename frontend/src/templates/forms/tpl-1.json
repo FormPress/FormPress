@@ -14,7 +14,8 @@
         "id": 3,
         "type": "Header",
         "label": "Customer Satisfaction Report",
-        "sublabel": ""
+        "sublabel": "",
+        "alignment": "Center"
       },
       {
         "id": 4,

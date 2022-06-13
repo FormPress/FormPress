@@ -138,6 +138,15 @@
 .gleam.form .header.label.alignCenter {
   text-align: center;
 }
+
+/* header alignment feature backwards compatibility */
+.gleam.form .header.label.undefined {
+  text-align: center;
+}
+.gleam.form .header.sublabel.undefined {
+  text-align: center;
+}
+
 .gleam.form .header.label span {
   font-family: Montserrat;
   padding: 3px 5px;

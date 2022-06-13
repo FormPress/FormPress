@@ -15,6 +15,7 @@
         "type": "Header",
         "label": "Event Attendance / RSVP",
         "sublabel": "",
+        "alignment": "Center",
         "separator": false
       },
       {
