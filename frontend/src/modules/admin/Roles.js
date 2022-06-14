@@ -19,6 +19,7 @@ const textMap = {
   Header: 'Header',
   Separator: 'Separator',
   Address: 'Address',
+  PageBreak: 'Page Break',
   NetPromoterScore: 'Net Promoter Score'
 }
 

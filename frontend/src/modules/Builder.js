@@ -1341,8 +1341,7 @@ class Builder extends Component {
               onDelete: this.handleFormElementDeleteClick,
               handleDragEnd: this.handleDragEnd,
               handleDragStart: this.handleDragStart,
-              handleFormItemMovement: this.handleFormItemMovement,
-              handleAddNewPage: this.handleAddNewPage
+              handleFormItemMovement: this.handleFormItemMovement
             }}
             draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
@@ -1357,6 +1356,14 @@ class Builder extends Component {
             mode="builder"
           />
         )}
+        {form.props.elements.length > 0 ? (
+          <div
+            key={`pb-newPage`}
+            onClick={this.handleAddNewPage}
+            className="pagebreak-new-placeholder">
+            Click here to add a new page.
+          </div>
+        ) : null}
         {this.props.auth.user_role === 2 ? (
           <div
             className="branding"
