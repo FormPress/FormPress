@@ -140,10 +140,10 @@
 }
 
 /* header alignment feature backwards compatibility */
-.gleam.form .header.label.undefined {
+.gleam.form .header.label.alignundefined {
   text-align: center;
 }
-.gleam.form .header.sublabel.undefined {
+.gleam.form .header.sublabel.alignundefined {
   text-align: center;
 }
 
