@@ -45,7 +45,7 @@
 
     if ($(this).attr('fp_widget') !== undefined) {
       iframeElem = `
-      <div style="position: fixed; bottom: 30px; left: 30px;">
+      <div style="position: fixed; bottom: 30px; right: 30px;">
         <div class="message-container hidden">
           <h2>We're not here, drop us an email...</h2>
           <div class="iframe-content">
@@ -99,7 +99,7 @@
         .message-container {
           box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1), 0 0 32px 32px rgba(0, 0, 0, 0.08);
           width: 400px;
-          /*right: -25px;*/
+          right: -25px;
           bottom: 75px;
           max-height: 400px;
           position: absolute;
