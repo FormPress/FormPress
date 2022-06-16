@@ -32,7 +32,8 @@
     }, 1000);
     <% if(widget === true) {%>
       document.getElementById("FORMPRESS_FORM_<%= FORMID %>").addEventListener('submit', function(){
-        parent.alert_me('hello there!');
+        console.log(window.parent, window.parent.alert_me())
+        window.parent.alert_me();
       });
     <%}%>
   </script>
