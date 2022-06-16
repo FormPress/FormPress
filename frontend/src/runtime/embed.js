@@ -49,7 +49,7 @@
         <div class="message-container hidden">
           <h2>We're not here, drop us an email...</h2>
           <div class="iframe-content">
-            <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true&widget=true" crossorigin="anonymous" onload="at()"></iframe>
+            <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true&widget=true" crossorigin="anonymous"></iframe>
           </div>
         </div>
         <div class="button-container">
@@ -152,7 +152,7 @@
       ${iframeElem}
       <script>
         if(getCookie('fp_widget_cookie') === "${formID}"){
-          $('#${iframeID}').attr('src', "#")
+          $('#${iframeID}').attr('src', "http://www.google.com")
         }
         var open = true
         function toggleOpen(open) {
@@ -179,6 +179,9 @@
             }
           }
           return "";
+        }
+        function alert_me() {
+          alert('hello this is parent');
         }
         iFrameResize({ log: false }, '#${iframeID}')
       </script>`).insertAfter(this)

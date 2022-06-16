@@ -30,8 +30,10 @@
     setInterval(function(){
       el.value = parseInt(el.value) + 1;
     }, 1000);
-    <% if(fp_widget === true) {%>
-    document.cookie = "fp_widget_cookie = <%= FORMID %>; max-age = " + (60*60*24*2);
+    <% if(widget === true) {%>
+      document.getElementById("FORMPRESS_FORM_<%= FORMID %>").addEventListener('submit', function(){
+        parent.alert_me('hello there!');
+      });
     <%}%>
   </script>
   <script src="<%= RUNTIMEJSURL %>"></script>
