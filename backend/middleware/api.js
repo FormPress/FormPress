@@ -811,6 +811,7 @@ module.exports = (app) => {
     )
 
     let showBranding = false
+    let fp_widget = false
 
     if (userRoleResult[0].role_id === 2) {
       showBranding = true
@@ -840,8 +841,12 @@ module.exports = (app) => {
 
     if (req.query.embed !== 'true') {
       style += ' body {background-color: #f5f5f5;} '
-      style += ' .form {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);} '
-      style += ' .branding {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);}  '
+      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
+      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    }
+
+    if (req.query.fp_widget === 'true') {
+      fp_widget = true
     }
 
     //form table has "published_version" while form_published has "version"
@@ -854,6 +859,7 @@ module.exports = (app) => {
       headerAppend: `<style type='text/css'>${style}</style>`,
       title: form.title,
       form: str,
+      fp_widget,
       postTarget,
       BACKEND,
       showBranding,

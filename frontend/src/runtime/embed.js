@@ -151,8 +151,8 @@
       </style>
       ${iframeElem}
       <script>
-        if(getCookie('fp_widget_cookie') !== ""){
-          iframeElem = '<div class="iframe-content">No you are fucking not</div>';
+        if(getCookie('fp_widget_cookie') === "${formID}"){
+          $('#${iframeID}').attr('src', "#")
         }
         var open = true
         function toggleOpen(open) {
@@ -179,9 +179,6 @@
             }
           }
           return "";
-        }
-        function at(){
-          console.log(document.getElementsByTagName('iframe')[0].contentWindow.document.body.innerText);
         }
         iFrameResize({ log: false }, '#${iframeID}')
       </script>`).insertAfter(this)

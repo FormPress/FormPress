@@ -30,6 +30,9 @@
     setInterval(function(){
       el.value = parseInt(el.value) + 1;
     }, 1000);
+    <% if(fp_widget === true) {%>
+    document.cookie = "fp_widget_cookie = <%= FORMID %>; max-age = " + (60*60*24*2);
+    <%}%>
   </script>
   <script src="<%= RUNTIMEJSURL %>"></script>
 </body>
