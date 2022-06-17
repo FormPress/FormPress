@@ -151,6 +151,12 @@ export default class Renderer extends Component {
               if (elem.value === true) extraProps.className = 'elementHider'
             }
 
+            if (elem.id === 'countriesType') {
+              if (elem.value === 'US') {
+                extraProps.className = 'elementHider'
+              }
+            }
+
             if (elem.type === 'PageBreak') {
               if (elem.empty === true) {
                 extraProps.className = 'emptyPage'
