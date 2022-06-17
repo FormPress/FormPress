@@ -52,6 +52,15 @@ export default class Address extends Component {
         label: 'Country type'
       }
     },
+    defaultCountry: {
+      default: 'United States',
+      formProps: {
+        type: 'Dropdown',
+        label: 'Default country',
+        hasDataset: true,
+        dataset: 'countriesWithFlags'
+      }
+    },
     title: {
       default: false,
       formProps: {
@@ -298,7 +307,12 @@ export default class Address extends Component {
                 className="dropdown-select"
                 id={`address-country_${config.id}`}
                 name={`q_${config.id}[country]`}
-                defaultValue={config.value ? config.value : ''}
+                data-fp-defaultvalue={config.defaultCountry}
+                value={
+                  config.defaultCountry
+                    ? config.defaultCountry
+                    : 'United States'
+                }
                 data-fp-list={'countriesWithFlags'}>
                 {datasets && datasets.countriesWithFlags
                   ? datasets.countriesWithFlags.map((country, index) => {
