@@ -22,7 +22,8 @@ import {
   faQuestionCircle,
   faPen,
   faMapMarkerAlt,
-  faSignal
+  faSignal,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -58,7 +59,8 @@ const iconMap = {
   Separator: faMinus,
   Address: faMapMarkerAlt,
   NetPromoterScore: faSignal,
-  PageBreak: faPlusCircle
+  PageBreak: faPlusCircle,
+  Phone: faPhone
 }
 
 //list of element texts
@@ -76,7 +78,8 @@ const textMap = {
   Separator: 'Separator',
   Address: 'Address',
   NetPromoterScore: 'Net Promoter Score',
-  PageBreak: 'Page Break'
+  PageBreak: 'Page Break',
+  Phone: 'Phone'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
