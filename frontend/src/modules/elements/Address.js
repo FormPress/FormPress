@@ -313,6 +313,7 @@ export default class Address extends Component {
                     ? config.defaultCountry
                     : 'United States'
                 }
+                readOnly={mode === 'builder'}
                 data-fp-list={'countriesWithFlags'}>
                 {datasets && datasets.countriesWithFlags
                   ? datasets.countriesWithFlags.map((country, index) => {
