@@ -54,5 +54,16 @@
       const dataset = response[element.dataset.fpList]
       fillDatasets(element, dataset)
     })
+
+    //if they have default values it should be set
+    const elemsWithDefaultValue = document.querySelectorAll(
+      '[data-fp-defaultvalue]'
+    )
+
+    if (elemsWithDefaultValue) {
+      for (const elem of elemsWithDefaultValue) {
+        elem.value = elem.dataset.fpDefaultvalue
+      }
+    }
   }
 })()
