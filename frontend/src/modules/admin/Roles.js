@@ -1,3 +1,4 @@
+import { faAdversal } from '@fortawesome/free-brands-svg-icons'
 import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
 import { api } from '../../helper'
@@ -5,22 +6,11 @@ import * as Elements from '../elements'
 import Renderer from '../Renderer'
 
 import './Roles.css'
-//list of element texts
-const textMap = {
-  TextBox: 'Text Box',
-  TextArea: 'Text Area',
-  Checkbox: 'Checkbox',
-  Button: 'Button',
-  Dropdown: 'Dropdown',
-  Radio: 'Radio button',
-  Name: 'Name',
-  FileUpload: 'File Upload',
-  Email: 'E-mail',
-  Header: 'Header',
-  Separator: 'Separator',
-  Address: 'Address',
-  NetPromoterScore: 'Net Promoter Score'
-}
+
+const elementMeta = {}
+Object.values(Elements).forEach((elem) => {
+  elementMeta[elem.defaultConfig.type] = elem.metaData.displayText
+})
 
 class Roles extends Component {
   constructor(props) {
@@ -97,14 +87,13 @@ class Roles extends Component {
   handleFieldChange(elem, e) {
     this.setState({ saved: false })
     const newPermissions = { ...this.state.permissions }
+
     if (elem.type === 'Checkbox') {
       const newPermissions = { ...this.state.permissions }
       const elementText = elem.options[0]
-      const textMapArray = Object.entries(textMap)
-      //first [0] for filters return array first element. second [0] for get type [type:, 'displayText']
-      const elementType = textMapArray.filter(
-        (element) => element[1] === elementText
-      )[0][0]
+      const elementType = Object.keys(elementMeta).find(
+        (searchedElem) => elementMeta[searchedElem] === elementText
+      )
       newPermissions[elementType] = !newPermissions[elementType]
       this.setState({ permissions: newPermissions })
     } else if (elem.type === 'TextBox') {
@@ -118,12 +107,14 @@ class Roles extends Component {
           this.setState({ permissions: newPermissions })
         }
       }
+
       if (elem.label === 'Submission Limit (Monthly)') {
         if (!isNaN(parseInt(e.target.value))) {
           newPermissions.submissionLimit = e.target.value
           this.setState({ permissions: newPermissions })
         }
       }
+
       if (elem.label === 'Upload Limit (in MB)') {
         if (!isNaN(parseInt(e.target.value))) {
           newPermissions.uploadLimit = e.target.value
@@ -187,11 +178,12 @@ class Roles extends Component {
           max: 99999999
         }
       } else {
+        const elemText = elementMeta[key]
         return {
           id: id,
           type: 'Checkbox',
           label: '',
-          options: [textMap[key]],
+          options: [elemText],
           value: this.state.permissions[key]
         }
       }
