@@ -23,6 +23,7 @@
   margin: 0 5px;
   padding: 10px;
   min-height: 200px;
+  word-break: break-all;
 }
 .shareFormMessage {
   background-color: #fffcdd;
@@ -65,7 +66,63 @@
 .share-iframe {
   min-height: 900px;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   opacity: 0.8;
   filter: blur(1px);
+}
+.shareFormSettings {
+  padding: 10px;
+}
+.shareFormSettingsInput {
+  width: 18px;
+  height: 18px;
+  -webkit-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  border: 1px solid #a0a0a0;
+  border-radius: 4px;
+  outline: none;
+  transition-duration: 0.3s;
+  background-color: #fdfdfd;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.shareFormSettingsInput:checked {
+  border: 1px solid #a0a0a0;
+  background-color: #113952;
+}
+.shareFormSettingsWidgetContainer {
+  display: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.shareFormSettingsInput:checked::before {
+  content: '';
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 2px;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+.shareFormSettingsInput:checked ~ .shareFormSettingsWidgetContainer {
+  display: block;
+}
+.shareFormSettings label {
+  vertical-align: middle;
+  display: inline-block;
+  text-indent: 5px;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-weight: 500;
+  font-style: normal;
+  cursor: pointer;
+  line-height: 1.5;
+  letter-spacing: normal;
+  color: #0c2738;
 }

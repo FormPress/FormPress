@@ -811,7 +811,6 @@ module.exports = (app) => {
     )
 
     let showBranding = false
-    let widget = false
 
     if (userRoleResult[0].role_id === 2) {
       showBranding = true
@@ -845,10 +844,6 @@ module.exports = (app) => {
       style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
     }
 
-    if (req.query.widget === 'true') {
-      widget = true
-    }
-
     //form table has "published_version" while form_published has "version"
     const postTarget =
       form.version === undefined
@@ -859,7 +854,6 @@ module.exports = (app) => {
       headerAppend: `<style type='text/css'>${style}</style>`,
       title: form.title,
       form: str,
-      widget,
       postTarget,
       BACKEND,
       showBranding,

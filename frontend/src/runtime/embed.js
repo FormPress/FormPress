@@ -39,6 +39,10 @@
   // add iframe after script tag, adding after not fp_style to ignore multiple embed
   $('script[fp_id]').each(function (index, elem) {
     const formID = $(this).attr('fp_id')
+    const fpTitle =
+      $(this).attr('fp_widget_title') !== undefined
+        ? `<h3>${$(this).attr('fp_widget_title')}</h3>`
+        : ''
     const iframeID = 'fp_' + formID
 
     let iframeElem = `<iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true"></iframe>`
@@ -47,7 +51,7 @@
       iframeElem = `
       <div style="position: fixed; bottom: 30px; right: 30px;">
         <div class="message-container hidden">
-          <h2>We're not here, drop us an email...</h2>
+          ${fpTitle}
           <div class="iframe-content">
             <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true&widget=true" crossorigin="anonymous"></iframe>
           </div>
@@ -97,7 +101,6 @@
           border-radius: 50%;
         }
         .message-container {
-          box-shadow: 0 0 18px 8px rgba(0, 0, 0, 0.1), 0 0 32px 32px rgba(0, 0, 0, 0.08);
           width: 400px;
           right: -25px;
           bottom: 75px;
@@ -110,16 +113,15 @@
         .message-container.hidden {
           max-height: 0px;
         }
-        .message-container h2 {
+        .message-container h3 {
           margin: 0;
           padding: 20px 20px;
           color: #fff;
           background-color: #04b73f;
+          font-size: 24px;
         }
         .message-container .iframe-content {
-          margin: 20px 10px ;
           border: 1px solid #dbdbdb;
-          padding: 10px;
           display: flex;
           background-color: #fff;
           flex-direction: column;
@@ -152,8 +154,17 @@
       ${iframeElem}
       <script>
         if(getCookie('fp_widget_cookie') === "${formID}"){
-          $('#${iframeID}').attr('src', "http://www.google.com")
+          console.log('ananı bacını sikeyim')
+          $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
+          $("#${iframeID}").on('load', function() {
+          loaded += 1
+          if(loaded === 2){
+            document.cookie = "fp_widget_cookie = ${formID}; max-age = "+ 60*60*24*2;
+            window.scrollTo(0, 0);
+          }
+        });
         }
+        var loaded = 0
         var open = true
         function toggleOpen(open) {
           if (open) {
@@ -179,9 +190,6 @@
             }
           }
           return "";
-        }
-        function alert_me() {
-          alert('hello this is parent');
         }
         iFrameResize({ log: false }, '#${iframeID}')
       </script>`).insertAfter(this)

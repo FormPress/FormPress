@@ -30,12 +30,6 @@
     setInterval(function(){
       el.value = parseInt(el.value) + 1;
     }, 1000);
-    <% if(widget === true) {%>
-      document.getElementById("FORMPRESS_FORM_<%= FORMID %>").addEventListener('submit', function(){
-        console.log(window.parent, window.parent.alert_me())
-        window.parent.alert_me();
-      });
-    <%}%>
   </script>
   <script src="<%= RUNTIMEJSURL %>"></script>
 </body>

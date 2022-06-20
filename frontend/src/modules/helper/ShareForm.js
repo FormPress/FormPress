@@ -16,12 +16,168 @@ import {
 } from 'react-share'
 
 class ShareForm extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+    this.onWidgetTitleChange = this.onWidgetTitleChange.bind(this)
+    this.onWidgetChange = this.onWidgetChange.bind(this)
+    this.onAnsweredOnceChange = this.onAnsweredOnceChange.bind(this)
+
     const hostname = window.location.protocol + '//' + window.location.host
-    const embedCode = [
-      `<script src="${hostname}/runtime/embed.js" fp_id="${this.props.formId}">`,
-      '</script>'
-    ].join('\n')
+    this.formId = this.props.formId
+    this.formLink = `${hostname}/form/view/${this.formId}`
+    this.scriptStart = `<script src="${hostname}/runtime/embed.js" fp_id="${this.formId}"`
+    this.scriptWidget = ` fp_widget="true"`
+    this.scriptAnsweredOnce = ` fp_widget_cookie="${this.formId}"`
+    this.scriptEnd = `></script>`
+
+    this.state = {
+      widget: false,
+      widget_title: '',
+      answered_once: false,
+      embedCode: this.scriptStart + this.scriptEnd
+    }
+  }
+
+  onWidgetChange() {
+    this.state.widget = !this.state.widget
+    this.setState({ widget: this.state.widget })
+    let embedCode,
+      widget_title = ` fp_widget_title="${this.state.widget_title}"`
+    if (this.state.widget) {
+      if (this.state.answered_once) {
+        if (this.state.widget_title) {
+          embedCode =
+            this.scriptStart +
+            this.scriptWidget +
+            widget_title +
+            this.scriptAnsweredOnce +
+            this.scriptEnd
+          widget_title = this.state.widget_title
+        } else {
+          embedCode =
+            this.scriptStart +
+            this.scriptWidget +
+            this.scriptAnsweredOnce +
+            this.scriptEnd
+          widget_title = ''
+        }
+      } else {
+        if (this.state.widget_title) {
+          embedCode =
+            this.scriptStart + this.scriptWidget + widget_title + this.scriptEnd
+          widget_title = this.state.widget_title
+        } else {
+          embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
+          widget_title = ''
+        }
+      }
+    } else {
+      widget_title = ''
+      if (this.state.answered_once) {
+        embedCode = this.scriptStart + this.scriptAnsweredOnce + this.scriptEnd
+      } else {
+        embedCode = this.scriptStart + this.scriptEnd
+      }
+    }
+
+    this.setState({
+      embedCode,
+      widget_title
+    })
+  }
+
+  onAnsweredOnceChange() {
+    this.state.answered_once = !this.state.answered_once
+    this.setState({ answered_once: this.state.answered_once })
+    let embedCode,
+      widget_title = ` fp_widget_title="${this.state.widget_title}"`
+    if (this.state.answered_once) {
+      if (this.state.widget) {
+        if (this.state.widget_title) {
+          embedCode =
+            this.scriptStart +
+            this.scriptWidget +
+            widget_title +
+            this.scriptAnsweredOnce +
+            this.scriptEnd
+          widget_title = this.state.widget_title
+        } else {
+          embedCode =
+            this.scriptStart +
+            this.scriptWidget +
+            this.scriptAnsweredOnce +
+            this.scriptEnd
+          widget_title = ''
+        }
+      } else {
+        embedCode = this.scriptStart + this.scriptAnsweredOnce + this.scriptEnd
+        widget_title = ''
+      }
+    } else {
+      if (this.state.widget) {
+        if (this.state.widget_title) {
+          embedCode =
+            this.scriptStart + this.scriptWidget + widget_title + this.scriptEnd
+          widget_title = this.state.widget_title
+        } else {
+          embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
+          widget_title = ''
+        }
+      } else {
+        embedCode = this.scriptStart + this.scriptEnd
+        widget_title = ''
+      }
+    }
+
+    this.setState({
+      embedCode,
+      widget_title
+    })
+  }
+
+  onWidgetTitleChange(e) {
+    let tempWidgetTitle = e.target.value.replace(/[^a-zA-Z ]/g, '')
+    this.state.widget_title = tempWidgetTitle
+    this.setState({
+      widget_title: tempWidgetTitle
+    })
+
+    let embedCode,
+      widget_title = ` fp_widget_title="${tempWidgetTitle}"`
+    if (this.state.answered_once === true) {
+      if (this.state.widget_title) {
+        embedCode =
+          this.scriptStart +
+          this.scriptWidget +
+          widget_title +
+          this.scriptAnsweredOnce +
+          this.scriptEnd
+        widget_title = tempWidgetTitle
+      } else {
+        embedCode =
+          this.scriptStart +
+          this.scriptWidget +
+          this.scriptAnsweredOnce +
+          this.scriptEnd
+        widget_title = ''
+      }
+    } else {
+      if (this.state.widget_title) {
+        embedCode =
+          this.scriptStart + this.scriptWidget + widget_title + this.scriptEnd
+        widget_title = tempWidgetTitle
+      } else {
+        embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
+        widget_title = ''
+      }
+    }
+    this.setState({
+      embedCode,
+      widget_title
+    })
+  }
+
+  render() {
     return (
       <div className="col-15-16 shareForm">
         <div className="shareFormTab col-5-16">
@@ -32,6 +188,42 @@ class ShareForm extends Component {
               before sharing. Otherwise your form will be seen latest saved
               version.
             </div>
+            <div className="shareFormSettings">
+              <input
+                id="widget"
+                type="checkbox"
+                name="widget"
+                value={this.state.widget}
+                className="shareFormSettingsInput"
+                onChange={this.onWidgetChange}
+              />
+              <label htmlFor="widget">Show form as widget</label>
+              <div className="shareFormSettingsWidgetContainer">
+                <label>Widget Title</label>
+                <input
+                  type="text"
+                  className="formURL"
+                  name="widget_title"
+                  value={this.state.widget_title}
+                  onChange={this.onWidgetTitleChange}
+                  placeholder="Enter widget title"
+                  maxLength="32"
+                />
+              </div>
+              <div>
+                <input
+                  id="widget_once"
+                  type="checkbox"
+                  name="widget_once"
+                  value={this.state.answered_once}
+                  className="shareFormSettingsInput"
+                  onChange={this.onAnsweredOnceChange}
+                />
+                <label htmlFor="widget_once">
+                  Set form to "can be answered once"
+                </label>
+              </div>
+            </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
                 <h3 className="shareFormFormUrlAreaTitle">
@@ -39,23 +231,27 @@ class ShareForm extends Component {
                 </h3>
                 <input
                   type="text"
-                  value={`${hostname}/form/view/${this.props.formId}`}
+                  value={this.formLink}
                   className="formURL"
                   readOnly
                 />
               </div>
               <CopyToClipboard
-                clipboardData={`${hostname}/form/view/${this.props.formId}`}
+                clipboardData={this.formLink}
                 buttonText="Copy the URL"
               />
               <div className="shareFormFormEmbedCodeArea">
                 <h3 className="shareFormFormEmbedCodeAreaTitle">
                   The Embed Code of your form:
                 </h3>
-                <textarea className="embedCode" value={embedCode} readOnly />
+                <textarea
+                  className="embedCode"
+                  value={this.state.embedCode}
+                  readOnly
+                />
               </div>
               <CopyToClipboard
-                clipboardData={embedCode}
+                clipboardData={this.state.embedCode}
                 buttonText="Copy the code"
               />
             </div>
@@ -65,27 +261,27 @@ class ShareForm extends Component {
                 <div className="shareFormButtonCover">
                   <TwitterShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <TwitterIcon size={48} round />
                   </TwitterShareButton>
                   <FacebookShareButton
                     quote="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <FacebookIcon size={48} round />
                   </FacebookShareButton>
 
                   <LinkedinShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <LinkedinIcon size={48} round />
                   </LinkedinShareButton>
 
                   <WhatsappShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}>
+                    url={this.formLink}>
                     <WhatsappIcon size={48} round />
                   </WhatsappShareButton>
                 </div>
@@ -99,10 +295,7 @@ class ShareForm extends Component {
             before sharing. Otherwise your form will be seen latest saved
             version.
           </div>
-          <iframe
-            src={`${hostname}/form/view/${this.props.formId}`}
-            className={'share-iframe'}
-          />
+          <iframe src={this.formLink} className={'share-iframe'} />
         </div>
       </div>
     )
