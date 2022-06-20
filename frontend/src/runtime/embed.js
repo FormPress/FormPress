@@ -81,8 +81,7 @@
         iframe {
           width: 1px;
           min-width: 100%;
-          border: none;
-        }
+          border: none;}
         .icon {
           cursor: pointer;
           width: 70%;
