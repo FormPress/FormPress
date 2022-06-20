@@ -8,7 +8,7 @@ import { faSignal } from '@fortawesome/free-solid-svg-icons'
 import './NetPromoterScore.css'
 
 export default class NetPromoterScore extends Component {
-  static weight = 13
+  static weight = 6
 
   static defaultConfig = {
     id: 0,
@@ -20,6 +20,18 @@ export default class NetPromoterScore extends Component {
   static metaData = {
     icon: faSignal,
     displayText: 'Net Promoter Score'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static IsJsonString(str) {

@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import {faMousePointer} from '@fortawesome/free-solid-svg-icons'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 import './Button.css'
 
 export default class Button extends Component {
-  static weight = 4
+  static weight = 11
 
   static defaultConfig = {
     id: 0,
@@ -16,8 +16,8 @@ export default class Button extends Component {
   }
 
   static metaData = {
-    icon: faMousePointer,
-    displayText: 'Button'
+    icon: faPaperPlane,
+    displayText: 'Submit Button'
   }
 
   render() {

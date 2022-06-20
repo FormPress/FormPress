@@ -3,11 +3,12 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import { faFileAlt } from '@fortawesome/free-solid-svg-icons'
+import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 import './FileUpload.css'
+
 export default class FileUpload extends Component {
-  static weight = 9
+  static weight = 7
 
   static defaultConfig = {
     id: 0,
@@ -17,8 +18,20 @@ export default class FileUpload extends Component {
   }
 
   static metaData = {
-    icon: faFileAlt,
+    icon: faFileArrowUp,
     displayText: 'File Upload'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

@@ -304,7 +304,7 @@ class Builder extends Component {
               type: 'TextBox',
               placeholder: '',
               required: false,
-              label: 'TextBox',
+              label: 'Short Text',
               requiredText: 'Please fill this field.'
             },
             {

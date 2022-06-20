@@ -8,7 +8,7 @@ import { faHeading } from '@fortawesome/free-solid-svg-icons'
 import './Header.css'
 
 export default class Header extends Component {
-  static weight = 11
+  static weight = 12
 
   static defaultConfig = {
     id: 0,

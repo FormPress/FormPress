@@ -12,12 +12,24 @@ export default class TextArea extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'TextArea'
+    label: 'Long Text'
   }
 
   static metaData = {
     icon: faAlignJustify,
-    displayText: 'Text Area'
+    displayText: 'Long Text'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

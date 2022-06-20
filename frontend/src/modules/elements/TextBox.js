@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import { faFont } from '@fortawesome/free-solid-svg-icons'
+import { faGripLines } from '@fortawesome/free-solid-svg-icons'
 
 import './TextBox.css'
 
@@ -12,12 +12,24 @@ export default class TextBox extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextBox',
-    label: 'TextBox'
+    label: 'Short Text'
   }
 
   static metaData = {
-    icon: faFont,
-    displayText: 'Text Box'
+    icon: faGripLines,
+    displayText: 'Short Text'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

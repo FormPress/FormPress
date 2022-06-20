@@ -4,23 +4,35 @@ import { cloneDeep } from 'lodash'
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
-import { faCheckSquare } from '@fortawesome/free-solid-svg-icons'
+import { faListCheck } from '@fortawesome/free-solid-svg-icons'
 
 import './Checkbox.css'
 
 export default class Checkbox extends Component {
-  static weight = 3
+  static weight = 4
 
   static defaultConfig = {
     id: 0,
     type: 'Checkbox',
-    label: 'Label',
+    label: 'Multiple Choice',
     options: ['New Checkbox']
   }
 
   static metaData = {
-    icon: faCheckSquare,
-    displayText: 'Checkbox'
+    icon: faListCheck,
+    displayText: 'Multiple Choice'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static configurableSettings = {

@@ -20,6 +20,18 @@ export default class Email extends Component {
     displayText: 'E-mail'
   }
 
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
+  }
+
   static helpers = {
     getElementValue: 'defaultInputHelpers',
     isFilled: 'defaultInputHelpers',

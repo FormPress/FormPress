@@ -54,22 +54,34 @@ export default class Dropdown extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Dropdown',
-    label: 'Dropdown',
-    options: ['Dropdown 1', 'Dropdown 2'],
+    label: 'Drop-down List',
+    options: ['Option 1', 'Option 2'],
     placeholder: 'Choose an option'
   }
 
   static metaData = {
     icon: faSort,
-    displayText: 'Dropdown'
+    displayText: 'Drop-down List'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static configurableSettings = {
     dropdownOptions: {
-      default: ['Dropdown 1', 'Dropdown 2'],
+      default: ['Option 1', 'Option 2'],
       formProps: {
         type: 'TextArea',
-        label: 'Dropdown options'
+        label: 'Drop-down Options'
       }
     }
   }

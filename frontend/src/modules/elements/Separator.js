@@ -6,7 +6,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import './Separator.css'
 
 export default class Separator extends Component {
-  static weight = 12
+  static weight = 14
 
   static defaultConfig = {
     id: 0,
