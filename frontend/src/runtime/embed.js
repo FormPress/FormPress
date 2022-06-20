@@ -94,7 +94,7 @@
           transform: scale(0);
         }
         .button-container {
-          background-color: #04b73f;
+          background-color: #8dc340;
           width: 60px;
           height: 60px;
           border-radius: 50%;
@@ -116,7 +116,7 @@
           margin: 0;
           padding: 20px 20px;
           color: #fff;
-          background-color: #04b73f;
+          background-color: #8dc340;
           font-size: 24px;
         }
         .message-container .iframe-content {
