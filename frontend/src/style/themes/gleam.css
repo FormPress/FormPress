@@ -125,9 +125,28 @@
 
 .gleam.form .header.label {
   position: relative;
-  text-align: center;
   max-width: 728px;
 }
+.gleam.form .header.label.alignLeft {
+  text-align: left;
+}
+
+.gleam.form .header.label.alignRight {
+  text-align: right;
+}
+
+.gleam.form .header.label.alignCenter {
+  text-align: center;
+}
+
+/* header alignment feature backwards compatibility */
+.gleam.form .header.label.alignundefined {
+  text-align: center;
+}
+.gleam.form .header.sublabel.alignundefined {
+  text-align: center;
+}
+
 .gleam.form .header.label span {
   font-family: Montserrat;
   padding: 3px 5px;
@@ -138,8 +157,18 @@
 }
 .gleam.form .header.sublabel {
   position: relative;
-  text-align: center;
   max-width: 728px;
+}
+.gleam.form .header.sublabel.alignLeft {
+  text-align: left;
+}
+
+.gleam.form .header.sublabel.alignRight {
+  text-align: right;
+}
+
+.gleam.form .header.sublabel.alignCenter {
+  text-align: center;
 }
 .gleam.form .header.sublabel span {
   padding: 3px 5px;

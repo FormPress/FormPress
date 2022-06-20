@@ -210,17 +210,6 @@ export default class Renderer extends Component {
           <div key={1} className={className} {...builderHandlers}></div>
         )
       : null
-
-    this.props.mode === 'builder'
-      ? output.push(
-          <div
-            key={`pb-newPage`}
-            onClick={customBuilderHandlers.handleAddNewPage}
-            className="pagebreak-new-placeholder">
-            Click here to add a new page.
-          </div>
-        )
-      : null
     return output
   }
 }

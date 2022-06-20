@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start-compose": "NODE_PATH=/node_modules react-scripts start",
-    "start": "react-scripts start",
+    "start": "WATCHPACK_POLLING=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
