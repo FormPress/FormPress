@@ -154,7 +154,7 @@
       ${iframeElem}
       <script>
         if(getCookie('fp_widget_cookie') === "${formID}"){
-          console.log('ananı bacını sikeyim')
+          console.log('asdads')
           $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
           $("#${iframeID}").on('load', function() {
           loaded += 1
