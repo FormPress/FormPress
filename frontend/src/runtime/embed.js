@@ -153,16 +153,15 @@
       ${iframeElem}
       <script>
         if(getCookie('fp_widget_cookie') === "${formID}"){
-          console.log('asdads')
           $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
-          $("#${iframeID}").on('load', function() {
+        }
+        $("#${iframeID}").on('load', function() {
           loaded += 1
           if(loaded === 2){
             document.cookie = "fp_widget_cookie = ${formID}; max-age = "+ 60*60*24*2;
             window.scrollTo(0, 0);
           }
         });
-        }
         var loaded = 0
         var open = true
         function toggleOpen(open) {
