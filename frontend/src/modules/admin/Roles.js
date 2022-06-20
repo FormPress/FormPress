@@ -1,4 +1,3 @@
-import { faAdversal } from '@fortawesome/free-brands-svg-icons'
 import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
 import { api } from '../../helper'
