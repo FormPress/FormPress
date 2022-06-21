@@ -219,9 +219,6 @@
 .gleam .elementCheckbox {
   background-color: transparent;
 }
-.gleam .elementDropdown > div > .dropdown-div > select {
-  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
-}
 
 .gleam .elementDropdown .dropdown-div {
   display: inline-block;
@@ -230,6 +227,7 @@
 }
 .gleam .elementDropdown .dropdown-div .dropdown-select,
 .gleam .elementDropdown .dropdown-div .dropdown-select:focus {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
   outline: 0;
   width: 200px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -910,6 +908,7 @@ input[type='file'] {
 }
 
 .renderer.gleam .elementPhone > div > .input > .dialCode {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
   width: 2.8rem;
   font-size: x-large;
   border: solid 1px #c9c9c9;

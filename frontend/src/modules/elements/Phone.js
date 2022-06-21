@@ -112,6 +112,7 @@ export default class Phone extends Component {
             id={`q_${config.id}`}
             className="phoneInput"
             name={`q_${config.id}`}
+            maxLength={30}
             value={
               config.defaultDialCode
                 ? config.defaultDialCode.substring(
