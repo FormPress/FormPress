@@ -97,7 +97,8 @@ export default class Phone extends Component {
             id={`phone-dialCode_${config.id}`}
             value={config.defaultDialCode ? config.defaultDialCode : '+1 (US)'}
             data-fp-list={'countriesDialCodes'}
-            data-fp-defaultvalue={config.defaultDialCode}>
+            data-fp-defaultvalue={config.defaultDialCode}
+            disabled={mode !== 'renderer'}>
             {datasets && datasets.countriesDialCodes
               ? datasets.countriesDialCodes.map((country, index) => {
                   return (

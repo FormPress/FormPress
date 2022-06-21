@@ -314,7 +314,8 @@ export default class Address extends Component {
                     : 'United States'
                 }
                 readOnly={mode === 'builder'}
-                data-fp-list={'countriesWithFlags'}>
+                data-fp-list={'countriesWithFlags'}
+                disabled={mode !== 'renderer'}>
                 {datasets && datasets.countriesWithFlags
                   ? datasets.countriesWithFlags.map((country, index) => {
                       return (
