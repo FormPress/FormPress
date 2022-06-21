@@ -3,7 +3,9 @@
 
   const elemsWithDatalist = document.querySelectorAll('[data-fp-list]')
 
-  const hasFlags = document.querySelector('[data-fp-list=countriesWithFlags]')
+  const hasFlags =
+    document.querySelector('[data-fp-list=countriesWithFlags]') ||
+    document.querySelector('[data-fp-list=countriesDialCodes]')
 
   if (hasFlags) {
     const isWindows = window.userAgent.indexOf('windows') > -1
