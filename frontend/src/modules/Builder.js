@@ -1361,13 +1361,12 @@ class Builder extends Component {
         )}
         {form.props.elements.length > 0 ? (
           <div
-            key={`pb-newPage`}
             onClick={this.handleAddNewPage}
             className="pagebreak-new-placeholder">
             Click here to add a new page.
           </div>
         ) : null}
-        {this.props.auth.user_role === 2 ? (
+        {this.props.auth.user_role !== 2 ? (
           <div
             className="branding"
             title="Upgrade your plan to remove branding.">

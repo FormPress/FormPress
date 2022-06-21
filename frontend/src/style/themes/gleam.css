@@ -636,7 +636,6 @@
 
   .branding > .branding-text {
     margin: auto;
-    /*width: auto;*/
   }
 }
 
@@ -665,6 +664,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   background-color: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .branding > img {

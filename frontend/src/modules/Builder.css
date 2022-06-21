@@ -533,6 +533,8 @@
   font-family: 'Montserrat', sans-serif;
   width: fit-content;
   margin: auto;
+  height: 2.5rem;
+  display: table;
 }
 
 .elementPageBreak + .dropPlaceHolder {
