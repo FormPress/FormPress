@@ -299,9 +299,8 @@ class ShareForm extends Component {
         </div>
         <div className="col-10-16 share-iframe-container">
           <div className="shareFormMessage">
-            Be sure that your latest changes have been saved and published
-            before sharing. Otherwise your form will be seen latest saved
-            version.
+            This field is a afterimage of your form. You cannot make any changes
+            in this field.
           </div>
           <iframe src={this.formLink} className={'share-iframe'} />
         </div>
