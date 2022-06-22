@@ -22,7 +22,8 @@ import {
   faQuestionCircle,
   faPen,
   faMapMarkerAlt,
-  faSignal
+  faSignal,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -58,7 +59,8 @@ const iconMap = {
   Separator: faMinus,
   Address: faMapMarkerAlt,
   NetPromoterScore: faSignal,
-  PageBreak: faPlusCircle
+  PageBreak: faPlusCircle,
+  Phone: faPhone
 }
 
 //list of element texts
@@ -76,7 +78,8 @@ const textMap = {
   Separator: 'Separator',
   Address: 'Address',
   NetPromoterScore: 'Net Promoter Score',
-  PageBreak: 'Page Break'
+  PageBreak: 'Page Break',
+  Phone: 'Phone'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -1358,13 +1361,12 @@ class Builder extends Component {
         )}
         {form.props.elements.length > 0 ? (
           <div
-            key={`pb-newPage`}
             onClick={this.handleAddNewPage}
             className="pagebreak-new-placeholder">
             Click here to add a new page.
           </div>
         ) : null}
-        {this.props.auth.user_role === 2 ? (
+        {this.props.auth.user_role !== 2 ? (
           <div
             className="branding"
             title="Upgrade your plan to remove branding.">

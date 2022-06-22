@@ -20,7 +20,8 @@ const textMap = {
   Separator: 'Separator',
   Address: 'Address',
   PageBreak: 'Page Break',
-  NetPromoterScore: 'Net Promoter Score'
+  NetPromoterScore: 'Net Promoter Score',
+  Phone: 'Phone'
 }
 
 class Roles extends Component {

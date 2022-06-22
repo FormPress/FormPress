@@ -3,7 +3,9 @@
 
   const elemsWithDatalist = document.querySelectorAll('[data-fp-list]')
 
-  const hasFlags = document.querySelector('[data-fp-list=countriesWithFlags]')
+  const hasFlags =
+    document.querySelector('[data-fp-list=countriesWithFlags]') ||
+    document.querySelector('[data-fp-list=countriesDialCodes]')
 
   if (hasFlags) {
     const isWindows = window.userAgent.indexOf('windows') > -1
@@ -54,5 +56,16 @@
       const dataset = response[element.dataset.fpList]
       fillDatasets(element, dataset)
     })
+
+    //if they have default values it should be set
+    const elemsWithDefaultValue = document.querySelectorAll(
+      '[data-fp-defaultvalue]'
+    )
+
+    if (elemsWithDefaultValue) {
+      for (const elem of elemsWithDefaultValue) {
+        elem.value = elem.dataset.fpDefaultvalue
+      }
+    }
   }
 })()
