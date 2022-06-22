@@ -1003,4 +1003,23 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
+  app.get('/thank-you', async (req, res) => {
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+    let tyPageText =
+      'Your submission has been successful and we informed the form owner about it.'
+
+    res.render('submit-success.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle: tyPageTitle,
+      tyText: tyPageText
+    })
+  })
 }

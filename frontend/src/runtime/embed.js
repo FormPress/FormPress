@@ -65,6 +65,34 @@
     }
 
     if (!$(this).next().attr('fp_style')) {
+      let cookieScript = ``
+      if ($(this).attr('fp_widget_cookie') !== undefined) {
+        cookieScript = `
+          var loaded = 0
+          if(getCookie('fp_widget_cookie') === "${formID}"){
+            $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
+          }
+          $("#${iframeID}").on('load', function() {
+            loaded += 1
+            if(loaded === 2){
+              document.cookie = "fp_widget_cookie = ${formID}; max-age = "+ 60*60*24*2;
+            }
+          });
+          function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+              let c = ca[i];
+              while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+              }
+              if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+              }
+            }
+            return "";
+          }`
+      }
       if ($(this).attr('fp_widget') === undefined) {
         $(`<style fp_style="true">
           iframe {
@@ -73,7 +101,9 @@
             border: none;
           }
         </style>
+        <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true"></iframe>
         <script>
+          ${cookieScript}
           iFrameResize({ log: false }, '#${iframeID}')
         </script>`).insertAfter(this)
       } else {
@@ -152,17 +182,7 @@
       </style>
       ${iframeElem}
       <script>
-        if(getCookie('fp_widget_cookie') === "${formID}"){
-          $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
-        }
-        $("#${iframeID}").on('load', function() {
-          loaded += 1
-          if(loaded === 2){
-            document.cookie = "fp_widget_cookie = ${formID}; max-age = "+ 60*60*24*2;
-            window.scrollTo(0, 0);
-          }
-        });
-        var loaded = 0
+        ${cookieScript}
         var open = true
         function toggleOpen(open) {
           if (open) {
@@ -174,20 +194,6 @@
             $('.cross').addClass('hidden');
             $('.message-container').addClass('hidden');
           }
-        }
-        function getCookie(cname) {
-          let name = cname + "=";
-          let ca = document.cookie.split(';');
-          for(let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) == ' ') {
-              c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-              return c.substring(name.length, c.length);
-            }
-          }
-          return "";
         }
         iFrameResize({ log: false }, '#${iframeID}')
       </script>`).insertAfter(this)
