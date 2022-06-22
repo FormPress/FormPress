@@ -22,170 +22,45 @@ class ShareForm extends Component {
     this.onWidgetChange = this.onWidgetChange.bind(this)
     this.onAnsweredOnceChange = this.onAnsweredOnceChange.bind(this)
 
-    const hostname = window.location.protocol + '//' + window.location.host
+    this.hostname = window.location.protocol + '//' + window.location.host
     this.formId = this.props.formId
-    this.formLink = `${hostname}/form/view/${this.formId}`
-    this.scriptStart = `<script src="${hostname}/runtime/embed.js" fp_id="${this.formId}"`
-    this.scriptWidget = ` fp_widget="true"`
-    this.scriptAnsweredOnce = ` fp_widget_cookie="${this.formId}"`
-    this.scriptEnd = `></script>`
+    this.formLink = `${this.hostname}/form/view/${this.formId}`
 
     this.state = {
       widget: false,
-      widget_title: '',
-      answered_once: false,
-      embedCode: this.scriptStart + this.scriptEnd
+      title: '',
+      answered_once: false
     }
   }
 
   async onWidgetChange() {
     let widget = !this.state.widget
-    let embedCode,
-      widget_title = ` fp_widget_title="${this.state.widget_title}"`
-    this.setState({ widget: widget }, () => {
-      if (this.state.widget) {
-        if (this.state.answered_once) {
-          if (this.state.widget_title) {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              widget_title +
-              this.scriptAnsweredOnce +
-              this.scriptEnd
-            widget_title = this.state.widget_title
-          } else {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              this.scriptAnsweredOnce +
-              this.scriptEnd
-            widget_title = ''
-          }
-        } else {
-          if (this.state.widget_title) {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              widget_title +
-              this.scriptEnd
-            widget_title = this.state.widget_title
-          } else {
-            embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
-            widget_title = ''
-          }
-        }
-      } else {
-        widget_title = ''
-        if (this.state.answered_once) {
-          embedCode =
-            this.scriptStart + this.scriptAnsweredOnce + this.scriptEnd
-        } else {
-          embedCode = this.scriptStart + this.scriptEnd
-        }
-      }
-      this.setState({
-        embedCode,
-        widget_title
-      })
-    })
+    this.setState({ widget })
   }
 
   async onAnsweredOnceChange() {
     let answered_once = !this.state.answered_once
-    let embedCode,
-      widget_title = ` fp_widget_title="${this.state.widget_title}"`
-    this.setState({ answered_once: answered_once }, () => {
-      if (this.state.answered_once) {
-        if (this.state.widget) {
-          if (this.state.widget_title) {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              widget_title +
-              this.scriptAnsweredOnce +
-              this.scriptEnd
-            widget_title = this.state.widget_title
-          } else {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              this.scriptAnsweredOnce +
-              this.scriptEnd
-            widget_title = ''
-          }
-        } else {
-          embedCode =
-            this.scriptStart + this.scriptAnsweredOnce + this.scriptEnd
-          widget_title = ''
-        }
-      } else {
-        if (this.state.widget) {
-          if (this.state.widget_title) {
-            embedCode =
-              this.scriptStart +
-              this.scriptWidget +
-              widget_title +
-              this.scriptEnd
-            widget_title = this.state.widget_title
-          } else {
-            embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
-            widget_title = ''
-          }
-        } else {
-          embedCode = this.scriptStart + this.scriptEnd
-          widget_title = ''
-        }
-      }
-
-      this.setState({
-        embedCode,
-        widget_title
-      })
-    })
+    this.setState({ answered_once })
   }
 
   async onWidgetTitleChange(e) {
-    let tempWidgetTitle = e.target.value.replace(/[^a-zA-Z ]/g, '')
-    let embedCode,
-      widget_title = ` fp_widget_title="${tempWidgetTitle}"`
-    this.setState({ widget_title: tempWidgetTitle }, () => {
-      if (this.state.answered_once === true) {
-        if (this.state.widget_title) {
-          embedCode =
-            this.scriptStart +
-            this.scriptWidget +
-            widget_title +
-            this.scriptAnsweredOnce +
-            this.scriptEnd
-          widget_title = tempWidgetTitle
-        } else {
-          embedCode =
-            this.scriptStart +
-            this.scriptWidget +
-            this.scriptAnsweredOnce +
-            this.scriptEnd
-          widget_title = ''
-        }
-      } else {
-        if (this.state.widget_title) {
-          embedCode =
-            this.scriptStart + this.scriptWidget + widget_title + this.scriptEnd
-          widget_title = tempWidgetTitle
-        } else {
-          embedCode = this.scriptStart + this.scriptWidget + this.scriptEnd
-          widget_title = ''
-        }
-      }
-      this.setState({
-        embedCode,
-        widget_title
-      })
-    })
+    let title = e.target.value.replace(/[^a-zA-Z ]/g, '')
+    this.setState({ title })
   }
 
   render() {
-    const { widget, widget_title, answered_once } = this.state
-    console.log(this.state)
+    const { widget, title, answered_once } = this.state
+
+    const embedCode = ` 
+      <script 
+        src="${this.hostname}/runtime/embed.js"
+        fp_id="${this.formId}"
+        ${this.state.widget ? ' fp_widget="true"' : ''} 
+        ${this.state.answered_once ? `fp_widget_cookie="${this.formId}"` : ''} 
+        ${this.state.title ? ` fp_widget_title="${this.state.title}"` : ''}>
+      </script>
+        `.replace(/\s+/g, ' ')
+
     return (
       <div className="col-15-16 shareForm">
         <div className="shareFormTab col-5-16">
@@ -212,7 +87,7 @@ class ShareForm extends Component {
                   type="text"
                   className="formURL"
                   name="widget_title"
-                  value={widget_title}
+                  value={title}
                   onChange={this.onWidgetTitleChange}
                   placeholder="Enter widget title"
                   maxLength="32"
@@ -252,14 +127,10 @@ class ShareForm extends Component {
                 <h3 className="shareFormFormEmbedCodeAreaTitle">
                   The Embed Code of your form:
                 </h3>
-                <textarea
-                  className="embedCode"
-                  value={this.state.embedCode}
-                  readOnly
-                />
+                <textarea className="embedCode" value={embedCode} readOnly />
               </div>
               <CopyToClipboard
-                clipboardData={this.state.embedCode}
+                clipboardData={embedCode}
                 buttonText="Copy the code"
               />
             </div>
