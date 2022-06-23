@@ -190,6 +190,11 @@ module.exports = {
       path: '/api/datasets',
       protected: false,
       exampleRequestPath: 'api/datasets?dataset=countries'
+    },
+    {
+      method: 'get',
+      path: '/thank-you',
+      protected: false
     }
   ]
 }
