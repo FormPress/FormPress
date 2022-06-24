@@ -840,8 +840,8 @@ module.exports = (app) => {
 
     if (req.query.embed !== 'true') {
       style += ' body {background-color: #f5f5f5;} '
-      style += ' .form {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);} '
-      style += ' .branding {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);}  '
+      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
+      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
     }
 
     //form table has "published_version" while form_published has "version"
@@ -1003,4 +1003,23 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
+  app.get('/thank-you', async (req, res) => {
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+    let tyPageText =
+      'Your submission has been successful and we informed the form owner about it.'
+
+    res.render('submit-success.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle: tyPageTitle,
+      tyText: tyPageText
+    })
+  })
 }
