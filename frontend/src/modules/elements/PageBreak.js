@@ -7,7 +7,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import './PageBreak.css'
 
 export default class PageBreak extends Component {
-  static weight = 13
+  static weight = 14
 
   static defaultConfig = {
     id: 0,

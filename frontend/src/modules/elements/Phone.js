@@ -27,7 +27,7 @@ export default class Phone extends Component {
         })
       })
   }
-  static weight = 13
+  static weight = 11
 
   static defaultConfig = {
     id: 0,
