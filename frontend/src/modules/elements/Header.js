@@ -45,7 +45,7 @@ export default class Header extends Component {
     const { config, mode } = this.props
     const inputProps = {}
     const alignmentClassName = `align${config.alignment}`
-    console.log(config)
+
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
     }

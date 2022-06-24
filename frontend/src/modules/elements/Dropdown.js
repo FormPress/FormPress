@@ -114,7 +114,7 @@ export default class Dropdown extends Component {
         : ['']
 
     var display
-    if (mode === 'builder') {
+    if (mode === 'builder' || mode === 'viewer') {
       display = [
         <EditableLabel
           key="1"
@@ -133,11 +133,11 @@ export default class Dropdown extends Component {
                 className="dropdown-select"
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
-                defaultValue=""
+                value={mode === 'viewer' ? config.value : undefined}
                 onChange={inputProps.onChange}
-                data-fp-list={config.hasDataset ? config.dataset : null}>
+                data-fp-list={config.hasDataset ? config.dataset : ''}>
                 {config.placeholder !== false ? (
-                  <option disabled value="">
+                  <option disabled selected value="">
                     {config.placeholder}
                   </option>
                 ) : null}
@@ -149,6 +149,18 @@ export default class Dropdown extends Component {
                           key={index}
                           value={item.value}>
                           {item.display}
+                        </option>
+                      )
+                    })
+                  : config.id === 'dataset'
+                  ? options.map((item) => {
+                      return (
+                        <option
+                          className="option-space"
+                          key={item.value}
+                          value={item.value}
+                          disabled={item.disabled}>
+                          {item.displayText}
                         </option>
                       )
                     })
@@ -208,18 +220,6 @@ export default class Dropdown extends Component {
             ) : null}
             {config.hasDataset
               ? null
-              : config.id === 'dataset'
-              ? options.map((item) => {
-                  return (
-                    <option
-                      className="option-space"
-                      key={item.value}
-                      value={item.value}
-                      disabled={item.disabled}>
-                      {item.displayText}
-                    </option>
-                  )
-                })
               : options.map((item) => {
                   return (
                     <option className="option-space" key={item} value={item}>
