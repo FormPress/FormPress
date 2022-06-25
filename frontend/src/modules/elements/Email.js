@@ -5,7 +5,7 @@ import ElementContainer from '../common/ElementContainer'
 import './Email.css'
 
 export default class Email extends Component {
-  static weight = 9
+  static weight = 10
 
   static defaultConfig = {
     id: 0,

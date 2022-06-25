@@ -36,7 +36,12 @@
           answer += value + '\r\n'
         }
       }
-    } else if (data.type === 'Checkbox' && data.answer === 'off') {
+    } else if (data.type === 'Address') {
+      for (const [key, value] of Object.entries(data.answer)) {
+        answer += value + '\r\n'
+      }
+    }
+    else if (data.type === 'Checkbox' && data.answer === 'off') {
       answer = 'N/A\r\n'
     } else if (data.type === 'FileUpload') {
       if (data.answer === '') {

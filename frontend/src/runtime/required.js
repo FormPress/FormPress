@@ -1,12 +1,13 @@
 ;(async () => {
-  console.log('REQUIRED LOADED')
-  const requireds = {}
+  FORMPRESS.requireds = {}
 
   const additionalElemEventListeners = {
     Email: ['input'],
     Name: ['input'],
     TextArea: ['input'],
-    TextBox: ['input']
+    TextBox: ['input'],
+    Address: ['input'],
+    Phone: ['input']
   }
 
   for (const elem of FORMPRESS.elements) {
@@ -22,24 +23,26 @@
 
     const id = elem.id
     const containerElem = document.getElementById(`qc_${id}`)
+    const elementPageNumber = containerElem.parentElement.dataset.fpPagenumber
     let value = elemHelpers.getElementValue(id)
 
-    requireds[id] = {
+    FORMPRESS.requireds[id] = {
       id,
-      valid: elemHelpers.isFilled(value)
+      valid: elemHelpers.isFilled(value),
+      page: elementPageNumber
     }
 
     containerElem.addEventListener('change', () => {
       let value = elemHelpers.getElementValue(id)
-      requireds[id].valid = elemHelpers.isFilled(value)
+      FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
       let isFilled = elemHelpers.isFilled(value)
 
       if (isFilled) {
-        requireds[id].valid = true
+        FORMPRESS.requireds[id].valid = true
         containerElem.classList.remove('requiredError')
       } else {
         containerElem.classList.add('requiredError')
-        requireds[id].valid = false
+        FORMPRESS.requireds[id].valid = false
       }
     })
 
@@ -47,15 +50,15 @@
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
         containerElem.addEventListener(eventListener, () => {
           let value = elemHelpers.getElementValue(id)
-          requireds[id].valid = elemHelpers.isFilled(value)
+          FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
           let isFilled = elemHelpers.isFilled(value)
 
           if (isFilled) {
-            requireds[id].valid = true
+            FORMPRESS.requireds[id].valid = true
             containerElem.classList.remove('requiredError')
           } else {
             containerElem.classList.add('requiredError')
-            requireds[id].valid = false
+            FORMPRESS.requireds[id].valid = false
           }
         })
       })
@@ -65,12 +68,12 @@
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
     event.preventDefault()
-    const keys = Object.keys(requireds)
+    const keys = Object.keys(FORMPRESS.requireds)
     let allValid = true
     const errorsToTrigger = []
 
     for (const key of keys) {
-      const elem = requireds[key]
+      const elem = FORMPRESS.requireds[key]
 
       if (elem.valid === false) {
         allValid = false

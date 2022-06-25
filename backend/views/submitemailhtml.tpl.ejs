@@ -89,6 +89,12 @@
                   <i>First Name: </i>
                 <%} else if (key === 'lastName') {%>
                   <i>Last Name: </i>
+                <%} else if (key === 'middleName') {%>
+                  <i>Middle Name: </i>
+                  <%} else if (key === 'suffix') {%>
+                    <i>Suffix: </i>
+                  <%} else if (key === 'prefix') {%>
+                    <i>Prefix: </i>
                 <%} else {%>
                   <i><%= key%>: </i>
                 <%}%>
@@ -112,7 +118,16 @@
                   
                 <%}%>
               </div>
-            <%} else {%>
+            <%} else if (response.type === 'Address') {
+              let addressString = ''
+                for (const [key, value] of Object.entries(response.answer)) {
+                  addressString += value + '\r\n'
+
+                }%>
+              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                  <%= addressString%>
+              </div>
+           <% } else {%>
               <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
                 <%=response.answer%>
               </div>

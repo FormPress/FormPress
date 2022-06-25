@@ -23,6 +23,10 @@
     {
       name: 'datasets',
       check: (element) => element.hasDataset === true
+    },
+    {
+      name: 'multistep',
+      check: (element) => element.type === 'PageBreak'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -66,6 +70,8 @@
   }
 
   const elements = elementsQuery.data
+
+  window.userAgent = navigator.userAgent.toLowerCase()
 
   // set global FORMPRESS object
   window.FORMPRESS = {

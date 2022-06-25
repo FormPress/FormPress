@@ -87,7 +87,7 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
       const formResults = await db.query(
-        `SELECT f.*, fb.id AS published_id,( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount FROM form AS f INNER JOIN form_published AS fb ON f.user_id = fb.user_id AND f.id = fb.form_id AND f.published_version = fb.version WHERE f.user_id = ? AND deleted_at IS NULL`,
+        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 ) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
         [user_id]
       )
 
@@ -268,7 +268,8 @@ module.exports = (app) => {
         Email: 'lastFive',
         DropDown: 'barChart',
         Checkbox: 'barChart',
-        Button: 'none'
+        Button: 'none',
+        NetPromoterScore: 'average'
       }
 
       const colors = [
@@ -452,6 +453,20 @@ module.exports = (app) => {
                     }
 
                     statistics.elements.push(elementTemplate)
+                    break
+
+                  case 'average':
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+                    elementTemplate.responseAverage =
+                      (
+                        elementTemplate.chartItems.reduce(
+                          (a, b) => parseInt(a) + parseInt(b),
+                          0
+                        ) / elementTemplate.chartItems.length
+                      ).toFixed(2) || 0
+                    statistics.elements.push(elementTemplate)
+
                     break
                 }
               }
@@ -997,4 +1012,23 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
+  app.get('/thank-you', async (req, res) => {
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+    let tyPageText =
+      'Your submission has been successful and we informed the form owner about it.'
+
+    res.render('submit-success.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      tyTitle: tyPageTitle,
+      tyText: tyPageText
+    })
+  })
 }

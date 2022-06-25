@@ -15,7 +15,10 @@ export default class Checkbox extends Component {
     id: 0,
     type: 'Checkbox',
     label: 'Label',
-    options: ['New Checkbox'],
+    options: ['New Checkbox']
+  }
+
+  static configurableSettings = {
     toggle: {
       default: false,
       formProps: {
@@ -71,7 +74,7 @@ export default class Checkbox extends Component {
       }
     } else {
       for (let elementContent of element.options) {
-        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
+        if (tempContentValue.includes(elementContent) === true) {
           returnContent.push({
             content: elementContent,
             value: 'checked',
