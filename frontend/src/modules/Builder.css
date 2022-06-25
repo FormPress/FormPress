@@ -5,7 +5,7 @@
 .builder > .headerContainer,
 .forms > .headerContainer,
 .data > .headerContainer {
-  height: 30px;
+  height: 31px;
   top: 86px;
   width: 100%;
   position: fixed;
@@ -111,6 +111,8 @@
   position: fixed;
   top: 126px;
   width: 359px;
+  height: calc(100vh - 150px);
+  overflow: auto;
   box-shadow: 0px 3px 10px #00000014;
 }
 
@@ -139,8 +141,6 @@
   margin-top: 20px;
   position: relative;
   display: block;
-  height: calc(100vh - 273px);
-  overflow-y: auto;
 }
 
 .elements > .elementList > .element {
@@ -202,13 +202,9 @@
 
 .builderStage {
   margin-bottom: 50px;
-  height: calc(100vh - 176px);
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-shadow: 0px 3px 10px #00000014;
 }
 
-.builderStage > .formTitle {
+.builderStage .formTitle {
   background-color: #fdfdfd;
   font-size: 18px;
   display: flex;
@@ -216,54 +212,55 @@
   min-height: 60px;
   padding: 0;
   color: #1c5c85;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
-.builderStage > .formTitle > .label {
+.builderStage .formTitle > .label {
   width: 100%;
   align-self: center;
   padding: 2px 5px;
 }
 
-.builderStage > .formControls {
+.builderStage .formControls {
   margin-bottom: 10px;
   background-color: #fdfdfd;
   text-align: right;
   height: 24px;
   padding-right: 0;
   border-top: solid 1px #f5f5f5;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
-.builderStage > .formControls > button,
-.builderStage > .formControls > a > button,
-.builderStage > .formControls > span > button {
+.builderStage .formControls > button,
+.builderStage .formControls > a > button,
+.builderStage .formControls > span > button {
   border: none;
   height: 24px;
   font-size: 14px;
   font-weight: bold;
-  background-color: #fdfdfd;
+  background-color: transparent;
   cursor: pointer;
   color: #8cc63f;
   padding: 0 20px;
   margin-left: 10px;
 }
-.builderStage > .formControls > span > button.preview-disabled-button {
+.builderStage .formControls > span > button.preview-disabled-button {
   color: gray;
   cursor: default;
 }
 
-.builderStage > .formControls > .publish-disabled-button {
+.builderStage .formControls > .publish-disabled-button {
   color: grey;
-  background: white;
   cursor: default;
 }
 
-.builderStage > .formControls > button.publish {
+.builderStage .formControls > button.publish {
   background-color: #8cc63f;
   color: #ffffff;
   position: relative;
 }
 
-.builderStage > .formControls > button.publish > .publishRequired {
+.builderStage .formControls > button.publish > .publishRequired {
   background-color: red;
   width: 10px;
   height: 10px;
@@ -275,8 +272,8 @@
 }
 
 .builderStage > .form {
-  margin: 0 auto;
-  padding: 6px;
+  margin: 0 auto 25px;
+  padding: 30px 45px 20px;
   border-top: 1px solid #f5f5f5;
 }
 
@@ -286,11 +283,12 @@
 
 .form.builder > .dropPlaceHolder {
   pointer-events: none;
-  height: 80px;
   width: 100%;
-  background-color: blue;
-  opacity: 0.1;
-  border: 3px solid blue;
+  padding: 25px 10px;
+  margin: 2px 0;
+  opacity: 0.4;
+  border-radius: 6px;
+  background-color: #e5fbda;
 }
 
 .form.builder > .element {
@@ -343,7 +341,7 @@
 }
 
 .form.builder > .element.selected {
-  border: 2px solid #e5fbda;
+  border: 2px solid #719d5a;
   border-radius: 6px;
 }
 
@@ -389,7 +387,11 @@
 }
 
 .leftMenuContents .element {
-  padding: 20px 10px 10px 10px;
+  padding: 10px;
+}
+
+.leftMenuContents .elementHeader {
+  padding: 10px 10px 0 0;
 }
 #qc_required .input {
   float: right;
@@ -511,4 +513,73 @@
 .fake-link {
   color: #0645ad;
   text-decoration: underline;
+}
+
+@keyframes elementShift {
+  from {
+    opacity: 0;
+    height: 0px;
+  }
+
+  to {
+    opacity: 0.1;
+    height: 80px;
+  }
+}
+
+.builderStage > .pagebreak-new-placeholder {
+  text-align: center;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  width: fit-content;
+  margin: auto;
+  height: 2.5rem;
+  display: table;
+}
+
+.elementPageBreak + .dropPlaceHolder {
+  display: none;
+}
+
+.elementPageBreak.reflection > .action:hover > .action-up,
+.elementPageBreak.reflection > .action:hover > .action-down,
+.elementPageBreak.reflection > .action:hover > .sortHandle,
+.elementPageBreak.reflection > .action:hover > .action-clone {
+  display: none !important;
+}
+
+.elementPageBreak.reflection > .action > .action-up,
+.elementPageBreak.reflection > .action > .action-down,
+.elementPageBreak.reflection > .action > .sortHandle,
+.elementPageBreak.reflection > .action > .action-clone {
+  display: none !important;
+}
+
+.builderStage > .form:empty:before {
+  content: 'Drag and drop elements here.';
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f9f9f9;
+  border: dashed 2px grey;
+  height: 11rem;
+  text-align: center;
+  display: grid;
+  justify-content: center;
+  padding: 7.3rem;
+  border-radius: 6px;
+}
+
+.builderStage > .form:empty:before:hover {
+  border: solid 2px #6dae19;
+}
+
+.elementPageBreak.emptyPage:before {
+  content: 'Drag and drop elements here.';
+  background-color: #f9f9f9;
+  border: dashed 2px grey;
+  height: 8rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  padding: 3.3rem;
+  border-radius: 6px;
 }

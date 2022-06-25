@@ -51,7 +51,7 @@ export default class Radio extends Component {
       }
     } else {
       for (let elementContent of element.options) {
-        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
+        if (tempContentValue.includes(elementContent) === true) {
           returnContent.push({
             content: elementContent,
             value: 'checked',
@@ -158,6 +158,12 @@ export default class Radio extends Component {
         ? config.options
         : ['']
 
+    const inputProps = {}
+
+    if (typeof this.props.onChange !== 'undefined') {
+      inputProps.onChange = this.props.onChange
+    }
+
     var display
     if (mode === 'builder') {
       display = [
@@ -219,7 +225,9 @@ export default class Radio extends Component {
                     type="radio"
                     id={`q_${config.id}_${key}`}
                     name={`q_${config.id}`}
-                    value={item}></input>
+                    value={item}
+                    onChange={inputProps.onChange}
+                    defaultChecked={config.value === item}></input>
                   <label
                     className="radio-label"
                     htmlFor={`q_${config.id}_${key}`}>

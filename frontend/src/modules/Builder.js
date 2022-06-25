@@ -20,7 +20,10 @@ import {
   faFont,
   faMinus,
   faQuestionCircle,
-  faPen
+  faPen,
+  faMapMarkerAlt,
+  faSignal,
+  faPhone
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -53,7 +56,11 @@ const iconMap = {
   FileUpload: faFileAlt,
   Email: faEnvelope,
   Header: faHeading,
-  Separator: faMinus
+  Separator: faMinus,
+  Address: faMapMarkerAlt,
+  NetPromoterScore: faSignal,
+  PageBreak: faPlusCircle,
+  Phone: faPhone
 }
 
 //list of element texts
@@ -68,7 +75,11 @@ const textMap = {
   FileUpload: 'File Upload',
   Email: 'E-mail',
   Header: 'Header',
-  Separator: 'Separator'
+  Separator: 'Separator',
+  Address: 'Address',
+  NetPromoterScore: 'Net Promoter Score',
+  PageBreak: 'Page Break',
+  Phone: 'Phone'
 }
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -88,15 +99,11 @@ const getElements = () =>
 const getElementsConfigurableSettingsObject = () =>
   Object.values(Elements).reduce((acc, element) => {
     let mergedObject = getConfigurableSettings(element.defaultConfig.type)
-    for (var key in element.defaultConfig) {
-      if (
-        Object.prototype.hasOwnProperty.call(
-          element.defaultConfig[key],
-          'default'
-        ) === true
-      ) {
-        Object.assign(mergedObject, { [key]: element.defaultConfig[key] })
-      }
+
+    for (const key in element.configurableSettings) {
+      Object.assign(mergedObject, {
+        [key]: element.configurableSettings[key]
+      })
     }
     acc[element.defaultConfig.type] = {
       configurableSettings: mergedObject
@@ -160,6 +167,9 @@ class Builder extends Component {
     }
 
     this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
+
+    const isWindows = navigator.platform.indexOf('Win') > -1
+    this.setState({ isWindows })
   }
 
   componentWillUnmount() {
@@ -172,7 +182,7 @@ class Builder extends Component {
     } // if user still wants to proceed without saving
 
     const { form, savedForm } = this.state
-    let isFormChanged = !isEqual(form, savedForm)
+    let isFormChanged = !isEqual(form.props.elements, savedForm.props.elements)
 
     const disallowedPath = !location.pathname.startsWith('/editor')
 
@@ -295,6 +305,7 @@ class Builder extends Component {
   }
 
   cloneTemplate = (template) => {
+    this.props.history.push('/editor/new/builder')
     this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props
@@ -315,6 +326,7 @@ class Builder extends Component {
       modalContent: {},
       dragging: false,
       dragIndex: false,
+      draggingItemType: '',
       dragMode: 'insert',
       sortItem: false,
       insertBefore: false,
@@ -336,7 +348,9 @@ class Builder extends Component {
             {
               id: 1,
               type: 'TextBox',
-              label: 'First Name',
+              placeholder: '',
+              required: false,
+              label: 'TextBox',
               requiredText: 'Please fill this field.'
             },
             {
@@ -379,6 +393,7 @@ class Builder extends Component {
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
+    this.handleAddNewPage = this.handleAddNewPage.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -402,6 +417,7 @@ class Builder extends Component {
 
     const dragState = {
       dragMode,
+      draggingItemType: _item.type,
       selectedFieldId: false,
       dragging: true
     }
@@ -511,6 +527,10 @@ class Builder extends Component {
     })
   }
 
+  handleAddNewPage() {
+    this.handleAddFormElementClick('PageBreak')
+  }
+
   handleDragEnd(e) {
     e.stopPropagation()
     e.preventDefault()
@@ -529,7 +549,17 @@ class Builder extends Component {
     const id = e.target.id.replace('qc_', '')
     const middleTop = top + height / 2
     const diff = clientY - middleTop
-    const insertBefore = diff < 0
+    let insertBefore = diff < 0
+
+    if (e.target.classList.contains('elementPageBreak')) {
+      const emptyPage = e.target.classList.contains('emptyPage')
+
+      if (emptyPage) {
+        insertBefore = !e.target.classList.contains('reflection')
+      } else {
+        return
+      }
+    }
 
     if (
       id !== '' &&
@@ -565,6 +595,12 @@ class Builder extends Component {
         question.sublabel = value
       } else if (id.split('_')[0] === 'name') {
         question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'address') {
+        question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'net') {
+        question[`${itemID}SublabelText`] = value
+      } else if (id.split('_')[0] === 'pbButton') {
+        question[`${itemID}ButtonText`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -624,8 +660,7 @@ class Builder extends Component {
       let newElements
       if (movementType === 'moveDown') {
         if (index === elements.length - 1) {
-          newElements = [item, ...elements]
-          newElements.unshift()
+          return
         } else {
           newElements = [
             ...elements.slice(0, index + 2),
@@ -762,13 +797,15 @@ class Builder extends Component {
       this.setState({
         dragging: false
       })
-      var nodeList = document.querySelectorAll('[id^="qc_"]')
-      nodeList.forEach((node) => {
+      const allElemNodes = document.querySelectorAll('[id^="qc_"]')
+      allElemNodes.forEach((node) => {
         node.classList.remove('selected')
       })
 
-      var node = document.getElementById(elemID.id)
-      node.classList.add('selected')
+      const selectedElemNodes = document.querySelectorAll(`[id^="qc_${id}"]`)
+      selectedElemNodes.forEach((node) => {
+        node.classList.add('selected')
+      })
     }
   }
 
@@ -1022,7 +1059,8 @@ class Builder extends Component {
             <NavLink
               className="option-container"
               to="/editor/new/template"
-              activeClassName="selected">
+              activeClassName="selected"
+              onClick={closeModal}>
               <div className="option" onClick={closeModal}>
                 <TemplateOptionSVG />
               </div>
@@ -1196,7 +1234,12 @@ class Builder extends Component {
           <ShareForm formId={formId} />
         </Route>
         <Route path="/editor/:formId/template">
-          <Templates formId={formId} cloneTemplate={this.cloneTemplate} />
+          <Templates
+            formId={formId}
+            cloneTemplate={this.cloneTemplate}
+            history={this.props.history}
+            location={this.props.location}
+          />
         </Route>
         <Route path="/editor/:formId/preview">
           <PreviewForm formID={formId} history={this.props.history} />
@@ -1228,49 +1271,64 @@ class Builder extends Component {
 
     return (
       <div className="builderStage col-10-16 grid">
-        <div className="formTitle col-16-16">
-          {loading === false ? (
-            <EditableLabel
-              className="label"
-              mode="builder"
-              dataPlaceholder="Click to edit form title"
-              labelKey="title"
-              handleLabelChange={this.handleTitleChange}
-              value={form.title}
-            />
-          ) : null}
-        </div>
-        <div className="col-16-16 formControls">
-          <button onClick={this.handleSaveClick} {...saveButtonProps}>
-            {saving === true ? 'Saving...' : 'Save'}
-          </button>
-          {typeof this.state.form.id === 'number' ? (
-            <NavLink to={`/editor/${params.formId}/preview`}>
-              <button>Preview</button>
-            </NavLink>
-          ) : (
-            <span>
-              <button
-                className="preview-disabled-button"
-                title="Form has to be saved before it can be previewed.">
-                Preview
+        {this.state.isWindows ? (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+          @font-face {
+            font-family: "Twemoji Country Flags";
+            unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067,
+            U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
+            src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
+          }`
+            }}
+          />
+        ) : null}
+        <div className="builderStageHeader">
+          <div className="formTitle col-16-16">
+            {loading === false ? (
+              <EditableLabel
+                className="label"
+                mode="builder"
+                dataPlaceholder="Click to edit form title"
+                labelKey="title"
+                handleLabelChange={this.handleTitleChange}
+                value={form.title}
+              />
+            ) : null}
+          </div>
+          <div className="col-16-16 formControls">
+            <button onClick={this.handleSaveClick} {...saveButtonProps}>
+              {saving === true ? 'Saving...' : 'Save'}
+            </button>
+            {typeof this.state.form.id === 'number' ? (
+              <NavLink to={`/editor/${params.formId}/preview`}>
+                <button>Preview</button>
+              </NavLink>
+            ) : (
+              <span>
+                <button
+                  className="preview-disabled-button"
+                  title="Form has to be saved before it can be previewed.">
+                  Preview
+                </button>
+              </span>
+            )}
+            {typeof this.state.form.id === 'number' ? (
+              <button className="publish" onClick={this.handlePublishClick}>
+                {publishing === true ? 'Publishing...' : 'Publish'}
+                {isPublishRequired === true ? (
+                  <div className="publishRequired"></div>
+                ) : null}
               </button>
-            </span>
-          )}
-          {typeof this.state.form.id === 'number' ? (
-            <button className="publish" onClick={this.handlePublishClick}>
-              {publishing === true ? 'Publishing...' : 'Publish'}
-              {isPublishRequired === true ? (
-                <div className="publishRequired"></div>
-              ) : null}
-            </button>
-          ) : (
-            <button
-              className="publish-disabled-button"
-              title="Form has to be saved before it can be published.">
-              Publish
-            </button>
-          )}
+            ) : (
+              <button
+                className="publish-disabled-button"
+                title="Form has to be saved before it can be published.">
+                Publish
+              </button>
+            )}
+          </div>
         </div>
         {loading === true ? (
           'Loading...'
@@ -1288,6 +1346,7 @@ class Builder extends Component {
               handleDragStart: this.handleDragStart,
               handleFormItemMovement: this.handleFormItemMovement
             }}
+            draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}
             dragIndex={this.state.dragIndex}
@@ -1300,7 +1359,14 @@ class Builder extends Component {
             mode="builder"
           />
         )}
-        {this.props.auth.user_role === 2 ? (
+        {form.props.elements.length > 0 ? (
+          <div
+            onClick={this.handleAddNewPage}
+            className="pagebreak-new-placeholder">
+            Click here to add a new page.
+          </div>
+        ) : null}
+        {this.props.auth.user_role !== 2 ? (
           <div
             className="branding"
             title="Upgrade your plan to remove branding.">

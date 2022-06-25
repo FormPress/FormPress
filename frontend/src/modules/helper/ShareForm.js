@@ -16,21 +16,96 @@ import {
 } from 'react-share'
 
 class ShareForm extends Component {
+  constructor(props) {
+    super(props)
+    this.onWidgetTitleChange = this.onWidgetTitleChange.bind(this)
+    this.onWidgetChange = this.onWidgetChange.bind(this)
+    this.onAnsweredOnceChange = this.onAnsweredOnceChange.bind(this)
+
+    this.hostname = window.location.protocol + '//' + window.location.host
+    this.formId = this.props.formId
+    this.formLink = `${this.hostname}/form/view/${this.formId}`
+
+    this.state = {
+      widget: false,
+      title: '',
+      answered_once: false
+    }
+  }
+
+  async onWidgetChange() {
+    let widget = !this.state.widget
+    this.setState({ widget })
+  }
+
+  async onAnsweredOnceChange() {
+    let answered_once = !this.state.answered_once
+    this.setState({ answered_once })
+  }
+
+  async onWidgetTitleChange(e) {
+    let title = e.target.value.replace(/[^a-zA-Z ]/g, '')
+    this.setState({ title })
+  }
+
   render() {
-    const hostname = window.location.protocol + '//' + window.location.host
-    const embedCode = [
-      `<script src="${hostname}/runtime/embed.js" fp_id="${this.props.formId}">`,
-      '</script>'
-    ].join('\n')
+    const { widget, title, answered_once } = this.state
+
+    const embedCode = ` 
+      <script 
+        src="${this.hostname}/runtime/embed.js"
+        fp_id="${this.formId}"
+        ${this.state.widget ? ' fp_widget="true"' : ''} 
+        ${this.state.answered_once ? `fp_widget_cookie="${this.formId}"` : ''} 
+        ${this.state.title ? ` fp_widget_title="${this.state.title}"` : ''}>
+      </script>
+        `.replace(/\s+/g, ' ')
+
     return (
       <div className="col-15-16 shareForm">
-        <div className="shareFormTab col-8-16">
+        <div className="shareFormTab col-5-16">
           <div className="shareFormTabCover">
             <h2 className="shareFormTitle">Share Your Form</h2>
             <div className="shareFormMessage">
               Be sure that your latest changes have been saved and published
               before sharing. Otherwise your form will be seen latest saved
               version.
+            </div>
+            <div className="shareFormSettings">
+              <input
+                id="widget"
+                type="checkbox"
+                name="widget"
+                value={widget}
+                className="shareFormSettingsInput"
+                onChange={this.onWidgetChange}
+              />
+              <label htmlFor="widget">Show form as widget</label>
+              <div className="shareFormSettingsWidgetContainer">
+                <label>Widget Title</label>
+                <input
+                  type="text"
+                  className="formURL"
+                  name="widget_title"
+                  value={title}
+                  onChange={this.onWidgetTitleChange}
+                  placeholder="Enter widget title"
+                  maxLength="32"
+                />
+              </div>
+              <div>
+                <input
+                  id="widget_once"
+                  type="checkbox"
+                  name="widget_once"
+                  value={answered_once}
+                  className="shareFormSettingsInput"
+                  onChange={this.onAnsweredOnceChange}
+                />
+                <label htmlFor="widget_once">
+                  Set form to &quot;can be answered once&quot;
+                </label>
+              </div>
             </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
@@ -39,13 +114,13 @@ class ShareForm extends Component {
                 </h3>
                 <input
                   type="text"
-                  value={`${hostname}/form/view/${this.props.formId}`}
+                  value={this.formLink}
                   className="formURL"
                   readOnly
                 />
               </div>
               <CopyToClipboard
-                clipboardData={`${hostname}/form/view/${this.props.formId}`}
+                clipboardData={this.formLink}
                 buttonText="Copy the URL"
               />
               <div className="shareFormFormEmbedCodeArea">
@@ -65,33 +140,40 @@ class ShareForm extends Component {
                 <div className="shareFormButtonCover">
                   <TwitterShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <TwitterIcon size={48} round />
                   </TwitterShareButton>
                   <FacebookShareButton
                     quote="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <FacebookIcon size={48} round />
                   </FacebookShareButton>
 
                   <LinkedinShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}
+                    url={this.formLink}
                     className="shareButton">
                     <LinkedinIcon size={48} round />
                   </LinkedinShareButton>
 
                   <WhatsappShareButton
                     title="Here is my most recent form, ready to be filled out!"
-                    url={`${hostname}/form/view/${this.props.formId}`}>
+                    url={this.formLink}>
                     <WhatsappIcon size={48} round />
                   </WhatsappShareButton>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div className="col-10-16 share-iframe-container">
+          <div className="shareFormMessage">
+            This field is a afterimage of your form. You cannot make any changes
+            in this field.
+          </div>
+          <iframe src={this.formLink} className={'share-iframe'} />
         </div>
       </div>
     )

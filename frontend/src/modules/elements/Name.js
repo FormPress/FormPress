@@ -10,7 +10,10 @@ export default class Name extends Component {
     id: 0,
     type: 'Name',
     label: 'Full Name',
-    options: ['Mr.', 'Mrs.'],
+    options: ['Mr.', 'Mrs.']
+  }
+
+  static configurableSettings = {
     prefix: {
       default: false,
       formProps: {

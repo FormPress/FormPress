@@ -55,7 +55,7 @@
   margin-bottom: 3px;
 }
 
-.rightColumn > .selected-template-title > a > button {
+.rightColumn > .selected-template-title > button {
   background: white;
   border: 1px solid #1c5c85;
   color: #1c5c85;
@@ -69,7 +69,7 @@
   transition: all 0.1s ease-in-out;
 }
 
-.rightColumn > .selected-template-title > a > button:hover {
+.rightColumn > .selected-template-title > button:hover {
   background: #1c5c85;
   color: white;
 }
@@ -132,6 +132,7 @@
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 500;
+  line-height: 1.5;
 }
 
 .template-controls > a > button {

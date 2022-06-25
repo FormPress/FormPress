@@ -14,6 +14,7 @@
         "id": 3,
         "type": "Header",
         "label": "Job Application Form",
+        "alignment": "Center",
         "sublabel": "We appreciate your interest in working with us. Please fill this form to apply for any open position."
       },
       {

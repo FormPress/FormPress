@@ -9,7 +9,6 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
-  height: 78px;
 }
 
 .question-info {
@@ -38,8 +37,8 @@
   padding: 10px 0;
   position: relative;
   display: block;
-  height: 440px;
 }
+
 .questionPropertiesForm > .element {
   margin-top: 10px;
   padding: 0 10px;
@@ -49,10 +48,40 @@
   width: 100%;
   margin-bottom: 10px;
   margin-right: 10px;
+  font-weight: bold;
+}
+
+.questionPropertiesForm > .elementRadio > .input > ul {
+  margin-top: 5px;
+  padding: 0;
+}
+
+.questionPropertiesForm .elementRadio > .input > ul > li {
+  display: block;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+.questionPropertiesForm .elementRadio > .input > ul > li > label {
+  margin-left: 5px;
+}
+
+.questionPropertiesForm > .elementHeader {
+  margin-top: -30px;
 }
 
 .questionPropertiesForm .element:last-child {
   padding-bottom: 20px;
+}
+
+.questionPropertiesForm .dropdown-div {
+}
+
+.questionPropertiesForm .dropdown-div .dropdown-select {
+  color: #333;
+  height: 40px;
+  border-radius: 5px;
+  outline: 0;
+  width: 100%;
 }
 
 #qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
@@ -79,5 +108,10 @@
   display: none !important;
 }
 
-#qc_dataset {
+#qc_countriesType.elementHider + #qc_defaultCountry.elementDropdown {
+  display: none !important;
+}
+
+#qc_defaultCountry {
+  margin-top: -20px;
 }

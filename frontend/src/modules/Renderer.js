@@ -8,6 +8,7 @@ export default class Renderer extends Component {
     const {
       dragging,
       dragMode,
+      draggingItemType,
       sortItem,
       customBuilderHandlers,
       configureQuestion,
@@ -38,96 +39,184 @@ export default class Renderer extends Component {
       encodedCSS = buff.toString('base64')
     }
 
-    return (
-      <div className={className} {...builderHandlers}>
-        {this.props.form.props.elements.map((elem) => {
-          const Component = Elements[elem.type]
-          const extraProps = { mode: this.props.mode }
+    let DraggingElement, dropPlaceHolder
 
-          if (typeof this.props.handleFieldChange === 'function') {
-            extraProps.onChange = (e) => {
-              this.props.handleFieldChange(elem, e)
+    if (draggingItemType) {
+      DraggingElement = Elements[draggingItemType]
+      dropPlaceHolder = (
+        <div key="dropPlaceHolder" className="dropPlaceHolder">
+          <DraggingElement config={DraggingElement.defaultConfig} />
+        </div>
+      )
+    }
+
+    // handle multi-page form
+    const formPagesCount =
+      this.props.form.props.elements.filter((e) => e.type === 'PageBreak')
+        .length + 1
+
+    let pages = []
+    let page = []
+    let pageNumber = 1
+    let copiedPageBreak
+    let emptyPage = true
+    this.props.form.props.elements.forEach((element) => {
+      // push copied page break to page
+      if (element.type !== 'PageBreak') {
+        page.push(element)
+        emptyPage = false
+      } else {
+        element.pageNumber = pageNumber
+        element.empty = emptyPage
+        element.maxPages = formPagesCount
+        element.style =
+          pageNumber === formPagesCount
+            ? 'end'
+            : 1 < pageNumber && pageNumber < formPagesCount
+            ? 'between'
+            : 'start'
+        copiedPageBreak = Object.assign({}, element)
+        page.push(element)
+        pages.push(page)
+        page = []
+        pageNumber++
+        emptyPage = true
+      }
+    })
+
+    if (copiedPageBreak) {
+      copiedPageBreak.pageNumber = pageNumber
+      copiedPageBreak.reflection = true
+      copiedPageBreak.empty = emptyPage
+      copiedPageBreak.style = pageNumber === formPagesCount ? 'end' : 'between'
+
+      page.push(copiedPageBreak)
+      copiedPageBreak = null
+    }
+
+    if (page.length > 0) {
+      pages.push(page)
+    }
+
+    const output = pages.map((page, index) => {
+      return [
+        <div
+          key={index}
+          className={
+            className +
+            ` formPage-${index + 1}` +
+            ` ${
+              this.props.mode === 'renderer' && index > 0 ? 'form-hidden' : ''
+            }`
+          }
+          data-fp-pagenumber={index + 1}
+          {...builderHandlers}>
+          {page.map((elem) => {
+            const Component = Elements[elem.type]
+            const extraProps = { mode: this.props.mode }
+
+            if (typeof this.props.handleFieldChange === 'function') {
+              extraProps.onChange = (e) => {
+                this.props.handleFieldChange(elem, e)
+              }
             }
-          }
 
-          // Hide sorted item
-          if (
-            dragging === true &&
-            dragMode === 'sort' &&
-            sortItem.id === elem.id
-          ) {
-            extraProps.className = 'dn'
-          }
-
-          // conditionally hide elements for QuestionProperties page
-          if (elem.id === 'required') {
-            if (elem.value === false) {
-              extraProps.className = 'elementHider'
+            // Hide sorted item
+            if (
+              dragging === true &&
+              dragMode === 'sort' &&
+              sortItem.id === elem.id
+            ) {
+              extraProps.className = 'dn'
             }
-          }
 
-          if (elem.id === 'hasDataset') {
-            if (elem.value === false) extraProps.className = 'elementHider'
-          }
+            // conditionally hide elements for QuestionProperties page
+            if (elem.id === 'required') {
+              if (elem.value === false) {
+                extraProps.className = 'elementHider'
+              }
+            }
 
-          if (elem.id === 'prefix') {
-            if (elem.value.default === false)
-              extraProps.className = 'elementHider'
-            if (elem.value === false) extraProps.className = 'elementHider'
-          }
+            if (elem.id === 'hasDataset') {
+              if (elem.value === false) extraProps.className = 'elementHider'
+            }
 
-          if (elem.id === 'prefixTypeTextBox') {
-            if (elem.value === true) extraProps.className = 'elementHider'
-          }
+            if (elem.id === 'prefix') {
+              if (elem.value.default === false)
+                extraProps.className = 'elementHider'
+              if (elem.value === false) extraProps.className = 'elementHider'
+            }
 
-          const renderList = [
-            <Component
-              key={elem.id}
-              id={elem.id}
-              config={elem}
-              builderHandlers={builderHandlers}
-              customBuilderHandlers={customBuilderHandlers}
-              handleLabelChange={handleLabelChange}
-              handleAddingItem={handleAddingItem}
-              handleDeletingItem={handleDeletingItem}
-              configureQuestion={configureQuestion}
-              selectedField={selectedField}
-              {...extraProps}
+            if (elem.id === 'prefixTypeTextBox') {
+              if (elem.value === true) extraProps.className = 'elementHider'
+            }
+
+            if (elem.id === 'countriesType') {
+              if (elem.value === 'US') {
+                extraProps.className = 'elementHider'
+              }
+            }
+
+            if (elem.type === 'PageBreak') {
+              if (elem.empty === true) {
+                extraProps.className = 'emptyPage'
+              }
+              if (elem.reflection === true) {
+                extraProps.className += ' reflection'
+              }
+            }
+
+            const renderList = [
+              <Component
+                key={elem.id}
+                id={elem.id}
+                config={elem}
+                builderHandlers={builderHandlers}
+                customBuilderHandlers={customBuilderHandlers}
+                handleLabelChange={handleLabelChange}
+                handleAddingItem={handleAddingItem}
+                handleDeletingItem={handleDeletingItem}
+                configureQuestion={configureQuestion}
+                selectedField={selectedField}
+                {...extraProps}
+              />
+            ]
+
+            if (
+              this.props.dragIndex === elem.id.toString() &&
+              this.props.dragging === true
+            ) {
+              if (this.props.insertBefore === true) {
+                renderList.unshift(dropPlaceHolder)
+              } else {
+                renderList.push(dropPlaceHolder)
+              }
+            }
+
+            return renderList.length === 1 ? renderList[0] : renderList
+          })}
+
+          {this.props.form.props.elements.length === 0 &&
+            this.props.dragging === true &&
+            dropPlaceHolder}
+
+          {this.props.form.props.customCSS === undefined ? null : (
+            <link
+              rel="stylesheet"
+              type="text/css"
+              href={'data:text/css;base64, ' + encodedCSS}
             />
-          ]
-
-          if (
-            this.props.dragIndex === elem.id.toString() &&
-            this.props.dragging === true
-          ) {
-            if (this.props.insertBefore === true) {
-              renderList.unshift(
-                <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
-              )
-            } else {
-              renderList.push(
-                <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
-              )
-            }
-          }
-
-          return renderList.length === 1 ? renderList[0] : renderList
-        })}
-
-        {this.props.form.props.elements.length === 0 &&
-          this.props.dragging === true && (
-            <div key="dropPlaceHolder" className="dropPlaceHolder"></div>
           )}
+        </div>
+      ]
+    })
 
-        {this.props.form.props.customCSS === undefined ? null : (
-          <link
-            rel="stylesheet"
-            type="text/css"
-            href={'data:text/css;base64, ' + encodedCSS}
-          />
-        )}
-      </div>
-    )
+    output.length === 0
+      ? output.push(
+          <div key={1} className={className} {...builderHandlers}></div>
+        )
+      : null
+    return output
   }
 }
 
