@@ -146,3 +146,22 @@ exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
     }
   }
 }
+
+exports.mustHaveValidAPIKey = async (req, res, next) => {
+  const key = req.get('APIKey')
+
+  if (typeof key === 'undefined') {
+    res.status(403).send({ message: 'Invalid API key' })
+  }
+
+  const db = await getPool()
+  const result = await db.query(`SELECT * FROM \`api_key\` WHERE api_key = ?`, [
+    key
+  ])
+
+  if (result.length > 0) {
+    next()
+  } else {
+    res.status(403).send({ message: 'Invalid API key' })
+  }
+}

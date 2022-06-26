@@ -1,12 +1,15 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const uuidAPIKey = require('uuid-apikey')
+const jwt = require('jsonwebtoken')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
   mustHaveValidToken,
+  mustHaveValidAPIKey,
   paramShouldMatchTokenUserId,
   userShouldOwnSubmission,
   userShouldOwnForm,
@@ -32,6 +35,8 @@ const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   'helper',
   'oldformpropshandler.js'
 ))
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
@@ -780,6 +785,26 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
+    if (result.private) {
+      if (!req.query.token) {
+        return res.status(404).send('token must be sent')
+      }
+
+      jwt.verify(
+        req.query.token.replace('Bearer ', ''),
+        JWT_SECRET,
+        (err, decoded) => {
+          if (err !== null) {
+            return res.status(404).send(err)
+          }
+
+          if (decoded.form_id !== form_id) {
+            return res.status(404).send('token is not valid')
+          }
+        }
+      )
+    }
+
     let form = result
 
     if (req.query.preview !== 'true' && form.published_version !== null) {
@@ -1003,6 +1028,7 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
+
   app.get('/thank-you', async (req, res) => {
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
@@ -1020,6 +1046,71 @@ module.exports = (app) => {
       headerAppend: `<style type='text/css'>${style}</style>`,
       tyTitle: tyPageTitle,
       tyText: tyPageText
+    })
+  })
+
+  // return api key
+  app.get(
+    '/api/users/:user_id/api-key',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const result = await db.query(
+        `SELECT * FROM \`api_key\` WHERE user_id = ?`,
+        [user_id]
+      )
+
+      if (result.length > 0) {
+        return res.json(result)
+      } else {
+        const api_key = await uuidAPIKey.create().apiKey
+        const data = await db.query(
+          `
+                INSERT INTO \`api_key\`
+                  (user_id, api_key, created_at)
+                VALUES
+                  (?, ?, NOW())
+              `,
+          [user_id, api_key]
+        )
+
+        const result = await db.query(
+          `SELECT * FROM \`api_key\` WHERE id = ?`,
+          [data.insertId]
+        )
+        return res.json(result)
+      }
+    }
+  )
+
+  // create a token with API key for private form view
+  app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
+    const { form_id, exp } = req.body
+
+    if (!form_id || !exp) {
+      return res.status(404).json({ message: 'form_id and exp must be sent' })
+    }
+
+    const result = await formModel.get({ form_id })
+    if (result === false) {
+      return res.status(404).json({ message: 'Form not found' })
+    }
+
+    const jwt_data = { form_id, action: 'view', exp }
+
+    jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+      console.log('token sign error ', err)
+      error.errorReport(err)
+
+      return res.status(200).json({
+        message: 'Create a new token',
+        token,
+        form_id,
+        action: 'view',
+        exp
+      })
     })
   })
 }

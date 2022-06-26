@@ -195,6 +195,22 @@ module.exports = {
       method: 'get',
       path: '/thank-you',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/users/:user_id/api-key',
+      protected: false,
+      exampleRequestPath: '/api/users/1/api-key'
+    },
+    {
+      method: 'post',
+      path: '/api/create-token',
+      protected: false,
+      exampleRequestPath: '/api/create-token',
+      exampleRequestBody: {
+        form_id: 1,
+        exp: 500000
+      }
     }
   ]
 }
