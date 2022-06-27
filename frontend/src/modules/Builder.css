@@ -583,3 +583,10 @@
   padding: 3.3rem;
   border-radius: 6px;
 }
+
+.checkbox-label {
+  float: left;
+  margin-left: 10px;
+  padding: 3px;
+  color: #0645ad;
+}

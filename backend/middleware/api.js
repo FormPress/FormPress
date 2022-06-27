@@ -43,6 +43,10 @@ module.exports = (app) => {
     const form = req.body
     const { user_id } = req.params
 
+    if (!form.private) {
+      form.private = 0
+    }
+
     if (typeof form.id !== 'undefined' && form.id !== null) {
       // Existing form should update!!!
       const result = await formModel.update({ form })
@@ -1095,6 +1099,10 @@ module.exports = (app) => {
 
     const result = await formModel.get({ form_id })
     if (result === false) {
+      return res.status(404).json({ message: 'Form not found' })
+    }
+
+    if (result.user_id !== res.locals.key.user_id) {
       return res.status(404).json({ message: 'Form not found' })
     }
 
