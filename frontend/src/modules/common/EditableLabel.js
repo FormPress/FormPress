@@ -1,6 +1,4 @@
 import React from 'react'
-import unescape from 'lodash/unescape'
-
 import { Editor } from '@tinymce/tinymce-react'
 
 const BACKEND = process.env.REACT_APP_BACKEND

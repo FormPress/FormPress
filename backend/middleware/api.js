@@ -460,7 +460,7 @@ module.exports = (app) => {
                     statistics.elements.push(elementTemplate)
                     break
 
-                  case 'netPromoterScore':
+                  case 'netPromoterScore': {
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
 
@@ -468,7 +468,6 @@ module.exports = (app) => {
                       highValue = 0
                     for (let index in elementTemplate.chartItems) {
                       let value = parseInt(elementTemplate.chartItems[index])
-                      console.log(value)
                       if (value >= 0 && value <= 6) {
                         lowValue++
                       } else if (value == 9 || value == 10) {
@@ -483,6 +482,7 @@ module.exports = (app) => {
                     statistics.elements.push(elementTemplate)
 
                     break
+                  }
                 }
               }
             }

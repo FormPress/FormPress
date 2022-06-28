@@ -51,7 +51,6 @@ exports.uploadFile = (uploadedFile, submit_id) => {
 }
 
 exports.uploadFileForRte = (uploadedFile) => {
-  let results = []
   let fileExtension = ''
   if (uploadedFile.file.name.indexOf('.') > -1) {
     fileExtension = uploadedFile.file.name.match(/\.[^.]+$/)[0]
@@ -59,7 +58,6 @@ exports.uploadFileForRte = (uploadedFile) => {
 
   let fileName = uuidv4() + fileExtension
   let file = fileUploadBucket.file(fileName)
-  let size = uploadedFile.file.size
 
   new Promise((resolve, reject) => {
     let stream = new Duplex()
@@ -72,7 +70,7 @@ exports.uploadFileForRte = (uploadedFile) => {
       .on('error', (error) => {
         reject(error)
       })
-      .on('finish', (e) => {
+      .on('finish', () => {
         resolve()
       })
   })
