@@ -443,10 +443,6 @@
   border: 1px dashed black;
 }
 
-.gleam.form .elementRadio.requiredError .input .radio-label {
-  border: 1px solid #ffb2b2;
-}
-
 .gleam .elementCheckbox .input > input[type='checkbox'] {
   width: 18px;
   height: 18px;
