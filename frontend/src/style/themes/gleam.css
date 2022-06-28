@@ -901,13 +901,13 @@ input[type='file'] {
   overflow-wrap: break-word;
 }
 
-.renderer.gleam .elementPhone > div > .input {
+.renderer.gleam .elementPhone > .input {
   display: flex;
   width: 100%;
   margin-top: 0.5rem;
 }
 
-.renderer.gleam .elementPhone > div > .input > .dialCode {
+.renderer.gleam .elementPhone > .input > .dialCode {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
   width: 3.1rem;
   font-size: x-large;
@@ -918,13 +918,13 @@ input[type='file'] {
   opacity: 1;
 }
 
-.renderer.gleam .elementPhone > div > .input > .dialCode:hover,
-.renderer.gleam .elementPhone > div > .input > .dialCode:focus {
+.renderer.gleam .elementPhone > .input > .dialCode:hover,
+.renderer.gleam .elementPhone > .input > .dialCode:focus {
   width: 12rem;
   font-size: medium;
 }
 
-.renderer.gleam .elementPhone > div > .input > .phoneInput {
+.renderer.gleam .elementPhone > .input > .phoneInput {
   width: 100%;
   padding: 5px 16px;
   height: 42px;
