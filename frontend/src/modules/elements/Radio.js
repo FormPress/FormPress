@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import { cloneDeep } from 'lodash'
 
 import EditableLabel from '../common/EditableLabel'
@@ -103,12 +102,30 @@ export default class Radio extends Component {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
       const radioButtons = Array.from(nodeList)
-      console.log(radioButtons, 'radioButtons')
 
       return radioButtons
     },
     isFilled: (value) => {
       return !value.every((item) => item.checked === false)
+    }
+  }
+
+  static configurableSettings = {
+    editor: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Use rich text editor']
+      }
+    },
+    correctAnswer: {
+      default: '',
+      formProps: {
+        type: 'TextArea',
+        editor: true,
+        label: 'Correct Answer'
+      }
     }
   }
 
@@ -172,6 +189,7 @@ export default class Radio extends Component {
           className="fl label"
           mode={mode}
           labelKey={config.id}
+          editor={config.editor}
           dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
@@ -206,16 +224,12 @@ export default class Radio extends Component {
       ]
     } else {
       display = [
-        <EditableLabel
+        <div
           key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />,
+          className="fl label asdasd"
+          dangerouslySetInnerHTML={{
+            __html: config.label
+          }}></div>,
         <div key="2" className="fl input">
           <ul>
             {config.options.map((item, key) => {

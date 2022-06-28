@@ -157,6 +157,10 @@ export default class Renderer extends Component {
               }
             }
 
+            if (elem.id === 'editor') {
+              if (elem.value === false) extraProps.className = 'elementHider'
+            }
+
             if (elem.type === 'PageBreak') {
               if (elem.empty === true) {
                 extraProps.className = 'emptyPage'

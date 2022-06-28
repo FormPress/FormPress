@@ -192,6 +192,12 @@ module.exports = {
       exampleRequestPath: 'api/datasets?dataset=countries'
     },
     {
+      method: 'post',
+      path: '/api/upload',
+      protected: true,
+      exampleRequestPath: '/api/upload'
+    },
+    {
       method: 'get',
       path: '/thank-you',
       protected: false

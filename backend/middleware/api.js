@@ -269,7 +269,7 @@ module.exports = (app) => {
         DropDown: 'barChart',
         Checkbox: 'barChart',
         Button: 'none',
-        NetPromoterScore: 'average'
+        NetPromoterScore: 'netPromoterScore'
       }
 
       const colors = [
@@ -366,7 +366,9 @@ module.exports = (app) => {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
                   }
                 } else {
-                  elementTemplate.chartItems = []
+                  if (elementTemplate.elementType !== 'NetPromoterScore') {
+                    elementTemplate.chartItems = []
+                  }
                 }
               }
 
@@ -383,7 +385,7 @@ module.exports = (app) => {
                     break
                   case 'pieChart':
                     willReturnArray = []
-                    for (const [key, value] of Object.entries(
+                    for (let [key, value] of Object.entries(
                       elementTemplate.chartItems.reduce((obj, chartItem) => {
                         if (!obj[chartItem]) {
                           obj[chartItem] = 1
@@ -393,6 +395,9 @@ module.exports = (app) => {
                         return obj
                       }, {})
                     )) {
+                      if (key === '') {
+                        key = 'Unanswered'
+                      }
                       willReturnObject = {}
                       willReturnObject.name = key
                       willReturnObject.value =
@@ -455,16 +460,26 @@ module.exports = (app) => {
                     statistics.elements.push(elementTemplate)
                     break
 
-                  case 'average':
+                  case 'netPromoterScore':
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
-                    elementTemplate.responseAverage =
-                      (
-                        elementTemplate.chartItems.reduce(
-                          (a, b) => parseInt(a) + parseInt(b),
-                          0
-                        ) / elementTemplate.chartItems.length
-                      ).toFixed(2) || 0
+
+                    let lowValue = 0,
+                      highValue = 0
+                    for (let index in elementTemplate.chartItems) {
+                      let value = parseInt(elementTemplate.chartItems[index])
+                      console.log(value)
+                      if (value >= 0 && value <= 6) {
+                        lowValue++
+                      } else if (value == 9 || value == 10) {
+                        highValue++
+                      }
+                    }
+
+                    elementTemplate.netPromoterScore =
+                      ((highValue - lowValue) / elementTemplate.responseCount) *
+                      100
+
                     statistics.elements.push(elementTemplate)
 
                     break
@@ -1021,5 +1036,9 @@ module.exports = (app) => {
       tyTitle: tyPageTitle,
       tyText: tyPageText
     })
+  })
+  app.post('/api/upload', async (req, res) => {
+    let value = await storage.uploadFileForRte(req.files)
+    res.json(value)
   })
 }

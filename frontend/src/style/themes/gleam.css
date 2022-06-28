@@ -653,6 +653,16 @@
   }
 }
 
+@media screen and (max-width: 590px) {
+  .renderer.gleam .elementNetPromoterScore ul {
+    padding: 0 !important;
+  }
+  .renderer.gleam .elementNetPromoterScore ul li label {
+    width: 30px !important;
+    margin: 0 1px !important;
+  }
+}
+
 .branding {
   display: flex;
   justify-content: center;

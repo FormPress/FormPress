@@ -50,6 +50,38 @@ exports.uploadFile = (uploadedFile, submit_id) => {
   return JSON.stringify(results)
 }
 
+exports.uploadFileForRte = (uploadedFile) => {
+  let results = []
+  let fileExtension = ''
+  if (uploadedFile.file.name.indexOf('.') > -1) {
+    fileExtension = uploadedFile.file.name.match(/\.[^.]+$/)[0]
+  }
+
+  let fileName = uuidv4() + fileExtension
+  let file = fileUploadBucket.file(fileName)
+  let size = uploadedFile.file.size
+
+  new Promise((resolve, reject) => {
+    let stream = new Duplex()
+
+    stream.push(uploadedFile.file.data)
+    stream.push(null)
+
+    stream
+      .pipe(file.createWriteStream())
+      .on('error', (error) => {
+        reject(error)
+      })
+      .on('finish', (e) => {
+        resolve()
+      })
+  })
+
+  return {
+    location: `https://storage.cloud.google.com/formpress-stage-test-fileuploads/${fileName}`
+  }
+}
+
 exports.downloadFile = (uploadName) => {
   const fileToDownload = fileUploadBucket.file(uploadName)
   const out = new PassThrough()

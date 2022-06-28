@@ -1,4 +1,9 @@
 import React from 'react'
+import unescape from 'lodash/unescape'
+
+import { Editor } from '@tinymce/tinymce-react'
+
+const BACKEND = process.env.REACT_APP_BACKEND
 
 export default function EditableLabel(props) {
   function handleOnInput(e) {
@@ -11,13 +16,7 @@ export default function EditableLabel(props) {
 
     if (text.length >= limit) {
       e.target.innerText = text.substr(0, limit)
-      props.handleLabelChange(
-        props.labelKey,
-        e.target.innerText
-          .replace(/<span(.*?)>(.*?)<\/span>/, '')
-          .replace(/(<([^>]+)>)/gi, '')
-          .trim()
-      )
+      props.handleLabelChange(props.labelKey, e.target.innerText)
 
       e.target.focus()
       document.execCommand('selectAll', false, null)
@@ -26,13 +25,7 @@ export default function EditableLabel(props) {
   }
 
   function handleOnBlur(e) {
-    props.handleLabelChange(
-      props.labelKey,
-      e.target.innerText
-        .replace(/<span(.*?)>(.*?)<\/span>/, '')
-        .replace(/(<([^>]+)>)/gi, '')
-        .trim()
-    )
+    props.handleLabelChange(props.labelKey, e.target.innerText)
   }
 
   function handleOnKeyDown(e) {
@@ -62,6 +55,32 @@ export default function EditableLabel(props) {
     extraProps.className = 'required'
   }
 
+  if (props.editor === true) {
+    return (
+      <Editor
+        apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+        value={props.value}
+        init={{
+          plugins: 'link image code',
+          toolbar:
+            'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | outdent indent removeformat image ',
+          file_picker_types: 'image',
+          automatic_uploads: true,
+          images_file_types: 'jpg,svg,png',
+          images_upload_url: `${BACKEND}/api/upload`,
+          image_dimensions: false,
+          resize: false,
+          paste_block_drop: true
+        }}
+        onEditorChange={(newValue) => {
+          props.handleLabelChange(props.labelKey, newValue)
+        }}
+      />
+    )
+  }
+
   return (
     <div className={props.className}>
       <span
@@ -74,7 +93,12 @@ export default function EditableLabel(props) {
         suppressContentEditableWarning={true}
         className={props.value === '' ? 'emptySpan' : null}
         {...extraProps}>
-        {props.value}
+        {props.value
+          .replace(/<span(.*?)>(.*?)<\/span>/, '')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, ' ')
+          .replace(/(<([^>]+)>)/gi, '')
+          .trim()}
       </span>
     </div>
   )

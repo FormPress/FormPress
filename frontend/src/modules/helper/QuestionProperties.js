@@ -12,25 +12,26 @@ export default class QuestionProperties extends Component {
 
   handleFieldChange(elem, e) {
     const value =
-      e.target.type === 'checkbox' ? e.target.checked : e.target.value
+      typeof e === 'string'
+        ? e
+        : e.target.id === 'q_required' && value === true
+        ? elem.value
+        : e.target.type === 'checkbox'
+        ? e.target.checked
+        : e.target.value
+    const elemId =
+      typeof e === 'string'
+        ? elem.id
+        : e.target.id === 'q_required' && value === true
+        ? elem.id.split('_')[1]
+        : elem.id
 
     this.props.configureQuestion({
       id: this.props.selectedField.config.id,
       newState: {
-        [elem.id]: value
+        [elemId]: value
       }
     })
-
-    if (e.target.id === 'q_required' && value === true) {
-      let newValue = elem.value
-      let elemId = elem.id.split('_')[1]
-      this.props.configureQuestion({
-        id: this.props.selectedField.config.id,
-        newState: {
-          [elemId]: newValue
-        }
-      })
-    }
   }
 
   render() {
@@ -69,7 +70,16 @@ export default class QuestionProperties extends Component {
         </div>
         <div className="wrapper-questionProperties">
           <div className="question-info">
-            <div className="qlabel">{selectedField.config.label}</div>
+            <div
+              className="qlabel"
+              dangerouslySetInnerHTML={{
+                __html: config?.label
+                  ? config.label
+                      .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                      .replace(/(<([^>]+)>)/gi, '')
+                      .trim()
+                  : ''
+              }}></div>
             <div className="qtype">{selectedField.config.type}</div>
           </div>
 
