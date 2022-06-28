@@ -91,6 +91,13 @@ module.exports = (app) => {
 
     const user = result[0]
 
+    if (user.isActive !== 1) {
+      return res.status(403).json({
+        message:
+          'You have been blocked because of not following our TOS. If you think this is an error contact our support team.'
+      })
+    }
+
     let isAdmin = false
     const admin = await db.query(
       `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
