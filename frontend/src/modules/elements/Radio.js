@@ -226,7 +226,7 @@ export default class Radio extends Component {
       display = [
         <div
           key="1"
-          className="fl label asdasd"
+          className="fl label"
           dangerouslySetInnerHTML={{
             __html: config.label
           }}></div>,

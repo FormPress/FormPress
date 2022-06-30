@@ -56,7 +56,7 @@ export default function EditableLabel(props) {
   if (props.editor === true) {
     return (
       <Editor
-        apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+        apiKey={process.env.TINYMCE_API_KEY}
         value={props.value}
         init={{
           plugins: 'link image code',
