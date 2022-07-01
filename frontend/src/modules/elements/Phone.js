@@ -100,55 +100,69 @@ export default class Phone extends Component {
     let display
 
     display = [
-      <div key={1}>
-        <EditableLabel
-          className="fl label"
-          dataPlaceholder="Type a question"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
+      <EditableLabel
+        className="fl label"
+        dataPlaceholder="Type a question"
+        mode={mode}
+        labelKey={config.id}
+        handleLabelChange={this.props.handleLabelChange}
+        value={config.label}
+        required={config.required}
+        key="1"
+      />,
+      <div className="fl input" key="2">
+        <select
+          className="dialCode"
+          id={`phone-dialCode_${config.id}`}
+          value={config.defaultDialCode ? config.defaultDialCode : '+1 (US)'}
+          data-fp-list={'countriesDialCodes'}
+          data-fp-defaultvalue={config.defaultDialCode}
+          disabled={mode !== 'renderer'}>
+          {datasets && datasets.countriesDialCodes
+            ? datasets.countriesDialCodes.map((country, index) => {
+                return (
+                  <option key={index} value={country.value}>
+                    {country.display}
+                  </option>
+                )
+              })
+            : null}
+        </select>
+        <input
+          id={`q_${config.id}`}
+          className="phoneInput"
+          name={`q_${config.id}`}
+          maxLength={30}
+          value={
+            config.defaultDialCode
+              ? config.defaultDialCode.substring(
+                  0,
+                  config.defaultDialCode.length - 4
+                )
+              : // to remove the part with the country code
+                ''
+          }
+          readOnly={mode === 'builder'}
+          {...inputProps}
         />
-        <div className="fl input">
-          <select
-            className="dialCode"
-            id={`phone-dialCode_${config.id}`}
-            value={config.defaultDialCode ? config.defaultDialCode : '+1 (US)'}
-            data-fp-list={'countriesDialCodes'}
-            data-fp-defaultvalue={config.defaultDialCode}
-            disabled={mode !== 'renderer'}>
-            {datasets && datasets.countriesDialCodes
-              ? datasets.countriesDialCodes.map((country, index) => {
-                  return (
-                    <option key={index} value={country.value}>
-                      {country.display}
-                    </option>
-                  )
-                })
-              : null}
-          </select>
-          <input
-            id={`q_${config.id}`}
-            className="phoneInput"
-            name={`q_${config.id}`}
-            maxLength={30}
-            value={
-              config.defaultDialCode
-                ? config.defaultDialCode.substring(
-                    0,
-                    config.defaultDialCode.length - 4
-                  )
-                : // to remove the part with the country code
-                  ''
-            }
-            readOnly={mode === 'builder'}
-            {...inputProps}
-          />
-        </div>
-        <div className="fl metadata">
-          <div className="requiredErrorText">{config.requiredText}</div>
-        </div>
+      </div>,
+      <div className="clearfix" key="3">
+        <EditableLabel
+          className="sublabel"
+          dataPlaceholder="Click to edit sublabel"
+          mode={mode}
+          labelKey={`sub_${config.id}`}
+          handleLabelChange={this.props.handleLabelChange}
+          value={
+            typeof config.sublabelText !== 'undefined' &&
+            config.sublabelText !== ''
+              ? config.sublabelText
+              : ''
+          }
+        />
+      </div>,
+      <div className="fl metadata" key="4">
+        <div className="requiredErrorText">{config.requiredText}</div>
       </div>
     ]
 
