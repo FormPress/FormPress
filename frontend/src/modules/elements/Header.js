@@ -3,16 +3,23 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import Separator from './Separator'
+import { faHeading } from '@fortawesome/free-solid-svg-icons'
+
 import './Header.css'
 
 export default class Header extends Component {
-  static weight = 11
+  static weight = 13
 
   static defaultConfig = {
     id: 0,
     type: 'Header',
     label: '',
     sublabel: ''
+  }
+
+  static metaData = {
+    icon: faHeading,
+    displayText: 'Header'
   }
 
   static configurableSettings = {

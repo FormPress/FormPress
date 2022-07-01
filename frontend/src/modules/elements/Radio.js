@@ -1,21 +1,38 @@
 import React, { Component } from 'react'
 
 import { cloneDeep } from 'lodash'
-
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
+import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './Radio.css'
 
 export default class Radio extends Component {
-  static weight = 6
+  static weight = 3
 
   static defaultConfig = {
     id: 0,
     type: 'Radio',
-    label: 'Radio',
+    label: 'Single Choice',
     options: ['New Radio']
+  }
+
+  static metaData = {
+    icon: faDotCircle,
+    displayText: 'Single Choice'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static IsJsonString(str) {

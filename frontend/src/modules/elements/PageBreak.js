@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 
 import ElementContainer from '../common/ElementContainer'
+import EditableLabel from '../common/EditableLabel'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './PageBreak.css'
-import EditableLabel from '../common/EditableLabel'
 
 export default class PageBreak extends Component {
-  static weight = 12
+  static weight = 14
 
   static defaultConfig = {
     id: 0,
@@ -15,6 +16,11 @@ export default class PageBreak extends Component {
     previousButtonText: 'Previous',
     submitButtonText: 'Submit',
     style: 'start'
+  }
+
+  static metaData = {
+    icon: faPlusCircle,
+    displayText: 'Page Break'
   }
 
   render() {

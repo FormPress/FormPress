@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faAlignJustify } from '@fortawesome/free-solid-svg-icons'
+
 import './TextArea.css'
 
 export default class TextArea extends Component {
@@ -10,7 +12,24 @@ export default class TextArea extends Component {
   static defaultConfig = {
     id: 0,
     type: 'TextArea',
-    label: 'TextArea'
+    label: 'Long Text'
+  }
+
+  static metaData = {
+    icon: faAlignJustify,
+    displayText: 'Long Text'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

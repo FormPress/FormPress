@@ -7,23 +7,9 @@ import {
   faPaintBrush,
   faPlusSquare,
   faShareAlt,
-  faHeading,
-  faAlignJustify,
-  faCheckSquare,
-  faMousePointer,
-  faSort,
-  faDotCircle,
-  faAddressCard,
-  faFileAlt,
   faPlusCircle,
-  faEnvelope,
-  faFont,
-  faMinus,
   faQuestionCircle,
-  faPen,
-  faMapMarkerAlt,
-  faSignal,
-  faPhone
+  faPen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -44,43 +30,6 @@ import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
 import '../style/themes/gleam.css'
 
-//list of element icons
-const iconMap = {
-  TextBox: faFont,
-  TextArea: faAlignJustify,
-  Checkbox: faCheckSquare,
-  Button: faMousePointer,
-  Dropdown: faSort,
-  Radio: faDotCircle,
-  Name: faAddressCard,
-  FileUpload: faFileAlt,
-  Email: faEnvelope,
-  Header: faHeading,
-  Separator: faMinus,
-  Address: faMapMarkerAlt,
-  NetPromoterScore: faSignal,
-  PageBreak: faPlusCircle,
-  Phone: faPhone
-}
-
-//list of element texts
-const textMap = {
-  TextBox: 'Text Box',
-  TextArea: 'Text Area',
-  Checkbox: 'Checkbox',
-  Button: 'Button',
-  Dropdown: 'Dropdown',
-  Radio: 'Radio button',
-  Name: 'Name',
-  FileUpload: 'File Upload',
-  Email: 'E-mail',
-  Header: 'Header',
-  Separator: 'Separator',
-  Address: 'Address',
-  NetPromoterScore: 'Net Promoter Score',
-  PageBreak: 'Page Break',
-  Phone: 'Phone'
-}
 const getElements = () =>
   Object.values(Elements).map((element) => {
     const config = Object.assign({}, element.defaultConfig)
@@ -114,7 +63,12 @@ const getElementsConfigurableSettingsObject = () =>
 
 const getWeightedElements = () =>
   Object.values(Elements).map((element) =>
-    Object.assign({}, element.defaultConfig, { weight: element.weight })
+    Object.assign(
+      {},
+      element.defaultConfig,
+      { weight: element.weight },
+      element.metaData
+    )
   )
 
 const getElementsKeys = () =>
@@ -350,7 +304,7 @@ class Builder extends Component {
               type: 'TextBox',
               placeholder: '',
               required: false,
-              label: 'TextBox',
+              label: 'Short Text',
               requiredText: 'Please fill this field.'
             },
             {
@@ -1138,12 +1092,12 @@ class Builder extends Component {
                       key={elem.type}>
                       <span className="element-picker-icon-wrapper">
                         <FontAwesomeIcon
-                          icon={iconMap[elem.type]}
+                          icon={elem.icon}
                           className="element-picker-icon"
                         />
                       </span>
                       <span className="element-picker-text">
-                        {textMap[elem.type]}
+                        {elem.displayText}
                       </span>
                       <span className="add-element-button">
                         <FontAwesomeIcon
@@ -1159,12 +1113,12 @@ class Builder extends Component {
                     <div className="element disabled-element" key={elem.type}>
                       <span className="element-picker-icon-wrapper">
                         <FontAwesomeIcon
-                          icon={iconMap[elem.type]}
+                          icon={elem.icon}
                           className="element-picker-icon"
                         />
                       </span>
                       <span className="element-picker-text">
-                        {textMap[elem.type]}
+                        {elem.displayText}
                       </span>
                       <span className="planover-container">
                         <FontAwesomeIcon icon={faQuestionCircle} />

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faPhone } from '@fortawesome/free-solid-svg-icons'
+
 import './Phone.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -25,13 +27,30 @@ export default class Phone extends Component {
         })
       })
   }
-  static weight = 13
+  static weight = 11
 
   static defaultConfig = {
     id: 0,
     type: 'Phone',
     label: 'Phone',
     hasDataset: true
+  }
+
+  static metaData = {
+    icon: faPhone,
+    displayText: 'Phone'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

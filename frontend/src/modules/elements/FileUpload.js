@@ -1,17 +1,37 @@
 import React, { Component } from 'react'
+
 import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons'
+
 import './FileUpload.css'
 
 export default class FileUpload extends Component {
-  static weight = 9
+  static weight = 7
 
   static defaultConfig = {
     id: 0,
     type: 'FileUpload',
     label: 'File Upload',
     requiredText: 'Please fill this field.'
+  }
+
+  static metaData = {
+    icon: faFileArrowUp,
+    displayText: 'File Upload'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static renderDataValue(entry) {

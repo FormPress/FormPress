@@ -2,16 +2,22 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 
 import './Button.css'
 
 export default class Button extends Component {
-  static weight = 4
+  static weight = 12
 
   static defaultConfig = {
     id: 0,
     type: 'Button',
     buttonText: 'Submit'
+  }
+
+  static metaData = {
+    icon: faPaperPlane,
+    displayText: 'Submit Button'
   }
 
   render() {
