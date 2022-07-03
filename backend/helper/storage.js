@@ -52,7 +52,6 @@ exports.uploadFile = (uploadedFile, submit_id) => {
 
 exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
   let fileExtension = ''
-  console.log(uploadedFile, form_id, question_id)
   if (uploadedFile.file.name.indexOf('.') > -1) {
     fileExtension = uploadedFile.file.name.match(/\.[^.]+$/)[0]
   }
@@ -61,6 +60,8 @@ exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
     'rte/' + form_id + '/' + question_id + '/' + uuidv4() + fileExtension
 
   let file = fileUploadBucket.file(fileName)
+
+  console.log(fileUploadBucket.name)
 
   new Promise((resolve, reject) => {
     let stream = new Duplex()
@@ -78,8 +79,9 @@ exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
         resolve()
       })
   })
+
   return {
-    location: `https://storage.googleapis.com/formpress-stage-test-fileuploads/${fileName}`
+    location: `https://storage.googleapis.com/${fileUploadBucket.name}/${fileName}`
   }
 }
 
