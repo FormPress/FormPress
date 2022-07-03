@@ -50,8 +50,9 @@ exports.uploadFile = (uploadedFile, submit_id) => {
   return JSON.stringify(results)
 }
 
-exports.uploadFileForRte = (uploadedFile, form_id, question_id) => {
+exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
   let fileExtension = ''
+  console.log(uploadedFile, form_id, question_id)
   if (uploadedFile.file.name.indexOf('.') > -1) {
     fileExtension = uploadedFile.file.name.match(/\.[^.]+$/)[0]
   }
@@ -70,13 +71,13 @@ exports.uploadFileForRte = (uploadedFile, form_id, question_id) => {
     stream
       .pipe(file.createWriteStream())
       .on('error', (error) => {
+        console.log(error)
         reject(error)
       })
       .on('finish', () => {
         resolve()
       })
   })
-
   return {
     location: `https://storage.googleapis.com/formpress-stage-test-fileuploads/${fileName}`
   }
