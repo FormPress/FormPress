@@ -16,6 +16,9 @@ class FormProperties extends Component {
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
     this.handleAddTag = this.handleAddTag.bind(this)
+    this.handleSubmitBehaviourChange = this.handleSubmitBehaviourChange.bind(
+      this
+    )
   }
 
   handleEmailChange(elem, e) {
@@ -43,6 +46,13 @@ class FormProperties extends Component {
     this.props.setCSS({
       value: e.target.value,
       isEncoded: false
+    })
+  }
+
+  handleSubmitBehaviourChange(elem, e) {
+    this.props.setIntegration({
+      type: 'submitBehaviour',
+      value: e.target.value
     })
   }
 
@@ -118,9 +128,31 @@ class FormProperties extends Component {
       }
     }
 
+    let submitBehaviour = 'Show Thank You Page'
+    if (matchingIntegration('submitBehaviour').length > 0) {
+      submitBehaviour = matchingIntegration('submitBehaviour')[0].value
+    }
+
     return (
       <div className="formProperties">
         <h2>Form Properties</h2>
+        <Renderer
+          handleFieldChange={this.handleSubmitBehaviourChange}
+          theme="infernal"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 5,
+                  type: 'Radio',
+                  label: 'On Submit',
+                  value: submitBehaviour,
+                  options: ['Show Thank You Page', 'Evaluate Form']
+                }
+              ]
+            }
+          }}
+        />
         {capabilities.sendgridApiKey ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
