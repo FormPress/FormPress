@@ -193,9 +193,9 @@ module.exports = {
     },
     {
       method: 'post',
-      path: '/api/upload',
-      protected: true,
-      exampleRequestPath: '/api/upload'
+      path: '/api/upload/:form_id/:question_id',
+      protected: false,
+      exampleRequestPath: '/api/upload/1/1'
     },
     {
       method: 'get',
