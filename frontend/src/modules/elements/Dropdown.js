@@ -152,7 +152,7 @@ export default class Dropdown extends Component {
                         </option>
                       )
                     })
-                  : config.id === 'dataset'
+                  : config.options && typeof config.options[0] === 'object'
                   ? options.map((item) => {
                       return (
                         <option
@@ -160,7 +160,7 @@ export default class Dropdown extends Component {
                           key={item.value}
                           value={item.value}
                           disabled={item.disabled}>
-                          {item.displayText}
+                          {item.display}
                         </option>
                       )
                     })
