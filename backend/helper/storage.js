@@ -61,8 +61,6 @@ exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
 
   let file = fileUploadBucket.file(fileName)
 
-  console.log(fileUploadBucket.name)
-
   new Promise((resolve, reject) => {
     let stream = new Duplex()
 
