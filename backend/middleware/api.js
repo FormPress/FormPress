@@ -1037,8 +1037,12 @@ module.exports = (app) => {
       tyText: tyPageText
     })
   })
-  app.post('/api/upload', async (req, res) => {
-    let value = await storage.uploadFileForRte(req.files)
+  app.post('/api/upload/:form_id/:question_id', async (req, res) => {
+    let value = await storage.uploadFileForRte(
+      req.files,
+      req.params.form_id,
+      req.params.question_id
+    )
     res.json(value)
   })
 }

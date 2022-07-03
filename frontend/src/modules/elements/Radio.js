@@ -190,6 +190,8 @@ export default class Radio extends Component {
           mode={mode}
           labelKey={config.id}
           editor={config.editor}
+          form_id={config.form_id}
+          question_id={config.id}
           dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}

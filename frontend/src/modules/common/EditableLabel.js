@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
 export default function EditableLabel(props) {
+  const editorRef = useRef(null)
+
   function handleOnInput(e) {
     const text = e.target.innerText
     let limit = 256
@@ -56,7 +58,8 @@ export default function EditableLabel(props) {
   if (props.editor === true) {
     return (
       <Editor
-        apiKey={process.env.TINYMCE_API_KEY}
+        onInit={(evt, editor) => (editorRef.current = editor)}
+        apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
         value={props.value}
         init={{
           plugins: 'link image code',
@@ -67,13 +70,17 @@ export default function EditableLabel(props) {
           file_picker_types: 'image',
           automatic_uploads: true,
           images_file_types: 'jpg,svg,png',
-          images_upload_url: `${BACKEND}/api/upload`,
+          images_upload_url: `${BACKEND}/api/upload/${props.form_id}/${props.question_id}`,
           image_dimensions: false,
           resize: false,
           paste_block_drop: true
         }}
         onEditorChange={(newValue) => {
           props.handleLabelChange(props.labelKey, newValue)
+          document
+            .getElementById(editorRef.current.id)
+            .closest('.element')
+            .click()
         }}
       />
     )

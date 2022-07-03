@@ -175,6 +175,7 @@ export default class Renderer extends Component {
                 key={elem.id}
                 id={elem.id}
                 config={elem}
+                form_id={this.props.form.id}
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}
                 handleLabelChange={handleLabelChange}

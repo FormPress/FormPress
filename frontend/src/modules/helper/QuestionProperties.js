@@ -55,12 +55,20 @@ export default class QuestionProperties extends Component {
       if (config[key] === undefined) {
         config[key] = question.default
       }
-
-      form.props.elements.push(
-        Object.assign({ id: key }, question.formProps, {
-          value: config[key]
-        })
-      )
+      if (key === 'correctAnswer') {
+        question.formProps.form_id = config.id
+        form.props.elements.push(
+          Object.assign({ id: key }, question.formProps, {
+            value: config[key]
+          })
+        )
+      } else {
+        form.props.elements.push(
+          Object.assign({ id: key }, question.formProps, {
+            value: config[key]
+          })
+        )
+      }
     }
 
     return (

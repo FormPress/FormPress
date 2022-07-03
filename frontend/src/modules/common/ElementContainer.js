@@ -20,7 +20,7 @@ export default function ElementContainer(props) {
     props.customBuilderHandlers.handleFormItemMovement(item, movementType)
   }
 
-  const {
+  let {
     builderHandlers,
     config,
     customBuilderHandlers,
@@ -32,6 +32,10 @@ export default function ElementContainer(props) {
   const classNames = ['element', 'oh']
 
   classNames.push(`element${type}`)
+
+  if (isNaN(config.id) === false) {
+    config.form_id = props.form_id
+  }
 
   if (config.id === selectedFieldId) {
     classNames.push('selected')

@@ -60,6 +60,8 @@ export default class TextArea extends Component {
           className="fl label"
           dataPlaceholder="Type a question"
           mode={mode}
+          form_id={config.form_id}
+          question_id={config.id}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
@@ -91,7 +93,7 @@ export default class TextArea extends Component {
                     file_picker_types: 'image',
                     automatic_uploads: true,
                     images_file_types: 'jpg,svg,png',
-                    images_upload_url: `${BACKEND}/api/upload`,
+                    images_upload_url: `${BACKEND}/api/upload/${config.form_id}/correctAnswer`,
                     image_dimensions: false,
                     resize: false,
                     paste_block_drop: true
