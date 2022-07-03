@@ -4,9 +4,10 @@ import { cloneDeep } from 'lodash'
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
 import ElementContainer from '../common/ElementContainer'
-import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
+import { faDotCircle, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './Radio.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default class Radio extends Component {
   static weight = 3
@@ -119,10 +120,7 @@ export default class Radio extends Component {
   static helpers = {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
-      const radioButtons = Array.from(nodeList)
-      console.log(radioButtons, 'radioButtons')
-
-      return radioButtons
+      return Array.from(nodeList)
     },
     isFilled: (value) => {
       return !value.every((item) => item.checked === false)
@@ -134,6 +132,29 @@ export default class Radio extends Component {
 
     this.handleAddingItem = this.handleAddingItem.bind(this)
     this.handleDeletingItem = this.handleDeletingItem.bind(this)
+    this.config = props.config
+    this.state = {
+      isDetailOpen: false
+    }
+  }
+
+  static configurableSettings = {
+    expectedAnswer: {
+      default: '0',
+      formProps: {
+        type: 'Dropdown',
+        options: [{ value: 0, display: 'New Radio' }],
+        label: 'Expected Answer'
+      }
+    },
+    answerExplanation: {
+      default: '',
+      formProps: {
+        type: 'TextArea',
+        placeholder: 'Please enter an answer explanation',
+        label: 'Answer Explanation'
+      }
+    }
   }
 
   handleAddingItem() {
@@ -168,6 +189,7 @@ export default class Radio extends Component {
 
   render() {
     const { config, mode } = this.props
+    const { isDetailOpen } = this.state
 
     const options =
       Array.isArray(config.options) === true ||
@@ -219,7 +241,41 @@ export default class Radio extends Component {
                 : ''
             }
           />
-        </div>
+        </div>,
+        config.answerExplanation !== '' ? (
+          <div className="fl metadata answerExplanationContainer" key="4">
+            <details
+              title={'Click to edit answer explanation'}
+              open={this.state.isDetailOpen}
+              onClick={() => this.setState({ isDetailOpen: !isDetailOpen })}>
+              <summary>
+                <EditableLabel
+                  className="sublabel"
+                  dataPlaceholder="Click to edit sublabel"
+                  mode={mode}
+                  labelKey={`radio_${config.id}_answerLabel`}
+                  handleLabelChange={this.props.handleLabelChange}
+                  value={
+                    typeof config.answerLabelText !== 'undefined' &&
+                    config.answerLabelText !== ''
+                      ? config.answerLabelText
+                      : ''
+                  }
+                />
+                <span className="popover-container">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                    This part will not be displayed on the form.
+                  </div>
+                </span>
+              </summary>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: config.answerExplanation
+                }}></p>
+            </details>
+          </div>
+        ) : null
       ]
     } else {
       display = [
@@ -244,7 +300,7 @@ export default class Radio extends Component {
                     name={`q_${config.id}`}
                     value={item}
                     onChange={inputProps.onChange}
-                    defaultChecked={config.value === item}></input>
+                    checked={config.value === item}></input>
                   <label
                     className="radio-label"
                     htmlFor={`q_${config.id}_${key}`}>
@@ -275,6 +331,12 @@ export default class Radio extends Component {
         </div>,
         <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>
+        </div>,
+        <div className="fl metadata answerExplanation dn" key="5">
+          <details>
+            <summary id={`q_${config.id}_answerLabel`}></summary>
+            <div id={`q_${config.id}_answerExplanation`}></div>
+          </details>
         </div>
       ]
     }
