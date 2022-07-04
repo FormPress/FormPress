@@ -171,7 +171,9 @@ module.exports = (app) => {
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
     async (req, res) => {
-      const { submission_id, form_id, user_id } = req.params
+      const { submission_id, form_id } = req.params
+      // TODO: currently user_id is not used in the query but will be used in the future for security reasons
+      // TODO: a check to make sure the viewer is the owner of the submission should be added
 
       const radioElem = require(path.resolve(
         'script',
@@ -282,7 +284,6 @@ module.exports = (app) => {
         SUBMISSION: submission
       }
 
-      // TODO: a check to make sure the viewer is the owner of the submission should be added
       res.render('results.tpl.ejs', templateProps)
     }
   )
