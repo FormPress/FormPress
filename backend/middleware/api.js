@@ -167,7 +167,7 @@ module.exports = (app) => {
     res.json(sanitizedElems || [])
   })
 
-  // a new endpoint to return an ejs template for exam evaluationssssssss
+  // a new endpoint to return an ejs template for exam evaluations
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
     async (req, res) => {
