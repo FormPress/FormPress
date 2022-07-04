@@ -252,6 +252,21 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setAutoPageBreak(key, value) {
+    const form = { ...this.state.form }
+    let autoPageBreak = { ...form.props.autoPageBreak }
+
+    if (typeof form.props.autoPageBreak === 'object') {
+      autoPageBreak = cloneDeep(form.props.autoPageBreak)
+    }
+
+    Object.assign(autoPageBreak, { [key]: value })
+
+    Object.assign(form.props, { autoPageBreak })
+
+    this.setState({ form })
+  }
+
   setCSS(cssProp) {
     const form = { ...this.state.form }
     form.props.customCSS = cssProp
@@ -340,6 +355,7 @@ class Builder extends Component {
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
     this.setFormTags = this.setFormTags.bind(this)
+    this.setAutoPageBreak = this.setAutoPageBreak.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
       this
@@ -555,6 +571,8 @@ class Builder extends Component {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'pbButton') {
         question[`${itemID}ButtonText`] = value
+      } else if (id.split('_')[0] === 'radio') {
+        question[`${itemID}Text`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -1066,6 +1084,19 @@ class Builder extends Component {
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
           elements[selectedFieldConfig.type].configurableSettings || {}
+
+        if (selectedFieldConfig.type === 'Radio') {
+          const expectedAnswer = selectedFieldConfig.options.map(
+            (option, index) => {
+              return {
+                value: index,
+                display: option
+              }
+            }
+          )
+
+          selectedField.configurableSettings.expectedAnswer.formProps.options = expectedAnswer
+        }
       } catch (e) {
         questionPropertiesReady = false
       }
@@ -1139,6 +1170,7 @@ class Builder extends Component {
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
             setFormTags={this.setFormTags}
+            setAutoPageBreak={this.setAutoPageBreak}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
@@ -1214,6 +1246,7 @@ class Builder extends Component {
       publishing
     } = this.state
     const { params } = this.props.match
+    console.log(form, 'form')
     let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = form.updated_at !== publishedForm.created_at

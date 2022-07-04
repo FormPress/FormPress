@@ -19,6 +19,7 @@ class FormProperties extends Component {
     this.handleSubmitBehaviourChange = this.handleSubmitBehaviourChange.bind(
       this
     )
+    this.handleElemPerPageChange = this.handleElemPerPageChange.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -54,6 +55,28 @@ class FormProperties extends Component {
       type: 'submitBehaviour',
       value: e.target.value
     })
+  }
+
+  handleElemPerPageChange(elem, e) {
+    if (elem.type === 'Checkbox') {
+      this.props.setAutoPageBreak('active', e.target.checked)
+    }
+
+    if (elem.type === 'Number') {
+      this.props.setAutoPageBreak('elemPerPage', e.target.value)
+    }
+
+    if (elem.label === 'Previous Button Text') {
+      this.props.setAutoPageBreak('prevButtonText', e.target.value)
+    }
+
+    if (elem.label === 'Next Button Text') {
+      this.props.setAutoPageBreak('nextButtonText', e.target.value)
+    }
+
+    if (elem.label === 'Submit Button Text') {
+      this.props.setAutoPageBreak('submitButtonText', e.target.value)
+    }
   }
 
   handleAddTag(e) {
@@ -133,26 +156,23 @@ class FormProperties extends Component {
       submitBehaviour = matchingIntegration('submitBehaviour')[0].value
     }
 
+    let autoPageBreak = {
+      active: false,
+      elemPerPage: 0,
+      prevButtonText: 'Previous',
+      nextButtonText: 'Next',
+      submitButtonText: 'Submit'
+    }
+
+    if (this.props.form.props.autoPageBreak !== undefined) {
+      autoPageBreak = {
+        ...this.props.form.props.autoPageBreak
+      }
+    }
+
     return (
       <div className="formProperties">
         <h2>Form Properties</h2>
-        <Renderer
-          handleFieldChange={this.handleSubmitBehaviourChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 5,
-                  type: 'Radio',
-                  label: 'On Submit',
-                  value: submitBehaviour,
-                  options: ['Show Thank You Page', 'Evaluate Form']
-                }
-              ]
-            }
-          }}
-        />
         {capabilities.sendgridApiKey ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
@@ -174,6 +194,23 @@ class FormProperties extends Component {
           ''
         )}
         <Renderer
+          handleFieldChange={this.handleSubmitBehaviourChange}
+          theme="infernal"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 5,
+                  type: 'Radio',
+                  label: 'On Submit',
+                  value: submitBehaviour,
+                  options: ['Show Thank You Page', 'Evaluate Form']
+                }
+              ]
+            }
+          }}
+        />
+        <Renderer
           handleFieldChange={this.handleTyPageTitleChange}
           theme="infernal"
           form={{
@@ -189,6 +226,7 @@ class FormProperties extends Component {
               ]
             }
           }}
+          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
         />
         <Renderer
           handleFieldChange={this.handleTyPageTextChange}
@@ -202,6 +240,58 @@ class FormProperties extends Component {
                   label: 'Thank you page text',
                   maxLength: 256,
                   value: tyPageText
+                }
+              ]
+            }
+          }}
+          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
+        />
+        <Renderer
+          handleFieldChange={this.handleElemPerPageChange}
+          theme="infernal"
+          allowInternal={true}
+          className={
+            'autoPageBreakForm' +
+            (autoPageBreak.active ? '' : ' autoPageBreakDisabled')
+          }
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 7,
+                  type: 'Checkbox',
+                  options: ['Auto-pagination'],
+                  value: autoPageBreak.active
+                },
+                {
+                  id: 6,
+                  type: 'Number',
+                  label: 'Questions Per Page',
+                  value: autoPageBreak.elemPerPage
+                },
+                {
+                  id: 9,
+                  type: 'TextBox',
+                  label: 'Previous Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.prevButtonText,
+                  placeholder: 'Previous'
+                },
+                {
+                  id: 10,
+                  type: 'TextBox',
+                  label: 'Next Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.nextButtonText,
+                  placeholder: 'Next'
+                },
+                {
+                  id: 11,
+                  type: 'TextBox',
+                  label: 'Submit Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.submitButtonText,
+                  placeholder: 'Submit'
                 }
               ]
             }

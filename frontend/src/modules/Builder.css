@@ -583,3 +583,22 @@
   padding: 3.3rem;
   border-radius: 6px;
 }
+
+.builderStage .form > .elementRadio > .metadata.answerExplanationContainer {
+  background: repeating-linear-gradient(
+    45deg,
+    #eef0f7,
+    #e8e9ec 10px,
+    #eaeaea 10px,
+    #f1f2f9 20px
+  );
+  border-radius: 0.5rem;
+}
+
+.builderStage
+  .form
+  > .elementRadio
+  > .metadata.answerExplanationContainer
+  .popover-container {
+  float: right;
+}
