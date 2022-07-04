@@ -33,15 +33,6 @@ const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   'oldformpropshandler.js'
 ))
 
-const { Storage } = require('@google-cloud/storage')
-
-const googleStorage = new Storage({
-  keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
-  projectId: 'formpress'
-})
-
-const fileUploadBucket = googleStorage.bucket(process.env.FILE_UPLOAD_BUCKET)
-
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
@@ -1053,19 +1044,5 @@ module.exports = (app) => {
       req.params.question_id
     )
     res.json(value)
-  })
-  app.get('/rte/:form_id/:question_id/:image_url', async (req, res) => {
-    console.log(
-      req.params.form_id,
-      req.params.question_id,
-      req.params.image_url,
-      fileUploadBucket.name
-    )
-    res.render('image-serve.tpl.ejs', {
-      form_id: req.params.form_id,
-      question_id: req.params.question_id,
-      image_url: req.params.image_url,
-      bucket_name: fileUploadBucket.name
-    })
   })
 }

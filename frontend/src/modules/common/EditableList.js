@@ -40,8 +40,6 @@ class EditableList extends Component {
   render() {
     const { config, mode, options, customBuilderHandlers } = this.props
 
-    console.log(this.props)
-
     if (config.type === 'Checkbox') {
       const display = [
         options.map((item, key) => {

@@ -75,12 +75,14 @@ export default function EditableLabel(props) {
           resize: false,
           paste_block_drop: true
         }}
-        onEditorChange={(newValue) => {
-          props.handleLabelChange(props.labelKey, newValue)
+        onClick={() => {
           document
             .getElementById(editorRef.current.id)
             .closest('.element')
             .click()
+        }}
+        onEditorChange={(newValue) => {
+          props.handleLabelChange(props.labelKey, newValue)
         }}
       />
     )
