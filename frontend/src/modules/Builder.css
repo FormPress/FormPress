@@ -17,6 +17,14 @@
   margin-top: 20px;
 }
 
+.input .tox.tox-tinymce {
+  height: 250px !important;
+  display: inline-flex;
+  width: calc(100% - 23px);
+  margin-top: 5px;
+  z-index: 0;
+}
+
 .tox-statusbar__branding {
   display: none !important;
 }

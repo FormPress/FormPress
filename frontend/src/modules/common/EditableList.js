@@ -40,6 +40,8 @@ class EditableList extends Component {
   render() {
     const { config, mode, options, customBuilderHandlers } = this.props
 
+    console.log(this.props)
+
     if (config.type === 'Checkbox') {
       const display = [
         options.map((item, key) => {
@@ -164,6 +166,9 @@ class EditableList extends Component {
                 <EditableLabel
                   className="label radio-label"
                   mode={mode}
+                  form_id={config.form_id}
+                  question_id={config.id}
+                  editor={this.props.editorForOptions}
                   dataPlaceholder="Type an option"
                   labelKey={`s_${config.id}_${key}`}
                   htmlFor={`q_${config.id}_${key}`}

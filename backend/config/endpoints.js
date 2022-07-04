@@ -201,6 +201,13 @@ module.exports = {
       method: 'get',
       path: '/thank-you',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/rte/:form_id/:question_id/:image_url',
+      protected: false,
+      exampleRequestPath:
+        '/rte/1/1/123abcde-abcd-1234-abcd-123abcde123abcde.png'
     }
   ]
 }

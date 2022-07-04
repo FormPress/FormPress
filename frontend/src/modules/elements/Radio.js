@@ -116,7 +116,7 @@ export default class Radio extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Use rich text editor']
+        options: ['Use rich text editor for question']
       }
     },
     correctAnswer: {
@@ -125,6 +125,14 @@ export default class Radio extends Component {
         type: 'TextArea',
         editor: true,
         label: 'Correct Answer'
+      }
+    },
+    editorForOptions: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Use rich text editor for options']
       }
     }
   }
@@ -201,6 +209,7 @@ export default class Radio extends Component {
           <EditableList
             config={config}
             mode={mode}
+            editorForOptions={config.editorForOptions}
             options={options}
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
