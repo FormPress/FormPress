@@ -171,3 +171,17 @@ label[for='q_5_1']::after {
   font-weight: bold;
   position: absolute;
 }
+
+.formProperties > .popover-container {
+  float: right;
+  position: relative;
+  top: 15px;
+  left: -20px;
+}
+
+.formProperties > .popover-container:hover > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -65px;
+  left: -170px;
+}

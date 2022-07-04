@@ -38,7 +38,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_next`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.nextButtonText}
@@ -53,7 +53,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_previous`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.previousButtonText}
@@ -68,7 +68,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_submit`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.submitButtonText}

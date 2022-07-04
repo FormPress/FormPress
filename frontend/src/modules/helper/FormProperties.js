@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Renderer from '../Renderer'
 import CapabilitiesContext from '../../capabilities.context'
 import './FormProperties.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 class FormProperties extends Component {
   constructor(props) {
@@ -63,7 +65,9 @@ class FormProperties extends Component {
     }
 
     if (elem.type === 'Number') {
-      this.props.setAutoPageBreak('elemPerPage', e.target.value)
+      if (!isNaN(e.target.value)) {
+        this.props.setAutoPageBreak('elemPerPage', e.target.value)
+      }
     }
 
     if (elem.label === 'Previous Button Text') {
@@ -246,6 +250,12 @@ class FormProperties extends Component {
           }}
           className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
         />
+        <span className="popover-container">
+          <FontAwesomeIcon icon={faInfoCircle} />
+          <div className="popoverText">
+            Choosing this option will disable all previously added page breaks.
+          </div>
+        </span>
         <Renderer
           handleFieldChange={this.handleElemPerPageChange}
           theme="infernal"
