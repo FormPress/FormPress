@@ -238,7 +238,7 @@ export default class Radio extends Component {
         <div key="1" className="fl label">
           <span
             dataplaceholder="Type a question"
-            spellcheck="false"
+            spellCheck="false"
             dangerouslySetInnerHTML={{
               __html: config.label
             }}></span>
