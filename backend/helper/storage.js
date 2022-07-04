@@ -70,7 +70,6 @@ exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
     stream
       .pipe(file.createWriteStream())
       .on('error', (error) => {
-        console.log(error)
         reject(error)
       })
       .on('finish', () => {

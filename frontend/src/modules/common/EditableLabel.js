@@ -73,7 +73,8 @@ export default function EditableLabel(props) {
           images_upload_url: `${BACKEND}/api/upload/${props.form_id}/${props.question_id}`,
           image_dimensions: false,
           resize: false,
-          paste_block_drop: true
+          paste_block_drop: true,
+          paste_data_images: false
         }}
         onClick={() => {
           document
@@ -82,6 +83,7 @@ export default function EditableLabel(props) {
             .click()
         }}
         onEditorChange={(newValue) => {
+          if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
           props.handleLabelChange(props.labelKey, newValue)
         }}
       />

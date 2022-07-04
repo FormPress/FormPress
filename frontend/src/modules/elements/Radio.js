@@ -235,12 +235,14 @@ export default class Radio extends Component {
       ]
     } else {
       display = [
-        <div
-          key="1"
-          className="fl label"
-          dangerouslySetInnerHTML={{
-            __html: config.label
-          }}></div>,
+        <div key="1" className="fl label">
+          <span
+            dataplaceholder="Type a question"
+            spellcheck="false"
+            dangerouslySetInnerHTML={{
+              __html: config.label
+            }}></span>
+        </div>,
         <div key="2" className="fl input">
           <ul>
             {config.options.map((item, key) => {
@@ -255,9 +257,8 @@ export default class Radio extends Component {
                     defaultChecked={config.value === item}></input>
                   <label
                     className="radio-label"
-                    htmlFor={`q_${config.id}_${key}`}>
-                    {item}
-                  </label>
+                    htmlFor={`q_${config.id}_${key}`}
+                    dangerouslySetInnerHTML={{ __html: item }}></label>
                   <div className="check">
                     <div className="inside"></div>
                   </div>
