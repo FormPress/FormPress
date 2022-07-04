@@ -33,6 +33,7 @@
     "ignore-styles": "5.0.1",
     "iyzipay": "^2.0.48",
     "jsonwebtoken": "8.5.1",
+    "moment": "^2.29.3",
     "nodemon": "2.0.2",
     "promise-mysql": "4.1.1",
     "react": "16.12.0",
