@@ -26,7 +26,7 @@
     },
     {
       name: 'multistep',
-      check: (element) => element.type === 'PageBreak'
+      check: (element) => element.type === 'PageBreak' || formHasAutoPageBreaks
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -132,6 +132,9 @@
       }
     }
   }
+
+  let formHasAutoPageBreaks =
+    document.querySelectorAll('.autoPageBreak').length > 0
 
   const extensionstoLoad = []
 

@@ -1246,7 +1246,6 @@ class Builder extends Component {
       publishing
     } = this.state
     const { params } = this.props.match
-    console.log(form, 'form')
     let selectedFieldId = parseInt(params.questionId)
 
     const isPublishRequired = form.updated_at !== publishedForm.created_at
