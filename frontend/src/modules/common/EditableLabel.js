@@ -56,6 +56,7 @@ export default function EditableLabel(props) {
     return (
       <div {...extraProps} suppressContentEditableWarning={true}>
         <Editor
+          key={Math.random()}
           apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
           value={props.value}
           init={{
