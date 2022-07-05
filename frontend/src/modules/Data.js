@@ -637,6 +637,21 @@ class Data extends Component {
                         </div>
                       )
                     } else if (question.chartType === 'pieChart') {
+                      question.label = question.label
+                        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                        .replace(/&nbsp;/g, ' ')
+                        .replace(/&amp;/g, ' ')
+                        .replace(/(<([^>]+)>)/gi, '')
+                        .trim()
+                      question.chartItems.filter((chartItem) => {
+                        chartItem.name = chartItem.name
+                          .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                          .replace(/&nbsp;/g, ' ')
+                          .replace(/&amp;/g, ' ')
+                          .replace(/(<([^>]+)>)/gi, '')
+                          .trim()
+                      })
+                      console.log(question)
                       return (
                         <div className="questionContainer" key={i}>
                           <div

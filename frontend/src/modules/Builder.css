@@ -15,6 +15,7 @@
 
 .tox.tox-tinymce {
   margin-top: 20px;
+  width: 100%;
 }
 .elementRadio .required:focus-visible {
   outline: none;
@@ -27,6 +28,15 @@
   top: 15px;
   right: 20px;
   z-index: 1;
+}
+
+.elementRadio [contentEditable='true'] {
+  width: calc(100% - 23px);
+  display: inline-flex;
+}
+
+.elementRadio [contentEditable='true']:focus-visible {
+  outline: none;
 }
 
 .input .tox.tox-tinymce {
@@ -401,7 +411,7 @@
 
 .popover-container:hover > .popoverText {
   display: block;
-  width: 83px;
+  width: 100px;
   height: 22px;
   padding: 3px 3px 0px;
   border-radius: 4px;

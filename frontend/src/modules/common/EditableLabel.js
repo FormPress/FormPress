@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
 export default function EditableLabel(props) {
-  const editorRef = useRef(null)
   let limit = 256
 
   function handleOnInput(e) {
@@ -57,7 +56,6 @@ export default function EditableLabel(props) {
     return (
       <div {...extraProps} suppressContentEditableWarning={true}>
         <Editor
-          onInit={(evt, editor) => (editorRef.current = editor)}
           apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
           value={props.value}
           init={{
@@ -74,9 +72,9 @@ export default function EditableLabel(props) {
             paste_block_drop: true,
             paste_data_images: false
           }}
-          onClick={() => {
+          onClick={(e) => {
             const elem = document
-              .getElementById(editorRef.current.id)
+              .getElementById(tinymce.activeEditor.id)
               .closest('.element')
             if (!elem.classList.contains('selected')) elem.click()
           }}

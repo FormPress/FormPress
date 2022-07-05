@@ -90,9 +90,10 @@ export default class Radio extends Component {
               '-label ' +
               (input.toggle === true ? 'toggle-label' : '')
             }
-            htmlFor={'q_required_' + index}>
-            {input.content}
-          </label>
+            htmlFor={'q_required_' + index}
+            dangerouslySetInnerHTML={{
+              __html: input.content
+            }}></label>
         </div>
       )
     })
