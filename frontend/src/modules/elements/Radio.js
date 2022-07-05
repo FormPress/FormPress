@@ -199,6 +199,7 @@ export default class Radio extends Component {
           labelKey={config.id}
           editor={config.editor}
           form_id={config.form_id}
+          rteUploadHandler={this.props.rteUploadHandler}
           question_id={config.id}
           dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
@@ -209,6 +210,7 @@ export default class Radio extends Component {
           <EditableList
             config={config}
             mode={mode}
+            rteUploadHandler={this.props.rteUploadHandler}
             editorForOptions={config.editorForOptions}
             options={options}
             handleAddingItem={this.handleAddingItem}

@@ -166,6 +166,7 @@ class EditableList extends Component {
                   mode={mode}
                   form_id={config.form_id}
                   question_id={config.id}
+                  rteUploadHandler={this.props.rteUploadHandler}
                   editor={this.props.editorForOptions}
                   dataPlaceholder="Type an option"
                   labelKey={`s_${config.id}_${key}`}

@@ -95,6 +95,7 @@ export default class QuestionProperties extends Component {
             theme="infernal"
             className="questionPropertiesForm"
             selectedField={selectedField}
+            rteUploadHandler={this.props.rteUploadHandler}
             handleFieldChange={this.handleFieldChange}
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
-const BACKEND = process.env.REACT_APP_BACKEND
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
@@ -86,17 +85,18 @@ export default class TextArea extends Component {
                   value={config.value}
                   init={{
                     plugins: 'link image code',
+                    menubar: 'edit insert format',
                     toolbar:
                       'undo redo | formatselect | ' +
-                      'bold italic backcolor | alignleft aligncenter ' +
-                      'alignright alignjustify | outdent indent removeformat image ',
+                      'bold italic forecolor | image ',
                     file_picker_types: 'image',
                     automatic_uploads: true,
-                    images_file_types: 'jpg,svg,png',
-                    images_upload_url: `${BACKEND}/api/upload/${config.form_id}/correctAnswer`,
-                    image_dimensions: false,
+                    image_dimensions: true,
+                    images_file_types: 'jpg,svg,png,jpeg',
+                    images_upload_handler: this.props.rteUploadHandler,
                     resize: false,
-                    paste_block_drop: true
+                    paste_block_drop: true,
+                    paste_data_images: false
                   }}
                   onEditorChange={(newValue) => {
                     inputProps.onChange(newValue)

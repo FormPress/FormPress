@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
-const BACKEND = process.env.REACT_APP_BACKEND
+import { cloneDeep } from 'lodash'
 
 export default function EditableLabel(props) {
   const editorRef = useRef(null)
+  const limit = 256
 
   function handleOnInput(e) {
     const text = e.target.innerText
-    let limit = 256
 
     if (typeof props.limit !== 'undefined') {
       limit = props.limit
@@ -57,36 +57,37 @@ export default function EditableLabel(props) {
 
   if (props.editor === true) {
     return (
-      <Editor
-        onInit={(evt, editor) => (editorRef.current = editor)}
-        apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
-        value={props.value}
-        init={{
-          plugins: 'link image code',
-          toolbar:
-            'undo redo | formatselect | ' +
-            'bold italic backcolor | alignleft aligncenter ' +
-            'alignright alignjustify | outdent indent removeformat image ',
-          file_picker_types: 'image',
-          automatic_uploads: true,
-          images_file_types: 'jpg,svg,png',
-          images_upload_url: `${BACKEND}/api/upload/${props.form_id}/${props.question_id}`,
-          image_dimensions: false,
-          resize: false,
-          paste_block_drop: true,
-          paste_data_images: false
-        }}
-        onClick={() => {
-          document
-            .getElementById(editorRef.current.id)
-            .closest('.element')
-            .click()
-        }}
-        onEditorChange={(newValue) => {
-          if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
-          props.handleLabelChange(props.labelKey, newValue)
-        }}
-      />
+      <div {...extraProps} suppressContentEditableWarning={true}>
+        <Editor
+          onInit={(evt, editor) => (editorRef.current = editor)}
+          apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+          value={props.value}
+          init={{
+            plugins: 'link image code',
+            toolbar:
+              'undo redo | formatselect | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | outdent indent removeformat image ',
+            file_picker_types: 'image',
+            automatic_uploads: true,
+            images_file_types: 'jpg,svg,png,jpeg',
+            images_upload_handler: props.rteUploadHandler,
+            resize: false,
+            paste_block_drop: true,
+            paste_data_images: false
+          }}
+          onClick={() => {
+            const elem = document
+              .getElementById(editorRef.current.id)
+              .closest('.element')
+            if (!elem.classList.contains('selected')) elem.click()
+          }}
+          onEditorChange={(newValue) => {
+            if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
+            props.handleLabelChange(props.labelKey, newValue)
+          }}
+        />
+      </div>
     )
   }
 
@@ -107,7 +108,8 @@ export default function EditableLabel(props) {
           .replace(/&nbsp;/g, ' ')
           .replace(/&amp;/g, ' ')
           .replace(/(<([^>]+)>)/gi, '')
-          .trim()}
+          .trim()
+          .substr(0, limit)}
       </span>
     </div>
   )

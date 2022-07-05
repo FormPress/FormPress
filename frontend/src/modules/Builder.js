@@ -44,6 +44,8 @@ import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
 import '../style/themes/gleam.css'
 
+const BACKEND = process.env.REACT_APP_BACKEND
+
 //list of element icons
 const iconMap = {
   TextBox: faFont,
@@ -394,6 +396,7 @@ class Builder extends Component {
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
+    this.rteUploadHandler = this.rteUploadHandler.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -763,6 +766,55 @@ class Builder extends Component {
     }
   }
 
+  async rteUploadHandler(blobInfo) {
+    return new Promise((success, failure) => {
+      const image_size = blobInfo.blob().size / 1000,
+        max_size = 3000
+      if (image_size > max_size) {
+        failure(
+          'Image is too large ( ' +
+            image_size +
+            ') ,Maximum image size is:' +
+            max_size +
+            ' Kb',
+          { remove: true }
+        )
+        return
+      } else {
+        let xhr, formData
+        xhr = new XMLHttpRequest()
+        xhr.withCredentials = false
+        xhr.open(
+          'POST',
+          `${BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
+        )
+
+        xhr.onload = function () {
+          let json
+
+          if (xhr.status != 200) {
+            alert('HTTP Error: ' + xhr.status)
+            return
+          }
+
+          json = JSON.parse(xhr.responseText)
+
+          if (!json || typeof json.location != 'string') {
+            alert('Invalid JSON: ' + xhr.responseText)
+            return false
+          }
+
+          success(json.location)
+        }
+
+        formData = new FormData()
+        formData.append('file', blobInfo.blob(), blobInfo.filename())
+
+        xhr.send(formData)
+      }
+    })
+  }
+
   handleTitleChange(id, value) {
     const form = { ...this.state.form }
 
@@ -786,7 +838,7 @@ class Builder extends Component {
     }
 
     const { elements } = this.state.form.props
-    let { formId } = this.props.match.params
+    let { formId, questionId } = this.props.match.params
 
     const matchingElements = elements.filter((elem) => elem.id === id)
 
@@ -795,7 +847,8 @@ class Builder extends Component {
         `/editor/${formId}/builder/question/${id}/properties`
       )
       this.setState({
-        dragging: false
+        dragging: false,
+        selectedFieldId: questionId
       })
       const allElemNodes = document.querySelectorAll('[id^="qc_"]')
       allElemNodes.forEach((node) => {
@@ -1094,6 +1147,7 @@ class Builder extends Component {
     const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+
     if (permission.admin) {
       pickerElements.forEach((elem) => {
         permission[elem.type] = true
@@ -1190,6 +1244,7 @@ class Builder extends Component {
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (
             <QuestionProperties
+              rteUploadHandler={this.rteUploadHandler}
               selectedField={selectedField}
               configureQuestion={this.configureQuestion}
             />
@@ -1346,6 +1401,7 @@ class Builder extends Component {
               handleDragStart: this.handleDragStart,
               handleFormItemMovement: this.handleFormItemMovement
             }}
+            rteUploadHandler={this.rteUploadHandler}
             draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
             configureQuestion={this.configureQuestion}

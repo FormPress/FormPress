@@ -29,6 +29,7 @@ export default function ElementContainer(props) {
     type,
     className
   } = props
+
   const classNames = ['element', 'oh']
 
   classNames.push(`element${type}`)

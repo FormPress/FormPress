@@ -16,9 +16,21 @@
 .tox.tox-tinymce {
   margin-top: 20px;
 }
+.elementRadio .required:focus-visible {
+  outline: none;
+}
+
+.elementRadio .required > .tox.tox-tinymce::after {
+  content: ' *';
+  color: red;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 1;
+}
 
 .input .tox.tox-tinymce {
-  height: 250px !important;
+  height: 360px !important;
   display: inline-flex;
   width: calc(100% - 23px);
   margin-top: 5px;
