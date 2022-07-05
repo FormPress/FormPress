@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
 export default function EditableLabel(props) {
@@ -72,9 +72,9 @@ export default function EditableLabel(props) {
             paste_block_drop: true,
             paste_data_images: false
           }}
-          onClick={(e) => {
+          onClick={() => {
             const elem = document
-              .getElementById(tinymce.activeEditor.id)
+              .getElementById(window.tinyMCE.activeEditor.id)
               .closest('.element')
             if (!elem.classList.contains('selected')) elem.click()
           }}

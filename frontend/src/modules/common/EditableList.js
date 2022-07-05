@@ -35,8 +35,6 @@ class EditableList extends Component {
       movementType,
       itemType
     )
-    tinymce.remove()
-    tinymce.init()
   }
 
   render() {
