@@ -1,11 +1,9 @@
 import React, { useRef } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
-import { cloneDeep } from 'lodash'
-
 export default function EditableLabel(props) {
   const editorRef = useRef(null)
-  const limit = 256
+  let limit = 256
 
   function handleOnInput(e) {
     const text = e.target.innerText
