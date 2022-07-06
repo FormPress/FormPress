@@ -5,7 +5,6 @@ import * as InternalElements from './internal'
 export default class Renderer extends Component {
   render() {
     let { className } = this.props
-    let orderInForm = 0
     const {
       dragging,
       dragMode,
