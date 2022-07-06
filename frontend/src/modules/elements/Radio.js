@@ -147,15 +147,6 @@ export default class Radio extends Component {
         options: ['Use rich text editor for question']
       }
     },
-    answerExplanation: {
-      default: '',
-      formProps: {
-        type: 'TextArea',
-        editor: true,
-        placeholder: 'Please enter an answer explanation',
-        label: 'Answer Explanation'
-      }
-    },
     editorForOptions: {
       default: false,
       formProps: {
@@ -171,6 +162,15 @@ export default class Radio extends Component {
         options: [{ value: 0, display: 'New Radio' }],
         label: 'Expected Answer',
         placeholder: 'Please select an answer'
+      }
+    },
+    answerExplanation: {
+      default: '',
+      formProps: {
+        type: 'TextArea',
+        editor: true,
+        placeholder: 'Please enter an answer explanation',
+        label: 'Answer Explanation'
       }
     }
   }
@@ -277,7 +277,7 @@ export default class Radio extends Component {
               <summary>
                 <EditableLabel
                   className="sublabel"
-                  dataPlaceholder="Click to edit sublabel"
+                  dataPlaceholder="Click to edit answer title"
                   mode={mode}
                   labelKey={`radio_${config.id}_answerLabel`}
                   handleLabelChange={this.props.handleLabelChange}

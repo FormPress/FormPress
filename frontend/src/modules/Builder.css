@@ -626,10 +626,10 @@
 .builderStage .form > .elementRadio > .metadata.answerExplanationContainer {
   background: repeating-linear-gradient(
     45deg,
-    #eef0f7,
-    #e8e9ec 10px,
+    #e5e7ec,
     #eaeaea 10px,
-    #f1f2f9 20px
+    #ececec 10px,
+    #e6e6e6 20px
   );
   border-radius: 0.5rem;
 }

@@ -116,10 +116,6 @@
   display: none !important;
 }
 
-#qc_editor.elementHider + #qc_answerExplanation.elementTextArea {
-  display: none !important;
-}
-
 #qc_defaultCountry {
   margin-top: -20px;
 }

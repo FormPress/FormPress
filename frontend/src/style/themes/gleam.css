@@ -305,6 +305,10 @@
   color: #8cc63f;
 }
 
+.elementRadio > .answerExplanationContainer > details {
+  word-break: break-all;
+}
+
 .gleam .elementName {
   background-color: transparent;
 }
