@@ -5,6 +5,7 @@ import * as InternalElements from './internal'
 export default class Renderer extends Component {
   render() {
     let { className } = this.props
+    let orderInForm = 0
     const {
       dragging,
       dragMode,
@@ -60,7 +61,10 @@ export default class Renderer extends Component {
     let pageNumber = 1
     let copiedPageBreak
     let emptyPage = true
-    this.props.form.props.elements.forEach((element) => {
+    this.props.form.props.elements.forEach((element, index) => {
+      if (this.props.mode === 'builder') {
+        element.order = index
+      }
       // push copied page break to page
       if (element.type !== 'PageBreak') {
         page.push(element)
@@ -114,6 +118,9 @@ export default class Renderer extends Component {
           {page.map((elem) => {
             const Component = Elements[elem.type]
             const extraProps = { mode: this.props.mode }
+
+            if (this.props.mode === 'builder') {
+            }
 
             if (typeof this.props.handleFieldChange === 'function') {
               extraProps.onChange = (e) => {
@@ -176,6 +183,7 @@ export default class Renderer extends Component {
                 id={elem.id}
                 config={elem}
                 form_id={this.props.form.id}
+                order={elem.order}
                 rteUploadHandler={this.props.rteUploadHandler}
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}

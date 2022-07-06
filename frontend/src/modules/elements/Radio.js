@@ -197,6 +197,7 @@ export default class Radio extends Component {
           key="1"
           className="fl label"
           mode={mode}
+          order={this.props.order}
           labelKey={config.id}
           editor={config.editor}
           form_id={config.form_id}
@@ -213,6 +214,7 @@ export default class Radio extends Component {
             mode={mode}
             rteUploadHandler={this.props.rteUploadHandler}
             editorForOptions={config.editorForOptions}
+            order={this.props.order}
             options={options}
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}

@@ -2,7 +2,8 @@ import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 
 export default function EditableLabel(props) {
-  let limit = 256
+  let limit = 256,
+    order = 0
 
   function handleOnInput(e) {
     const text = e.target.innerText
@@ -53,10 +54,15 @@ export default function EditableLabel(props) {
   }
 
   if (props.editor === true) {
+    if (typeof props.labelKey === 'string') {
+      order = props.order + '_' + props.labelKey
+    } else {
+      order = props.order
+    }
     return (
       <div {...extraProps} suppressContentEditableWarning={true}>
         <Editor
-          key={Math.random()}
+          key={order}
           apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
           value={props.value}
           init={{
