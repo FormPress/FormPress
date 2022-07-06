@@ -398,6 +398,10 @@
   white-space: break-spaces;
 }
 
+.renderer.gleam.form .elementRadio .input .radio-label p {
+  margin: 0;
+}
+
 .gleam.form
   .elementRadio
   .input
@@ -647,6 +651,16 @@
   .branding > img {
     width: auto;
     margin: auto;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .renderer.gleam .elementNetPromoterScore ul {
+    padding: 0 !important;
+  }
+  .renderer.gleam .elementNetPromoterScore ul li label {
+    width: 30px !important;
+    margin: 0 1px !important;
   }
 }
 

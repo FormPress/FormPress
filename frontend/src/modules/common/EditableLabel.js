@@ -1,9 +1,12 @@
 import React from 'react'
+import { Editor } from '@tinymce/tinymce-react'
 
 export default function EditableLabel(props) {
+  let limit = 256,
+    order = 0
+
   function handleOnInput(e) {
     const text = e.target.innerText
-    let limit = 256
 
     if (typeof props.limit !== 'undefined') {
       limit = props.limit
@@ -11,13 +14,7 @@ export default function EditableLabel(props) {
 
     if (text.length >= limit) {
       e.target.innerText = text.substr(0, limit)
-      props.handleLabelChange(
-        props.labelKey,
-        e.target.innerText
-          .replace(/<span(.*?)>(.*?)<\/span>/, '')
-          .replace(/(<([^>]+)>)/gi, '')
-          .trim()
-      )
+      props.handleLabelChange(props.labelKey, e.target.innerText)
 
       e.target.focus()
       document.execCommand('selectAll', false, null)
@@ -26,13 +23,7 @@ export default function EditableLabel(props) {
   }
 
   function handleOnBlur(e) {
-    props.handleLabelChange(
-      props.labelKey,
-      e.target.innerText
-        .replace(/<span(.*?)>(.*?)<\/span>/, '')
-        .replace(/(<([^>]+)>)/gi, '')
-        .trim()
-    )
+    props.handleLabelChange(props.labelKey, e.target.innerText)
   }
 
   function handleOnKeyDown(e) {
@@ -62,6 +53,47 @@ export default function EditableLabel(props) {
     extraProps.className = 'required'
   }
 
+  if (props.editor === true) {
+    if (typeof props.labelKey === 'string') {
+      order = props.order + '_' + props.labelKey
+    } else {
+      order = props.order
+    }
+    return (
+      <div {...extraProps} suppressContentEditableWarning={true}>
+        <Editor
+          key={order}
+          apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+          value={props.value}
+          init={{
+            plugins: 'link image code',
+            toolbar:
+              'undo redo | formatselect | ' +
+              'bold italic backcolor | alignleft aligncenter ' +
+              'alignright alignjustify | outdent indent removeformat image ',
+            file_picker_types: 'image',
+            automatic_uploads: true,
+            images_file_types: 'jpg,svg,png,jpeg',
+            images_upload_handler: props.rteUploadHandler,
+            resize: false,
+            paste_block_drop: true,
+            paste_data_images: false
+          }}
+          onClick={() => {
+            const elem = document
+              .getElementById(window.tinyMCE.activeEditor.id)
+              .closest('.element')
+            if (!elem.classList.contains('selected')) elem.click()
+          }}
+          onEditorChange={(newValue) => {
+            if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
+            props.handleLabelChange(props.labelKey, newValue)
+          }}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className={props.className}>
       <span
@@ -74,7 +106,13 @@ export default function EditableLabel(props) {
         suppressContentEditableWarning={true}
         className={props.value === '' ? 'emptySpan' : null}
         {...extraProps}>
-        {props.value}
+        {props.value
+          .replace(/<span(.*?)>(.*?)<\/span>/, '')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&amp;/g, ' ')
+          .replace(/(<([^>]+)>)/gi, '')
+          .trim()
+          .substr(0, limit)}
       </span>
     </div>
   )

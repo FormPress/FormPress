@@ -104,7 +104,10 @@ export default class Renderer extends Component {
     let pageNumber = 1
     let copiedPageBreak
     let emptyPage = true
-    formElements.forEach((element) => {
+    formElements.forEach((element, index) => {
+      if (this.props.mode === 'builder') {
+        element.order = index
+      }
       // push copied page break to page
       if (element.type !== 'PageBreak') {
         page.push(element)
@@ -202,6 +205,10 @@ export default class Renderer extends Component {
               }
             }
 
+            if (elem.id === 'editor') {
+              if (elem.value === false) extraProps.className = 'elementHider'
+            }
+
             if (elem.type === 'PageBreak') {
               if (elem.empty === true) {
                 extraProps.className = 'emptyPage'
@@ -216,6 +223,9 @@ export default class Renderer extends Component {
                 key={elem.id}
                 id={elem.id}
                 config={elem}
+                form_id={this.props.form.id}
+                order={elem.order}
+                rteUploadHandler={this.props.rteUploadHandler}
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}
                 handleLabelChange={handleLabelChange}

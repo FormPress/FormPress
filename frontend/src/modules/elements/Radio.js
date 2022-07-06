@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 import { cloneDeep } from 'lodash'
 import EditableLabel from '../common/EditableLabel'
 import EditableList from '../common/EditableList'
@@ -109,9 +108,10 @@ export default class Radio extends Component {
               '-label ' +
               (input.toggle === true ? 'toggle-label' : '')
             }
-            htmlFor={'q_required_' + index}>
-            {input.content}
-          </label>
+            htmlFor={'q_required_' + index}
+            dangerouslySetInnerHTML={{
+              __html: input.content
+            }}></label>
         </div>
       )
     })
@@ -139,6 +139,30 @@ export default class Radio extends Component {
   }
 
   static configurableSettings = {
+    editor: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Use rich text editor for question']
+      }
+    },
+    correctAnswer: {
+      default: '',
+      formProps: {
+        type: 'TextArea',
+        editor: true,
+        label: 'Correct Answer'
+      }
+    },
+    editorForOptions: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Use rich text editor for options']
+      }
+    },
     expectedAnswer: {
       default: '0',
       formProps: {
@@ -210,7 +234,12 @@ export default class Radio extends Component {
           key="1"
           className="fl label"
           mode={mode}
+          order={this.props.order}
           labelKey={config.id}
+          editor={config.editor}
+          form_id={config.form_id}
+          rteUploadHandler={this.props.rteUploadHandler}
+          question_id={config.id}
           dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
@@ -220,6 +249,9 @@ export default class Radio extends Component {
           <EditableList
             config={config}
             mode={mode}
+            rteUploadHandler={this.props.rteUploadHandler}
+            editorForOptions={config.editorForOptions}
+            order={this.props.order}
             options={options}
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
@@ -279,16 +311,14 @@ export default class Radio extends Component {
       ]
     } else {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />,
+        <div key="1" className="fl label">
+          <span
+            dataplaceholder="Type a question"
+            spellCheck="false"
+            dangerouslySetInnerHTML={{
+              __html: config.label
+            }}></span>
+        </div>,
         <div key="2" className="fl input">
           <ul>
             {config.options.map((item, key) => {
@@ -303,9 +333,8 @@ export default class Radio extends Component {
                     checked={config.value === item}></input>
                   <label
                     className="radio-label"
-                    htmlFor={`q_${config.id}_${key}`}>
-                    {item}
-                  </label>
+                    htmlFor={`q_${config.id}_${key}`}
+                    dangerouslySetInnerHTML={{ __html: item }}></label>
                   <div className="check">
                     <div className="inside"></div>
                   </div>

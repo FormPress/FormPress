@@ -84,6 +84,10 @@
   width: 100%;
 }
 
+.hidden {
+  display: none !important;
+}
+
 #qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
   display: none !important;
 }
@@ -109,6 +113,10 @@
 }
 
 #qc_countriesType.elementHider + #qc_defaultCountry.elementDropdown {
+  display: none !important;
+}
+
+#qc_editor.elementHider + #qc_correctAnswer.elementTextArea {
   display: none !important;
 }
 

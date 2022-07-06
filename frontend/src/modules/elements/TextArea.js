@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Editor } from '@tinymce/tinymce-react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
@@ -54,6 +55,9 @@ export default class TextArea extends Component {
       if (config.id === 'prefixOptions' && Array.isArray(config.value)) {
         inputProps.value = config.value.join('\n')
       }
+      if (config.id === 'correctAnswer') {
+        inputProps.value = config.value
+      }
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -74,6 +78,8 @@ export default class TextArea extends Component {
           className="fl label"
           dataPlaceholder="Type a question"
           mode={mode}
+          form_id={config.form_id}
+          question_id={config.id}
           labelKey={config.id}
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
@@ -86,6 +92,36 @@ export default class TextArea extends Component {
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
                 {...inputProps}></textarea>
+            ) : config.id === 'correctAnswer' ? (
+              <div>
+                <textarea
+                  id={`q_${config.id}`}
+                  name={`q_${config.id}`}
+                  className="hidden"
+                  {...inputProps}></textarea>
+                <Editor
+                  apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+                  value={config.value}
+                  init={{
+                    plugins: 'link image code',
+                    menubar: 'edit insert format',
+                    toolbar:
+                      'undo redo | formatselect | ' +
+                      'bold italic forecolor | image ',
+                    file_picker_types: 'image',
+                    automatic_uploads: true,
+                    image_dimensions: true,
+                    images_file_types: 'jpg,svg,png,jpeg',
+                    images_upload_handler: this.props.rteUploadHandler,
+                    resize: false,
+                    paste_block_drop: true,
+                    paste_data_images: false
+                  }}
+                  onEditorChange={(newValue) => {
+                    inputProps.onChange(newValue)
+                  }}
+                />
+              </div>
             ) : (
               <textarea
                 id={`q_${config.id}`}
