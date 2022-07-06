@@ -54,13 +54,15 @@ export default function EditableLabel(props) {
   }
 
   if (props.editor === true) {
+    extraProps.className += ' rteContainer'
+    extraProps.contentEditable = false
     if (typeof props.labelKey === 'string') {
       order = props.order + '_' + props.labelKey
     } else {
       order = props.order
     }
     return (
-      <div {...extraProps} suppressContentEditableWarning={true}>
+      <div {...extraProps}>
         <Editor
           key={order}
           apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"

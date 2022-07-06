@@ -25,17 +25,18 @@
   content: ' *';
   color: red;
   position: absolute;
-  top: 15px;
-  right: 20px;
+  top: 10px;
+  left: 6px;
+  font-size: 22px;
   z-index: 1;
 }
 
-.elementRadio li > [contentEditable='true'] {
+.elementRadio li > .rteContainer {
   width: calc(100% - 23px);
   display: inline-flex;
 }
 
-.elementRadio [contentEditable='true']:focus-visible {
+.elementRadio .rteContainer:focus-visible {
   outline: none;
 }
 
