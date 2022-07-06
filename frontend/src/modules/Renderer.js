@@ -118,9 +118,6 @@ export default class Renderer extends Component {
             const Component = Elements[elem.type]
             const extraProps = { mode: this.props.mode }
 
-            if (this.props.mode === 'builder') {
-            }
-
             if (typeof this.props.handleFieldChange === 'function') {
               extraProps.onChange = (e) => {
                 this.props.handleFieldChange(elem, e)
