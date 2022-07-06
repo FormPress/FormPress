@@ -116,7 +116,7 @@
   display: none !important;
 }
 
-#qc_editor.elementHider + #qc_correctAnswer.elementTextArea {
+#qc_editor.elementHider + #qc_answerExplanation.elementTextArea {
   display: none !important;
 }
 

@@ -55,7 +55,7 @@ export default class TextArea extends Component {
       if (config.id === 'prefixOptions' && Array.isArray(config.value)) {
         inputProps.value = config.value.join('\n')
       }
-      if (config.id === 'correctAnswer') {
+      if (config.id === 'answerExplanation') {
         inputProps.value = config.value
       }
     }
@@ -92,7 +92,7 @@ export default class TextArea extends Component {
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
                 {...inputProps}></textarea>
-            ) : config.id === 'correctAnswer' ? (
+            ) : config.id === 'answerExplanation' ? (
               <div>
                 <textarea
                   id={`q_${config.id}`}

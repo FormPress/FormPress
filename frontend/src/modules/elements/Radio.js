@@ -147,12 +147,13 @@ export default class Radio extends Component {
         options: ['Use rich text editor for question']
       }
     },
-    correctAnswer: {
+    answerExplanation: {
       default: '',
       formProps: {
         type: 'TextArea',
         editor: true,
-        label: 'Correct Answer'
+        placeholder: 'Please enter an answer explanation',
+        label: 'Answer Explanation'
       }
     },
     editorForOptions: {
@@ -168,15 +169,8 @@ export default class Radio extends Component {
       formProps: {
         type: 'Dropdown',
         options: [{ value: 0, display: 'New Radio' }],
-        label: 'Expected Answer'
-      }
-    },
-    answerExplanation: {
-      default: '',
-      formProps: {
-        type: 'TextArea',
-        placeholder: 'Please enter an answer explanation',
-        label: 'Answer Explanation'
+        label: 'Expected Answer',
+        placeholder: 'Please select an answer'
       }
     }
   }

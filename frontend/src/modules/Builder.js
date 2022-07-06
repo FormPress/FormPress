@@ -1142,7 +1142,7 @@ class Builder extends Component {
             (option, index) => {
               return {
                 value: index,
-                display: option
+                display: option.replace(/<(?:.|\n)*?>/gm, '')
               }
             }
           )

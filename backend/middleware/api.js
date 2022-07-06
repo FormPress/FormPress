@@ -200,6 +200,10 @@ module.exports = (app) => {
         form = regularForm
       }
 
+      if (form.autoPageBreak) {
+        form.autoPageBreak.active = false
+      }
+
       const questions = (form.props.elements = form.props.elements.filter(
         (elem) => elem.type === 'Radio'
       ))

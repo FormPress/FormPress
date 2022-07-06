@@ -107,12 +107,14 @@ export default function EditableLabel(props) {
         className={props.value === '' ? 'emptySpan' : null}
         {...extraProps}>
         {props.value
-          .replace(/<span(.*?)>(.*?)<\/span>/, '')
-          .replace(/&nbsp;/g, ' ')
-          .replace(/&amp;/g, ' ')
-          .replace(/(<([^>]+)>)/gi, '')
-          .trim()
-          .substr(0, limit)}
+          ? props.value
+              .replace(/<span(.*?)>(.*?)<\/span>/, '')
+              .replace(/&nbsp;/g, ' ')
+              .replace(/&amp;/g, ' ')
+              .replace(/(<([^>]+)>)/gi, '')
+              .trim()
+              .substr(0, limit)
+          : ''}
       </span>
     </div>
   )
