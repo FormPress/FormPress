@@ -307,7 +307,9 @@ export default class Radio extends Component {
       display = [
         <div key="1" className="fl label">
           <span
+            className={config.required ? 'required' : ''}
             dataplaceholder="Type a question"
+            editor={config.editor ? 'true' : 'false'}
             spellCheck="false"
             dangerouslySetInnerHTML={{
               __html: config.label
