@@ -61,3 +61,7 @@
   width: 5.7rem;
   overflow-wrap: break-word;
 }
+
+.autoPB > .action {
+  display: none !important;
+}

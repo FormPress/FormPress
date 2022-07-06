@@ -160,7 +160,7 @@
   display: none;
 }
 
-label[for='q_5_1']::after {
+.formProperties label[for='q_5_1']::after {
   content: 'BETA';
   padding: 2px;
   font-size: 8pt;

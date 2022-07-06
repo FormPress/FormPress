@@ -64,7 +64,7 @@ export default class Renderer extends Component {
 
       const formElementsPerPage = parseInt(autoPageBreak.elemPerPage) || 0
 
-      let pageBreakId = this.props.form.props.elements.length - 1
+      let pageBreakId = this.props.form.props.elements.length
       let elemCounter = 0
 
       if (formElementsPerPage > 0) {
