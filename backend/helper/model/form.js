@@ -1,6 +1,7 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
 const { hydrateForm, dehydrateForm } = require('../formhydration')
+const { v4 } = require('uuid')
 
 exports.delete = async ({ form_id }) => {
   const db = await getPool()
@@ -16,9 +17,9 @@ exports.get = async ({ form_id }) => {
   const db = await getPool()
   const result = await db.query(
     `
-      SELECT * FROM \`form\` WHERE id = ? AND deleted_at IS NULL LIMIT 1
+      SELECT * FROM \`form\` WHERE id = ? OR uuid = ? AND deleted_at IS NULL LIMIT 1
     `,
-    [form_id]
+    [form_id, form_id]
   )
 
   if (result.length === 0) {
@@ -34,11 +35,11 @@ exports.create = async ({ user_id, form }) => {
   return await db.query(
     `
           INSERT INTO \`form\`
-            (user_id, title, props, private, published_version, created_at)
+            (uuid, user_id, title, props, private, published_version, created_at)
           VALUES
-            (?, ?, ?, ?, 0, NOW())
+            (?, ?, ?, ?, ?, 0, NOW())
         `,
-    [user_id, form.title, form.props, form.private]
+    [v4(), user_id, form.title, form.props, form.private]
   )
 }
 

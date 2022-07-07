@@ -1,7 +1,8 @@
 module.exports = async (db) => {
   await db.query(`
       ALTER TABLE \`form\`
-      ADD \`private\` tinyint(1) NOT NULL DEFAULT '0';
+      ADD \`private\` tinyint(1) NOT NULL DEFAULT '0',
+      ADD \`uuid\` varchar(256) DEFAULT NULL
     `)
 
   await db.query(`
