@@ -200,8 +200,8 @@ module.exports = (app) => {
         form = regularForm
       }
 
-      if (form.autoPageBreak) {
-        form.autoPageBreak.active = false
+      if (form.props.autoPageBreak !== undefined) {
+        delete form.props.autoPageBreak
       }
 
       const questions = (form.props.elements = form.props.elements.filter(
