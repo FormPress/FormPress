@@ -309,6 +309,10 @@
   word-break: break-all;
 }
 
+.elementRadio > .answerExplanation > details {
+  word-break: break-all;
+}
+
 .gleam .elementName {
   background-color: transparent;
 }
@@ -497,8 +501,8 @@
   text-align: center;
   color: #ffffff;
   position: absolute;
-  left: 4px;
-  top: 2px;
+  left: 9px;
+  top: 6px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
