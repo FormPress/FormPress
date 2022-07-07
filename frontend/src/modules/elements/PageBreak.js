@@ -162,10 +162,7 @@ export default class PageBreak extends Component {
     }
 
     return (
-      <ElementContainer
-        type={config.type}
-        {...this.props}
-        className={config.autoPageBreak ? 'autoPB' : ''}>
+      <ElementContainer type={config.type} {...this.props}>
         <hr className="pagebreak-separator" />
         {display}
         <span className="pagebreak-pageCount">

@@ -217,6 +217,15 @@ class Builder extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
 
+    const autoPageBreakSettings = form.props.autoPageBreak
+    if (autoPageBreakSettings !== undefined) {
+      if (autoPageBreakSettings.active !== undefined) {
+        this.setState({
+          autoPBEnabled: autoPageBreakSettings.active
+        })
+      }
+    }
+
     this.setState({
       loading: false,
       form,
@@ -267,6 +276,10 @@ class Builder extends Component {
     Object.assign(form.props, { autoPageBreak })
 
     this.setState({ form })
+
+    if (key === 'active') {
+      this.setState({ autoPBEnabled: value })
+    }
   }
 
   setCSS(cssProp) {
@@ -336,7 +349,8 @@ class Builder extends Component {
           },
           tags: []
         }
-      }
+      },
+      autoPBEnabled: false
     }
     //this.handleClick = this.handleClick.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
@@ -1169,31 +1183,52 @@ class Builder extends Component {
                 .filter((elem) => this.removeUnavailableElems(elem))
                 .map((elem) =>
                   permission[elem.type] ? (
-                    <div
-                      className="element"
-                      draggable
-                      onDragStart={this.handleDragStart.bind(this, elem)}
-                      onDragEnd={this.handleDragEnd}
-                      key={elem.type}>
-                      <span className="element-picker-icon-wrapper">
-                        <FontAwesomeIcon
-                          icon={elem.icon}
-                          className="element-picker-icon"
-                        />
-                      </span>
-                      <span className="element-picker-text">
-                        {elem.displayText}
-                      </span>
-                      <span className="add-element-button">
-                        <FontAwesomeIcon
-                          icon={faPlusCircle}
-                          title="Add Field"
-                          onClick={() =>
-                            this.handleAddFormElementClick(elem.type)
-                          }
-                        />
-                      </span>
-                    </div>
+                    elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
+                      <div className="element disabled-element" key={elem.type}>
+                        <span className="element-picker-icon-wrapper">
+                          <FontAwesomeIcon
+                            icon={elem.icon}
+                            className="element-picker-icon"
+                          />
+                        </span>
+                        <span className="element-picker-text">
+                          {elem.displayText}
+                        </span>
+                        <span className="planover-container">
+                          <FontAwesomeIcon icon={faQuestionCircle} />
+                          <div className="popoverText">
+                            Auto Page Break is enabled. Please disable it in
+                            form properties to add manual page breaks.
+                          </div>
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className="element"
+                        draggable
+                        onDragStart={this.handleDragStart.bind(this, elem)}
+                        onDragEnd={this.handleDragEnd}
+                        key={elem.type}>
+                        <span className="element-picker-icon-wrapper">
+                          <FontAwesomeIcon
+                            icon={elem.icon}
+                            className="element-picker-icon"
+                          />
+                        </span>
+                        <span className="element-picker-text">
+                          {elem.displayText}
+                        </span>
+                        <span className="add-element-button">
+                          <FontAwesomeIcon
+                            icon={faPlusCircle}
+                            title="Add Field"
+                            onClick={() =>
+                              this.handleAddFormElementClick(elem.type)
+                            }
+                          />
+                        </span>
+                      </div>
+                    )
                   ) : (
                     <div className="element disabled-element" key={elem.type}>
                       <span className="element-picker-icon-wrapper">
@@ -1401,7 +1436,7 @@ class Builder extends Component {
             mode="builder"
           />
         )}
-        {form.props.elements.length > 0 ? (
+        {form.props.elements.length > 0 && !this.state.autoPBEnabled ? (
           <div
             onClick={this.handleAddNewPage}
             className="pagebreak-new-placeholder">

@@ -64,7 +64,7 @@ export default class Renderer extends Component {
 
       const formElementsPerPage = parseInt(autoPageBreak.elemPerPage) || 0
 
-      let pageBreakId = this.props.form.props.elements.length
+      let pageBreakId = 0
       let elemCounter = 0
 
       if (formElementsPerPage > 0) {
@@ -77,7 +77,7 @@ export default class Renderer extends Component {
           if (elemCounter === formElementsPerPage) {
             pageBreakId++
             formElements.push({
-              id: pageBreakId,
+              id: `autoPB_${pageBreakId}`,
               type: 'PageBreak',
               nextButtonText: autoPageBreak.nextButtonText || 'Next',
               previousButtonText: autoPageBreak.prevButtonText || 'Previous',
