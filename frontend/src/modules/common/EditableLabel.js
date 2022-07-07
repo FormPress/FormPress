@@ -107,17 +107,18 @@ export default function EditableLabel(props) {
         spellCheck={false}
         suppressContentEditableWarning={true}
         className={props.value === '' ? 'emptySpan' : null}
-        {...extraProps}>
-        {props.value
-          ? props.value
-              .replace(/<span(.*?)>(.*?)<\/span>/, '')
-              .replace(/&nbsp;/g, ' ')
-              .replace(/&amp;/g, ' ')
-              .replace(/(<([^>]+)>)/gi, '')
-              .trim()
-              .substr(0, limit)
-          : ''}
-      </span>
+        {...extraProps}
+        dangerouslySetInnerHTML={{
+          __html: props.value
+            ? props.value
+                .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&amp;/g, ' ')
+                .replace(/(<([^>]+)>)/gi, '')
+                .trim()
+                .substr(0, limit)
+            : ''
+        }}></span>
     </div>
   )
 }
