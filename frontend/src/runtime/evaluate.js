@@ -15,8 +15,6 @@
     const questionContainer = document.getElementById(`qc_${question.id}`)
     const choices = questionContainer.getElementsByTagName('li')
 
-    const expectedAnswerIndex = parseInt(question.expectedAnswer)
-
     const answer = elem.value.find((answer) => answer.value === 'checked')
     let answerIsWrong = false
 
@@ -25,33 +23,44 @@
       const answerInput = document.getElementById(
         `q_${question.id}_${answerIndex}`
       )
-      answerIsWrong = expectedAnswerIndex !== answerIndex
       answerInput.checked = true
 
-      if (answerIsWrong) {
-        wrongAnswers++
-        choices[expectedAnswerIndex].classList.add('expected')
-        choices[answerIndex].classList.add('wrong')
-      } else {
-        correctAnswers++
-        choices[expectedAnswerIndex].classList.add('correct')
+      if (question.expectedAnswer !== '') {
+        const expectedAnswerIndex = parseInt(question.expectedAnswer)
+        answerIsWrong = expectedAnswerIndex !== answerIndex
+
+        if (answerIsWrong) {
+          wrongAnswers++
+          choices[expectedAnswerIndex].classList.add('expected')
+          choices[answerIndex].classList.add('wrong')
+        } else {
+          correctAnswers++
+          choices[expectedAnswerIndex].classList.add('correct')
+        }
       }
     } else {
       emptyAnswers++
-      choices[expectedAnswerIndex].classList.add('expected')
+      if (question.expectedAnswer !== '') {
+        const expectedAnswerIndex = parseInt(question.expectedAnswer)
+        choices[expectedAnswerIndex].classList.add('expected')
+      }
     }
 
     // the part below is for populating the textarea with the answer
-    const answerLabel = document.getElementById(`q_${question.id}_answerLabel`)
-    answerLabel.innerHTML = question.answerLabelText
-      ? question.answerLabelText
-      : 'Click to see answer explanation'
+    if (question.answerLabelText) {
+      const answerLabel = document.getElementById(
+        `q_${question.id}_answerLabel`
+      )
+      answerLabel.innerHTML = question.answerLabelText
+    }
 
-    const answerExplanation = document.getElementById(
-      `q_${question.id}_answerExplanation`
-    )
-    answerExplanation.innerHTML = question.answerExplanation
-    answerExplanation.classList.remove('dn')
+    if (question.answerExplanation) {
+      const answerExplanation = document.getElementById(
+        `q_${question.id}_answerExplanation`
+      )
+      answerExplanation.innerHTML = question.answerExplanation
+      answerExplanation.classList.remove('dn')
+    }
     // details element of the question
     questionContainer.getElementsByTagName('details')[0].open = answerIsWrong
   })

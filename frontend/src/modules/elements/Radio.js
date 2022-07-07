@@ -156,12 +156,12 @@ export default class Radio extends Component {
       }
     },
     expectedAnswer: {
-      default: '0',
+      default: '',
       formProps: {
         type: 'Dropdown',
         options: [{ value: 0, display: 'New Radio' }],
         label: 'Expected Answer',
-        placeholder: 'Please select an answer'
+        placeholder: 'None'
       }
     },
     answerExplanation: {

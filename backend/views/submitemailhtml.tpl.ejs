@@ -80,7 +80,7 @@
         responselist.forEach (function (response) {%>
           <div>
             <div style=" color: #113952; font-weight: bold; font-size: 16px; width: 90%; padding: 10px 10px 10px 30px;">
-              <%= response.question%>
+              <%- response.question%>
             </div>
             <% if (response.type === 'Name') {
               for (const [key, value] of Object.entries(response.answer)) {%>
@@ -129,7 +129,7 @@
               </div>
            <% } else {%>
               <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                <%=response.answer%>
+                <%- response.answer %>
               </div>
             <%}%>
           </div>
