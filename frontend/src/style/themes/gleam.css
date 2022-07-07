@@ -21,6 +21,9 @@
   background-color: #ffbebb;
   border-radius: 3px;
 }
+.gleam.form > .element.requiredError > span {
+  background-color: #ffbebb !important;
+}
 
 .gleam.form > .element.invalidError > .input > input {
   border-radius: 5px;
