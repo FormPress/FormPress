@@ -315,6 +315,7 @@ class Builder extends Component {
       sortItem: false,
       insertBefore: false,
       selectedFieldId: false,
+      selectedLabelId: false,
       publishedForm: {},
       savedForm: {},
       form: {
@@ -381,6 +382,7 @@ class Builder extends Component {
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
     this.rteUploadHandler = this.rteUploadHandler.bind(this)
+    this.handleLabelClick = this.handleLabelClick.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -836,15 +838,6 @@ class Builder extends Component {
         dragging: false,
         selectedFieldId: questionId
       })
-      const allElemNodes = document.querySelectorAll('[id^="qc_"]')
-      allElemNodes.forEach((node) => {
-        node.classList.remove('selected')
-      })
-
-      const selectedElemNodes = document.querySelectorAll(`[id^="qc_${id}"]`)
-      selectedElemNodes.forEach((node) => {
-        node.classList.add('selected')
-      })
     }
   }
 
@@ -866,12 +859,16 @@ class Builder extends Component {
   handleUnselectElement() {
     const { location } = this.props.history
 
-    if (location.pathname.endsWith('/builder')) {
-      var nodeList = document.querySelectorAll('[id^="qc_"]')
-      nodeList.forEach((node) => {
-        node.classList.remove('selected')
-      })
+    if (
+      location.pathname.endsWith('/builder') &&
+      this.state.selectedFieldId !== undefined
+    ) {
+      this.setState({ selectedFieldId: undefined })
     }
+  }
+
+  handleLabelClick(labelId) {
+    this.setState({ selectedLabelId: labelId })
   }
 
   async handleSaveClick() {
@@ -1425,6 +1422,7 @@ class Builder extends Component {
             rteUploadHandler={this.rteUploadHandler}
             draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
+            handleLabelClick={this.handleLabelClick}
             configureQuestion={this.configureQuestion}
             dragIndex={this.state.dragIndex}
             dragging={dragging}
@@ -1432,7 +1430,8 @@ class Builder extends Component {
             sortItem={sortItem}
             insertBefore={this.state.insertBefore}
             form={form}
-            selectedFieldId={selectedFieldId}
+            selectedField={selectedFieldId}
+            selectedLabelId={this.state.selectedLabelId}
             mode="builder"
           />
         )}

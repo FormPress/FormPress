@@ -26,6 +26,10 @@ export default function EditableLabel(props) {
     props.handleLabelChange(props.labelKey, e.target.innerText)
   }
 
+  function handleOnClick() {
+    props.handleLabelClick(props.labelKey)
+  }
+
   function handleOnKeyDown(e) {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -51,6 +55,10 @@ export default function EditableLabel(props) {
 
   if (props.required === true) {
     extraProps.className = 'required'
+  }
+
+  if (props.handleLabelClick !== undefined) {
+    extraProps.onClick = handleOnClick.bind(this)
   }
 
   if (props.editor === true) {
@@ -81,12 +89,6 @@ export default function EditableLabel(props) {
             paste_block_drop: true,
             paste_data_images: false
           }}
-          onClick={() => {
-            const elem = document
-              .getElementById(window.tinyMCE.activeEditor.id)
-              .closest('.element')
-            if (!elem.classList.contains('selected')) elem.click()
-          }}
           onEditorChange={(newValue) => {
             if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
             props.handleLabelChange(props.labelKey, newValue)
@@ -105,19 +107,12 @@ export default function EditableLabel(props) {
         onPaste={handleOnPaste.bind(this)}
         dataplaceholder={props.dataPlaceholder}
         spellCheck={false}
+        labelkey={props.labelKey}
         suppressContentEditableWarning={true}
         className={props.value === '' ? 'emptySpan' : null}
         {...extraProps}
         dangerouslySetInnerHTML={{
-          __html: props.value
-            ? props.value
-                .replace(/<span(.*?)>(.*?)<\/span>/, '')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/&amp;/g, ' ')
-                .replace(/(<([^>]+)>)/gi, '')
-                .trim()
-                .substr(0, limit)
-            : ''
+          __html: props.value ? props.value : ''
         }}></span>
     </div>
   )

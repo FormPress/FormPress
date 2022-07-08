@@ -206,7 +206,7 @@ export default class Radio extends Component {
   }
 
   render() {
-    const { config, mode } = this.props
+    const { config, mode, selectedLabelId, selectedField } = this.props
     const { isDetailOpen } = this.state
 
     const options =
@@ -230,12 +230,17 @@ export default class Radio extends Component {
           mode={mode}
           order={this.props.order}
           labelKey={config.id}
-          editor={config.editor}
+          editor={
+            config.editor &&
+            selectedField === config.id &&
+            selectedLabelId === config.id
+          }
           form_id={config.form_id}
           rteUploadHandler={this.props.rteUploadHandler}
           question_id={config.id}
           dataPlaceholder="Type a question"
           handleLabelChange={this.props.handleLabelChange}
+          handleLabelClick={this.props.handleLabelClick}
           value={config.label}
           required={config.required}
         />,
@@ -244,13 +249,17 @@ export default class Radio extends Component {
             config={config}
             mode={mode}
             rteUploadHandler={this.props.rteUploadHandler}
-            editorForOptions={config.editorForOptions}
+            editorForOptions={
+              config.editorForOptions && selectedField === config.id
+            }
             order={this.props.order}
             options={options}
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             handleLabelChange={this.props.handleLabelChange}
+            handleLabelClick={this.props.handleLabelClick}
             customBuilderHandlers={this.props.customBuilderHandlers}
+            selectedLabelId={selectedLabelId}
           />
         </div>,
         <div className="clearfix" key="3">
@@ -260,6 +269,7 @@ export default class Radio extends Component {
             mode={mode}
             labelKey={`sub_${config.id}`}
             handleLabelChange={this.props.handleLabelChange}
+            handleLabelClick={this.props.handleLabelClick}
             value={
               typeof config.sublabelText !== 'undefined' &&
               config.sublabelText !== ''
