@@ -161,12 +161,31 @@ export default class PageBreak extends Component {
       }
     }
 
+    const options = []
+    for (let i = 1; i <= parseInt(config.maxPages); i++) {
+      options.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      )
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <hr className="pagebreak-separator" />
         {display}
         <span className="pagebreak-pageCount">
-          {config.pageNumber}/{config.maxPages}
+          <span className="currentPageSelector">
+            <select
+              className="currentPageSelector-select"
+              data-currentpage={config.pageNumber}
+              value={config.pageNumber}>
+              {options}
+            </select>
+            &nbsp;
+          </span>
+          /&nbsp;
+          {config.maxPages}
         </span>
       </ElementContainer>
     )

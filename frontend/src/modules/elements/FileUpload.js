@@ -112,7 +112,9 @@ export default class FileUpload extends Component {
             Browse...
           </label>
           {display}
-          <span id={'fileDisplay_' + config.id}>No File Chosen</span>
+          <span id={'fileDisplay_' + config.id} className="fileDisplay">
+            No File Chosen
+          </span>
         </div>
         <div className="clearfix">
           <EditableLabel
