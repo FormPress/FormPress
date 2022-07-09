@@ -14,9 +14,11 @@ export default class Renderer extends Component {
       configureQuestion,
       builderHandlers,
       handleLabelChange,
+      handleLabelClick,
       handleAddingItem,
       handleDeletingItem,
       selectedField,
+      selectedLabelId,
       theme,
       allowInternal
     } = this.props
@@ -178,6 +180,10 @@ export default class Renderer extends Component {
               extraProps.className = 'dn'
             }
 
+            if (elem.id === selectedField) {
+              extraProps.className = 'selected'
+            }
+
             // conditionally hide elements for QuestionProperties page
             if (elem.id === 'required') {
               if (elem.value === false) {
@@ -225,10 +231,12 @@ export default class Renderer extends Component {
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}
                 handleLabelChange={handleLabelChange}
+                handleLabelClick={handleLabelClick}
                 handleAddingItem={handleAddingItem}
                 handleDeletingItem={handleDeletingItem}
                 configureQuestion={configureQuestion}
                 selectedField={selectedField}
+                selectedLabelId={selectedLabelId}
                 {...extraProps}
               />
             ]

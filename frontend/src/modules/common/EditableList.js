@@ -38,7 +38,13 @@ class EditableList extends Component {
   }
 
   render() {
-    const { config, mode, options, customBuilderHandlers } = this.props
+    const {
+      config,
+      mode,
+      options,
+      customBuilderHandlers,
+      selectedLabelId
+    } = this.props
 
     if (config.type === 'Checkbox') {
       const display = [
@@ -168,11 +174,15 @@ class EditableList extends Component {
                   question_id={config.id}
                   rteUploadHandler={this.props.rteUploadHandler}
                   order={this.props.order}
-                  editor={this.props.editorForOptions}
+                  editor={
+                    this.props.editorForOptions &&
+                    selectedLabelId === `s_${config.id}_${key}`
+                  }
                   dataPlaceholder="Type an option"
                   labelKey={`s_${config.id}_${key}`}
                   htmlFor={`q_${config.id}_${key}`}
                   handleLabelChange={this.props.handleLabelChange}
+                  handleLabelClick={this.props.handleLabelClick}
                   value={item}
                 />
                 <div className="action">

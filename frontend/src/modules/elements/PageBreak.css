@@ -26,7 +26,12 @@
 
 .pagebreak-pageCount {
   text-align: center;
-  color: #c4bfbf;
+  margin-top: 1rem;
+}
+
+.currentPageSelector > .currentPageSelector-select {
+  text-align: right;
+  width: min-content !important;
 }
 
 .pb-next {
