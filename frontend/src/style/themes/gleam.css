@@ -1001,7 +1001,6 @@ ul li.expected {
   top: 0;
   z-index: 200;
   font-family: 'Montserrat';
-  font-size: 1vw;
 }
 .results-header > .r-header-section {
   width: 33%;
@@ -1076,9 +1075,6 @@ ul li.expected {
   color: #d75454;
 }
 
-.results-header > .testResults > .rightHand > .rhContent > #percentageScore {
-  font-size: 1.3vw;
-}
 .results-header
   > .testResults
   > .rightHand
@@ -1088,7 +1084,6 @@ ul li.expected {
   color: black;
   font-family: 'Montserrat';
   font-weight: 600;
-  font-size: 0.8vw;
 }
 
 .results-header

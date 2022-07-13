@@ -5,6 +5,10 @@ export default function EditableLabel(props) {
   let limit = 256,
     order = 0
 
+  if (typeof props.limit !== 'undefined') {
+    limit = props.limit
+  }
+
   function handleOnInput(e) {
     const text = e.target.innerText
 

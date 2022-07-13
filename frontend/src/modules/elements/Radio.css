@@ -111,6 +111,7 @@
   height: fit-content;
   top: -45px;
   left: -165px;
+  word-break: break-word;
 }
 
 .elementRadio > .metadata.answerExplanationContainer {

@@ -243,6 +243,7 @@ export default class Radio extends Component {
           handleLabelClick={this.props.handleLabelClick}
           value={config.label}
           required={config.required}
+          limit={2000}
         />,
         <div key="2" className="fl input">
           <EditableList

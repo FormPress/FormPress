@@ -184,6 +184,7 @@ class EditableList extends Component {
                   handleLabelChange={this.props.handleLabelChange}
                   handleLabelClick={this.props.handleLabelClick}
                   value={item}
+                  limit={2000}
                 />
                 <div className="action">
                   <div className="popover-container">
