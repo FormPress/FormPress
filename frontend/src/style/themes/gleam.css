@@ -21,6 +21,9 @@
   background-color: #ffbebb;
   border-radius: 3px;
 }
+.gleam.form > .element.requiredError > span {
+  background-color: #ffbebb !important;
+}
 
 .gleam.form > .element.invalidError > .input > input {
   border-radius: 5px;
@@ -30,6 +33,13 @@
 .label span.required:after {
   content: ' *';
   color: red;
+  position: absolute;
+  left: 5px;
+  font-size: 20px;
+}
+
+.label span.required[editor='true']:after {
+  margin-top: -30px;
 }
 
 .gleam.form .element > .label {
@@ -298,6 +308,14 @@
   color: #8cc63f;
 }
 
+.elementRadio > .answerExplanationContainer > details {
+  word-break: break-all;
+}
+
+.elementRadio > .answerExplanation > details {
+  word-break: break-all;
+}
+
 .gleam .elementName {
   background-color: transparent;
 }
@@ -314,6 +332,11 @@
 .gleam .elementFileUpload {
   background-color: transparent;
 }
+
+.elementFileUpload > .inputContainer > .fileDisplay {
+  word-break: break-all;
+}
+
 .gleam .elementButton input[type='submit'],
 .gleam .elementButton input[type='submit']:focus,
 .elementButton button,
@@ -348,6 +371,7 @@
   position: relative;
   width: 100%;
   margin-bottom: 10px;
+  padding: 6px;
 }
 
 .builder.gleam .elementCheckbox .input .checkbox-label {
@@ -395,6 +419,10 @@
   display: inline-block;
   word-break: break-all;
   white-space: break-spaces;
+}
+
+.renderer.gleam.form .elementRadio .input .radio-label p {
+  margin: 0;
 }
 
 .gleam.form
@@ -481,8 +509,8 @@
   text-align: center;
   color: #ffffff;
   position: absolute;
-  left: 4px;
-  top: 2px;
+  left: 9px;
+  top: 6px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
@@ -646,6 +674,16 @@
   .branding > img {
     width: auto;
     margin: auto;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .renderer.gleam .elementNetPromoterScore ul {
+    padding: 0 !important;
+  }
+  .renderer.gleam .elementNetPromoterScore ul li label {
+    width: 30px !important;
+    margin: 0 1px !important;
   }
 }
 
@@ -848,7 +886,11 @@ input[type='file'] {
 
 .renderer.gleam .pagebreak-pageCount {
   text-align: center;
-  color: #c4bfbf;
+  margin-top: 1rem;
+}
+.currentPageSelector > .currentPageSelector-select {
+  text-align: right;
+  width: min-content !important;
 }
 
 .renderer.gleam .pagebreak-next {
@@ -931,3 +973,151 @@ input[type='file'] {
   box-sizing: border-box;
   margin-left: 5px;
 }
+
+/* PART BELOW IS ABOUT EXAM EVALUATION PAGE */
+ul li.correct > label::after {
+  content: ' \2713';
+  display: inline-block;
+  color: #7fcc0a;
+  padding: 0 6px 0 0;
+}
+
+ul li.wrong {
+  background-color: palevioletred;
+  border-radius: 4px;
+}
+
+ul li.expected {
+  background-color: lightgreen;
+  border-radius: 4px;
+}
+
+.results-header {
+  background: white;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  font-family: 'Montserrat';
+}
+.results-header > .r-header-section {
+  width: 33%;
+  float: left;
+  display: block;
+  border-right: 1px solid #eee;
+}
+
+.results-header > .userData {
+  display: block;
+  padding: 1rem;
+  color: #113952;
+}
+.results-header > .userData .completion-date > #completionDate,
+.results-header > .userData .completion-time > #completionTime {
+  color: black;
+}
+
+.results-header > .formInfo {
+  padding: 1.5rem;
+  text-align: center;
+  color: #0071bc;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.results-header > .testResults {
+  padding: 0.4rem;
+}
+
+.results-header > .testResults > .leftHand {
+  width: 50%;
+  float: left;
+}
+.results-header > .testResults > .rightHand {
+  width: 45%;
+  float: right;
+  padding: 0.25rem 0.2rem;
+  text-align: center;
+  border-left: 1px solid #eee;
+  margin-left: 10px;
+  height: 100%;
+}
+
+.results-header > .testResults > .leftHand > .lhContent,
+.results-header > .testResults > .rightHand > .rhContent {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.results-header > .testResults > .leftHand > .lhContent > .question-info-row,
+.results-header > .testResults > .leftHand > .lhContent > .answer-info-row {
+  color: #113952;
+}
+.results-header
+  > .testResults
+  > .leftHand
+  > .lhContent
+  > .answer-info-row
+  > #correctAnswers {
+  color: #6dd76d;
+}
+.results-header
+  > .testResults
+  > .leftHand
+  > .lhContent
+  > .answer-info-row
+  > #wrongAnswers {
+  color: #d75454;
+}
+
+.results-header
+  > .testResults
+  > .rightHand
+  > .rhContent
+  > #percentageScore::after {
+  content: '%';
+  color: black;
+  font-family: 'Montserrat';
+  font-weight: 600;
+}
+
+.results-header
+  > .testResults
+  > .leftHand
+  > .lhContent
+  > .question-info-row
+  > .total-question-count {
+  font-weight: bold;
+  color: #0071bc;
+}
+
+.fp-powered {
+  display: flex;
+  width: 13rem;
+  align-items: center;
+  color: #847e7e;
+  font-size: 9pt;
+  font-weight: bold;
+  font-family: 'Montserrat';
+  padding: 0 0.2rem;
+}
+.fp-powered > a {
+  text-decoration: none;
+}
+
+.fp-powered > a > img {
+  height: 2rem;
+  width: 5.8rem;
+  margin-left: 0.5rem;
+}
+
+fp-powered + div > .form::after {
+  content: none;
+}
+
+/* PART ABOVE IS ABOUT EXAM EVALUATION PAGE*/

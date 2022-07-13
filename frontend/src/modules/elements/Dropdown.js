@@ -137,7 +137,10 @@ export default class Dropdown extends Component {
                 onChange={inputProps.onChange}
                 data-fp-list={config.hasDataset ? config.dataset : ''}>
                 {config.placeholder !== false ? (
-                  <option disabled selected value="">
+                  <option
+                    disabled={config.id !== 'expectedAnswer'}
+                    selected
+                    value="">
                     {config.placeholder}
                   </option>
                 ) : null}
@@ -152,16 +155,17 @@ export default class Dropdown extends Component {
                         </option>
                       )
                     })
-                  : config.id === 'dataset'
+                  : config.options && typeof config.options[0] === 'object'
                   ? options.map((item) => {
                       return (
                         <option
                           className="option-space"
                           key={item.value}
                           value={item.value}
-                          disabled={item.disabled}>
-                          {item.displayText}
-                        </option>
+                          disabled={item.disabled}
+                          dangerouslySetInnerHTML={{
+                            __html: item.display
+                          }}></option>
                       )
                     })
                   : options.map((item, index) => {

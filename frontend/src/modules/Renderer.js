@@ -14,9 +14,11 @@ export default class Renderer extends Component {
       configureQuestion,
       builderHandlers,
       handleLabelChange,
+      handleLabelClick,
       handleAddingItem,
       handleDeletingItem,
       selectedField,
+      selectedLabelId,
       theme,
       allowInternal
     } = this.props
@@ -50,17 +52,64 @@ export default class Renderer extends Component {
       )
     }
 
+    let formElements = []
+    let autoPageBreakEnabled = false
+
+    const { autoPageBreak } = this.props.form.props
+
+    if (
+      autoPageBreak &&
+      autoPageBreak.active &&
+      autoPageBreak.elemPerPage > 0
+    ) {
+      autoPageBreakEnabled = true
+
+      const formElementsPerPage = parseInt(autoPageBreak.elemPerPage) || 0
+
+      let pageBreakId = 0
+      let elemCounter = 0
+
+      if (formElementsPerPage > 0) {
+        this.props.form.props.elements.forEach((element) => {
+          // if element is a page break, ignore it
+          if (element.type === 'PageBreak') {
+            return
+          }
+
+          if (elemCounter === formElementsPerPage) {
+            pageBreakId++
+            formElements.push({
+              id: `autoPB_${pageBreakId}`,
+              type: 'PageBreak',
+              nextButtonText: autoPageBreak.nextButtonText || 'Next',
+              previousButtonText: autoPageBreak.prevButtonText || 'Previous',
+              submitButtonText: autoPageBreak.submitButtonText || 'Submit',
+              style: 'start',
+              autoPageBreak: true
+            })
+            elemCounter = 0
+          }
+          elemCounter++
+          formElements.push(element)
+        })
+      }
+    } else {
+      formElements = this.props.form.props.elements
+    }
+
     // handle multi-page form
     const formPagesCount =
-      this.props.form.props.elements.filter((e) => e.type === 'PageBreak')
-        .length + 1
+      formElements.filter((e) => e.type === 'PageBreak').length + 1
 
     let pages = []
     let page = []
     let pageNumber = 1
     let copiedPageBreak
     let emptyPage = true
-    this.props.form.props.elements.forEach((element) => {
+    formElements.forEach((element, index) => {
+      if (this.props.mode === 'builder') {
+        element.order = index
+      }
       // push copied page break to page
       if (element.type !== 'PageBreak') {
         page.push(element)
@@ -105,6 +154,7 @@ export default class Renderer extends Component {
           className={
             className +
             ` formPage-${index + 1}` +
+            (autoPageBreakEnabled ? ' autoPageBreak' : '') +
             ` ${
               this.props.mode === 'renderer' && index > 0 ? 'form-hidden' : ''
             }`
@@ -128,6 +178,10 @@ export default class Renderer extends Component {
               sortItem.id === elem.id
             ) {
               extraProps.className = 'dn'
+            }
+
+            if (elem.id === selectedField) {
+              extraProps.className = 'selected'
             }
 
             // conditionally hide elements for QuestionProperties page
@@ -171,13 +225,18 @@ export default class Renderer extends Component {
                 key={elem.id}
                 id={elem.id}
                 config={elem}
+                form_id={this.props.form.id}
+                order={elem.order}
+                rteUploadHandler={this.props.rteUploadHandler}
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}
                 handleLabelChange={handleLabelChange}
+                handleLabelClick={handleLabelClick}
                 handleAddingItem={handleAddingItem}
                 handleDeletingItem={handleDeletingItem}
                 configureQuestion={configureQuestion}
                 selectedField={selectedField}
+                selectedLabelId={selectedLabelId}
                 {...extraProps}
               />
             ]

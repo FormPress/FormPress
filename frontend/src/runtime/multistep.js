@@ -1,27 +1,16 @@
-function navigateToNextPage(currentPage, direction) {
-  const nextPage = parseInt(currentPage) + 1
-  const previousPage = parseInt(currentPage) - 1
+function goToPage(currentPage, targetPage) {
+  currentPage = parseInt(currentPage)
+  targetPage = parseInt(targetPage)
 
-  switch (direction) {
-    case 'next':
-      document
-        .getElementsByClassName(`formPage-${currentPage}`)[0]
-        .classList.add('form-hidden')
-      document
-        .getElementsByClassName(`formPage-${nextPage}`)[0]
-        .classList.remove('form-hidden')
-      break
-    case 'previous':
-      document
-        .getElementsByClassName(`formPage-${currentPage}`)[0]
-        .classList.add('form-hidden')
-      document
-        .getElementsByClassName(`formPage-${previousPage}`)[0]
-        .classList.remove('form-hidden')
-      break
-    default:
-      break
-  }
+  document
+    .getElementsByClassName(`formPage-${currentPage}`)[0]
+    .classList.add('form-hidden')
+
+  document
+    .getElementsByClassName(`formPage-${targetPage}`)[0]
+    .classList.remove('form-hidden')
+
+  window.scrollTo(0, 0)
 }
 
 function checkFormPageGoodToGo(currentPage) {
@@ -95,10 +84,26 @@ for (const element of elementsWithCurrentPage) {
 
     if (event.target.classList.contains('pb-next')) {
       if (checkFormPageGoodToGo(currentPage)) {
-        navigateToNextPage(currentPage, 'next')
+        goToPage(currentPage, parseInt(currentPage) + 1)
       }
     } else if (event.target.classList.contains('pb-previous')) {
-      navigateToNextPage(currentPage, 'previous')
+      goToPage(currentPage, parseInt(currentPage) - 1)
+    }
+  })
+}
+
+const pageSelectors = document.getElementsByClassName(
+  'currentPageSelector-select'
+)
+for (const pageSelector of pageSelectors) {
+  pageSelector.addEventListener('change', (event) => {
+    const currentPage = pageSelector.dataset.currentpage
+    const targetPage = event.target.value
+    if (targetPage !== currentPage && checkFormPageGoodToGo(currentPage)) {
+      pageSelector.value = currentPage
+      goToPage(currentPage, targetPage)
+    } else {
+      pageSelector.value = currentPage
     }
   })
 }

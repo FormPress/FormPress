@@ -27,6 +27,8 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
 
+const BACKEND = process.env.REACT_APP_BACKEND
+
 import './Builder.css'
 import '../style/themes/gleam.css'
 
@@ -215,6 +217,15 @@ class Builder extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
     })
 
+    const autoPageBreakSettings = form.props.autoPageBreak
+    if (autoPageBreakSettings !== undefined) {
+      if (autoPageBreakSettings.active !== undefined) {
+        this.setState({
+          autoPBEnabled: autoPageBreakSettings.active
+        })
+      }
+    }
+
     this.setState({
       loading: false,
       form,
@@ -252,6 +263,25 @@ class Builder extends Component {
     this.setState({ form })
   }
 
+  setAutoPageBreak(key, value) {
+    const form = { ...this.state.form }
+    let autoPageBreak = { ...form.props.autoPageBreak }
+
+    if (typeof form.props.autoPageBreak === 'object') {
+      autoPageBreak = cloneDeep(form.props.autoPageBreak)
+    }
+
+    Object.assign(autoPageBreak, { [key]: value })
+
+    Object.assign(form.props, { autoPageBreak })
+
+    this.setState({ form })
+
+    if (key === 'active') {
+      this.setState({ autoPBEnabled: value })
+    }
+  }
+
   setCSS(cssProp) {
     const form = { ...this.state.form }
     form.props.customCSS = cssProp
@@ -285,6 +315,7 @@ class Builder extends Component {
       sortItem: false,
       insertBefore: false,
       selectedFieldId: false,
+      selectedLabelId: false,
       publishedForm: {},
       savedForm: {},
       form: {
@@ -319,7 +350,8 @@ class Builder extends Component {
           },
           tags: []
         }
-      }
+      },
+      autoPBEnabled: false
     }
     //this.handleClick = this.handleClick.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
@@ -340,6 +372,7 @@ class Builder extends Component {
     this.configureQuestion = this.configureQuestion.bind(this)
     this.setCSS = this.setCSS.bind(this)
     this.setFormTags = this.setFormTags.bind(this)
+    this.setAutoPageBreak = this.setAutoPageBreak.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
       this
@@ -348,6 +381,8 @@ class Builder extends Component {
     this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
+    this.rteUploadHandler = this.rteUploadHandler.bind(this)
+    this.handleLabelClick = this.handleLabelClick.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -555,6 +590,8 @@ class Builder extends Component {
         question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'pbButton') {
         question[`${itemID}ButtonText`] = value
+      } else if (id.split('_')[0] === 'radio') {
+        question[`${itemID}Text`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -717,6 +754,55 @@ class Builder extends Component {
     }
   }
 
+  async rteUploadHandler(blobInfo) {
+    return new Promise((success, failure) => {
+      const image_size = blobInfo.blob().size / 1000,
+        max_size = 3000
+      if (image_size > max_size) {
+        failure(
+          'Image is too large ( ' +
+            image_size +
+            ') ,Maximum image size is:' +
+            max_size +
+            ' Kb',
+          { remove: true }
+        )
+        return
+      } else {
+        let xhr, formData
+        xhr = new XMLHttpRequest()
+        xhr.withCredentials = false
+        xhr.open(
+          'POST',
+          `${BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
+        )
+
+        xhr.onload = function () {
+          let json
+
+          if (xhr.status != 200) {
+            alert('HTTP Error: ' + xhr.status)
+            return
+          }
+
+          json = JSON.parse(xhr.responseText)
+
+          if (!json || typeof json.location != 'string') {
+            alert('Invalid JSON: ' + xhr.responseText)
+            return false
+          }
+
+          success(json.location)
+        }
+
+        formData = new FormData()
+        formData.append('file', blobInfo.blob(), blobInfo.filename())
+
+        xhr.send(formData)
+      }
+    })
+  }
+
   handleTitleChange(id, value) {
     const form = { ...this.state.form }
 
@@ -740,7 +826,7 @@ class Builder extends Component {
     }
 
     const { elements } = this.state.form.props
-    let { formId } = this.props.match.params
+    let { formId, questionId } = this.props.match.params
 
     const matchingElements = elements.filter((elem) => elem.id === id)
 
@@ -749,16 +835,8 @@ class Builder extends Component {
         `/editor/${formId}/builder/question/${id}/properties`
       )
       this.setState({
-        dragging: false
-      })
-      const allElemNodes = document.querySelectorAll('[id^="qc_"]')
-      allElemNodes.forEach((node) => {
-        node.classList.remove('selected')
-      })
-
-      const selectedElemNodes = document.querySelectorAll(`[id^="qc_${id}"]`)
-      selectedElemNodes.forEach((node) => {
-        node.classList.add('selected')
+        dragging: false,
+        selectedFieldId: questionId
       })
     }
   }
@@ -781,12 +859,16 @@ class Builder extends Component {
   handleUnselectElement() {
     const { location } = this.props.history
 
-    if (location.pathname.endsWith('/builder')) {
-      var nodeList = document.querySelectorAll('[id^="qc_"]')
-      nodeList.forEach((node) => {
-        node.classList.remove('selected')
-      })
+    if (
+      location.pathname.endsWith('/builder') &&
+      this.state.selectedFieldId !== undefined
+    ) {
+      this.setState({ selectedFieldId: undefined })
     }
+  }
+
+  handleLabelClick(labelId) {
+    this.setState({ selectedLabelId: labelId })
   }
 
   async handleSaveClick() {
@@ -1048,6 +1130,7 @@ class Builder extends Component {
     const { permission } = this.props.auth
     const selectedField = {}
     const { questionId } = params
+
     if (permission.admin) {
       pickerElements.forEach((elem) => {
         permission[elem.type] = true
@@ -1066,6 +1149,19 @@ class Builder extends Component {
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
           elements[selectedFieldConfig.type].configurableSettings || {}
+
+        if (selectedFieldConfig.type === 'Radio') {
+          const expectedAnswer = selectedFieldConfig.options.map(
+            (option, index) => {
+              return {
+                value: index,
+                display: option.replace(/<(?:.|\n)*?>/gm, '')
+              }
+            }
+          )
+
+          selectedField.configurableSettings.expectedAnswer.formProps.options = expectedAnswer
+        }
       } catch (e) {
         questionPropertiesReady = false
       }
@@ -1084,31 +1180,52 @@ class Builder extends Component {
                 .filter((elem) => this.removeUnavailableElems(elem))
                 .map((elem) =>
                   permission[elem.type] ? (
-                    <div
-                      className="element"
-                      draggable
-                      onDragStart={this.handleDragStart.bind(this, elem)}
-                      onDragEnd={this.handleDragEnd}
-                      key={elem.type}>
-                      <span className="element-picker-icon-wrapper">
-                        <FontAwesomeIcon
-                          icon={elem.icon}
-                          className="element-picker-icon"
-                        />
-                      </span>
-                      <span className="element-picker-text">
-                        {elem.displayText}
-                      </span>
-                      <span className="add-element-button">
-                        <FontAwesomeIcon
-                          icon={faPlusCircle}
-                          title="Add Field"
-                          onClick={() =>
-                            this.handleAddFormElementClick(elem.type)
-                          }
-                        />
-                      </span>
-                    </div>
+                    elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
+                      <div className="element disabled-element" key={elem.type}>
+                        <span className="element-picker-icon-wrapper">
+                          <FontAwesomeIcon
+                            icon={elem.icon}
+                            className="element-picker-icon"
+                          />
+                        </span>
+                        <span className="element-picker-text">
+                          {elem.displayText}
+                        </span>
+                        <span className="planover-container">
+                          <FontAwesomeIcon icon={faQuestionCircle} />
+                          <div className="popoverText">
+                            Auto Page Break is enabled. Please disable it in
+                            form properties to add manual page breaks.
+                          </div>
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className="element"
+                        draggable
+                        onDragStart={this.handleDragStart.bind(this, elem)}
+                        onDragEnd={this.handleDragEnd}
+                        key={elem.type}>
+                        <span className="element-picker-icon-wrapper">
+                          <FontAwesomeIcon
+                            icon={elem.icon}
+                            className="element-picker-icon"
+                          />
+                        </span>
+                        <span className="element-picker-text">
+                          {elem.displayText}
+                        </span>
+                        <span className="add-element-button">
+                          <FontAwesomeIcon
+                            icon={faPlusCircle}
+                            title="Add Field"
+                            onClick={() =>
+                              this.handleAddFormElementClick(elem.type)
+                            }
+                          />
+                        </span>
+                      </div>
+                    )
                   ) : (
                     <div className="element disabled-element" key={elem.type}>
                       <span className="element-picker-icon-wrapper">
@@ -1139,11 +1256,13 @@ class Builder extends Component {
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
             setFormTags={this.setFormTags}
+            setAutoPageBreak={this.setAutoPageBreak}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
           {questionPropertiesReady === true ? (
             <QuestionProperties
+              rteUploadHandler={this.rteUploadHandler}
               selectedField={selectedField}
               configureQuestion={this.configureQuestion}
             />
@@ -1300,8 +1419,10 @@ class Builder extends Component {
               handleDragStart: this.handleDragStart,
               handleFormItemMovement: this.handleFormItemMovement
             }}
+            rteUploadHandler={this.rteUploadHandler}
             draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
+            handleLabelClick={this.handleLabelClick}
             configureQuestion={this.configureQuestion}
             dragIndex={this.state.dragIndex}
             dragging={dragging}
@@ -1309,11 +1430,12 @@ class Builder extends Component {
             sortItem={sortItem}
             insertBefore={this.state.insertBefore}
             form={form}
-            selectedFieldId={selectedFieldId}
+            selectedField={selectedFieldId}
+            selectedLabelId={this.state.selectedLabelId}
             mode="builder"
           />
         )}
-        {form.props.elements.length > 0 ? (
+        {form.props.elements.length > 0 && !this.state.autoPBEnabled ? (
           <div
             onClick={this.handleAddNewPage}
             className="pagebreak-new-placeholder">

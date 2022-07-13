@@ -100,3 +100,21 @@
   background-color: #737679;
   color: white;
 }
+
+.elementRadio
+  > .metadata
+  > details
+  > summary
+  > .popover-container:hover
+  > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -45px;
+  left: -165px;
+  word-break: break-word;
+}
+
+.elementRadio > .metadata.answerExplanationContainer {
+  margin-top: 2rem;
+  padding: 0.5rem;
+}

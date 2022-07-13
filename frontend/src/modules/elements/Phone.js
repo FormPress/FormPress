@@ -184,7 +184,7 @@ export default class Phone extends Component {
       })
   `
       let script = (
-        <script key={2} dangerouslySetInnerHTML={{ __html: scriptInnerHtml }} />
+        <script key={5} dangerouslySetInnerHTML={{ __html: scriptInnerHtml }} />
       )
       display.push(script)
     }
