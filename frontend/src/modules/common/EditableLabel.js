@@ -60,7 +60,7 @@ class EditableLabel extends Component {
     document.execCommand('insertHTML', false, text)
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
+  shouldComponentUpdate(nextProps) {
     // for tinymce to work properly, component should not update if the editor is active
     if (this.props.editor === true) {
       return nextProps.editor !== true
