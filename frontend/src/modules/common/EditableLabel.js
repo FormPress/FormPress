@@ -1,5 +1,6 @@
 import React from 'react'
 import { Editor } from '@tinymce/tinymce-react'
+import { debounce } from '../optimization'
 
 export default function EditableLabel(props) {
   let limit = 256,
@@ -78,7 +79,7 @@ export default function EditableLabel(props) {
         <Editor
           key={order}
           apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
-          value={props.value}
+          initialValue={props.value}
           init={{
             plugins: 'link image code',
             toolbar:
@@ -93,10 +94,9 @@ export default function EditableLabel(props) {
             paste_block_drop: true,
             paste_data_images: false
           }}
-          onEditorChange={(newValue) => {
-            if (newValue.length >= 2000) newValue = newValue.substr(0, 2000)
+          onEditorChange={debounce((newValue) => {
             props.handleLabelChange(props.labelKey, newValue)
-          }}
+          }, 1500)}
         />
       </div>
     )

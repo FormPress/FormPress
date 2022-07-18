@@ -279,7 +279,7 @@ export default class Radio extends Component {
             }
           />
         </div>,
-        config.answerExplanation !== '' ? (
+        config.answerExplanation && config.answerExplanation !== '' ? (
           <div className="fl metadata answerExplanationContainer" key="4">
             <details
               title={'Click to edit answer explanation'}
