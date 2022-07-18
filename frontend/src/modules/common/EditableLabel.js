@@ -1,25 +1,33 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import { debounce } from '../optimization'
 
-export default function EditableLabel(props) {
-  let limit = 256,
-    order = 0
+class EditableLabel extends Component {
+  constructor(props) {
+    super(props)
 
-  if (typeof props.limit !== 'undefined') {
-    limit = props.limit
+    this.handleOnInput = this.handleOnInput.bind(this)
+    this.handleOnBlur = this.handleOnBlur.bind(this)
+    this.handleOnClick = this.handleOnClick.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
+    this.handleOnPaste = this.handleOnPaste.bind(this)
   }
 
-  function handleOnInput(e) {
+  handleOnInput(e) {
     const text = e.target.innerText
+    let limit = 256
 
-    if (typeof props.limit !== 'undefined') {
-      limit = props.limit
+    if (typeof this.props.limit !== 'undefined') {
+      limit = this.props.limit
+    }
+
+    if (typeof this.props.limit !== 'undefined') {
+      limit = this.props.limit
     }
 
     if (text.length >= limit) {
       e.target.innerText = text.substr(0, limit)
-      props.handleLabelChange(props.labelKey, e.target.innerText)
+      this.props.handleLabelChange(this.props.labelKey, e.target.innerText)
 
       e.target.focus()
       document.execCommand('selectAll', false, null)
@@ -27,22 +35,22 @@ export default function EditableLabel(props) {
     }
   }
 
-  function handleOnBlur(e) {
-    props.handleLabelChange(props.labelKey, e.target.innerText)
+  handleOnBlur(e) {
+    this.props.handleLabelChange(this.props.labelKey, e.target.innerText)
   }
 
-  function handleOnClick() {
-    props.handleLabelClick(props.labelKey)
+  handleOnClick() {
+    this.props.handleLabelClick(this.props.labelKey)
   }
 
-  function handleOnKeyDown(e) {
+  handleOnKeyDown(e) {
     if (e.key === 'Enter') {
       e.preventDefault()
       e.target.blur()
     }
   }
 
-  function handleOnPaste(e) {
+  handleOnPaste(e) {
     e.preventDefault()
 
     // get text representation of clipboard
@@ -52,72 +60,87 @@ export default function EditableLabel(props) {
     document.execCommand('insertHTML', false, text)
   }
 
-  const extraProps = {}
-
-  if (props.mode === 'builder') {
-    extraProps.contentEditable = true
-  }
-
-  if (props.required === true) {
-    extraProps.className = 'required'
-  }
-
-  if (props.handleLabelClick !== undefined) {
-    extraProps.onClick = handleOnClick.bind(this)
-  }
-
-  if (props.editor === true) {
-    extraProps.className += ' rteContainer'
-    extraProps.contentEditable = false
-    if (typeof props.labelKey === 'string') {
-      order = props.order + '_' + props.labelKey
-    } else {
-      order = props.order
+  shouldComponentUpdate(nextProps, nextState, nextContext) {
+    // for tinymce to work properly, component should not update if the editor is active
+    if (this.props.editor === true) {
+      return nextProps.editor !== true
     }
+    return true
+  }
+
+  render() {
+    const props = this.props
+    let order = 0
+
+    const extraProps = {}
+
+    if (props.mode === 'builder') {
+      extraProps.contentEditable = true
+    }
+
+    if (props.required === true) {
+      extraProps.className = 'required'
+    }
+
+    if (props.handleLabelClick !== undefined) {
+      extraProps.onClick = this.handleOnClick
+    }
+
+    if (props.editor === true) {
+      extraProps.className += ' rteContainer'
+      extraProps.contentEditable = false
+      if (typeof props.labelKey === 'string') {
+        order = props.order + '_' + props.labelKey
+      } else {
+        order = props.order
+      }
+      return (
+        <div {...extraProps}>
+          <Editor
+            key={order}
+            apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+            initialValue={props.value}
+            init={{
+              plugins: 'link image code',
+              toolbar:
+                'undo redo | formatselect | ' +
+                'bold italic backcolor | alignleft aligncenter ' +
+                'alignright alignjustify | outdent indent removeformat image ',
+              file_picker_types: 'image',
+              automatic_uploads: true,
+              images_file_types: 'jpg,svg,png,jpeg',
+              images_upload_handler: props.rteUploadHandler,
+              resize: false,
+              paste_block_drop: true,
+              paste_data_images: false
+            }}
+            onEditorChange={debounce((newValue) => {
+              props.handleLabelChange(props.labelKey, newValue)
+            }, 1500)}
+          />
+        </div>
+      )
+    }
+
     return (
-      <div {...extraProps}>
-        <Editor
-          key={order}
-          apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
-          initialValue={props.value}
-          init={{
-            plugins: 'link image code',
-            toolbar:
-              'undo redo | formatselect | ' +
-              'bold italic backcolor | alignleft aligncenter ' +
-              'alignright alignjustify | outdent indent removeformat image ',
-            file_picker_types: 'image',
-            automatic_uploads: true,
-            images_file_types: 'jpg,svg,png,jpeg',
-            images_upload_handler: props.rteUploadHandler,
-            resize: false,
-            paste_block_drop: true,
-            paste_data_images: false
-          }}
-          onEditorChange={debounce((newValue) => {
-            props.handleLabelChange(props.labelKey, newValue)
-          }, 1500)}
-        />
+      <div className={props.className}>
+        <span
+          onInput={this.handleOnInput}
+          onBlur={this.handleOnBlur}
+          onKeyDown={this.handleOnKeyDown}
+          onPaste={this.handleOnPaste}
+          dataplaceholder={props.dataPlaceholder}
+          spellCheck={false}
+          labelkey={props.labelKey}
+          suppressContentEditableWarning={true}
+          className={props.value === '' ? 'emptySpan' : null}
+          {...extraProps}
+          dangerouslySetInnerHTML={{
+            __html: props.value ? props.value : ''
+          }}></span>
       </div>
     )
   }
-
-  return (
-    <div className={props.className}>
-      <span
-        onInput={handleOnInput.bind(this)}
-        onBlur={handleOnBlur.bind(this)}
-        onKeyDown={handleOnKeyDown.bind(this)}
-        onPaste={handleOnPaste.bind(this)}
-        dataplaceholder={props.dataPlaceholder}
-        spellCheck={false}
-        labelkey={props.labelKey}
-        suppressContentEditableWarning={true}
-        className={props.value === '' ? 'emptySpan' : null}
-        {...extraProps}
-        dangerouslySetInnerHTML={{
-          __html: props.value ? props.value : ''
-        }}></span>
-    </div>
-  )
 }
+
+export default EditableLabel
