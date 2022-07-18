@@ -50,7 +50,11 @@ export default class Radio extends Component {
 
     if (this.IsJsonString(tempContentValue) === false) {
       for (let elementContent of element.options) {
-        if (tempContentValue === elementContent) {
+        if (
+          parseInt(tempContentValue) ===
+            element.options.indexOf(elementContent) ||
+          tempContentValue === elementContent
+        ) {
           returnContent.push({
             content: elementContent,
             value: 'checked',
@@ -68,7 +72,11 @@ export default class Radio extends Component {
       }
     } else {
       for (let elementContent of element.options) {
-        if (tempContentValue.includes(elementContent) === true) {
+        if (
+          parseInt(tempContentValue) ===
+            element.options.indexOf(elementContent) ||
+          tempContentValue.includes(elementContent)
+        ) {
           returnContent.push({
             content: elementContent,
             value: 'checked',
@@ -335,7 +343,7 @@ export default class Radio extends Component {
                     type="radio"
                     id={`q_${config.id}_${key}`}
                     name={`q_${config.id}`}
-                    value={item}
+                    value={key}
                     onChange={inputProps.onChange}
                     checked={config.value === item}></input>
                   <label
