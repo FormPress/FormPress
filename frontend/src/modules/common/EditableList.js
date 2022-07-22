@@ -38,13 +38,9 @@ class EditableList extends Component {
   }
 
   render() {
-    const {
-      config,
-      mode,
-      options,
-      customBuilderHandlers,
-      selectedLabelId
-    } = this.props
+    const { mode, options, customBuilderHandlers, selectedLabelId } = this.props
+
+    let { config } = this.props
 
     if (config.type === 'Checkbox') {
       const display = [
@@ -264,34 +260,101 @@ class EditableList extends Component {
           </div>
         </ul>
       )
-    } else if (config.type === 'Dropdown') {
-      return (
-        <select className="dropdown-select" name={`q_${config.id}`}>
-          <option selected disabled>
-            {config.placeholder}
-          </option>
-          {options.map((item, key) => {
-            return (
-              <option className="option-space" key={item} value={item}>
-                <EditableLabel
-                  className="label radio-label"
-                  mode={mode}
-                  labelKey={`s_${config.id}_${key}`}
-                  htmlFor={`q_${config.id}_${key}`}
-                  handleLabelChange={this.props.handleLabelChange}
-                  value={item}
-                />
-                <span className="delete-element-button">
+    } else {
+      config = this.props.selectedField.config
+      const universalEditableList = [
+        options.map((item, key) => {
+          return (
+            <div className="fl input" key={key}>
+              <EditableLabel
+                className="label"
+                mode={'builder'}
+                dataPlaceholder="Type an option"
+                labelKey={`s_${config.id}_${key}`}
+                htmlFor={`q_${config.id}_${key}`}
+                handleLabelChange={this.props.handleLabelChange}
+                customBuilderHandlers={customBuilderHandlers}
+                value={item}
+              />
+              <div className="action">
+                <div className="popover-container">
                   <FontAwesomeIcon
-                    icon={faMinusCircle}
-                    title="Delete Field"
+                    icon={faAngleDown}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveDown',
+                        'listItem'
+                      )
+                    }
+                    className="moveButton"
+                  />
+                  <div className="popoverText">Move Down</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faAngleUp}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'moveUp',
+                        'listItem'
+                      )
+                    }
+                    className="moveButton"
+                    popover-data="up"
+                  />
+                  <div className="popoverText">Move Up</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faClone}
+                    onClick={() =>
+                      customBuilderHandlers.handleFormItemMovement(
+                        {
+                          mode: 'sort',
+                          ref: this.myRef,
+                          ...config,
+                          listItemId: key
+                        },
+                        'clone',
+                        'listItem'
+                      )
+                    }
+                  />
+                  <div className="popoverText">Clone</div>
+                </div>
+                <div className="popover-container">
+                  <FontAwesomeIcon
+                    icon={faTrash}
                     onClick={() => this.handleDeletingItem(parseInt(`${key}`))}
                   />
-                </span>
-              </option>
-            )
-          })}
-        </select>
+                  <div className="popoverText">Delete</div>
+                </div>
+              </div>
+            </div>
+          )
+        }),
+        <div
+          key="2"
+          className={'builderAddNewButton addNewItem'}
+          onClick={() => this.handleAddingItem(parseInt(config.id))}>
+          Add New Item
+        </div>
+      ]
+
+      return (
+        <div className="universalEditableList">{universalEditableList}</div>
       )
     }
   }
