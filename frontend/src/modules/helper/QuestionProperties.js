@@ -100,6 +100,12 @@ export default class QuestionProperties extends Component {
             handleAddingItem={this.handleAddingItem}
             handleDeletingItem={this.handleDeletingItem}
             form={form}
+            allowInternal={true}
+            customBuilderHandlers={this.props.customBuilderHandlers}
+            handleLabelChange={this.props.handleLabelChange}
+            handleLabelClick={this.props.handleLabelClick}
+            configureQuestion={this.props.configureQuestion}
+            selectedLabelId={this.props.selectedLabelId}
           />
         </div>
       </div>
