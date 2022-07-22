@@ -8,12 +8,15 @@
 }
 .universalEditableList > .builderAddNewButton.addNewItem {
   display: block;
-  background: gray;
+  background: #a8a4a4;
   padding: 0.5rem;
   color: white;
-  border: 1px solid;
+  border: 1px solid whitesmoke;
   cursor: pointer;
   margin-top: 3px;
+}
+.universalEditableList > .builderAddNewButton.addNewItem:hover {
+  background: gray;
 }
 
 .universalEditableList > .input {

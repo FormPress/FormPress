@@ -3,7 +3,7 @@ import EditableLabel from './EditableLabel'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import {
-  faMinusCircle,
+  faPlusCircle,
   faTrash,
   faAngleDown,
   faAngleUp,
@@ -350,7 +350,8 @@ class EditableList extends Component {
           key="2"
           className={'builderAddNewButton addNewItem'}
           onClick={() => this.handleAddingItem(parseInt(config.id))}>
-          Add New {itemType}
+          <FontAwesomeIcon icon={faPlusCircle} />
+          &nbsp;Add New {itemType}
         </div>
       ]
 
