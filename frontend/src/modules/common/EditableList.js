@@ -261,6 +261,7 @@ class EditableList extends Component {
         </ul>
       )
     } else {
+      const itemType = config.itemType || 'Item'
       config = this.props.selectedField.config
       const universalEditableList = [
         options.map((item, key) => {
@@ -349,7 +350,7 @@ class EditableList extends Component {
           key="2"
           className={'builderAddNewButton addNewItem'}
           onClick={() => this.handleAddingItem(parseInt(config.id))}>
-          Add New Item
+          Add New {itemType}
         </div>
       ]
 

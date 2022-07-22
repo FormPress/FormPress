@@ -88,11 +88,11 @@
   display: none !important;
 }
 
-#qc_prefixTypeTextBox.elementHider + #qc_prefixOptions.elementTextArea {
+#qc_prefixTypeTextBox.elementHider + #qc_prefixOptions {
   display: none !important;
 }
 
-#qc_prefix.elementHider ~ #qc_prefixOptions.elementTextArea {
+#qc_prefix.elementHider ~ #qc_prefixOptions {
   display: none !important;
 }
 

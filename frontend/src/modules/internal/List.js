@@ -21,7 +21,8 @@ export default class List extends Component {
   static defaultConfig = {
     id: 0,
     type: 'List',
-    label: 'List'
+    label: 'List',
+    itemType: 'Item'
   }
 
   static configurableSettings = {
@@ -117,6 +118,7 @@ export default class List extends Component {
           customBuilderHandlers={this.props.customBuilderHandlers}
           selectedLabelId={selectedLabelId}
           selectedField={selectedField}
+          itemType={config.itemType}
         />
       </ElementContainer>
     )

@@ -58,12 +58,6 @@ export default class TextArea extends Component {
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
 
-      if (config.id === 'dropdownOptions' && Array.isArray(config.value)) {
-        inputProps.value = config.value.join('\n')
-      }
-      if (config.id === 'prefixOptions' && Array.isArray(config.value)) {
-        inputProps.value = config.value.join('\n')
-      }
       if (config.id === 'answerExplanation') {
         inputProps.value = config.value
       }
