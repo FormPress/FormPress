@@ -364,7 +364,7 @@ class Builder extends Component {
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
-    this.handleStatusChange = this.handleStatusChange.bind(this)
+    this.setFormAsPrivate = this.setFormAsPrivate.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
     this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(
       this
@@ -813,8 +813,9 @@ class Builder extends Component {
     this.setState({ form })
   }
 
-  handleStatusChange() {
+  setFormAsPrivate() {
     const form = { ...this.state.form }
+
     form.private = Number(!form.private)
 
     this.setState({ form })
@@ -1266,6 +1267,7 @@ class Builder extends Component {
             setCSS={this.setCSS}
             setFormTags={this.setFormTags}
             setAutoPageBreak={this.setAutoPageBreak}
+            setFormAsPrivate={this.setFormAsPrivate}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">
@@ -1380,15 +1382,6 @@ class Builder extends Component {
             ) : null}
           </div>
           <div className="col-16-16 formControls">
-            <label className="checkbox-label">
-              <input
-                title="If choice the private form, you should create an API key in settings and create a token for the form view."
-                type="checkbox"
-                checked={form.private}
-                onClick={this.handleStatusChange}
-              />{' '}
-              Private form
-            </label>
             <button onClick={this.handleSaveClick} {...saveButtonProps}>
               {saving === true ? 'Saving...' : 'Save'}
             </button>
