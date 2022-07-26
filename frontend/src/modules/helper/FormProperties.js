@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faInfoCircle,
   faCode,
-  faBoltLightning,
-  faBolt,
   faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons'
 
