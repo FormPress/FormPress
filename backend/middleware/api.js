@@ -1202,7 +1202,6 @@ module.exports = (app) => {
     })
   })
 
-
   // return api key
   app.get(
     '/api/users/:user_id/api-key',
@@ -1271,7 +1270,6 @@ module.exports = (app) => {
       })
     })
   })
-
 
   app.post('/api/upload/:form_id/:question_id', async (req, res) => {
     let value = await storage.uploadFileForRte(
