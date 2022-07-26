@@ -76,3 +76,112 @@
   display: block;
   max-height: 25px;
 }
+
+.formProperties > .infernal > .element {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.formProperties > .infernal > .elementRadio > .input {
+  clear: both;
+}
+.formProperties > .infernal > .elementRadio > .input > ul {
+  padding: 0;
+}
+
+.formProperties > .infernal > .elementRadio > .input > ul > li {
+  display: block;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+.formProperties > .infernal > .elementRadio > .input > ul > li > label {
+  margin-left: 5px;
+}
+
+.formProperties > .autoPageBreakForm {
+  padding-bottom: 1rem;
+}
+
+.formProperties > .autoPageBreakForm {
+  background: unset;
+}
+.formProperties > .infernal:hover,
+.formProperties > .tags-wrapper:hover {
+  background: gainsboro;
+  border-radius: 3px;
+}
+
+.formProperties > .infernal,
+.formProperties > .tags-wrapper {
+  margin-top: 7px;
+}
+
+.formProperties > .infernal:focus-within,
+.formProperties > .tags-wrapper:focus-within {
+  background: gainsboro;
+  border-radius: 3px;
+}
+
+.formProperties > .autoPageBreakForm > .element.elementTextBox > .input > input,
+.formProperties
+  > .autoPageBreakForm
+  > .element.elementTextArea
+  > .input
+  > input {
+  padding: 0.2rem 1rem;
+  width: 70%;
+}
+
+.formProperties > .autoPageBreakForm > .element.elementTextBox,
+.formProperties > .autoPageBreakForm > .element.elementTextArea {
+  padding: 0.2rem 2rem;
+}
+
+.formProperties > .autoPageBreakForm > .element.elementNumber {
+  padding: 0.2rem 2rem;
+}
+.formProperties > .autoPageBreakForm > .element.elementNumber > .input {
+  width: 20%;
+  clear: both;
+  margin-top: 5px;
+}
+.formProperties > .autoPageBreakForm > .element.elementNumber > .input > input {
+  width: 100%;
+}
+
+.formProperties
+  > .autoPageBreakForm.autoPageBreakDisabled
+  > .element.elementTextArea,
+.formProperties
+  > .autoPageBreakForm.autoPageBreakDisabled
+  > .element.elementTextBox,
+.formProperties
+  > .autoPageBreakForm.autoPageBreakDisabled
+  > .element.elementNumber {
+  display: none;
+}
+
+.formProperties label[for='q_5_1']::after {
+  content: 'BETA';
+  padding: 2px;
+  font-size: 8pt;
+  background: #6399bb;
+  color: white;
+  border-radius: 4px;
+  margin-left: 2px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.formProperties > .popover-container {
+  float: right;
+  position: relative;
+  top: 15px;
+  left: -20px;
+}
+
+.formProperties > .popover-container:hover > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -65px;
+  left: -170px;
+}

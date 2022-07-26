@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Renderer from '../Renderer'
 import CapabilitiesContext from '../../capabilities.context'
 import './FormProperties.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 class FormProperties extends Component {
   constructor(props) {
@@ -16,6 +18,10 @@ class FormProperties extends Component {
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
     this.handleAddTag = this.handleAddTag.bind(this)
+    this.handleSubmitBehaviourChange = this.handleSubmitBehaviourChange.bind(
+      this
+    )
+    this.handleElemPerPageChange = this.handleElemPerPageChange.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -44,6 +50,37 @@ class FormProperties extends Component {
       value: e.target.value,
       isEncoded: false
     })
+  }
+
+  handleSubmitBehaviourChange(elem, e) {
+    this.props.setIntegration({
+      type: 'submitBehaviour',
+      value: e.target.value
+    })
+  }
+
+  handleElemPerPageChange(elem, e) {
+    if (elem.type === 'Checkbox') {
+      this.props.setAutoPageBreak('active', e.target.checked)
+    }
+
+    if (elem.type === 'Number') {
+      if (!isNaN(e.target.value)) {
+        this.props.setAutoPageBreak('elemPerPage', e.target.value)
+      }
+    }
+
+    if (elem.label === 'Previous Button Text') {
+      this.props.setAutoPageBreak('prevButtonText', e.target.value)
+    }
+
+    if (elem.label === 'Next Button Text') {
+      this.props.setAutoPageBreak('nextButtonText', e.target.value)
+    }
+
+    if (elem.label === 'Submit Button Text') {
+      this.props.setAutoPageBreak('submitButtonText', e.target.value)
+    }
   }
 
   handleAddTag(e) {
@@ -118,6 +155,25 @@ class FormProperties extends Component {
       }
     }
 
+    let submitBehaviour = 'Show Thank You Page'
+    if (matchingIntegration('submitBehaviour').length > 0) {
+      submitBehaviour = matchingIntegration('submitBehaviour')[0].value
+    }
+
+    let autoPageBreak = {
+      active: false,
+      elemPerPage: 0,
+      prevButtonText: 'Previous',
+      nextButtonText: 'Next',
+      submitButtonText: 'Submit'
+    }
+
+    if (this.props.form.props.autoPageBreak !== undefined) {
+      autoPageBreak = {
+        ...this.props.form.props.autoPageBreak
+      }
+    }
+
     return (
       <div className="formProperties">
         <h2>Form Properties</h2>
@@ -142,6 +198,23 @@ class FormProperties extends Component {
           ''
         )}
         <Renderer
+          handleFieldChange={this.handleSubmitBehaviourChange}
+          theme="infernal"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 5,
+                  type: 'Radio',
+                  label: 'On Submit',
+                  value: submitBehaviour,
+                  options: ['Show Thank You Page', 'Evaluate Form']
+                }
+              ]
+            }
+          }}
+        />
+        <Renderer
           handleFieldChange={this.handleTyPageTitleChange}
           theme="infernal"
           form={{
@@ -157,6 +230,7 @@ class FormProperties extends Component {
               ]
             }
           }}
+          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
         />
         <Renderer
           handleFieldChange={this.handleTyPageTextChange}
@@ -170,6 +244,64 @@ class FormProperties extends Component {
                   label: 'Thank you page text',
                   maxLength: 256,
                   value: tyPageText
+                }
+              ]
+            }
+          }}
+          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
+        />
+        <span className="popover-container">
+          <FontAwesomeIcon icon={faInfoCircle} />
+          <div className="popoverText">
+            Choosing this option will disable all previously added page breaks.
+          </div>
+        </span>
+        <Renderer
+          handleFieldChange={this.handleElemPerPageChange}
+          theme="infernal"
+          allowInternal={true}
+          className={
+            'autoPageBreakForm' +
+            (autoPageBreak.active ? '' : ' autoPageBreakDisabled')
+          }
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 7,
+                  type: 'Checkbox',
+                  options: ['Auto-pagination'],
+                  value: autoPageBreak.active
+                },
+                {
+                  id: 6,
+                  type: 'Number',
+                  label: 'Questions Per Page',
+                  value: autoPageBreak.elemPerPage
+                },
+                {
+                  id: 9,
+                  type: 'TextBox',
+                  label: 'Previous Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.prevButtonText,
+                  placeholder: 'Previous'
+                },
+                {
+                  id: 10,
+                  type: 'TextBox',
+                  label: 'Next Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.nextButtonText,
+                  placeholder: 'Next'
+                },
+                {
+                  id: 11,
+                  type: 'TextBox',
+                  label: 'Submit Button Text',
+                  maxLength: 32,
+                  value: autoPageBreak.submitButtonText,
+                  placeholder: 'Submit'
                 }
               ]
             }

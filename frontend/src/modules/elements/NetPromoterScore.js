@@ -1,20 +1,37 @@
 import React, { Component } from 'react'
 
 import { cloneDeep } from 'lodash'
-
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faSignal } from '@fortawesome/free-solid-svg-icons'
 
 import './NetPromoterScore.css'
 
 export default class NetPromoterScore extends Component {
-  static weight = 13
+  static weight = 6
 
   static defaultConfig = {
     id: 0,
     type: 'NetPromoterScore',
     label: 'Net Promoter Score',
-    options: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    options: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+  }
+
+  static metaData = {
+    icon: faSignal,
+    displayText: 'Net Promoter Score'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static IsJsonString(str) {

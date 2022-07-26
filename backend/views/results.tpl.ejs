@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- headerAppend %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap">
+</head>
+<body answers="<%= JSON.stringify(ANSWERS) %>" questions=" <%= JSON.stringify(QUESTIONS)%>" >
+
+    <div id="loader">
+    <%- include ("../svg/fpLoader.svg") %>
+    </div>
+
+    <div class="results-header">
+        <div class="r-header-section userData">
+            <div class="completion-date">
+                Completion Date:&nbsp;
+                <span id="completionDate" >
+                    <%= SUBMISSION.created_at %>
+                </span>
+            </div>
+            <div class="completion-time">
+                Completion Time:&nbsp;
+                <span id="completionTime" >
+                    <%= SUBMISSION.completion_time %>
+                </span>
+            </div>
+        </div>
+        <div class="r-header-section formInfo">
+            <%= title %>
+        </div>
+        <div class="r-header-section testResults">
+            <div class="leftHand">
+                <div class="lhContent">
+                    <div class="question-info-row">
+                        Questions: <span id="questionCount" class="total-question-count"></span>
+                    </div>
+                    <div class="answer-info-row">
+                Answers: <span id="totalAnswers" class="total-answer-count"></span>
+                (&nbsp;<span id="correctAnswers" class="correct-answer-count"></span> |             <span id="wrongAnswers" class="incorrect-answer-count"></span>&nbsp;)
+            </div>
+                </div>
+            </div>
+
+
+
+            <div class="rightHand">
+                <div class="rhContent">
+                     Score:&nbsp;<span id="percentageScore" class="percentage-score"></span>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="fp-powered">
+        powered by <a href="https://formpress.org" target="_blank"><img alt="Go to Formpress." src="https://static.formpress.org/images/formpressBrand.svg"></a>
+    </div>
+    <div
+        id="FORMPRESS_FORM_<%= FORMID %>"
+    >
+        <%- form %>
+    </div>
+<script>
+  var loader = document.getElementById("loader");
+  window.addEventListener("load", function () {
+
+
+    loader.style.height = "100%";
+    loader.style.width = "100%";
+
+    setTimeout(function () {
+      loader.style.visibility = "hidden";
+    }, 2000);
+
+  });
+
+  var FORMID = "<%= FORMID %>";
+  var USERID = "<%= USERID %>";
+  var BACKEND = "<%= BACKEND %>";
+  var QUESTIONS =  JSON.parse(document.body.attributes.questions.value) ;
+  var ANSWERS = JSON.parse(document.body.attributes.answers.value)
+
+  document.body.removeAttribute('answers');
+  document.body.removeAttribute('questions');
+
+  window.FORMPRESS = {
+    formId: FORMID,
+    userId: USERID,
+    QUESTIONS: QUESTIONS,
+    ANSWERS: ANSWERS
+  }
+
+</script>
+
+<script src="<%= RUNTIMEJSURL%>"></script>
+</body>
+</html>
