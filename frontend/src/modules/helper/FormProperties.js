@@ -3,7 +3,11 @@ import Renderer from '../Renderer'
 import CapabilitiesContext from '../../capabilities.context'
 import './FormProperties.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faInfoCircle,
+  faCode,
+  faQuestionCircle
+} from '@fortawesome/free-solid-svg-icons'
 
 class FormProperties extends Component {
   constructor(props) {
@@ -22,6 +26,7 @@ class FormProperties extends Component {
       this
     )
     this.handleElemPerPageChange = this.handleElemPerPageChange.bind(this)
+    this.handleFormPrivateChange = this.handleFormPrivateChange.bind(this)
   }
 
   handleEmailChange(elem, e) {
@@ -112,6 +117,10 @@ class FormProperties extends Component {
     this.props.setFormTags(tagsArray)
   }
 
+  handleFormPrivateChange(elem, e) {
+    this.props.setFormAsPrivate(e.target.checked)
+  }
+
   render() {
     const capabilities = this.props.capabilities
     const integrations = this.props.form.props.integrations || []
@@ -146,6 +155,12 @@ class FormProperties extends Component {
 
     if (this.props.form.props.customCSS !== undefined) {
       customCSS = this.props.form.props.customCSS.value
+    }
+
+    let privateForm = 0
+
+    if (this.props.form.private !== undefined) {
+      privateForm = this.props.form.private
     }
 
     let tags = []
@@ -349,6 +364,39 @@ class FormProperties extends Component {
             </form>
           </div>
         </div>
+        <details
+          className="adv-settings"
+          title="This part contains advanced settings. Some settings may prevent your form working properly.">
+          <summary className="adv-settings-summary">
+            <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
+            &nbsp; Developer settings
+          </summary>
+          <div className="adv-settings-row">
+            <Renderer
+              handleFieldChange={this.handleFormPrivateChange}
+              theme="infernal"
+              form={{
+                props: {
+                  elements: [
+                    {
+                      id: 12,
+                      type: 'Checkbox',
+                      options: ['Private Form'],
+                      value: !!privateForm
+                    }
+                  ]
+                }
+              }}
+            />
+            <span className="popover-container">
+              <FontAwesomeIcon icon={faQuestionCircle} />
+              <div className="popoverText">
+                Setting this form to private will hide it from the public. The
+                form will only be accessible via a token.
+              </div>
+            </span>
+          </div>
+        </details>
       </div>
     )
   }

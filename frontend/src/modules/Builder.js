@@ -322,6 +322,7 @@ class Builder extends Component {
         id: null,
         user_id: null,
         title: 'Untitled Form',
+        private: 0,
         props: {
           integrations: [
             {
@@ -363,6 +364,7 @@ class Builder extends Component {
     this.handlePublishClick = this.handlePublishClick.bind(this)
     this.handleLabelChange = this.handleLabelChange.bind(this)
     this.handleTitleChange = this.handleTitleChange.bind(this)
+    this.setFormAsPrivate = this.setFormAsPrivate.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
     this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(
       this
@@ -807,6 +809,14 @@ class Builder extends Component {
     const form = { ...this.state.form }
 
     form.title = value
+
+    this.setState({ form })
+  }
+
+  setFormAsPrivate() {
+    const form = { ...this.state.form }
+
+    form.private = Number(!form.private)
 
     this.setState({ form })
   }
@@ -1257,6 +1267,7 @@ class Builder extends Component {
             setCSS={this.setCSS}
             setFormTags={this.setFormTags}
             setAutoPageBreak={this.setAutoPageBreak}
+            setFormAsPrivate={this.setFormAsPrivate}
           />
         </Route>
         <Route path="/editor/:formId/builder/question/:questionId/properties">

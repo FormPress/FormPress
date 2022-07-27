@@ -172,16 +172,50 @@
   position: absolute;
 }
 
-.formProperties > .popover-container {
+.formProperties .popover-container {
   float: right;
   position: relative;
   top: 15px;
   left: -20px;
 }
 
-.formProperties > .popover-container:hover > .popoverText {
+.formProperties .popover-container:hover > .popoverText {
   width: 12rem;
   height: fit-content;
   top: -65px;
   left: -170px;
+}
+
+.formProperties > .adv-settings {
+  padding: 20px 10px 10px 10px;
+}
+.formProperties > .adv-settings > .adv-settings-summary {
+  cursor: pointer;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.formProperties > .adv-settings > .adv-settings-summary > .adv-settings-icon {
+  color: #1c5c85;
+}
+
+.formProperties
+  > .adv-settings
+  > .adv-settings-summary::-webkit-details-marker {
+  display: none;
+  color: transparent;
+  font-size: 0;
+}
+.formProperties > .adv-settings > .adv-settings-summary::marker {
+  display: none;
+  color: transparent;
+  font-size: 0;
+}
+
+.formProperties > .adv-settings > .adv-settings-row {
+  background: #fbfbfb;
+  display: flex;
 }

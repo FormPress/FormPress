@@ -40,7 +40,8 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-router-dom": "^5.3.0",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "uuid-apikey": "^1.5.3"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.10",
