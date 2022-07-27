@@ -23,6 +23,9 @@ class AdminPage extends Component {
         <Route exact path="/admin/status">
           <Status />
         </Route>
+        <Route exact path="/admin/whiteList">
+          whiteList will Come Here!.
+        </Route>
         <Redirect path="*" to="/404" />
       </Switch>
     )
