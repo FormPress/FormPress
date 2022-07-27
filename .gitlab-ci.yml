@@ -24,8 +24,8 @@ run-unit-test-frontend:
   stage: unittest
   script:
     - cd frontend
-    - npm install
-    - npm test
+    - yarn install
+    - yarn test
   only:
     - merge_requests
 
