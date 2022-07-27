@@ -41,7 +41,7 @@
     const formID = $(this).attr('fp_id')
     const token = $(this).attr('fp_token')
 
-    const src = `${BACKEND}/form/view/${formID}?embed=true`
+    let src = `${BACKEND}/form/view/${formID}?embed=true`
 
     if (token) {
       src += `&token=${token}`
