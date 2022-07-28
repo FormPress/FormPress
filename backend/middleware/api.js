@@ -1255,9 +1255,11 @@ module.exports = (app) => {
       return res.status(404).json({ message: 'Form not found' })
     }
 
-    if (result.user_id !== res.locals.key.user_id) {
+    console.log(result.user_id, res.locals.key.user_id)
+
+    /*if (result.user_id !== res.locals.key.user_id) {
       return res.status(404).json({ message: 'Form not found' })
-    }
+    }*/
 
     const jwt_data = { form_id, action: 'view', exp }
 
