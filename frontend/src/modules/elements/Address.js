@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
+
 import './Address.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -25,7 +28,7 @@ export default class Address extends Component {
       })
   }
 
-  static weight = 8
+  static weight = 9
 
   static defaultConfig = {
     id: 0,
@@ -41,6 +44,23 @@ export default class Address extends Component {
     title: false,
     type: 'Address',
     zip: true
+  }
+
+  static metaData = {
+    icon: faMapMarkerAlt,
+    displayText: 'Address'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let valueObject = {}
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          valueObject[elem.sub_id] = elem.value
+        }
+      }
+      return valueObject
+    }
   }
 
   static configurableSettings = {

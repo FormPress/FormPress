@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 
 import ElementContainer from '../common/ElementContainer'
+import EditableLabel from '../common/EditableLabel'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './PageBreak.css'
-import EditableLabel from '../common/EditableLabel'
 
 export default class PageBreak extends Component {
-  static weight = 12
+  static weight = 14
 
   static defaultConfig = {
     id: 0,
@@ -15,6 +16,11 @@ export default class PageBreak extends Component {
     previousButtonText: 'Previous',
     submitButtonText: 'Submit',
     style: 'start'
+  }
+
+  static metaData = {
+    icon: faPlusCircle,
+    displayText: 'Page Break'
   }
 
   render() {
@@ -32,7 +38,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_next`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.nextButtonText}
@@ -47,7 +53,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_previous`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.previousButtonText}
@@ -62,7 +68,7 @@ export default class PageBreak extends Component {
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
-            mode={mode}
+            mode={config.autoPageBreak ? 'viewer' : mode}
             labelKey={`pbButton_${config.id}_submit`}
             handleLabelChange={this.props.handleLabelChange}
             value={config.submitButtonText}
@@ -155,12 +161,31 @@ export default class PageBreak extends Component {
       }
     }
 
+    const options = []
+    for (let i = 1; i <= parseInt(config.maxPages); i++) {
+      options.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      )
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <hr className="pagebreak-separator" />
         {display}
         <span className="pagebreak-pageCount">
-          {config.pageNumber}/{config.maxPages}
+          <span className="currentPageSelector">
+            <select
+              className="currentPageSelector-select"
+              data-currentpage={config.pageNumber}
+              value={config.pageNumber}>
+              {options}
+            </select>
+            &nbsp;
+          </span>
+          /&nbsp;
+          {config.maxPages}
         </span>
       </ElementContainer>
     )

@@ -38,7 +38,13 @@ class EditableList extends Component {
   }
 
   render() {
-    const { config, mode, options, customBuilderHandlers } = this.props
+    const {
+      config,
+      mode,
+      options,
+      customBuilderHandlers,
+      selectedLabelId
+    } = this.props
 
     if (config.type === 'Checkbox') {
       const display = [
@@ -164,11 +170,21 @@ class EditableList extends Component {
                 <EditableLabel
                   className="label radio-label"
                   mode={mode}
+                  form_id={config.form_id}
+                  question_id={config.id}
+                  rteUploadHandler={this.props.rteUploadHandler}
+                  order={this.props.order}
+                  editor={
+                    this.props.editorForOptions &&
+                    selectedLabelId === `s_${config.id}_${key}`
+                  }
                   dataPlaceholder="Type an option"
                   labelKey={`s_${config.id}_${key}`}
                   htmlFor={`q_${config.id}_${key}`}
                   handleLabelChange={this.props.handleLabelChange}
+                  handleLabelClick={this.props.handleLabelClick}
                   value={item}
+                  limit={2000}
                 />
                 <div className="action">
                   <div className="popover-container">

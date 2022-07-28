@@ -10,7 +10,46 @@
   width: 100%;
   position: fixed;
   background-color: #e2e2e2;
+  z-index: 2;
+}
+
+.tox.tox-tinymce {
+  margin-top: 20px;
+  width: 100%;
+}
+.elementRadio .required:focus-visible {
+  outline: none;
+}
+
+.elementRadio .required > .tox.tox-tinymce::after {
+  content: ' *';
+  color: red;
+  position: absolute;
+  top: 10px;
+  left: 6px;
+  font-size: 22px;
   z-index: 1;
+}
+
+.elementRadio li > .rteContainer {
+  width: calc(100% - 23px);
+  display: inline-flex;
+}
+
+.elementRadio .rteContainer:focus-visible {
+  outline: none;
+}
+
+.input .tox.tox-tinymce {
+  height: 360px !important;
+  display: inline-flex;
+  width: calc(100% - 23px);
+  margin-top: 5px;
+  z-index: 0;
+}
+
+.tox-statusbar__branding {
+  display: none !important;
 }
 
 .builder > .headerContainer > .header,
@@ -373,7 +412,7 @@
 
 .popover-container:hover > .popoverText {
   display: block;
-  width: 83px;
+  width: 100px;
   height: 22px;
   padding: 3px 3px 0px;
   border-radius: 4px;
@@ -582,4 +621,23 @@
   justify-content: center;
   padding: 3.3rem;
   border-radius: 6px;
+}
+
+.builderStage .form > .elementRadio > .metadata.answerExplanationContainer {
+  background: repeating-linear-gradient(
+    45deg,
+    #e5e7ec,
+    #eaeaea 10px,
+    #ececec 10px,
+    #e6e6e6 20px
+  );
+  border-radius: 0.5rem;
+}
+
+.builderStage
+  .form
+  > .elementRadio
+  > .metadata.answerExplanationContainer
+  .popover-container {
+  float: right;
 }

@@ -637,9 +637,28 @@ class Data extends Component {
                         </div>
                       )
                     } else if (question.chartType === 'pieChart') {
+                      question.label = question.label
+                        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                        .replace(/&nbsp;/g, ' ')
+                        .replace(/&amp;/g, ' ')
+                        .replace(/(<([^>]+)>)/gi, '')
+                        .trim()
+                      question.chartItems.filter((chartItem) => {
+                        chartItem.name = chartItem.name
+                          .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                          .replace(/&nbsp;/g, ' ')
+                          .replace(/&amp;/g, ' ')
+                          .replace(/(<([^>]+)>)/gi, '')
+                          .trim()
+                      })
+                      console.log(question)
                       return (
                         <div className="questionContainer" key={i}>
-                          <div className="question">{question.label}</div>
+                          <div
+                            className="question"
+                            dangerouslySetInnerHTML={{
+                              __html: question.label
+                            }}></div>
                           <PieChart width={730} height={300}>
                             <Pie
                               data={question.chartItems}
@@ -699,7 +718,7 @@ class Data extends Component {
                           </BarChart>
                         </div>
                       )
-                    } else if (question.chartType === 'average') {
+                    } else if (question.chartType === 'netPromoterScore') {
                       return (
                         <div className="questionContainer" key={i}>
                           <div className="question">{question.label}</div>
@@ -715,8 +734,8 @@ class Data extends Component {
                                 Average value
                               </div>
                               <div className="last_responses">
-                                <div title={question.responseAverage}>
-                                  &quot;{question.responseAverage}&quot;
+                                <div title={question.netPromoterScore}>
+                                  &quot;{question.netPromoterScore}&quot;
                                 </div>
                               </div>
                             </div>
@@ -970,7 +989,11 @@ class Data extends Component {
       return entries.map((entry, index) => {
         return (
           <div key={index} className="entry">
-            <div className="label">{getLabel(entry.question_id)}</div>
+            <div
+              className="label"
+              dangerouslySetInnerHTML={{
+                __html: getLabel(entry.question_id)
+              }}></div>
             <div className="value">{this.renderEntryElements(entry)}</div>
           </div>
         )

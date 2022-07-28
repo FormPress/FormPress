@@ -1,16 +1,36 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
+
 import './Name.css'
 
 export default class Name extends Component {
-  static weight = 7
+  static weight = 8
 
   static defaultConfig = {
     id: 0,
     type: 'Name',
     label: 'Full Name',
     options: ['Mr.', 'Mrs.']
+  }
+
+  static metaData = {
+    icon: faAddressCard,
+    displayText: 'Name'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let valueObject = {}
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          valueObject[elem.sub_id] = elem.value
+        }
+      }
+      return valueObject
+    }
   }
 
   static configurableSettings = {

@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const moment = require('moment')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
@@ -154,9 +155,142 @@ module.exports = (app) => {
   // return form questions
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     const { form_id } = req.params
+    const elems = (await formModel.get({ form_id })).props.elements
 
-    res.json((await formModel.get({ form_id })).props.elements || [])
+    // remove the keys that are named 'expectedAnswer' out of the elements
+    const sanitizedElems = elems.map((elem) => {
+      delete elem.expectedAnswer
+      delete elem.answerExplanation
+      return elem
+    })
+
+    res.json(sanitizedElems || [])
   })
+
+  // a new endpoint to return an ejs template for exam evaluations
+  app.get(
+    '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
+    async (req, res) => {
+      const { submission_id, form_id } = req.params
+      // TODO: currently user_id is not used in the query but will be used in the future for security reasons
+      // TODO: a check to make sure the viewer is the owner of the submission should be added
+
+      const radioElem = require(path.resolve(
+        'script',
+        'transformed',
+        'elements',
+        'Radio'
+      )).default
+
+      const Renderer = require(path.resolve(
+        'script',
+        'transformed',
+        'Renderer'
+      )).default
+
+      let form
+      const regularForm = await formModel.get({ form_id })
+
+      if (regularForm.published_version > 0) {
+        form = await formPublishedModel.get({
+          form_id,
+          version_id: regularForm.published_version
+        })
+      } else {
+        form = regularForm
+      }
+
+      if (form.props.autoPageBreak !== undefined) {
+        delete form.props.autoPageBreak
+      }
+
+      const questions = (form.props.elements = form.props.elements.filter(
+        (elem) => elem.type === 'Radio'
+      ))
+
+      const db = await getPool()
+      const submissionQuery = await db.query(
+        `
+        SELECT  \`id\`, \`created_at\`, \`completion_time\` FROM \`submission\`
+          WHERE form_id = ? AND id = ? LIMIT 1
+      `,
+        [form_id, submission_id]
+      )
+
+      const submission = submissionQuery[0]
+
+      submission.completion_time = moment()
+        .startOf('day')
+        .seconds(submission.completion_time)
+        .format('HH:mm:ss')
+
+      submission.created_at = moment().format('HH:mm:ss YYYY-MM-DD')
+
+      const allEntries = await db.query(
+        `
+        SELECT * FROM \`entry\` WHERE submission_id = ?
+      `,
+        [submission_id]
+      )
+
+      // filter out the entries that don't have questions
+      const entriesWithQuestions = allEntries.filter((entry) => {
+        const questionId = entry.question_id
+        const question = questions.find(
+          (question) => question.id === questionId
+        )
+        return question !== undefined
+      })
+
+      for (let entry of entriesWithQuestions) {
+        for (let question of questions) {
+          if (question.id === entry.question_id) {
+            entry.value = radioElem.dataContentOrganizer(entry.value, question)
+          }
+        }
+      }
+
+      const str = reactDOMServer.renderToStaticMarkup(
+        React.createElement(Renderer, {
+          className: 'form',
+          form,
+          mode: 'renderer'
+        })
+      )
+
+      let style = fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/normalize.css')
+      )
+
+      style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/common.css')
+      )
+      style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/themes/gleam.css')
+      )
+      style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/modules/elements/index.css')
+      )
+      style += ' body {background-color: #f5f5f5;} '
+      style += ' .form {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);} '
+      style += ' .branding {box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);}  '
+
+      const templateProps = {
+        headerAppend: `<style type='text/css'>${style}</style>`,
+        form: str,
+        title: form.title,
+        QUESTIONS: questions,
+        ANSWERS: entriesWithQuestions,
+        RUNTIMEJSURL: `${BACKEND}/runtime/evaluate.js`,
+        FORMID: form_id,
+        USERID: form.user_id,
+        BACKEND,
+        SUBMISSION: submission
+      }
+
+      res.render('results.tpl.ejs', templateProps)
+    }
+  )
 
   //return form validators
   app.get('/api/form/element/validators', async (req, res) => {
@@ -269,7 +403,7 @@ module.exports = (app) => {
         DropDown: 'barChart',
         Checkbox: 'barChart',
         Button: 'none',
-        NetPromoterScore: 'average'
+        NetPromoterScore: 'netPromoterScore'
       }
 
       const colors = [
@@ -366,7 +500,9 @@ module.exports = (app) => {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
                   }
                 } else {
-                  elementTemplate.chartItems = []
+                  if (elementTemplate.elementType !== 'NetPromoterScore') {
+                    elementTemplate.chartItems = []
+                  }
                 }
               }
 
@@ -383,7 +519,7 @@ module.exports = (app) => {
                     break
                   case 'pieChart':
                     willReturnArray = []
-                    for (const [key, value] of Object.entries(
+                    for (let [key, value] of Object.entries(
                       elementTemplate.chartItems.reduce((obj, chartItem) => {
                         if (!obj[chartItem]) {
                           obj[chartItem] = 1
@@ -393,6 +529,9 @@ module.exports = (app) => {
                         return obj
                       }, {})
                     )) {
+                      if (key === '') {
+                        key = 'Unanswered'
+                      }
                       willReturnObject = {}
                       willReturnObject.name = key
                       willReturnObject.value =
@@ -455,19 +594,29 @@ module.exports = (app) => {
                     statistics.elements.push(elementTemplate)
                     break
 
-                  case 'average':
+                  case 'netPromoterScore': {
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
-                    elementTemplate.responseAverage =
-                      (
-                        elementTemplate.chartItems.reduce(
-                          (a, b) => parseInt(a) + parseInt(b),
-                          0
-                        ) / elementTemplate.chartItems.length
-                      ).toFixed(2) || 0
+
+                    let lowValue = 0,
+                      highValue = 0
+                    for (let index in elementTemplate.chartItems) {
+                      let value = parseInt(elementTemplate.chartItems[index])
+                      if (value >= 0 && value <= 6) {
+                        lowValue++
+                      } else if (value == 9 || value == 10) {
+                        highValue++
+                      }
+                    }
+
+                    elementTemplate.netPromoterScore =
+                      ((highValue - lowValue) / elementTemplate.responseCount) *
+                      100
+
                     statistics.elements.push(elementTemplate)
 
                     break
+                  }
                 }
               }
             }
@@ -1030,5 +1179,13 @@ module.exports = (app) => {
       tyTitle: tyPageTitle,
       tyText: tyPageText
     })
+  })
+  app.post('/api/upload/:form_id/:question_id', async (req, res) => {
+    let value = await storage.uploadFileForRte(
+      req.files,
+      req.params.form_id,
+      req.params.question_id
+    )
+    res.json(value)
   })
 }

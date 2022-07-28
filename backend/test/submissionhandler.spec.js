@@ -21,8 +21,8 @@ describe('submission handler', () => {
       type:"Dropdown",
       label:"Dropdown Label",
       options:[
-        "Dropdown 1",
-        "Dropdown 2"
+        "Option 1",
+        "Option 2"
       ],
       required:false
     },
@@ -66,10 +66,13 @@ describe('submission handler', () => {
   it('default values', () => {
     const input = []
     const expectedOutput = [
+      {q_id: 1, value: ''},
+      {q_id: 3, value: ''},
       {q_id: 5, value: ''},
-      {q_id: 9, value: 'off'},
+      {q_id: 9, value: ''},
       {q_id: 6, value: ''},
-      {q_id: 8, value: ''},
+      {q_id: 7, value: {}},
+      {q_id: 8, value: ''}
     ]
     const formattedInput = submissionhandler.formatInput(formProps,input)
     assert.deepEqual(formattedInput, expectedOutput)
@@ -81,15 +84,17 @@ describe('submission handler', () => {
       { q_id: 'q_7[lastName]', value: 'Doe' }
     ]
     const expectedOutput = [
+      {q_id: 1, value: ''},
+      {q_id: 3, value: ''},
       {q_id: 5, value: ''},
-      {q_id: 9, value: 'off'},
+      {q_id: 9, value: ''},
       {q_id: 6, value: ''},
       {q_id: 7, value: {
         firstName:"John",
         lastName:"Doe"
         }
       },
-      {q_id: 8, value: ''},
+      {q_id: 8, value: ''}
     ]
     const formattedInput = submissionhandler.formatInput(formProps,input)
     assert.deepEqual(formattedInput, expectedOutput)

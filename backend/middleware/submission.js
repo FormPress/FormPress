@@ -209,11 +209,38 @@ module.exports = (app) => {
       tyPageText = tyTextIntegration[0].value
     }
 
-    res.render('submit-success.tpl.ejs', {
-      headerAppend: `<style type='text/css'>${style}</style>`,
-      tyTitle: tyPageTitle,
-      tyText: tyPageText
-    })
+    let submitBehaviour
+
+    const submissionIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'submitBehaviour'
+    )
+    if (submissionIntegration) {
+      submitBehaviour = submissionIntegration.value
+    } else {
+      submitBehaviour = 'Show Thank You Page'
+    }
+
+    switch (submitBehaviour) {
+      case 'Evaluate Form':
+        res.redirect(
+          `/api/users/${form.user_id}/forms/${form_id}/submissions/${submission_id}/evaluate`
+        )
+        break
+      case 'Show Thank You Page':
+        res.render('submit-success.tpl.ejs', {
+          headerAppend: `<style type='text/css'>${style}</style>`,
+          tyTitle: tyPageTitle,
+          tyText: tyPageText
+        })
+        break
+      default:
+        res.render('submit-success.tpl.ejs', {
+          headerAppend: `<style type='text/css'>${style}</style>`,
+          tyTitle: tyPageTitle,
+          tyText: tyPageText
+        })
+        break
+    }
 
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to

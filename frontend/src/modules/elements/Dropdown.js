@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
+
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { faSort } from '@fortawesome/free-solid-svg-icons'
 
 import './Dropdown.css'
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -52,17 +54,34 @@ export default class Dropdown extends Component {
   static defaultConfig = {
     id: 0,
     type: 'Dropdown',
-    label: 'Dropdown',
-    options: ['Dropdown 1', 'Dropdown 2'],
+    label: 'Drop-down List',
+    options: ['Option 1', 'Option 2'],
     placeholder: 'Choose an option'
+  }
+
+  static metaData = {
+    icon: faSort,
+    displayText: 'Drop-down List'
+  }
+
+  static submissionHandler = {
+    getQuestionValue: (inputs, qid) => {
+      let value = ''
+      for (const elem of inputs) {
+        if (elem.q_id === qid) {
+          value = elem.value
+        }
+      }
+      return value
+    }
   }
 
   static configurableSettings = {
     dropdownOptions: {
-      default: ['Dropdown 1', 'Dropdown 2'],
+      default: ['Option 1', 'Option 2'],
       formProps: {
         type: 'TextArea',
-        label: 'Dropdown options'
+        label: 'Drop-down Options'
       }
     }
   }
@@ -118,7 +137,10 @@ export default class Dropdown extends Component {
                 onChange={inputProps.onChange}
                 data-fp-list={config.hasDataset ? config.dataset : ''}>
                 {config.placeholder !== false ? (
-                  <option disabled selected value="">
+                  <option
+                    disabled={config.id !== 'expectedAnswer'}
+                    selected
+                    value="">
                     {config.placeholder}
                   </option>
                 ) : null}
@@ -133,16 +155,17 @@ export default class Dropdown extends Component {
                         </option>
                       )
                     })
-                  : config.id === 'dataset'
+                  : config.options && typeof config.options[0] === 'object'
                   ? options.map((item) => {
                       return (
                         <option
                           className="option-space"
                           key={item.value}
                           value={item.value}
-                          disabled={item.disabled}>
-                          {item.displayText}
-                        </option>
+                          disabled={item.disabled}
+                          dangerouslySetInnerHTML={{
+                            __html: item.display
+                          }}></option>
                       )
                     })
                   : options.map((item, index) => {
