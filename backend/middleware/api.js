@@ -931,6 +931,16 @@ module.exports = (app) => {
 
     let form = result
 
+    const db = await getPool()
+    const userResult = await db.query(
+      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
+      [form.user_id]
+    )
+
+    if (userResult[0].isActive === 0) {
+      return res.status(404).send('Form not found')
+    }
+
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
         form_id,
@@ -951,7 +961,6 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
-    const db = await getPool()
     const userRoleResult = await db.query(
       `
     SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
