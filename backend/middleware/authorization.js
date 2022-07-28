@@ -150,8 +150,6 @@ exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
 exports.mustHaveValidAPIKey = async (req, res, next) => {
   const key = req.body.APIKey
 
-  console.log(req.body, req.get('API_KEY'))
-
   if (typeof key === 'undefined') {
     res.status(403).send({ message: 'Invalid API key' })
   }
@@ -160,6 +158,8 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
   const result = await db.query(`SELECT * FROM \`api_key\` WHERE api_key = ?`, [
     key
   ])
+
+  console.log(`SELECT * FROM \`api_key\` WHERE api_key = ?`, key, result)
 
   if (result.length > 0) {
     res.locals.key = result[0]
