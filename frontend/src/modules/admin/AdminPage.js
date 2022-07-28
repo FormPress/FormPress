@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import AuthContext from '../../auth.context'
 import Roles from './Roles'
+import Users from './Users'
+import Status from './Status'
 
 import './AdminPage.css'
 
@@ -13,15 +15,17 @@ class AdminPage extends Component {
           <Redirect to="/admin/users" />
         </Route>
         <Route exact path="/admin/users">
-          Users will Come Here!.
+          <Users />
         </Route>
         <Route exact path="/admin/roles">
           <Roles />
         </Route>
         <Route exact path="/admin/status">
-          Status will Come Here!.
+          <Status />
         </Route>
-
+        <Route exact path="/admin/whiteList">
+          whiteList will Come Here!.
+        </Route>
         <Redirect path="*" to="/404" />
       </Switch>
     )

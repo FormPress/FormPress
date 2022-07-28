@@ -54,6 +54,15 @@ module.exports = (app) => {
     const form = formResult[0]
     //preview mode form id = form.id VS published mode form id = form.form_id
 
+    const userResult = await db.query(
+      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
+      [form.user_id]
+    )
+
+    if (userResult[0].isActive === 0) {
+      return res.status(404).send('Error: Form not found')
+    }
+
     form.props = JSON.parse(form.props)
 
     //create submission and get id

@@ -38,6 +38,7 @@ let initialAuthObject = {
   user_id: 0,
   user_role: 0,
   permission: {},
+  impersonate: 0,
   exp: '',
   admin: false,
   loggedIn: false
@@ -84,7 +85,17 @@ class App extends Component {
   }
 
   handleSetAuth(
-    { email, user_id, user_role, token, admin, loggedIn, exp, permission },
+    {
+      email,
+      user_id,
+      user_role,
+      token,
+      impersonate,
+      admin,
+      loggedIn,
+      exp,
+      permission
+    },
     persist = true
   ) {
     this.setState({
@@ -92,6 +103,7 @@ class App extends Component {
       user_id,
       user_role,
       token,
+      impersonate,
       admin,
       loggedIn,
       exp,
@@ -106,6 +118,7 @@ class App extends Component {
           user_id,
           user_role,
           token,
+          impersonate,
           admin,
           loggedIn,
           exp,
@@ -118,6 +131,7 @@ class App extends Component {
   getAuthContextValue() {
     return {
       token: this.state.token,
+      impersonate: this.state.impersonate,
       email: this.state.email,
       user_id: this.state.user_id,
       user_role: this.state.user_role,
