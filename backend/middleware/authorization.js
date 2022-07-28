@@ -159,8 +159,6 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
     key
   ])
 
-  console.log(`SELECT * FROM \`api_key\` WHERE api_key = ?`, key, result)
-
   if (result.length > 0) {
     res.locals.key = result[0]
     next()

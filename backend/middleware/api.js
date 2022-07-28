@@ -960,16 +960,6 @@ module.exports = (app) => {
 
     let form = result
 
-    const db = await getPool()
-    const userResult = await db.query(
-      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
-      [form.user_id]
-    )
-
-    if (userResult[0].isActive === 0) {
-      return res.status(404).send('Form not found')
-    }
-
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
         form_id: form.id,
@@ -990,6 +980,7 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
+    const db = await getPool()
     const userRoleResult = await db.query(
       `
     SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
@@ -1252,27 +1243,19 @@ module.exports = (app) => {
     const { form_id, exp } = req.body
 
     if (!form_id || !exp) {
-      console.log(
-        'form_id and exp check',
-        result.user_id,
-        res.locals.key.user_id
-      )
       return res.status(404).json({ message: 'form_id and exp must be sent' })
     }
 
     if (typeof form_id !== 'string') {
-      console.log('form_id type check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'form_id format must be uuid' })
     }
 
     const result = await formModel.get({ form_id })
     if (result === false) {
-      console.log('form exist check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'Form not found' })
     }
 
     if (result.user_id !== res.locals.key.user_id) {
-      console.log('user_id check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'Form not found' })
     }
 
