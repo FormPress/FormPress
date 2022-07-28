@@ -1243,23 +1243,29 @@ module.exports = (app) => {
     const { form_id, exp } = req.body
 
     if (!form_id || !exp) {
+      console.log(
+        'form_id and exp check',
+        result.user_id,
+        res.locals.key.user_id
+      )
       return res.status(404).json({ message: 'form_id and exp must be sent' })
     }
 
     if (typeof form_id !== 'string') {
+      console.log('form_id type check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'form_id format must be uuid' })
     }
 
     const result = await formModel.get({ form_id })
     if (result === false) {
+      console.log('form exist check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'Form not found' })
     }
 
-    console.log(result.user_id, res.locals.key.user_id)
-
-    /*if (result.user_id !== res.locals.key.user_id) {
+    if (result.user_id !== res.locals.key.user_id) {
+      console.log('user_id check', result.user_id, res.locals.key.user_id)
       return res.status(404).json({ message: 'Form not found' })
-    }*/
+    }
 
     const jwt_data = { form_id, action: 'view', exp }
 
