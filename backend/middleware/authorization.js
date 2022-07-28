@@ -152,8 +152,6 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
 
   if (typeof key === 'undefined') {
     res.status(403).send({ message: 'Invalid API key' })
-
-    return
   }
 
   const db = await getPool()
@@ -162,11 +160,9 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
   ])
 
   if (result.length > 0) {
-    //res.locals.key = result[0]
+    res.locals.key = result[0]
     next()
   } else {
     res.status(403).send({ message: 'Invalid API key' })
-
-    return
   }
 }

@@ -951,7 +951,7 @@ module.exports = (app) => {
             return res.status(404).send(err)
           }
 
-          if (decoded.form_id !== parseInt(form_id)) {
+          if (decoded.form_id !== form_id) {
             return res.status(404).send('token is not valid')
           }
         }
@@ -962,7 +962,7 @@ module.exports = (app) => {
 
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
-        form_id,
+        form_id: form.id,
         version_id: form.published_version
       })
 
@@ -1203,34 +1203,40 @@ module.exports = (app) => {
   })
 
   // return api key
-  app.get('/api/users/:user_id/api-key', async (req, res) => {
-    const db = await getPool()
-    const user_id = req.params.user_id
-    const result = await db.query(
-      `SELECT * FROM \`api_key\` WHERE user_id = ?`,
-      [user_id]
-    )
+  app.get(
+    '/api/users/:user_id/api-key',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const result = await db.query(
+        `SELECT * FROM \`api_key\` WHERE user_id = ?`,
+        [user_id]
+      )
 
-    if (result.length > 0) {
-      return res.json(result)
-    } else {
-      const api_key = await uuidAPIKey.create().apiKey
-      const data = await db.query(
-        `
+      if (result.length > 0) {
+        return res.json(result)
+      } else {
+        const api_key = await uuidAPIKey.create().apiKey
+        const data = await db.query(
+          `
                 INSERT INTO \`api_key\`
                   (user_id, api_key, created_at)
                 VALUES
                   (?, ?, NOW())
               `,
-        [user_id, api_key]
-      )
+          [user_id, api_key]
+        )
 
-      const result = await db.query(`SELECT * FROM \`api_key\` WHERE id = ?`, [
-        data.insertId
-      ])
-      return res.json(result)
+        const result = await db.query(
+          `SELECT * FROM \`api_key\` WHERE id = ?`,
+          [data.insertId]
+        )
+        return res.json(result)
+      }
     }
-  })
+  )
 
   // create a token with API key for private form view
   app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
@@ -1240,14 +1246,18 @@ module.exports = (app) => {
       return res.status(404).json({ message: 'form_id and exp must be sent' })
     }
 
+    if (typeof form_id !== 'string') {
+      return res.status(404).json({ message: 'form_id format must be uuid' })
+    }
+
     const result = await formModel.get({ form_id })
     if (result === false) {
       return res.status(404).json({ message: 'Form not found' })
     }
 
-    /*if (result.user_id !== res.locals.key.user_id) {
+    if (result.user_id !== res.locals.key.user_id) {
       return res.status(404).json({ message: 'Form not found' })
-    }*/
+    }
 
     const jwt_data = { form_id, action: 'view', exp }
 
