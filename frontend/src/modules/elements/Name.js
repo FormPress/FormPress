@@ -53,8 +53,10 @@ export default class Name extends Component {
     prefixOptions: {
       default: ['Mr.', 'Mrs.'],
       formProps: {
-        type: 'TextArea',
-        label: 'Preset Title Options'
+        type: 'List',
+        options: ['Mr.', 'Mrs.'],
+        label: 'Preset Title Options',
+        itemType: 'Prefix'
       }
     },
     middleName: {
