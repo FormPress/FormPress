@@ -80,8 +80,9 @@ export default class Dropdown extends Component {
     dropdownOptions: {
       default: ['Option 1', 'Option 2'],
       formProps: {
-        type: 'TextArea',
-        label: 'Drop-down Options'
+        type: 'List',
+        label: 'Drop-down Options',
+        options: ['Option 1', 'Option 2']
       }
     }
   }
@@ -107,11 +108,21 @@ export default class Dropdown extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    const options =
+    let options =
       Array.isArray(config.options) === true ||
       typeof config.options !== 'undefined'
         ? config.options
         : ['']
+
+    if (config.id === 'expectedAnswer') {
+      const selectedFieldConfig = this.props.selectedField.config
+      options = selectedFieldConfig.options.map((option, index) => {
+        return {
+          value: index,
+          display: option.replace(/<(?:.|\n)*?>/gm, '')
+        }
+      })
+    }
 
     var display
     if (mode === 'builder' || mode === 'viewer') {
@@ -155,7 +166,7 @@ export default class Dropdown extends Component {
                         </option>
                       )
                     })
-                  : config.options && typeof config.options[0] === 'object'
+                  : typeof options[0] === 'object'
                   ? options.map((item) => {
                       return (
                         <option

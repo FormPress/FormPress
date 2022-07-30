@@ -1159,19 +1159,6 @@ class Builder extends Component {
         selectedField.config = selectedFieldConfig
         selectedField.configurableSettings =
           elements[selectedFieldConfig.type].configurableSettings || {}
-
-        if (selectedFieldConfig.type === 'Radio') {
-          const expectedAnswer = selectedFieldConfig.options.map(
-            (option, index) => {
-              return {
-                value: index,
-                display: option.replace(/<(?:.|\n)*?>/gm, '')
-              }
-            }
-          )
-
-          selectedField.configurableSettings.expectedAnswer.formProps.options = expectedAnswer
-        }
       } catch (e) {
         questionPropertiesReady = false
       }
@@ -1276,6 +1263,15 @@ class Builder extends Component {
               rteUploadHandler={this.rteUploadHandler}
               selectedField={selectedField}
               configureQuestion={this.configureQuestion}
+              customBuilderHandlers={{
+                onDelete: this.handleFormElementDeleteClick,
+                handleDragEnd: this.handleDragEnd,
+                handleDragStart: this.handleDragStart,
+                handleFormItemMovement: this.handleFormItemMovement
+              }}
+              handleLabelChange={this.handleLabelChange}
+              handleLabelClick={this.handleLabelClick}
+              selectedLabelId={this.state.selectedLabelId}
             />
           ) : null}
         </Route>

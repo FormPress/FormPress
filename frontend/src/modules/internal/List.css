@@ -1,0 +1,59 @@
+.universalEditableList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.universalEditableList > .builderAddNewButton.addNewItem {
+  display: block;
+  background: rgb(168, 227, 57);
+  padding: 0.5rem;
+  color: white;
+  border: 1px solid whitesmoke;
+  cursor: pointer;
+  margin-top: 3px;
+}
+.universalEditableList > .builderAddNewButton.addNewItem:hover {
+  background: rgb(148, 200, 50);
+}
+
+.universalEditableList > .input {
+  display: block;
+  width: 100%;
+}
+.universalEditableList > .input > .label > span {
+  border: solid 1px #c9c9c9;
+  padding: 3px;
+  width: 82%;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 2rem;
+  float: left;
+  background: white;
+  margin: 3px 0 3px 0;
+}
+
+.universalEditableList > .fl.input .action {
+  display: flex;
+  opacity: 0.62;
+  width: 18%;
+  padding: 10px 3px 10px 3px;
+  font-size: 10pt;
+}
+.universalEditableList > .fl.input .action > .popover-container {
+  padding: 2px;
+}
+
+.universalEditableList > .fl.input li:hover .action,
+.universalEditableList > .fl.input:hover .label + .action {
+  opacity: 1;
+}
+
+.fl.input li .action:hover,
+.fl.input .universalEditableList + .action:hover {
+  opacity: 1;
+}

@@ -3,6 +3,7 @@ import { Editor } from '@tinymce/tinymce-react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
+import { debounce } from '../optimization'
 import { faAlignJustify } from '@fortawesome/free-solid-svg-icons'
 
 import './TextArea.css'
@@ -42,6 +43,14 @@ export default class TextArea extends Component {
     isFilled: 'defaultInputHelpers'
   }
 
+  shouldComponentUpdate(nextProps) {
+    // for tinymce to work properly, component should not update if the editor is active
+    if (this.props.config && this.props.config.editor === true) {
+      return nextProps.config && nextProps.config.editor !== true
+    }
+    return true
+  }
+
   render() {
     const { config, mode } = this.props
     const inputProps = {}
@@ -49,12 +58,6 @@ export default class TextArea extends Component {
     if (typeof config.value !== 'undefined') {
       inputProps.value = config.value
 
-      if (config.id === 'dropdownOptions' && Array.isArray(config.value)) {
-        inputProps.value = config.value.join('\n')
-      }
-      if (config.id === 'prefixOptions' && Array.isArray(config.value)) {
-        inputProps.value = config.value.join('\n')
-      }
       if (config.id === 'answerExplanation') {
         inputProps.value = config.value
       }
@@ -101,7 +104,7 @@ export default class TextArea extends Component {
                   {...inputProps}></textarea>
                 <Editor
                   apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
-                  value={config.value}
+                  initialValue={config.value}
                   init={{
                     plugins: 'link image code',
                     menubar: 'edit insert format',
@@ -117,9 +120,9 @@ export default class TextArea extends Component {
                     paste_block_drop: true,
                     paste_data_images: false
                   }}
-                  onEditorChange={(newValue) => {
+                  onEditorChange={debounce((newValue) => {
                     inputProps.onChange(newValue)
-                  }}
+                  }, 500)}
                 />
               </div>
             ) : (

@@ -69,6 +69,17 @@ const transformMap = [
       'frontend',
       'src',
       'modules',
+      'optimization.js'
+    ),
+    target: path.resolve('./', 'script', 'transformed', 'optimization.js')
+  },
+  {
+    type: 'file',
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
+      'modules',
       'ConfigurableSettings.js'
     ),
     target: path.resolve(
