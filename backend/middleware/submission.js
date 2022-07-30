@@ -5,7 +5,11 @@ const ejs = require('ejs')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { storage, submissionhandler, error } = require(path.resolve('helper'))
+const { storage, submissionhandler, error, model } = require(path.resolve(
+  'helper'
+))
+const formModel = model.form
+const formPublishedModel = model.formpublished
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
@@ -35,19 +39,15 @@ module.exports = (app) => {
     //read out form
     let formResult
     if (version === 0) {
-      formResult = await db.query(
-        `SELECT * FROM \`form\`
-        WHERE id = ?`,
-        [form_id]
-      )
+      formResult = await formModel.get({ form_id })
     } else {
-      formResult = await db.query(
-        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
-        [form_id, version]
-      )
+      formResult = await formPublishedModel.get({
+        form_id,
+        version_id: version
+      })
     }
 
-    if (formResult.length === 0) {
+    if (formResult === false) {
       return res.status(404).send('Error: form not found')
     }
 

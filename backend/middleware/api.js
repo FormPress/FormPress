@@ -938,7 +938,7 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
-    if (result.private) {
+    if (result.private && req.query.preview !== 'true') {
       if (!req.query.token) {
         return res.status(404).send('token must be sent')
       }
