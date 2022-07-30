@@ -29,17 +29,26 @@ const findQuestionType = (form, qid) => {
 module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id/:version?', async (req, res) => {
-    const form_id = parseInt(req.params.id)
+    let form_id = parseInt(req.params.id)
+
+    if (isNaN(form_id)) {
+      form_id = req.params.id
+    }
+
+    const regularForm = await formModel.get({ form_id })
+    form_id = regularForm.id
+
     let version = parseInt(req.params.version) //either a value or NaN
     const db = await getPool()
     //if preview mode
     if (isNaN(version)) {
       version = 0
     }
+
     //read out form
     let formResult
     if (version === 0) {
-      formResult = await formModel.get({ form_id })
+      formResult = regularForm
     } else {
       formResult = await formPublishedModel.get({
         form_id,

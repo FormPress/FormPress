@@ -933,7 +933,6 @@ module.exports = (app) => {
   app.get('/form/view/:id', async (req, res) => {
     const form_id = req.params.id
     const result = await formModel.get({ form_id })
-
     if (result === false) {
       return res.status(404).send('Form not found')
     }
@@ -959,10 +958,9 @@ module.exports = (app) => {
     }
 
     let form = result
-
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
-        form_id: form.id,
+        form_id,
         version_id: form.published_version
       })
 
