@@ -79,17 +79,23 @@ function checkFormPageGoodToGo(currentPage) {
 const elementsWithCurrentPage = document.querySelectorAll(`[data-currentpage]`)
 
 for (const element of elementsWithCurrentPage) {
-  element.addEventListener('click', (event) => {
-    const currentPage = event.target.dataset.currentpage
+  const currentPage = element.dataset.currentpage
 
-    if (event.target.classList.contains('pb-next')) {
+  if (element.classList.contains('pb-next')) {
+    element.addEventListener('click', (event) => {
       if (checkFormPageGoodToGo(currentPage)) {
         goToPage(currentPage, parseInt(currentPage) + 1)
       }
-    } else if (event.target.classList.contains('pb-previous')) {
-      goToPage(currentPage, parseInt(currentPage) - 1)
-    }
-  })
+    })
+  }
+
+  if (element.classList.contains('pb-previous')) {
+    element.addEventListener('click', (event) => {
+      if (checkFormPageGoodToGo(currentPage)) {
+        goToPage(currentPage, parseInt(currentPage) - 1)
+      }
+    })
+  }
 }
 
 const pageSelectors = document.getElementsByClassName(

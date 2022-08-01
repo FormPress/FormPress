@@ -353,6 +353,8 @@
   color: #ffffff;
   float: right;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
 }
 
 .gleam .elementButton input[type='submit']:hover {
@@ -893,11 +895,11 @@ input[type='file'] {
   width: min-content !important;
 }
 
-.renderer.gleam .pagebreak-next {
-  float: right;
+.pagebreak-button.pb-previous {
+  float: left;
 }
-
-.renderer.gleam .pagebreak-submit {
+.pagebreak-button.pb-next,
+.pagebreak-button.pb-submit {
   float: right;
 }
 
