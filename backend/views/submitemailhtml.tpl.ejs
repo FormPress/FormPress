@@ -34,7 +34,7 @@
           const checkQuestion = Form.props.elements.filter(
             (element) => element.id === question_id
           )
-          const question = checkQuestion[0].label
+          const question = checkQuestion[0]
           const type = checkQuestion[0].type
       
           questionData.push({
@@ -46,7 +46,7 @@
         }
         const responselist = questionData.map((data) => {
           let response = {}
-          response.question = data.question
+          response.question = data.question.label
           if (data.type === 'Checkbox' && data.answer === 'off') {
             response.answer = '-'
           } else if (data.type === 'FileUpload') {
@@ -64,7 +64,10 @@
                 })
               })
             }
-          } else {
+          } else if (data.type === 'Radio') {
+            response.answer = data.question.options[parseInt(data.answer)]
+          }
+          else {
             if (data.answer === '') {
               response.answer = '-'
             } else {
