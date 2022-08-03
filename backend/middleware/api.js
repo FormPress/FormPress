@@ -1014,10 +1014,14 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
-    if (req.query.embed !== 'true') {
-      style += ' body {background-color: #f5f5f5;} '
-      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
-      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    if (req.query.embed === 'true') {
+      style += ' body {background: none !important; margin: 3px; } '
+    }
+
+    if (form.private) {
+      console.log('hehehehe')
+      // remove the part that says 'Never Submit Passwords'
+      style += ' .renderer.gleam::after {content: none !important; }'
     }
 
     //form table has "published_version" while form_published has "version"
@@ -1260,8 +1264,10 @@ module.exports = (app) => {
     const jwt_data = { form_id, action: 'view', exp }
 
     jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
-      console.log('token sign error ', err)
-      error.errorReport(err)
+      if (err) {
+        console.log('token sign error ', err)
+        error.errorReport(err)
+      }
 
       return res.status(200).json({
         message: 'Create a new token',
