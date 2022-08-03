@@ -37,7 +37,7 @@ export default class PageBreak extends Component {
         <button
           type="button"
           className="pb-next"
-          data-currentPage={config.pageNumber}
+          data-currentpage={config.pageNumber}
           {...inputProps}>
           <EditableLabel
             className="fl label"
@@ -56,7 +56,7 @@ export default class PageBreak extends Component {
         <button
           type="button"
           className="pb-previous"
-          data-currentPage={config.pageNumber}
+          data-currentpage={config.pageNumber}
           {...inputProps}>
           <EditableLabel
             className="fl label"
