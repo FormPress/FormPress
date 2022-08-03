@@ -341,8 +341,8 @@
   word-break: break-all;
 }
 
-.gleam .elementButton input[type='submit'],
-.gleam .elementButton input[type='submit']:focus,
+.gleam .elementButton button,
+.gleam .elementButton button:focus,
 .elementButton button,
 .elementButton button:focus {
   font-family: Montserrat;
@@ -361,7 +361,7 @@
   cursor: pointer;
 }
 
-.gleam .elementButton input[type='submit']:hover {
+.gleam .elementButton button:hover {
   cursor: pointer;
 }
 
@@ -872,9 +872,7 @@ input[type='file'] {
   display: inline-block;
 }
 
-.renderer.gleam .pagebreak-button > button,
-.renderer.gleam .pagebreak-button > input[type='button'],
-.renderer.gleam .pagebreak-button > input[type='submit'] {
+.renderer.gleam .pagebreak-button > button {
   color: white;
   cursor: pointer;
   background-color: #9ee048;
@@ -919,6 +917,10 @@ input[type='file'] {
   > input[type='submit']
   > div {
   padding: 0.3rem;
+}
+
+.renderer.gleam .pagebreak-button > button > * {
+  pointer-events: none;
 }
 
 .renderer.gleam

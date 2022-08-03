@@ -1015,7 +1015,8 @@ module.exports = (app) => {
     )
 
     if (req.query.embed === 'true') {
-      style += ' body {background: none !important; margin: 3px; } '
+      style +=
+        ' body {background: none !important; margin: 3px; padding-bottom: 3px; } '
     }
 
     if (form.private) {
