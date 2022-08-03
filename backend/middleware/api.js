@@ -1020,7 +1020,6 @@ module.exports = (app) => {
     }
 
     if (form.private) {
-      console.log('hehehehe')
       // remove the part that says 'Never Submit Passwords'
       style += ' .renderer.gleam::after {content: none !important; }'
     }
