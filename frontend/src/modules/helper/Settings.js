@@ -76,7 +76,7 @@ class Settings extends Component {
   }
 
   render() {
-    const { navLinks, routes, key } = this.state
+    const { navLinks, routes } = this.state
 
     return (
       <div className="settings_container">
@@ -84,10 +84,6 @@ class Settings extends Component {
           <div className="settings_menu">
             <h2>User settings</h2>
             {navLinks}
-            <div className="settings_key">
-              <h3>API Key</h3>
-              {key}
-            </div>
           </div>
           <div className="settings_content">
             <Switch>{routes}</Switch>
