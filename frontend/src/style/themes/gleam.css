@@ -7,6 +7,10 @@
   padding: 30px 45px 20px;
   box-sizing: border-box;
 }
+.gleam.form {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
@@ -700,7 +704,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   background-color: white;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .branding > img {
@@ -1013,7 +1017,7 @@ ul li.expected {
 
 .results-header > .userData {
   display: block;
-  padding: 1rem;
+  padding: 0.8rem;
   color: #113952;
 }
 .results-header > .userData .completion-date > #completionDate,
@@ -1049,11 +1053,7 @@ ul li.expected {
 
 .results-header > .testResults > .leftHand > .lhContent,
 .results-header > .testResults > .rightHand > .rhContent {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  padding: 0.8rem;
 }
 
 .results-header > .testResults > .leftHand > .lhContent > .question-info-row,

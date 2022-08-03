@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- headerAppend %>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap">
+    <style>
+        body {
+          margin: 2px;
+          background: none;
+        }
+
+        .renderer.gleam::after {
+          content: none;
+        }
+    </style>
 </head>
 <body answers="<%= JSON.stringify(ANSWERS) %>" questions=" <%= JSON.stringify(QUESTIONS)%>" >
 
@@ -79,6 +89,7 @@
   var FORMID = "<%= FORMID %>";
   var USERID = "<%= USERID %>";
   var BACKEND = "<%= BACKEND %>";
+  var SUBMISSIONID = "<%= SUBMISSION.id %>";
   var QUESTIONS =  JSON.parse(document.body.attributes.questions.value) ;
   var ANSWERS = JSON.parse(document.body.attributes.answers.value)
 
@@ -88,6 +99,7 @@
   window.FORMPRESS = {
     formId: FORMID,
     userId: USERID,
+    submissionId: SUBMISSIONID,
     QUESTIONS: QUESTIONS,
     ANSWERS: ANSWERS
   }
