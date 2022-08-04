@@ -343,7 +343,7 @@ export default class Radio extends Component {
                     type="radio"
                     id={`q_${config.id}_${key}`}
                     name={`q_${config.id}`}
-                    value={key}
+                    value={mode === 'renderer' ? key : item}
                     onChange={inputProps.onChange}
                     checked={config.value === item}></input>
                   <label

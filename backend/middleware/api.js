@@ -2,12 +2,15 @@ const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
 const moment = require('moment')
+const uuidAPIKey = require('uuid-apikey')
+const jwt = require('jsonwebtoken')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
   mustHaveValidToken,
+  mustHaveValidAPIKey,
   paramShouldMatchTokenUserId,
   userShouldOwnSubmission,
   userShouldOwnForm,
@@ -34,10 +37,16 @@ const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   'oldformpropshandler.js'
 ))
 
+const JWT_SECRET = process.env.JWT_SECRET
+
 module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
     const { user_id } = req.params
+
+    if (!form.private) {
+      form.private = 0
+    }
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       // Existing form should update!!!
@@ -924,23 +933,31 @@ module.exports = (app) => {
   app.get('/form/view/:id', async (req, res) => {
     const form_id = req.params.id
     const result = await formModel.get({ form_id })
-
     if (result === false) {
       return res.status(404).send('Form not found')
     }
 
-    let form = result
+    if (result.private && req.query.preview !== 'true') {
+      if (!req.query.token) {
+        return res.status(404).send('token must be sent')
+      }
 
-    const db = await getPool()
-    const userResult = await db.query(
-      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
-      [form.user_id]
-    )
+      jwt.verify(
+        req.query.token.replace('Bearer ', ''),
+        JWT_SECRET,
+        (err, decoded) => {
+          if (err !== null) {
+            return res.status(404).send(err)
+          }
 
-    if (userResult[0].isActive === 0) {
-      return res.status(404).send('Form not found')
+          if (decoded.form_id !== form_id) {
+            return res.status(404).send('token is not valid')
+          }
+        }
+      )
     }
 
+    let form = result
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
         form_id,
@@ -961,6 +978,7 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
+    const db = await getPool()
     const userRoleResult = await db.query(
       `
     SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
@@ -996,10 +1014,14 @@ module.exports = (app) => {
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
 
-    if (req.query.embed !== 'true') {
-      style += ' body {background-color: #f5f5f5;} '
-      style += ' .form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);} '
-      style += ' .branding {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);}  '
+    if (req.query.embed === 'true') {
+      style +=
+        ' body {background: none !important; margin: 3px; padding-bottom: 3px; } '
+    }
+
+    if (form.private) {
+      // remove the part that says 'Never Submit Passwords'
+      style += ' .renderer.gleam::after {content: none !important; }'
     }
 
     //form table has "published_version" while form_published has "version"
@@ -1161,6 +1183,7 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
+
   app.get('/thank-you', async (req, res) => {
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
@@ -1180,6 +1203,82 @@ module.exports = (app) => {
       tyText: tyPageText
     })
   })
+
+  // return api key
+  app.get(
+    '/api/users/:user_id/api-key',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const result = await db.query(
+        `SELECT * FROM \`api_key\` WHERE user_id = ?`,
+        [user_id]
+      )
+
+      if (result.length > 0) {
+        return res.json(result)
+      } else {
+        const api_key = await uuidAPIKey.create().apiKey
+        const data = await db.query(
+          `
+                INSERT INTO \`api_key\`
+                  (user_id, api_key, created_at)
+                VALUES
+                  (?, ?, NOW())
+              `,
+          [user_id, api_key]
+        )
+
+        const result = await db.query(
+          `SELECT * FROM \`api_key\` WHERE id = ?`,
+          [data.insertId]
+        )
+        return res.json(result)
+      }
+    }
+  )
+
+  // create a token with API key for private form view
+  app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
+    const { form_id, exp } = req.body
+
+    if (!form_id || !exp) {
+      return res.status(404).json({ message: 'form_id and exp must be sent' })
+    }
+
+    if (typeof form_id !== 'string') {
+      return res.status(404).json({ message: 'form_id format must be uuid' })
+    }
+
+    const result = await formModel.get({ form_id })
+    if (result === false) {
+      return res.status(404).json({ message: 'Form not found' })
+    }
+
+    if (result.user_id !== res.locals.key.user_id) {
+      return res.status(404).json({ message: 'Form not found' })
+    }
+
+    const jwt_data = { form_id, action: 'view', exp }
+
+    jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
+      if (err) {
+        console.log('token sign error ', err)
+        error.errorReport(err)
+      }
+
+      return res.status(200).json({
+        message: 'Create a new token',
+        token,
+        form_id,
+        action: 'view',
+        exp
+      })
+    })
+  })
+
   app.post('/api/upload/:form_id/:question_id', async (req, res) => {
     let value = await storage.uploadFileForRte(
       req.files,

@@ -2,6 +2,20 @@
   document.querySelectorAll('input[type=radio]').forEach(function (element) {
     element.disabled = true
   })
+  const formIsEmbedded = window.location !== window.parent.location
+
+  const loadScript = (name) =>
+    new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+
+      script.onload = resolve
+      script.src = `${BACKEND}/runtime/${name}.js`
+      document.head.appendChild(script)
+    })
+
+  if (formIsEmbedded) {
+    await loadScript('3rdparty/iframeSizer.contentWindow.min')
+  }
 
   let emptyAnswers = 0
   let correctAnswers = 0
@@ -81,10 +95,27 @@
   document.getElementById('questionCount').innerText = `${questionCount}`
   document.getElementById('correctAnswers').innerText = `${correctAnswers}`
   document.getElementById('wrongAnswers').innerText = `${wrongAnswers}`
-  document.getElementById('totalAnswers').innerText = `${
-    questionCount - emptyAnswers
-  }`
+  document.getElementById('unanswered').innerText = `${emptyAnswers}`
+
   const percentageScoreDOMElem = document.getElementById('percentageScore')
   percentageScoreDOMElem.innerHTML = `${percentageScore}`
   percentageScoreDOMElem.style.color = colorizePercentage(percentageScore)
+
+  if (formIsEmbedded) {
+    window.parent.postMessage(
+      {
+        type: 'submission-info',
+        formId: FORMPRESS.formId,
+        submissionId: FORMPRESS.submissionId,
+        results: {
+          questionCount: questionCount,
+          answersGiven: correctAnswers + wrongAnswers,
+          correctAnswers: correctAnswers,
+          wrongAnswers: wrongAnswers,
+          percentageScore: percentageScore
+        }
+      },
+      '*'
+    )
+  }
 })()

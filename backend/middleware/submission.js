@@ -5,7 +5,11 @@ const ejs = require('ejs')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { storage, submissionhandler, error } = require(path.resolve('helper'))
+const { storage, submissionhandler, error, model } = require(path.resolve(
+  'helper'
+))
+const formModel = model.form
+const formPublishedModel = model.formpublished
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
@@ -25,33 +29,38 @@ const findQuestionType = (form, qid) => {
 module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id/:version?', async (req, res) => {
-    const form_id = parseInt(req.params.id)
+    let form_id = parseInt(req.params.id)
+
+    if (isNaN(form_id)) {
+      form_id = req.params.id
+    }
+
+    const regularForm = await formModel.get({ form_id })
+    form_id = regularForm.id
+
     let version = parseInt(req.params.version) //either a value or NaN
     const db = await getPool()
     //if preview mode
     if (isNaN(version)) {
       version = 0
     }
+
     //read out form
     let formResult
     if (version === 0) {
-      formResult = await db.query(
-        `SELECT * FROM \`form\`
-        WHERE id = ?`,
-        [form_id]
-      )
+      formResult = regularForm
     } else {
-      formResult = await db.query(
-        `SELECT * FROM \`form_published\` WHERE form_id = ? AND version = ?`,
-        [form_id, version]
-      )
+      formResult = await formPublishedModel.get({
+        form_id,
+        version_id: version
+      })
     }
 
-    if (formResult.length === 0) {
+    if (formResult === false) {
       return res.status(404).send('Error: form not found')
     }
 
-    const form = formResult[0]
+    const form = formResult
     //preview mode form id = form.id VS published mode form id = form.form_id
 
     const userResult = await db.query(
@@ -62,8 +71,6 @@ module.exports = (app) => {
     if (userResult[0].isActive === 0) {
       return res.status(404).send('Error: Form not found')
     }
-
-    form.props = JSON.parse(form.props)
 
     //create submission and get id
     const result = await db.query(

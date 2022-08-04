@@ -112,11 +112,11 @@
   float: left;
 }
 
-.infernal > .elementButton {
+.infernal .elementButton {
   width: 332px;
 }
 
-.infernal > .elementButton input {
+.infernal .elementButton button {
   font-family: Montserrat;
   font-weight: 700;
   font-size: 16px;
@@ -128,7 +128,7 @@
   border: none;
 }
 
-.infernal > .elementButton input:hover {
+.infernal .elementButton button:hover {
   color: #ffffff;
   background-color: #8cc63f;
   border: none;

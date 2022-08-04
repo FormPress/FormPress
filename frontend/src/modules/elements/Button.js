@@ -60,7 +60,9 @@ export default class Button extends Component {
           </div>
         ) : (
           <div>
-            <input type="submit" value={config.buttonText} {...inputProps} />
+            <button type="submit" {...inputProps}>
+              {config.buttonText}
+            </button>
             <div className="clearfix">
               <EditableLabel
                 className="sublabel"

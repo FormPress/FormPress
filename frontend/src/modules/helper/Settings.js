@@ -3,17 +3,28 @@ import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import PrivateRoute from '../../PrivateRoute'
 import './Settings.css'
 import { api } from '../../helper'
+import AuthContext from '../../auth.context'
 
 class Settings extends Component {
-  state = {
-    navLinks: [],
-    routes: [],
-    planNames: ['silver', 'gold', 'diamond']
+  constructor(props) {
+    super(props)
+    this.state = {
+      navLinks: [],
+      routes: [],
+      planNames: ['silver', 'gold', 'diamond'],
+      key: '-'
+    }
   }
+
   async componentDidMount() {
     const { data } = await api({
       resource: `/api/app/get/settingsPluginfileslist`
     })
+    const key = await api({
+      resource: `/api/users/${this.props.auth.user_id}/api-key`
+    })
+
+    this.setState({ userListIsloaded: true, key: key.data[0].api_key, data })
 
     const navLinks = [],
       routes = [
@@ -83,4 +94,10 @@ class Settings extends Component {
   }
 }
 
-export default Settings
+const SettingsWrapped = (props) => (
+  <AuthContext.Consumer>
+    {(value) => <Settings {...props} auth={value} />}
+  </AuthContext.Consumer>
+)
+
+export default SettingsWrapped

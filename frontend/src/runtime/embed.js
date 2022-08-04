@@ -34,26 +34,35 @@
 
   await loadScript('3rdparty/jquery.3.4.1.min')
   await loadScript('3rdparty/iframeResizer.min')
-  // console.log(jQuery('script a'))
 
   // add iframe after script tag, adding after not fp_style to ignore multiple embed
   $('script[fp_id]').each(function (index, elem) {
     const formID = $(this).attr('fp_id')
+    const token = $(this).attr('fp_token')
+
+    let src = `${BACKEND}/form/view/${formID}?embed=true`
+
+    if (token) {
+      src += `&token=${token}`
+    }
+
     const fpTitle =
       $(this).attr('fp_widget_title') !== undefined
         ? `<h3>${$(this).attr('fp_widget_title')}</h3>`
         : ''
     const iframeID = 'fp_' + formID
 
-    let iframeElem = `<iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true"></iframe>`
+    let iframeElem = `<iframe id="${iframeID}" src="${src}"></iframe>`
 
     if ($(this).attr('fp_widget') !== undefined) {
+      src += `&widget=true`
+
       iframeElem = `
       <div style="position: fixed; bottom: 30px; right: 30px;">
         <div class="message-container hidden">
           ${fpTitle}
           <div class="iframe-content">
-            <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true&widget=true" crossorigin="anonymous"></iframe>
+            <iframe id="${iframeID}" src="${src}" crossorigin="anonymous"></iframe>
           </div>
         </div>
         <div class="button-container">
@@ -101,7 +110,7 @@
             border: none;
           }
         </style>
-        <iframe id="${iframeID}" src="${BACKEND}/form/view/${formID}?embed=true"></iframe>
+        <iframe id="${iframeID}" src="${src}"></iframe>
         <script>
           ${cookieScript}
           iFrameResize({ log: false }, '#${iframeID}')

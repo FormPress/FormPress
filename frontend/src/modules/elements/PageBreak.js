@@ -32,9 +32,13 @@ export default class PageBreak extends Component {
       inputProps.onClick = config.onClick
     }
 
-    const builderNextButton = (
+    const nextButton = (
       <div className="pagebreak-button pb-next">
-        <button {...inputProps}>
+        <button
+          type="button"
+          className="pb-next"
+          data-currentpage={config.pageNumber}
+          {...inputProps}>
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
@@ -47,9 +51,13 @@ export default class PageBreak extends Component {
       </div>
     )
 
-    const builderPreviousButton = (
+    const previousButton = (
       <div className="pagebreak-button pb-previous">
-        <button {...inputProps}>
+        <button
+          type="button"
+          className="pb-previous"
+          data-currentpage={config.pageNumber}
+          {...inputProps}>
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
@@ -62,9 +70,9 @@ export default class PageBreak extends Component {
       </div>
     )
 
-    const builderSubmitButton = (
+    const submitButton = (
       <div className="pagebreak-button pb-submit">
-        <button {...inputProps}>
+        <button type="submit" className="pb-submit" {...inputProps}>
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a button text"
@@ -77,88 +85,27 @@ export default class PageBreak extends Component {
       </div>
     )
 
-    const rendererNextButton = (
-      <div className="pagebreak-button pagebreak-next">
-        <input
-          {...inputProps}
-          type="button"
-          className="pb-next"
-          value={config.nextButtonText}
-          data-currentPage={config.pageNumber}></input>
-      </div>
-    )
-
-    const rendererPreviousButton = (
-      <div className="pagebreak-button pagebreak-previous">
-        <input
-          {...inputProps}
-          type="button"
-          className="pb-previous"
-          value={config.previousButtonText}
-          data-currentPage={config.pageNumber}></input>
-      </div>
-    )
-
-    const rendererSubmitButton = (
-      <div className="pagebreak-button pagebreak-submit">
-        <input
-          {...inputProps}
-          type="submit"
-          className="pb-submit"
-          value={config.submitButtonText}
-          data-currentPage={config.pageNumber}></input>
-      </div>
-    )
-
     let display
-    if (mode === 'builder') {
-      switch (config.style) {
-        case 'start':
-          display = (
-            <div className="pagebreak-navControls">{builderNextButton}</div>
-          )
-          break
-        case 'end':
-          display = (
-            <div className="pagebreak-navControls">
-              {builderPreviousButton}
-              {builderSubmitButton}
-            </div>
-          )
-          break
-        case 'between':
-          display = (
-            <div className="pagebreak-navControls">
-              {builderPreviousButton}
-              {builderNextButton}
-            </div>
-          )
-          break
-      }
-    } else {
-      switch (config.style) {
-        case 'start':
-          display = (
-            <div className="pagebreak-navControls">{rendererNextButton}</div>
-          )
-          break
-        case 'end':
-          display = (
-            <div className="pagebreak-navControls">
-              {rendererPreviousButton}
-              {rendererSubmitButton}
-            </div>
-          )
-          break
-        case 'between':
-          display = (
-            <div className="pagebreak-navControls">
-              {rendererPreviousButton}
-              {rendererNextButton}
-            </div>
-          )
-          break
-      }
+    switch (config.style) {
+      case 'start':
+        display = <div className="pagebreak-navControls">{nextButton}</div>
+        break
+      case 'end':
+        display = (
+          <div className="pagebreak-navControls">
+            {previousButton}
+            {submitButton}
+          </div>
+        )
+        break
+      case 'between':
+        display = (
+          <div className="pagebreak-navControls">
+            {previousButton}
+            {nextButton}
+          </div>
+        )
+        break
     }
 
     const options = []

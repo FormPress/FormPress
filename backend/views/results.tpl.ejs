@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- headerAppend %>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap">
+    <style>
+        body {
+          margin: 2px;
+          background: none;
+        }
+
+        .renderer.gleam::after {
+          content: none;
+        }
+    </style>
 </head>
 <body answers="<%= JSON.stringify(ANSWERS) %>" questions=" <%= JSON.stringify(QUESTIONS)%>" >
 
@@ -15,13 +25,13 @@
     <div class="results-header">
         <div class="r-header-section userData">
             <div class="completion-date">
-                Completion Date:&nbsp;
+                Bitirme Tarihi:&nbsp;
                 <span id="completionDate" >
                     <%= SUBMISSION.created_at %>
                 </span>
             </div>
             <div class="completion-time">
-                Completion Time:&nbsp;
+                Bitirme Süresi:&nbsp;
                 <span id="completionTime" >
                     <%= SUBMISSION.completion_time %>
                 </span>
@@ -34,24 +44,24 @@
             <div class="leftHand">
                 <div class="lhContent">
                     <div class="question-info-row">
-                        Questions: <span id="questionCount" class="total-question-count"></span>
+                        Soru Sayısı: <span id="questionCount" class="total-question-count"></span>
                     </div>
                     <div class="answer-info-row">
-                Answers: <span id="totalAnswers" class="total-answer-count"></span>
-                (&nbsp;<span id="correctAnswers" class="correct-answer-count"></span> |             <span id="wrongAnswers" class="incorrect-answer-count"></span>&nbsp;)
-            </div>
+                        Doğru: &nbsp;<span id="correctAnswers" class="correct-answer-count"></span>
+                    </div>
+                    <div class="answer-info-row">
+                        Yanlış: &nbsp;<span id="wrongAnswers" class="wrong-answer-count"></span>
+                    </div>
+                    <div class="answer-info-row">
+                     Boş: <span id="unanswered" class="unanswered-count"></span>
+                </div>
                 </div>
             </div>
-
-
-
             <div class="rightHand">
                 <div class="rhContent">
-                     Score:&nbsp;<span id="percentageScore" class="percentage-score"></span>
+                     Başarı:&nbsp;<span id="percentageScore" class="percentage-score"></span>
                 </div>
             </div>
-
-
         </div>
     </div>
     <div class="fp-powered">
@@ -79,6 +89,7 @@
   var FORMID = "<%= FORMID %>";
   var USERID = "<%= USERID %>";
   var BACKEND = "<%= BACKEND %>";
+  var SUBMISSIONID = "<%= SUBMISSION.id %>";
   var QUESTIONS =  JSON.parse(document.body.attributes.questions.value) ;
   var ANSWERS = JSON.parse(document.body.attributes.answers.value)
 
@@ -88,6 +99,7 @@
   window.FORMPRESS = {
     formId: FORMID,
     userId: USERID,
+    submissionId: SUBMISSIONID,
     QUESTIONS: QUESTIONS,
     ANSWERS: ANSWERS
   }

@@ -7,6 +7,10 @@
   padding: 30px 45px 20px;
   box-sizing: border-box;
 }
+.gleam.form {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
@@ -337,8 +341,8 @@
   word-break: break-all;
 }
 
-.gleam .elementButton input[type='submit'],
-.gleam .elementButton input[type='submit']:focus,
+.gleam .elementButton button,
+.gleam .elementButton button:focus,
 .elementButton button,
 .elementButton button:focus {
   font-family: Montserrat;
@@ -353,9 +357,11 @@
   color: #ffffff;
   float: right;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
 }
 
-.gleam .elementButton input[type='submit']:hover {
+.gleam .elementButton button:hover {
   cursor: pointer;
 }
 
@@ -698,7 +704,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
   background-color: white;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .branding > img {
@@ -866,9 +872,7 @@ input[type='file'] {
   display: inline-block;
 }
 
-.renderer.gleam .pagebreak-button > button,
-.renderer.gleam .pagebreak-button > input[type='button'],
-.renderer.gleam .pagebreak-button > input[type='submit'] {
+.renderer.gleam .pagebreak-button > button {
   color: white;
   cursor: pointer;
   background-color: #9ee048;
@@ -893,11 +897,11 @@ input[type='file'] {
   width: min-content !important;
 }
 
-.renderer.gleam .pagebreak-next {
-  float: right;
+.pagebreak-button.pb-previous {
+  float: left;
 }
-
-.renderer.gleam .pagebreak-submit {
+.pagebreak-button.pb-next,
+.pagebreak-button.pb-submit {
   float: right;
 }
 
@@ -913,6 +917,10 @@ input[type='file'] {
   > input[type='submit']
   > div {
   padding: 0.3rem;
+}
+
+.renderer.gleam .pagebreak-button > button > * {
+  pointer-events: none;
 }
 
 .renderer.gleam
@@ -1005,13 +1013,12 @@ ul li.expected {
 .results-header > .r-header-section {
   width: 33%;
   float: left;
-  display: block;
   border-right: 1px solid #eee;
 }
 
 .results-header > .userData {
   display: block;
-  padding: 1rem;
+  /*padding: 0.8rem;*/
   color: #113952;
 }
 .results-header > .userData .completion-date > #completionDate,
@@ -1020,7 +1027,7 @@ ul li.expected {
 }
 
 .results-header > .formInfo {
-  padding: 1.5rem;
+  /*padding: 1.5rem;*/
   text-align: center;
   color: #0071bc;
   text-overflow: ellipsis;
@@ -1038,20 +1045,20 @@ ul li.expected {
 .results-header > .testResults > .rightHand {
   width: 45%;
   float: right;
-  padding: 0.25rem 0.2rem;
   text-align: center;
   border-left: 1px solid #eee;
-  margin-left: 10px;
   height: 100%;
 }
 
-.results-header > .testResults > .leftHand > .lhContent,
-.results-header > .testResults > .rightHand > .rhContent {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+.results-header > .userData,
+.results-header > .formInfo,
+.results-header > .testResults > .leftHand,
+.results-header > .testResults > .rightHand {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .results-header > .testResults > .leftHand > .lhContent > .question-info-row,
@@ -1077,6 +1084,15 @@ ul li.expected {
 
 .results-header
   > .testResults
+  > .leftHand
+  > .lhContent
+  > .answer-info-row
+  > #unanswered {
+  color: rgb(123, 116, 116);
+}
+
+.results-header
+  > .testResults
   > .rightHand
   > .rhContent
   > #percentageScore::after {
@@ -1092,8 +1108,8 @@ ul li.expected {
   > .lhContent
   > .question-info-row
   > .total-question-count {
-  font-weight: bold;
-  color: #0071bc;
+  /*font-weight: bold;*/
+  /*color: #0071bc;*/
 }
 
 .fp-powered {
