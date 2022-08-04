@@ -33,18 +33,12 @@
     })
 
   await loadScript('3rdparty/jquery.3.4.1.min')
-  // console.log(jQuery('script a'))
-
-  let bypassIframeResizer = false
+  await loadScript('3rdparty/iframeResizer.min')
 
   // add iframe after script tag, adding after not fp_style to ignore multiple embed
   $('script[fp_id]').each(function (index, elem) {
     const formID = $(this).attr('fp_id')
     const token = $(this).attr('fp_token')
-
-    if ($(this).attr('fp_bypassResizer')) {
-      bypassIframeResizer = true
-    }
 
     let src = `${BACKEND}/form/view/${formID}?embed=true`
 
@@ -215,8 +209,4 @@
       }
     }
   })
-
-  if (!bypassIframeResizer) {
-    await loadScript('3rdparty/iframeResizer.min')
-  }
 })()
