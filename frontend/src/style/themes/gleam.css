@@ -1013,13 +1013,12 @@ ul li.expected {
 .results-header > .r-header-section {
   width: 33%;
   float: left;
-  display: block;
   border-right: 1px solid #eee;
 }
 
 .results-header > .userData {
   display: block;
-  padding: 0.8rem;
+  /*padding: 0.8rem;*/
   color: #113952;
 }
 .results-header > .userData .completion-date > #completionDate,
@@ -1028,7 +1027,7 @@ ul li.expected {
 }
 
 .results-header > .formInfo {
-  padding: 1.5rem;
+  /*padding: 1.5rem;*/
   text-align: center;
   color: #0071bc;
   text-overflow: ellipsis;
@@ -1046,16 +1045,20 @@ ul li.expected {
 .results-header > .testResults > .rightHand {
   width: 45%;
   float: right;
-  padding: 0.25rem 0.2rem;
   text-align: center;
   border-left: 1px solid #eee;
-  margin-left: 10px;
   height: 100%;
 }
 
-.results-header > .testResults > .leftHand > .lhContent,
-.results-header > .testResults > .rightHand > .rhContent {
-  padding: 0.8rem;
+.results-header > .userData,
+.results-header > .formInfo,
+.results-header > .testResults > .leftHand,
+.results-header > .testResults > .rightHand {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .results-header > .testResults > .leftHand > .lhContent > .question-info-row,
@@ -1081,6 +1084,15 @@ ul li.expected {
 
 .results-header
   > .testResults
+  > .leftHand
+  > .lhContent
+  > .answer-info-row
+  > #unanswered {
+  color: rgb(123, 116, 116);
+}
+
+.results-header
+  > .testResults
   > .rightHand
   > .rhContent
   > #percentageScore::after {
@@ -1096,8 +1108,8 @@ ul li.expected {
   > .lhContent
   > .question-info-row
   > .total-question-count {
-  font-weight: bold;
-  color: #0071bc;
+  /*font-weight: bold;*/
+  /*color: #0071bc;*/
 }
 
 .fp-powered {

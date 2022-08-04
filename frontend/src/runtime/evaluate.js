@@ -95,9 +95,7 @@
   document.getElementById('questionCount').innerText = `${questionCount}`
   document.getElementById('correctAnswers').innerText = `${correctAnswers}`
   document.getElementById('wrongAnswers').innerText = `${wrongAnswers}`
-  document.getElementById('totalAnswers').innerText = `${
-    questionCount - emptyAnswers
-  }`
+  document.getElementById('unanswered').innerText = `${emptyAnswers}`
 
   const percentageScoreDOMElem = document.getElementById('percentageScore')
   percentageScoreDOMElem.innerHTML = `${percentageScore}`
