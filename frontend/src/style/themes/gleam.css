@@ -320,6 +320,10 @@
   word-break: break-all;
 }
 
+.label.radio-label > span > p {
+  margin: unset;
+}
+
 .gleam .elementName {
   background-color: transparent;
 }
