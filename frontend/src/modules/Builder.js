@@ -498,7 +498,7 @@ class Builder extends Component {
   handleAddFormElementClick(elemType) {
     let item = getElementsKeys()[elemType]
     const { form } = this.state
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
     let maxId = Math.max(...form.props.elements.map((element) => element.id))
     //if no elements, Math.max returns -Infinity
     if (maxId === -Infinity) {
