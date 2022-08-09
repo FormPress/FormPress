@@ -43,14 +43,6 @@ export default class TextArea extends Component {
     isFilled: 'defaultInputHelpers'
   }
 
-  shouldComponentUpdate(nextProps) {
-    // for tinymce to work properly, component should not update if the editor is active
-    if (this.props.config && this.props.config.editor === true) {
-      return nextProps.config && nextProps.config.editor !== true
-    }
-    return true
-  }
-
   render() {
     const { config, mode } = this.props
     const inputProps = {}
