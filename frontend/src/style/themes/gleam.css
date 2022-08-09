@@ -421,8 +421,8 @@
 
 .renderer.gleam.form .elementRadio .input .radio-label {
   color: #333333;
-  margin-top: 0px;
   max-width: calc(100% - 25px);
+  margin-top: 0px;
   overflow: hidden;
   user-select: none;
   min-width: 60px;
