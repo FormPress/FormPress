@@ -948,37 +948,6 @@ class Builder extends Component {
     const question = form.props.elements.filter(
       (element) => element.id === changes.id
     )[0]
-    if (
-      Object.prototype.hasOwnProperty.call(
-        changes.newState,
-        'dropdownOptions'
-      ) === true
-    ) {
-      let lines = changes.newState.dropdownOptions.split('\n')
-      changes.newState.options = []
-
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i] && lines[i].trim().length !== 0) {
-          changes.newState.options.push(lines[i])
-        }
-      }
-    }
-
-    if (
-      Object.prototype.hasOwnProperty.call(
-        changes.newState,
-        'prefixOptions'
-      ) === true
-    ) {
-      let lines = changes.newState.prefixOptions.split('\n')
-      changes.newState.options = []
-
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i] && lines[i].trim().length !== 0) {
-          changes.newState.options.push(lines[i])
-        }
-      }
-    }
 
     Object.assign(question, changes.newState)
 
