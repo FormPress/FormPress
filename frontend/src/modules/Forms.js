@@ -187,8 +187,11 @@ class Forms extends Component {
       }
     }
     this.setState({ modalContent })
+    setTimeout(() => {
+      this.handleCloseModalClick()
+    }, 1500)
 
-    this.updateForms()
+    await this.updateForms()
   }
 
   async formClone(form) {
@@ -217,6 +220,10 @@ class Forms extends Component {
       }
     }
     this.setState({ modalContent })
+
+    setTimeout(() => {
+      this.handleCloseModalClick()
+    }, 1500)
 
     this.updateForms()
   }
@@ -266,12 +273,13 @@ class Forms extends Component {
     return (
       <div>
         <div className="forms">
-          <Modal
-            history={this.props.history}
-            isOpen={this.state.isModalOpen}
-            modalContent={this.state.modalContent}
-            closeModal={this.handleCloseModalClick}
-          />
+          {this.state.isModalOpen ? (
+            <Modal
+              isOpen={this.state.isModalOpen}
+              modalContent={this.state.modalContent}
+              closeModal={this.handleCloseModalClick}
+            />
+          ) : null}
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">

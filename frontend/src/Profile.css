@@ -1,6 +1,5 @@
 .profileMenuContainer {
-  height: 60px;
-  width: 200px;
+  width: min-content;
   position: relative;
 }
 

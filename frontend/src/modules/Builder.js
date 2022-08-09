@@ -1044,12 +1044,14 @@ class Builder extends Component {
 
     return (
       <div className="builder">
-        <Modal
-          isOpen={this.state.isModalOpen}
-          modalContent={this.state.modalContent}
-          closeModal={this.handleCloseModalClick}
-        />
-        {this.renderTemplateModal()}
+        {this.state.isModalOpen ? (
+          <Modal
+            isOpen={this.state.isModalOpen}
+            modalContent={this.state.modalContent}
+            closeModal={this.handleCloseModalClick}
+          />
+        ) : null}
+        {this.state.isTemplateModalOpen ? this.renderTemplateModal() : null}
         <div className="headerContainer">
           <div
             className={`header grid center ${
