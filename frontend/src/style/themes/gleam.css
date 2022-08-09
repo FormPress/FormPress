@@ -427,7 +427,7 @@
   user-select: none;
   min-width: 60px;
   display: inline-block;
-  word-break: break-all;
+  word-break: normal;
   white-space: break-spaces;
 }
 
