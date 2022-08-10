@@ -27,6 +27,10 @@
     {
       name: 'multistep',
       check: (element) => element.type === 'PageBreak' || formHasAutoPageBreaks
+    },
+    {
+      name: 'deselectableRadio',
+      check: (element) => element.type === 'Radio'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
