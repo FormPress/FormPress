@@ -90,19 +90,15 @@ class Forms extends Component {
 
     modalContent.content = (
       <div>
-        <span
+        <strong
           style={{
-            color: '#719fbd',
-            fontWeight: 'bold',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             wordBreak: 'break-all'
           }}>
           {form.title}
-        </span>{' '}
-        will be cloned.
-        <br />
-        Please specify a name for new form:
+        </strong>{' '}
+        will be cloned. Please specify a name for new form.
       </div>
     )
 
@@ -125,16 +121,14 @@ class Forms extends Component {
 
     modalContent.content = (
       <div>
-        <span
+        <strong
           style={{
-            color: '#719fbd',
-            fontWeight: 'bold',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             wordBreak: 'break-all'
           }}>
           {form.title}
-        </span>{' '}
+        </strong>{' '}
         will be deleted. Are you sure you want to delete this form?
       </div>
     )
