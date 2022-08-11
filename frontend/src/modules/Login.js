@@ -25,6 +25,8 @@ class Login extends Component {
     this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+
+    this.formRef = React.createRef();
   }
 
   handleFieldChange(elem, e) {
@@ -40,6 +42,8 @@ class Login extends Component {
   async handleLoginButtonClick(e) {
     e.preventDefault()
     this.setState({ state: 'loading' })
+
+    window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
     const { email, password } = this.state
 
@@ -127,6 +131,8 @@ class Login extends Component {
 
     const capabilities = this.props.capabilities
 
+    
+
     return (
       <div className="login-wrapper">
         <div className="loginForm">
@@ -137,8 +143,8 @@ class Login extends Component {
             </div>
           </div>
           <div className="pale-border">
-            <div className="form-header">LOGIN FORM</div>
-            <form onSubmit={this.handleLoginButtonClick}>
+            <div className="form-header">LOGIN FORM Test</div>
+            <form ref={this.formRef} onSubmit={this.handleLoginButtonClick}>
               <Renderer
                 className="form"
                 theme="infernal"
