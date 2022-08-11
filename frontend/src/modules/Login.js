@@ -26,7 +26,7 @@ class Login extends Component {
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
 
-    this.formRef = React.createRef();
+    this.formRef = React.createRef()
   }
 
   handleFieldChange(elem, e) {
@@ -130,8 +130,6 @@ class Login extends Component {
     }
 
     const capabilities = this.props.capabilities
-
-    
 
     return (
       <div className="login-wrapper">
