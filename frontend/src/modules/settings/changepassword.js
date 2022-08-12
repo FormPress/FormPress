@@ -122,7 +122,7 @@ export default class ChangePassword extends Component {
                             id: 4,
                             key: 4,
                             type: 'Button',
-                            buttonText: 'CHANCE PASSWORD'
+                            buttonText: 'CHANGE PASSWORD'
                           }
                         ]
                       }

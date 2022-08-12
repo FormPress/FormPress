@@ -3,6 +3,29 @@ import ReactDOM from 'react-dom'
 import './Modal.css'
 
 class Modal extends Component {
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown)
+  }
+
+  handleKeyDown = (e) => {
+    const { dialogue } = this.props.modalContent
+    if (e.key === 'Escape') {
+      this.props.closeModal()
+    }
+
+    if (e.key === 'Enter') {
+      if (dialogue && typeof dialogue.positiveClick === 'function') {
+        dialogue.positiveClick()
+      } else if (dialogue && typeof dialogue.negativeClick === 'function') {
+        dialogue.negativeClick()
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown)
+  }
+
   renderDialogue() {
     const { dialogue } = this.props.modalContent
     return (
