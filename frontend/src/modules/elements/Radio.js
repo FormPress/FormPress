@@ -335,7 +335,7 @@ export default class Radio extends Component {
             }}></span>
         </div>,
         <div key="2" className="fl input">
-          <ul className="radioList">
+          <ul>
             {config.options.map((item, key) => {
               return (
                 <li key={key}>
