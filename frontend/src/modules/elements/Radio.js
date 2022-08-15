@@ -15,7 +15,8 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Single Choice',
-    options: ['New Radio']
+    options: ['New Radio'],
+    unselectButtonText: 'Clear Selection'
   }
 
   static metaData = {
@@ -163,6 +164,14 @@ export default class Radio extends Component {
         options: ['Use rich text editor for options']
       }
     },
+    isUnselectable: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Make options unselectable']
+      }
+    },
     expectedAnswer: {
       default: '',
       formProps: {
@@ -270,6 +279,26 @@ export default class Radio extends Component {
             customBuilderHandlers={this.props.customBuilderHandlers}
             selectedLabelId={selectedLabelId}
           />
+          {config.isUnselectable === true ? (
+            <button
+              type="button"
+              className="unselect-button"
+              id={`q_${config.id}_unselectButton`}>
+              <EditableLabel
+                className="sublabel unselect-label"
+                dataPlaceholder="Clear Selection"
+                mode={mode}
+                labelKey={`radio_${config.id}_unselectButton`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.unselectButtonText !== 'undefined' &&
+                  config.unselectButtonText !== ''
+                    ? config.unselectButtonText
+                    : ''
+                }
+              />
+            </button>
+          ) : null}
         </div>,
         <div className="clearfix" key="3">
           <EditableLabel
@@ -335,7 +364,7 @@ export default class Radio extends Component {
             }}></span>
         </div>,
         <div key="2" className="fl input">
-          <ul>
+          <ul id={`q_${config.id}_radioList`} className="radioList">
             {config.options.map((item, key) => {
               return (
                 <li key={key}>
@@ -357,6 +386,26 @@ export default class Radio extends Component {
               )
             })}
           </ul>
+          {config.isUnselectable === true ? (
+            <button
+              type="button"
+              className="unselect-button"
+              id={`q_${config.id}_unselectButton`}>
+              <EditableLabel
+                className="sublabel unselect-label"
+                dataPlaceholder="Clear Selection"
+                mode={mode}
+                labelKey={`radio_${config.id}_unselectButton`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.unselectButtonText !== 'undefined' &&
+                  config.unselectButtonText !== ''
+                    ? config.unselectButtonText
+                    : ''
+                }
+              />
+            </button>
+          ) : null}
         </div>,
         <div className="clearfix" key="3">
           <EditableLabel
@@ -383,6 +432,20 @@ export default class Radio extends Component {
           </details>
         </div>
       ]
+    }
+
+    if (mode === 'renderer') {
+      let scriptInnerHtml = `
+      document.getElementById('q_${config.id}_unselectButton').onclick = function() {
+        document.getElementById('q_${config.id}_radioList').childNodes.forEach(function(item) {
+          item.childNodes[0].checked = false;
+        });
+      }
+    `
+      let script = (
+        <script key={5} dangerouslySetInnerHTML={{ __html: scriptInnerHtml }} />
+      )
+      display.push(script)
     }
 
     return (

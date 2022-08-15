@@ -81,7 +81,6 @@
   position: relative;
   font-size: 12px;
   display: inline-block;
-  margin-top: 10px;
   max-width: 600px;
   word-break: break-word;
 }
@@ -92,7 +91,7 @@
   color: gray;
   border: 1px solid transparent;
   display: block;
-  word-break: break-all;
+  word-break: break-word;
 }
 .builder.gleam.form span.emptySpan[contentEditable='true'] {
   border: 1px dashed gray;
@@ -322,6 +321,30 @@
 
 .label.radio-label > span > p {
   margin: unset;
+}
+
+.gleam .elementRadio .unselect-button {
+  background-color: #719fbd;
+  outline: 0;
+  border: 0;
+  border-radius: 0;
+  padding: 0.25rem;
+  width: 9rem;
+  min-height: 2.5rem;
+  color: white;
+  cursor: pointer;
+  word-wrap: break-word;
+  float: right;
+}
+
+.gleam .elementRadio .unselect-button:hover {
+  background-color: #5e8c9e;
+}
+
+.gleam .elementRadio .unselect-button > .unselect-label > span {
+  color: white !important;
+  margin: unset;
+  font-size: 11pt;
 }
 
 .gleam .elementName {

@@ -119,3 +119,7 @@
 #qc_defaultCountry {
   margin-top: -20px;
 }
+
+#qc_isUnselectable.elementHider + #qc_unselectButtonText.elementTextBox {
+  display: none !important;
+}
