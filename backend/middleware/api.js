@@ -960,7 +960,7 @@ module.exports = (app) => {
     let form = result
     if (req.query.preview !== 'true' && form.published_version !== null) {
       const publishedResult = await formPublishedModel.get({
-        form_id,
+        form_id: form.id,
         version_id: form.published_version
       })
 

@@ -29,7 +29,6 @@
   width: 82%;
   display: block;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   height: 2rem;
   float: left;

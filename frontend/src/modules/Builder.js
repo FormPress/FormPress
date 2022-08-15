@@ -498,7 +498,7 @@ class Builder extends Component {
   handleAddFormElementClick(elemType) {
     let item = getElementsKeys()[elemType]
     const { form } = this.state
-    let elements = [...form.props.elements]
+    let elements = cloneDeep([...form.props.elements])
     let maxId = Math.max(...form.props.elements.map((element) => element.id))
     //if no elements, Math.max returns -Infinity
     if (maxId === -Infinity) {
@@ -948,37 +948,6 @@ class Builder extends Component {
     const question = form.props.elements.filter(
       (element) => element.id === changes.id
     )[0]
-    if (
-      Object.prototype.hasOwnProperty.call(
-        changes.newState,
-        'dropdownOptions'
-      ) === true
-    ) {
-      let lines = changes.newState.dropdownOptions.split('\n')
-      changes.newState.options = []
-
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i] && lines[i].trim().length !== 0) {
-          changes.newState.options.push(lines[i])
-        }
-      }
-    }
-
-    if (
-      Object.prototype.hasOwnProperty.call(
-        changes.newState,
-        'prefixOptions'
-      ) === true
-    ) {
-      let lines = changes.newState.prefixOptions.split('\n')
-      changes.newState.options = []
-
-      for (let i = 0; i < lines.length; i++) {
-        if (lines[i] && lines[i].trim().length !== 0) {
-          changes.newState.options.push(lines[i])
-        }
-      }
-    }
 
     Object.assign(question, changes.newState)
 
@@ -1044,12 +1013,14 @@ class Builder extends Component {
 
     return (
       <div className="builder">
-        <Modal
-          isOpen={this.state.isModalOpen}
-          modalContent={this.state.modalContent}
-          closeModal={this.handleCloseModalClick}
-        />
-        {this.renderTemplateModal()}
+        {this.state.isModalOpen ? (
+          <Modal
+            isOpen={this.state.isModalOpen}
+            modalContent={this.state.modalContent}
+            closeModal={this.handleCloseModalClick}
+          />
+        ) : null}
+        {this.state.isTemplateModalOpen ? this.renderTemplateModal() : null}
         <div className="headerContainer">
           <div
             className={`header grid center ${
