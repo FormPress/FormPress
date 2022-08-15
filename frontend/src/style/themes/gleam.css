@@ -324,6 +324,7 @@
 }
 
 .gleam .elementRadio .unselect-button {
+  visibility: hidden;
   background-color: #719fbd;
   outline: 0;
   border: 0;
@@ -335,6 +336,10 @@
   cursor: pointer;
   word-wrap: break-word;
   float: right;
+}
+
+.gleam .elementRadio .radioList.dirty + .unselect-button {
+  visibility: visible;
 }
 
 .gleam .elementRadio .unselect-button:hover {

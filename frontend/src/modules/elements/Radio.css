@@ -137,6 +137,10 @@
   background-color: #5e8c9e;
 }
 
+.builderStage .unselect-button {
+  visibility: visible !important;
+}
+
 .elementRadio .unselect-button > .unselect-label > span {
   color: white !important;
   margin: unset;
