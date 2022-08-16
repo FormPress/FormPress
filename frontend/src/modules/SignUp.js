@@ -25,6 +25,8 @@ class SignUp extends Component {
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+
+    this.formRef = React.createRef()
   }
 
   handleFieldChange(elem, e) {
@@ -47,22 +49,27 @@ class SignUp extends Component {
 
   async handleSignUpButtonClick(e) {
     e.preventDefault()
+    this.setState({ state: 'signup' })
+    
 
     const { email, password } = this.state
 
     const simpleEmailRegex = /^\S{1,}@\S{2,}\.\S{2,}$/
     if (!email) {
       this.setState({ message: 'Please use a valid email' })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
       return
     } else if (simpleEmailRegex.exec(email) === null) {
       this.setState({ message: 'Please use a valid email' })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
       return
     }
 
     if (!password || password !== this.state.passwordRe) {
       this.setState({ message: 'Password should match' })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
       return
     }
@@ -72,6 +79,7 @@ class SignUp extends Component {
       this.setState({
         message: 'New password must contain at least 8 characters.'
       })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
       return
     }
@@ -190,7 +198,7 @@ class SignUp extends Component {
             ) : (
               <div>
                 <div className="form-header">SIGNUP FORM</div>
-                <form onSubmit={this.handleSignUpButtonClick}>
+                <form ref={this.formRef} onSubmit={this.handleSignUpButtonClick}>
                   <Renderer
                     className="form"
                     theme="infernal"

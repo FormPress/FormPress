@@ -43,8 +43,6 @@ class Login extends Component {
     e.preventDefault()
     this.setState({ state: 'loading' })
 
-    window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
-
     const { email, password } = this.state
 
     const { success, data } = await api({
@@ -71,6 +69,7 @@ class Login extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -128,7 +127,7 @@ class Login extends Component {
         />
       )
     }
-
+    
     const capabilities = this.props.capabilities
 
     return (
@@ -141,7 +140,7 @@ class Login extends Component {
             </div>
           </div>
           <div className="pale-border">
-            <div className="form-header">LOGIN FORM Test</div>
+            <div className="form-header">LOGIN FORM</div>
             <form ref={this.formRef} onSubmit={this.handleLoginButtonClick}>
               <Renderer
                 className="form"
