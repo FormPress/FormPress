@@ -95,6 +95,7 @@ class SignUp extends Component {
       this.setState({ success: true, state: 'done', message: data.message })
     } else {
       this.setState({ state: 'done', message: data.message })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -122,6 +123,7 @@ class SignUp extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -131,6 +133,7 @@ class SignUp extends Component {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {
       this.setState({ state: 'done', message: response.error })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
