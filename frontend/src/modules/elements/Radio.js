@@ -291,10 +291,9 @@ export default class Radio extends Component {
                 labelKey={`radio_${config.id}_unselectButton`}
                 handleLabelChange={this.props.handleLabelChange}
                 value={
-                  typeof config.unselectButtonText !== 'undefined' &&
-                  config.unselectButtonText !== ''
+                  typeof config.unselectButtonText !== 'undefined'
                     ? config.unselectButtonText
-                    : ''
+                    : 'Clear Selection'
                 }
               />
             </button>
@@ -398,10 +397,9 @@ export default class Radio extends Component {
                 labelKey={`radio_${config.id}_unselectButton`}
                 handleLabelChange={this.props.handleLabelChange}
                 value={
-                  typeof config.unselectButtonText !== 'undefined' &&
-                  config.unselectButtonText !== ''
+                  typeof config.unselectButtonText !== 'undefined'
                     ? config.unselectButtonText
-                    : ''
+                    : 'Clear Selection'
                 }
               />
             </button>
