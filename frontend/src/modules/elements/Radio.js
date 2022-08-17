@@ -436,19 +436,30 @@ export default class Radio extends Component {
 
     if (mode === 'renderer' && config.isUnselectable) {
       let scriptInnerHtml = `
-      document.getElementById('q_${config.id}_radioList').onclick = function(e) {
+      ;(async () => {
+       var elemContainer = document.getElementById('qc_${config.id}')
+       var radioList = document.getElementById('q_${config.id}_radioList')
+       var unselectButton = document.getElementById('q_${config.id}_unselectButton')
+     
+      radioList.onclick = function(e) {
        if (e.target.type === 'radio') {
-        e.target.closest('.radioList').classList.add('dirty')
+        radioList.classList.add('dirty')
         }
       };
       
-      document.getElementById('q_${config.id}_unselectButton').onclick = function() {
-        document.getElementById('q_${config.id}_radioList').childNodes.forEach(function(item) {
+      unselectButton.onclick = function() {
+      
+        radioList.childNodes.forEach(function(item) {
           item.childNodes[0].checked = false;
         });
         
-        document.getElementById('q_${config.id}_radioList').classList.remove('dirty');
+       if (FORMPRESS.requireds && ${config.id} in FORMPRESS.requireds) {
+        FORMPRESS.requireds[${config.id}].valid = false;
+        }
+        
+        radioList.classList.remove('dirty');
       }
+      })()
     `
       let script = (
         <script key={5} dangerouslySetInnerHTML={{ __html: scriptInnerHtml }} />
