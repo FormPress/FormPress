@@ -25,6 +25,8 @@ class SignUp extends Component {
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+
+    this.formRef = React.createRef()
   }
 
   handleFieldChange(elem, e) {
@@ -47,32 +49,35 @@ class SignUp extends Component {
 
   async handleSignUpButtonClick(e) {
     e.preventDefault()
+    this.setState({ state: 'signup' })
 
     const { email, password } = this.state
+    let pattern = /^.{8,}$/,
+      signupErrorHandler = 0
 
     const simpleEmailRegex = /^\S{1,}@\S{2,}\.\S{2,}$/
     if (!email) {
       this.setState({ message: 'Please use a valid email' })
-
-      return
+      signupErrorHandler++
     } else if (simpleEmailRegex.exec(email) === null) {
       this.setState({ message: 'Please use a valid email' })
-
-      return
-    }
-
-    if (!password || password !== this.state.passwordRe) {
+      signupErrorHandler++
+    } else if (!password || password !== this.state.passwordRe) {
       this.setState({ message: 'Password should match' })
-
-      return
-    }
-
-    let pattern = /^.{8,}$/
-    if (!pattern.test(password)) {
+      signupErrorHandler++
+    } else if (!pattern.test(password)) {
       this.setState({
         message: 'New password must contain at least 8 characters.'
       })
+      signupErrorHandler++
+    }
 
+    if (signupErrorHandler > 0) {
+      window.scrollTo({
+        top: this.formRef.current.offsetTop,
+        behavior: 'smooth'
+      })
+      signupErrorHandler = 0
       return
     }
 
@@ -87,6 +92,10 @@ class SignUp extends Component {
       this.setState({ success: true, state: 'done', message: data.message })
     } else {
       this.setState({ state: 'done', message: data.message })
+      window.scrollTo({
+        top: this.formRef.current.offsetTop,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -114,6 +123,10 @@ class SignUp extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
+      window.scrollTo({
+        top: this.formRef.current.offsetTop,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -123,6 +136,10 @@ class SignUp extends Component {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {
       this.setState({ state: 'done', message: response.error })
+      window.scrollTo({
+        top: this.formRef.current.offsetTop,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -190,7 +207,9 @@ class SignUp extends Component {
             ) : (
               <div>
                 <div className="form-header">SIGNUP FORM</div>
-                <form onSubmit={this.handleSignUpButtonClick}>
+                <form
+                  ref={this.formRef}
+                  onSubmit={this.handleSignUpButtonClick}>
                   <Renderer
                     className="form"
                     theme="infernal"
