@@ -69,7 +69,10 @@ class Login extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
-      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
+      window.scrollTo({
+        top: this.formRef.current.offsetTop,
+        behavior: 'smooth'
+      })
     }
   }
 
@@ -127,7 +130,7 @@ class Login extends Component {
         />
       )
     }
-    
+
     const capabilities = this.props.capabilities
 
     return (
