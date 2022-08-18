@@ -52,46 +52,32 @@ class SignUp extends Component {
     this.setState({ state: 'signup' })
 
     const { email, password } = this.state
+    let pattern = /^.{8,}$/,
+      signupErrorHandler = 0
 
     const simpleEmailRegex = /^\S{1,}@\S{2,}\.\S{2,}$/
     if (!email) {
       this.setState({ message: 'Please use a valid email' })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
-
-      return
+      signupErrorHandler++
     } else if (simpleEmailRegex.exec(email) === null) {
       this.setState({ message: 'Please use a valid email' })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
-
-      return
-    }
-
-    if (!password || password !== this.state.passwordRe) {
+      signupErrorHandler++
+    } else if (!password || password !== this.state.passwordRe) {
       this.setState({ message: 'Password should match' })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
-
-      return
-    }
-
-    let pattern = /^.{8,}$/
-    if (!pattern.test(password)) {
+      signupErrorHandler++
+    } else if (!pattern.test(password)) {
       this.setState({
         message: 'New password must contain at least 8 characters.'
       })
+      signupErrorHandler++
+    }
+
+    if (signupErrorHandler > 0) {
       window.scrollTo({
         top: this.formRef.current.offsetTop,
         behavior: 'smooth'
       })
-
+      signupErrorHandler = 0
       return
     }
 
