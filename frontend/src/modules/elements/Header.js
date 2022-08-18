@@ -28,7 +28,7 @@ export default class Header extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Add a separator between headers?']
+        options: ['Add a separator between headers']
       }
     },
     alignment: {
@@ -36,7 +36,7 @@ export default class Header extends Component {
       formProps: {
         type: 'Radio',
         options: ['Center', 'Left', 'Right'],
-        label: 'Header aligment'
+        label: 'Header alignment'
       }
     }
   }

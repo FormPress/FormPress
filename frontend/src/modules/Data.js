@@ -499,7 +499,7 @@ class Data extends Component {
     }
 
     let tabs = [
-      { name: 'responses', text: 'Responses', path: '/data' },
+      { name: 'submissions', text: 'Submissions', path: '/data' },
       {
         name: 'statistics',
         text: 'Statistics',
@@ -549,9 +549,8 @@ class Data extends Component {
             </div>
           </div>
           <div
-            className={`formSelectorOptions cw center grid ${
-              formSelectorOpen ? '' : 'dn'
-            }`}>
+            className={`formSelectorOptions cw center grid ${formSelectorOpen ? '' : 'dn'
+              }`}>
             <div className="col-16-16">
               <ul>
                 {forms.map((form, index) => (
@@ -580,7 +579,7 @@ class Data extends Component {
                       <div className="detailLabel">
                         {this.state.statistics.responses}
                       </div>
-                      <div className="detailSublabel">Response(s)</div>
+                      <div className="detailSublabel">Submission(s)</div>
                     </div>
                     <div>
                       <div className="detailLabel">
@@ -617,11 +616,11 @@ class Data extends Component {
                               <div className="response_count_title">
                                 {question.responseCount}
                               </div>
-                              <div className="response_count">Response(s)</div>
+                              <div className="response_count">Submission(s)</div>
                             </div>
                             <div className="last_responses_container">
                               <div className="last_responses_title">
-                                Last Response(s)
+                                Last Submission(s)
                               </div>
                               <div className="last_responses">
                                 {question.chartItems.map((response, index) => {
@@ -837,9 +836,8 @@ class Data extends Component {
           </label>
           <label
             key="unreadSwitchLabel"
-            className={`unreadSwitchLabel ${
-              submissionFilterSelectors.showUnread ? ' active' : ''
-            } `}>
+            className={`unreadSwitchLabel ${submissionFilterSelectors.showUnread ? ' active' : ''
+              } `}>
             Show unread only
           </label>
         </article>
@@ -927,7 +925,7 @@ class Data extends Component {
               className: 'text_center'
             },
             {
-              label: 'Response Date',
+              label: 'Submission Date',
               content: (submission) => [
                 <Moment fromNow ago date={submission.created_at} key="1" />,
                 <span key="2">{' ago'}</span>

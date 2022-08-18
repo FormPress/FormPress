@@ -60,12 +60,12 @@ class ForgotPassword extends Component {
     const forgotSuccess = (
       <div>
         <div className="reset-success">
-          We have send an e-mail to{' '}
+          We have sent an e-mail to the address{' '}
           <span className="reset-email">
             <i>{email}</i>
           </span>{' '}
-          address. Reset your password by following the e-mail. (If you
-          didn&apos;t recieve please check spam folder)
+          . Reset your password by following the e-mail. (If you
+          didn&apos;t receive the e-mail, please check your spam folder)
         </div>
       </div>
     )
@@ -123,7 +123,7 @@ class ForgotPassword extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2021 formpress.org</div>
+          <div className="col-8-16">Copyright © 2022 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>

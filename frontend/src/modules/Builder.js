@@ -1140,8 +1140,7 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements to right hand side into the form; or you
-              can click the + icon that pops up next to the element
+              Drag and Drop elements into the form, or click the + icon that's next to the elements
             </div>
             <div className="elementList">
               {pickerElements
@@ -1431,8 +1430,8 @@ class Builder extends Component {
             />
             <div
               className="branding-text"
-              title="Visit FORMPRESS and start building awesome forms!">
-              This form has been created on FORMPRESS. <br />
+              title="Visit FormPress and start building awesome forms!">
+              This form has been created on FormPress. <br />
               <span className="fake-link">Click here</span> to create your own
               form now! It is free!
             </div>

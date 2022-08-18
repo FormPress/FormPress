@@ -51,11 +51,11 @@ class VerifyEMail extends Component {
     const verificationSuccess = (
       <div className="verification_back">
         <div>
-          Your account have verified. You can
+          Your account has been verified. You can now
           <Link to="/login">
-            &nbsp;<i>login</i>
+            &nbsp;<i>log in</i>
           </Link>{' '}
-          using your verified e-mail address.
+          with your e-mail.
         </div>
       </div>
     )
@@ -74,8 +74,8 @@ class VerifyEMail extends Component {
               {situation === 'init'
                 ? verificationInit
                 : success
-                ? verificationSuccess
-                : verificationFail}
+                  ? verificationSuccess
+                  : verificationFail}
               <p className={`message-back ${this.state.situation}`}>
                 {message}
               </p>
@@ -95,7 +95,7 @@ class VerifyEMail extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2021 formpress.org</div>
+          <div className="col-8-16">Copyright © 2022 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>

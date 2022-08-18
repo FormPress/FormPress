@@ -37,7 +37,7 @@ class ResetPassword extends Component {
     const { password } = this.state
 
     if (password === '' || password !== this.state.passwordRe) {
-      this.setState({ message: 'Password should match' })
+      this.setState({ message: 'Passwords should match' })
 
       return
     }
@@ -62,11 +62,11 @@ class ResetPassword extends Component {
     const resetSuccess = (
       <div>
         <div className="reset-success">
-          You successfully changed your password. You can
+          You changed your password successfully. You can now
           <Link to="/login">
-            &nbsp;<i>login</i>
+            &nbsp;<i>log in</i>
           </Link>{' '}
-          using your new password.
+          with your new password.
         </div>
       </div>
     )
@@ -129,7 +129,7 @@ class ResetPassword extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2021 formpress.org</div>
+          <div className="col-8-16">Copyright © 2022 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>

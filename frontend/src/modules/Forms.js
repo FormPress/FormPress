@@ -92,13 +92,16 @@ class Forms extends Component {
       <div>
         <strong
           style={{
+            color: '#719fbd',
+            fontWeight: 'bold',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             wordBreak: 'break-all'
           }}>
           {form.title}
-        </strong>{' '}
-        will be cloned. Please specify a name for new form.
+          </strong>{' '}
+        will be cloned. Please specify a name for the new form.
+
       </div>
     )
 
@@ -129,7 +132,7 @@ class Forms extends Component {
           }}>
           {form.title}
         </strong>{' '}
-        will be deleted. Are you sure you want to delete this form?
+        will be deleted <strong>permanently.</strong> Are you sure you want to proceed?
       </div>
     )
 
@@ -175,7 +178,7 @@ class Forms extends Component {
     } else {
       modalContent = {
         content:
-          'There has been an error deleting this form. Please contact support.',
+          'There was an error deleting this form. Please contact support.',
         status: 'error',
         header: 'Error'
       }
@@ -208,7 +211,7 @@ class Forms extends Component {
     } else {
       modalContent = {
         content:
-          'There has been an error cloning this form. Please contact support.',
+          'There was an error cloning this form. Please contact support.',
         status: 'error',
         header: 'Error'
       }
@@ -268,12 +271,12 @@ class Forms extends Component {
       <div>
         <div className="forms">
           {this.state.isModalOpen ? (
-            <Modal
-              isOpen={this.state.isModalOpen}
-              modalContent={this.state.modalContent}
-              closeModal={this.handleCloseModalClick}
-            />
-          ) : null}
+              <Modal
+                isOpen={this.state.isModalOpen}
+                modalContent={this.state.modalContent}
+                closeModal={this.handleCloseModalClick}
+              />
+            ) : null}
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
@@ -310,7 +313,7 @@ class Forms extends Component {
                   title: ' '
                 },
                 {
-                  label: 'Responses',
+                  label: 'Submissions',
                   content: (form) => (
                     <div className="responsesContainer">
                       <Link
@@ -324,7 +327,7 @@ class Forms extends Component {
                         className={`responseCount${
                           form.responseCount === 0 ? ' zero' : ''
                         }`}
-                        title="View this submissions of this form.">
+                        title="View the submissions to this form.">
                         {this.handleCountSubmissions(form.responseCount)}
                       </Link>
                       {form.unreadCount > 0 ? (
@@ -339,7 +342,7 @@ class Forms extends Component {
                   className: 'responses'
                 },
                 {
-                  label: 'Created At',
+                  label: 'Created',
                   content: (form) => [
                     <Moment fromNow ago date={form.created_at} key="1" />,
                     <span key="2">{' ago'}</span>
@@ -351,9 +354,8 @@ class Forms extends Component {
                   content: (form) => (
                     <div className="actions">
                       <span
-                        className={`${
-                          form.published_version ? 'view' : 'inactive_view'
-                        }`}
+                        className={`${form.published_version ? 'view' : 'inactive_view'
+                          }`}
                         title={
                           form.published_version
                             ? 'View Form'
