@@ -64,8 +64,8 @@ class ForgotPassword extends Component {
           <span className="reset-email">
             <i>{email}</i>
           </span>{' '}
-          . Reset your password by following the e-mail. (If you
-          didn&apos;t receive the e-mail, please check your spam folder)
+          . Reset your password by following the e-mail. (If you didn&apos;t
+          receive the e-mail, please check your spam folder)
         </div>
       </div>
     )

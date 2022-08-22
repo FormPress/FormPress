@@ -74,8 +74,8 @@ class VerifyEMail extends Component {
               {situation === 'init'
                 ? verificationInit
                 : success
-                  ? verificationSuccess
-                  : verificationFail}
+                ? verificationSuccess
+                : verificationFail}
               <p className={`message-back ${this.state.situation}`}>
                 {message}
               </p>

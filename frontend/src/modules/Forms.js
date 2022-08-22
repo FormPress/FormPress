@@ -99,9 +99,8 @@ class Forms extends Component {
             wordBreak: 'break-all'
           }}>
           {form.title}
-          </strong>{' '}
+        </strong>{' '}
         will be cloned. Please specify a name for the new form.
-
       </div>
     )
 
@@ -132,7 +131,8 @@ class Forms extends Component {
           }}>
           {form.title}
         </strong>{' '}
-        will be deleted <strong>permanently.</strong> Are you sure you want to proceed?
+        will be deleted <strong>permanently.</strong> Are you sure you want to
+        proceed?
       </div>
     )
 
@@ -271,12 +271,12 @@ class Forms extends Component {
       <div>
         <div className="forms">
           {this.state.isModalOpen ? (
-              <Modal
-                isOpen={this.state.isModalOpen}
-                modalContent={this.state.modalContent}
-                closeModal={this.handleCloseModalClick}
-              />
-            ) : null}
+            <Modal
+              isOpen={this.state.isModalOpen}
+              modalContent={this.state.modalContent}
+              closeModal={this.handleCloseModalClick}
+            />
+          ) : null}
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
@@ -354,8 +354,9 @@ class Forms extends Component {
                   content: (form) => (
                     <div className="actions">
                       <span
-                        className={`${form.published_version ? 'view' : 'inactive_view'
-                          }`}
+                        className={`${
+                          form.published_version ? 'view' : 'inactive_view'
+                        }`}
                         title={
                           form.published_version
                             ? 'View Form'

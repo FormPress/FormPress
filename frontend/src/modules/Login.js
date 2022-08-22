@@ -69,9 +69,9 @@ class Login extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
-      window.scrollTo({ 
+      window.scrollTo({
         top: this.formRef.current.offsetTop,
-        behavior: 'smooth' 
+        behavior: 'smooth'
       })
     }
   }

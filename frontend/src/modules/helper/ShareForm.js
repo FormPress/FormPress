@@ -67,7 +67,11 @@ class ShareForm extends Component {
           <div className="shareFormTabCover">
             <h2 className="shareFormTitle">Share Your Form</h2>
             <div className="shareFormMessage">
-              Before you share your form, <strong>make sure you saved and published the latest version of it.</strong> Otherwise, the most recently published version will be shared.
+              Before you share your form,{' '}
+              <strong>
+                make sure you saved and published the latest version of it.
+              </strong>{' '}
+              Otherwise, the most recently published version will be shared.
             </div>
             <div className="shareFormSettings">
               <input
@@ -107,9 +111,7 @@ class ShareForm extends Component {
             </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
-                <h3 className="shareFormFormUrlAreaTitle">
-                  URL of your form:
-                </h3>
+                <h3 className="shareFormFormUrlAreaTitle">URL of your form:</h3>
                 <input
                   type="text"
                   value={this.formLink}

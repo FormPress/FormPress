@@ -72,7 +72,6 @@ class SignUp extends Component {
     }
 
     if (signupErrorHandler > 0) {
-
       window.scrollTo({
         top: this.formRef.current.offsetTop,
         behavior: 'smooth'
@@ -176,8 +175,9 @@ class SignUp extends Component {
             .
           </p>
           <p>
-            Please activate your account to begin your journey with FormPress. (If you didn&apos;t
-            receive the e-mail, please check your spam folder)
+            Please activate your account to begin your journey with FormPress.
+            (If you didn&apos;t receive the e-mail, please check your spam
+            folder)
           </p>
         </div>
       </div>
@@ -207,7 +207,9 @@ class SignUp extends Component {
             ) : (
               <div>
                 <div className="form-header">SIGNUP FORM</div>
-                <form ref={this.formRef} onSubmit={this.handleSignUpButtonClick}>
+                <form
+                  ref={this.formRef}
+                  onSubmit={this.handleSignUpButtonClick}>
                   <Renderer
                     className="form"
                     theme="infernal"
