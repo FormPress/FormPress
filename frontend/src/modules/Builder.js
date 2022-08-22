@@ -1140,8 +1140,7 @@ class Builder extends Component {
         <Route exact path="/editor/:formId/builder">
           <div className="elements">
             <div className="elementsMessage">
-              Drag and Drop elements into the form, or click the + icon that's
-              next to the elements
+              Drag and Drop elements into the form, or click the + icon that&apos;s next to the elements
             </div>
             <div className="elementList">
               {pickerElements
