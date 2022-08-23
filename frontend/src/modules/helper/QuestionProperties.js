@@ -74,7 +74,7 @@ export default class QuestionProperties extends Component {
     return (
       <div className="questionProperties">
         <div className="questionPropertiesMessage">
-          Here you can change the question properties to your liking.
+          Here you can set the question properties to your liking.
         </div>
         <div className="wrapper-questionProperties">
           <div className="question-info">
