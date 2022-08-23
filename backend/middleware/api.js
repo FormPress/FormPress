@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
@@ -1195,7 +1196,7 @@ module.exports = (app) => {
 
     let tyPageTitle = 'Thank you!'
     let tyPageText =
-      'Your submission has been successful and we informed the form owner about it.'
+      'Your submission was successful and the form owner has been notified.'
 
     res.render('submit-success.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

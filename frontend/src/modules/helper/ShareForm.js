@@ -67,9 +67,11 @@ class ShareForm extends Component {
           <div className="shareFormTabCover">
             <h2 className="shareFormTitle">Share Your Form</h2>
             <div className="shareFormMessage">
-              Be sure that your latest changes have been saved and published
-              before sharing. Otherwise your form will be seen latest saved
-              version.
+              Before you share your form,{' '}
+              <strong>
+                make sure you saved and published the latest version of it.
+              </strong>{' '}
+              Otherwise, the most recently published version will be shared.
             </div>
             <div className="shareFormSettings">
               <input
@@ -80,7 +82,7 @@ class ShareForm extends Component {
                 className="shareFormSettingsInput"
                 onChange={this.onWidgetChange}
               />
-              <label htmlFor="widget">Show form as widget</label>
+              <label htmlFor="widget">Arrange form as widget</label>
               <div className="shareFormSettingsWidgetContainer">
                 <label>Widget Title</label>
                 <input
@@ -109,9 +111,7 @@ class ShareForm extends Component {
             </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
-                <h3 className="shareFormFormUrlAreaTitle">
-                  The URL of your form:
-                </h3>
+                <h3 className="shareFormFormUrlAreaTitle">URL of your form:</h3>
                 <input
                   type="text"
                   value={this.formLink}
@@ -121,17 +121,17 @@ class ShareForm extends Component {
               </div>
               <CopyToClipboard
                 clipboardData={this.formLink}
-                buttonText="Copy the URL"
+                buttonText="Copy URL"
               />
               <div className="shareFormFormEmbedCodeArea">
                 <h3 className="shareFormFormEmbedCodeAreaTitle">
-                  The Embed Code of your form:
+                  Embed Code of your form:
                 </h3>
                 <textarea className="embedCode" value={embedCode} readOnly />
               </div>
               <CopyToClipboard
                 clipboardData={embedCode}
-                buttonText="Copy the code"
+                buttonText="Copy embed code"
               />
             </div>
             <div className="shareFormFooterArea">
@@ -170,8 +170,7 @@ class ShareForm extends Component {
         </div>
         <div className="col-10-16 share-iframe-container">
           <div className="shareFormMessage">
-            This field is a afterimage of your form. You cannot make any changes
-            in this field.
+            Below is a view of your form. You cannot make any changes here.
           </div>
           <iframe src={this.formLink} className={'share-iframe'} />
         </div>

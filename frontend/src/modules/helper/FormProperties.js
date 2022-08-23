@@ -141,10 +141,10 @@ class FormProperties extends Component {
     }
 
     let tyPageText =
-      'Your submission has been successful and we informed the form owner about it.'
+      'Your submission was successful and the form owner has been notified.'
 
     if (capabilities.sendgridApiKey === false) {
-      tyPageText = 'Your submission has been successful.'
+      tyPageText = 'Your submission was successful.'
     }
 
     if (matchingIntegration('tyPageText').length > 0) {
@@ -221,7 +221,7 @@ class FormProperties extends Component {
                 {
                   id: 5,
                   type: 'Radio',
-                  label: 'On Submit',
+                  label: 'Upon Submission',
                   value: submitBehaviour,
                   options: ['Show Thank You Page', 'Evaluate Form']
                 }
@@ -268,7 +268,7 @@ class FormProperties extends Component {
         <span className="popover-container">
           <FontAwesomeIcon icon={faInfoCircle} />
           <div className="popoverText">
-            Choosing this option will disable all previously added page breaks.
+            Enabling this option will disable all previously added page breaks.
           </div>
         </span>
         <Renderer
@@ -366,7 +366,7 @@ class FormProperties extends Component {
         </div>
         <details
           className="adv-settings"
-          title="This part contains advanced settings. Some settings may prevent your form working properly.">
+          title="This part contains advanced settings. Some settings may cause your form to stop working properly.">
           <summary className="adv-settings-summary">
             <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
             &nbsp; Developer settings
@@ -392,7 +392,7 @@ class FormProperties extends Component {
               <FontAwesomeIcon icon={faQuestionCircle} />
               <div className="popoverText">
                 Setting this form to private will hide it from the public. The
-                form will only be accessible via a token.
+                form will be accessible only via a token.
               </div>
             </span>
           </div>
