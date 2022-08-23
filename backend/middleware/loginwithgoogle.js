@@ -94,7 +94,7 @@ module.exports = (app) => {
     if (user.isActive !== 1) {
       return res.status(403).json({
         message:
-          'You have been blocked because of not following our TOS. If you think this is an error contact our support team.'
+          'You have been blocked due to not following our TOS. If you think this is an error, contact our support team.'
       })
     }
 
