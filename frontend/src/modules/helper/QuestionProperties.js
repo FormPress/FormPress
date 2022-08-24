@@ -74,19 +74,21 @@ export default class QuestionProperties extends Component {
     return (
       <div className="questionProperties">
         <div className="questionPropertiesMessage">
-          Here you can set the question properties to your liking.
+          Here you can change the question properties to your liking.
         </div>
         <div className="wrapper-questionProperties">
           <div className="question-info">
             <div
               className="qlabel"
               dangerouslySetInnerHTML={{
-                __html: config?.label
-                  ? config.label
-                      .replace(/<span(.*?)>(.*?)<\/span>/, '')
-                      .replace(/(<([^>]+)>)/gi, '')
-                      .trim()
-                  : ''
+                __html:
+                  typeof config !== 'undefined' &&
+                  typeof config.label !== 'undefined'
+                    ? config.label
+                        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                        .replace(/(<([^>]+)>)/gi, '')
+                        .trim()
+                    : ''
               }}></div>
             <div className="qtype">{selectedField.config.type}</div>
           </div>
