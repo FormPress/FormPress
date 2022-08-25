@@ -15,7 +15,8 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Single Choice',
-    options: ['New Radio']
+    options: ['New Radio'],
+    unselectButtonText: 'Clear Selection'
   }
 
   static metaData = {
@@ -163,6 +164,14 @@ export default class Radio extends Component {
         options: ['Use rich text editor for options']
       }
     },
+    isUnselectable: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Make options unselectable']
+      }
+    },
     expectedAnswer: {
       default: '',
       formProps: {
@@ -270,6 +279,25 @@ export default class Radio extends Component {
             customBuilderHandlers={this.props.customBuilderHandlers}
             selectedLabelId={selectedLabelId}
           />
+          {config.isUnselectable === true ? (
+            <button
+              type="button"
+              className="unselect-button"
+              id={`q_${config.id}_unselectButton`}>
+              <EditableLabel
+                className="sublabel unselect-label"
+                dataPlaceholder="Clear Selection"
+                mode={mode}
+                labelKey={`radio_${config.id}_unselectButton`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.unselectButtonText !== 'undefined'
+                    ? config.unselectButtonText
+                    : 'Clear Selection'
+                }
+              />
+            </button>
+          ) : null}
         </div>,
         <div className="clearfix" key="3">
           <EditableLabel
@@ -335,7 +363,7 @@ export default class Radio extends Component {
             }}></span>
         </div>,
         <div key="2" className="fl input">
-          <ul>
+          <ul id={`q_${config.id}_radioList`} className="radioList">
             {config.options.map((item, key) => {
               return (
                 <li key={key}>
@@ -357,6 +385,25 @@ export default class Radio extends Component {
               )
             })}
           </ul>
+          {config.isUnselectable === true ? (
+            <button
+              type="button"
+              className="unselect-button"
+              id={`q_${config.id}_unselectButton`}>
+              <EditableLabel
+                className="sublabel unselect-label"
+                dataPlaceholder="Clear Selection"
+                mode={mode}
+                labelKey={`radio_${config.id}_unselectButton`}
+                handleLabelChange={this.props.handleLabelChange}
+                value={
+                  typeof config.unselectButtonText !== 'undefined'
+                    ? config.unselectButtonText
+                    : 'Clear Selection'
+                }
+              />
+            </button>
+          ) : null}
         </div>,
         <div className="clearfix" key="3">
           <EditableLabel
@@ -383,6 +430,39 @@ export default class Radio extends Component {
           </details>
         </div>
       ]
+    }
+
+    if (mode === 'renderer' && config.isUnselectable) {
+      let scriptInnerHtml = `
+      ;(async () => {
+       var elemContainer = document.getElementById('qc_${config.id}')
+       var radioList = document.getElementById('q_${config.id}_radioList')
+       var unselectButton = document.getElementById('q_${config.id}_unselectButton')
+     
+      radioList.onclick = function(e) {
+       if (e.target.type === 'radio') {
+        radioList.classList.add('dirty')
+        }
+      };
+      
+      unselectButton.onclick = function() {
+      
+        radioList.childNodes.forEach(function(item) {
+          item.childNodes[0].checked = false;
+        });
+        
+       if (FORMPRESS.requireds && ${config.id} in FORMPRESS.requireds) {
+        FORMPRESS.requireds[${config.id}].valid = false;
+        }
+        
+        radioList.classList.remove('dirty');
+      }
+      })()
+    `
+      let script = (
+        <script key={5} dangerouslySetInnerHTML={{ __html: scriptInnerHtml }} />
+      )
+      display.push(script)
     }
 
     return (

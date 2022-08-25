@@ -205,6 +205,10 @@ export default class Renderer extends Component {
               if (elem.value === true) extraProps.className = 'elementHider'
             }
 
+            if (elem.id === 'isUnselectable') {
+              if (elem.value === false) extraProps.className = 'elementHider'
+            }
+
             if (elem.id === 'countriesType') {
               if (elem.value === 'US') {
                 extraProps.className = 'elementHider'
