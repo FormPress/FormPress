@@ -186,9 +186,9 @@ module.exports = (app) => {
     let tyPageText = ''
     if (isEnvironmentVariableSet.sendgridApiKey) {
       tyPageText =
-        'Your submission has been successful and we informed the form owner about it.'
+        'Your submission was successful and the form owner has been notified.'
     } else {
-      tyPageText = 'Your submission has been successful.'
+      tyPageText = 'Your submission was successful.'
     }
 
     let sendEmailTo = false
@@ -354,7 +354,7 @@ module.exports = (app) => {
 
     let tyPageTitle = 'Thank you!'
     let tyPageText =
-      'Your submission has been successful and we informed the form owner about it.'
+      'Your submission was successful and the form owner has been notified.'
 
     res.render('submit-success.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

@@ -25,7 +25,6 @@ class SignUp extends Component {
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
-
     this.formRef = React.createRef()
   }
 
@@ -169,15 +168,16 @@ class SignUp extends Component {
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
           <p>
-            Signup success! We have sent an e-mail to your{' '}
+            We have sent a verification e-mail to the address{' '}
             <span className="signup-email">
               <i>{email}</i>
             </span>{' '}
-            address.
+            .
           </p>
           <p>
-            Activate account by following that e-mail. (If you didn&apos;t
-            recieve please check spam folder)
+            Please activate your account to begin your journey with FormPress.
+            (If you didn&apos;t receive the e-mail, please check your spam
+            folder)
           </p>
         </div>
       </div>
@@ -188,7 +188,7 @@ class SignUp extends Component {
           <div className="signup-email">
             <i>{email}</i>
           </div>
-          <p>Signup success! You can now login to your account.</p>
+          <p>Signup success! You can now log in to your account.</p>
         </div>
       </div>
     )
@@ -279,7 +279,7 @@ class SignUp extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2021 formpress.org</div>
+          <div className="col-8-16">Copyright © 2022 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>
