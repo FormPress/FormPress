@@ -87,6 +87,7 @@
 .gleam.form .sublabel:not(.header) span[contentEditable='true'] {
   min-width: 123px;
   min-height: 19px;
+  margin-top: 10px;
   padding: 2px 5px;
   color: gray;
   border: 1px solid transparent;
@@ -348,7 +349,7 @@
 
 .gleam .elementRadio .unselect-button > .unselect-label > span {
   color: white !important;
-  margin: unset;
+  margin: unset !important;
   font-size: 11pt;
 }
 
