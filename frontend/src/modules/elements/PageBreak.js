@@ -106,6 +106,9 @@ export default class PageBreak extends Component {
           </div>
         )
         break
+      default:
+        display = <div className="pagebreak-navControls">{nextButton}</div>
+        break
     }
 
     const options = []

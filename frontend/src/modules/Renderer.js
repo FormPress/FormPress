@@ -274,11 +274,9 @@ export default class Renderer extends Component {
       ]
     })
 
-    output.length === 0
-      ? output.push(
-          <div key={1} className={className} {...builderHandlers}></div>
-        )
-      : null
+    if (output.length === 0) {
+      return <div key={1} className={className} {...builderHandlers}></div>
+    }
     return output
   }
 }

@@ -53,7 +53,7 @@ class Settings extends Component {
           />
         )
         if (module.default.menuText === 'Billing') {
-          this.state.planNames.map((item) => {
+          this.state.planNames.forEach((item) => {
             routes.push(
               <PrivateRoute
                 exact

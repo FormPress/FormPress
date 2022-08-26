@@ -26,11 +26,10 @@ import Templates from './Templates'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
-
-const BACKEND = process.env.REACT_APP_BACKEND
-
 import './Builder.css'
 import '../style/themes/gleam.css'
+
+const BACKEND = process.env.REACT_APP_BACKEND
 
 const getElements = () =>
   Object.values(Elements).map((element) => {
@@ -163,11 +162,7 @@ class Builder extends Component {
       return false
     }
 
-    if (isFormChanged === false) {
-      return true
-    }
-
-    return false // fail-safe
+    return isFormChanged === false
   }
 
   handleCloseModalClick() {
@@ -769,7 +764,6 @@ class Builder extends Component {
             ' Kb',
           { remove: true }
         )
-        return
       } else {
         let xhr, formData
         xhr = new XMLHttpRequest()
@@ -782,7 +776,7 @@ class Builder extends Component {
         xhr.onload = function () {
           let json
 
-          if (xhr.status != 200) {
+          if (xhr.status !== 200) {
             alert('HTTP Error: ' + xhr.status)
             return
           }

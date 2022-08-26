@@ -172,7 +172,11 @@ class ShareForm extends Component {
           <div className="shareFormMessage">
             Below is a view of your form. You cannot make any changes here.
           </div>
-          <iframe src={this.formLink} className={'share-iframe'} />
+          <iframe
+            title="form-preview"
+            src={this.formLink}
+            className={'share-iframe'}
+          />
         </div>
       </div>
     )
