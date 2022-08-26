@@ -158,13 +158,13 @@ class Data extends Component {
         selectedFormPublishedId,
         selectedFormSelectedPublishedVersion
 
-      this.state.forms.map((form) => {
-        if (form.id === form_id) {
-          selectedFormId = form_id
-          selectedFormPublishedId = form.published_id
-          selectedFormSelectedPublishedVersion = form.published_version
-        }
-      })
+      const matchingForm = this.state.forms.find((form) => form.id === form_id)
+
+      if (matchingForm) {
+        selectedFormId = form_id
+        selectedFormPublishedId = matchingForm.published_id
+        selectedFormSelectedPublishedVersion = matchingForm.published_version
+      }
 
       this.setState({
         selectedFormId,
@@ -319,11 +319,7 @@ class Data extends Component {
     if (filterActive) {
       document.querySelector(`.s_${id}`).classList.add('read')
     } else {
-      submissions.map((submission) => {
-        if (submission.id === id) {
-          submission.read = 1
-        }
-      })
+      submissions.find((submission) => submission.id === id).read = 1
 
       this.setState({ submissions })
     }
@@ -493,12 +489,8 @@ class Data extends Component {
     let formSelectorText = 'Please select form'
 
     if (selectedFormId !== null && forms.length > 0) {
-      const formSelector = forms.filter((form) => {
-        if (form.id === selectedFormId) {
-          return form
-        }
-      })
-      formSelectorText = formSelector[0].title
+      const formSelector = forms.find((form) => form.id === selectedFormId)
+      formSelectorText = formSelector.title
     }
 
     let tabs = [
@@ -649,12 +641,12 @@ class Data extends Component {
                         .replace(/(<([^>]+)>)/gi, '')
                         .trim()
                       question.chartItems.filter((chartItem) => {
-                        chartItem.name = chartItem.name
+                        return (chartItem.name = chartItem.name
                           .replace(/<span(.*?)>(.*?)<\/span>/, '')
                           .replace(/&nbsp;/g, ' ')
                           .replace(/&amp;/g, ' ')
                           .replace(/(<([^>]+)>)/gi, '')
-                          .trim()
+                          .trim())
                       })
                       console.log(question)
                       return (
@@ -748,6 +740,7 @@ class Data extends Component {
                         </div>
                       )
                     }
+                    return null
                   })}
                 </div>
               ) : null}
