@@ -5,17 +5,13 @@
     "node": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
-  "parser": "@babel/eslint-parser",
+  "parser": "babel-eslint",
   "parserOptions": {
-    "requireConfigFile": false,
     "ecmaFeatures": {
       "jsx": true
     },
     "ecmaVersion": 12,
-    "sourceType": "module",
-    "babelOptions": {
-      "presets": ["@babel/preset-react"]
-    }
+    "sourceType": "module"
   },
   "plugins": ["react"],
   "settings": {
