@@ -1,0 +1,61 @@
+{
+  "id": 6,
+  "user_id": 46,
+  "title": "Basic Feedback Report",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Feedback Report",
+        "sublabel": "Your thoughts matter to us. With your feedback, we're better able to improve and provide high quality service.",
+        "separator": true
+      },
+      {
+        "mode": "sort",
+        "id": 6,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "mode": "sort",
+        "id": 7,
+        "type": "Email",
+        "label": "E-mail",
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "",
+        "sublabelText": ""
+      },
+      {
+        "id": 4,
+        "type": "Checkbox",
+        "label": "Feedback Content",
+        "options": ["Comments", "Problems", "Questions", "Suggestions"],
+        "toggle": false,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "TextArea",
+        "label": "Your Feedback",
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      { "id": 2, "type": "Button", "buttonText": "Submit" }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Feedback"]
+  }
+}

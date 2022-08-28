@@ -1,0 +1,72 @@
+{
+  "id": 19,
+  "user_id": 46,
+  "title": "File Submission",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Submit Your Files",
+        "sublabel": "",
+        "form_id": 607,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 607,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 607,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "FileUpload",
+        "label": "Please upload your files here",
+        "requiredText": "Please fill this field.",
+        "form_id": 607,
+        "order": 3,
+        "required": false,
+        "sublabelText": ""
+      },
+      {
+        "id": 8,
+        "type": "TextArea",
+        "label": "Your message",
+        "form_id": 607,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 5,
+        "form_id": 607
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Submission"]
+  }
+}

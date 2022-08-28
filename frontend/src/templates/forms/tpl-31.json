@@ -1,0 +1,132 @@
+{
+  "id": 31,
+  "user_id": 46,
+  "title": "Settlement Agreement",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Settlement Agreement",
+        "sublabel": "",
+        "separator": false,
+        "alignment": "Center",
+        "order": 0,
+        "form_id": 629
+      },
+      {
+        "id": 6,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information:",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 629,
+        "defaultCountry": "United States",
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 9,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Mailing Address:",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 629,
+        "defaultCountry": "United States",
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 10,
+        "type": "TextBox",
+        "label": "Branch Name",
+        "form_id": 629,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 11,
+        "type": "Name",
+        "label": "Husband",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 629,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 4
+      },
+      {
+        "id": 12,
+        "type": "Name",
+        "label": "Wife",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 629,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 13,
+        "type": "TextBox",
+        "label": "Case Number:",
+        "form_id": 629,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "Dropdown",
+        "label": "Terms",
+        "options": ["I agree to the terms given."],
+        "placeholder": "Choose an option",
+        "form_id": 629,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 8,
+        "form_id": 629
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Agreement"]
+  }
+}

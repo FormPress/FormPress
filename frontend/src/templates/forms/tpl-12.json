@@ -1,0 +1,163 @@
+{
+  "id": 12,
+  "user_id": 46,
+  "title": "Student Registration",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Student Registration Form",
+        "sublabel": "Fill out the form carefully for registration",
+        "separator": true,
+        "alignment": "Center",
+        "order": 0,
+        "form_id": 600
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 600,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Birth Date",
+        "form_id": 600,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "yyyy-mm-dd"
+      },
+      {
+        "id": 6,
+        "type": "Dropdown",
+        "label": "Gender",
+        "options": ["Male", "Female", "Other"],
+        "placeholder": "Choose an option",
+        "form_id": 600,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 7,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 600,
+        "defaultCountry": "United States",
+        "order": 4
+      },
+      {
+        "id": 8,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 600,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "Phone",
+        "label": "Personal Number",
+        "hasDataset": true,
+        "form_id": 600,
+        "defaultDialCode": "+1 (US)",
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 10,
+        "type": "Phone",
+        "label": "Work Number",
+        "hasDataset": true,
+        "form_id": 600,
+        "defaultDialCode": "+1 (US)",
+        "order": 7
+      },
+      {
+        "id": 11,
+        "type": "TextBox",
+        "label": "Company",
+        "form_id": 600,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 12,
+        "type": "Dropdown",
+        "label": "Courses ",
+        "options": [
+          "Windows 8",
+          "Introduction to Linux",
+          "English 101",
+          "English 102",
+          "Creative Writing 1",
+          "Creative writing 2",
+          "History 101",
+          "History 102",
+          "Math 101",
+          "Math 102"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 600,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "mode": "sort",
+        "id": 13,
+        "type": "TextBox",
+        "label": "Additional Comments",
+        "form_id": 600,
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 11,
+        "form_id": 600
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

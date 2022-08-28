@@ -1,0 +1,200 @@
+{
+  "id": 32,
+  "user_id": 46,
+  "title": "Car Rental Agreement",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Car Rental Agreement Form",
+        "sublabel": "Thank you for using our car rental service. We have a large lot of vehicles that you can select from. Prices vary depending on the selected car category. Fill in the rental agreement form below with the requested information and we will get back to you.",
+        "separator": false,
+        "alignment": "Center",
+        "order": 0,
+        "form_id": 630
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 630,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 630,
+        "order": 2,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 630,
+        "defaultDialCode": "+1 (US)",
+        "order": 3,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 7,
+        "type": "Dropdown",
+        "label": "Please choose your car category:",
+        "options": ["Car 1", "Car 2", "Car 3", "Car 4", "Car 5"],
+        "placeholder": "Choose an option",
+        "form_id": 630,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 4,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 8,
+        "type": "TextBox",
+        "label": "Price $/24hs",
+        "form_id": 630,
+        "order": 5,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "0"
+      },
+      {
+        "id": 9,
+        "type": "TextBox",
+        "label": "Pick Up Date",
+        "form_id": 630,
+        "order": 6,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "yyyy-mm-dd"
+      },
+      {
+        "id": 10,
+        "type": "TextBox",
+        "label": "Return Date",
+        "form_id": 630,
+        "order": 7,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "yyyy-mm-dd"
+      },
+      {
+        "id": 11,
+        "type": "TextBox",
+        "label": "Pick Up Time",
+        "form_id": 630,
+        "order": 8,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "##:## AM/PM"
+      },
+      {
+        "id": 12,
+        "type": "TextBox",
+        "label": "Return Time",
+        "form_id": 630,
+        "order": 9,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "##:## AM/PM"
+      },
+      {
+        "id": 13,
+        "type": "Dropdown",
+        "label": "Pick Up Location",
+        "options": ["Airport", "Downtown - City Park", "Downtown - City Hall"],
+        "placeholder": "Choose an option",
+        "form_id": 630,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 14,
+        "type": "Dropdown",
+        "label": "Return Location",
+        "options": ["Airport", "Downtown - City Park", "Downtown - City Hall"],
+        "placeholder": "Choose an option",
+        "form_id": 630,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 11,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 15,
+        "type": "Dropdown",
+        "label": "Coverage",
+        "options": [
+          "Mandatory protection",
+          "$0 Deductible Coverage",
+          "$500 Deductible Coverage"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 630,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 12,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 16,
+        "type": "Radio",
+        "label": "Do you require additional features?",
+        "options": ["Yes", "No"],
+        "form_id": 630,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 13,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 17,
+        "type": "TextArea",
+        "label": "Comments, questions, and special requests:",
+        "form_id": 630,
+        "order": 14,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 15,
+        "form_id": 630
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Agreement"]
+  }
+}

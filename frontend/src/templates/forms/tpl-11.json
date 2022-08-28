@@ -1,0 +1,81 @@
+{
+  "id": 11,
+  "user_id": 46,
+  "title": "Issue Tracking",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 0,
+        "type": "Header",
+        "label": "Issue Tracking Form",
+        "sublabel": "",
+        "separator": false,
+        "alignment": "Center",
+        "order": 0,
+        "form_id": 597
+      },
+      {
+        "id": 1,
+        "type": "TextArea",
+        "label": "Issue Description",
+        "order": 1,
+        "form_id": 597
+      },
+      {
+        "id": 2,
+        "type": "Dropdown",
+        "label": "Issue opened by",
+        "options": ["Name", "Name", "Name", "Name", "Name", "Name"],
+        "placeholder": "Choose an option",
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 2,
+        "form_id": 597,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 3,
+        "type": "Dropdown",
+        "label": "Issue assigned to",
+        "options": ["Fixer 1", "Fixer 2 ", "Fixer 3", "Fixer 4 ", "Fixer 5"],
+        "placeholder": "Choose an option",
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 3,
+        "form_id": 597,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 4,
+        "type": "Dropdown",
+        "label": "Issue priority",
+        "options": ["Nice-to-have", "Important", "Urgent"],
+        "placeholder": "Choose an option",
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 4,
+        "form_id": 597,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Issue Date and Time",
+        "form_id": 597,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "yyyy-mm-dd - ##.## AM/PM"
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Request"]
+  }
+}

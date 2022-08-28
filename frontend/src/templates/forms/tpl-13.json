@@ -1,0 +1,180 @@
+{
+  "id": 13,
+  "user_id": 46,
+  "title": "Website Design Request",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Website Design Request",
+        "sublabel": "Fill out the form to request a design",
+        "form_id": 601,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 601,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 601,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 601,
+        "defaultDialCode": "+1 (US)",
+        "order": 3
+      },
+      {
+        "id": 7,
+        "type": "TextBox",
+        "label": "Company",
+        "form_id": 601,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "Company name"
+      },
+      {
+        "id": 8,
+        "type": "Dropdown",
+        "label": "Type of Business",
+        "options": ["Technology", "Food", "Beauty", "Finance"],
+        "placeholder": "Choose an option",
+        "form_id": 601,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 14,
+        "type": "TextBox",
+        "label": "What is your budget for this website design order?",
+        "form_id": 601,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "Dropdown",
+        "label": "What type of a website do you need?",
+        "options": [
+          "Personal",
+          "Educational",
+          "Sport",
+          "Food, Restaurant",
+          "Local Business",
+          "Small Business",
+          "Medium Business",
+          "Large Business"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 601,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 10,
+        "type": "Checkbox",
+        "label": "Which items would you like to have in the \"Navigation Bar\"?",
+        "options": [
+          "Home",
+          "About",
+          "FAQ",
+          "User Guidelines",
+          "Forum",
+          "Blog",
+          "Pricing"
+        ],
+        "form_id": 601,
+        "toggle": false,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 11,
+        "type": "TextArea",
+        "label": "What services do you offer specifically? Please enter detailed information.",
+        "form_id": 601,
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 12,
+        "type": "Checkbox",
+        "label": "What additional services would you like to order?",
+        "options": [
+          "Banner Design",
+          "Logo Design",
+          "Landing Page Design",
+          "New Checkbox",
+          "SEO",
+          "Advertisement",
+          "Video",
+          "Analytics"
+        ],
+        "form_id": 601,
+        "toggle": false,
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 13,
+        "type": "TextArea",
+        "label": "Additional Comments",
+        "form_id": 601,
+        "order": 11,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 12,
+        "form_id": 601
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Order"]
+  }
+}

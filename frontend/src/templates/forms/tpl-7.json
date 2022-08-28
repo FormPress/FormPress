@@ -1,0 +1,314 @@
+{
+  "id": 7,
+  "user_id": 46,
+  "title": "History Quiz",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 0,
+        "type": "Header",
+        "label": "History Quiz",
+        "sublabel": "Good Luck All",
+        "separator": true,
+        "order": 0,
+        "form_id": 403,
+        "alignment": "Center"
+      },
+      {
+        "id": 20,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": true,
+        "prefixTypeTextBox": true,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "required": true,
+        "requiredText": "Required field",
+        "firstNameSublabelText": "First Name",
+        "prefixSublabelText": "Student Number",
+        "suffixSublabelText": "Suffix",
+        "order": 1,
+        "form_id": 403
+      },
+      {
+        "id": 1,
+        "type": "Radio",
+        "label": "Italy's invasion of Ethiopia in 1935, the 1936 joint signing of a military alliance by Germany and Italy, and Japan's invasions of China, including Shanghai, and withdrawal from the League of Nations were antecedents of which major conflict?",
+        "options": [
+          "A: The Russo-Japanese War",
+          "B: The Sino-Japanese War",
+          "C: World War I",
+          "D: World War II"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 2,
+        "form_id": 403
+      },
+      {
+        "id": 2,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "start",
+        "pageNumber": 1,
+        "empty": false,
+        "maxPages": 10,
+        "order": 3,
+        "form_id": 403
+      },
+      {
+        "id": 3,
+        "type": "Radio",
+        "label": "Jewish people, communists, journalists, and the disabled were all targets of this World War II era dictator in Western Europe.",
+        "options": [
+          "A: The Khmer Rouge",
+          "B: Benito Mussolini",
+          "C: Joseph Stalin",
+          "D: Adolf Hitler"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 4,
+        "form_id": 403
+      },
+      {
+        "id": 4,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 2,
+        "empty": false,
+        "maxPages": 10,
+        "order": 5,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 21,
+        "type": "Radio",
+        "label": "Where did the loyalties of the Tories lie during the American Revolution?",
+        "options": [
+          "A: With France",
+          "B: With the Austrian Empire",
+          "C: With Great Britain and King George III",
+          "D: With the colony of Virginia alone"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 6,
+        "form_id": 403
+      },
+      {
+        "id": 6,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 3,
+        "empty": false,
+        "maxPages": 10,
+        "order": 7,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 22,
+        "type": "Radio",
+        "label": "Which major document states that governments are created by people to protect their inalienable rights?",
+        "options": [
+          "A: The Mayflower Compact",
+          "B: The Introduction to the Bill of Rights",
+          "C: The Preamble of the Declaration of Independence",
+          "D: The Preamble to the First Continental Congress"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 8,
+        "form_id": 403
+      },
+      {
+        "id": 8,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 4,
+        "empty": false,
+        "maxPages": 10,
+        "order": 9,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 23,
+        "type": "Radio",
+        "label": "Which post-war, counter-culture group in America is best defined as a vast group of bohemian creatives that deviated markedly in their ideas from mainstream society in the 1950s?",
+        "options": ["A: Beatniks", "B: Hippies", "C: Scalawags", "D: Yuppies"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 10,
+        "form_id": 403
+      },
+      {
+        "id": 10,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 5,
+        "empty": false,
+        "maxPages": 10,
+        "order": 11,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 24,
+        "type": "Radio",
+        "label": "The end of World War II marked President Truman's foreign policy strategy designed to contain the spread of which item?",
+        "options": [
+          "A: American imperialism",
+          "B: Communism",
+          "C: European immigration to the United States",
+          "D: European economic recovery"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 12,
+        "form_id": 403
+      },
+      {
+        "id": 12,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 6,
+        "empty": false,
+        "maxPages": 10,
+        "order": 13,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 25,
+        "type": "Radio",
+        "label": "The annexation of Oregon during the Presidency of James K. Polk was promoted with the popular slogan:",
+        "options": [
+          "A: '54°40 or Fight!'",
+          "B: '54°40 or War!'",
+          "C: '40°54 or War!'",
+          "D: '40°54 or Fight!'"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 14,
+        "form_id": 403
+      },
+      {
+        "id": 14,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 7,
+        "empty": false,
+        "maxPages": 10,
+        "order": 15,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 26,
+        "type": "Radio",
+        "label": "The Gadsden Purchase in 1853 is the completion of the so called 'lower 48' with the purchase of a strip of land at the southern border of the New Mexico territory for $10 million during the presidency of _____ .",
+        "options": [
+          "A: Franklin Pierce",
+          "B: Millard Fillmore",
+          "C: Jefferson Davis",
+          "D: James Gadsden"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 16,
+        "form_id": 403
+      },
+      {
+        "id": 16,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 8,
+        "empty": false,
+        "maxPages": 10,
+        "order": 17,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 28,
+        "type": "Radio",
+        "label": "During the 1920s, a U.S.Attorney General received a letter bomb at his home widely believed to be sent by Communists. This led to the founding of the _____.",
+        "options": [
+          "A: Intelligence Division of the Justice Dept. (F.B.I.)",
+          "B: Central Intelligence Agency (C.I.A.)",
+          "C: Homeland Security Agency",
+          "D: Washington Counter Terrorism Unit (C.T.U.)"
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 18,
+        "form_id": 403
+      },
+      {
+        "id": 18,
+        "type": "PageBreak",
+        "nextButtonText": "Next",
+        "previousButtonText": "Previous",
+        "submitButtonText": "Submit",
+        "style": "between",
+        "pageNumber": 9,
+        "empty": false,
+        "maxPages": 10,
+        "order": 19,
+        "form_id": 403
+      },
+      {
+        "mode": "sort",
+        "id": 29,
+        "type": "Radio",
+        "label": "What was the impact of the Dred Scott decision upon the issue of slavery?",
+        "options": [
+          "A: It declared slavery to be unconstitutional and illegal nationwide, precipitating the War Between the States.",
+          "B: It allowed the Supreme Court to decide who could be married and who could not.",
+          "C: The high court used the Bill of Rights to protect the rights of slaveowners",
+          "D: It declared the Mason-Dixon Line the official line of separation between slave states and Free states."
+        ],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 20,
+        "form_id": 403,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Quiz"]
+  }
+}

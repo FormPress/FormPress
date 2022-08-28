@@ -1,0 +1,132 @@
+{
+  "id": 33,
+  "user_id": 46,
+  "title": "Chess Tournament Registration",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Chess Tournament Registration",
+        "sublabel": "",
+        "form_id": 637,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Grade",
+        "form_id": 637,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "TextBox",
+        "label": "School",
+        "form_id": 637,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 7,
+        "type": "Name",
+        "label": "Parent Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 637,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "Name",
+        "label": "Parent Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 637,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 9,
+        "type": "Email",
+        "label": "Parent E-mail",
+        "form_id": 637,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Student Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 637,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 12,
+        "type": "Radio",
+        "label": "Have you played in a chess tournament before?",
+        "options": ["Yes", "No"],
+        "form_id": 637,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 11,
+        "type": "Radio",
+        "label": "Your level",
+        "options": ["Beginning", "Intermediate", "Advanced"],
+        "form_id": 637,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 9,
+        "form_id": 637
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

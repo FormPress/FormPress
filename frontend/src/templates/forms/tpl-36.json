@@ -1,0 +1,135 @@
+{
+  "id": 36,
+  "user_id": 46,
+  "title": "Student Roommate Application",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Student Roommate Application",
+        "sublabel": "",
+        "form_id": 640,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 21,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 640,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 640,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 640,
+        "defaultDialCode": "+1 (US)",
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 15,
+        "type": "TextBox",
+        "label": "What's your student status?",
+        "form_id": 640,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 23,
+        "type": "TextArea",
+        "label": "What are your roommate preferences?",
+        "form_id": 640,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 24,
+        "type": "TextArea",
+        "label": "If you have any pet restrictions, please specify them below.",
+        "form_id": 640,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 25,
+        "type": "TextArea",
+        "label": "If you're a host looking to share your place, describe your property briefly (neighborhood, amenities, furniture, etc).",
+        "form_id": 640,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 19,
+        "type": "TextArea",
+        "label": "If you're looking for a place, describe your interests in terms of neighborhood, amenities, utilities, etc.",
+        "form_id": 640,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 20,
+        "type": "TextArea",
+        "label": "Monthly rent and utilities",
+        "form_id": 640,
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 22,
+        "type": "TextArea",
+        "label": "Any further related information?",
+        "form_id": 640,
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "Button",
+        "buttonText": "Submit",
+        "form_id": 640,
+        "order": 11
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Application"]
+  }
+}

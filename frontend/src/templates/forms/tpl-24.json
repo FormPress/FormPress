@@ -1,0 +1,136 @@
+{
+  "id": 24,
+  "user_id": 46,
+  "title": "Job Application",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Job Application Form",
+        "sublabel": "",
+        "form_id": 613,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 613,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": false,
+        "order": 1,
+        "required": true,
+        "requiredText": "Required field",
+        "firstNameSublabelText": "First Name"
+      },
+      {
+        "mode": "sort",
+        "id": 10,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 613,
+        "defaultDialCode": "+1 (US)",
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "mode": "sort",
+        "id": 9,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 613,
+        "order": 3,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 8,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 613,
+        "defaultCountry": "United States",
+        "order": 4,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 11,
+        "type": "Dropdown",
+        "label": "Which position are you applying for?",
+        "options": ["Position 1", "Position 2", "Position 3"],
+        "placeholder": "Choose an option",
+        "form_id": 613,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 12,
+        "type": "Dropdown",
+        "label": "What is your current employment status?",
+        "options": ["Employed", "Self-Employed", "Unemployed", "Student"],
+        "placeholder": "Choose an option",
+        "form_id": 613,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 13,
+        "type": "TextBox",
+        "label": "Please submit your resume via its URL:",
+        "form_id": 613,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "TextArea",
+        "label": "Would you like to list references? If yes, please provide their names and e-mail addresses.",
+        "form_id": 613,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 9,
+        "form_id": 613
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Application"]
+  }
+}
