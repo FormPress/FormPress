@@ -291,8 +291,11 @@ module.exports = (app) => {
 
       const msg = {
         to: sendEmailTo,
-        from: 'submission-notifications-noreply@api.formpress.org',
-        subject: 'New submission has been received',
+        from: {
+          name: 'FormPress',
+          email: 'submission-notifications-noreply@api.formpress.org'
+        },
+        subject: `New Response: ${form.title}`,
         text: textBody,
         html: htmlBody
       }
