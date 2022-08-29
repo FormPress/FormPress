@@ -30,6 +30,7 @@ function Password(props) {
       <div className="fl input">
         <input
           type="password"
+          autoComplete="on"
           id={`q_${config.id}`}
           name={`q_${config.id}`}
           {...(inputProps || '')}
