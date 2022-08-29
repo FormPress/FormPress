@@ -149,6 +149,7 @@ class Data extends Component {
 
   componenDidMountWorker() {
     if (
+      this.props.location.state !== null &&
       typeof this.props.location.state !== 'undefined' &&
       typeof this.props.location.state.form_id !== 'undefined'
     ) {
