@@ -58,7 +58,7 @@
       src += `&widget=true`
 
       iframeElem = `
-      <div style="position: fixed; bottom: 30px; right: 30px;">
+      <div style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
         <div class="message-container hidden">
           ${fpTitle}
           <div class="iframe-content">
