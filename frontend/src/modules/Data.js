@@ -148,7 +148,7 @@ class Data extends Component {
   }
 
   componenDidMountWorker() {
-    if (this.props.location.state?.form_id) {
+    if (this.props.location.state !== null && && this.props.location.state?.form_id) {
       const { form_id, submissionFilterSelectors } = this.props.location.state
 
       let selectedFormId,
