@@ -14,7 +14,7 @@ export default class QuestionProperties extends Component {
     const value =
       typeof e === 'string'
         ? e
-        : e.target.id === 'q_required' && value === true
+        : e.target.id === 'q_required' && e.target.value === true
         ? elem.value
         : e.target.type === 'checkbox'
         ? e.target.checked

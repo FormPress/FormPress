@@ -1,4 +1,4 @@
-FROM node:12.14-alpine3.10 as base
+FROM node:16.13.0-alpine3.14 as base
 
 RUN apk update && apk add curl bash
 

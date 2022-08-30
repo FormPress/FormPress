@@ -8,6 +8,7 @@ const NotFoundPage = () => (
         <img
           src="https://storage.googleapis.com/static.formpress.org/images/NotFoundPage.svg"
           className="img-responsive"
+          alt="Not Found"
         />
       </div>
       <div className="not-found-text">
