@@ -100,7 +100,7 @@ class Users extends Component {
   }
 
   handleSave = async (e) => {
-    e.preventDefault()
+    e?.preventDefault()
     this.setState({ saved: false })
     const { selectedUserId, roleId, isActive } = this.state
 

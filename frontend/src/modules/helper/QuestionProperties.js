@@ -81,14 +81,12 @@ export default class QuestionProperties extends Component {
             <div
               className="qlabel"
               dangerouslySetInnerHTML={{
-                __html:
-                  typeof config !== 'undefined' &&
-                  typeof config.label !== 'undefined'
-                    ? config.label
-                        .replace(/<span(.*?)>(.*?)<\/span>/, '')
-                        .replace(/(<([^>]+)>)/gi, '')
-                        .trim()
-                    : ''
+                __html: config?.label
+                  ? config.label
+                      .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                      .replace(/(<([^>]+)>)/gi, '')
+                      .trim()
+                  : ''
               }}></div>
             <div className="qtype">{selectedField.config.type}</div>
           </div>
