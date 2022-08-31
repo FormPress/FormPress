@@ -1,0 +1,114 @@
+{
+  "id": 17,
+  "user_id": 46,
+  "title": "Free Marriage Certificate",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Free Marriage Certificate Form",
+        "sublabel": "",
+        "form_id": 605,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 10,
+        "type": "Radio",
+        "label": "<p><img src=\"https://cdn.pixabay.com/photo/2016/04/26/08/00/wedding-1353829_960_720.jpg\" alt=\"D&uuml;ğ&uuml;n i&ccedil;in &uuml;cretsiz fotoğraflar\" width=\"379\" height=\"252\"></p>",
+        "options": [],
+        "form_id": 605,
+        "editor": true,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Name of the Husband",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 605,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": true,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Name",
+        "label": "Name of the Wife",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 605,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": true,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 6,
+        "type": "TextBox",
+        "label": "Date of marriage",
+        "form_id": 605,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "yyyy-mm-dd"
+      },
+      {
+        "id": 7,
+        "type": "TextBox",
+        "label": "Place of the wedding",
+        "form_id": 605,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 8,
+        "type": "TextArea",
+        "label": "Husband Signature",
+        "form_id": 605,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "TextArea",
+        "label": "Wife Signature",
+        "form_id": 605,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 8,
+        "form_id": 605
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Application"]
+  }
+}

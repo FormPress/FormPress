@@ -1,0 +1,106 @@
+{
+  "id": 42,
+  "user_id": 46,
+  "title": "Bug Report",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 4,
+        "type": "Header",
+        "label": "Bug Report",
+        "sublabel": "",
+        "form_id": 661,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 1,
+        "type": "Name",
+        "label": "Your name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 661,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 3,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 661,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 13,
+        "type": "Radio",
+        "label": "Priority",
+        "options": ["High", "Medium", "Low"],
+        "form_id": 661,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 14,
+        "type": "TextBox",
+        "label": "Which browsers does this bug occur on?",
+        "form_id": 661,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 15,
+        "type": "TextBox",
+        "label": "What is your operating system",
+        "form_id": 661,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 18,
+        "type": "TextArea",
+        "label": "Any further details?",
+        "form_id": 661,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 17,
+        "type": "FileUpload",
+        "label": "Screenshots",
+        "requiredText": "Please fill this field.",
+        "form_id": 661,
+        "order": 7,
+        "required": false
+      },
+      {
+        "id": 11,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 8,
+        "form_id": 661
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Report"]
+  }
+}

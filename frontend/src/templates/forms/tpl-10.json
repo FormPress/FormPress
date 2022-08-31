@@ -1,0 +1,166 @@
+{
+  "id": 10,
+  "user_id": 46,
+  "title": "Twitch Mod Application",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 12,
+        "type": "Header",
+        "label": "Twitch Mod Application",
+        "sublabel": "",
+        "separator": true,
+        "order": 0,
+        "form_id": 406
+      },
+      {
+        "id": 1,
+        "type": "TextBox",
+        "placeholder": "",
+        "required": true,
+        "label": "Your Twitch Username",
+        "requiredText": "Please fill this field.",
+        "order": 1,
+        "form_id": 406
+      },
+      {
+        "id": 13,
+        "type": "TextArea",
+        "label": "Why do you want to become a moderator for this channel?",
+        "form_id": 406,
+        "order": 2,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 15,
+        "type": "TextBox",
+        "label": "Do you have experience being a moderator?",
+        "form_id": 406,
+        "order": 3,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 16,
+        "type": "TextArea",
+        "label": "Were you ever punished(suspended, banned, etc.) in another stream for bad behavior? If so, what were the exact reasons?",
+        "form_id": 406,
+        "order": 4,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 4,
+        "type": "Checkbox",
+        "label": "What would you do if someone was spamming in chat?",
+        "options": ["Mute", "Warn", "Kick", "Ban"],
+        "toggle": true,
+        "required": true,
+        "requiredText": "Required field",
+        "order": 5,
+        "form_id": 406
+      },
+      {
+        "id": 6,
+        "type": "Checkbox",
+        "label": "What would you do if someone was discriminating / harassing someone in chat?",
+        "options": ["Mute", "Warn", "Kick", "Ban"],
+        "toggle": true,
+        "required": true,
+        "requiredText": "Required field",
+        "order": 6,
+        "form_id": 406
+      },
+      {
+        "id": 17,
+        "type": "Radio",
+        "label": "How long have you been following this channel?",
+        "options": ["Less than a year", "1-2 year(s)", "2-3 years", "Longer"],
+        "form_id": 406,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 7,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "Are you subscribed to the channel ?",
+        "options": ["Yes", "No"],
+        "required": true,
+        "requiredText": "Required field",
+        "order": 8,
+        "form_id": 406,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 8,
+        "type": "TextBox",
+        "label": "How active are you in the stream?",
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "",
+        "order": 9,
+        "form_id": 406
+      },
+      {
+        "id": 14,
+        "type": "TextArea",
+        "label": "Would you be willing to end a heated argument between two people without getting involved yourself? If so, how would you do it?",
+        "form_id": 406,
+        "order": 10,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 10,
+        "type": "Radio",
+        "label": "Do you understand that if you abuse your powers, your mod rights can be taken away?",
+        "options": ["Yes", "No"],
+        "required": true,
+        "requiredText": "Required field",
+        "order": 11,
+        "form_id": 406,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 11,
+        "type": "Radio",
+        "label": "Do you understand that if you disrespect any other staff, your mod rights can be taken away?",
+        "options": ["Yes", "No"],
+        "required": true,
+        "requiredText": "Required field",
+        "order": 12,
+        "form_id": 406,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 18,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 13,
+        "form_id": 406
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Application"]
+  }
+}

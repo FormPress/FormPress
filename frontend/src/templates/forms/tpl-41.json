@@ -1,0 +1,133 @@
+{
+  "id": 41,
+  "user_id": 46,
+  "title": "Computer Class Registration",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 4,
+        "type": "Header",
+        "label": "Computer Class Registration",
+        "sublabel": "",
+        "form_id": 660,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 1,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 660,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 2,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 660,
+        "defaultCountry": "United States",
+        "order": 2
+      },
+      {
+        "id": 3,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 660,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 5,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 660,
+        "defaultDialCode": "+1 (US)",
+        "order": 4
+      },
+      {
+        "id": 0,
+        "type": "TextBox",
+        "label": "Date",
+        "order": 5,
+        "form_id": 660,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "yyyy/mm/dd"
+      },
+      {
+        "id": 6,
+        "type": "Header",
+        "label": "",
+        "sublabel": "Please select the classes you're interested in",
+        "form_id": 660,
+        "separator": false,
+        "alignment": "Center",
+        "order": 6
+      },
+      {
+        "id": 7,
+        "type": "Checkbox",
+        "label": "Class Category",
+        "options": ["Class name", "Class name", "Class name", "Class name"],
+        "form_id": 660,
+        "toggle": false,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "Checkbox",
+        "label": "Class Category",
+        "options": ["Class name", "Class name", "Class name", "Class name"],
+        "form_id": 660,
+        "toggle": false,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 9,
+        "type": "Checkbox",
+        "label": "Class Category",
+        "options": ["Class name", "Class name", "Class name"],
+        "form_id": 660,
+        "toggle": false,
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 11,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 10,
+        "form_id": 660
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

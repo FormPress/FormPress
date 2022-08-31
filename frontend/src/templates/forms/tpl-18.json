@@ -1,0 +1,83 @@
+{
+  "id": 18,
+  "user_id": 46,
+  "title": "Video Submission",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Video Submission",
+        "sublabel": "Submit your video for evaluation",
+        "form_id": 606,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 606,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 606,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "FileUpload",
+        "label": "Upload Video",
+        "requiredText": "Please fill this field.",
+        "form_id": 606,
+        "order": 3,
+        "required": false,
+        "sublabelText": "Make sure your video is no longer than 10 minutes."
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "<p>Make sure you have the legal rights to use the music &amp; images in the video. Make sure your video does not contain inappropriate content (language, imagery, etc.)</p>\n<p>Do you agree to the terms above?</p>",
+        "options": ["Yes", "No"],
+        "form_id": 606,
+        "editor": true,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "TextArea",
+        "label": "Comments",
+        "form_id": 606,
+        "order": 5
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 6,
+        "form_id": 606
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Submission"]
+  }
+}

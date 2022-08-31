@@ -1,0 +1,88 @@
+{
+  "id": 28,
+  "user_id": 46,
+  "title": "Membership Dues",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 0,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 0,
+        "form_id": 620,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 1,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "defaultCountry": "United States",
+        "order": 1,
+        "form_id": 620
+      },
+      {
+        "id": 2,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "defaultDialCode": "+1 (US)",
+        "order": 2,
+        "form_id": 620
+      },
+      {
+        "id": 3,
+        "type": "Email",
+        "label": "E-mail",
+        "order": 3,
+        "form_id": 620,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 4,
+        "type": "Radio",
+        "label": "Please choose the membership level you wish to purchase.",
+        "options": ["Bronze - $25.00", "Silver - $50.00", "Gold - $75.00"],
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 4,
+        "form_id": 620,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Comments or Questions",
+        "order": 5,
+        "form_id": 620,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

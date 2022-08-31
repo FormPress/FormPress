@@ -1,0 +1,210 @@
+{
+  "id": 21,
+  "user_id": 46,
+  "title": "Identity Verification",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 9,
+        "type": "Header",
+        "label": "Identity Verification Form",
+        "sublabel": "",
+        "form_id": 609,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 609,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 7,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Permanent Address",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 609,
+        "defaultCountry": "United States",
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 10,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Current Address",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 609,
+        "defaultCountry": "United States",
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 11,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 609,
+        "defaultDialCode": "+1 (US)",
+        "order": 4
+      },
+      {
+        "id": 12,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 609,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "mode": "sort",
+        "id": 13,
+        "type": "TextBox",
+        "label": "Identification proof provided/Type of ID:",
+        "form_id": 609,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "TextBox",
+        "label": "ID number:",
+        "form_id": 609,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 15,
+        "type": "TextBox",
+        "label": "Expiry of ID proof (if applicable):",
+        "form_id": 609,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 16,
+        "type": "Radio",
+        "label": "",
+        "options": [
+          "<p>I assure that the all the information provided above is accurate and any false information will lead to imprisonment.</p>"
+        ],
+        "form_id": 609,
+        "editor": false,
+        "editorForOptions": true,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 17,
+        "type": "TextArea",
+        "label": "Signature",
+        "form_id": 609,
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 18,
+        "type": "Header",
+        "label": "",
+        "sublabel": "I would like to inform that the above mentioned individual approached our agency personally and submitted documents which I believe are genuine as he/she has proved to be the person mentioned in the id.",
+        "form_id": 609,
+        "separator": false,
+        "alignment": "Center",
+        "order": 11
+      },
+      {
+        "id": 19,
+        "type": "Name",
+        "label": "Full Name of witness:",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 609,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 12,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 20,
+        "type": "TextBox",
+        "label": "Agency Name:",
+        "form_id": 609,
+        "order": 13
+      },
+      {
+        "id": 21,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address of the agency:",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 609,
+        "defaultCountry": "United States",
+        "order": 14
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 15,
+        "form_id": 609
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Consent"]
+  }
+}

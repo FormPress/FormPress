@@ -1,0 +1,144 @@
+{
+  "id": 30,
+  "user_id": 46,
+  "title": "Prenuptial Agreement",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Prenuptial Agreement Form",
+        "sublabel": "",
+        "separator": false,
+        "alignment": "Center",
+        "order": 0,
+        "form_id": 628
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Prenuptial Agreement made and executed by:",
+        "form_id": 628,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "mode": "sort",
+        "id": 4,
+        "type": "TextBox",
+        "label": "Single/Married to:",
+        "order": 2,
+        "form_id": 628,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 628,
+        "defaultCountry": "United States",
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 7,
+        "type": "TextBox",
+        "label": "Prenuptial Agreement made with:",
+        "form_id": 628,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 8,
+        "type": "TextBox",
+        "label": "Single/Married to",
+        "form_id": 628,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 628,
+        "defaultCountry": "United States",
+        "order": 6
+      },
+      {
+        "id": 10,
+        "type": "TextBox",
+        "label": "Contract of Marriage, tentatively to take place on:",
+        "form_id": 628,
+        "order": 7
+      },
+      {
+        "id": 11,
+        "type": "Dropdown",
+        "label": "All the property, real and personal, now owned by the future wife shall remain to be her own exclusive and separate property",
+        "options": ["I agree to these terms."],
+        "placeholder": "Choose an option",
+        "form_id": 628,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 8,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 12,
+        "type": "Dropdown",
+        "label": "All the property, real and personal, now owned by the future husband shall remain to be his own exclusive and separate property",
+        "options": ["I agree to these terms."],
+        "placeholder": "Choose an option",
+        "form_id": 628,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 9,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 10,
+        "form_id": 628
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Agreement"]
+  }
+}

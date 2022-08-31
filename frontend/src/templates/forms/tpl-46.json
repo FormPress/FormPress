@@ -1,0 +1,199 @@
+{
+  "id": 46,
+  "user_id": 46,
+  "title": "Job Interview Questionnaire",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Interview Questionnaire",
+        "sublabel": "Please fill out the form for your job interview",
+        "form_id": null,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 7,
+        "type": "Header",
+        "label": "",
+        "sublabel": "Personal Information",
+        "form_id": null,
+        "separator": false,
+        "alignment": "Center",
+        "order": 1
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Your name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": null,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "Your age",
+        "form_id": null,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Radio",
+        "label": "Your gender",
+        "options": ["Male", "Female", "Other"],
+        "form_id": null,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Your address",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": null,
+        "defaultCountry": "United States",
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 9,
+        "type": "Phone",
+        "label": "Your phone",
+        "hasDataset": true,
+        "form_id": null,
+        "defaultDialCode": "+1 (US)",
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 10,
+        "type": "Email",
+        "label": "Your e-mail",
+        "form_id": null,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 11,
+        "type": "Header",
+        "label": "",
+        "sublabel": "Further Questions",
+        "form_id": null,
+        "separator": false,
+        "alignment": "Center",
+        "order": 8
+      },
+      {
+        "id": 12,
+        "type": "TextArea",
+        "label": "How would you describe yourself in a few words?",
+        "form_id": null,
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 13,
+        "type": "TextArea",
+        "label": "What could you tell us about your related job experiences?",
+        "form_id": null,
+        "order": 10,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "TextArea",
+        "label": "Why did you leave your previous job?",
+        "form_id": null,
+        "order": 11,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 15,
+        "type": "TextArea",
+        "label": "What do you want to accomplish in our organization?",
+        "form_id": null,
+        "order": 12,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 16,
+        "type": "TextArea",
+        "label": "Please tell us what attracts your interest the most about the position you're applying for",
+        "form_id": null,
+        "order": 13,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 17,
+        "type": "TextArea",
+        "label": "What are your major skills suitable for this position?",
+        "form_id": null,
+        "order": 14,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 18,
+        "type": "TextArea",
+        "label": "Any comments?",
+        "form_id": null,
+        "order": 15,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 16,
+        "form_id": null
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Questionnaire"]
+  }
+}
