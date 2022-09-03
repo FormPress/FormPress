@@ -1170,3 +1170,10 @@ fp-powered + div > .form::after {
 }
 
 /* PART ABOVE IS ABOUT EXAM EVALUATION PAGE*/
+h1, h2, h3, h4, h5, h6 {
+  color: #113952;
+}
+
+p, span, strong, input, textarea{
+  color:#333333;
+}
