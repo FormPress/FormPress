@@ -212,6 +212,7 @@
   outline: 0;
   background-color: #f5f5f5;
   box-sizing: border-box;
+  font-family: 'unset';
 }
 .gleam.form .element > .fl.label {
   margin-bottom: 10px;
@@ -227,8 +228,9 @@
   resize: none;
   width: 100%;
   outline: 0;
-  color: #333333;
+  color: #113952;
   box-sizing: border-box;
+  font-family: 'unset';
 }
 .gleam .elementCheckbox {
   background-color: transparent;
