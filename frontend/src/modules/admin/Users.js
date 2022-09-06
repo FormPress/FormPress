@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AuthContext from '../../auth.context'
 import { api, setToken } from '../../helper'
 import Renderer from '../Renderer'
+import moment from 'moment'
 
 import './Users.css'
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -222,7 +223,15 @@ class Users extends Component {
             <div className="userdetail">
               <div
                 className="addToWhitelist"
-                onClick={() => this.addToWhitelist()}>
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Are you sure you want to whitelist this user?'
+                    )
+                  ) {
+                    this.addToWhitelist()
+                  }
+                }}>
                 Add to Whitelist
               </div>
             </div>
@@ -267,7 +276,10 @@ class Users extends Component {
               {this.state.saved ? 'Saved' : 'Changes do not saved'}
             </div>
             <div className="message">Status: {this.state.message}</div>
-            <div className="message">Signup Date: {this.state.signupDate}</div>
+            <div className="message">
+              Signup Date:{' '}
+              {moment(this.state.signupDate).format('DD.MM.YYYY, hh:mm:ss')}
+            </div>
           </div>
         </div>
         <div className="wrap-right">
@@ -276,8 +288,13 @@ class Users extends Component {
               Forms:
               {forms.map((form) => (
                 <div key={form.link}>
-                  <a href={form.link}>{form.link}</a>
-                  <div>Created Date: {form.created_at}</div>
+                  <a href={form.link} target="_blank" rel="noreferrer">
+                    {form.link}
+                  </a>
+                  <div>
+                    Created Date:{' '}
+                    {moment(form.created_at).format('DD.MM.YYYY, hh:mm:ss')}
+                  </div>
                 </div>
               ))}
             </div>
