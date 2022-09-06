@@ -4,7 +4,6 @@ import AuthContext from '../../auth.context'
 import Roles from './Roles'
 import Users from './Users'
 import Status from './Status'
-import Whitelist from './Whitelist'
 
 import './AdminPage.css'
 
@@ -24,8 +23,8 @@ class AdminPage extends Component {
         <Route exact path="/admin/status">
           <Status />
         </Route>
-        <Route exact path="/admin/whitelist">
-          <Whitelist />
+        <Route exact path="/admin/whiteList">
+          whiteList will Come Here!.
         </Route>
         <Redirect path="*" to="/404" />
       </Switch>
@@ -44,12 +43,7 @@ class AdminPage extends Component {
         path: `/admin/roles`
       },
       {
-        name: 'whitelist',
-        text: 'Whitelist',
-        path: '/admin/whitelist'
-      },
-      {
-        name: 'status',
+        name: 'roles',
         text: 'Status',
         path: '/admin/status'
       }

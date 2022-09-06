@@ -41,8 +41,8 @@ const Profile = () => {
           loggedIn: true
         })
       )
-      window.location.href = '/admin/users'
     }
+    window.location.reload()
   }
 
   const renderLoggedIn = (auth) => {
