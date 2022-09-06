@@ -4,7 +4,7 @@
 }
 
 .userwrap {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 20px;
   padding: 30px;
@@ -44,6 +44,15 @@
   grid-column: span 3;
 }
 
+.userforms {
+  padding-top: 10px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 10px;
+  grid-column: span 100;
+  width: 100%;
+}
+
 .userdetail {
   grid-column: span 1;
 }
@@ -53,7 +62,7 @@
   padding: 0px 10px;
 }
 
-.servermessage {
+.message {
   grid-column: span 1;
   padding: 0px 10px;
 }
@@ -79,7 +88,8 @@
 }
 
 .loginAsUser,
-.statusUser {
+.statusUser,
+.addToWhitelist {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
@@ -96,13 +106,26 @@
   background-color: #c9bdb9;
 }
 
+.addToWhitelist {
+  width: 140px;
+  background-color: #b9c1c9;
+}
+
 .loginAsUser:hover,
-.statusUser:hover {
+.statusUser:hover,
+.addToWhitelist:hover {
   cursor: pointer;
   color: #ffffff;
+}
+
+.loginAsUser:hover {
   background-color: #79bd71;
 }
 
 .statusUser:hover {
   background-color: #c65c5c;
+}
+
+.addToWhitelist:hover {
+  background-color: #7188bd;
 }
