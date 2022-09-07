@@ -135,6 +135,7 @@ export default class NetPromoterScore extends Component {
     }
 
     var display = [
+      <h4>
       <EditableLabel
         key="1"
         className="fl label"
@@ -144,7 +145,8 @@ export default class NetPromoterScore extends Component {
         handleLabelChange={this.props.handleLabelChange}
         value={config.label}
         required={config.required}
-      />,
+      />
+      </h4>,
       <div key="2" className="fl input">
         <ul>
           {config.options.map((item, key) => {
@@ -168,6 +170,7 @@ export default class NetPromoterScore extends Component {
         </ul>
       </div>,
       <div className="clearfix first-child" key="3">
+        <h4>
         <EditableLabel
           className="sublabel"
           dataPlaceholder="Click to edit sublabel"
@@ -182,7 +185,8 @@ export default class NetPromoterScore extends Component {
               : 'Not Likely'
           }
         />
-
+        </h4>
+        <h4>
         <EditableLabel
           className="sublabel fr"
           dataPlaceholder="Click to edit sublabel"
@@ -197,8 +201,10 @@ export default class NetPromoterScore extends Component {
               : 'Very Likely'
           }
         />
+        </h4>
       </div>,
       <div className="clearfix" key="4">
+        <h4>
         <EditableLabel
           className="sublabel"
           dataPlaceholder="Click to edit sublabel"
@@ -212,6 +218,7 @@ export default class NetPromoterScore extends Component {
               : ''
           }
         />
+        </h4>
       </div>
     ]
 

@@ -197,6 +197,7 @@ export default class Checkbox extends Component {
     let display
     if (mode === 'builder') {
       display = [
+        <h4>
         <EditableLabel
           key="1"
           className="fl label"
@@ -206,7 +207,8 @@ export default class Checkbox extends Component {
           value={config.label}
           dataPlaceholder="Type a question"
           required={config.required}
-        />,
+        />
+        </h4>,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
           <EditableList
             config={config}
@@ -221,6 +223,7 @@ export default class Checkbox extends Component {
       ]
     } else {
       display = [
+        <h4>
         <EditableLabel
           key="1"
           className="fl label"
@@ -230,7 +233,8 @@ export default class Checkbox extends Component {
           handleLabelChange={this.props.handleLabelChange}
           value={config.label}
           required={config.required}
-        />,
+        />
+        </h4>,
         <div
           key="2"
           className={
@@ -265,6 +269,7 @@ export default class Checkbox extends Component {
           ''
         ) : (
           <div className="clearfix">
+            <h4>
             <EditableLabel
               className="sublabel"
               dataPlaceholder="Click to edit sublabel"
@@ -278,6 +283,7 @@ export default class Checkbox extends Component {
                   : ''
               }
             />
+            </h4>
           </div>
         )}
         <div className="fl metadata">

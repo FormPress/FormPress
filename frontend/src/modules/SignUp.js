@@ -25,6 +25,7 @@ class SignUp extends Component {
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+
     this.formRef = React.createRef()
   }
 
@@ -49,34 +50,37 @@ class SignUp extends Component {
   async handleSignUpButtonClick(e) {
     e.preventDefault()
     this.setState({ state: 'signup' })
+    
 
     const { email, password } = this.state
-    let pattern = /^.{8,}$/,
-      signupErrorHandler = 0
 
     const simpleEmailRegex = /^\S{1,}@\S{2,}\.\S{2,}$/
     if (!email) {
       this.setState({ message: 'Please use a valid email' })
-      signupErrorHandler++
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
+
+      return
     } else if (simpleEmailRegex.exec(email) === null) {
       this.setState({ message: 'Please use a valid email' })
-      signupErrorHandler++
-    } else if (!password || password !== this.state.passwordRe) {
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
+
+      return
+    }
+
+    if (!password || password !== this.state.passwordRe) {
       this.setState({ message: 'Password should match' })
-      signupErrorHandler++
-    } else if (!pattern.test(password)) {
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
+
+      return
+    }
+
+    let pattern = /^.{8,}$/
+    if (!pattern.test(password)) {
       this.setState({
         message: 'New password must contain at least 8 characters.'
       })
-      signupErrorHandler++
-    }
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
 
-    if (signupErrorHandler > 0) {
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
-      signupErrorHandler = 0
       return
     }
 
@@ -91,10 +95,7 @@ class SignUp extends Component {
       this.setState({ success: true, state: 'done', message: data.message })
     } else {
       this.setState({ state: 'done', message: data.message })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -122,10 +123,7 @@ class SignUp extends Component {
       })
     } else {
       this.setState({ state: 'done', message: data.message })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -135,10 +133,7 @@ class SignUp extends Component {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {
       this.setState({ state: 'done', message: response.error })
-      window.scrollTo({
-        top: this.formRef.current.offsetTop,
-        behavior: 'smooth'
-      })
+      window.scrollTo({ top: this.formRef.current.offsetTop, behavior: 'smooth' })
     }
   }
 
@@ -168,16 +163,15 @@ class SignUp extends Component {
         <div className="form-header">SIGNUP SUCCESS!</div>
         <div className="sign-up-success">
           <p>
-            We have sent a verification e-mail to the address{' '}
+            Signup success! We have sent an e-mail to your{' '}
             <span className="signup-email">
               <i>{email}</i>
             </span>{' '}
-            .
+            address.
           </p>
           <p>
-            Please activate your account to begin your journey with FormPress.
-            (If you didn&apos;t receive the e-mail, please check your spam
-            folder)
+            Activate account by following that e-mail. (If you didn&apos;t
+            recieve please check spam folder)
           </p>
         </div>
       </div>
@@ -188,7 +182,7 @@ class SignUp extends Component {
           <div className="signup-email">
             <i>{email}</i>
           </div>
-          <p>Signup success! You can now log in to your account.</p>
+          <p>Signup success! You can now login to your account.</p>
         </div>
       </div>
     )
@@ -207,9 +201,7 @@ class SignUp extends Component {
             ) : (
               <div>
                 <div className="form-header">SIGNUP FORM</div>
-                <form
-                  ref={this.formRef}
-                  onSubmit={this.handleSignUpButtonClick}>
+                <form ref={this.formRef} onSubmit={this.handleSignUpButtonClick}>
                   <Renderer
                     className="form"
                     theme="infernal"
@@ -279,7 +271,7 @@ class SignUp extends Component {
           </div>
         </div>
         <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2022 formpress.org</div>
+          <div className="col-8-16">Copyright © 2021 formpress.org</div>
           <div className="col-8-16 tr">
             <a href="mailto:support@formpress.org">Contact</a>
           </div>

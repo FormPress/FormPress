@@ -1332,6 +1332,7 @@ class Builder extends Component {
         <div className="builderStageHeader">
           <div className="formTitle col-16-16">
             {loading === false ? (
+              <h4>
               <EditableLabel
                 className="label"
                 mode="builder"
@@ -1340,6 +1341,7 @@ class Builder extends Component {
                 handleLabelChange={this.handleTitleChange}
                 value={form.title}
               />
+              </h4>
             ) : null}
           </div>
           <div className="col-16-16 formControls">

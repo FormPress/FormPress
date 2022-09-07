@@ -46,11 +46,11 @@
   margin-top: -30px;
 }
 
-.gleam.form .element > .label {
+.gleam.form .element > h4 > .label {
   float: none;
   margin-bottom: 10px;
 }
-.gleam.form .element > .label > span {
+.gleam.form .element > h4 > .label > span {
   font-family: Montserrat;
   min-width: 125px;
   max-width: calc(100% - 20px);
@@ -60,13 +60,13 @@
   word-break: break-word;
   color: #113952;
 }
-.builder.gleam.form .element > .label > span[contentEditable='true']:hover {
+.builder.gleam.form .element > h4 > .label > span[contentEditable='true']:hover {
   border: 1px dashed;
 }
-.gleam.form .element > .label > span.emptySpan {
+.gleam.form .element > h4 > .label > span.emptySpan {
   border: 1px dashed transparent;
 }
-.gleam.form .element > .label > .requiredMarker {
+.gleam.form .element > h4 > .label > .requiredMarker {
   display: inline-block;
   color: red;
   padding: 0;
@@ -1177,7 +1177,7 @@ fp-powered + div > .form::after {
 }
 
 /* PART ABOVE IS ABOUT EXAM EVALUATION PAGE*/
-h1, h2, h3, h4, h5, h6 {
+h4 {
   color: #113952;
 }
 

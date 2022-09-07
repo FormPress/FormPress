@@ -43,6 +43,7 @@ export default class Button extends Component {
               />
             </button>
             <div className="clearfix">
+              <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -56,6 +57,7 @@ export default class Button extends Component {
                     : ''
                 }
               />
+              </h4>
             </div>
           </div>
         ) : (
@@ -64,6 +66,7 @@ export default class Button extends Component {
               {config.buttonText}
             </button>
             <div className="clearfix">
+              <h4>
               <EditableLabel
                 className="sublabel"
                 mode={mode}
@@ -76,6 +79,7 @@ export default class Button extends Component {
                     : ''
                 }
               />
+              </h4>
             </div>
           </div>
         )}

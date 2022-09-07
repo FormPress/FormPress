@@ -241,6 +241,7 @@ export default class Radio extends Component {
     var display
     if (mode === 'builder') {
       display = [
+        <h4>
         <EditableLabel
           key="1"
           className="fl label"
@@ -261,7 +262,8 @@ export default class Radio extends Component {
           value={config.label}
           required={config.required}
           limit={2000}
-        />,
+        />
+        </h4>,
         <div key="2" className="fl input">
           <EditableList
             config={config}
@@ -284,6 +286,7 @@ export default class Radio extends Component {
               type="button"
               className="unselect-button"
               id={`q_${config.id}_unselectButton`}>
+                <h4>
               <EditableLabel
                 className="sublabel unselect-label"
                 dataPlaceholder="Clear Selection"
@@ -296,10 +299,12 @@ export default class Radio extends Component {
                     : 'Clear Selection'
                 }
               />
+              </h4>
             </button>
           ) : null}
         </div>,
         <div className="clearfix" key="3">
+          <h4>
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -314,6 +319,7 @@ export default class Radio extends Component {
                 : ''
             }
           />
+          </h4>
         </div>,
         config.answerExplanation && config.answerExplanation !== '' ? (
           <div className="fl metadata answerExplanationContainer" key="4">
@@ -322,6 +328,7 @@ export default class Radio extends Component {
               open={this.state.isDetailOpen}
               onClick={() => this.setState({ isDetailOpen: !isDetailOpen })}>
               <summary>
+              <h4>
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit answer title"
@@ -335,6 +342,7 @@ export default class Radio extends Component {
                       : ''
                   }
                 />
+                </h4>
                 <span className="popover-container">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div className="popoverText">
@@ -390,6 +398,7 @@ export default class Radio extends Component {
               type="button"
               className="unselect-button"
               id={`q_${config.id}_unselectButton`}>
+                <h4>
               <EditableLabel
                 className="sublabel unselect-label"
                 dataPlaceholder="Clear Selection"
@@ -402,10 +411,12 @@ export default class Radio extends Component {
                     : 'Clear Selection'
                 }
               />
+              </h4>
             </button>
           ) : null}
         </div>,
         <div className="clearfix" key="3">
+          <h4>
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -419,6 +430,7 @@ export default class Radio extends Component {
                 : ''
             }
           />
+          </h4>
         </div>,
         <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

@@ -68,6 +68,7 @@ export default class TextArea extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
+        <h4>
         <EditableLabel
           className="fl label"
           dataPlaceholder="Type a question"
@@ -79,6 +80,7 @@ export default class TextArea extends Component {
           value={config.label}
           required={config.required}
         />
+        </h4>
         <div>
           <div className="fl input">
             {config.id === 'answerExplanation' ? (
@@ -120,6 +122,7 @@ export default class TextArea extends Component {
             ''
           ) : (
             <div className="clearfix">
+              <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -133,6 +136,7 @@ export default class TextArea extends Component {
                     : ''
                 }
               />
+              </h4>
             </div>
           )}
           <div className="fl metadata">

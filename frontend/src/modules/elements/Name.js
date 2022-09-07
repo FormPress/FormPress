@@ -135,6 +135,7 @@ export default class Name extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
+        <h4>
         <EditableLabel
           className="fl label"
           mode={mode}
@@ -144,6 +145,7 @@ export default class Name extends Component {
           value={config.label}
           required={config.required}
         />
+        </h4>
         <div className="nameContainer">
           <span
             className={`prefix_span${
@@ -180,6 +182,7 @@ export default class Name extends Component {
               </select>
             )}
             <div className="clearfix">
+            <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -192,6 +195,7 @@ export default class Name extends Component {
                     : 'Prefix'
                 }
               />
+              </h4>
             </div>
           </span>
           <span className="name_span first_name">
@@ -200,6 +204,7 @@ export default class Name extends Component {
               id={`fname_${config.id}`}
               name={`q_${config.id}[firstName]`}></input>
             <div className="clearfix">
+            <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -212,6 +217,7 @@ export default class Name extends Component {
                     : 'First Name'
                 }
               />
+              </h4>
             </div>
           </span>
           <span
@@ -226,6 +232,7 @@ export default class Name extends Component {
               id={`mname_${config.id}`}
               name={`q_${config.id}[middleName]`}></input>
             <div className="clearfix">
+            <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -238,6 +245,7 @@ export default class Name extends Component {
                     : 'Middle Name'
                 }
               />
+              </h4>
             </div>
           </span>
           <span className="name_span last_name">
@@ -246,6 +254,7 @@ export default class Name extends Component {
               id={`lname_${config.id}`}
               name={`q_${config.id}[lastName]`}></input>
             <div className="clearfix">
+            <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -258,6 +267,7 @@ export default class Name extends Component {
                     : 'Last Name'
                 }
               />
+              </h4>
             </div>
           </span>
           <span
@@ -271,6 +281,7 @@ export default class Name extends Component {
               id={`suffix_${config.id}`}
               name={`q_${config.id}[suffix]`}></input>
             <div className="clearfix">
+            <h4>
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -283,10 +294,12 @@ export default class Name extends Component {
                     : 'Suffix'
                 }
               />
+              </h4>
             </div>
           </span>
         </div>
         <div className="clearfix">
+        <h4>
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -300,6 +313,7 @@ export default class Name extends Component {
                 : ''
             }
           />
+          </h4>
         </div>
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

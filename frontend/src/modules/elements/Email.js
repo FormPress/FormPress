@@ -62,6 +62,7 @@ export default class Email extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
+        <h4>
         <EditableLabel
           className="fl label"
           mode={mode}
@@ -71,6 +72,7 @@ export default class Email extends Component {
           value={config.label}
           required={config.required}
         />
+        </h4>
         <div className="fl input">
           <input
             id={`q_${config.id}`}
@@ -79,6 +81,7 @@ export default class Email extends Component {
           />
         </div>
         <div className="clearfix">
+        <h4>
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -92,6 +95,7 @@ export default class Email extends Component {
                 : ''
             }
           />
+          </h4>
         </div>
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

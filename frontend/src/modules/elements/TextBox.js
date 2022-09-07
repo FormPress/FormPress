@@ -62,6 +62,7 @@ export default class TextBox extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
+        <h4>
         <EditableLabel
           className="fl label"
           dataPlaceholder="Type a question"
@@ -71,6 +72,7 @@ export default class TextBox extends Component {
           value={config.label}
           required={config.required}
         />
+        </h4>
         <div className="fl input">
           <input
             id={`q_${config.id}`}
@@ -82,6 +84,7 @@ export default class TextBox extends Component {
           ''
         ) : (
           <div className="clearfix">
+            <h4>
             <EditableLabel
               className="sublabel"
               dataPlaceholder="Click to edit sublabel"
@@ -95,6 +98,7 @@ export default class TextBox extends Component {
                   : ''
               }
             />
+            </h4>
           </div>
         )}
         <div className="fl metadata">
