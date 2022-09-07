@@ -17,7 +17,7 @@ const isEnvironmentVariableSet = {
 }
 
 let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
-var buff = Buffer.from(tmp, 'base64')
+let buff = Buffer.from(tmp, 'base64')
 let finalSecret = buff.toString('ascii')
 process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE = '/gcp-key.json'
 fs.writeFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE, finalSecret)
@@ -54,6 +54,10 @@ const authenticationMiddleware = require(path.resolve(
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
+const { authGoogleDrive } = require(path.resolve(
+  'integrations',
+  'googledriveapi.js'
+))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -82,6 +86,7 @@ loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)
 changePasswordMiddleware(app)
+authGoogleDrive(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)
