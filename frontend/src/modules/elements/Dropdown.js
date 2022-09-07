@@ -196,7 +196,7 @@ export default class Dropdown extends Component {
           }
         </div>,
         <div className="clearfix" key="3">
-          <h4>
+          
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -210,7 +210,7 @@ export default class Dropdown extends Component {
                 : ''
             }
           />
-          </h4>
+          
         </div>
       ]
     } else {
@@ -251,7 +251,7 @@ export default class Dropdown extends Component {
           </select>
         </div>,
         <div className="clearfix" key="3">
-          <h4>
+          
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -264,7 +264,7 @@ export default class Dropdown extends Component {
                 : ''
             }
           />
-          </h4>
+          
         </div>,
         <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

@@ -149,7 +149,7 @@ export default class Phone extends Component {
         />
       </div>,
       <div className="clearfix" key="3">
-        <h4>
+        
         <EditableLabel
           className="sublabel"
           dataPlaceholder="Click to edit sublabel"
@@ -163,7 +163,7 @@ export default class Phone extends Component {
               : ''
           }
         />
-        </h4>
+      
       </div>,
       <div className="fl metadata" key="4">
         <div className="requiredErrorText">{config.requiredText}</div>

@@ -81,7 +81,7 @@ export default class Email extends Component {
           />
         </div>
         <div className="clearfix">
-        <h4>
+        
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -95,7 +95,7 @@ export default class Email extends Component {
                 : ''
             }
           />
-          </h4>
+          
         </div>
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

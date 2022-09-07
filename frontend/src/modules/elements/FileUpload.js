@@ -119,7 +119,7 @@ export default class FileUpload extends Component {
           </span>
         </div>
         <div className="clearfix">
-        <h4>
+        
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -133,7 +133,7 @@ export default class FileUpload extends Component {
                 : ''
             }
           />
-          </h4>
+          
         </div>
         <div className="fl metadata">
           {script}

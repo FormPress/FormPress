@@ -63,7 +63,7 @@ export default class Number extends Component {
           />
         </div>
         <div className="clearfix">
-        <h4>
+        
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -77,7 +77,7 @@ export default class Number extends Component {
                 : ''
             }
           />
-          </h4>
+          
         </div>
       </ElementContainer>
     )

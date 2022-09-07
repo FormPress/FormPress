@@ -191,7 +191,7 @@ export default class Address extends Component {
               type="text"
             />
             <div className="clearfix">
-              <h4>
+              
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -204,7 +204,7 @@ export default class Address extends Component {
                     : 'Street Line'
                 }
               />
-              </h4>
+              
             </div>
           </span>
         ) : null}
@@ -217,7 +217,7 @@ export default class Address extends Component {
               type="text"
             />
             <div className="clearfix">
-              <h4>
+              
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -230,7 +230,7 @@ export default class Address extends Component {
                     : 'Street Line 2'
                 }
               />
-              </h4>
+              
             </div>
           </span>
         ) : null}
@@ -244,7 +244,7 @@ export default class Address extends Component {
                 type="text"
               />
               <div className="clearfix">
-                <h4>
+                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -257,7 +257,7 @@ export default class Address extends Component {
                       : 'City'
                   }
                 />
-                </h4>
+                
               </div>
             </span>
           ) : null}
@@ -270,7 +270,7 @@ export default class Address extends Component {
                 type="text"
               />
               <div className="clearfix">
-                <h4>
+                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -283,7 +283,7 @@ export default class Address extends Component {
                       : 'Zip'
                   }
                 />
-                </h4>
+                
               </div>
             </span>
           ) : null}
@@ -315,7 +315,7 @@ export default class Address extends Component {
                 />
               )}
               <div className="clearfix">
-                <h4>
+                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -328,7 +328,7 @@ export default class Address extends Component {
                       : 'State'
                   }
                 />
-                </h4>
+              
               </div>
             </span>
           ) : null}
@@ -359,7 +359,7 @@ export default class Address extends Component {
                   : null}
               </select>
               <div className="clearfix">
-                <h4>
+                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -372,7 +372,7 @@ export default class Address extends Component {
                       : 'Country'
                   }
                 />
-                </h4>
+              
               </div>
             </span>
           ) : null}
