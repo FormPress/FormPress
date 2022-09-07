@@ -55,7 +55,7 @@ class EditableList extends Component {
                 value={item}
               />
               {config.toggle === true ? <span className="slider"></span> : ''}
-              <h4>
+              
               <EditableLabel
                 className="label checkbox-label"
                 mode={mode}
@@ -71,7 +71,7 @@ class EditableList extends Component {
                 }}
                 value={item}
               />
-              </h4>
+              
               <div className="action">
                 <div className="popover-container">
                   <FontAwesomeIcon
@@ -165,7 +165,7 @@ class EditableList extends Component {
                   id={`q_${config.id}_${key}`}
                   name={`q_${config.id}`}
                   value={item}></input>
-                  <h4>
+                  
                 <EditableLabel
                   className="label radio-label"
                   mode={mode}
@@ -185,7 +185,7 @@ class EditableList extends Component {
                   value={item}
                   limit={2000}
                 />
-                </h4>
+                
                 <div className="action">
                   <div className="popover-container">
                     <FontAwesomeIcon
@@ -271,7 +271,7 @@ class EditableList extends Component {
         options.map((item, key) => {
           return (
             <div className="fl input" key={key}>
-              <h4>
+              
               <EditableLabel
                 className="label"
                 mode={'builder'}
@@ -282,7 +282,7 @@ class EditableList extends Component {
                 customBuilderHandlers={customBuilderHandlers}
                 value={item}
               />
-              </h4>
+              
               <div className="action">
                 <div className="popover-container">
                   <FontAwesomeIcon
