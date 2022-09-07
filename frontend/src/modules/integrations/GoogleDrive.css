@@ -1,0 +1,262 @@
+.integration-wrapper {
+  font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 3px 10px #00000014;
+  padding: 1.5rem !important;
+  height: calc(100vh - 150px);
+  min-height: 360px;
+  background-color: #ffffff;
+}
+
+.integration-wrapper > .integration-header {
+  display: flex;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+
+.integration-wrapper > .integration-header > .logo {
+  height: 72px;
+  width: 72px;
+}
+
+.integration-wrapper > .integration-header > .title {
+  display: flex;
+  align-items: center;
+  font-size: 25px;
+  padding-left: 10px;
+}
+.integration-wrapper > .integration-content {
+  margin-top: 25px;
+  margin-left: 15px;
+}
+
+.integration-wrapper > .integration-content > .activation-button {
+  padding-right: 10px;
+  margin-top: 40px;
+}
+.integration-wrapper > .integration-content > .activation-button > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #9ee048;
+  border: 1px solid #9ee048;
+  outline: none;
+  color: #ffffff;
+  float: right;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-controls
+  > .pause-integration
+  > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #9d9d9d;
+  border: 1px solid #9d9d9d;
+  outline: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.integration-wrapper
+  > .integration-content
+  > .integration-controls
+  > .edit-integration
+  > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #1c5c85;
+  border: 1px solid #1c5c85;
+  outline: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.integration-wrapper
+  > .integration-content
+  > .integration-controls
+  > .remove-integration
+  > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #be0000;
+  border: 1px solid #be0000;
+  outline: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.integration-wrapper > .integration-content > .integration-motto {
+  font-size: 18px;
+}
+.integration-wrapper > .integration-content > .integration-text {
+  line-height: 22px;
+  font-size: 16px;
+  padding-top: 15px;
+  text-align: justify;
+}
+
+.integration-wrapper > .integration-content > .integration-active {
+  line-height: 30px;
+  margin: auto;
+  font-size: 18px;
+}
+.integration-wrapper > .integration-content > .integration-active > a {
+  margin-top: 30px;
+  color: #1c5c85;
+  font-size: 16px;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.integration-wrapper > .integration-content > .complete-authentication {
+  margin-top: 8px;
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #9ee048;
+  border: 1px solid #9ee048;
+  outline: none;
+  color: #ffffff;
+  float: right;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.integration-wrapper > .integration-content > .update-integration {
+  margin-top: 73px;
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #9ee048;
+  border: 1px solid #9ee048;
+  outline: none;
+  color: #ffffff;
+  float: right;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs {
+  display: grid;
+}
+.integration-wrapper > .integration-content > .integration-configuration {
+  display: flex;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .folder
+  > .element
+  > div
+  > input {
+  color: black;
+  margin-top: 5px;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .file {
+  margin-top: 20px;
+}
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .file
+  > .element
+  > div
+  > .dropdown-div
+  > select {
+  width: 340px;
+  color: black;
+  padding: 10px 0 10px 12px;
+  font-family: Montserrat, sans-serif;
+  border-radius: 3px;
+}
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .file-name-preview {
+  padding-left: 40px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .file-name-preview
+  > .message {
+  margin-top: 20px;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .file-name-preview
+  > .value
+  > .chosen-label {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .file-name-preview
+  > .value {
+  margin-top: 30px;
+  display: flex;
+}
+
+.integration-wrapper > .integration-content > .integration-controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-top: 43px;
+  padding: 0 10px 0;
+}
+
+.integration-wrapper > .close-button > .close-integration {
+  float: right;
+  user-select: none;
+  cursor: pointer;
+  color: grey;
+}
