@@ -20,7 +20,8 @@ export default class Checkbox extends Component {
 
   static metaData = {
     icon: faListCheck,
-    displayText: 'Multiple Choice'
+    displayText: 'Multiple Choice',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

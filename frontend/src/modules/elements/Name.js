@@ -18,7 +18,8 @@ export default class Name extends Component {
 
   static metaData = {
     icon: faAddressCard,
-    displayText: 'Name'
+    displayText: 'Name',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

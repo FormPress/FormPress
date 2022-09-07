@@ -17,7 +17,8 @@ export default class TextBox extends Component {
 
   static metaData = {
     icon: faGripLines,
-    displayText: 'Short Text'
+    displayText: 'Short Text',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

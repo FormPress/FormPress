@@ -18,7 +18,8 @@ export default class TextArea extends Component {
 
   static metaData = {
     icon: faAlignJustify,
-    displayText: 'Long Text'
+    displayText: 'Long Text',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

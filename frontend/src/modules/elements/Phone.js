@@ -38,7 +38,8 @@ export default class Phone extends Component {
 
   static metaData = {
     icon: faPhone,
-    displayText: 'Phone'
+    displayText: 'Phone',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

@@ -61,7 +61,8 @@ export default class Dropdown extends Component {
 
   static metaData = {
     icon: faSort,
-    displayText: 'Drop-down List'
+    displayText: 'Drop-down List',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

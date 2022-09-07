@@ -19,7 +19,8 @@ export default class FileUpload extends Component {
 
   static metaData = {
     icon: faFileArrowUp,
-    displayText: 'File Upload'
+    displayText: 'File Upload',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

@@ -19,7 +19,8 @@ export default class Header extends Component {
 
   static metaData = {
     icon: faHeading,
-    displayText: 'Header'
+    displayText: 'Header',
+    group: 'pageElement'
   }
 
   static configurableSettings = {

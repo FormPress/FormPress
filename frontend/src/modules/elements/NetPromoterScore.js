@@ -19,7 +19,8 @@ export default class NetPromoterScore extends Component {
 
   static metaData = {
     icon: faSignal,
-    displayText: 'Net Promoter Score'
+    displayText: 'Net Promoter Score',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

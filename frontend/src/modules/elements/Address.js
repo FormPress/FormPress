@@ -48,7 +48,8 @@ export default class Address extends Component {
 
   static metaData = {
     icon: faMapMarkerAlt,
-    displayText: 'Address'
+    displayText: 'Address',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

@@ -21,7 +21,8 @@ export default class Radio extends Component {
 
   static metaData = {
     icon: faDotCircle,
-    displayText: 'Single Choice'
+    displayText: 'Single Choice',
+    group: 'inputElement'
   }
 
   static submissionHandler = {

@@ -17,7 +17,8 @@ export default class Email extends Component {
 
   static metaData = {
     icon: faEnvelope,
-    displayText: 'E-mail'
+    displayText: 'E-mail',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
