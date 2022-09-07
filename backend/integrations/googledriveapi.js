@@ -2,11 +2,17 @@ const { google } = require('googleapis')
 const { URLSearchParams } = require('url')
 const { Duplex } = require('stream')
 
+const port = parseInt(process.env.SERVER_PORT || 3000)
+const frontendPort = 3000
+const { FP_ENV, FP_HOST } = process.env
+const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
+const FRONTEND =
+  FP_ENV === 'development' ? `${FP_HOST}:${frontendPort}` : FP_HOST
+
 const SCOPES = ['https://www.googleapis.com/auth/drive.file']
 const googleDriveClientSecret = process.env.GOOGLE_DRIVE_CLIENT_SECRET
 const googleDriveClientID = process.env.GOOGLE_DRIVE_CLIENT_ID
-const googleDriveRedirectURI = process.env.GOOGLE_DRIVE_REDIRECT_URI
-
+const googleDriveRedirectURI = BACKEND + process.env.GOOGLE_DRIVE_REDIRECT_URI
 const oAuth2Client = new google.auth.OAuth2(
   googleDriveClientID,
   googleDriveClientSecret,
@@ -55,7 +61,7 @@ exports.authGoogleDrive = (app) => {
           status = false
         }
       }
-      const redirectURL = 'http://localhost:3000/read/googledrive?'
+      const redirectURL = `${FRONTEND}/read/googledrive?`
       const components = {
         message: status,
         token: base64Token,
