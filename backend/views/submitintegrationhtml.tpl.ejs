@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            width: 780px;
+            height: 100%;
+            display: table;
+            margin: auto;
+            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+            0 2px 2px rgba(0,0,0,0.11),
+            0 4px 4px rgba(0,0,0,0.11),
+            0 6px 8px rgba(0,0,0,0.11),
+            0 8px 16px rgba(0,0,0,0.11);
+            position: relative;
+        }
+       .header {
+            border-top: 20px solid #8cc63f;
+            width: 100%;
+            display: flex;
+        }
+        .content-wrapper {
+            width: 780px;
+            display: grid;
+            margin-top: -10px;
+        }
+        .footer {
+            text-align: center;
+            height: 50px;
+            line-height: 50px;
+            margin-top: 40px;
+            position: absolute;
+            bottom: 0;
+            width: 780px;
+        }
+        .fp-logo {
+            margin: auto;
+        }
+        .fp-logo > svg{
+            width: 360px;
+        }
+        .hero-logo > svg{
+            margin-top: -70px;
+            width: 200px;
+            padding-left: 10px;
+        }
+        .notifier-text {
+            font-size: 18px;
+            width: calc(100% - 235px);
+            margin-top: 55px;
+            height: 62px;
+            border-bottom: 2px solid #d0d0d0;
+            margin-right: 20px;
+            display: inline-table;
+
+        }
+        .notifier-text > p >strong {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            max-width: 42ch;
+            line-height: 15px;
+        }
+        .answers {
+            width: 720px;
+            margin: -50px 30px 0;
+            padding-bottom: 50px;
+            font-size: 18px;
+        }
+        .answer-value {
+            padding-bottom: 5px;
+            margin-left: 10px;
+        }
+        .question-name {
+            color: #113952;
+            font-weight: bold;
+            padding: 10px 0 0;
+        }
+        .name-key > i {
+            margin-left: 10px;
+        }
+        .content {
+            display: flex;
+            width: 780px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="fp-logo">
+        <%- include ("../svg/formpresslogo.svg") %>
+    </div>
+
+</div>
+<div class="content-wrapper">
+
+<div class="content">
+    <div class="hero-logo">
+        <%- include ("../svg/SubmitSuccess.svg") %>
+    </div>
+
+    <div class="notifier-text">
+<p>
+        Your form <strong>&quot;<%= FormTitle %>&quot;</strong> just received a submission. Here are the responses:
+
+</p>
+
+
+    </div>
+
+
+
+</div>
+    <div class="answers">
+        <%
+        let questionData = []
+        for (const data of FormattedInput) {
+            const question_id = parseInt(data.q_id)
+            const value = data.value
+            const checkQuestion = Form.props.elements.filter(
+                    (element) => element.id === question_id
+            )
+            const question = checkQuestion[0]
+            const type = checkQuestion[0].type
+
+            questionData.push({
+                question: question,
+                type: type,
+                answer: value,
+                question_id: question_id
+            })
+        }
+        const responselist = questionData.map((data) => {
+            let response = {}
+            response.question = data.question.label
+            if (data.type === 'Checkbox' && data.answer === 'off') {
+                response.answer = '-'
+            } else if (data.type === 'FileUpload') {
+                if (data.answer === '') {
+                    response.answer = '-'
+                } else {
+                    const value = JSON.parse(data.answer)
+                    response.answer = []
+                    value.forEach((file)=>{
+                        let uriFileName = encodeURI(file.fileName)
+                        let downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
+                        response.answer.push({
+                            downloadLink: downloadLink,
+                            fileName: file.fileName
+                        })
+                    })
+                }
+            } else if (data.type === 'Radio') {
+                response.answer = data.question.options[parseInt(data.answer)]
+            }
+            else {
+                if (data.answer === '') {
+                    response.answer = '-'
+                } else {
+                    response.answer = data.answer
+                }
+            }
+            response.type = data.type
+
+            return response
+        })
+
+
+        responselist.forEach (function (response) {%>
+            <div>
+                <div class="question-name">
+                    <%- response.question%>
+                </div>
+                <% if (response.type === 'Name') {
+                        for (const [key, value] of Object.entries(response.answer)) {%>
+                <div class="name-key">
+                    <%if (key === 'firstName') { %>
+                        <i>First Name: </i>
+                    <%} else if (key === 'lastName') {%>
+                        <i>Last Name: </i>
+                    <%} else if (key === 'middleName') {%>
+                        <i>Middle Name: </i>
+                    <%} else if (key === 'suffix') {%>
+                        <i>Suffix: </i>
+                    <%} else if (key === 'prefix') {%>
+                        <i>Prefix: </i>
+                    <%} else {%>
+                        <i><%= key%>: </i>
+                    <%}%>
+                    <% if (value === '') {%>
+                        -
+                    <%} else {%>
+                        <%= value%>
+                    <%}%>
+                </div>
+                <%}
+                } else if (response.type === 'FileUpload'){%>
+                <div class="answer-value">
+                    <%if (response.answer === '-') {%>
+                        -
+                    <%} else {%>
+                        <%
+                        response.answer.forEach((answer)=>{%>
+                            <a  href="<%= answer.downloadLink %>"><%=answer.fileName%></a><br/><%
+                        })
+                        %>
+
+                    <%}%>
+                </div>
+                <%} else if (response.type === 'Address') {
+                    let addressString = ''
+                    for (const [value] of Object.entries(response.answer)) {
+                        addressString += value + '\r\n'
+
+                    }%>
+                <div class="answer-value">
+                    <%= addressString%>
+                </div>
+                <% } else {%>
+                    <div class="answer-value">
+                        <%- response.answer %>
+                    </div>
+                <%}%>
+            </div>
+        <%})%>
+        %>
+    </div>
+</div>
+
+
+<div class="footer">
+    &#169; 2022 FORMPRESS.ORG
+</div>
+</body>
+</html>

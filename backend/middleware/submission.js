@@ -2,6 +2,8 @@ const path = require('path')
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
+const puppeteer = require('puppeteer')
+const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
@@ -11,6 +13,10 @@ const { storage, submissionhandler, error, model } = require(path.resolve(
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
+const { gdUploadFile } = require(path.resolve(
+  'integrations',
+  'googledriveapi.js'
+))
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
@@ -89,6 +95,10 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
+
+    const submissionDate = moment(new Date())
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss')
 
     const fileUploadEntries = []
 
@@ -252,15 +262,14 @@ module.exports = (app) => {
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to
     }
-
+    const FRONTEND =
+      FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
     if (
       sendEmailTo !== false &&
       sendEmailTo !== undefined &&
       sendEmailTo !== '' &&
       isEnvironmentVariableSet.sendgridApiKey !== false
     ) {
-      const FRONTEND =
-        FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
       const htmlBody = await ejs
         .renderFile(path.join(__dirname, '../views/submitemailhtml.tpl.ejs'), {
           FRONTEND: FRONTEND,
@@ -301,10 +310,151 @@ module.exports = (app) => {
       }
 
       try {
-        console.log('sending email ', msg)
+        console.log('sending email')
         sgMail.send(msg)
       } catch (e) {
         console.log('Error while sending email ', e)
+      }
+    }
+
+    const integrationList = form.props.integrations
+    let pdfBuffer
+    let customSubmissionFileName = ''
+
+    const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
+    if (gDrive !== undefined && gDrive.active === true) {
+      const folderID = gDrive.folder
+      const base64Token = gDrive.value
+      const decodedToken = JSON.parse(
+        Buffer.from(base64Token, 'base64').toString()
+      )
+
+      const htmlBody = await ejs
+        .renderFile(
+          path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
+          {
+            FRONTEND: FRONTEND,
+            FormTitle: form.title,
+            Form: form,
+            FormattedInput: formattedInput,
+            Submission_id: submission_id
+          }
+        )
+        .catch((err) => {
+          console.log('can not render html body', err)
+          error.errorReport(err)
+        })
+
+      let questionData = []
+      for (const data of formattedInput) {
+        const question_id = parseInt(data.q_id)
+        const value = data.value
+        const checkQuestion = form.props.elements.filter(
+          (element) => element.id === question_id
+        )
+        const question = checkQuestion[0]
+        const type = checkQuestion[0].type
+
+        questionData.push({
+          question: question,
+          type: type,
+          answer: value,
+          question_id: question_id
+        })
+      }
+      const responselist = questionData.map((data) => {
+        let response = {}
+        response.question = data.question.label
+        response.id = data.question_id
+        if (data.type === 'Checkbox' && data.answer === 'off') {
+          response.answer = '-'
+        } else if (data.type === 'FileUpload') {
+          if (data.answer === '') {
+            response.answer = '-'
+          } else {
+            const value = JSON.parse(data.answer)
+            response.answer = []
+            value.forEach((file) => {
+              let uriFileName = encodeURI(file.fileName)
+              let downloadLink = `${FRONTEND}/download/${form.id}/${submission_id}/${data.question_id}/${uriFileName}`
+              response.answer.push({
+                downloadLink: downloadLink,
+                fileName: file.fileName
+              })
+            })
+          }
+        } else if (data.type === 'Radio') {
+          response.answer = data.question.options[parseInt(data.answer)]
+        } else {
+          if (data.answer === '') {
+            response.answer = '-'
+          } else {
+            response.answer = data.answer
+          }
+        }
+        response.type = data.type
+
+        return response
+      })
+      const identifierElement = responselist.find(
+        (i) =>
+          i.id === parseInt(gDrive.submissionIdentifier.id) &&
+          i.type === gDrive.submissionIdentifier.type
+      )
+
+      if (identifierElement !== undefined) {
+        const identifierAnswer = identifierElement.answer
+        if (
+          identifierElement.type === 'Name' ||
+          identifierElement.type === 'Address'
+        ) {
+          Object.values(identifierAnswer).forEach((value) => {
+            customSubmissionFileName += value + ' '
+          })
+          customSubmissionFileName = customSubmissionFileName
+            .replace(/  +/g, ' ')
+            .trim()
+        } else if (identifierElement.type === 'FileUpload') {
+          customSubmissionFileName = identifierAnswer[0].fileName
+        } else {
+          customSubmissionFileName = identifierAnswer
+        }
+        customSubmissionFileName += ' - ' + submissionDate
+      } else {
+        customSubmissionFileName += submissionDate
+      }
+
+      const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox']
+      })
+      const pages = await browser.pages()
+      const page = pages[0]
+
+      await page.setContent(htmlBody, {
+        waitUntil: 'domcontentloaded'
+      })
+      try {
+        pdfBuffer = await page.pdf({
+          format: 'A4',
+          margin: { top: '10px' }
+        })
+      } catch (err) {
+        console.log('Error while creating the pdf file', err)
+      }
+
+      await browser.close()
+      try {
+        await gdUploadFile(
+          folderID,
+          pdfBuffer,
+          customSubmissionFileName,
+          decodedToken
+        )
+        console.log('File Uploaded')
+      } catch (err) {
+        console.log('Error while uploading file to google drive', err)
       }
     }
 
