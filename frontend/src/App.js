@@ -25,6 +25,7 @@ import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 import NotFoundPage from './modules/common/NotFoundPage'
+import ReadCallback from './modules/common/ReadCallback'
 
 import { Logo } from './svg'
 
@@ -264,6 +265,11 @@ class App extends Component {
                   path="/editor/:formId/builder/properties"
                   component={Builder}
                 />
+                <PrivateRoute
+                  exact
+                  path="/editor/:formId/builder/integrations"
+                  component={Builder}
+                />
                 <PrivateRoute exact path="/editor" component={Builder} />
                 <PrivateRoute exact strict path="/data" component={Data} />
                 <PrivateRoute
@@ -295,6 +301,7 @@ class App extends Component {
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
+                <Route path="/read" component={ReadCallback} />
 
                 <Route path="/404" component={NotFoundPage} />
                 {redirectPage}
