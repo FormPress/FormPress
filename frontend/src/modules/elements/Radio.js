@@ -239,31 +239,52 @@ export default class Radio extends Component {
     }
 
     var display
+
     if (mode === 'builder') {
       display = [
-        <h4>
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          order={this.props.order}
-          labelKey={config.id}
-          editor={
-            config.editor &&
-            selectedField === config.id &&
-            selectedLabelId === config.id
-          }
-          form_id={config.form_id}
-          rteUploadHandler={this.props.rteUploadHandler}
-          question_id={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          handleLabelClick={this.props.handleLabelClick}
-          value={config.label}
-          required={config.required}
-          limit={2000}
-        />
-        </h4>,
+        config.editor ? (
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            order={this.props.order}
+            labelKey={config.id}
+            editor={
+              config.editor &&
+              selectedField === config.id &&
+              selectedLabelId === config.id
+            }
+            form_id={config.form_id}
+            rteUploadHandler={this.props.rteUploadHandler}
+            question_id={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            handleLabelClick={this.props.handleLabelClick}
+            value={config.label}
+            required={config.required}
+            limit={2000}
+          />
+        ) : (
+          <h4 className="elemLabelTitle" key={0}>
+            <EditableLabel
+              key="1"
+              className="fl label"
+              mode={mode}
+              order={this.props.order}
+              labelKey={config.id}
+              editor={false}
+              form_id={config.form_id}
+              rteUploadHandler={this.props.rteUploadHandler}
+              question_id={config.id}
+              dataPlaceholder="Type a question"
+              handleLabelChange={this.props.handleLabelChange}
+              handleLabelClick={this.props.handleLabelClick}
+              value={config.label}
+              required={config.required}
+              limit={2000}
+            />
+          </h4>
+        ),
         <div key="2" className="fl input">
           <EditableList
             config={config}
@@ -286,7 +307,6 @@ export default class Radio extends Component {
               type="button"
               className="unselect-button"
               id={`q_${config.id}_unselectButton`}>
-                
               <EditableLabel
                 className="sublabel unselect-label"
                 dataPlaceholder="Clear Selection"
@@ -299,12 +319,10 @@ export default class Radio extends Component {
                     : 'Clear Selection'
                 }
               />
-              
             </button>
           ) : null}
         </div>,
         <div className="clearfix" key="3">
-          
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -319,7 +337,6 @@ export default class Radio extends Component {
                 : ''
             }
           />
-          
         </div>,
         config.answerExplanation && config.answerExplanation !== '' ? (
           <div className="fl metadata answerExplanationContainer" key="4">
@@ -328,7 +345,6 @@ export default class Radio extends Component {
               open={this.state.isDetailOpen}
               onClick={() => this.setState({ isDetailOpen: !isDetailOpen })}>
               <summary>
-              
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit answer title"
@@ -342,7 +358,6 @@ export default class Radio extends Component {
                       : ''
                   }
                 />
-                
                 <span className="popover-container">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div className="popoverText">
@@ -360,16 +375,31 @@ export default class Radio extends Component {
       ]
     } else {
       display = [
-        <div key="1" className="fl label">
-          <span
-            className={config.required ? 'required' : ''}
-            dataplaceholder="Type a question"
-            editor={config.editor ? 'true' : 'false'}
-            spellCheck="false"
-            dangerouslySetInnerHTML={{
-              __html: config.label
-            }}></span>
-        </div>,
+        config.editor ? (
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            order={this.props.order}
+            labelKey={config.id}
+            value={config.label}
+            required={config.required}
+            question_id={config.id}
+          />
+        ) : (
+          <h4 className="elemLabelTitle" key={0}>
+            <EditableLabel
+              key="1"
+              className="fl label"
+              mode={mode}
+              order={this.props.order}
+              labelKey={config.id}
+              value={config.label}
+              required={config.required}
+              question_id={config.id}
+            />
+          </h4>
+        ),
         <div key="2" className="fl input">
           <ul id={`q_${config.id}_radioList`} className="radioList">
             {config.options.map((item, key) => {
@@ -398,7 +428,6 @@ export default class Radio extends Component {
               type="button"
               className="unselect-button"
               id={`q_${config.id}_unselectButton`}>
-                
               <EditableLabel
                 className="sublabel unselect-label"
                 dataPlaceholder="Clear Selection"
@@ -411,12 +440,10 @@ export default class Radio extends Component {
                     : 'Clear Selection'
                 }
               />
-              
             </button>
           ) : null}
         </div>,
         <div className="clearfix" key="3">
-          
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -430,7 +457,6 @@ export default class Radio extends Component {
                 : ''
             }
           />
-          
         </div>,
         <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

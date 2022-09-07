@@ -171,16 +171,16 @@ export default class Address extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle" key={0}>
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>
 
         {config.street ? (
@@ -191,7 +191,6 @@ export default class Address extends Component {
               type="text"
             />
             <div className="clearfix">
-              
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -204,7 +203,6 @@ export default class Address extends Component {
                     : 'Street Line'
                 }
               />
-              
             </div>
           </span>
         ) : null}
@@ -217,7 +215,6 @@ export default class Address extends Component {
               type="text"
             />
             <div className="clearfix">
-              
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -230,7 +227,6 @@ export default class Address extends Component {
                     : 'Street Line 2'
                 }
               />
-              
             </div>
           </span>
         ) : null}
@@ -244,7 +240,6 @@ export default class Address extends Component {
                 type="text"
               />
               <div className="clearfix">
-                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -257,7 +252,6 @@ export default class Address extends Component {
                       : 'City'
                   }
                 />
-                
               </div>
             </span>
           ) : null}
@@ -270,7 +264,6 @@ export default class Address extends Component {
                 type="text"
               />
               <div className="clearfix">
-                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -283,7 +276,6 @@ export default class Address extends Component {
                       : 'Zip'
                   }
                 />
-                
               </div>
             </span>
           ) : null}
@@ -315,7 +307,6 @@ export default class Address extends Component {
                 />
               )}
               <div className="clearfix">
-                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -328,7 +319,6 @@ export default class Address extends Component {
                       : 'State'
                   }
                 />
-              
               </div>
             </span>
           ) : null}
@@ -359,7 +349,6 @@ export default class Address extends Component {
                   : null}
               </select>
               <div className="clearfix">
-                
                 <EditableLabel
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
@@ -372,7 +361,6 @@ export default class Address extends Component {
                       : 'Country'
                   }
                 />
-              
               </div>
             </span>
           ) : null}

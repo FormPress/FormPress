@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat');
 
 .renderer.gleam {
   background-color: white;
@@ -46,21 +46,30 @@
   margin-top: -30px;
 }
 
+.gleam.form .element > .elemLabelTitle {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .gleam.form .element > h4 > .label {
   float: none;
-  margin-bottom: 10px;
 }
+
 .gleam.form .element > h4 > .label > span {
   font-family: Montserrat;
   min-width: 125px;
   max-width: calc(100% - 20px);
   display: inline-block;
-  padding: 2px 5px;
+  /*padding: 2px 5px;*/
   border: 1px solid transparent;
   word-break: break-word;
   color: #113952;
 }
-.builder.gleam.form .element > h4 > .label > span[contentEditable='true']:hover {
+.builder.gleam.form
+  .element
+  > h4
+  > .label
+  > span[contentEditable='true']:hover {
   border: 1px dashed;
 }
 .gleam.form .element > h4 > .label > span.emptySpan {
@@ -89,7 +98,7 @@
   min-width: 123px;
   min-height: 19px;
   margin-top: 10px;
-  padding: 2px 5px;
+  padding: 3px;
   color: gray;
   border: 1px solid transparent;
   display: block;
@@ -479,7 +488,6 @@
 
 .gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
   border: 1px dashed transparent;
-  padding: 2px 5px;
   min-width: 60px;
   display: block;
   word-break: break-all;
@@ -500,7 +508,7 @@
   .checkbox-label
   span[contentEditable='true'] {
   border: 1px dashed transparent;
-  padding: 2px 5px;
+  /*padding: 2px 5px;*/
   min-width: 60px;
   display: block;
   word-break: break-all;
@@ -1140,16 +1148,6 @@ ul li.expected {
   color: black;
   font-family: 'Montserrat';
   font-weight: 600;
-}
-
-.results-header
-  > .testResults
-  > .leftHand
-  > .lhContent
-  > .question-info-row
-  > .total-question-count {
-  /*font-weight: bold;*/
-  /*color: #0071bc;*/
 }
 
 .fp-powered {

@@ -1,3 +1,11 @@
+.formPropertiesMessage {
+  background-color: #fffcdd;
+  color: #646464;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+}
+
 .tag-controls form {
   display: flex;
 }
@@ -11,32 +19,32 @@
 .tag-controls input[type='submit'] {
   font-family: Montserrat;
   display: block;
-  padding: 5px 10px;
   font-size: 16px;
   width: 20%;
   min-height: 44px;
-  border: 2px solid #9ee048;
+  border: none;
   outline: none;
   float: right;
   color: #fff;
-  background-color: #9ee048;
+  background: rgb(168, 227, 57);
   cursor: pointer;
+  margin-left: 2px;
 }
 .tag-controls input[type='submit']:hover {
-  background-color: #fff;
-  color: #9ee048;
+  background-color: rgb(148, 200, 50);
+  color: #fff;
 }
 
-.tag-controls input[type='eee'] {
-  font-weight: 700;
-  font-size: 16px;
-  padding-top: 16px !important;
-  padding-bottom: 16px !important;
-  width: 100%;
-  color: #1c5c85;
-  background-color: #f5f5f5;
-  border: none;
-}
+/*.tag-controls input[type='eee'] {*/
+/*  font-weight: 700;*/
+/*  font-size: 16px;*/
+/*  padding-top: 16px !important;*/
+/*  padding-bottom: 16px !important;*/
+/*  width: 100%;*/
+/*  color: #1c5c85;*/
+/*  background-color: #f5f5f5;*/
+/*  border: none;*/
+/*}*/
 
 .tags-wrapper {
   padding: 20px 10px 10px 10px;
@@ -44,6 +52,9 @@
 .tags-list {
   display: flex;
   flex-wrap: wrap;
+}
+
+.tags-list:not(:empty) {
   padding-bottom: 7px;
 }
 
@@ -67,9 +78,8 @@
 
 .tags-label {
   font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .tag {

@@ -98,15 +98,15 @@ export default class List extends Component {
         type={config.type}
         {...this.props}
         className={className ? className : ''}>
-          <h4>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>
         <EditableList
           config={config}

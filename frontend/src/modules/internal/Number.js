@@ -44,15 +44,15 @@ export default class Number extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>
         <div className="fl input">
           <input
@@ -63,7 +63,6 @@ export default class Number extends Component {
           />
         </div>
         <div className="clearfix">
-        
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -77,7 +76,6 @@ export default class Number extends Component {
                 : ''
             }
           />
-          
         </div>
       </ElementContainer>
     )
