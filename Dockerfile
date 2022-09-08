@@ -20,6 +20,31 @@ ADD scripts /scripts
 
 RUN cd /scripts && sh ./install_plugin.sh
 
+RUN set -x \
+      && apk update \
+      && apk upgrade \
+
+      && apk add --no-cache \
+           dumb-init \
+           curl \
+           make \
+           gcc \
+           g++ \
+           python3 \
+           py3-pip \
+           linux-headers \
+           binutils-gold \
+           gnupg \
+           libstdc++ \
+           nss \
+           chromium \
+      \
+
+      && apk del --no-cache make gcc g++ python3 py3-pip binutils-gold gnupg libstdc++ \
+      && rm -rf /usr/include \
+      && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
+      && echo
+
 RUN cd /frontend &&\
   yarn &&\
   yarn build
