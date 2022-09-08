@@ -22,7 +22,12 @@ export default class ReadCallback extends Component {
             submissionIdentifierId,
             submissionIdentifierType
           )
-        window.close()
+        console.log(status)
+        console.log(base64Token)
+        console.log(folderID)
+        console.log(submissionIdentifierId)
+        console.log(submissionIdentifierType)
+        // window.close()
       }
     }
   }
