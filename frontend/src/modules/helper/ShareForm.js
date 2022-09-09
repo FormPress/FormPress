@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import CopyToClipboard from '../common/CopyToClipboard'
 import './ShareForm.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 import {
   FacebookIcon,
@@ -112,12 +110,10 @@ class ShareForm extends Component {
                 <span className="popover-container">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div className="popoverText">
-                      Allows each respondent only one submission
+                    Allows each respondent only one submission
                   </div>
                 </span>
-                <label htmlFor="widget_once">
-                  Unique submissions
-                </label>
+                <label htmlFor="widget_once">Unique submissions</label>
               </div>
             </div>
             <div className="shareFormContent">
@@ -136,10 +132,10 @@ class ShareForm extends Component {
               />
               <div className="embedCodeTooltip">
                 <span className="popover-container">
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <div className="popoverText">
-                      Copy and paste the code into the html file of your webpage
-                    </div>
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                    Copy and paste the code into the html file of your webpage
+                  </div>
                 </span>
               </div>
 
