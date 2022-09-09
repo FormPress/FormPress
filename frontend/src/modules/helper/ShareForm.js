@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import CopyToClipboard from '../common/CopyToClipboard'
 import './ShareForm.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faInfoCircle,
+} from '@fortawesome/free-solid-svg-icons'
+
 import {
   FacebookIcon,
   LinkedinIcon,
@@ -104,14 +109,20 @@ class ShareForm extends Component {
                   className="shareFormSettingsInput"
                   onChange={this.onAnsweredOnceChange}
                 />
+                <span className="popover-container">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                      Allows each respondent only one submission
+                  </div>
+                </span>
                 <label htmlFor="widget_once">
-                  Set form to &quot;can be answered once&quot;
+                  Unique submissions
                 </label>
               </div>
             </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
-                <h3 className="shareFormFormUrlAreaTitle">URL of your form:</h3>
+                <h3 className="shareFormFormUrlAreaTitle">URL of your form</h3>
                 <input
                   type="text"
                   value={this.formLink}
@@ -123,9 +134,18 @@ class ShareForm extends Component {
                 clipboardData={this.formLink}
                 buttonText="Copy URL"
               />
+              <div className="embedCodeTooltip">
+                <span className="popover-container">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    <div className="popoverText">
+                      Copy and paste the code into the html file of your webpage
+                    </div>
+                </span>
+              </div>
+
               <div className="shareFormFormEmbedCodeArea">
                 <h3 className="shareFormFormEmbedCodeAreaTitle">
-                  Embed Code of your form:
+                  Embed Code of your form
                 </h3>
                 <textarea className="embedCode" value={embedCode} readOnly />
               </div>

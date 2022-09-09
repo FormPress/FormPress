@@ -175,15 +175,43 @@
 .formProperties .popover-container {
   float: right;
   position: relative;
-  top: 15px;
-  left: -20px;
+  top: 17px;
+  left: -175px;
 }
 
 .formProperties .popover-container:hover > .popoverText {
   width: 12rem;
   height: fit-content;
   top: -65px;
+  left: -155px;
+}
+
+.formProperties .evaluateFormTooltip .popover-container {
+  float: right;
+  position: relative;
+  top: 88px;
+  left: -115px;
+}
+
+.formProperties .evaluateFormTooltip .popover-container:hover > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: 20px;
   left: -170px;
+}
+
+.formProperties .privateFormTooltip .popover-container {
+  float: right;
+  position: relative;
+  top: 10px;
+  left: -175px;
+}
+
+.formProperties .privateFormTooltip .popover-container:hover > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -105px;
+  left: -130px;
 }
 
 .formProperties > .adv-settings {

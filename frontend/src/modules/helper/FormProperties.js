@@ -212,6 +212,15 @@ class FormProperties extends Component {
         ) : (
           ''
         )}
+
+        <div className="evaluateFormTooltip">
+          <span className="popover-container">
+            <FontAwesomeIcon icon={faInfoCircle} />
+            <div className="popoverText">
+              Enable this if you want your form to be in "test-format" with correct answers etc. Works properly only with "single choice element" for now
+            </div>
+          </span>
+        </div>
         <Renderer
           handleFieldChange={this.handleSubmitBehaviourChange}
           theme="infernal"
@@ -268,7 +277,7 @@ class FormProperties extends Component {
         <span className="popover-container">
           <FontAwesomeIcon icon={faInfoCircle} />
           <div className="popoverText">
-            Enabling this option will disable all previously added page breaks.
+            Enabling this option will disable all previously added page breaks
           </div>
         </span>
         <Renderer
@@ -366,7 +375,7 @@ class FormProperties extends Component {
         </div>
         <details
           className="adv-settings"
-          title="This part contains advanced settings. Some settings may cause your form to stop working properly.">
+          title="This part contains advanced settings. Some settings may cause your form to stop working properly">
           <summary className="adv-settings-summary">
             <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
             &nbsp; Developer settings
@@ -388,13 +397,15 @@ class FormProperties extends Component {
                 }
               }}
             />
-            <span className="popover-container">
-              <FontAwesomeIcon icon={faQuestionCircle} />
-              <div className="popoverText">
-                Setting this form to private will hide it from the public. The
-                form will be accessible only via a token.
-              </div>
-            </span>
+            <div className="privateFormTooltip">
+              <span className="popover-container">
+                <FontAwesomeIcon icon={faQuestionCircle} />
+                <div className="popoverText">
+                  Setting this form to private will hide it from the public. The
+                  form will be accessible only via a token
+                </div>
+              </span>
+            </div>
           </div>
         </details>
       </div>
