@@ -217,7 +217,7 @@ class FormProperties extends Component {
           <span className="popover-container">
             <FontAwesomeIcon icon={faInfoCircle} />
             <div className="popoverText">
-              Enable this if you want your form to be in "test-format" with correct answers etc. Works properly only with "single choice element" for now
+              Enable this if you want your form to be in 'test-format' with correct answers etc. Works properly only with 'single choice element' for now
             </div>
           </span>
         </div>
