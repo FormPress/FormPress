@@ -85,7 +85,7 @@ class ShareForm extends Component {
                 className="shareFormSettingsInput"
                 onChange={this.onWidgetChange}
               />
-              <label htmlFor="widget">Arrange form as widget</label>
+              <label htmlFor="widget">Set form as widget</label>
               <div className="shareFormSettingsWidgetContainer">
                 <label>Widget Title</label>
                 <input
