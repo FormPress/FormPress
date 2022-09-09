@@ -134,7 +134,7 @@ class ShareForm extends Component {
                 <span className="popover-container">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div className="popoverText">
-                    Copy and paste the code into the html file of your webpage
+                    Use this code to embed the form into your webpage
                   </div>
                 </span>
               </div>

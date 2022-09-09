@@ -376,7 +376,7 @@ class FormProperties extends Component {
         </div>
         <details
           className="adv-settings"
-          title="This part contains advanced settings. Some settings may cause your form to stop working properly">
+          title="This part contains advanced settings. Some settings may cause your form to stop working properly.">
           <summary className="adv-settings-summary">
             <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
             &nbsp; Developer settings
