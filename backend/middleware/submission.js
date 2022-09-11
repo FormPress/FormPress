@@ -323,6 +323,7 @@ module.exports = (app) => {
 
     const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
     if (gDrive !== undefined && gDrive.active === true) {
+      console.log('checkpoint 1')
       const folderID = gDrive.folder
       const base64Token = gDrive.value
       const decodedToken = JSON.parse(
@@ -436,16 +437,19 @@ module.exports = (app) => {
         waitUntil: 'domcontentloaded'
       })
       try {
+        console.log('checkpoint 2')
         pdfBuffer = await page.pdf({
           format: 'A4',
           margin: { top: '10px' }
         })
+        console.log('checkpoint 3')
       } catch (err) {
         console.log('Error while creating the pdf file', err)
       }
 
       await browser.close()
       try {
+        console.log('checkpoint 4')
         await gdUploadFile(
           folderID,
           pdfBuffer,
