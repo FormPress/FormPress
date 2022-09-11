@@ -27,8 +27,8 @@ export default class ReadCallback extends Component {
         console.log(folderID)
         console.log(submissionIdentifierId)
         console.log(submissionIdentifierType)
-        // window.close()
       }
+      // window.close()
     }
   }
 
