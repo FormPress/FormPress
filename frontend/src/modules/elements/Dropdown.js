@@ -127,17 +127,17 @@ export default class Dropdown extends Component {
     var display
     if (mode === 'builder' || mode === 'viewer') {
       display = [
-        <h4>
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          dataPlaceholder="Type a question"
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            dataPlaceholder="Type a question"
+            value={config.label}
+            required={config.required}
+          />
         </h4>,
         <div key="2">
           {
@@ -196,7 +196,6 @@ export default class Dropdown extends Component {
           }
         </div>,
         <div className="clearfix" key="3">
-          
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -210,21 +209,20 @@ export default class Dropdown extends Component {
                 : ''
             }
           />
-          
         </div>
       ]
     } else {
       display = [
-        <h4>
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>,
         <div key="2" className="dropdown-div">
           <select
@@ -251,7 +249,6 @@ export default class Dropdown extends Component {
           </select>
         </div>,
         <div className="clearfix" key="3">
-          
           <EditableLabel
             className="sublabel"
             mode={mode}
@@ -264,7 +261,6 @@ export default class Dropdown extends Component {
                 : ''
             }
           />
-          
         </div>,
         <div key="4" className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

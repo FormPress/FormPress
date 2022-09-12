@@ -135,17 +135,17 @@ export default class Name extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
-        
+        <h4 className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </h4>
         <div className="nameContainer">
           <span
             className={`prefix_span${
@@ -182,7 +182,6 @@ export default class Name extends Component {
               </select>
             )}
             <div className="clearfix">
-            
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -195,7 +194,6 @@ export default class Name extends Component {
                     : 'Prefix'
                 }
               />
-              
             </div>
           </span>
           <span className="name_span first_name">
@@ -204,7 +202,6 @@ export default class Name extends Component {
               id={`fname_${config.id}`}
               name={`q_${config.id}[firstName]`}></input>
             <div className="clearfix">
-            
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -217,7 +214,6 @@ export default class Name extends Component {
                     : 'First Name'
                 }
               />
-              
             </div>
           </span>
           <span
@@ -232,7 +228,6 @@ export default class Name extends Component {
               id={`mname_${config.id}`}
               name={`q_${config.id}[middleName]`}></input>
             <div className="clearfix">
-            
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -245,7 +240,6 @@ export default class Name extends Component {
                     : 'Middle Name'
                 }
               />
-              
             </div>
           </span>
           <span className="name_span last_name">
@@ -254,7 +248,6 @@ export default class Name extends Component {
               id={`lname_${config.id}`}
               name={`q_${config.id}[lastName]`}></input>
             <div className="clearfix">
-            
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -267,7 +260,6 @@ export default class Name extends Component {
                     : 'Last Name'
                 }
               />
-              
             </div>
           </span>
           <span
@@ -281,7 +273,6 @@ export default class Name extends Component {
               id={`suffix_${config.id}`}
               name={`q_${config.id}[suffix]`}></input>
             <div className="clearfix">
-            
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -294,12 +285,10 @@ export default class Name extends Component {
                     : 'Suffix'
                 }
               />
-              
             </div>
           </span>
         </div>
         <div className="clearfix">
-        
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -313,7 +302,6 @@ export default class Name extends Component {
                 : ''
             }
           />
-          
         </div>
         <div className="fl metadata">
           <div className="requiredErrorText">{config.requiredText}</div>

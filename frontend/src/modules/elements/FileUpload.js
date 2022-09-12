@@ -98,16 +98,16 @@ export default class FileUpload extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>
         <div className="inputContainer">
           <label htmlFor={`q_${config.id}`} className="custom-file-upload">
@@ -119,7 +119,6 @@ export default class FileUpload extends Component {
           </span>
         </div>
         <div className="clearfix">
-        
           <EditableLabel
             className="sublabel"
             dataPlaceholder="Click to edit sublabel"
@@ -133,7 +132,6 @@ export default class FileUpload extends Component {
                 : ''
             }
           />
-          
         </div>
         <div className="fl metadata">
           {script}

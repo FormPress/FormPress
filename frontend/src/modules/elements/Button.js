@@ -33,7 +33,6 @@ export default class Button extends Component {
         {mode === 'builder' ? (
           <div>
             <button {...inputProps}>
-              <h4>
               <EditableLabel
                 className="fl label"
                 dataPlaceholder="Type a button text"
@@ -42,10 +41,8 @@ export default class Button extends Component {
                 handleLabelChange={this.props.handleLabelChange}
                 value={config.buttonText}
               />
-              </h4>
             </button>
             <div className="clearfix">
-              
               <EditableLabel
                 className="sublabel"
                 dataPlaceholder="Click to edit sublabel"
@@ -59,7 +56,6 @@ export default class Button extends Component {
                     : ''
                 }
               />
-              
             </div>
           </div>
         ) : (
@@ -68,7 +64,6 @@ export default class Button extends Component {
               {config.buttonText}
             </button>
             <div className="clearfix">
-              
               <EditableLabel
                 className="sublabel"
                 mode={mode}
@@ -81,7 +76,6 @@ export default class Button extends Component {
                     : ''
                 }
               />
-              
             </div>
           </div>
         )}

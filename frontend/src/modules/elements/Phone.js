@@ -100,17 +100,17 @@ export default class Phone extends Component {
     let display
 
     display = [
-      <h4>
-      <EditableLabel
-        className="fl label"
-        dataPlaceholder="Type a question"
-        mode={mode}
-        labelKey={config.id}
-        handleLabelChange={this.props.handleLabelChange}
-        value={config.label}
-        required={config.required}
-        key="1"
-      />
+      <h4 className="elemLabelTitle" key={0}>
+        <EditableLabel
+          className="fl label"
+          dataPlaceholder="Type a question"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+          key="1"
+        />
       </h4>,
       <div className="fl input" key="2">
         <select
@@ -149,7 +149,6 @@ export default class Phone extends Component {
         />
       </div>,
       <div className="clearfix" key="3">
-        
         <EditableLabel
           className="sublabel"
           dataPlaceholder="Click to edit sublabel"
@@ -163,7 +162,6 @@ export default class Phone extends Component {
               : ''
           }
         />
-      
       </div>,
       <div className="fl metadata" key="4">
         <div className="requiredErrorText">{config.requiredText}</div>

@@ -197,17 +197,17 @@ export default class Checkbox extends Component {
     let display
     if (mode === 'builder') {
       display = [
-        <h4>
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          dataPlaceholder="Type a question"
-          required={config.required}
-        />
+        <h4 className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            dataPlaceholder="Type a question"
+            required={config.required}
+          />
         </h4>,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
           <EditableList
@@ -223,17 +223,19 @@ export default class Checkbox extends Component {
       ]
     } else {
       display = [
-        <h4>
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <h4
+          className={`elemLabelTitle ${config.label ? '' : ' emptyLabel'}`}
+          key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
         </h4>,
         <div
           key="2"
@@ -269,7 +271,6 @@ export default class Checkbox extends Component {
           ''
         ) : (
           <div className="clearfix">
-            
             <EditableLabel
               className="sublabel"
               dataPlaceholder="Click to edit sublabel"
@@ -283,7 +284,6 @@ export default class Checkbox extends Component {
                   : ''
               }
             />
-            
           </div>
         )}
         <div className="fl metadata">
