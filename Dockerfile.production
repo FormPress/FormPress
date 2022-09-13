@@ -18,8 +18,6 @@ ADD frontend /frontend
 RUN mkdir /scripts
 ADD scripts /scripts
 
-RUN cd /scripts && sh ./install_plugin.sh
-
 RUN set -x \
       && apk update \
       && apk upgrade \
@@ -42,6 +40,8 @@ RUN set -x \
       && rm -rf /usr/include \
       && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
       && echo
+
+RUN cd /scripts && sh ./install_plugin.sh
 
 RUN cd /frontend &&\
   yarn &&\
