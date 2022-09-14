@@ -2,22 +2,6 @@ FROM node:16.13.0-alpine3.14 as base
 
 RUN apk update && apk add curl bash
 
-FROM base as frontend_builder
-
-ENV PATH="/node_modules/.bin:$PATH"
-ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
-ENV REACT_APP_FP_ENV="production"
-ENV REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
-ENV REACT_APP_HOMEURL="https://stage.formpress.org"
-
-ARG PLUGIN_URL
-ARG PRIVATE_TOKEN
-
-ADD frontend /frontend
-
-RUN mkdir /scripts
-ADD scripts /scripts
-
 RUN set -x \
       && apk update \
       && apk upgrade \
@@ -39,7 +23,23 @@ RUN set -x \
       && apk del --no-cache make gcc g++ python3 py3-pip binutils-gold gnupg libstdc++ \
       && rm -rf /usr/include \
       && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
-      && echo
+      && echo \
+
+FROM base as frontend_builder
+
+ENV PATH="/node_modules/.bin:$PATH"
+ENV REACT_APP_BACKEND='https://app-stage.formpress.org'
+ENV REACT_APP_FP_ENV="production"
+ENV REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID="763212824993-o0fl1ru6okjbcltn69sui769ve3cfgtf.apps.googleusercontent.com"
+ENV REACT_APP_HOMEURL="https://stage.formpress.org"
+
+ARG PLUGIN_URL
+ARG PRIVATE_TOKEN
+
+ADD frontend /frontend
+
+RUN mkdir /scripts
+ADD scripts /scripts
 
 RUN cd /scripts && sh ./install_plugin.sh
 

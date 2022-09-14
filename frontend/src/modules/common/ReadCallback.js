@@ -28,7 +28,7 @@ export default class ReadCallback extends Component {
         console.log(submissionIdentifierType)
       }
     }
-    window.close()
+    // window.close()
   }
 
   render() {
