@@ -20,6 +20,12 @@ ADD scripts /scripts
 
 RUN cd /scripts && sh ./install_plugin.sh
 
+RUN cd /frontend &&\
+  yarn &&\
+  yarn build
+
+FROM base as backend_dependencies
+
 RUN set -x \
       && apk update \
       && apk upgrade \
@@ -41,11 +47,9 @@ RUN set -x \
       && apk del --no-cache make gcc g++ python3 py3-pip binutils-gold gnupg libstdc++ \
       && rm -rf /usr/include \
       && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
-      && echo
+      && echo \
 
-RUN cd /frontend &&\
-  yarn &&\
-  yarn build
+
 
 FROM base as final
 
