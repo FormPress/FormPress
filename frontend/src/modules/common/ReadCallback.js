@@ -15,20 +15,15 @@ export default class ReadCallback extends Component {
       const submissionIdentifierType = params.get('submissionIdentifierType')
 
       if (status === 'true') {
-        window.onbeforeunload = () =>
-          window.opener.activateIntegration(
-            base64Token,
-            folderID,
-            submissionIdentifierId,
-            submissionIdentifierType
-          )
-        console.log(base64Token)
-        console.log(folderID)
-        console.log(submissionIdentifierId)
-        console.log(submissionIdentifierType)
+        window.opener.activateIntegration(
+          base64Token,
+          folderID,
+          submissionIdentifierId,
+          submissionIdentifierType
+        )
       }
     }
-    // window.close()
+    window.close()
   }
 
   render() {

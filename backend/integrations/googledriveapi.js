@@ -3,11 +3,11 @@ const { URLSearchParams } = require('url')
 const { Duplex } = require('stream')
 
 const port = parseInt(process.env.SERVER_PORT || 3000)
-// const frontendPort = 3000
+const frontendPort = 3000
 const { FP_ENV, FP_HOST } = process.env
 const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-// const FRONTEND =
-//   FP_ENV === 'development' ? `${FP_HOST}:${frontendPort}` : FP_HOST
+const FRONTEND =
+  FP_ENV === 'development' ? `${FP_HOST}:${frontendPort}` : FP_HOST
 
 const SCOPES = ['https://www.googleapis.com/auth/drive.file']
 const googleDriveClientSecret = process.env.GOOGLE_DRIVE_CLIENT_SECRET
@@ -62,7 +62,7 @@ exports.authGoogleDrive = (app) => {
           status = false
         }
       }
-      const redirectURL = `${BACKEND}/read/googledrive?`
+      const redirectURL = `${FRONTEND}/read/googledrive?`
       const components = {
         message: status,
         token: base64Token,
@@ -73,6 +73,10 @@ exports.authGoogleDrive = (app) => {
       const urlParameters = new URLSearchParams(components)
       res.redirect(redirectURL + urlParameters)
     })
+  })
+
+  app.get('/read/googledrive', async (req, res) => {
+    res.render('readCallback.ejs')
   })
 
   async function createFolder(auth, title) {
