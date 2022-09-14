@@ -18,10 +18,12 @@ class SignUp extends Component {
       passwordRe: '',
       message: '',
       success: false,
+      tosClicked: false,
       state: 'initial' // one of, initial, loading, done
     }
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleTosClicked = this.handleTosClicked.bind(this)
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
@@ -44,6 +46,11 @@ class SignUp extends Component {
     }
 
     this.setState({ [stateKey]: e.target.value })
+  }
+
+  async handleTosClicked() {
+    console.log('tosClicked will be -> ', !this.state.tosClicked)
+    this.setState({tosClicked: !this.state.tosClicked})
   }
 
   async handleSignUpButtonClick(e) {
@@ -195,7 +202,7 @@ class SignUp extends Component {
 
     return (
       <div className="login-wrapper">
-        <div className="loginForm">
+        <div className="loginForm signupForm">
           <div className="picture-bg">
             <div className="login-picture">
               <LoginPicture />
@@ -237,18 +244,24 @@ class SignUp extends Component {
                           {
                             id: 4,
                             type: 'Button',
-                            buttonText: 'SIGN UP'
+                            buttonText: 'SIGN UP',
+                            disabled: !this.state.tosClicked
                           }
                         ]
                       }
                     }}
                   />
                 </form>
+                <div className="tosContainer">
+                  <input type="checkbox" name="toscheckbox" onClick={() => this.handleTosClicked()}/> I accept and agree to the <a target="_blank" href="https://formpress.org/tos.html" rel="noopener noreferrer">Terms of Use</a>.
+                </div>
+
                 {capabilities.googleCredentialsClientID ? (
                   <div className="for-sign-up">
                     <div className="or-seperator">or</div>
                     <div className="google-sign-in">
                       <LoginWithGoogle
+                        disabled={!this.state.tosClicked}
                         handleLoginWithGoogleButton={
                           this.handleLoginWithGoogleClick
                         }

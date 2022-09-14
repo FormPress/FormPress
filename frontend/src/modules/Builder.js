@@ -495,12 +495,20 @@ class Builder extends Component {
     const { form } = this.state
     let elements = cloneDeep([...form.props.elements])
     let maxId = Math.max(...form.props.elements.map((element) => element.id))
+    let newElements, lastElement
     //if no elements, Math.max returns -Infinity
     if (maxId === -Infinity) {
-      maxId = -1
+      item.id = 0
+      newElements = elements.concat(item)
+    }else{
+      lastElement = elements.pop()
+      item.id = maxId + 1
+      if(lastElement.type === 'Button'){
+        newElements = elements.concat(item, lastElement)
+      }else{
+        newElements = elements.concat(lastElement, item)
+      }
     }
-    item.id = maxId + 1
-    const newElements = elements.concat(item)
 
     this.setState({
       form: {

@@ -23,3 +23,13 @@
 .signup-email {
   font-weight: 700;
 }
+
+.signupForm .elementButton {
+  margin-top: 50px;
+}
+
+.tosContainer{
+  user-select: none;
+  width: 332px;
+  margin: -95px auto 70px;
+}

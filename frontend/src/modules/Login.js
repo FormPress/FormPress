@@ -174,7 +174,7 @@ class Login extends Component {
                       {
                         id: 4,
                         type: 'Button',
-                        buttonText: 'LOGIN'
+                        buttonText: 'LOGIN',
                       }
                     ]
                   }

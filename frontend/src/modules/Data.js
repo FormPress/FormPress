@@ -79,12 +79,11 @@ class Data extends Component {
     this.setState({ forms }, this.componenDidMountWorker)
   }
 
-  async updateSubmissions(form_id, version) {
+  async updateSubmissions(form_id) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
       selectedFormId: form_id,
-      selectedFormSelectedPublishedVersion: version,
       selectedSubmissionId: null,
       entries: []
     })
@@ -92,10 +91,14 @@ class Data extends Component {
     let submissions = []
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/submissions?orderBy=created_at&desc=true`
+      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
-    submissions = data
+    let reducedData = data.filter(function(item) {
+      return item.version !== 0
+    })
+
+    submissions = reducedData
 
     const { submissionFilterSelectors } = this.state
     const filterActive = !Object.values(submissionFilterSelectors).every(
@@ -178,7 +181,7 @@ class Data extends Component {
         form_id,
         selectedFormSelectedPublishedVersion
       )
-      this.updateSubmissions(form_id, selectedFormSelectedPublishedVersion)
+      this.updateSubmissions(form_id)
     }
   }
 
@@ -228,7 +231,7 @@ class Data extends Component {
       selectedSubmissionIds: []
     })
     this.updateSubmissionStatistics(form.id, form.published_version)
-    this.updateSubmissions(form.id, form.published_version)
+    this.updateSubmissions(form.id)
   }
 
   toggleSubmission(submission_id) {
@@ -336,8 +339,7 @@ class Data extends Component {
     })
 
     this.updateSubmissions(
-      this.state.selectedFormId,
-      this.state.selectedFormSelectedPublishedVersion
+      this.state.selectedFormId
     )
   }
 
@@ -452,13 +454,12 @@ class Data extends Component {
   handleUnreadFilterToggle(e) {
     const {
       submissionFilterSelectors,
-      selectedFormId,
-      selectedFormSelectedPublishedVersion
+      selectedFormId
     } = this.state
     e.value = !e.value
     submissionFilterSelectors.showUnread = e.value
     this.setState({ submissionFilterSelectors })
-    this.updateSubmissions(selectedFormId, selectedFormSelectedPublishedVersion)
+    this.updateSubmissions(selectedFormId)
   }
 
   CustomTooltip = ({ active, payload, label }) => {
