@@ -2,6 +2,29 @@ FROM node:16.13.0-alpine3.14 as base
 
 RUN apk update && apk add curl bash
 
+RUN set -x \
+      && apk update \
+      && apk upgrade \
+      && apk add --no-cache \
+           dumb-init \
+           curl \
+           make \
+           gcc \
+           g++ \
+           python3 \
+           py3-pip \
+           linux-headers \
+           binutils-gold \
+           gnupg \
+           libstdc++ \
+           nss \
+           chromium \
+      \
+      && apk del --no-cache make gcc g++ python3 py3-pip binutils-gold gnupg libstdc++ \
+      && rm -rf /usr/include \
+      && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
+      && echo \
+
 FROM base as frontend_builder
 
 ENV PATH="/node_modules/.bin:$PATH"
@@ -25,29 +48,6 @@ RUN cd /frontend &&\
   yarn build
 
 FROM base as final
-
-RUN set -x \
-      && apk update \
-      && apk upgrade \
-      && apk add --no-cache \
-           dumb-init \
-           curl \
-           make \
-           gcc \
-           g++ \
-           python3 \
-           py3-pip \
-           linux-headers \
-           binutils-gold \
-           gnupg \
-           libstdc++ \
-           nss \
-           chromium \
-      \
-      && apk del --no-cache make gcc g++ python3 py3-pip binutils-gold gnupg libstdc++ \
-      && rm -rf /usr/include \
-      && rm -rf /var/cache/apk/* /root/.node-gyp /usr/share/man /tmp/* \
-      && echo \
 
 ENV SERVER_PORT=3001
 ENV FP_ENV=production
