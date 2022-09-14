@@ -174,7 +174,7 @@ class Builder extends Component {
   }
 
   handleCloseTemplateModalClick() {
-    this.props.history.push('/editor/new/builder')
+    this.props.history.replace('/editor/new/builder')
     this.setState({ isTemplateModalOpen: false, modalContent: {} })
   }
 
@@ -889,7 +889,10 @@ class Builder extends Component {
     this.setState({ saving: false })
 
     if (form.id === null && typeof data.id !== 'undefined') {
-      this.props.history.push(`/editor/${data.id}/builder`)
+      const currentPath = this.props.history.location.pathname
+      const newPath = currentPath.replace(/new/, `${data.id}`)
+
+      this.props.history.replace(newPath)
       this.setState({
         form: {
           ...this.state.form,
