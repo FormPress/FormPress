@@ -668,6 +668,8 @@
 *:after,
 *:before {
   box-sizing: border-box;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .gleam .nameContainer .name_span {
