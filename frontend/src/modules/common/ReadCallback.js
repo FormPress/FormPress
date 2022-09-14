@@ -14,11 +14,15 @@ export default class ReadCallback extends Component {
       const submissionIdentifierType = params.get('submissionIdentifierType')
 
       if (status === 'true') {
-        window.opener.activateIntegration(
-          base64Token,
-          folderID,
-          submissionIdentifierId,
-          submissionIdentifierType
+        window.opener.postMessage(
+          {
+            type: 'gdriveCallback',
+            base64Token,
+            folderID,
+            submissionIdentifierId,
+            submissionIdentifierType
+          },
+          '*'
         )
       }
     }

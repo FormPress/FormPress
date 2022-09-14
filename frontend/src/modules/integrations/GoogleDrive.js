@@ -46,32 +46,31 @@ export default class GoogleDrive extends Component {
   }
 
   componentDidMount() {
-    this._isMounted = true
-    if (window.activateIntegration === undefined) {
-      window.activateIntegration = (
-        token,
-        folderID,
-        submissionIdentifierId,
-        submissionIdentifierType
-      ) => {
-        if (this._isMounted) {
-          this.props.setIntegration({
-            type: GoogleDrive.metaData.name,
-            active: true,
-            value: token,
-            folder: folderID,
-            submissionIdentifier: {
-              id: submissionIdentifierId,
-              type: submissionIdentifierType
-            }
-          })
-        }
+    const props = this.props
+    window.addEventListener('message', function (event) {
+      if (event.data?.type === 'gdriveCallback') {
+        console.log(event.data)
+        const {
+          base64Token,
+          folderID,
+          submissionIdentifierId,
+          submissionIdentifierType
+        } = event.data
+
+        props.setIntegration({
+          type: GoogleDrive.metaData.name,
+          active: true,
+          value: base64Token,
+          folder: folderID,
+          submissionIdentifier: {
+            id: submissionIdentifierId,
+            type: submissionIdentifierType
+          }
+        })
       }
-    }
+    })
+
     this.filterElementsWithInput()
-  }
-  componentWillUnmount() {
-    this._isMounted = false
   }
 
   async componentDidUpdate(prevProps) {
