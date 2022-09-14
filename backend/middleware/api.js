@@ -1288,4 +1288,8 @@ module.exports = (app) => {
     )
     res.json(value)
   })
+
+  app.get('/read/googledrive', async (req, res) => {
+    res.render('readcallback.ejs', {})
+  })
 }
