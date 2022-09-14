@@ -12,7 +12,8 @@ const FRONTEND =
 const SCOPES = ['https://www.googleapis.com/auth/drive.file']
 const googleDriveClientSecret = process.env.GOOGLE_DRIVE_CLIENT_SECRET
 const googleDriveClientID = process.env.GOOGLE_DRIVE_CLIENT_ID
-const googleDriveRedirectURI = BACKEND + process.env.GOOGLE_DRIVE_REDIRECT_URI
+const googleDriveRedirectURI =
+  BACKEND + '/api/integrations/googledrive/getToken'
 const oAuth2Client = new google.auth.OAuth2(
   googleDriveClientID,
   googleDriveClientSecret,
