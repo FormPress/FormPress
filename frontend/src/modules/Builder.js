@@ -500,12 +500,12 @@ class Builder extends Component {
     if (maxId === -Infinity) {
       item.id = 0
       newElements = elements.concat(item)
-    }else{
+    } else {
       lastElement = elements.pop()
       item.id = maxId + 1
-      if(lastElement.type === 'Button'){
+      if (lastElement.type === 'Button') {
         newElements = elements.concat(item, lastElement)
-      }else{
+      } else {
         newElements = elements.concat(lastElement, item)
       }
     }

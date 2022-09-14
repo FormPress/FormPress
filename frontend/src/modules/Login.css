@@ -86,7 +86,7 @@
   cursor: pointer;
 }
 
-.google-sign-in > button[disabled]{
+.google-sign-in > button[disabled] {
   filter: grayscale(1);
 }
 

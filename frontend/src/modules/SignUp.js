@@ -50,7 +50,7 @@ class SignUp extends Component {
 
   async handleTosClicked() {
     console.log('tosClicked will be -> ', !this.state.tosClicked)
-    this.setState({tosClicked: !this.state.tosClicked})
+    this.setState({ tosClicked: !this.state.tosClicked })
   }
 
   async handleSignUpButtonClick(e) {
@@ -253,7 +253,19 @@ class SignUp extends Component {
                   />
                 </form>
                 <div className="tosContainer">
-                  <input type="checkbox" name="toscheckbox" onClick={() => this.handleTosClicked()}/> I accept and agree to the <a target="_blank" href="https://formpress.org/tos.html" rel="noopener noreferrer">Terms of Use</a>.
+                  <input
+                    type="checkbox"
+                    name="toscheckbox"
+                    onClick={() => this.handleTosClicked()}
+                  />{' '}
+                  I accept and agree to the{' '}
+                  <a
+                    target="_blank"
+                    href="https://formpress.org/tos.html"
+                    rel="noopener noreferrer">
+                    Terms of Use
+                  </a>
+                  .
                 </div>
 
                 {capabilities.googleCredentialsClientID ? (

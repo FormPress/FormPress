@@ -135,7 +135,7 @@
   cursor: pointer;
 }
 
-.infernal .elementButton button[disabled]{
+.infernal .elementButton button[disabled] {
   filter: grayscale(1);
 }
 

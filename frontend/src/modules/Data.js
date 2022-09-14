@@ -94,7 +94,7 @@ class Data extends Component {
       resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
-    let reducedData = data.filter(function(item) {
+    let reducedData = data.filter(function (item) {
       return item.version !== 0
     })
 
@@ -338,9 +338,7 @@ class Data extends Component {
       selectedFormSelectedPublishedVersion: value
     })
 
-    this.updateSubmissions(
-      this.state.selectedFormId
-    )
+    this.updateSubmissions(this.state.selectedFormId)
   }
 
   async handleCSVExportClick() {
@@ -452,10 +450,7 @@ class Data extends Component {
   }
 
   handleUnreadFilterToggle(e) {
-    const {
-      submissionFilterSelectors,
-      selectedFormId
-    } = this.state
+    const { submissionFilterSelectors, selectedFormId } = this.state
     e.value = !e.value
     submissionFilterSelectors.showUnread = e.value
     this.setState({ submissionFilterSelectors })
