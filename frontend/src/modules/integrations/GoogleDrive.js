@@ -49,7 +49,6 @@ export default class GoogleDrive extends Component {
     const props = this.props
     window.addEventListener('message', function (event) {
       if (event.data?.type === 'gdriveCallback') {
-        console.log(event.data)
         const {
           base64Token,
           folderID,
