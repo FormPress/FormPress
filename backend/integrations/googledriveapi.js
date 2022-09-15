@@ -62,7 +62,12 @@ exports.authGoogleDrive = (app) => {
           status = false
         }
       }
-      const redirectURL = `${FRONTEND}/read/googledrive?`
+
+      const redirectURL =
+        FP_ENV === 'development'
+          ? `${FRONTEND}/read/development/googledrive?`
+          : `${FRONTEND}/read/googledrive?`
+
       const components = {
         message: status,
         token: base64Token,

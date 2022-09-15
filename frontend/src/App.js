@@ -25,7 +25,7 @@ import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 import NotFoundPage from './modules/common/NotFoundPage'
-// import ReadCallback from './modules/common/ReadCallback'
+import ReadCallback from './modules/common/ReadCallback'
 
 import { Logo } from './svg'
 
@@ -301,8 +301,7 @@ class App extends Component {
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
-                {/*<Route path="/read" component={ReadCallback} />*/}
-
+                <Route path="/read/development" component={ReadCallback} />
                 <Route path="/404" component={NotFoundPage} />
                 {redirectPage}
               </Switch>

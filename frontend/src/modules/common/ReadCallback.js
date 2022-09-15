@@ -20,9 +20,10 @@ export default class ReadCallback extends Component {
             base64Token,
             folderID,
             submissionIdentifierId,
-            submissionIdentifierType
+            submissionIdentifierType,
+            origin: 'component'
           },
-          '*'
+          window.opener.origin
         )
       }
     }

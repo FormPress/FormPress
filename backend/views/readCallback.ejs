@@ -20,9 +20,10 @@
                        base64Token,
                        folderID,
                        submissionIdentifierId,
-                       submissionIdentifierType
+                       submissionIdentifierType,
+                       origin: 'ejs'
                     },
-                    '*'
+                    window.opener.origin
             )
          }
           window.close()
