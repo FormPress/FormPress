@@ -452,7 +452,6 @@ module.exports = (app) => {
           customSubmissionFileName,
           decodedToken
         )
-        console.log('File Uploaded')
       } catch (err) {
         console.log('Error while uploading file to google drive', err)
       }
