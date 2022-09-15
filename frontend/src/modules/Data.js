@@ -217,7 +217,6 @@ class Data extends Component {
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
-    this.formVersionSelector = this.formVersionSelector.bind(this)
     this.componenDidMountWorker = this.componenDidMountWorker.bind(this)
   }
 
@@ -326,19 +325,6 @@ class Data extends Component {
 
       this.setState({ submissions })
     }
-  }
-
-  async formVersionSelector(value) {
-    let versionData = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${this.state.selectedFormId}/${this.state.selectedFormSelectedPublishedVersion}`
-    })
-
-    this.setState({
-      selectedFormPublishedId: versionData.id,
-      selectedFormSelectedPublishedVersion: value
-    })
-
-    this.updateSubmissions(this.state.selectedFormId)
   }
 
   async handleCSVExportClick() {
@@ -837,34 +823,6 @@ class Data extends Component {
             Show unread only
           </label>
         </article>
-        <label>
-          {this.state.selectedFormPublishedVersion > 0 ? (
-            <select
-              className="formVersionSelector"
-              onChange={(e) => this.formVersionSelector(e.target.value)}
-              value={this.state.selectedFormSelectedPublishedVersion}>
-              <optgroup label="Frequently used versions">
-                <option value={options.length + 1}>Latest</option>
-                <option value="0">Preview</option>
-              </optgroup>
-              <optgroup label="Other versions">
-                {options.map((item) => {
-                  return (
-                    <option className="option-space" key={item} value={item}>
-                      {'v' + item}
-                    </option>
-                  )
-                })}
-              </optgroup>
-            </select>
-          ) : (
-            <select className="formVersionSelector">
-              <optgroup label="Frequently used versions">
-                <option value="0">Preview</option>
-              </optgroup>
-            </select>
-          )}
-        </label>
       </div>,
       loading.submissions === false && submissions.length > 0 ? (
         <Table
