@@ -75,7 +75,7 @@ module.exports = (app) => {
         INSERT INTO \`user\`
           (email, password, salt, emailVerificationCode, emailVerified)
         VALUES
-      ('${email}', NULL, NULL, '${verifyCode}', 1)
+      ('${email}', '', '', '${verifyCode}', 1)
       `)
 
       //adding default role 2, it should be dynamic

@@ -586,7 +586,8 @@ module.exports = (app) => {
                       }, {})
                     )) {
                       willReturnObject = {}
-                      willReturnObject.name = key.substring(0, 8)
+                      willReturnObject.nameForXaxis = key.substring(0, 8)
+                      willReturnObject.name = key
                       willReturnObject.value = value
 
                       willReturnArray.push(willReturnObject)

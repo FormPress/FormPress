@@ -443,7 +443,7 @@ class Data extends Component {
     this.updateSubmissions(selectedFormId)
   }
 
-  CustomTooltip = ({ active, payload, label }) => {
+  CustomTooltipForPieChart = ({ active, payload, label }) => {
     if (active) {
       return (
         <div
@@ -456,6 +456,25 @@ class Data extends Component {
           <label>{`${payload[0].name} : ${payload[0].value.toFixed(
             2
           )}%`}</label>
+        </div>
+      )
+    }
+
+    return null
+  }
+
+  CustomTooltipForBarChart = ({ active, payload, label }) => {
+    if (active) {
+      console.log(payload)
+      return (
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: '#ffff',
+            padding: '5px',
+            border: '1px solid #cccc'
+          }}>
+          <label>{`${payload[0].payload.name}`}</label>
         </div>
       )
     }
@@ -630,7 +649,6 @@ class Data extends Component {
                           .replace(/(<([^>]+)>)/gi, '')
                           .trim())
                       })
-                      console.log(question)
                       return (
                         <div className="questionContainer" key={i}>
                           <div
@@ -655,7 +673,9 @@ class Data extends Component {
                                 />
                               ))}
                             </Pie>
-                            <Tooltip content={<this.CustomTooltip />} />
+                            <Tooltip
+                              content={<this.CustomTooltipForPieChart />}
+                            />
                             <Legend
                               layout="vertical"
                               verticalAlign="text-bottom"
@@ -676,14 +696,16 @@ class Data extends Component {
                             <XAxis
                               type="category"
                               stroke="#000000"
-                              dataKey="name"
+                              dataKey="nameForXaxis"
                             />
                             <YAxis
                               type="number"
                               stroke="#000000"
                               dataKey="value"
                             />
-                            <Tooltip />
+                            <Tooltip
+                              content={<this.CustomTooltipForBarChart />}
+                            />
                             <Bar
                               dataKey="value"
                               fill="#00a0fc"
