@@ -900,7 +900,8 @@ module.exports = (app) => {
         res.set('Content-disposition', 'attachment; filename=' + fileName)
         res.set('Content-Type', 'application/json')
 
-        storage.downloadFile(uploadName).pipe(res)
+        const file = await storage.downloadFile(uploadName)
+        file.pipe(res)
       }
     }
   )
