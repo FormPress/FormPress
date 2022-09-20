@@ -3,7 +3,7 @@ import { api } from '../../helper'
 import { LoginPicture } from '../../svg'
 import { Link } from 'react-router-dom'
 import Renderer from '../Renderer'
-import AuthContext from '../../auth.context'
+import GeneralContext from '../../general.context'
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -139,9 +139,9 @@ class ResetPassword extends Component {
   }
 }
 const ResetPasswordWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <ResetPassword {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <ResetPassword {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default ResetPasswordWrapped

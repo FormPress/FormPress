@@ -3,9 +3,8 @@ import { Redirect, Link } from 'react-router-dom'
 import { api, setToken } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
+import GeneralContext from '../general.context'
 import './SignUp.css'
 
 class SignUp extends Component {
@@ -290,15 +289,9 @@ class SignUp extends Component {
 }
 
 const SignUpWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <SignUp {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <SignUp {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default SignUpWrapped

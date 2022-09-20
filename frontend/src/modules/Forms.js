@@ -258,7 +258,6 @@ export default class Forms extends Component {
   }
 
   render() {
-    console.log(this.props.generalContext)
     const { forms } = this.state
     let roleLimit = 2
     if (this.props.generalContext.auth.permission.admin) {
