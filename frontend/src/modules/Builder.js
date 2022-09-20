@@ -13,8 +13,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
 import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
@@ -82,7 +80,7 @@ const getElementsKeys = () =>
 //Stuff that we render in left hand side
 let pickerElements = getWeightedElements().sort((a, b) => a.weight - b.weight)
 
-class Builder extends Component {
+export default class Builder extends Component {
   async componentDidMount() {
     if (typeof this.props.match.params.formId !== 'undefined') {
       const { formId } = this.props.match.params
@@ -97,7 +95,10 @@ class Builder extends Component {
       } else {
         window.scrollTo(0, 0)
         const { form } = this.state
-        this.setIntegration({ type: 'email', to: this.props.auth.email })
+        this.setIntegration({
+          type: 'email',
+          to: this.props.generalContext.auth.email
+        })
 
         const savedForm = cloneDeep(form)
         this.setState({ savedForm })
@@ -112,7 +113,7 @@ class Builder extends Component {
         }, 1)
       } else {
         const { data } = await api({
-          resource: `/api/users/${this.props.auth.user_id}/editor`
+          resource: `/api/users/${this.props.generalContext.auth.user_id}/editor`
         })
         this.props.history.push(`/editor/${data.message}/builder`)
         setTimeout(() => {
@@ -186,7 +187,7 @@ class Builder extends Component {
     }
 
     const { data, status } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${formId}`
     })
     if (status === 403) {
       this.setState({ redirect: true })
@@ -209,7 +210,7 @@ class Builder extends Component {
     const savedForm = cloneDeep(form)
 
     const publishedFormResult = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${formId}?published=true`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${formId}?published=true`
     })
 
     const autoPageBreakSettings = form.props.autoPageBreak
@@ -289,7 +290,10 @@ class Builder extends Component {
     const form = { ...this.state.form }
     form.props = template.props
     form.title = template.title
-    form.props.integrations[0] = { type: 'email', to: this.props.auth.email }
+    form.props.integrations[0] = {
+      type: 'email',
+      to: this.props.generalContext.auth.email
+    }
     this.setState({ form, isTemplateModalOpen: false })
     this.setState({ loading: false })
   }
@@ -881,7 +885,7 @@ class Builder extends Component {
     this.setState({ saving: true })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`,
       method: form.id === null ? 'post' : 'put',
       body: this.state.form
     })
@@ -924,7 +928,7 @@ class Builder extends Component {
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       await api({
-        resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}/publish`,
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form.id}/publish`,
         method: 'post'
       })
 
@@ -949,7 +953,7 @@ class Builder extends Component {
   }
 
   removeUnavailableElems = (elem) => {
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
     const elementsToRemove = []
 
     if (
@@ -1102,7 +1106,7 @@ class Builder extends Component {
   renderLeftMenuContents() {
     const { form } = this.state
     const { params } = this.props.match
-    const { permission } = this.props.auth
+    const { permission } = this.props.generalContext.auth
     const selectedField = {}
     const { questionId } = params
 
@@ -1215,6 +1219,7 @@ class Builder extends Component {
         <Route path="/editor/:formId/builder/properties">
           <FormProperties
             form={form}
+            generalContext={this.props.generalContext}
             setIntegration={this.setIntegration}
             setCSS={this.setCSS}
             setFormTags={this.setFormTags}
@@ -1414,7 +1419,7 @@ class Builder extends Component {
             Click here to add a new page.
           </div>
         ) : null}
-        {this.props.auth.user_role !== 2 ? (
+        {this.props.generalContext.auth.user_role === 2 ? (
           <div
             className="branding"
             title="Upgrade your plan to remove branding.">
@@ -1436,17 +1441,3 @@ class Builder extends Component {
     )
   }
 }
-
-const BuilderWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <Builder {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
-)
-
-export default BuilderWrapped

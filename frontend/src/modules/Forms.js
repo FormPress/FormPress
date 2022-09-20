@@ -13,12 +13,11 @@ import Moment from 'react-moment'
 import { api } from '../helper'
 import Table from './common/Table'
 import Modal from './common/Modal'
-import AuthContext from '../auth.context'
 
 import './Forms.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
-class Forms extends Component {
+export default class Forms extends Component {
   setLoadingState(key, value) {
     this.setState({
       loading: {
@@ -32,7 +31,7 @@ class Forms extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
     const forms = data
 
@@ -161,7 +160,7 @@ class Forms extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
 
@@ -195,7 +194,7 @@ class Forms extends Component {
     form.id = null
     form.title = this.state.cloneFormName
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`,
       method: 'post',
       body: form
     })
@@ -259,12 +258,13 @@ class Forms extends Component {
   }
 
   render() {
+    console.log(this.props.generalContext)
     const { forms } = this.state
     let roleLimit = 2
-    if (this.props.auth.permission.admin) {
+    if (this.props.generalContext.auth.permission.admin) {
       roleLimit = 0
     } else {
-      roleLimit = parseInt(this.props.auth.permission.formLimit)
+      roleLimit = parseInt(this.props.generalContext.auth.permission.formLimit)
     }
 
     return (
@@ -411,11 +411,3 @@ class Forms extends Component {
     )
   }
 }
-
-const FormsWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Forms {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default FormsWrapped

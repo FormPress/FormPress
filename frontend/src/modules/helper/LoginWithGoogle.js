@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { GoogleLogin } from 'react-google-login'
-import AuthContext from '../../auth.context'
 
 const GOOGLE_CREDENTIALS_CLIENT_ID =
   process.env.REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID
 
-class LoginWithGoogle extends Component {
+export default class LoginWithGoogle extends Component {
   render() {
     return (
       <GoogleLogin
@@ -23,11 +22,3 @@ class LoginWithGoogle extends Component {
     )
   }
 }
-
-const LoginWithGoogleWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <LoginWithGoogle {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default LoginWithGoogleWrapped

@@ -7,7 +7,6 @@ import _ from 'lodash'
 import Moment from 'react-moment'
 import Modal from './common/Modal'
 import { api } from '../helper'
-import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
@@ -56,7 +55,7 @@ function download(filename, text) {
   document.body.removeChild(element)
 }
 
-class Data extends Component {
+export default class Data extends Component {
   setLoadingState(key, value) {
     this.setState({
       loading: {
@@ -70,7 +69,7 @@ class Data extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
 
     const forms = data
@@ -92,7 +91,7 @@ class Data extends Component {
     let submissions = []
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/submissions?orderBy=created_at&desc=true`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}/submissions?orderBy=created_at&desc=true`
     })
 
     submissions = data
@@ -128,7 +127,7 @@ class Data extends Component {
 
   async updateSubmissionStatistics(form_id, version) {
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/statistics`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}/statistics`
     })
 
     this.setState({
@@ -254,12 +253,12 @@ class Data extends Component {
 
     if (version === 0) {
       selectedSubmissionForm = await api({
-        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/`
       })
       selectedSubmissionForm = selectedSubmissionForm.data
     } else {
       selectedSubmissionForm = await api({
-        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}`
       })
       selectedSubmissionForm = selectedSubmissionForm.data
     }
@@ -272,7 +271,7 @@ class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
     try {
@@ -303,7 +302,7 @@ class Data extends Component {
     }
 
     await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions/${id}`,
       method: 'put',
       body: JSON.stringify({
         ...submission,
@@ -327,7 +326,7 @@ class Data extends Component {
 
   async formVersionSelector(value) {
     let versionData = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${this.state.selectedFormId}/${this.state.selectedFormSelectedPublishedVersion}`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${this.state.selectedFormId}/${this.state.selectedFormSelectedPublishedVersion}`
     })
 
     this.setState({
@@ -344,7 +343,7 @@ class Data extends Component {
   async handleCSVExportClick() {
     const form_id = this.state.selectedFormId
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/CSVExport`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/CSVExport`,
       method: 'post',
       body: {
         submissionIds: this.state.selectedSubmissionIds
@@ -406,7 +405,7 @@ class Data extends Component {
     } = this.state
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
       method: 'delete',
       body: {
         submissionIds: this.state.selectedSubmissionIds
@@ -1001,11 +1000,3 @@ class Data extends Component {
     }
   }
 }
-
-const DataWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Data {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default DataWrapped

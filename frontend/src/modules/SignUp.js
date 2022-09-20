@@ -111,7 +111,7 @@ class SignUp extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
         token: data.token,
@@ -144,7 +144,7 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    if (this.props.auth.loggedIn) {
+    if (this.props.generalContext.auth.loggedIn) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -162,7 +162,7 @@ class SignUp extends Component {
         />
       )
     }
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>

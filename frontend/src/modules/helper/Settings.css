@@ -3,10 +3,17 @@
 }
 
 .settings_container > .content {
-  padding-top: 40px;
-  width: 1200px;
+  width: 1210px;
   margin: 0 auto;
   overflow: hidden;
+  padding: 5px;
+}
+
+.settings_menu {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+.settings_content > div {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .settings_container > .content > div {
