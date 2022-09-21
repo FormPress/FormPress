@@ -499,6 +499,7 @@ module.exports = (app) => {
                   submission.id,
                   element.id
                 ])
+
                 if (questionStatistics.length > 0) {
                   if (elementTemplate.elementType === 'Name') {
                     elementTemplate.chartItems.push(
@@ -506,6 +507,12 @@ module.exports = (app) => {
                         .join(' ')
                         .trim()
                     )
+                  }else if(elementTemplate.elementType === 'Radio'){
+                    if(!isNaN(questionStatistics[0].value)){
+                      elementTemplate.chartItems.push(element.options[questionStatistics[0].value])
+                    }else{
+                      elementTemplate.chartItems.push(questionStatistics[0].value)
+                    }
                   } else {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
                   }
@@ -563,7 +570,7 @@ module.exports = (app) => {
                     break
                   case 'barChart':
                     willReturnArray = []
-                    for (const [key, value] of Object.entries(
+                    for (let [key, value] of Object.entries(
                       elementTemplate.chartItems.reduce((obj, chartItem) => {
                         if (!testStringIsJson.hasJsonStructure(chartItem)) {
                           if (!obj[chartItem]) {
@@ -586,7 +593,10 @@ module.exports = (app) => {
                       }, {})
                     )) {
                       willReturnObject = {}
-                      willReturnObject.nameForXaxis = key.substring(0, 8)
+                      if (key === '') {
+                        key = 'Unanswered'
+                      }
+                      willReturnObject.nameForXaxis = key.substring(0, 10)
                       willReturnObject.name = key
                       willReturnObject.value = value
 
