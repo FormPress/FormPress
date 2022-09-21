@@ -507,11 +507,15 @@ module.exports = (app) => {
                         .join(' ')
                         .trim()
                     )
-                  }else if(elementTemplate.elementType === 'Radio'){
-                    if(!isNaN(questionStatistics[0].value)){
-                      elementTemplate.chartItems.push(element.options[questionStatistics[0].value])
-                    }else{
-                      elementTemplate.chartItems.push(questionStatistics[0].value)
+                  } else if (elementTemplate.elementType === 'Radio') {
+                    if (!isNaN(questionStatistics[0].value)) {
+                      elementTemplate.chartItems.push(
+                        element.options[questionStatistics[0].value]
+                      )
+                    } else {
+                      elementTemplate.chartItems.push(
+                        questionStatistics[0].value
+                      )
                     }
                   } else {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
