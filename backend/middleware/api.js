@@ -98,7 +98,7 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
       const formResults = await db.query(
-        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 ) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
+        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id AND version != 0 ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 AND version != 0) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
         [user_id]
       )
 
@@ -625,8 +625,10 @@ module.exports = (app) => {
 
                     let lowValue = 0,
                       highValue = 0
-                    for (let index in elementTemplate.chartItems) {
-                      let value = parseInt(elementTemplate.chartItems[index])
+                    for (let [
+                      ,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
                       if (value >= 0 && value <= 6) {
                         lowValue++
                       } else if (value == 9 || value == 10) {

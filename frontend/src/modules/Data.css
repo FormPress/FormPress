@@ -19,6 +19,13 @@
   display: block;
 }
 
+text[type='category'] tspan {
+  width: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
 .data > .formSelectorContainer > .formSelector {
   border-left: 8px solid #113952;
   background-color: white;

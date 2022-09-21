@@ -732,11 +732,12 @@ class Data extends Component {
                             </div>
                             <div className="last_responses_container">
                               <div className="last_responses_title">
-                                Average value
+                                Net Promoter Score
                               </div>
                               <div className="last_responses">
                                 <div title={question.netPromoterScore}>
-                                  &quot;{question.netPromoterScore}&quot;
+                                  &quot;{question.netPromoterScore.toFixed(2)}
+                                  &quot;
                                 </div>
                               </div>
                             </div>
