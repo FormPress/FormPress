@@ -1,0 +1,221 @@
+.pricing-title {
+  color: #1c5c85;
+  font-weight: bold;
+}
+
+.arrow-up {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  display: table;
+  margin: 0 0 10px 40px;
+  cursor: pointer;
+}
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black;
+  display: table;
+  margin: 10px 0 0 40px;
+  cursor: pointer;
+}
+
+.py-6 {
+  padding-bottom: 2rem !important;
+  padding-top: 2rem !important;
+}
+
+.formpress_features_title {
+  color: #646464;
+  font-weight: bolder;
+  font-size: 14px;
+  text-align: center;
+  line-height: 36px;
+}
+
+.pricing-table .col-sm-6 {
+  padding: 0 12px;
+}
+
+.table tr td {
+  height: 64px;
+  display: table-cell;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+th[scope='col'] {
+  font-size: 24px;
+  text-align: center;
+}
+
+.col-md-2 .table tr td {
+  text-align: center;
+}
+
+table[class$='-plan']:not(.free-plan) [scope='col'] {
+  height: 48px;
+}
+.free-plan [scope='col'] {
+  background-color: #c9c9c9 !important;
+}
+.free-contact {
+  background-color: #c9c9c9 !important;
+  padding: 0 !important;
+}
+.silver-plan [scope='col'],
+.silver-price {
+  background-color: #a8a9ad !important;
+}
+
+.silver-plan + .purchase-link .purchase-button {
+  margin-top: 34px;
+}
+
+.gold-plan [scope='col'],
+.gold-price {
+  background-color: #dba52d !important;
+}
+
+.gold-plan + .purchase-link .purchase-button {
+  margin-top: 34px;
+}
+
+.diamond-plan {
+  width: 244px;
+  border: 16px solid #ffffff !important;
+  border-radius: 8px;
+  box-shadow: 0 0 6px 0 rgb(20 38 55 / 16%);
+  overflow: hidden;
+  margin-left: -12px;
+  margin-bottom: 18px;
+}
+.diamond-plan [scope='col'],
+.diamond-price {
+  height: 70px !important;
+  background-color: #a0e1f5 !important;
+}
+.diamond-plan-container {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.enterprise-plan [scope='col'] {
+  background-color: #333333 !important;
+}
+.enterprise-contact {
+  background-color: #333333 !important;
+  padding: 0 !important;
+}
+.enterprise-content {
+  color: #333333;
+  font-size: 18px;
+  height: 448px !important;
+}
+
+.price-amount {
+  font-size: 32px;
+  display: block;
+}
+
+.enterprise-contact .contact-support,
+.free-contact .free-support,
+.purchase-button {
+  cursor: pointer;
+  padding: 20px 0px;
+}
+
+.purchase-button {
+  color: #7aad37;
+  background-color: #ffffff;
+}
+
+.purchase-button:hover {
+  color: #ffffff;
+  background-color: #7aad37;
+}
+
+.star {
+  width: 30px;
+  height: 30px;
+  background-image: url(https://formpress.org/images/white-star.png);
+  background-size: cover;
+  border-radius: 50%;
+  background-color: #a0e1f5 !important;
+  border: 5px solid #a0e1f5 !important;
+  margin-top: -30px;
+  position: absolute;
+  display: flex;
+  margin-left: 70px;
+}
+
+.available-checkmark,
+.unavailable-xmark {
+  position: relative;
+  margin: auto;
+  width: 24px;
+  height: 24px;
+  display: -webkit-box;
+}
+
+.information-mark {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+
+.information-mark:after {
+  content: 'i';
+  color: #ffffff;
+  position: absolute;
+  right: 0;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  font-size: 10px;
+  text-align: center;
+  background-color: #333333;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.available-checkmark:after {
+  content: '✔';
+  color: #ffffff;
+  position: absolute;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  background-color: #7aad37;
+  border-radius: 50%;
+}
+
+.unavailable-xmark:after {
+  content: 'x';
+  color: #ffffff;
+  position: absolute;
+  left: calc(50% - 10px);
+  top: calc(50% - 10px);
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  background-color: #c9c9c9;
+  border-radius: 50%;
+}
+.mobile-features {
+  display: none;
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.brand-container {
+  width: 700px;
+  margin: auto;
+}
