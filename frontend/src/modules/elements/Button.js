@@ -29,6 +29,10 @@ export default class Button extends Component {
       inputProps.onClick = config.onClick
     }
 
+    if (typeof config.disabled !== 'undefined') {
+      inputProps.disabled = config.disabled
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         {mode === 'builder' ? (
