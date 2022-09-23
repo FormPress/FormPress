@@ -35,9 +35,7 @@ const BACKEND = process.env.REACT_APP_BACKEND
 
 const getElements = () =>
   Object.values(Elements).map((element) => {
-    const config = Object.assign({}, element.defaultConfig, {
-      group: element.metaData.group
-    })
+    const config = Object.assign({}, element.defaultConfig)
 
     if (typeof element.configurableSettings !== 'undefined') {
       const configurableKeys = Object.keys(element.configurableSettings)
@@ -337,14 +335,12 @@ class Builder extends Component {
               placeholder: '',
               required: false,
               label: 'Short Text',
-              requiredText: 'Please fill this field.',
-              group: 'inputElement'
+              requiredText: 'Please fill this field.'
             },
             {
               id: 2,
               type: 'Button',
-              buttonText: 'Submit',
-              group: 'pageElement'
+              buttonText: 'Submit'
             }
           ],
           customCSS: {

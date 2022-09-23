@@ -3,6 +3,7 @@ import Renderer from '../Renderer'
 import Modal from '../common/Modal'
 import './GoogleDrive.css'
 import { api } from '../../helper'
+import * as Elements from '../elements'
 
 export default class GoogleDrive extends Component {
   static metaData = {
@@ -83,7 +84,8 @@ export default class GoogleDrive extends Component {
     const inputElements = []
 
     elements.forEach((elem) => {
-      if (elem.group === 'inputElement') {
+      let elementType = elem.type
+      if (Elements[elementType].metaData.group === 'inputElement') {
         const inputElement = {
           display: elem.label,
           value: elem.id,
