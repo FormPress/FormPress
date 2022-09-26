@@ -1,0 +1,210 @@
+.usages-wrapper {
+  display: inline-block;
+  width: 100%;
+}
+
+.usages-wrapper > .usages-list {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: center;
+}
+
+.usages-wrapper > .usages-header {
+  width: 100% !important;
+  height: 3rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+  font-size: 14px;
+}
+
+.usages-wrapper > .usages-header > .currentPlan {
+  color: #113952;
+  font-weight: bold;
+}
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge {
+  padding: 3px 31px 3px 31px;
+  border-radius: 8px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.free {
+  color: #333333 !important;
+  background-color: #c9c9c9;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.silver {
+  background-color: #a8a9ad;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.gold {
+  background-color: #dba52d;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.diamond {
+  background-color: #a0e1f5;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.enterprise {
+  background-color: #333333;
+}
+
+.usages-wrapper > .usages-header > .currentPlan > .plan-badge.admin {
+  background-color: #5d08b2;
+}
+
+.usages-wrapper > .usages-header > .needMore,
+.usages-wrapper > .usages-header > .needMore > a {
+  color: #646464;
+}
+
+.usages-wrapper > .usages-list > .usage-container {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.usages-wrapper > .usages-list > .usage-container > .usage-label {
+  margin-bottom: 2.2rem;
+  text-transform: uppercase;
+  font-family: Montserrat;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.usages-wrapper > .usages-list > .usage-container > .user-limit-bar {
+  height: 10px;
+  display: flex;
+  background-color: #e2e2e2;
+  border-radius: 5px;
+}
+
+.usages-wrapper > .usages-list > .usage-container > .limit-legend {
+  display: flex;
+  justify-content: space-between;
+  color: #646464;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .user-progress {
+  background-color: #8cc63f;
+  height: 100%;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .user-progress.alert {
+  background-color: crimson !important;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .user-progress.alert
+  + .progress-knob {
+  background-color: crimson !important;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .user-progress.full {
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: crimson !important;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .user-progress.full
+  + .progress-knob {
+  display: none;
+}
+
+.usages-wrapper
+  > .usages-list
+  > .usage-container
+  > .user-limit-bar
+  > .progress-knob {
+  width: 2px;
+  height: 14px;
+  border-radius: 1px;
+  background: #8cc63f;
+  position: relative;
+  top: -2px;
+}
+
+.progress-knob::after {
+  content: attr(data-percentage);
+  position: relative;
+  bottom: 25px;
+  color: #646464;
+  font-size: 12px;
+  width: max-content;
+  display: block;
+  transform: translateX(-50%);
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.1s ease-in-out;
+}
+
+.progress-knob::before {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  border-color: transparent;
+  border-width: 5px;
+  border-style: solid;
+  transform: translateX(-50%);
+  transition: all 0.1s ease-in-out;
+}
+
+.usages-wrapper > .usages-list > .usage-container:hover .progress-knob::after {
+  color: white !important;
+  background-color: #21465e;
+}
+
+.usages-wrapper > .usages-list > .usage-container:hover .progress-knob::before {
+  border-color: #21465e transparent transparent transparent;
+}
+
+/* admin mode */
+.usages-list.admin .user-limit-bar,
+.usages-list.admin .user-limit-bar > .user-progress,
+.usages-list.admin .user-limit-bar > .progress-knob {
+  background-color: #5d08b2;
+}
+
+.usages-list.admin .user-limit-bar > .progress-knob {
+  visibility: hidden;
+}
+.usages-list.admin .user-limit-bar > .progress-knob::after {
+  visibility: visible !important;
+}
+
+.usages-list.admin .progress-knob {
+  display: block;
+}
