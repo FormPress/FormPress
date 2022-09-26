@@ -68,6 +68,11 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
   background-color: #c9c9c9 !important;
   padding: 0 !important;
 }
+
+.free-plan + .purchase-link .purchase-button {
+  margin-top: 34px;
+}
+
 .silver-plan [scope='col'],
 .silver-price {
   background-color: #a8a9ad !important;
@@ -120,6 +125,11 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
 .price-amount {
   font-size: 32px;
   display: block;
+}
+
+.free-support {
+  font-size: 32px;
+  color: white;
 }
 
 .enterprise-contact .contact-support,

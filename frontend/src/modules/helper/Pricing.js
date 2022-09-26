@@ -59,7 +59,7 @@ const Pricing = (props) => {
                   <thead>
                     <tr>
                       <th scope="col" className="text-black">
-                        FREE
+                        BASIC
                       </th>
                     </tr>
                   </thead>
@@ -128,13 +128,18 @@ const Pricing = (props) => {
                     </tr>
                     <tr>
                       <td className="free-contact">
-                        <a href="/signup" className="text-decoration-none">
-                          <div className="free-support text-black">SIGN UP</div>
-                        </a>
+                        <div className="text-decoration-none">
+                          <div className="free-support">FREE</div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                {user_role === 2 ? (
+                  <div className="text-decoration-none text-center purchase-link">
+                    <div className="purchase-button">Current Plan</div>
+                  </div>
+                ) : null}
               </div>
               <div className="col-md-2 col-sm-6 silver-plan-container">
                 <table className="table table-striped table-hover table-borderless silver-plan">
@@ -210,7 +215,7 @@ const Pricing = (props) => {
                     </tr>
                     <tr>
                       <td className="silver-price text-white">
-                        <span className="price-amount">19$</span> / BILLED
+                        <span className="price-amount">$19</span> / BILLED
                         MONTHLY
                       </td>
                     </tr>
@@ -303,7 +308,7 @@ const Pricing = (props) => {
                     </tr>
                     <tr>
                       <td className="gold-price text-white">
-                        <span className="price-amount">39$</span> / BILLED
+                        <span className="price-amount">$39</span> / BILLED
                         MONTHLY
                       </td>
                     </tr>
@@ -396,7 +401,7 @@ const Pricing = (props) => {
                     </tr>
                     <tr>
                       <td className="diamond-price text-white">
-                        <span className="price-amount">99$</span> / BILLED
+                        <span className="price-amount">$99</span> / BILLED
                         MONTHLY
                       </td>
                     </tr>
