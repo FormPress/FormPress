@@ -81,7 +81,7 @@ export default class Settings extends Component {
       <div className="settings_container">
         <div className="content">
           <div className="settings_menu">
-            <h2>User settings</h2>
+            <div className="settings_header">User settings</div>
             {navLinks}
           </div>
           <div className="settings_content">
