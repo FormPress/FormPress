@@ -287,7 +287,7 @@ export default class Users extends Component {
               Forms:
               {forms.map((form) => (
                 <div key={form.link}>
-                  <a href={form.link} target="_blank" rel="noreferrer">
+                  <a href={form.link} target="_blank" rel="noopener noreferrer">
                     {form.link}
                   </a>
                   <div>

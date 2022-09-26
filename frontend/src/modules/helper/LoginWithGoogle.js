@@ -10,7 +10,9 @@ export default class LoginWithGoogle extends Component {
       <GoogleLogin
         clientId={GOOGLE_CREDENTIALS_CLIENT_ID}
         render={(renderProps) => (
-          <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+          <button
+            onClick={renderProps.onClick}
+            disabled={renderProps.disabled || this.props.disabled}>
             Sign in via Google
           </button>
         )}

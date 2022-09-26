@@ -19,6 +19,13 @@
   display: block;
 }
 
+text[type='category'] tspan {
+  width: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
 .data > .formSelectorContainer > .formSelector {
   border-left: 8px solid #113952;
   background-color: white;
@@ -694,23 +701,6 @@
 .dataContent > .submissionSelector > .unreadSwitchContainer .unreadSwitchLabel {
   color: #646464;
   vertical-align: sub;
-}
-
-.dataContent .formVersionSelector {
-  text-align: center;
-  padding: 0;
-  border-radius: 4px;
-  outline: 0;
-}
-
-.dataContent .formVersionSelector::before {
-  content: '\2713';
-  display: block;
-  text-align: center;
-  color: #333333;
-  font-size: 16px;
-  margin: auto;
-  position: relative;
 }
 
 .dataContent
