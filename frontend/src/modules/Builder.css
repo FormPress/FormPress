@@ -545,7 +545,7 @@
   cursor: pointer;
 }
 
-.builderStage > .branding {
+.builderStage > .branding-container > .branding {
   position: relative !important;
 }
 
@@ -640,4 +640,33 @@
   > .metadata.answerExplanationContainer
   .popover-container {
   float: right;
+}
+
+.branding-container > .popoverText {
+  display: block;
+  width: 230px;
+  margin: 0 0 3px;
+  padding: 2px 4px 3px 3px;
+  border-radius: 4px;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.branding-container:hover > .popoverText,
+.branding-container:focus > .popoverText {
+  position: relative;
+  top: 0px;
+  opacity: 1;
+  visibility: visible;
+}
+
+.branding-container > .popoverText > a {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
 }

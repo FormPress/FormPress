@@ -1420,22 +1420,39 @@ export default class Builder extends Component {
           </div>
         ) : null}
         {this.props.generalContext.auth.user_role === 2 ? (
-          <div
-            className="branding"
-            title="Upgrade your plan to remove branding.">
-            <img
-              alt="Formpress Logo"
-              src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
-              className="formpress-logo"
-            />
+          <span
+            className="branding-container"
+            onMouseEnter={(e) => {
+              // can later be moved into a separate function for reusability
+              const rect = e.target.getBoundingClientRect()
+              const diff = rect.right - e.clientX
+              const rightPercentage = (100 * diff) / rect.width
+              const popover = document.getElementById('branding-popover')
+              popover.style.position = 'absolute'
+              popover.style.top = e.clientY + 'px'
+              popover.style.left =
+                (rightPercentage > 20 ? e.clientX : e.clientX - 230) + 'px'
+            }}>
             <div
-              className="branding-text"
-              title="Visit FormPress and start building awesome forms!">
-              This form has been created on FormPress. <br />
-              <span className="fake-link">Click here</span> to create your own
-              form now! It is free!
+              className="branding"
+              title="Upgrade your plan to remove branding.">
+              <img
+                alt="Formpress Logo"
+                src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
+                className="formpress-logo"
+              />
+              <div
+                className="branding-text"
+                title="Visit FormPress and start building awesome forms!">
+                This form has been created on FormPress. <br />
+                <span className="fake-link">Click here</span> to create your own
+                form now! It is free!
+              </div>
             </div>
-          </div>
+            <div id="branding-popover" className="popoverText">
+              Want to remove branding? <a href="/pricing">Upgrade your plan.</a>
+            </div>
+          </span>
         ) : null}
       </div>
     )
