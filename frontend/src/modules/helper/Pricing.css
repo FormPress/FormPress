@@ -229,3 +229,10 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
   width: 700px;
   margin: auto;
 }
+
+.purchase-button.current-plan {
+  background: #6f6b6b;
+  border: 2px solid white;
+  font-weight: bolder;
+  color: white;
+}
