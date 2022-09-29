@@ -195,7 +195,7 @@
 .usages-list.admin .user-limit-bar,
 .usages-list.admin .user-limit-bar > .user-progress,
 .usages-list.admin .user-limit-bar > .progress-knob {
-  background-color: #5d08b2;
+  background-color: #5d08b2 !important;
 }
 
 .usages-list.admin .user-limit-bar > .progress-knob {

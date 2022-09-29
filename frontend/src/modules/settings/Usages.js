@@ -13,7 +13,7 @@ export default class Usages extends Component {
   }
 
   formatBytes(bytes, decimals = 2) {
-    if (!+bytes) return '0 Bytes'
+    if (!+bytes) return { numerical: 0, fullString: '0 KB' }
 
     const k = 1000
     const dm = decimals < 0 ? 0 : decimals
@@ -73,7 +73,7 @@ export default class Usages extends Component {
           {typeof usages === 'object'
             ? Object.entries(usages).map((u, index) => {
                 const usageName = u[0]
-                let usageData = { value: u[1], display: u[1] }
+                let usageData = { value: u[1] || 0, display: u[1] }
 
                 const limitMin = { display: 0, value: 0 }
                 const limitMax = {
@@ -119,7 +119,7 @@ export default class Usages extends Component {
                     <div className="limit-legend">
                       <span className="limit-min">{limitMin.display}</span>
                       <span className="limit-max">
-                        {limitMax.display || '∞'}
+                        {isAdmin ? '∞' : limitMax.display}
                       </span>
                     </div>
                   </div>

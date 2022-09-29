@@ -137,7 +137,9 @@ const Pricing = (props) => {
                 </table>
                 {user_role === 2 ? (
                   <div className="text-decoration-none text-center purchase-link">
-                    <div className="purchase-button">Current Plan</div>
+                    <div className="purchase-button current-plan">
+                      Current Plan
+                    </div>
                   </div>
                 ) : null}
               </div>
@@ -223,7 +225,9 @@ const Pricing = (props) => {
                 </table>
                 {user_role === 3 ? (
                   <div className="text-decoration-none text-center purchase-link">
-                    <div className="purchase-button">Current Plan</div>
+                    <div className="purchase-button current-plan">
+                      Current Plan
+                    </div>
                   </div>
                 ) : user_role > 3 ? null : (
                   <a
@@ -316,7 +320,9 @@ const Pricing = (props) => {
                 </table>
                 {user_role === 4 ? (
                   <div className="text-decoration-none text-center purchase-link">
-                    <div className="purchase-button">Current Plan</div>
+                    <div className="purchase-button current-plan">
+                      Current Plan
+                    </div>
                   </div>
                 ) : user_role > 4 ? null : (
                   <a
@@ -409,7 +415,9 @@ const Pricing = (props) => {
                 </table>
                 {user_role === 5 ? (
                   <div className="text-decoration-none text-center purchase-link">
-                    <div className="purchase-button">Current Plan</div>
+                    <div className="purchase-button current-plan">
+                      Current Plan
+                    </div>
                   </div>
                 ) : (
                   <a
