@@ -1213,9 +1213,12 @@ export default class Builder extends Component {
                       </span>
                       <span className="planover-container">
                         <FontAwesomeIcon icon={faQuestionCircle} />
+                        <a href="/pricing" className="upgrade_button">
+                          UPGRADE
+                        </a>
                         <div className="popoverText">
-                          Your plan does not include this element. Please
-                          contact support for upgrade.
+                          Your plan does not include this element. Click here to
+                          upgrade your plan!
                         </div>
                       </span>
                     </div>

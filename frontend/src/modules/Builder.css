@@ -442,10 +442,6 @@
   position: relative;
 }
 
-.planover-container:hover {
-  color: #fffcdd;
-}
-
 .planover-container:hover > .popoverText {
   display: block;
   width: 160px;
@@ -456,9 +452,37 @@
   background-color: #113952;
   color: #fff;
   text-align: center;
-  font-size: 10px;
   left: -130px;
-  top: 20px;
+  top: 25px;
+}
+
+.planover-container > svg {
+  transition: opacity ease-in 0.4s;
+  opacity: 1;
+}
+
+.planover-container:hover > svg {
+  opacity: 0;
+  transition: opacity ease-out 0.2s;
+}
+
+.planover-container:hover > .upgrade_button {
+  opacity: 1;
+  transition: opacity ease-in 0.4s;
+}
+
+.upgrade_button {
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  right: -10px;
+  font-size: 12px;
+  font-weight: bolder;
+  color: white;
+  background: #1c5c85;
+  padding: 3px;
+  border-radius: 2px;
+  transition: opacity ease-out 0.2s;
 }
 
 .elements > .elementList > .disabled-element:hover {
