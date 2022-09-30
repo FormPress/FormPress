@@ -20,7 +20,12 @@
   font-size: 16px;
 }
 .loginForm .element {
-  margin: 0 auto 15px;
+  padding: 5px 0 5px 0;
+}
+
+.login-mainContent {
+  padding-top: 15px;
+  /*padding-bottom: 15px;*/
 }
 
 .content {
@@ -33,11 +38,6 @@
   padding-bottom: 20px;
 }
 
-.picture-bg {
-  background-color: #00538a;
-  padding-top: 25px;
-  padding-bottom: 25px;
-}
 .login-picture {
   display: block;
   margin-left: auto;
@@ -49,8 +49,6 @@
   font-size: 20px;
   text-align: center;
   color: #0c2738;
-  padding: 16px;
-  margin-top: 9px;
 }
 
 .forgot-pass {
@@ -58,7 +56,7 @@
   font-family: Montserrat;
   font-weight: 600;
   font-size: 14px;
-  margin: -99px auto 100px;
+  margin: -84px auto 89px;
   width: 322px;
 }
 
@@ -106,6 +104,7 @@
   width: 100%;
   font-family: Montserrat;
   text-align: center;
+  padding-bottom: 10px;
 }
 
 .have-account > a,
@@ -127,12 +126,13 @@
 }
 .message-back {
   width: 100%;
-  height: 20px;
-  padding-bottom: 35px;
   font-family: Montserrat;
   text-align: center;
   color: #ff5050;
-  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+}
+.message-back.isFilled {
+  padding: 10px 0 10px 0;
 }
 
 .message-back.message-success,
@@ -158,7 +158,7 @@
 }
 
 .for-sign-up .or-seperator {
-  margin-top: 0px;
+  padding: 6px;
 }
 
 .for-login + .do-not-have {

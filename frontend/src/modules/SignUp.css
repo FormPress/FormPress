@@ -3,6 +3,11 @@
   text-align: center;
 }
 
+.signup-mainContent {
+  padding-top: 15px;
+  /*padding-bottom: 15px;*/
+}
+
 .sign-up-success {
   padding: 0px 20px;
   font-size: large;

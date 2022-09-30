@@ -18,7 +18,6 @@
 }
 
 #root > .headerContainer > .grid > .header {
-  background-color: #f5f5f5;
   width: inherit;
   margin: 0 auto;
   padding: 6px;
