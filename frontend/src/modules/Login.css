@@ -2,6 +2,7 @@
   overflow: hidden;
   width: 500px;
   margin: 40px auto 0;
+  background-color: white;
 }
 .login-wrapper > .footer .col-8-16 {
   text-align: center;
@@ -55,7 +56,6 @@
 .forgot-pass {
   color: #0c2738;
   font-family: Montserrat;
-  font-style: italic;
   font-weight: 600;
   font-size: 14px;
   margin: -99px auto 100px;
@@ -88,35 +88,29 @@
 
 .google-sign-in > button[disabled] {
   filter: grayscale(1);
+  pointer-events: none;
 }
 
 .do-not-have {
-  width: 100%;
-  height: 19px;
-  margin: 10px 0px 10px;
   font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.13;
-  letter-spacing: normal;
   text-align: center;
-  color: #113952;
-  font-style: italic;
+  margin-bottom: 20px;
+}
+
+.do-not-have > a {
+  color: #646464;
+  font-weight: bold;
 }
 
 .have-trouble {
   width: 100%;
-  height: 19px;
-  margin: auto;
-  padding: 8px;
   font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: italic;
-  line-height: 1.13;
-  letter-spacing: normal;
   text-align: center;
-  color: #113952;
+}
+
+.have-account > a,
+.have-trouble > a {
+  font-weight: bold;
 }
 
 .login-wrapper > .footer {
@@ -136,7 +130,6 @@
   height: 20px;
   padding-bottom: 35px;
   font-family: Montserrat;
-  font-style: italic;
   text-align: center;
   color: #ff5050;
   margin-bottom: 10px;

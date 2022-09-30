@@ -134,7 +134,7 @@ class Login extends Component {
 
     return (
       <div className="login-wrapper">
-        <div className="loginForm">
+        <div className="loginForm bs-mild">
           <div className="wellcome-message">WELCOME BACK!</div>
           <div className="picture-bg">
             <div className="login-picture">
@@ -183,9 +183,7 @@ class Login extends Component {
             {capabilities.sendgridApiKey ? (
               <div className="forgot-pass" title="forgot password">
                 <span className="forgot-pass-span">
-                  <Link to="/forgotpassword">
-                    &nbsp;<i>Forgot password?</i>
-                  </Link>
+                  <Link to="/forgotpassword">&nbsp;Forgot password?</Link>
                 </span>
               </div>
             ) : (
@@ -196,6 +194,7 @@ class Login extends Component {
                 <div className="or-seperator">or</div>
                 <div className="google-sign-in">
                   <LoginWithGoogle
+                    disabled={false}
                     handleLoginWithGoogleButton={
                       this.handleLoginWithGoogleClick
                     }
@@ -211,16 +210,11 @@ class Login extends Component {
               {state === 'done' ? message : null}
             </p>
             <div className="do-not-have">
-              Don&apos;t have an account?{' '}
-              <Link to="/signup">
-                <i>SignUp</i>
-              </Link>
+              Don&apos;t have an account? <Link to="/signup">SIGN UP</Link>
             </div>
             <div className="have-trouble">
               Having trouble?
-              <span className="wip-placeholder" title="WIP">
-                <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
-              </span>
+              <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
             </div>
           </div>
         </div>

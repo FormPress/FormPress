@@ -72,6 +72,13 @@ class Modal extends Component {
     const customContentPresent = this.props.children !== undefined
 
     if (this.props.isOpen === true) {
+      if (modalContent === 'backdrop') {
+        return ReactDOM.createPortal(
+          <div className="modal-overlay" onClick={this.props.closeModal} />,
+          document.getElementById('portal')
+        )
+      }
+
       return ReactDOM.createPortal(
         <div className="modal-overlay" onClick={this.props.closeModal}>
           {customContentPresent ? (

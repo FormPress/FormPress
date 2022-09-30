@@ -91,6 +91,7 @@
   border-radius: 4px;
   outline: 0;
   border: solid 1px #f5f5f5;
+  font-weight: 700;
 }
 
 .infernal > .elementPassword > .input > input:hover {
@@ -155,6 +156,7 @@
 
 .infernal .elementButton button[disabled] {
   filter: grayscale(1);
+  pointer-events: none;
 }
 
 .infernal .elementCheckbox .input > input {

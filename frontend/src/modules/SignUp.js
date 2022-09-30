@@ -48,7 +48,6 @@ class SignUp extends Component {
   }
 
   async handleTosClicked() {
-    console.log('tosClicked will be -> ', !this.state.tosClicked)
     this.setState({ tosClicked: !this.state.tosClicked })
   }
 
@@ -201,7 +200,7 @@ class SignUp extends Component {
 
     return (
       <div className="login-wrapper">
-        <div className="loginForm signupForm">
+        <div className="loginForm signupForm bs-mild">
           <div className="picture-bg">
             <div className="login-picture">
               <LoginPicture />
@@ -253,11 +252,15 @@ class SignUp extends Component {
                 </form>
                 <div className="tosContainer">
                   <input
+                    id="toscheckbox"
                     type="checkbox"
                     name="toscheckbox"
-                    onClick={() => this.handleTosClicked()}
+                    onChange={() => this.handleTosClicked()}
                   />{' '}
-                  I accept and agree to the{' '}
+                  <label htmlFor="toscheckbox">
+                    {' '}
+                    I accept and agree to the{' '}
+                  </label>
                   <a
                     target="_blank"
                     href="https://formpress.org/tos.html"
@@ -288,17 +291,13 @@ class SignUp extends Component {
                 <p className="message-back">{message}</p>
                 <div className="have-account">
                   Already have an account?
-                  <Link to="/login">
-                    <i>Login</i>
-                  </Link>
+                  <Link to="/login">&nbsp;LOGIN</Link>
                 </div>
               </div>
             )}
             <div className="have-trouble">
               Having trouble?
-              <span className="wip-placeholder" title="WIP">
-                <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
-              </span>
+              <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
             </div>
           </div>
         </div>

@@ -11,6 +11,10 @@
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
+.bs-mild {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
 .gleam.form > .element {
   box-sizing: border-box;
   padding: 25px 10px;
