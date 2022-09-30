@@ -62,7 +62,7 @@ export default class Email extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4 className="elemLabelTitle">
+        <div className="elemLabelTitle">
           <EditableLabel
             className="fl label"
             mode={mode}
@@ -72,7 +72,7 @@ export default class Email extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>
+        </div>
         <div className="fl input">
           <input
             id={`q_${config.id}`}

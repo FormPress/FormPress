@@ -100,7 +100,7 @@ export default class Phone extends Component {
     let display
 
     display = [
-      <h4 className="elemLabelTitle" key={0}>
+      <div className="elemLabelTitle" key={0}>
         <EditableLabel
           className="fl label"
           dataPlaceholder="Type a question"
@@ -111,7 +111,7 @@ export default class Phone extends Component {
           required={config.required}
           key="1"
         />
-      </h4>,
+      </div>,
       <div className="fl input" key="2">
         <select
           className="dialCode"

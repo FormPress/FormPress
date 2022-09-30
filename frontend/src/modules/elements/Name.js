@@ -135,7 +135,7 @@ export default class Name extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4 className="elemLabelTitle">
+        <div className="elemLabelTitle">
           <EditableLabel
             className="fl label"
             mode={mode}
@@ -145,7 +145,7 @@ export default class Name extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>
+        </div>
         <div className="nameContainer">
           <span
             className={`prefix_span${

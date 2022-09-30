@@ -13,6 +13,7 @@
 .infernal .elemLabelTitle {
   margin-top: 5px !important;
   margin-bottom: 5px !important;
+  font-weight: 500 !important;
 }
 
 .infernal > .elementTextBox > .label {

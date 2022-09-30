@@ -68,7 +68,7 @@ export default class TextArea extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4 className="elemLabelTitle">
+        <div className="elemLabelTitle">
           <EditableLabel
             className="fl label"
             dataPlaceholder="Type a question"
@@ -80,7 +80,7 @@ export default class TextArea extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>
+        </div>
         <div>
           <div className="fl input">
             {config.id === 'answerExplanation' ? (

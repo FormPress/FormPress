@@ -171,7 +171,7 @@ export default class Address extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4 className="elemLabelTitle" key={0}>
+        <div className="elemLabelTitle" key={0}>
           <EditableLabel
             className="fl label"
             mode={mode}
@@ -181,7 +181,7 @@ export default class Address extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>
+        </div>
 
         {config.street ? (
           <span className={`address-section adr-street`}>

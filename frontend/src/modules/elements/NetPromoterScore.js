@@ -135,7 +135,7 @@ export default class NetPromoterScore extends Component {
     }
 
     var display = [
-      <h4 className="elemLabelTitle" key={0}>
+      <div className="elemLabelTitle" key={0}>
         <EditableLabel
           key="1"
           className="fl label"
@@ -146,7 +146,7 @@ export default class NetPromoterScore extends Component {
           value={config.label}
           required={config.required}
         />
-      </h4>,
+      </div>,
       <div key="2" className="fl input">
         <ul>
           {config.options.map((item, key) => {

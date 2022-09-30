@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 .renderer.gleam {
   background-color: white;
@@ -49,13 +49,14 @@
 .gleam.form .element > .elemLabelTitle {
   margin-top: 5px;
   margin-bottom: 5px;
+  font-weight: 500;
 }
 
-.gleam.form .element > h4 > .label {
+.gleam.form .element > .elemLabelTitle > .label {
   float: none;
 }
 
-.gleam.form .element > h4 > .label > span {
+.gleam.form .element > .elemLabelTitle > .label > span {
   font-family: Montserrat;
   min-width: 125px;
   max-width: calc(100% - 20px);
@@ -67,15 +68,15 @@
 }
 .builder.gleam.form
   .element
-  > h4
+  > .elemLabelTitle
   > .label
   > span[contentEditable='true']:hover {
   border: 1px dashed;
 }
-.gleam.form .element > h4 > .label > span.emptySpan {
+.gleam.form .element > .elemLabelTitle > .label > span.emptySpan {
   border: 1px dashed transparent;
 }
-.gleam.form .element > h4 > .label > .requiredMarker {
+.gleam.form .element > .elemLabelTitle > .label > .requiredMarker {
   display: inline-block;
   color: red;
   padding: 0;
@@ -668,8 +669,6 @@
 *:after,
 *:before {
   box-sizing: border-box;
-  font-size: 16px;
-  font-weight: 600;
 }
 
 .gleam .nameContainer .name_span {

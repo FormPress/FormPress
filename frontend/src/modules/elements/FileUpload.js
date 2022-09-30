@@ -98,7 +98,7 @@ export default class FileUpload extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <h4 className="elemLabelTitle">
+        <div className="elemLabelTitle">
           <EditableLabel
             className="fl label"
             mode={mode}
@@ -108,7 +108,7 @@ export default class FileUpload extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>
+        </div>
         <div className="inputContainer">
           <label htmlFor={`q_${config.id}`} className="custom-file-upload">
             Browse...

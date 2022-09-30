@@ -127,7 +127,7 @@ export default class Dropdown extends Component {
     var display
     if (mode === 'builder' || mode === 'viewer') {
       display = [
-        <h4 className="elemLabelTitle" key={0}>
+        <div className="elemLabelTitle" key={0}>
           <EditableLabel
             key="1"
             className="fl label"
@@ -138,7 +138,7 @@ export default class Dropdown extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>,
+        </div>,
         <div key="2">
           {
             <div className="dropdown-div">
@@ -213,7 +213,7 @@ export default class Dropdown extends Component {
       ]
     } else {
       display = [
-        <h4 className="elemLabelTitle" key={0}>
+        <div className="elemLabelTitle" key={0}>
           <EditableLabel
             key="1"
             className="fl label"
@@ -223,7 +223,7 @@ export default class Dropdown extends Component {
             value={config.label}
             required={config.required}
           />
-        </h4>,
+        </div>,
         <div key="2" className="dropdown-div">
           <select
             className="dropdown-select"

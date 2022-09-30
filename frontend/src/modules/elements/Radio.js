@@ -265,7 +265,7 @@ export default class Radio extends Component {
             limit={2000}
           />
         ) : (
-          <h4 className="elemLabelTitle" key={0}>
+          <div className="elemLabelTitle" key={0}>
             <EditableLabel
               key="1"
               className="fl label"
@@ -283,7 +283,7 @@ export default class Radio extends Component {
               required={config.required}
               limit={2000}
             />
-          </h4>
+          </div>
         ),
         <div key="2" className="fl input">
           <EditableList
@@ -387,7 +387,7 @@ export default class Radio extends Component {
             question_id={config.id}
           />
         ) : (
-          <h4 className="elemLabelTitle" key={0}>
+          <div className="elemLabelTitle" key={0}>
             <EditableLabel
               key="1"
               className="fl label"
@@ -398,7 +398,7 @@ export default class Radio extends Component {
               required={config.required}
               question_id={config.id}
             />
-          </h4>
+          </div>
         ),
         <div key="2" className="fl input">
           <ul id={`q_${config.id}_radioList`} className="radioList">
