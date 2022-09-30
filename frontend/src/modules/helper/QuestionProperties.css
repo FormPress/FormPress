@@ -25,6 +25,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   height: 20px;
+  font-weight: 500;
 }
 
 .question-info > .qtype {

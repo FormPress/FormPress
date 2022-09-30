@@ -78,7 +78,7 @@ export default class QuestionProperties extends Component {
         </div>
         <div className="wrapper-questionProperties">
           <div className="question-info">
-            <h4
+            <div
               className="qlabel"
               dangerouslySetInnerHTML={{
                 __html: config?.label
@@ -87,7 +87,7 @@ export default class QuestionProperties extends Component {
                       .replace(/(<([^>]+)>)/gi, '')
                       .trim()
                   : ''
-              }}></h4>
+              }}></div>
             <div className="qtype">{selectedField.config.type}</div>
           </div>
 
