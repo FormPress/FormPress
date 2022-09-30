@@ -108,6 +108,7 @@ text[type='category'] tspan {
 
 .data .statisticsContainer .questionContainer {
   border-top: 1px solid #eaeaea;
+  padding: 15px;
 }
 
 .data .statisticsContainer .questionContainer .question {
