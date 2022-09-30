@@ -35,7 +35,7 @@ export default function LoginPicture(props) {
         <style
           dangerouslySetInnerHTML={{
             __html:
-              '.prefix__cls-2{fill:#0c2738}.prefix__cls-3{fill:#113952}.prefix__cls-4{fill:#fffcdd}.prefix__cls-7{fill:#719fbd}'
+              '.prefix__cls-2{fill:#0c2738}.prefix__cls-3{fill:#113952}.prefix__cls-4{fill:#d58066}.prefix__cls-7{fill:#719fbd}'
           }}></style>
       </defs>
       <g
