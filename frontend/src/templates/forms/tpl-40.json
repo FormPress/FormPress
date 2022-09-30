@@ -1,0 +1,92 @@
+{
+  "id": 40,
+  "user_id": 46,
+  "title": "Petition Signup",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Online Petition Signup",
+        "sublabel": "",
+        "form_id": 657,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Your name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 657,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 657,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 10,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 657,
+        "defaultCountry": "United States",
+        "order": 3
+      },
+      {
+        "id": 12,
+        "type": "TextArea",
+        "label": "Could you tell us why you sign this petition?",
+        "form_id": 657,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 11,
+        "type": "TextArea",
+        "label": "Comments",
+        "form_id": 657,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 6,
+        "form_id": 657
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Signup"]
+  }
+}

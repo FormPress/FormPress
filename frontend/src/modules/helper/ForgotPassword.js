@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { api } from '../../helper'
 import { LoginPicture } from '../../svg'
 import Renderer from '../Renderer'
-import AuthContext from '../../auth.context'
+import GeneralContext from '../../general.context'
 
 import './ForgotPassword.css'
 
@@ -134,9 +134,9 @@ class ForgotPassword extends Component {
 }
 
 const ForgotPasswordWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <ForgotPassword {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <ForgotPassword {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default ForgotPasswordWrapped

@@ -98,7 +98,7 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
       const formResults = await db.query(
-        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 ) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
+        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id AND version != 0 ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 AND version != 0) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
         [user_id]
       )
 
@@ -499,6 +499,7 @@ module.exports = (app) => {
                   submission.id,
                   element.id
                 ])
+
                 if (questionStatistics.length > 0) {
                   if (elementTemplate.elementType === 'Name') {
                     elementTemplate.chartItems.push(
@@ -506,6 +507,16 @@ module.exports = (app) => {
                         .join(' ')
                         .trim()
                     )
+                  } else if (elementTemplate.elementType === 'Radio') {
+                    if (!isNaN(questionStatistics[0].value)) {
+                      elementTemplate.chartItems.push(
+                        element.options[questionStatistics[0].value]
+                      )
+                    } else {
+                      elementTemplate.chartItems.push(
+                        questionStatistics[0].value
+                      )
+                    }
                   } else {
                     elementTemplate.chartItems.push(questionStatistics[0].value)
                   }
@@ -563,7 +574,7 @@ module.exports = (app) => {
                     break
                   case 'barChart':
                     willReturnArray = []
-                    for (const [key, value] of Object.entries(
+                    for (let [key, value] of Object.entries(
                       elementTemplate.chartItems.reduce((obj, chartItem) => {
                         if (!testStringIsJson.hasJsonStructure(chartItem)) {
                           if (!obj[chartItem]) {
@@ -586,6 +597,10 @@ module.exports = (app) => {
                       }, {})
                     )) {
                       willReturnObject = {}
+                      if (key === '') {
+                        key = 'Unanswered'
+                      }
+                      willReturnObject.nameForXaxis = key.substring(0, 10)
                       willReturnObject.name = key
                       willReturnObject.value = value
 
@@ -610,8 +625,10 @@ module.exports = (app) => {
 
                     let lowValue = 0,
                       highValue = 0
-                    for (let index in elementTemplate.chartItems) {
-                      let value = parseInt(elementTemplate.chartItems[index])
+                    for (let [
+                      ,
+                      value
+                    ] of elementTemplate.chartItems.entries()) {
                       if (value >= 0 && value <= 6) {
                         lowValue++
                       } else if (value == 9 || value == 10) {
@@ -900,7 +917,8 @@ module.exports = (app) => {
         res.set('Content-disposition', 'attachment; filename=' + fileName)
         res.set('Content-Type', 'application/json')
 
-        storage.downloadFile(uploadName).pipe(res)
+        const file = await storage.downloadFile(uploadName)
+        file.pipe(res)
       }
     }
   )
@@ -1288,4 +1306,33 @@ module.exports = (app) => {
     )
     res.json(value)
   })
+
+  // return users usage information
+  app.get(
+    '/api/users/:user_id/usages',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+
+      const dateObj = new Date()
+      const month = dateObj.getUTCMonth() + 1 //months from 1-12
+      const year = dateObj.getUTCFullYear()
+      const yearMonth = year + '-' + month
+
+      const usagesResult = await db.query(
+        `SELECT 
+        (SELECT COUNT(\`id\`) FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL) as 'formUsage',
+        (SELECT \`count\` FROM \`submission_usage\` WHERE user_id = ? AND date = ?) as 'submissionUsage',
+        (SELECT SUM(\`size\`) FROM \`storage_usage\` WHERE user_id = ? ) as 'uploadUsage'
+        FROM dual`,
+        [user_id, user_id, yearMonth, user_id]
+      )
+      if (usagesResult.length > 0) {
+        const usages = usagesResult[0]
+        res.json(usages)
+      }
+    }
+  )
 }

@@ -3,10 +3,20 @@
 }
 
 .settings_container > .content {
-  padding-top: 40px;
-  width: 1200px;
+  width: 1210px;
   margin: 0 auto;
   overflow: hidden;
+  padding: 5px;
+}
+
+.settings_menu {
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+.settings_content > div {
+  height: calc(100vh - 8rem);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: white;
+  padding: 16px;
 }
 
 .settings_container > .content > div {
@@ -16,14 +26,15 @@
 }
 
 .settings_container > .content > div.settings_menu {
-  width: 350px;
+  width: 30%;
   background-color: #fdfdfd;
   padding: 16px;
+  float: left;
 }
 
-.settings_container > .content > div.settings_menu > h2,
-.settings_container > .content > div.settings_content h2 {
-  margin-bottom: 30px;
+.settings_container > .content > div.settings_menu > .settings_header,
+.settings_container > .content > div.settings_content .settings_header {
+  margin-bottom: 1rem;
   font-size: 24px;
   font-weight: 500;
   line-height: 1;
@@ -47,8 +58,9 @@
 }
 
 .settings_container > .content > div.settings_content {
-  padding: 0 16px 16px;
-  width: 850px;
+  padding: 0 0 0 16px;
+  width: 70%;
+  float: right;
 }
 
 .current_plan {

@@ -1,0 +1,98 @@
+{
+  "id": 16,
+  "user_id": 46,
+  "title": "Concert Ticket Registration",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Tickets to the Greatest Concert Ever!",
+        "sublabel": "Get tickets today before it's too late!",
+        "form_id": 604,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 604,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 604,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 604,
+        "defaultDialCode": "+1 (US)",
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "Seating options",
+        "options": [" Front stage ", " Middle ", " Balcony "],
+        "form_id": 604,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "TextBox",
+        "label": "Number of tickets",
+        "form_id": 604,
+        "order": 5,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": "ex: 1 ticket"
+      },
+      {
+        "id": 9,
+        "type": "TextArea",
+        "label": "Any questions ?",
+        "form_id": 604,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 7,
+        "form_id": 604
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

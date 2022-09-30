@@ -1,0 +1,108 @@
+{
+  "id": 27,
+  "user_id": 46,
+  "title": "Product Order",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 0,
+        "type": "Name",
+        "label": "Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 0,
+        "form_id": 619,
+        "required": true,
+        "requiredText": "Required field",
+        "firstNameSublabelText": "First Name"
+      },
+      {
+        "id": 1,
+        "type": "Email",
+        "label": "Email",
+        "order": 1,
+        "form_id": 619,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "defaultDialCode": "+1 (US)",
+        "order": 2,
+        "form_id": 619,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 3,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "defaultCountry": "United States",
+        "order": 3,
+        "form_id": 619,
+        "required": true,
+        "requiredText": "Required field",
+        "streetSublabelText": "Street Line"
+      },
+      {
+        "id": 4,
+        "type": "Checkbox",
+        "label": "Which product() would you like to order?",
+        "options": ["product 1 ", "product 2", "product 3"],
+        "toggle": false,
+        "order": 4,
+        "form_id": 619,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "TextBox",
+        "label": "How many items of each product would you like to order? ",
+        "order": 5,
+        "form_id": 619,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "TextArea",
+        "label": "Additional info",
+        "order": 6,
+        "form_id": 619,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 7,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 7,
+        "form_id": 619
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Order"]
+  }
+}

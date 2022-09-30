@@ -1,0 +1,86 @@
+{
+  "id": 15,
+  "user_id": 46,
+  "title": "Monthly Business Expense Report",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 1,
+        "type": "TextBox",
+        "placeholder": "",
+        "required": false,
+        "label": "Expense",
+        "requiredText": "Please fill this field.",
+        "order": 0,
+        "form_id": 603
+      },
+      {
+        "id": 3,
+        "type": "Dropdown",
+        "label": "Type",
+        "options": [
+          "Employee Expense",
+          "Workplace Expense",
+          "Marketing Expense",
+          "Training Expense",
+          "Travel Expense"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 603,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 4,
+        "type": "TextBox",
+        "label": "Planned Expense",
+        "form_id": 603,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "Ex: $ 1.000.000 "
+      },
+      {
+        "id": 5,
+        "type": "Dropdown",
+        "label": "Month",
+        "options": [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 603,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 4,
+        "form_id": 603
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Report"]
+  }
+}

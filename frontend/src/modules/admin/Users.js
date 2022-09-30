@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import AuthContext from '../../auth.context'
 import { api, setToken } from '../../helper'
 import Renderer from '../Renderer'
+import moment from 'moment'
 
 import './Users.css'
+const BACKEND = process.env.REACT_APP_BACKEND
 
-class Users extends Component {
+export default class Users extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -13,10 +14,12 @@ class Users extends Component {
       loaded: false,
       userListIsloaded: false,
       selectedUserId: 0,
-      roleId: 0,
+      roleName: '',
+      signupDate: '',
       emailVerified: 0,
       message: '',
-      roles: []
+      roles: [],
+      forms: []
     }
   }
 
@@ -34,13 +37,23 @@ class Users extends Component {
     const { data } = await api({
       resource: `/api/admin/roles`
     })
-    let result = []
+    this.setState({ loaded: true, roles: data })
+  }
 
-    data.forEach((role) => {
-      result.push(role.id)
+  getUserFormList = async (user_id) => {
+    let result = []
+    const { data } = await api({
+      resource: `/api/admin/users/${user_id}/forms`
     })
 
-    this.setState({ loaded: true, roles: result })
+    data.forEach((form) => {
+      result.push({
+        link: `${BACKEND}/form/view/${form.id}`,
+        created_at: form.created_at
+      })
+    })
+
+    this.setState({ forms: result })
   }
 
   componentDidMount() {
@@ -50,8 +63,8 @@ class Users extends Component {
 
   handleFieldChange = (elem, e) => {
     this.setState({ saved: false })
-    if (elem.label === 'Role Id' && !isNaN(parseInt(e.target.value))) {
-      this.setState({ roleId: parseInt(e.target.value) })
+    if (elem.label === 'Role Name') {
+      this.setState({ roleName: e.target.value })
     }
     if (elem.label === 'Is Active' && !isNaN(parseInt(e.target.value))) {
       this.setState({ isActive: parseInt(e.target.value) })
@@ -63,28 +76,18 @@ class Users extends Component {
     const user_id = parseInt(userId)
     if (user_id !== 0) {
       const user = data.filter((user) => user.id === user_id)[0]
+      this.getUserFormList(user_id)
 
       this.setState({
         selectedUserId: user_id,
-        roleId: parseInt(user.role_id),
+        roleName: user.role_name,
         emailVerified: user.emailVerified,
         isActive: user.isActive,
+        signupDate: user.created_at,
         message: incMessage,
         saved: true
       })
     }
-  }
-
-  onWatchUserStatusInDidUpdate = (prevProps, prevState) => {
-    const isChanged = prevState.isActive !== this.state.isActive
-
-    if (isChanged) {
-      this.handleSave()
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    this.onWatchUserStatusInDidUpdate(prevProps, prevState)
   }
 
   changeStatus = () => {
@@ -102,7 +105,14 @@ class Users extends Component {
   handleSave = async (e) => {
     e.preventDefault()
     this.setState({ saved: false })
-    const { selectedUserId, roleId, isActive } = this.state
+    const { selectedUserId, roles, roleName, isActive } = this.state
+    let roleId = null
+
+    roles.filter(async (role) => {
+      if (role.name === roleName) {
+        roleId = role.id
+      }
+    })
 
     if (selectedUserId !== 0) {
       const { data } = await api({
@@ -139,7 +149,7 @@ class Users extends Component {
 
       if (success === true) {
         setToken(data.token)
-        this.props.auth.setAuth({
+        this.props.generalContext.auth.setAuth({
           email: data.email,
           name: data.name,
           exp: data.exp,
@@ -158,11 +168,33 @@ class Users extends Component {
     }
   }
 
+  addToWhitelist = async () => {
+    const { selectedUserId } = this.state
+
+    if (selectedUserId !== 0) {
+      const { success } = await api({
+        resource: `/api/admin/whitelist/${selectedUserId}`,
+        method: 'post'
+      })
+
+      if (success === true) {
+        this.setState({ saved: true, message: 'User added in whitelist' })
+      } else {
+        this.setState({
+          saved: true,
+          message: 'User cannot added in whitelist'
+        })
+      }
+    } else {
+      this.setState({ message: 'Please select a user' })
+    }
+  }
+
   render() {
-    const { data, userListIsloaded } = this.state
+    const { data, userListIsloaded, forms } = this.state
     return (
       <div className="userwrap">
-        <div>
+        <div className="wrap-left">
           <div className="col-4-16 userlist">
             {userListIsloaded &&
               data.map((user) => (
@@ -179,12 +211,36 @@ class Users extends Component {
                 </div>
               ))}
           </div>
-          <div className="userpands">
+          <div className="col-2-16 userpands">
             <div className="userdetail">
               <div
                 className="loginAsUser"
                 onClick={() => this.handleLoginAsUser()}>
                 Login As User
+              </div>
+            </div>
+            <div className="userdetail">
+              <div
+                className="addToWhitelist"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Are you sure you want to whitelist this user?'
+                    )
+                  ) {
+                    this.addToWhitelist()
+                  }
+                }}>
+                Add to Whitelist
+              </div>
+            </div>
+            <div className="userdetail">
+              <div className="message">
+                User Status:{' '}
+                {this.state.isActive === 1 ? 'Active' : 'Suspended'}
+              </div>
+              <div className="statusUser" onClick={(e) => this.changeStatus(e)}>
+                Change Status
               </div>
             </div>
             <div className="userdetail">
@@ -200,9 +256,9 @@ class Users extends Component {
                         {
                           id: 1,
                           type: 'Dropdown',
-                          label: 'Role Id',
-                          options: this.state.roles,
-                          placeholder: this.state.roleId
+                          label: 'Role Name',
+                          options: this.state.roles.map((role) => role.name),
+                          placeholder: this.state.roleName
                         },
                         {
                           id: 3,
@@ -215,29 +271,35 @@ class Users extends Component {
                 />
               </form>
             </div>
-            <div className="userdetail">
-              <div>
-                User: {this.state.isActive === 1 ? 'Active' : 'Suspended'}
-              </div>
-              <div className="statusUser" onClick={(e) => this.changeStatus(e)}>
-                Change Status
-              </div>
-            </div>
             <div className="savedornot">
               {this.state.saved ? 'Saved' : 'Changes do not saved'}
             </div>
-            <div className="servermessage">Status: {this.state.message}</div>
+            <div className="message">Status: {this.state.message}</div>
+            <div className="message">
+              Signup Date:{' '}
+              {moment(this.state.signupDate).format('DD.MM.YYYY, hh:mm:ss')}
+            </div>
+          </div>
+        </div>
+        <div className="wrap-right">
+          <div className="col-2-16 userforms">
+            <div className="message">
+              Forms:
+              {forms.map((form) => (
+                <div key={form.link}>
+                  <a href={form.link} target="_blank" rel="noopener noreferrer">
+                    {form.link}
+                  </a>
+                  <div>
+                    Created Date:{' '}
+                    {moment(form.created_at).format('DD.MM.YYYY, hh:mm:ss')}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     )
   }
 }
-
-const UsersWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Users {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default UsersWrapped

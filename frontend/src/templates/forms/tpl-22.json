@@ -1,0 +1,108 @@
+{
+  "id": 22,
+  "user_id": 46,
+  "title": "Charity Dinner Party",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 10,
+        "type": "Header",
+        "label": "RSVP",
+        "sublabel": "",
+        "form_id": 611,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "TextBox",
+        "label": "Company name:",
+        "order": 1,
+        "form_id": 611,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Contact name:",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 611,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": false,
+        "order": 2,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 611,
+        "defaultDialCode": "+1 (US)",
+        "order": 3
+      },
+      {
+        "id": 6,
+        "type": "Email",
+        "label": "Email",
+        "form_id": 611,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 7,
+        "type": "Dropdown",
+        "label": "Will you attend?",
+        "options": ["Yes", "No"],
+        "placeholder": "Choose an option",
+        "form_id": 611,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 5,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 8,
+        "type": "TextBox",
+        "label": "Number of guests",
+        "form_id": 611,
+        "order": 6,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "TextArea",
+        "label": "Special request",
+        "form_id": 611,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 8,
+        "form_id": 611
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Registration"]
+  }
+}

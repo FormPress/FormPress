@@ -3,9 +3,8 @@ import { Redirect, Link } from 'react-router-dom'
 import { api, setToken } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
+import GeneralContext from '../general.context'
 import './SignUp.css'
 
 class SignUp extends Component {
@@ -18,10 +17,12 @@ class SignUp extends Component {
       passwordRe: '',
       message: '',
       success: false,
+      tosClicked: false,
       state: 'initial' // one of, initial, loading, done
     }
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
+    this.handleTosClicked = this.handleTosClicked.bind(this)
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
@@ -44,6 +45,11 @@ class SignUp extends Component {
     }
 
     this.setState({ [stateKey]: e.target.value })
+  }
+
+  async handleTosClicked() {
+    console.log('tosClicked will be -> ', !this.state.tosClicked)
+    this.setState({ tosClicked: !this.state.tosClicked })
   }
 
   async handleSignUpButtonClick(e) {
@@ -111,7 +117,7 @@ class SignUp extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
         token: data.token,
@@ -144,7 +150,7 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    if (this.props.auth.loggedIn) {
+    if (this.props.generalContext.auth.loggedIn) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -162,7 +168,7 @@ class SignUp extends Component {
         />
       )
     }
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
         <div className="form-header">SIGNUP SUCCESS!</div>
@@ -195,7 +201,7 @@ class SignUp extends Component {
 
     return (
       <div className="login-wrapper">
-        <div className="loginForm">
+        <div className="loginForm signupForm">
           <div className="picture-bg">
             <div className="login-picture">
               <LoginPicture />
@@ -237,18 +243,36 @@ class SignUp extends Component {
                           {
                             id: 4,
                             type: 'Button',
-                            buttonText: 'SIGN UP'
+                            buttonText: 'SIGN UP',
+                            disabled: !this.state.tosClicked
                           }
                         ]
                       }
                     }}
                   />
                 </form>
+                <div className="tosContainer">
+                  <input
+                    type="checkbox"
+                    name="toscheckbox"
+                    onClick={() => this.handleTosClicked()}
+                  />{' '}
+                  I accept and agree to the{' '}
+                  <a
+                    target="_blank"
+                    href="https://formpress.org/tos.html"
+                    rel="noopener noreferrer">
+                    Terms of Use
+                  </a>
+                  .
+                </div>
+
                 {capabilities.googleCredentialsClientID ? (
                   <div className="for-sign-up">
                     <div className="or-seperator">or</div>
                     <div className="google-sign-in">
                       <LoginWithGoogle
+                        disabled={!this.state.tosClicked}
                         handleLoginWithGoogleButton={
                           this.handleLoginWithGoogleClick
                         }
@@ -290,15 +314,9 @@ class SignUp extends Component {
 }
 
 const SignUpWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <SignUp {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <SignUp {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default SignUpWrapped

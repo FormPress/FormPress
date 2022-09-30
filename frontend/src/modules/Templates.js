@@ -7,12 +7,13 @@ import './Templates.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
-class Templates extends Component {
+export default class Templates extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       templates: [],
+      categories: [],
       selectedTemplate: {},
       filterText: ''
     }
@@ -24,7 +25,14 @@ class Templates extends Component {
     const templates = data
 
     if (templates.length > 0) {
-      this.setState({ templates })
+      let categories = templates.map((template) => {
+        return template.props.tags[0] || 'Other'
+      })
+
+      // avoid duplicates
+      categories = Array.from(new Set(categories))
+
+      this.setState({ templates, categories })
     } else {
       console.error('No templates found')
     }
@@ -85,50 +93,49 @@ class Templates extends Component {
     if (this.state.templateToBeCloned) {
       this.props.cloneTemplate(this.state.templateToBeCloned)
     }
-    const { templates, selectedTemplate } = this.state
+    const { templates, selectedTemplate, categories } = this.state
     const filterText = this.state.filterText.toLowerCase()
     const templatesMainContent = []
-    let lastCategory = null
 
-    templates.forEach((template) => {
-      let category = template.props.tags[0]
-      if (category === undefined || '') {
-        category = 'Other'
-      }
+    categories.forEach((category) => {
       let templateCount = this.filterAndCount(category)
-      if (category !== lastCategory) {
-        templatesMainContent.push(
-          <div
-            key={category}
-            className="template-group"
-            style={
-              templateCount > 0
-                ? { display: 'inline-block' }
-                : { display: 'none' }
-            }>
-            {category} Forms{' '}
-            <span className="template-count">{templateCount}</span>
-          </div>
-        )
-      }
+
       templatesMainContent.push(
-        <NavLink
-          key={template.id}
-          to={`/editor/new/template/${template.title}`}
-          id={`tpl-${template.id}`}
-          className={`template-card ${
-            template.title.toLowerCase().indexOf(filterText) === -1 ? ' dn' : ''
-          } ${selectedTemplate.id === template.id ? 'selected' : ''}`}
-          onClick={() => this.handleTemplateSelect(template)}>
-          <div className="screen">
-            <TemplatePlaceholder className="template-placeholder" />
-          </div>
-          <div key={template.id} className="template-info">
-            <div className="template-title">{template.title}</div>
-          </div>
-        </NavLink>
+        <div
+          key={category}
+          className="template-group"
+          style={
+            templateCount > 0
+              ? { display: 'inline-block' }
+              : { display: 'none' }
+          }>
+          {category} Forms{' '}
+          <span className="template-count">{templateCount}</span>
+        </div>
       )
-      lastCategory = category
+      templates.forEach((template) => {
+        if (template.props.tags[0] === category) {
+          templatesMainContent.push(
+            <NavLink
+              key={template.id}
+              to={`/editor/new/template/${template.title}`}
+              id={`tpl-${template.id}`}
+              className={`template-card ${
+                template.title.toLowerCase().indexOf(filterText) === -1
+                  ? ' dn'
+                  : ''
+              } ${selectedTemplate.id === template.id ? 'selected' : ''}`}
+              onClick={() => this.handleTemplateSelect(template)}>
+              <div className="screen">
+                <TemplatePlaceholder className="template-placeholder" />
+              </div>
+              <div key={template.id} className="template-info">
+                <div className="template-title">{template.title}</div>
+              </div>
+            </NavLink>
+          )
+        }
+      })
     })
 
     return (
@@ -170,5 +177,3 @@ class Templates extends Component {
     )
   }
 }
-
-export default Templates

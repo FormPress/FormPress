@@ -1,0 +1,123 @@
+{
+  "id": 45,
+  "user_id": 46,
+  "title": "Internet Speed Survey",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 4,
+        "type": "Header",
+        "label": "Internet Speed Survey",
+        "sublabel": "",
+        "form_id": 664,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 26,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 664,
+        "defaultCountry": "United States",
+        "order": 1
+      },
+      {
+        "id": 22,
+        "type": "Dropdown",
+        "label": "Which is your internet service provider?",
+        "options": [
+          "Verizon",
+          "AT & T",
+          "ComCast",
+          "RoadRunner",
+          "EarthLink",
+          "Other"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 664,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 20,
+        "type": "TextBox",
+        "label": "Your download speed [mbps]",
+        "form_id": 664,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "ex: 8759 mbps"
+      },
+      {
+        "id": 23,
+        "type": "TextBox",
+        "label": "Your upload speed [mbps]",
+        "form_id": 664,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "ex: 9999 mbps"
+      },
+      {
+        "id": 24,
+        "type": "Dropdown",
+        "label": "You're connected to internet via",
+        "options": ["LAN", "Wireless", "USB Cable", "Other"],
+        "placeholder": "Choose an option",
+        "form_id": 664,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 25,
+        "type": "Dropdown",
+        "label": "Your router type",
+        "options": [
+          "802.11g",
+          "802.11n",
+          "100 BaseT",
+          "Gigabit",
+          "Not Applicable"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 664,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 11,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 7,
+        "form_id": 664
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Survey"]
+  }
+}

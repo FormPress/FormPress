@@ -1,0 +1,91 @@
+{
+  "id": 20,
+  "user_id": 46,
+  "title": "E-mail Signup",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "E-mail Signup Form",
+        "sublabel": "We would love to be in touch with you! Please sign up to receive latest updates from us!",
+        "form_id": 608,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 608,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 608,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 608,
+        "defaultDialCode": "+1 (US)",
+        "order": 3
+      },
+      {
+        "id": 7,
+        "city": true,
+        "countriesType": "International",
+        "country": true,
+        "hasDataset": true,
+        "label": "Address information",
+        "placeholder": "Address information",
+        "state": true,
+        "street": true,
+        "street2": true,
+        "title": false,
+        "type": "Address",
+        "zip": true,
+        "form_id": 608,
+        "defaultCountry": "United States",
+        "order": 4
+      },
+      {
+        "id": 8,
+        "type": "TextArea",
+        "label": "Comments, questions, or suggestions",
+        "form_id": 608,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 6,
+        "form_id": 608
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Signup"]
+  }
+}

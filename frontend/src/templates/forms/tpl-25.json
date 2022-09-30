@@ -1,0 +1,129 @@
+{
+  "id": 25,
+  "user_id": 46,
+  "title": "Bank Customer Feedback",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Bank Customer Feedback Form",
+        "sublabel": "",
+        "form_id": 614,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 5,
+        "type": "Dropdown",
+        "label": "Type of Feedback",
+        "options": ["Enquiry", "Complaint", "Compliment", "Suggestion"],
+        "placeholder": "Choose an option",
+        "form_id": 614,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 1,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 6,
+        "type": "Dropdown",
+        "label": "Feedback on",
+        "options": [
+          "Deposit",
+          "Housing & Renovation Loan",
+          "iBanking",
+          "Treasures",
+          "Tuition Fee Loan/Further Study Assist",
+          "Unsecured Loans-Cashline/Loan Assist",
+          "Staff Code of Conduct"
+        ],
+        "placeholder": "Choose an option",
+        "form_id": 614,
+        "dropdownOptions": ["Option 1", "Option 2"],
+        "order": 2,
+        "required": true,
+        "requiredText": "Required field",
+        "hasDataset": false,
+        "dataset": "countries"
+      },
+      {
+        "id": 7,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 614,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": true,
+        "suffix": false,
+        "order": 3,
+        "required": true,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 614,
+        "order": 4,
+        "required": true,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 614,
+        "defaultDialCode": "+1 (US)",
+        "order": 5
+      },
+      {
+        "id": 10,
+        "type": "TextBox",
+        "label": "If you remember, please tell us the name(s) of our staff members that attented to you during your visit.",
+        "form_id": 614,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 11,
+        "type": "TextBox",
+        "label": "Which branch did you visit?",
+        "form_id": 614,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 12,
+        "type": "TextArea",
+        "label": "Please enter your feedback. Be sure not to indicate your account or credit card number and banking instruction in your comments. Thank you for your time and valuable feedback.",
+        "form_id": 614,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 13,
+        "type": "Button",
+        "buttonText": "Send Feedback",
+        "order": 9,
+        "form_id": 614
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Feedback"]
+  }
+}

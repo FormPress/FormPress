@@ -148,6 +148,10 @@
   cursor: pointer;
 }
 
+.infernal .elementButton button[disabled] {
+  filter: grayscale(1);
+}
+
 .infernal .elementCheckbox .input > input {
   width: 18px;
   height: 18px;

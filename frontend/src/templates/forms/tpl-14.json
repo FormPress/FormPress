@@ -1,0 +1,115 @@
+{
+  "id": 14,
+  "user_id": 46,
+  "title": "Online Donation",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 3,
+        "type": "Header",
+        "label": "Donation Form",
+        "sublabel": "",
+        "form_id": 602,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 4,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 602,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1
+      },
+      {
+        "id": 5,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 602,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 6,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 602,
+        "defaultDialCode": "+1 (US)",
+        "order": 3
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "Type of Donation",
+        "options": [
+          "One-Time Donation",
+          "Recurring Gifts",
+          "Stock Donation",
+          "In-Kind Donation"
+        ],
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 4,
+        "form_id": 602,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 9,
+        "type": "TextBox",
+        "label": "Donation Amount",
+        "form_id": 602,
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "USD"
+      },
+      {
+        "id": 10,
+        "type": "Radio",
+        "label": "Payment Methods",
+        "options": ["Debit or Credit Card", "PayPal", "Other"],
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 6,
+        "form_id": 602,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "TextArea",
+        "label": "Comments",
+        "form_id": 602,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 8,
+        "form_id": 602
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Donation"]
+  }
+}

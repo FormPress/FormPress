@@ -1,0 +1,84 @@
+{
+  "id": 5,
+  "user_id": 46,
+  "title": "Newsletter Signup",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 6,
+        "type": "Header",
+        "label": "Sign Up For Our E-mail List",
+        "sublabel": "Stay Updated!",
+        "separator": false,
+        "order": 0,
+        "form_id": 310
+      },
+      {
+        "id": 3,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": {
+          "default": false,
+          "formProps": {
+            "type": "Checkbox",
+            "label": "",
+            "options": ["Allow users to enter a title before their names."]
+          }
+        },
+        "prefixTypeTextBox": {
+          "default": false,
+          "formProps": {
+            "type": "Checkbox",
+            "label": "",
+            "options": ["Change the type of title field to TextBox."]
+          }
+        },
+        "prefixOptions": {
+          "default": ["Mr.", "Mrs."],
+          "formProps": { "type": "TextArea", "label": "Preset Title Options" }
+        },
+        "middleName": {
+          "default": false,
+          "formProps": {
+            "type": "Checkbox",
+            "label": "",
+            "options": ["Allow users to enter a middle name."]
+          }
+        },
+        "suffix": {
+          "default": false,
+          "formProps": {
+            "type": "Checkbox",
+            "label": "",
+            "options": ["Allow users to enter a title after their names."]
+          }
+        },
+        "required": false,
+        "requiredText": "Required field",
+        "order": 1,
+        "form_id": 310
+      },
+      {
+        "id": 4,
+        "type": "Email",
+        "label": "Email",
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "",
+        "order": 2,
+        "form_id": 310
+      },
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Sign Up",
+        "order": 3,
+        "form_id": 310
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Signup"]
+  }
+}

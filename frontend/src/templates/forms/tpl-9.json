@@ -1,0 +1,141 @@
+{
+  "id": 9,
+  "user_id": 46,
+  "title": "Friendship Survey",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Friendship Survey",
+        "sublabel": "",
+        "separator": false,
+        "order": 0,
+        "form_id": 405
+      },
+      {
+        "id": 4,
+        "type": "Radio",
+        "label": "How many friends do you have at school?",
+        "options": ["0 - 2", "3 - 5", "6 - 8", "More than 8"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 1,
+        "form_id": 405
+      },
+      {
+        "id": 5,
+        "type": "Radio",
+        "label": "Do you find it easy to make good friends?",
+        "options": ["Yes", "No"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 2,
+        "form_id": 405
+      },
+      {
+        "id": 8,
+        "type": "Checkbox",
+        "label": "Why would you become friends with someone?",
+        "options": [
+          "Similar hobbies",
+          "Similar goals",
+          "Good personality",
+          "Good condition (reputation, attractiveness etc.)",
+          "Other"
+        ],
+        "toggle": false,
+        "required": false,
+        "requiredText": "Required field",
+        "order": 3,
+        "form_id": 405
+      },
+      {
+        "id": 7,
+        "type": "Radio",
+        "label": "How many hours do you spend with your friend(s) per week?",
+        "options": ["1 - 4", "5 - 8", "8 - 11", "More than 11"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 4,
+        "form_id": 405,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 15,
+        "type": "Radio",
+        "label": "Do you trust your friends?",
+        "options": ["Never", "Sometimes", "Usually", "Always"],
+        "form_id": 405,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 5,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 10,
+        "type": "Radio",
+        "label": "Do you feel emotionally attached to your friends?",
+        "options": ["Yes", "No"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 6,
+        "form_id": 405,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 11,
+        "type": "Radio",
+        "label": "Do you feel comfortable talking to teachers or other adults about your friendship problems?",
+        "options": ["Yes", "No"],
+        "required": false,
+        "requiredText": "Required field",
+        "order": 7,
+        "form_id": 405,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": ""
+      },
+      {
+        "id": 12,
+        "type": "TextArea",
+        "label": "What do you share with your friends the most?",
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "Type here...",
+        "order": 8,
+        "form_id": 405
+      },
+      {
+        "id": 13,
+        "type": "TextArea",
+        "label": "In your opinion, what makes friendships valuable?",
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "Type here...",
+        "order": 9,
+        "form_id": 405
+      },
+      {
+        "id": 14,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 10,
+        "form_id": 405
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Survey"]
+  }
+}

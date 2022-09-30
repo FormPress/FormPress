@@ -1,0 +1,66 @@
+{
+  "id": 29,
+  "user_id": 46,
+  "title": "Service Quality Feedback",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 4,
+        "type": "Header",
+        "label": "Service Quality Feedback",
+        "sublabel": "",
+        "form_id": 621,
+        "separator": false,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 0,
+        "type": "Name",
+        "label": "Full Name",
+        "options": ["Mr.", "Mrs."],
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "form_id": 621
+      },
+      {
+        "id": 5,
+        "type": "Radio",
+        "label": "How would you rate the quality of our service",
+        "options": ["Low", "Mediocre", "Good", "Top-Notch"],
+        "form_id": 621,
+        "editor": false,
+        "editorForOptions": false,
+        "expectedAnswer": "",
+        "answerExplanation": "",
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 2,
+        "type": "TextArea",
+        "label": "Please share any comments or suggestions on our service or how you think we can improve it. Thank you.",
+        "order": 3,
+        "form_id": 621,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": "Type Here..."
+      },
+      {
+        "id": 3,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 4,
+        "form_id": 621
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Feedback"]
+  }
+}

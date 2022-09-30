@@ -7,7 +7,6 @@ import _ from 'lodash'
 import Moment from 'react-moment'
 import Modal from './common/Modal'
 import { api } from '../helper'
-import AuthContext from '../auth.context'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
@@ -56,7 +55,7 @@ function download(filename, text) {
   document.body.removeChild(element)
 }
 
-class Data extends Component {
+export default class Data extends Component {
   setLoadingState(key, value) {
     this.setState({
       loading: {
@@ -70,7 +69,7 @@ class Data extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
 
     const forms = data
@@ -79,12 +78,11 @@ class Data extends Component {
     this.setState({ forms }, this.componenDidMountWorker)
   }
 
-  async updateSubmissions(form_id, version) {
+  async updateSubmissions(form_id) {
     this.setLoadingState('submissions', true)
     this.setState({
       submissions: [],
       selectedFormId: form_id,
-      selectedFormSelectedPublishedVersion: version,
       selectedSubmissionId: null,
       entries: []
     })
@@ -92,10 +90,14 @@ class Data extends Component {
     let submissions = []
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/submissions?orderBy=created_at&desc=true`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
     })
 
-    submissions = data
+    let reducedData = data.filter(function (item) {
+      return item.version !== 0
+    })
+
+    submissions = reducedData
 
     const { submissionFilterSelectors } = this.state
     const filterActive = !Object.values(submissionFilterSelectors).every(
@@ -128,7 +130,7 @@ class Data extends Component {
 
   async updateSubmissionStatistics(form_id, version) {
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}/statistics`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}/statistics`
     })
 
     this.setState({
@@ -178,7 +180,7 @@ class Data extends Component {
         form_id,
         selectedFormSelectedPublishedVersion
       )
-      this.updateSubmissions(form_id, selectedFormSelectedPublishedVersion)
+      this.updateSubmissions(form_id)
     }
   }
 
@@ -214,7 +216,6 @@ class Data extends Component {
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
-    this.formVersionSelector = this.formVersionSelector.bind(this)
     this.componenDidMountWorker = this.componenDidMountWorker.bind(this)
   }
 
@@ -228,7 +229,7 @@ class Data extends Component {
       selectedSubmissionIds: []
     })
     this.updateSubmissionStatistics(form.id, form.published_version)
-    this.updateSubmissions(form.id, form.published_version)
+    this.updateSubmissions(form.id)
   }
 
   toggleSubmission(submission_id) {
@@ -254,12 +255,12 @@ class Data extends Component {
 
     if (version === 0) {
       selectedSubmissionForm = await api({
-        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/`
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/`
       })
       selectedSubmissionForm = selectedSubmissionForm.data
     } else {
       selectedSubmissionForm = await api({
-        resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/${version}`
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}`
       })
       selectedSubmissionForm = selectedSubmissionForm.data
     }
@@ -272,7 +273,7 @@ class Data extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
     try {
@@ -303,7 +304,7 @@ class Data extends Component {
     }
 
     await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/submissions/${id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions/${id}`,
       method: 'put',
       body: JSON.stringify({
         ...submission,
@@ -325,26 +326,10 @@ class Data extends Component {
     }
   }
 
-  async formVersionSelector(value) {
-    let versionData = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${this.state.selectedFormId}/${this.state.selectedFormSelectedPublishedVersion}`
-    })
-
-    this.setState({
-      selectedFormPublishedId: versionData.id,
-      selectedFormSelectedPublishedVersion: value
-    })
-
-    this.updateSubmissions(
-      this.state.selectedFormId,
-      this.state.selectedFormSelectedPublishedVersion
-    )
-  }
-
   async handleCSVExportClick() {
     const form_id = this.state.selectedFormId
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form_id}/CSVExport`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/CSVExport`,
       method: 'post',
       body: {
         submissionIds: this.state.selectedSubmissionIds
@@ -406,7 +391,7 @@ class Data extends Component {
     } = this.state
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
       method: 'delete',
       body: {
         submissionIds: this.state.selectedSubmissionIds
@@ -450,18 +435,14 @@ class Data extends Component {
   }
 
   handleUnreadFilterToggle(e) {
-    const {
-      submissionFilterSelectors,
-      selectedFormId,
-      selectedFormSelectedPublishedVersion
-    } = this.state
+    const { submissionFilterSelectors, selectedFormId } = this.state
     e.value = !e.value
     submissionFilterSelectors.showUnread = e.value
     this.setState({ submissionFilterSelectors })
-    this.updateSubmissions(selectedFormId, selectedFormSelectedPublishedVersion)
+    this.updateSubmissions(selectedFormId)
   }
 
-  CustomTooltip = ({ active, payload, label }) => {
+  CustomTooltipForPieChart = ({ active, payload, label }) => {
     if (active) {
       return (
         <div
@@ -474,6 +455,24 @@ class Data extends Component {
           <label>{`${payload[0].name} : ${payload[0].value.toFixed(
             2
           )}%`}</label>
+        </div>
+      )
+    }
+
+    return null
+  }
+
+  CustomTooltipForBarChart = ({ active, payload, label }) => {
+    if (active) {
+      return (
+        <div
+          className="custom-tooltip"
+          style={{
+            backgroundColor: '#ffff',
+            padding: '5px',
+            border: '1px solid #cccc'
+          }}>
+          <label>{`${payload[0].payload.name}`}</label>
         </div>
       )
     }
@@ -648,7 +647,6 @@ class Data extends Component {
                           .replace(/(<([^>]+)>)/gi, '')
                           .trim())
                       })
-                      console.log(question)
                       return (
                         <div className="questionContainer" key={i}>
                           <div
@@ -673,7 +671,9 @@ class Data extends Component {
                                 />
                               ))}
                             </Pie>
-                            <Tooltip content={<this.CustomTooltip />} />
+                            <Tooltip
+                              content={<this.CustomTooltipForPieChart />}
+                            />
                             <Legend
                               layout="vertical"
                               verticalAlign="text-bottom"
@@ -694,14 +694,16 @@ class Data extends Component {
                             <XAxis
                               type="category"
                               stroke="#000000"
-                              dataKey="name"
+                              dataKey="nameForXaxis"
                             />
                             <YAxis
                               type="number"
                               stroke="#000000"
                               dataKey="value"
                             />
-                            <Tooltip />
+                            <Tooltip
+                              content={<this.CustomTooltipForBarChart />}
+                            />
                             <Bar
                               dataKey="value"
                               fill="#00a0fc"
@@ -728,11 +730,12 @@ class Data extends Component {
                             </div>
                             <div className="last_responses_container">
                               <div className="last_responses_title">
-                                Average value
+                                Net Promoter Score
                               </div>
                               <div className="last_responses">
                                 <div title={question.netPromoterScore}>
-                                  &quot;{question.netPromoterScore}&quot;
+                                  &quot;{question.netPromoterScore.toFixed(2)}
+                                  &quot;
                                 </div>
                               </div>
                             </div>
@@ -841,34 +844,6 @@ class Data extends Component {
             Show unread only
           </label>
         </article>
-        <label>
-          {this.state.selectedFormPublishedVersion > 0 ? (
-            <select
-              className="formVersionSelector"
-              onChange={(e) => this.formVersionSelector(e.target.value)}
-              value={this.state.selectedFormSelectedPublishedVersion}>
-              <optgroup label="Frequently used versions">
-                <option value={options.length + 1}>Latest</option>
-                <option value="0">Preview</option>
-              </optgroup>
-              <optgroup label="Other versions">
-                {options.map((item) => {
-                  return (
-                    <option className="option-space" key={item} value={item}>
-                      {'v' + item}
-                    </option>
-                  )
-                })}
-              </optgroup>
-            </select>
-          ) : (
-            <select className="formVersionSelector">
-              <optgroup label="Frequently used versions">
-                <option value="0">Preview</option>
-              </optgroup>
-            </select>
-          )}
-        </label>
       </div>,
       loading.submissions === false && submissions.length > 0 ? (
         <Table
@@ -1001,11 +976,3 @@ class Data extends Component {
     }
   }
 }
-
-const DataWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Data {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default DataWrapped

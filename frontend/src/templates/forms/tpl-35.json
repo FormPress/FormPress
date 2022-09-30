@@ -1,0 +1,117 @@
+{
+  "id": 35,
+  "user_id": 46,
+  "title": "Teacher Substitution Report",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "id": 3,
+        "type": "Header",
+        "label": "Teacher Substitution Report",
+        "sublabel": "",
+        "form_id": 639,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 7,
+        "type": "Name",
+        "label": "Substitute Teacher",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 639,
+        "prefix": true,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 8,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 639,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 9,
+        "type": "Phone",
+        "label": "Phone",
+        "hasDataset": true,
+        "form_id": 639,
+        "defaultDialCode": "+1 (US)",
+        "order": 3
+      },
+      {
+        "id": 15,
+        "type": "TextBox",
+        "label": "Grade",
+        "form_id": 639,
+        "order": 4
+      },
+      {
+        "id": 16,
+        "type": "TextBox",
+        "label": "School",
+        "form_id": 639,
+        "order": 5
+      },
+      {
+        "id": 18,
+        "type": "TextBox",
+        "label": "Substituted for",
+        "form_id": 639,
+        "order": 6,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 17,
+        "type": "TextBox",
+        "label": "Lecture",
+        "form_id": 639,
+        "order": 7,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 19,
+        "type": "TextArea",
+        "label": "Notes for lectures",
+        "form_id": 639,
+        "order": 8,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 20,
+        "type": "TextArea",
+        "label": "Notes for students",
+        "form_id": 639,
+        "order": 9,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 14,
+        "type": "Button",
+        "buttonText": "Submit",
+        "form_id": 639,
+        "order": 10
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Report"]
+  }
+}

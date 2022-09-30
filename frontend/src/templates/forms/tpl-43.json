@@ -1,0 +1,84 @@
+{
+  "id": 43,
+  "user_id": 46,
+  "title": "Help Desk Request",
+  "props": {
+    "integrations": [{ "type": "email", "value": "" }],
+    "elements": [
+      {
+        "mode": "sort",
+        "id": 4,
+        "type": "Header",
+        "label": "Help Desk Request",
+        "sublabel": "",
+        "form_id": 662,
+        "separator": true,
+        "alignment": "Center",
+        "order": 0
+      },
+      {
+        "id": 1,
+        "type": "Name",
+        "label": "Your name",
+        "options": ["Mr.", "Mrs."],
+        "form_id": 662,
+        "prefix": false,
+        "prefixTypeTextBox": false,
+        "prefixOptions": ["Mr.", "Mrs."],
+        "middleName": false,
+        "suffix": false,
+        "order": 1,
+        "required": false,
+        "requiredText": "Required field"
+      },
+      {
+        "id": 3,
+        "type": "Email",
+        "label": "E-mail",
+        "form_id": 662,
+        "order": 2,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 19,
+        "type": "TextArea",
+        "label": "Could you specify your problem?",
+        "form_id": 662,
+        "order": 3,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 18,
+        "type": "TextArea",
+        "label": "Any details you'd like to add?",
+        "form_id": 662,
+        "order": 4,
+        "required": false,
+        "requiredText": "Required field",
+        "placeholder": ""
+      },
+      {
+        "id": 17,
+        "type": "FileUpload",
+        "label": "Screenshots",
+        "requiredText": "Please fill this field.",
+        "form_id": 662,
+        "order": 5,
+        "required": false
+      },
+      {
+        "id": 11,
+        "type": "Button",
+        "buttonText": "Submit",
+        "order": 6,
+        "form_id": 662
+      }
+    ],
+    "customCSS": { "value": "", "isEncoded": true },
+    "tags": ["Request"]
+  }
+}
