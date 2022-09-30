@@ -2,13 +2,12 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { api, setToken } from './helper'
-import AuthContext from './auth.context'
 import { ProfileSVG } from './svg'
 import './Profile.css'
 import SettingsSVG from './svg/SettingsSVG'
 import LogoutSVG from './svg/LogoutSVG'
 
-const Profile = () => {
+const Profile = (props) => {
   const logout = (e) => {
     e.preventDefault()
     window.localStorage.removeItem('auth')
@@ -45,53 +44,45 @@ const Profile = () => {
     }
   }
 
-  const renderLoggedIn = (auth) => {
-    return (
-      <div className="profile">
-        <div className="profileMenuContainer">
-          <div key="1" className="wrapper-welcome">
-            <div className="welcome-user" key="2">
-              Welcome,
-              <i title={auth.email}> {auth.email.match(/[^@]+/)}</i>
+  const { auth } = props.generalContext
+
+  return auth.loggedIn ? (
+    <div className="profile">
+      <div className="profileMenuContainer">
+        <div key="1" className="wrapper-welcome">
+          <div className="welcome-user" key="2">
+            Welcome,
+            <i title={auth.email}> {auth.email.match(/[^@]+/)}</i>
+          </div>
+          <ProfileSVG key="1" className="profileSVG" />
+          <div className="profileMenuContent dn">
+            <div className="profileMenuEntry">
+              <NavLink to="/settings" activeClassName="selected">
+                <SettingsSVG />
+                Settings
+              </NavLink>
             </div>
-            <ProfileSVG key="1" className="profileSVG" />
-            <div className="profileMenuContent dn">
+            {auth.impersonate ? (
               <div className="profileMenuEntry">
-                <NavLink to="/settings" activeClassName="selected">
-                  <SettingsSVG />
-                  Settings
-                </NavLink>
-              </div>
-              {auth.impersonate ? (
-                <div className="profileMenuEntry">
-                  <span onClick={logoutAsUser}>
-                    <LogoutSVG width={16} heigth={16} />
-                    Logout as User
-                  </span>
-                </div>
-              ) : (
-                ''
-              )}
-              <div className="profileMenuEntry">
-                <span onClick={logout}>
+                <span onClick={logoutAsUser}>
                   <LogoutSVG width={16} heigth={16} />
-                  Logout
+                  Logout as User
                 </span>
               </div>
+            ) : (
+              ''
+            )}
+            <div className="profileMenuEntry">
+              <span onClick={logout}>
+                <LogoutSVG width={16} heigth={16} />
+                Logout
+              </span>
             </div>
           </div>
         </div>
       </div>
-    )
-  }
-
-  return (
-    <AuthContext.Consumer>
-      {(value) => {
-        return value.loggedIn === true ? renderLoggedIn(value) : null
-      }}
-    </AuthContext.Consumer>
-  )
+    </div>
+  ) : null
 }
 
 export default Profile

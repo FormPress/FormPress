@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
-import AuthContext from './auth.context'
+import GeneralContext from './general.context'
 
 const AdminRoute = ({ children, component, ...rest }) => {
   return (
-    <AuthContext.Consumer>
+    <GeneralContext.Consumer>
       {(value) => (
         <Route
           {...rest}
@@ -16,7 +16,7 @@ const AdminRoute = ({ children, component, ...rest }) => {
               //user_role=1 admin
               value.user_role === 1 || value.admin === true ? (
                 component !== undefined ? (
-                  <Component {...props} />
+                  <Component {...props} generalContext={value} />
                 ) : (
                   children
                 )
@@ -38,7 +38,7 @@ const AdminRoute = ({ children, component, ...rest }) => {
           }}
         />
       )}
-    </AuthContext.Consumer>
+    </GeneralContext.Consumer>
   )
 }
 

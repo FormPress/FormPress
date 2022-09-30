@@ -81,60 +81,56 @@ export default class ChangePassword extends Component {
 
     return (
       <div className="login-wrapper">
+        <div className="settings_header">Change Password</div>
         <div className="loginForm">
-          <div className="pale-border">
-            <div>
-              <div className="form-header">RESET PASSWORD</div>
-              {situation === 'success' ? (
-                changeSuccess
-              ) : (
-                <form onSubmit={this.handleResetButtonClick}>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={this.handleFieldChange}
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            key: 1,
-                            type: 'Password',
-                            label: 'Current Password',
-                            value: this.state.current_password
-                          },
-                          {
-                            id: 2,
-                            key: 2,
-                            type: 'Password',
-                            label: 'New Password',
-                            value: this.state.new_password
-                          },
-                          {
-                            id: 3,
-                            key: 3,
-                            type: 'Password',
-                            label: 'New Password Again',
-                            value: this.state.new_password_again
-                          },
-                          {
-                            id: 4,
-                            key: 4,
-                            type: 'Button',
-                            buttonText: 'CHANGE PASSWORD'
-                          }
-                        ]
+          {situation === 'success' ? (
+            changeSuccess
+          ) : (
+            <form onSubmit={this.handleResetButtonClick}>
+              <Renderer
+                className="form"
+                theme="infernal"
+                allowInternal={true}
+                handleFieldChange={this.handleFieldChange}
+                form={{
+                  props: {
+                    elements: [
+                      {
+                        id: 1,
+                        key: 1,
+                        type: 'Password',
+                        label: 'Current Password',
+                        value: this.state.current_password
+                      },
+                      {
+                        id: 2,
+                        key: 2,
+                        type: 'Password',
+                        label: 'New Password',
+                        value: this.state.new_password
+                      },
+                      {
+                        id: 3,
+                        key: 3,
+                        type: 'Password',
+                        label: 'New Password Again',
+                        value: this.state.new_password_again
+                      },
+                      {
+                        id: 4,
+                        key: 4,
+                        type: 'Button',
+                        buttonText: 'CHANGE PASSWORD'
                       }
-                    }}
-                  />
-                </form>
-              )}
-              <p className={`message-back message-${message.toLowerCase()}`}>
-                {message}
-              </p>
-            </div>
-          </div>
+                    ]
+                  }
+                }}
+              />
+            </form>
+          )}
+          <p className={`message-back message-${message.toLowerCase()}`}>
+            {message}
+          </p>
         </div>
       </div>
     )

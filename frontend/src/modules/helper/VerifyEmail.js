@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { api } from '../../helper'
 import { LoginPicture } from '../../svg'
 import { Link } from 'react-router-dom'
-import AuthContext from '../../auth.context'
+import GeneralContext from '../../general.context'
 
 class VerifyEMail extends Component {
   constructor(props) {
@@ -105,9 +105,9 @@ class VerifyEMail extends Component {
   }
 }
 const VerifyEmailWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <VerifyEMail {...props} auth={value} />}
-  </AuthContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <VerifyEMail {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default VerifyEmailWrapped

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { api } from '../../helper'
-import AuthContext from '../../auth.context'
-class Download extends Component {
+
+export default class Download extends Component {
   constructor(props) {
     super(props)
     this.startDownload = this.startDownload.bind(this)
@@ -11,7 +11,7 @@ class Download extends Component {
   }
 
   async startDownload(fileName) {
-    const resource = `/api/users/${this.props.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}/${fileName}`
+    const resource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}/${fileName}`
 
     const { status, data } = await api({
       resource: resource,
@@ -55,11 +55,3 @@ class Download extends Component {
     )
   }
 }
-
-const DownloadWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Download {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default DownloadWrapped
