@@ -224,6 +224,13 @@ module.exports = {
         form_id: 1,
         exp: 500000
       }
+    },
+    {
+      method: 'get',
+      path:
+        '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
+      protected: false,
+      exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
     }
   ]
 }
