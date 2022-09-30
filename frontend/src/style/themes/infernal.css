@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.infernal .element {
+  font-family: 'Montserrat', sans-serif;
+}
+
 .infernal .emptyLabel {
   display: none !important;
 }

@@ -340,9 +340,9 @@ export default class FormProperties extends Component {
           }}
         />
         <div className="tags-wrapper">
-          <h4 className="tags-label">
+          <div className="tags-label elemLabelTitle">
             <span>Tags</span>
-          </h4>
+          </div>
           <div className="tags-list">
             {!tags
               ? null
