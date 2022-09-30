@@ -142,7 +142,7 @@ class Login extends Component {
             </div>
           </div>
           <div className="pale-border">
-            <div className="form-header">LOGIN FORM</div>
+            <div className="form-header">Login</div>
             <form ref={this.formRef} onSubmit={this.handleLoginButtonClick}>
               <Renderer
                 className="form"

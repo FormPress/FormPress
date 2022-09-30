@@ -170,7 +170,7 @@ class SignUp extends Component {
     const { capabilities } = this.props.generalContext
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
-        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="form-header">SIGN-UP SUCCESS!</div>
         <div className="sign-up-success">
           <p>
             We have sent a verification e-mail to the address{' '}
@@ -188,12 +188,12 @@ class SignUp extends Component {
       </div>
     ) : (
       <div>
-        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="form-header">SIGN-UP SUCCESS!</div>
         <div className="sign-up-success">
           <div className="signup-email">
             <i>{email}</i>
           </div>
-          <p>Signup success! You can now log in to your account.</p>
+          <p>Sign-up successful! You can now log in to your account.</p>
         </div>
       </div>
     )
@@ -211,7 +211,7 @@ class SignUp extends Component {
               signUpSuccess
             ) : (
               <div>
-                <div className="form-header">SIGNUP FORM</div>
+                <div className="form-header">Sign up</div>
                 <form
                   ref={this.formRef}
                   onSubmit={this.handleSignUpButtonClick}>
