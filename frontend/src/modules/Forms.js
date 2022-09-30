@@ -259,7 +259,7 @@ export default class Forms extends Component {
 
   render() {
     const { forms } = this.state
-    let roleLimit = 2
+    let roleLimit = 5
     if (this.props.generalContext.auth.permission.admin) {
       roleLimit = 0
     } else {
@@ -400,8 +400,29 @@ export default class Forms extends Component {
             {roleLimit === 0 || roleLimit > forms.length ? (
               <Link to="/editor/new">Create a new form</Link>
             ) : (
-              <span className="disabledNewForm" title="Form limit reached">
+              <span
+                className="disabledNewForm"
+                onMouseEnter={(e) => {
+                  const rect = e.target.getBoundingClientRect()
+                  const rightDiff = rect.right - e.clientX
+                  const rightPercentage = (100 * rightDiff) / rect.width
+                  const bottomDiff = rect.bottom - e.clientY
+                  const bottomPercentage = (100 * bottomDiff) / rect.height
+                  const popover = document.getElementById(
+                    'createNewForm-popover'
+                  )
+                  popover.style.position = 'fixed'
+                  popover.style.top =
+                    (bottomPercentage > 20 ? e.clientY - 20 : e.clientY - 80) +
+                    'px'
+                  popover.style.left =
+                    (rightPercentage < 20 ? e.clientX - 130 : e.clientX) + 'px'
+                }}>
                 Create a new form
+                <div id="createNewForm-popover" className="popoverText">
+                  Form limit reached.
+                  <a href="/pricing"> Upgrade your plan for more.</a>
+                </div>
               </span>
             )}
           </div>
