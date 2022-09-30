@@ -191,6 +191,29 @@ class Users extends Component {
     }
   }
 
+  deleteUser = async () => {
+    const { selectedUserId } = this.state
+
+    if (selectedUserId !== 0) {
+      const { success } = await api({
+        resource: `/api/admin/deleteUser/${selectedUserId}`,
+        method: 'post'
+      })
+
+      if (success === true) {
+        this.setState({ saved: true, message: 'User is deleted successfully.' })
+        this.getUserList()
+      } else {
+        this.setState({
+          saved: true,
+          message: 'User cannot deleted.'
+        })
+      }
+    } else {
+      this.setState({ message: 'Please select a user' })
+    }
+  }
+
   render() {
     const { data, userListIsloaded, forms } = this.state
     return (
@@ -233,6 +256,19 @@ class Users extends Component {
                   }
                 }}>
                 Add to Whitelist
+              </div>
+            </div>
+            <div className="userdetail">
+              <div
+                className="deleteUser"
+                onClick={() => {
+                  if (
+                    window.confirm('Are you sure you want to delete this user?')
+                  ) {
+                    this.deleteUser()
+                  }
+                }}>
+                Delete User
               </div>
             </div>
             <div className="userdetail">

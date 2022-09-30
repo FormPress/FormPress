@@ -49,7 +49,6 @@ class SignUp extends Component {
   }
 
   async handleTosClicked() {
-    console.log('tosClicked will be -> ', !this.state.tosClicked)
     this.setState({ tosClicked: !this.state.tosClicked })
   }
 
@@ -273,7 +272,6 @@ class SignUp extends Component {
                     <div className="or-seperator">or</div>
                     <div className="google-sign-in">
                       <LoginWithGoogle
-                        disabled={!this.state.tosClicked}
                         handleLoginWithGoogleButton={
                           this.handleLoginWithGoogleClick
                         }

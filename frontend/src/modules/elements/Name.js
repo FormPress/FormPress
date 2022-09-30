@@ -13,7 +13,8 @@ export default class Name extends Component {
     id: 0,
     type: 'Name',
     label: 'Full Name',
-    options: ['Mr.', 'Mrs.']
+    options: ['Mr.', 'Mrs.'],
+    placeholder: 'Choose an option'
   }
 
   static metaData = {
@@ -48,6 +49,14 @@ export default class Name extends Component {
         type: 'Checkbox',
         label: '',
         options: ['Change the type of title field to TextBox.']
+      }
+    },
+    placeholder: {
+      default: '',
+      formProps: {
+        type: 'TextBox',
+        label: 'Placeholder Text',
+        placeholder: 'Enter a placeholder text'
       }
     },
     prefixOptions: {
@@ -164,9 +173,15 @@ export default class Name extends Component {
                 name={`q_${config.id}[prefix]`}
                 key={`q_${config.id}[prefix]`}
                 defaultValue="">
-                <option disabled value="">
-                  Prefix
-                </option>
+                {config.placeholder !== false ? (
+                  <option disabled value="">
+                    {config.placeholder}
+                  </option>
+                ) : (
+                  <option disabled value="">
+                    Prefix
+                  </option>
+                )}
                 {options.map((item, index) => {
                   return (
                     <option

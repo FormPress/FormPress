@@ -96,6 +96,10 @@
   display: none !important;
 }
 
+#qc_prefix.elementHider ~ #qc_placeholder {
+  display: none !important;
+}
+
 #qc_prefix.elementHider + #qc_prefixTypeTextBox {
   display: none !important;
 }

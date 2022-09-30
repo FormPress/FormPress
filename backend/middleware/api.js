@@ -1298,6 +1298,43 @@ module.exports = (app) => {
     })
   })
 
+  app.get(
+    '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id'),
+    userShouldOwnSubmission('user_id', 'submission_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const { submission_id, question_id, file_name } = req.params
+
+      const preResult = await db.query(
+        `
+          SELECT \`value\`, \`form_id\` from \`entry\` WHERE submission_id = ? AND question_id = ?
+        `,
+        [submission_id, question_id]
+      )
+
+      if (preResult.length < 1) {
+        return res.json([false])
+      } else {
+        const resultArray = JSON.parse(preResult[0].value)
+
+        let result = resultArray.find((file) => {
+          return file.fileName === file_name
+        })
+
+        if (result === undefined) {
+          return res.json([false])
+        }
+
+        const uploadName = result.uploadName
+
+        return res.json(await storage.checkIfFileIsExist(uploadName))
+      }
+    }
+  )
+
   app.post('/api/upload/:form_id/:question_id', async (req, res) => {
     let value = await storage.uploadFileForRte(
       req.files,
