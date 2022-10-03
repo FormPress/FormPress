@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import AuthContext from '../../auth.context'
 import { api } from '../../helper'
 
 import './Whitelist.css'
 
-class Whitelist extends Component {
+export default class Whitelist extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,11 +40,3 @@ class Whitelist extends Component {
     )
   }
 }
-
-const WhitelistWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Whitelist {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default WhitelistWrapped

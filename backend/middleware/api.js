@@ -1343,4 +1343,33 @@ module.exports = (app) => {
     )
     res.json(value)
   })
+
+  // return users usage information
+  app.get(
+    '/api/users/:user_id/usages',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+
+      const dateObj = new Date()
+      const month = dateObj.getUTCMonth() + 1 //months from 1-12
+      const year = dateObj.getUTCFullYear()
+      const yearMonth = year + '-' + month
+
+      const usagesResult = await db.query(
+        `SELECT 
+        (SELECT COUNT(\`id\`) FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL) as 'formUsage',
+        (SELECT \`count\` FROM \`submission_usage\` WHERE user_id = ? AND date = ?) as 'submissionUsage',
+        (SELECT SUM(\`size\`) FROM \`storage_usage\` WHERE user_id = ? ) as 'uploadUsage'
+        FROM dual`,
+        [user_id, user_id, yearMonth, user_id]
+      )
+      if (usagesResult.length > 0) {
+        const usages = usagesResult[0]
+        res.json(usages)
+      }
+    }
+  )
 }

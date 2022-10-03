@@ -1,20 +1,20 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
-import AuthContext from './auth.context'
+import GeneralContext from './general.context'
 
 const PrivateRoute = ({ children, component, ...rest }) => {
   return (
-    <AuthContext.Consumer>
+    <GeneralContext.Consumer>
       {(value) => (
         <Route
           {...rest}
           render={(props) => {
             const Component = component
 
-            return value.loggedIn === true ? (
+            return value.auth.loggedIn === true ? (
               component !== undefined ? (
-                <Component {...props} />
+                <Component generalContext={value} {...props} />
               ) : (
                 children
               )
@@ -29,7 +29,7 @@ const PrivateRoute = ({ children, component, ...rest }) => {
           }}
         />
       )}
-    </AuthContext.Consumer>
+    </GeneralContext.Consumer>
   )
 }
 

@@ -4,8 +4,7 @@ import { Redirect, Link } from 'react-router-dom'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
+import GeneralContext from '../general.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
@@ -56,7 +55,7 @@ class Login extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email,
         name: data.name,
         exp: data.exp,
@@ -89,7 +88,7 @@ class Login extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
         token: data.token,
@@ -116,7 +115,7 @@ class Login extends Component {
   render() {
     const { message, state } = this.state
 
-    if (this.props.auth.loggedIn === true) {
+    if (this.props.generalContext.auth.loggedIn === true) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -131,7 +130,7 @@ class Login extends Component {
       )
     }
 
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
 
     return (
       <div className="login-wrapper">
@@ -237,15 +236,9 @@ class Login extends Component {
 }
 
 const LoginWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <Login {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <Login {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default LoginWrapped

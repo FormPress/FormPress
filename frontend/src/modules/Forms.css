@@ -177,7 +177,8 @@
   margin: 0 auto;
 }
 
-.forms > .newButtonContainer > a {
+.forms > .newButtonContainer > a,
+.forms > .newButtonContainer > .disabledNewForm {
   width: 100%;
   height: 60px;
   line-height: 60px;
@@ -193,17 +194,7 @@
 }
 
 .forms > .newButtonContainer > .disabledNewForm {
-  width: 100%;
-  height: 60px;
-  line-height: 60px;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  color: white;
-  text-decoration: none;
-  background-color: #c9c9c9;
-  display: inline-block;
-  margin-top: 20px;
+  background-color: #c9c9c9 !important;
 }
 
 .nav_add_new_form_link {
@@ -236,4 +227,40 @@
   .nav_add_new_form_link {
     left: 70%;
   }
+}
+
+.disabledNewForm > .popoverText {
+  display: block;
+  width: 200px;
+  margin: 0 0 3px;
+  padding: 2px 4px 3px 3px;
+  border-radius: 4px;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  line-height: normal !important;
+  position: fixed;
+  font-weight: normal;
+  font-size: 16px;
+  top: 0;
+  left: 0;
+}
+
+.disabledNewForm > .popoverText > a {
+  text-decoration: underline;
+  color: white;
+  font-weight: bold;
+}
+
+.disabledNewForm > * {
+  /*pointer-events: none;*/
+}
+
+.disabledNewForm:hover > .popoverText,
+.disabledNewForm:focus > .popoverText {
+  opacity: 1;
 }
