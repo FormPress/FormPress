@@ -155,15 +155,6 @@
   box-shadow: 0px 3px 10px #00000014;
 }
 
-.builder > .content > .leftMenu > .leftMenuContents h2 {
-  padding-left: 10px;
-}
-
-.builder > .content > .leftMenu > .leftMenuContents h4 {
-  padding-left: 10px;
-  margin-bottom: 0;
-}
-
 .leftMenuContents .elementTextArea .fl.input {
   width: 100%;
 }
@@ -226,6 +217,7 @@
   line-height: 1.38;
   letter-spacing: normal;
   text-align: left;
+  font-family: 'Montserrat';
 }
 .add-element-button {
   height: 16px;
@@ -408,6 +400,10 @@
 .popover-container {
   display: inline-flex;
   position: relative;
+}
+
+.builder.form .element > h4 > .label > span {
+  padding: 3px;
 }
 
 .popover-container:hover > .popoverText {

@@ -239,29 +239,52 @@ export default class Radio extends Component {
     }
 
     var display
+
     if (mode === 'builder') {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          order={this.props.order}
-          labelKey={config.id}
-          editor={
-            config.editor &&
-            selectedField === config.id &&
-            selectedLabelId === config.id
-          }
-          form_id={config.form_id}
-          rteUploadHandler={this.props.rteUploadHandler}
-          question_id={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          handleLabelClick={this.props.handleLabelClick}
-          value={config.label}
-          required={config.required}
-          limit={2000}
-        />,
+        config.editor ? (
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            order={this.props.order}
+            labelKey={config.id}
+            editor={
+              config.editor &&
+              selectedField === config.id &&
+              selectedLabelId === config.id
+            }
+            form_id={config.form_id}
+            rteUploadHandler={this.props.rteUploadHandler}
+            question_id={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            handleLabelClick={this.props.handleLabelClick}
+            value={config.label}
+            required={config.required}
+            limit={2000}
+          />
+        ) : (
+          <div className="elemLabelTitle" key={0}>
+            <EditableLabel
+              key="1"
+              className="fl label"
+              mode={mode}
+              order={this.props.order}
+              labelKey={config.id}
+              editor={false}
+              form_id={config.form_id}
+              rteUploadHandler={this.props.rteUploadHandler}
+              question_id={config.id}
+              dataPlaceholder="Type a question"
+              handleLabelChange={this.props.handleLabelChange}
+              handleLabelClick={this.props.handleLabelClick}
+              value={config.label}
+              required={config.required}
+              limit={2000}
+            />
+          </div>
+        ),
         <div key="2" className="fl input">
           <EditableList
             config={config}
@@ -352,16 +375,31 @@ export default class Radio extends Component {
       ]
     } else {
       display = [
-        <div key="1" className="fl label">
-          <span
-            className={config.required ? 'required' : ''}
-            dataplaceholder="Type a question"
-            editor={config.editor ? 'true' : 'false'}
-            spellCheck="false"
-            dangerouslySetInnerHTML={{
-              __html: config.label
-            }}></span>
-        </div>,
+        config.editor ? (
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            order={this.props.order}
+            labelKey={config.id}
+            value={config.label}
+            required={config.required}
+            question_id={config.id}
+          />
+        ) : (
+          <div className="elemLabelTitle" key={0}>
+            <EditableLabel
+              key="1"
+              className="fl label"
+              mode={mode}
+              order={this.props.order}
+              labelKey={config.id}
+              value={config.label}
+              required={config.required}
+              question_id={config.id}
+            />
+          </div>
+        ),
         <div key="2" className="fl input">
           <ul id={`q_${config.id}_radioList`} className="radioList">
             {config.options.map((item, key) => {

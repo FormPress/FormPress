@@ -135,16 +135,18 @@ export default class NetPromoterScore extends Component {
     }
 
     var display = [
-      <EditableLabel
-        key="1"
-        className="fl label"
-        mode={mode}
-        labelKey={config.id}
-        dataPlaceholder="Type a question"
-        handleLabelChange={this.props.handleLabelChange}
-        value={config.label}
-        required={config.required}
-      />,
+      <div className="elemLabelTitle" key={0}>
+        <EditableLabel
+          key="1"
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          dataPlaceholder="Type a question"
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />
+      </div>,
       <div key="2" className="fl input">
         <ul>
           {config.options.map((item, key) => {

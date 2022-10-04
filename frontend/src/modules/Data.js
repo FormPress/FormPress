@@ -431,7 +431,11 @@ export default class Data extends Component {
   }
 
   handleCloseModalClick() {
-    this.setState({ isModalOpen: false, modalContent: {} })
+    this.setState({
+      isModalOpen: false,
+      modalContent: {},
+      formSelectorOpen: false
+    })
   }
 
   handleUnreadFilterToggle(e) {
@@ -529,16 +533,20 @@ export default class Data extends Component {
             </div>
           </div>
         </div>
-        <div className="formSelectorContainer center">
-          <div
-            className="formSelector cw center grid"
-            onClick={() => {
-              this.setState({ formSelectorOpen: !formSelectorOpen })
-            }}>
-            <div className="col-15-16 formSelectorContent">
-              {formSelectorText}
-            </div>
-            <div className="col-1-16 down">
+        <div
+          className={`formSelectorContainer center ${
+            formSelectorOpen ? 'open' : 'closed'
+          }`}
+          onClick={() => {
+            this.setState({
+              formSelectorOpen: !formSelectorOpen,
+              isModalOpen: !formSelectorOpen,
+              modalContent: 'backdrop'
+            })
+          }}>
+          <div className="formSelector cw center grid">
+            <div className="fl formSelectorContent">{formSelectorText}</div>
+            <div className="fl down">
               <FontAwesomeIcon icon={faChevronDown} />
             </div>
           </div>
@@ -567,8 +575,8 @@ export default class Data extends Component {
         ) : (
           <div className="cw center grid dataStatistics">
             <div className="selectedSubmissionStatistics col-16-16">
-              <div className="submissionResponsesContainer">
-                {_.isEmpty(this.state.statistics) === false ? (
+              {_.isEmpty(this.state.statistics) === false ? (
+                <div className="submissionResponsesContainer">
                   <div className="submissionResponsesDetails">
                     <div>
                       <div className="detailLabel">
@@ -595,10 +603,10 @@ export default class Data extends Component {
                       <div className="detailSublabel">Status</div>
                     </div>
                   </div>
-                ) : (
-                  <div className="noData">No submission(s)</div>
-                )}
-              </div>
+                </div>
+              ) : (
+                <div className="noData">No submission(s)</div>
+              )}
               {_.isEmpty(this.state.statistics) === false ? (
                 <div className="statisticsContainer">
                   {this.state.statistics.elements.map((question, i) => {

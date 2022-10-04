@@ -2,6 +2,24 @@
   width: 100%;
 }
 
+.infernal .element {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.infernal .emptyLabel {
+  display: none !important;
+}
+
+.infernal .fl {
+  float: none !important;
+}
+
+.infernal .elemLabelTitle {
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+  font-weight: 500 !important;
+}
+
 .infernal > .elementTextBox > .label {
   font-family: Montserrat;
   font-size: 16px;
@@ -56,8 +74,8 @@
 
 .infernal > .elementPassword > .label {
   font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   margin-bottom: 8px;
 }
 
@@ -73,6 +91,7 @@
   border-radius: 4px;
   outline: 0;
   border: solid 1px #f5f5f5;
+  font-weight: 700;
 }
 
 .infernal > .elementPassword > .input > input:hover {
@@ -137,6 +156,7 @@
 
 .infernal .elementButton button[disabled] {
   filter: grayscale(1);
+  pointer-events: none;
 }
 
 .infernal .elementCheckbox .input > input {

@@ -127,16 +127,18 @@ export default class Dropdown extends Component {
     var display
     if (mode === 'builder' || mode === 'viewer') {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          dataPlaceholder="Type a question"
-          value={config.label}
-          required={config.required}
-        />,
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            dataPlaceholder="Type a question"
+            value={config.label}
+            required={config.required}
+          />
+        </div>,
         <div key="2">
           {
             <div className="dropdown-div">
@@ -211,15 +213,17 @@ export default class Dropdown extends Component {
       ]
     } else {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />,
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>,
         <div key="2" className="dropdown-div">
           <select
             className="dropdown-select"

@@ -19,14 +19,16 @@ function Password(props) {
 
   return (
     <ElementContainer type={config.type} {...props}>
-      <EditableLabel
-        className="fl label"
-        mode={mode}
-        labelKey={config.id}
-        handleLabelChange={props.handleLabelChange}
-        value={config.label}
-        required={config.required}
-      />
+      <div className="elemLabelTitle">
+        <EditableLabel
+          className="fl label"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+        />
+      </div>
       <div className="fl input">
         <input
           type="password"
