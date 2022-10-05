@@ -10,6 +10,27 @@ export default class Download extends Component {
     }
   }
 
+  async componentDidMount() {
+    const params = this.props.match.params
+
+    const result = await api({
+      resource: `/api/checkIfFileIsExist/${this.props.auth.user_id}/${params.formId}/${params.submissionId}/${params.questionId}/${params.fileName}`,
+      method: 'get'
+    })
+
+    if (result.data.message === 'That form is not yours') {
+      window.location.href = '/404'
+    }
+
+    if (result.data.message === 'Submission not found') {
+      window.location.href = '/404'
+    }
+
+    if (result.data[0] === false) {
+      window.location.href = '/404'
+    }
+  }
+
   async startDownload(fileName) {
     const resource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${this.props.match.params.formId}/submissions/${this.props.match.params.submissionId}/questions/${this.props.match.params.questionId}/${fileName}`
 
