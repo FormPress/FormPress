@@ -61,15 +61,21 @@
   console.log('MAIN FORM RUNTIME LOADED')
   console.log('SHOULD LOAD FORM ID QUESTIONS ', FORMID)
 
-  const elementsQuery = await api({
-    resource: `/api/users/${USERID}/forms/${FORMID}/elements`
-  })
+  let elements
 
-  if (elementsQuery.success === false) {
-    return alert('Error while loading questions.')
+  if (document.body.attributes.elements !== undefined) {
+    elements = JSON.parse(document.body.attributes.elements.value)
+    document.body.removeAttribute('elements')
+  } else {
+    const elementsQuery = await api({
+      resource: `/api/users/${USERID}/forms/${FORMID}/elements`
+    })
+    elements = elementsQuery.data
   }
 
-  const elements = elementsQuery.data
+  if (!Array.isArray(elements)) {
+    return alert('Error while loading questions.')
+  }
 
   window.userAgent = navigator.userAgent.toLowerCase()
 

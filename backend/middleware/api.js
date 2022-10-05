@@ -1102,6 +1102,8 @@ module.exports = (app) => {
       title: form.title,
       form: str,
       postTarget: `${BACKEND}/templates/submit/${form_id}`,
+      elements: form.props.elements,
+      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
       BACKEND,
       FORMID: form_id
     })

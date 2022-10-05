@@ -3,15 +3,20 @@
 }
 
 .data > .formSelectorContainer {
-  height: 60px;
   top: 116px;
+  max-height: 55px;
   width: fit-content;
   width: -moz-fit-content;
   position: sticky;
   z-index: 1;
 }
 
-.formSelectorContainer.center::before {
+.data > .formSelectorContainer.open {
+  top: 126px;
+  z-index: 110;
+}
+
+.formSelectorContainer.center.closed::before {
   content: '';
   min-height: 10px;
   background: #f5f5f5;
@@ -42,6 +47,11 @@ text[type='category'] tspan {
   max-height: 60px;
   overflow: hidden;
   word-break: break-word;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #0071bc;
+  width: 96%;
 }
 
 .data > .formSelectorContainer > .formSelector > .down {
@@ -49,6 +59,7 @@ text[type='category'] tspan {
   color: white;
   text-align: center;
   font-size: 22px;
+  width: 4%;
 }
 
 .data > .formSelectorContainer > .formSelectorOptions {
@@ -62,6 +73,7 @@ text[type='category'] tspan {
 .data > .formSelectorContainer > .formSelectorOptions ul {
   margin: 0;
   padding: 0;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .data > .formSelectorContainer > .formSelectorOptions li {
@@ -75,6 +87,7 @@ text[type='category'] tspan {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: #f5f5f5;
 }
 
 .data > .formSelectorContainer > .formSelectorOptions li:hover {
@@ -90,12 +103,12 @@ text[type='category'] tspan {
 
 .data > .dataStatistics > .selectedSubmissionStatistics {
   font-family: sans-serif;
-  padding: 15px;
   background-color: #ffffff;
 }
 
 .data .statisticsContainer .questionContainer {
   border-top: 1px solid #eaeaea;
+  padding: 15px;
 }
 
 .data .statisticsContainer .questionContainer .question {
@@ -205,9 +218,11 @@ text[type='category'] tspan {
   > .submissionResponsesContainer {
   position: relative;
   width: 100%;
-  background-color: #f8f8f8;
   margin-bottom: 15px;
   border-radius: 4px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 18px;
 }
 
 .recharts-legend-item-text {
@@ -374,7 +389,8 @@ text[type='category'] tspan {
 }
 
 .data > .dataContent > .entriesViewer,
-.data > .dataContent > .submissionSelector > .noData {
+.data > .dataContent > .submissionSelector > .noData,
+.data > .dataStatistics > .selectedSubmissionStatistics > .noData {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 18px;

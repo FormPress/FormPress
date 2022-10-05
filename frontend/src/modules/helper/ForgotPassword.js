@@ -71,14 +71,19 @@ class ForgotPassword extends Component {
     )
 
     return (
-      <div className="login-wrapper">
-        <div className="loginForm">
-          <div className="picture-bg">
-            <div className="login-picture">
-              <LoginPicture />
+      <>
+        <link
+          href="/customPublicStyling.css"
+          rel="stylesheet"
+          crossOrigin="anonymous"
+        />
+        <div className="login-wrapper">
+          <div className="loginForm bs-mild">
+            <div className="picture-bg">
+              <div className="login-picture">
+                <LoginPicture />
+              </div>
             </div>
-          </div>
-          <div className="pale-border">
             <div>
               <div className="form-header">FORGOT PASSWORD</div>
               {success ? (
@@ -110,7 +115,10 @@ class ForgotPassword extends Component {
                   />
                 </form>
               )}
-              <p className={`message-back message-${message.toLowerCase()}`}>
+              <p
+                className={`message-back ${
+                  message ? 'isFilled' : 'empty'
+                } message-${message.toLowerCase()}`}>
                 {message}
               </p>
               <div className="have-trouble">
@@ -121,14 +129,14 @@ class ForgotPassword extends Component {
               </div>
             </div>
           </div>
-        </div>
-        <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2022 formpress.org</div>
-          <div className="col-8-16 tr">
-            <a href="mailto:support@formpress.org">Contact</a>
+          <div className="footer cw center grid">
+            <div className="col-8-16">Copyright © 2022 formpress.org</div>
+            <div className="col-8-16 tr">
+              <a href="mailto:support@formpress.org">Contact</a>
+            </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 }

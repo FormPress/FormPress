@@ -1,16 +1,11 @@
 .have-account {
-  width: 100%;
-  height: 19px;
-  margin: 10px 0px 10px;
-  padding: 8px;
   font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  font-style: italic;
-  line-height: 1.13;
-  letter-spacing: normal;
   text-align: center;
-  color: #113952;
+}
+
+.signup-mainContent {
+  padding-top: 15px;
+  /*padding-bottom: 15px;*/
 }
 
 .sign-up-success {
@@ -32,4 +27,22 @@
   user-select: none;
   width: 332px;
   margin: -95px auto 70px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.tosContainer > a {
+  color: #0079d3 !important;
+  font-weight: 500 !important;
+}
+.tosContainer > a:hover {
+  text-decoration: underline;
+}
+
+.loginForm a {
+  text-decoration: none;
+  color: #646464;
+}
+
+.loginForm a:hover {
+  color: #1c5c85;
 }

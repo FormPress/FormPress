@@ -190,7 +190,9 @@ export default class FormProperties extends Component {
 
     return (
       <div className="formProperties">
-        <h2>Form Properties</h2>
+        <div className="formPropertiesMessage">
+          Customize the setting of your form. Change the submission behavior.
+        </div>
         {capabilities.sendgridApiKey ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
@@ -338,7 +340,7 @@ export default class FormProperties extends Component {
           }}
         />
         <div className="tags-wrapper">
-          <div className="tags-label">
+          <div className="tags-label elemLabelTitle">
             <span>Tags</span>
           </div>
           <div className="tags-list">
