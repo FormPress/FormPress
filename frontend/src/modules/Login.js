@@ -4,8 +4,7 @@ import { Redirect, Link } from 'react-router-dom'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api, setToken } from '../helper'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
+import GeneralContext from '../general.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
 import './Login.css'
@@ -41,7 +40,7 @@ class Login extends Component {
 
   async handleLoginButtonClick(e) {
     e.preventDefault()
-    this.setState({ state: 'loading' })
+    this.setState({ state: 'loading', message: 'Logging in...' })
 
     const { email, password } = this.state
 
@@ -56,7 +55,7 @@ class Login extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email,
         name: data.name,
         exp: data.exp,
@@ -77,7 +76,7 @@ class Login extends Component {
   }
 
   async handleLoginWithGoogleClick(response) {
-    this.setState({ state: 'loading' })
+    this.setState({ state: 'loading', message: 'Logging in...' })
     const tokenID = response.tokenId
     const email = response.profileObj.email
     const { success, data } = await api({
@@ -89,7 +88,7 @@ class Login extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
         token: data.token,
@@ -116,7 +115,7 @@ class Login extends Component {
   render() {
     const { message, state } = this.state
 
-    if (this.props.auth.loggedIn === true) {
+    if (this.props.generalContext.auth.loggedIn === true) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -131,121 +130,118 @@ class Login extends Component {
       )
     }
 
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
 
     return (
-      <div className="login-wrapper">
-        <div className="loginForm">
-          <div className="wellcome-message">WELCOME BACK!</div>
-          <div className="picture-bg">
-            <div className="login-picture">
-              <LoginPicture />
-            </div>
-          </div>
-          <div className="pale-border">
-            <div className="form-header">LOGIN FORM</div>
-            <form ref={this.formRef} onSubmit={this.handleLoginButtonClick}>
-              <Renderer
-                className="form"
-                theme="infernal"
-                allowInternal={true}
-                handleFieldChange={this.handleFieldChange}
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 1,
-                        type: 'TextBox',
-                        label: 'Email',
-                        value: this.state.email
-                      },
-                      {
-                        id: 2,
-                        type: 'Password',
-                        label: 'Password',
-                        value: this.state.password
-                      },
-                      {
-                        id: 3,
-                        type: 'Checkbox',
-                        label: '',
-                        options: ['Remember Me']
-                      },
-                      {
-                        id: 4,
-                        type: 'Button',
-                        buttonText: 'LOGIN'
-                      }
-                    ]
-                  }
-                }}
-              />
-            </form>
-            {capabilities.sendgridApiKey ? (
-              <div className="forgot-pass" title="forgot password">
-                <span className="forgot-pass-span">
-                  <Link to="/forgotpassword">
-                    &nbsp;<i>Forgot password?</i>
-                  </Link>
-                </span>
+      <>
+        <link
+          href="/customPublicStyling.css"
+          rel="stylesheet"
+          crossOrigin="anonymous"
+        />
+        <div className="login-wrapper">
+          <div className="loginForm bs-mild">
+            <div className="wellcome-message">WELCOME BACK!</div>
+            <div className="picture-bg">
+              <div className="login-picture">
+                <LoginPicture />
               </div>
-            ) : (
-              ''
-            )}
-            {capabilities.googleCredentialsClientID ? (
-              <div className="for-login">
-                <div className="or-seperator">or</div>
-                <div className="google-sign-in">
-                  <LoginWithGoogle
-                    handleLoginWithGoogleButton={
-                      this.handleLoginWithGoogleClick
+            </div>
+            <div className="login-mainContent">
+              <div className="form-header">Login</div>
+              <form ref={this.formRef} onSubmit={this.handleLoginButtonClick}>
+                <Renderer
+                  className="form"
+                  theme="infernal"
+                  allowInternal={true}
+                  handleFieldChange={this.handleFieldChange}
+                  form={{
+                    props: {
+                      elements: [
+                        {
+                          id: 1,
+                          type: 'TextBox',
+                          label: 'Email',
+                          value: this.state.email
+                        },
+                        {
+                          id: 2,
+                          type: 'Password',
+                          label: 'Password',
+                          value: this.state.password
+                        },
+                        {
+                          id: 3,
+                          type: 'Checkbox',
+                          label: '',
+                          options: ['Remember Me']
+                        },
+                        {
+                          id: 4,
+                          type: 'Button',
+                          buttonText: 'LOGIN'
+                        }
+                      ]
                     }
-                    handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
-                  />
+                  }}
+                />
+              </form>
+              {capabilities.sendgridApiKey ? (
+                <div className="forgot-pass" title="forgot password">
+                  <span className="forgot-pass-span">
+                    <Link to="/forgotpassword">&nbsp;Forgot password?</Link>
+                  </span>
                 </div>
+              ) : (
+                ''
+              )}
+              {capabilities.googleCredentialsClientID ? (
+                <div className="for-login">
+                  <div className="or-seperator">or</div>
+                  <div className="google-sign-in">
+                    <LoginWithGoogle
+                      disabled={false}
+                      handleLoginWithGoogleButton={
+                        this.handleLoginWithGoogleClick
+                      }
+                      handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+                    />
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+              <p
+                className={`message-back ${
+                  state === 'done' ? 'isFilled' : 'empty'
+                }`}>
+                {state === 'done' ? message : null}
+              </p>
+              <div className="do-not-have">
+                Don&apos;t have an account? <Link to="/signup">SIGN UP</Link>
               </div>
-            ) : (
-              ''
-            )}
-            <p className="message-back">
-              {state === 'loading' ? 'Loading...' : null}
-              {state === 'done' ? message : null}
-            </p>
-            <div className="do-not-have">
-              Don&apos;t have an account?{' '}
-              <Link to="/signup">
-                <i>SignUp</i>
-              </Link>
-            </div>
-            <div className="have-trouble">
-              Having trouble?
-              <span className="wip-placeholder" title="WIP">
+              <div className="have-trouble">
+                Having trouble?
                 <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
-              </span>
+              </div>
+            </div>
+          </div>
+          <div className="footer cw center grid">
+            <div className="col-8-16">Copyright © 2022 formpress.org</div>
+            <div className="col-8-16 tr">
+              <a href="mailto:support@formpress.org">Contact</a>
             </div>
           </div>
         </div>
-        <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2022 formpress.org</div>
-          <div className="col-8-16 tr">
-            <a href="mailto:support@formpress.org">Contact</a>
-          </div>
-        </div>
-      </div>
+      </>
     )
   }
 }
 
 const LoginWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <Login {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <Login {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default LoginWrapped

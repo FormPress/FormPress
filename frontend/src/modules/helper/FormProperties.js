@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Renderer from '../Renderer'
-import CapabilitiesContext from '../../capabilities.context'
 import './FormProperties.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -9,7 +8,7 @@ import {
   faQuestionCircle
 } from '@fortawesome/free-solid-svg-icons'
 
-class FormProperties extends Component {
+export default class FormProperties extends Component {
   constructor(props) {
     super(props)
 
@@ -122,7 +121,7 @@ class FormProperties extends Component {
   }
 
   render() {
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
@@ -191,7 +190,9 @@ class FormProperties extends Component {
 
     return (
       <div className="formProperties">
-        <h2>Form Properties</h2>
+        <div className="formPropertiesMessage">
+          Customize the setting of your form. Change the submission behavior.
+        </div>
         {capabilities.sendgridApiKey ? (
           <Renderer
             handleFieldChange={this.handleEmailChange}
@@ -339,7 +340,7 @@ class FormProperties extends Component {
           }}
         />
         <div className="tags-wrapper">
-          <div className="tags-label">
+          <div className="tags-label elemLabelTitle">
             <span>Tags</span>
           </div>
           <div className="tags-list">
@@ -401,13 +402,3 @@ class FormProperties extends Component {
     )
   }
 }
-
-const FormPropertiesWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <FormProperties {...props} capabilities={capabilities} />
-    )}
-  </CapabilitiesContext.Consumer>
-)
-
-export default FormPropertiesWrapped

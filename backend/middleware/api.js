@@ -1102,6 +1102,8 @@ module.exports = (app) => {
       title: form.title,
       form: str,
       postTarget: `${BACKEND}/templates/submit/${form_id}`,
+      elements: form.props.elements,
+      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
       BACKEND,
       FORMID: form_id
     })
@@ -1298,6 +1300,43 @@ module.exports = (app) => {
     })
   })
 
+  app.get(
+    '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id'),
+    userShouldOwnSubmission('user_id', 'submission_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const { submission_id, question_id, file_name } = req.params
+
+      const preResult = await db.query(
+        `
+          SELECT \`value\`, \`form_id\` from \`entry\` WHERE submission_id = ? AND question_id = ?
+        `,
+        [submission_id, question_id]
+      )
+
+      if (preResult.length < 1) {
+        return res.json([false])
+      } else {
+        const resultArray = JSON.parse(preResult[0].value)
+
+        let result = resultArray.find((file) => {
+          return file.fileName === file_name
+        })
+
+        if (result === undefined) {
+          return res.json([false])
+        }
+
+        const uploadName = result.uploadName
+
+        return res.json(await storage.checkIfFileIsExist(uploadName))
+      }
+    }
+  )
+
   app.post('/api/upload/:form_id/:question_id', async (req, res) => {
     let value = await storage.uploadFileForRte(
       req.files,
@@ -1306,4 +1345,33 @@ module.exports = (app) => {
     )
     res.json(value)
   })
+
+  // return users usage information
+  app.get(
+    '/api/users/:user_id/usages',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+
+      const dateObj = new Date()
+      const month = dateObj.getUTCMonth() + 1 //months from 1-12
+      const year = dateObj.getUTCFullYear()
+      const yearMonth = year + '-' + month
+
+      const usagesResult = await db.query(
+        `SELECT 
+        (SELECT COUNT(\`id\`) FROM \`form\` WHERE user_id = ? AND deleted_at IS NULL) as 'formUsage',
+        (SELECT \`count\` FROM \`submission_usage\` WHERE user_id = ? AND date = ?) as 'submissionUsage',
+        (SELECT SUM(\`size\`) FROM \`storage_usage\` WHERE user_id = ? ) as 'uploadUsage'
+        FROM dual`,
+        [user_id, user_id, yearMonth, user_id]
+      )
+      if (usagesResult.length > 0) {
+        const usages = usagesResult[0]
+        res.json(usages)
+      }
+    }
+  )
 }

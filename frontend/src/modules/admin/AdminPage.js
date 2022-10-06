@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom'
-import AuthContext from '../../auth.context'
 import Roles from './Roles'
 import Users from './Users'
 import Status from './Status'
@@ -8,7 +7,7 @@ import Whitelist from './Whitelist'
 
 import './AdminPage.css'
 
-class AdminPage extends Component {
+export default class AdminPage extends Component {
   renderAdminContent() {
     return (
       <Switch>
@@ -76,11 +75,3 @@ class AdminPage extends Component {
     )
   }
 }
-
-const AdminPageWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <AdminPage {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default AdminPageWrapped

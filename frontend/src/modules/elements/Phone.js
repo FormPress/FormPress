@@ -101,16 +101,18 @@ export default class Phone extends Component {
     let display
 
     display = [
-      <EditableLabel
-        className="fl label"
-        dataPlaceholder="Type a question"
-        mode={mode}
-        labelKey={config.id}
-        handleLabelChange={this.props.handleLabelChange}
-        value={config.label}
-        required={config.required}
-        key="1"
-      />,
+      <div className="elemLabelTitle" key={0}>
+        <EditableLabel
+          className="fl label"
+          dataPlaceholder="Type a question"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+          key="1"
+        />
+      </div>,
       <div className="fl input" key="2">
         <select
           className="dialCode"

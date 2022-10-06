@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import AuthContext from '../../auth.context'
 import { api } from '../../helper'
 import * as Elements from '../elements'
 import Renderer from '../Renderer'
@@ -11,7 +10,7 @@ Object.values(Elements).forEach((elem) => {
   elementMeta[elem.defaultConfig.type] = elem.metaData.displayText
 })
 
-class Roles extends Component {
+export default class Roles extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -260,11 +259,3 @@ class Roles extends Component {
     )
   }
 }
-
-const RolesWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Roles {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default RolesWrapped

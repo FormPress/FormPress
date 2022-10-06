@@ -198,16 +198,18 @@ export default class Checkbox extends Component {
     let display
     if (mode === 'builder') {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          dataPlaceholder="Type a question"
-          required={config.required}
-        />,
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            dataPlaceholder="Type a question"
+            required={config.required}
+          />
+        </div>,
         <div key="2" className={config.toggle === true ? 'toggle' : ''}>
           <EditableList
             config={config}
@@ -222,16 +224,20 @@ export default class Checkbox extends Component {
       ]
     } else {
       display = [
-        <EditableLabel
-          key="1"
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />,
+        <div
+          className={`elemLabelTitle ${config.label ? '' : ' emptyLabel'}`}
+          key={0}>
+          <EditableLabel
+            key="1"
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>,
         <div
           key="2"
           className={

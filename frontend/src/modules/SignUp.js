@@ -3,9 +3,8 @@ import { Redirect, Link } from 'react-router-dom'
 import { api, setToken } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
-import AuthContext from '../auth.context'
-import CapabilitiesContext from '../capabilities.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
+import GeneralContext from '../general.context'
 import './SignUp.css'
 
 class SignUp extends Component {
@@ -49,7 +48,6 @@ class SignUp extends Component {
   }
 
   async handleTosClicked() {
-    console.log('tosClicked will be -> ', !this.state.tosClicked)
     this.setState({ tosClicked: !this.state.tosClicked })
   }
 
@@ -118,7 +116,7 @@ class SignUp extends Component {
 
     if (success === true) {
       setToken(data.token)
-      this.props.auth.setAuth({
+      this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
         token: data.token,
@@ -151,7 +149,7 @@ class SignUp extends Component {
 
   render() {
     const { message, success, email } = this.state
-    if (this.props.auth.loggedIn) {
+    if (this.props.generalContext.auth.loggedIn) {
       let pathName = this.props.location.state
         ? this.props.location.state.from.pathname
         : '/forms'
@@ -169,10 +167,10 @@ class SignUp extends Component {
         />
       )
     }
-    const capabilities = this.props.capabilities
+    const { capabilities } = this.props.generalContext
     const signUpSuccess = capabilities.sendgridApiKey ? (
       <div>
-        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="form-header">SIGN-UP SUCCESS!</div>
         <div className="sign-up-success">
           <p>
             We have sent a verification e-mail to the address{' '}
@@ -190,140 +188,146 @@ class SignUp extends Component {
       </div>
     ) : (
       <div>
-        <div className="form-header">SIGNUP SUCCESS!</div>
+        <div className="form-header">SIGN-UP SUCCESS!</div>
         <div className="sign-up-success">
           <div className="signup-email">
             <i>{email}</i>
           </div>
-          <p>Signup success! You can now log in to your account.</p>
+          <p>Sign-up successful! You can now log in to your account.</p>
         </div>
       </div>
     )
 
     return (
-      <div className="login-wrapper">
-        <div className="loginForm signupForm">
-          <div className="picture-bg">
-            <div className="login-picture">
-              <LoginPicture />
-            </div>
-          </div>
-          <div className="pale-border">
-            {success ? (
-              signUpSuccess
-            ) : (
-              <div>
-                <div className="form-header">SIGNUP FORM</div>
-                <form
-                  ref={this.formRef}
-                  onSubmit={this.handleSignUpButtonClick}>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={this.handleFieldChange}
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'TextBox',
-                            label: 'Email',
-                            value: this.state.email
-                          },
-                          {
-                            id: 2,
-                            type: 'Password',
-                            label: 'Password'
-                          },
-                          {
-                            id: 3,
-                            type: 'Password',
-                            label: 'Confirm Password'
-                          },
-                          {
-                            id: 4,
-                            type: 'Button',
-                            buttonText: 'SIGN UP',
-                            disabled: !this.state.tosClicked
-                          }
-                        ]
-                      }
-                    }}
-                  />
-                </form>
-                <div className="tosContainer">
-                  <input
-                    type="checkbox"
-                    name="toscheckbox"
-                    onClick={() => this.handleTosClicked()}
-                  />{' '}
-                  I accept and agree to the{' '}
-                  <a
-                    target="_blank"
-                    href="https://formpress.org/tos.html"
-                    rel="noopener noreferrer">
-                    Terms of Use
-                  </a>
-                  .
-                </div>
-
-                {capabilities.googleCredentialsClientID ? (
-                  <div className="for-sign-up">
-                    <div className="or-seperator">or</div>
-                    <div className="google-sign-in">
-                      <LoginWithGoogle
-                        disabled={!this.state.tosClicked}
-                        handleLoginWithGoogleButton={
-                          this.handleLoginWithGoogleClick
-                        }
-                        handleLoginWithGoogleFail={
-                          this.handleLoginWithGoogleFail
-                        }
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  ''
-                )}
-                <p className="message-back">{message}</p>
-                <div className="have-account">
-                  Already have an account?
-                  <Link to="/login">
-                    <i>Login</i>
-                  </Link>
-                </div>
+      <>
+        <link
+          href="/customPublicStyling.css"
+          rel="stylesheet"
+          crossOrigin="anonymous"
+        />
+        <div className="login-wrapper">
+          <div className="loginForm signupForm bs-mild">
+            <div className="picture-bg">
+              <div className="login-picture">
+                <LoginPicture />
               </div>
-            )}
-            <div className="have-trouble">
-              Having trouble?
-              <span className="wip-placeholder" title="WIP">
+            </div>
+            <div className="signup-mainContent">
+              {success ? (
+                signUpSuccess
+              ) : (
+                <div>
+                  <div className="form-header">Sign up</div>
+                  <form
+                    ref={this.formRef}
+                    onSubmit={this.handleSignUpButtonClick}>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={this.handleFieldChange}
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'TextBox',
+                              label: 'Email',
+                              value: this.state.email
+                            },
+                            {
+                              id: 2,
+                              type: 'Password',
+                              label: 'Password'
+                            },
+                            {
+                              id: 3,
+                              type: 'Password',
+                              label: 'Confirm Password'
+                            },
+                            {
+                              id: 4,
+                              type: 'Button',
+                              buttonText: 'SIGN UP',
+                              disabled: !this.state.tosClicked
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </form>
+                  <div className="tosContainer">
+                    <input
+                      id="toscheckbox"
+                      type="checkbox"
+                      name="toscheckbox"
+                      onChange={() => this.handleTosClicked()}
+                    />{' '}
+                    <label htmlFor="toscheckbox">
+                      {' '}
+                      I accept and agree to the{' '}
+                    </label>
+                    <a
+                      target="_blank"
+                      href="https://formpress.org/tos.html"
+                      rel="noopener noreferrer">
+                      Terms of Use
+                    </a>
+                    .
+                  </div>
+
+                  {capabilities.googleCredentialsClientID ? (
+                    <div className="for-sign-up">
+                      <div className="or-seperator">or</div>
+                      <div className="google-sign-in">
+                        <LoginWithGoogle
+                          disabled={!this.state.tosClicked}
+                          handleLoginWithGoogleButton={
+                            this.handleLoginWithGoogleClick
+                          }
+                          handleLoginWithGoogleFail={
+                            this.handleLoginWithGoogleFail
+                          }
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <p
+                    className={`message-back ${
+                      message === '' ? 'empty' : 'isFilled'
+                    }`}>
+                    {message}
+                  </p>
+                  <div className="have-account">
+                    Already have an account?
+                    <Link to="/login">&nbsp;LOGIN</Link>
+                  </div>
+                </div>
+              )}
+              <div className="have-trouble">
+                Having trouble?
                 <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
-              </span>
+              </div>
+            </div>
+          </div>
+          <div className="footer cw center grid">
+            <div className="col-8-16">Copyright © 2022 formpress.org</div>
+            <div className="col-8-16 tr">
+              <a href="mailto:support@formpress.org">Contact</a>
             </div>
           </div>
         </div>
-        <div className="footer cw center grid">
-          <div className="col-8-16">Copyright © 2022 formpress.org</div>
-          <div className="col-8-16 tr">
-            <a href="mailto:support@formpress.org">Contact</a>
-          </div>
-        </div>
-      </div>
+      </>
     )
   }
 }
 
 const SignUpWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <SignUp {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <SignUp {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default SignUpWrapped

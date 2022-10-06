@@ -63,15 +63,17 @@ export default class Email extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          dataPlaceholder="Type a question"
-          value={config.label}
-          required={config.required}
-        />
+        <div className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            dataPlaceholder="Type a question"
+            value={config.label}
+            required={config.required}
+          />
+        </div>
         <div className="fl input">
           <input
             id={`q_${config.id}`}

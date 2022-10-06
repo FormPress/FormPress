@@ -7,7 +7,7 @@ import './Templates.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
 
-class Templates extends Component {
+export default class Templates extends Component {
   constructor(props) {
     super(props)
 
@@ -177,5 +177,3 @@ class Templates extends Component {
     )
   }
 }
-
-export default Templates

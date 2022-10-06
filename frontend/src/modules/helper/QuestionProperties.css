@@ -25,6 +25,8 @@
   text-overflow: ellipsis;
   overflow: hidden;
   height: 20px;
+  font-weight: 500;
+  color: #113952;
 }
 
 .question-info > .qtype {
@@ -93,6 +95,10 @@
 }
 
 #qc_prefix.elementHider ~ #qc_prefixOptions {
+  display: none !important;
+}
+
+#qc_prefix.elementHider ~ #qc_placeholder {
   display: none !important;
 }
 

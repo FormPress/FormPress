@@ -12,20 +12,23 @@ import Data from './modules/Data'
 import Forms from './modules/Forms'
 import Login from './modules/Login'
 import SignUp from './modules/SignUp'
-import AuthContext from './auth.context'
-import CapabilitiesContext from './capabilities.context'
-import PrivateRoute from './PrivateRoute'
-import AdminRoute from './AdminRoute'
-import Profile from './Profile'
-import { api, setToken } from './helper'
 import DownloadFile from './modules/helper/DownloadFile'
 import VerifyEMail from './modules/helper/VerifyEmail'
 import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
+import Pricing from './modules/helper/Pricing'
+import Profile from './Profile'
 import NotFoundPage from './modules/common/NotFoundPage'
 import ReadCallback from './modules/common/ReadCallback'
+
+import PrivateRoute from './PrivateRoute'
+import AdminRoute from './AdminRoute'
+
+import { api, setToken } from './helper'
+
+import GeneralContext from './general.context'
 
 import { Logo } from './svg'
 
@@ -43,13 +46,6 @@ let initialAuthObject = {
   exp: '',
   admin: false,
   loggedIn: false
-}
-
-let capabilities = {
-  googleServiceAccountCredentials: false,
-  sendgridApiKey: false,
-  googleCredentialsClientID: false,
-  fileUploadBucket: false
 }
 
 if (auth !== null) {
@@ -70,19 +66,35 @@ class App extends Component {
     super(props)
     this.state = {
       ...initialAuthObject,
-      capabilities
+      capabilities: {},
+      user: { getUsages: this.getUsages }
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
   async componentDidMount() {
-    const result = await api({
+    const capabilitiesResult = await api({
       resource: `/api/server/capabilities`,
       method: 'get'
     })
-    const isEnvironmentVariableSet = result.data
-    this.setState({ capabilities: isEnvironmentVariableSet })
+    const capabilities = capabilitiesResult.data
+
+    this.setState({ capabilities })
+
+    await this.getUsages()
+  }
+
+  getUsages = async () => {
+    if (this.state.user_id) {
+      const { user } = this.state
+      const { data } = await api({
+        resource: `/api/users/${this.state.user_id}/usages`,
+        method: 'get'
+      })
+      user.usages = data
+      this.setState({ user })
+    }
   }
 
   handleSetAuth(
@@ -145,6 +157,13 @@ class App extends Component {
 
   render() {
     const auth = this.getAuthContextValue()
+
+    const generalContext = {
+      auth,
+      capabilities: this.state.capabilities,
+      user: this.state.user
+    }
+
     let homeUrl = undefined
     //after permission update old logged accounts create error dont have permissions
     if (auth.permission === undefined) {
@@ -164,8 +183,7 @@ class App extends Component {
 
     return (
       <Router>
-        <CapabilitiesContext.Provider value={this.state.capabilities}>
-          <AuthContext.Provider value={auth}>
+        <GeneralContext.Provider value={generalContext}>
             <div className="headerContainer">
               <div className="grid cw center">
                 <div className="grid header">
@@ -301,13 +319,14 @@ class App extends Component {
                   path="/resetpassword/:userId/:passwordResetCode"
                   component={ResetPassword}
                 />
+                <PrivateRoute path="/pricing" component={Pricing} />
+
                 <Route path="/read/development" component={ReadCallback} />
                 <Route path="/404" component={NotFoundPage} />
                 {redirectPage}
               </Switch>
             </div>
-          </AuthContext.Provider>
-        </CapabilitiesContext.Provider>
+          </GeneralContext.Provider>
       </Router>
     )
   }

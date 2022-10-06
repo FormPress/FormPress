@@ -87,7 +87,7 @@
             </div>
             <% if (response.type === 'Name') {
               for (const [key, value] of Object.entries(response.answer)) {%>
-                <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+                <div style=" width: 90%; color: #333333; font-size: 16px; padding: 10px 10px 10px 30px;">
                 <%if (key === 'firstName') { %>
                   <i>First Name: </i>
                 <%} else if (key === 'lastName') {%>
@@ -109,7 +109,7 @@
                 </div>
               <%}
             } else if (response.type === 'FileUpload'){%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+              <div style=" width: 90%; color: #333333; font-size: 16px; padding: 10px 10px 10px 30px;">
                 <%if (response.answer === '-') {%>
                   -
                 <%} else {%> 
@@ -127,11 +127,11 @@
                   addressString += value + '\r\n'
 
                 }%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+              <div style=" width: 90%; color: #333333; font-size: 16px; padding: 10px 10px 10px 30px;">
                   <%= addressString%>
               </div>
            <% } else {%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
+              <div style=" width: 90%; color: #333333; font-size: 16px; padding: 10px 10px 10px 30px;">
                 <%- response.answer %>
               </div>
             <%}%>
