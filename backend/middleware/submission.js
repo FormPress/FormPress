@@ -259,6 +259,12 @@ module.exports = (app) => {
         break
     }
 
+    const questionsAndAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
+      form,
+      formattedInput,
+      submission_id
+    )
+
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to
     }
@@ -274,8 +280,7 @@ module.exports = (app) => {
         .renderFile(path.join(__dirname, '../views/submitemailhtml.tpl.ejs'), {
           FRONTEND: FRONTEND,
           FormTitle: form.title,
-          Form: form,
-          FormattedInput: formattedInput,
+          QUESTION_AND_ANSWERS: questionsAndAnswers,
           Submission_id: submission_id,
           Email: sendEmailTo
         })
@@ -335,8 +340,7 @@ module.exports = (app) => {
           {
             FRONTEND: FRONTEND,
             FormTitle: form.title,
-            Form: form,
-            FormattedInput: formattedInput,
+            QUESTION_AND_ANSWERS: questionsAndAnswers,
             Submission_id: submission_id
           }
         )
@@ -345,58 +349,7 @@ module.exports = (app) => {
           error.errorReport(err)
         })
 
-      let questionData = []
-      for (const data of formattedInput) {
-        const question_id = parseInt(data.q_id)
-        const value = data.value
-        const checkQuestion = form.props.elements.filter(
-          (element) => element.id === question_id
-        )
-        const question = checkQuestion[0]
-        const type = checkQuestion[0].type
-
-        questionData.push({
-          question: question,
-          type: type,
-          answer: value,
-          question_id: question_id
-        })
-      }
-      const responselist = questionData.map((data) => {
-        let response = {}
-        response.question = data.question.label
-        response.id = data.question_id
-        if (data.type === 'Checkbox' && data.answer === 'off') {
-          response.answer = '-'
-        } else if (data.type === 'FileUpload') {
-          if (data.answer === '') {
-            response.answer = '-'
-          } else {
-            const value = JSON.parse(data.answer)
-            response.answer = []
-            value.forEach((file) => {
-              let uriFileName = encodeURI(file.fileName)
-              let downloadLink = `${FRONTEND}/download/${form.id}/${submission_id}/${data.question_id}/${uriFileName}`
-              response.answer.push({
-                downloadLink: downloadLink,
-                fileName: file.fileName
-              })
-            })
-          }
-        } else if (data.type === 'Radio') {
-          response.answer = data.question.options[parseInt(data.answer)]
-        } else {
-          if (data.answer === '') {
-            response.answer = '-'
-          } else {
-            response.answer = data.answer
-          }
-        }
-        response.type = data.type
-
-        return response
-      })
-      const identifierElement = responselist.find(
+      const identifierElement = questionsAndAnswers.find(
         (i) =>
           i.id === parseInt(gDrive.submissionIdentifier.id) &&
           i.type === gDrive.submissionIdentifier.type

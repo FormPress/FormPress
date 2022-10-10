@@ -1,3 +1,5 @@
+const reactDOMServer = require('react-dom/server')
+
 const Elements = require('../script/transformed/elements/')
 
 const parseInput = (input) => {
@@ -17,7 +19,7 @@ exports.formatInput = (questions, inputs) => {
   const parsedInputs = inputs.map((input) => parseInput(input))
   questions.forEach((question) => {
     if ('submissionHandler' in Elements[question.type]) {
-      let value = Elements[question.type].submissionHandler.getQuestionValue(
+      let value = Elements[question.type].submissionHandler.findQuestionValue(
         parsedInputs,
         question.id
       )
@@ -29,4 +31,40 @@ exports.formatInput = (questions, inputs) => {
   })
 
   return formattedInput
+}
+
+exports.getQuestionsWithRenderedAnswers = (
+  form,
+  formattedInput,
+  submission_id
+) => {
+  let questionData = []
+  for (const input of formattedInput) {
+    const question_id = parseInt(input.q_id)
+    const { value } = input
+    // necessary for FileUpload
+    input.submission_id = submission_id
+    const element = form.props.elements.find(
+      (element) => element.id === question_id
+    )
+
+    let plainAnswer, renderedAnswer
+
+    if (typeof Elements[element.type].renderDataValue === 'function') {
+      renderedAnswer = Elements[element.type].renderDataValue(input, element)
+      renderedAnswer = reactDOMServer.renderToStaticMarkup(renderedAnswer)
+    } else {
+      plainAnswer = value ? value : '-'
+    }
+
+    questionData.push({
+      question: element.label,
+      type: element.type,
+      answer: plainAnswer,
+      renderedAnswer,
+      id: question_id
+    })
+  }
+
+  return questionData
 }
