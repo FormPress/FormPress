@@ -75,14 +75,12 @@
         .answer-value {
             padding-bottom: 5px;
             margin-left: 10px;
+            color: #333333;
         }
         .question-name {
             color: #113952;
             font-weight: bold;
             padding: 10px 0 0;
-        }
-        .name-key > i {
-            margin-left: 10px;
         }
         .content {
             display: flex;
@@ -91,149 +89,36 @@
     </style>
 </head>
 <body>
-
 <div class="header">
     <div class="fp-logo">
         <%- include ("../svg/formpresslogo.svg") %>
     </div>
-
 </div>
 <div class="content-wrapper">
-
-<div class="content">
-    <div class="hero-logo">
-        <%- include ("../svg/SubmitSuccess.svg") %>
+    <div class="content">
+        <div class="hero-logo">
+            <%- include ("../svg/SubmitSuccess.svg") %>
+        </div>
+        <div class="notifier-text">
+            <p>
+            Your form <strong>&quot;<%= FormTitle %>&quot;</strong> just received a submission. Here are the responses:
+            </p>
+        </div>
     </div>
-
-    <div class="notifier-text">
-<p>
-        Your form <strong>&quot;<%= FormTitle %>&quot;</strong> just received a submission. Here are the responses:
-
-</p>
-
-
-    </div>
-
-
-
-</div>
     <div class="answers">
         <%
-        let questionData = []
-        for (const data of FormattedInput) {
-            const question_id = parseInt(data.q_id)
-            const value = data.value
-            const checkQuestion = Form.props.elements.filter(
-                    (element) => element.id === question_id
-            )
-            const question = checkQuestion[0]
-            const type = checkQuestion[0].type
-
-            questionData.push({
-                question: question,
-                type: type,
-                answer: value,
-                question_id: question_id
-            })
-        }
-        const responselist = questionData.map((data) => {
-            let response = {}
-            response.question = data.question.label
-            if (data.type === 'Checkbox' && data.answer === 'off') {
-                response.answer = '-'
-            } else if (data.type === 'FileUpload') {
-                if (data.answer === '') {
-                    response.answer = '-'
-                } else {
-                    const value = JSON.parse(data.answer)
-                    response.answer = []
-                    value.forEach((file)=>{
-                        let uriFileName = encodeURI(file.fileName)
-                        let downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
-                        response.answer.push({
-                            downloadLink: downloadLink,
-                            fileName: file.fileName
-                        })
-                    })
-                }
-            } else if (data.type === 'Radio') {
-                response.answer = data.question.options[parseInt(data.answer)]
-            }
-            else {
-                if (data.answer === '') {
-                    response.answer = '-'
-                } else {
-                    response.answer = data.answer
-                }
-            }
-            response.type = data.type
-
-            return response
-        })
-
-
-        responselist.forEach (function (response) {%>
+        QUESTION_AND_ANSWERS.forEach (function (QnA) {%>
             <div>
                 <div class="question-name">
-                    <%- response.question%>
+                    <%- QnA.question%>
                 </div>
-                <% if (response.type === 'Name') {
-                        for (const [key, value] of Object.entries(response.answer)) {%>
-                <div class="name-key">
-                    <%if (key === 'firstName') { %>
-                        <i>First Name: </i>
-                    <%} else if (key === 'lastName') {%>
-                        <i>Last Name: </i>
-                    <%} else if (key === 'middleName') {%>
-                        <i>Middle Name: </i>
-                    <%} else if (key === 'suffix') {%>
-                        <i>Suffix: </i>
-                    <%} else if (key === 'prefix') {%>
-                        <i>Prefix: </i>
-                    <%} else {%>
-                        <i><%= key%>: </i>
-                    <%}%>
-                    <% if (value === '') {%>
-                        -
-                    <%} else {%>
-                        <%= value%>
-                    <%}%>
-                </div>
-                <%}
-                } else if (response.type === 'FileUpload'){%>
                 <div class="answer-value">
-                    <%if (response.answer === '-') {%>
-                        -
-                    <%} else {%>
-                        <%
-                        response.answer.forEach((answer)=>{%>
-                            <a  href="<%= answer.downloadLink %>"><%=answer.fileName%></a><br/><%
-                        })
-                        %>
-
-                    <%}%>
+                    <%- QnA.renderedAnswer %>
                 </div>
-                <%} else if (response.type === 'Address') {
-                    let addressString = ''
-                    for (const [value] of Object.entries(response.answer)) {
-                        addressString += value + '\r\n'
-
-                    }%>
-                <div class="answer-value">
-                    <%= addressString%>
-                </div>
-                <% } else {%>
-                    <div class="answer-value">
-                        <%- response.answer %>
-                    </div>
-                <%}%>
             </div>
         <%})%>
-        %>
     </div>
 </div>
-
-
 <div class="footer">
     &#169; 2022 FORMPRESS.ORG
 </div>
