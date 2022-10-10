@@ -86,6 +86,43 @@
             display: flex;
             width: 780px;
         }
+
+        /* FOR NPS ONLY */
+        .nps {
+          list-style: none;
+          display: flex;
+          justify-content: space-around;
+          max-width: fit-content;
+          padding: 0;
+        }
+
+        .nps li {
+          display: inline-flex;
+        }
+
+        .nps [type='radio'] {
+          display: none;
+        }
+
+
+        .nps .net-promoter-score-label {
+          display: inline-block;
+          border: 1px solid #1c5c85;
+          background-color: #fff;
+          color: #1c5c85;
+          width: 40px;
+          height: 30px;
+          margin: 0 5px;
+          user-select: none;
+          text-align: center;
+          line-height: 28px;
+        }
+
+        .nps-input:checked + label {
+          border: 1px solid #1c5c85;
+          background-color: #1c5c85;
+          color: #fff;
+        }
     </style>
 </head>
 <body>
