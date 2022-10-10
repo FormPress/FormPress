@@ -1,11 +1,33 @@
 import React, { Component } from 'react'
 
-import { Link } from 'react-router-dom'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 import './FileUpload.css'
+
+const {
+  REACT_APP_FP_ENV,
+  REACT_APP_FRONTEND,
+  REACT_APP_BACKEND,
+  FP_HOST,
+  FP_ENV
+} = process.env
+
+let FRONTEND =
+  REACT_APP_FP_ENV === 'development' ? REACT_APP_FRONTEND : REACT_APP_BACKEND
+
+if (FRONTEND === undefined) {
+  FRONTEND = `${FP_HOST}${FP_ENV === 'development' ? ':3000' : null}`
+}
+
+// may later be refactored to get the bucketName dynamically
+let bucketName =
+  'http://storage.googleapis.com/formpress-stage-test-fileuploads/'
+
+if (REACT_APP_FP_ENV === 'production' || FP_ENV === 'production') {
+  bucketName = 'http://storage.googleapis.com/fp-uploads-production/'
+}
 
 export default class FileUpload extends Component {
   static weight = 7
@@ -24,7 +46,7 @@ export default class FileUpload extends Component {
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -35,23 +57,49 @@ export default class FileUpload extends Component {
     }
   }
 
-  static renderDataValue(entry) {
+  static renderDataValue(entry, question) {
     if (entry.value !== '') {
-      const parsedValue = JSON.parse(entry.value)
-      const values = parsedValue.map((file, index) => (
-        <Link
-          to={`/download/${entry.form_id}/${entry.submission_id}/${
-            entry.question_id
-          }/${encodeURI(file.fileName)}`}
-          target="_blank"
-          key={index}>
-          {file.fileName}
-          <br />
-        </Link>
+      let files
+      let imgExtensionArray = [
+        'png',
+        'jpg',
+        'jpeg',
+        'gif',
+        'ico',
+        'apng',
+        'svg',
+        'webp',
+        'bmp'
+      ]
+
+      if (typeof entry.value === 'string') {
+        files = JSON.parse(entry.value)
+      } else {
+        files = entry.value
+      }
+      return files.map((file, index) => (
+        <>
+          {imgExtensionArray.includes(file.uploadName.split('.').pop()) ? (
+            <img
+              src={bucketName + file.uploadName}
+              style={{ maxWidth: '700px' }}
+            />
+          ) : null}
+          <a
+            href={`${FRONTEND}/download/${question.form_id}/${
+              entry.submission_id
+            }/${question.id}/${encodeURI(file.fileName)}`}
+            target="_blank"
+            rel="noreferrer"
+            key={index}
+            style={{ display: 'block' }}>
+            {file.fileName}
+            <br />
+          </a>
+        </>
       ))
-      return values
     } else {
-      return ''
+      return '-'
     }
   }
 
