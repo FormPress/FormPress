@@ -12,9 +12,9 @@ const AdminRoute = ({ children, component, ...rest }) => {
           render={(props) => {
             const Component = component
 
-            return value.loggedIn === true ? (
+            return value.auth.loggedIn === true ? (
               //user_role=1 admin
-              value.user_role === 1 || value.admin === true ? (
+              value.auth.user_role === 1 || value.auth.admin === true ? (
                 component !== undefined ? (
                   <Component {...props} generalContext={value} />
                 ) : (
