@@ -292,10 +292,12 @@ export default class Builder extends Component {
     const form = { ...this.state.form }
     form.props = template.props
     form.title = template.title
-    form.props.integrations = [{
-      type: 'email',
-      to: this.props.generalContext.auth.email
-    }]
+    form.props.integrations = [
+      {
+        type: 'email',
+        to: this.props.generalContext.auth.email
+      }
+    ]
     this.setState({ form, isTemplateModalOpen: false })
     this.setState({ loading: false })
   }
