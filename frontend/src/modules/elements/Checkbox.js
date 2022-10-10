@@ -25,7 +25,7 @@ export default class Checkbox extends Component {
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -47,15 +47,6 @@ export default class Checkbox extends Component {
     }
   }
 
-  static IsJsonString(str) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
-
   static helpers = {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
@@ -68,72 +59,28 @@ export default class Checkbox extends Component {
     }
   }
 
-  static dataContentOrganizer(dataContentValue, element) {
-    const tempContentValue = cloneDeep(dataContentValue)
-    let returnContent = []
-
-    if (this.IsJsonString(tempContentValue) === false) {
-      for (let elementContent of element.options) {
-        if (tempContentValue === elementContent) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
-    } else {
-      for (let elementContent of element.options) {
-        if (tempContentValue.includes(elementContent) === true) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
-    }
-
-    return returnContent
-  }
-
-  static renderDataValue(entry) {
-    return entry.value.map((input, index) => {
+  static renderDataValue(entry, question) {
+    return question.options.map((option, index) => {
       return (
         <div className="input" key={index}>
           <input
-            type={input.type.toLowerCase()}
+            type={question.type.toLowerCase()}
             id={'q_required_' + index}
-            className={input.toggle === true ? 'toggle-checkbox' : ''}
-            defaultChecked={input.value}
+            className={question.toggle === true ? 'toggle-checkbox' : ''}
+            value={entry.value[index]}
+            checked={entry.value.includes(index.toString())}
             disabled
             readOnly
           />
-          {input.toggle === true ? <span className="slider"></span> : null}
+          {question.toggle === true ? <span className="slider"></span> : null}
           <label
             className={
-              input.type.toLowerCase() +
+              question.type.toLowerCase() +
               '-label ' +
-              (input.toggle === true ? 'toggle-label' : '')
+              (question.toggle === true ? 'toggle-label' : '')
             }
             htmlFor={'q_required_' + index}>
-            {input.content}
+            {option}
           </label>
         </div>
       )
@@ -250,7 +197,7 @@ export default class Checkbox extends Component {
                   type="checkbox"
                   id={`q_${config.id}_${key}`}
                   name={`q_${config.id}`}
-                  value={item}
+                  value={key}
                   {...inputProps}
                 />
                 {config.toggle === true ? <span className="slider"></span> : ''}

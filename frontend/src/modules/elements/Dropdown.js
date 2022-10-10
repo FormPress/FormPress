@@ -66,7 +66,7 @@ export default class Dropdown extends Component {
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {

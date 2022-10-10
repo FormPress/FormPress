@@ -53,7 +53,7 @@ export default class Address extends Component {
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let valueObject = {}
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -156,14 +156,30 @@ export default class Address extends Component {
     }
   }
 
-  static renderDataValue(entry) {
-    if (entry.value !== '') {
-      return Object.entries(JSON.parse(entry.value))
-        .map(([, t]) => `${t}`)
-        .join(' ')
-    } else {
-      return '-'
-    }
+  static renderDataValue(entry, question) {
+    return (
+      Object.entries(entry.value).map((entry) => {
+        const key = entry[0]
+        const value = entry[1]
+
+        let defaultSublabel = true
+
+        if (question[`${key}SublabelText`]) {
+          defaultSublabel = false
+        }
+
+        return (
+          <div key={key}>
+            <strong
+              style={defaultSublabel ? { textTransform: 'capitalize' } : null}>
+              {defaultSublabel ? key : question[`${key}SublabelText`]}:
+            </strong>
+            {value}
+            <br />
+          </div>
+        )
+      }) || '-'
+    )
   }
 
   render() {
