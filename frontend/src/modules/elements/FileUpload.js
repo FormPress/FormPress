@@ -81,6 +81,7 @@ export default class FileUpload extends Component {
         <>
           {imgExtensionArray.includes(file.uploadName.split('.').pop()) ? (
             <img
+              alt={file.filename}
               src={bucketName + file.uploadName}
               style={{ maxWidth: '700px' }}
             />
@@ -90,7 +91,7 @@ export default class FileUpload extends Component {
               entry.submission_id
             }/${question.id}/${encodeURI(file.fileName)}`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             key={index}
             style={{ display: 'block' }}>
             {file.fileName}
