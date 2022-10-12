@@ -357,22 +357,24 @@ module.exports = (app) => {
 
       if (identifierElement !== undefined) {
         const identifierAnswer = identifierElement.answer
-        if (
-          identifierElement.type === 'Name' ||
-          identifierElement.type === 'Address'
-        ) {
-          Object.values(identifierAnswer).forEach((value) => {
-            customSubmissionFileName += value + ' '
-          })
-          customSubmissionFileName = customSubmissionFileName
-            .replace(/  +/g, ' ')
-            .trim()
-        } else if (identifierElement.type === 'FileUpload') {
-          customSubmissionFileName = identifierAnswer[0].fileName
-        } else {
-          customSubmissionFileName = identifierAnswer
+        if (identifierAnswer) {
+          if (
+            identifierElement.type === 'Name' ||
+            identifierElement.type === 'Address'
+          ) {
+            Object.values(identifierAnswer).forEach((value) => {
+              customSubmissionFileName += value + ' '
+            })
+            customSubmissionFileName = customSubmissionFileName
+              .replace(/  +/g, ' ')
+              .trim()
+          } else if (identifierElement.type === 'FileUpload') {
+            customSubmissionFileName = identifierAnswer[0].fileName
+          } else {
+            customSubmissionFileName = identifierAnswer
+          }
+          customSubmissionFileName += ' - ' + submissionDate
         }
-        customSubmissionFileName += ' - ' + submissionDate
       } else {
         customSubmissionFileName += submissionDate
       }
