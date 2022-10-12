@@ -7,8 +7,6 @@ import { faImage, faFileUpload } from '@fortawesome/free-solid-svg-icons'
 
 import './Image.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 export default class Image extends Component {
   constructor(props) {
     super(props)
