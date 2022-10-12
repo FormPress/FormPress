@@ -45,18 +45,20 @@ export default class GoogleDrive extends Component {
   componentDidMount() {
     const props = this.props
 
-    let { submissionIdentifier } = props.integrationObject
+    if (props.integrationObject) {
+      let { submissionIdentifier } = props.integrationObject
 
-    const selectedELement = props.form.props.elements.find(
-      (element) =>
-        element.id === submissionIdentifier.id ||
-        element.type === submissionIdentifier.type
-    )
+      const selectedELement = props.form.props.elements.find(
+        (element) =>
+          element.id === submissionIdentifier.id ||
+          element.type === submissionIdentifier.type
+      )
 
-    if (selectedELement) {
-      this.setState({ submissionIdentifier })
-    } else {
-      this.setState({ submissionIdentifier: {} })
+      if (selectedELement) {
+        this.setState({ submissionIdentifier })
+      } else {
+        this.setState({ submissionIdentifier: {} })
+      }
     }
 
     window.addEventListener('message', function (event) {
@@ -358,12 +360,13 @@ export default class GoogleDrive extends Component {
             <div className="file-name-preview">
               <div className="message">Your submissions will be saved as:</div>
               <div className="value">
-                <div className="chosen-label">
+                <div className="chosen-label filename-block">
                   {this.state.submissionIdentifier.id !== undefined
-                    ? submissionIdentifierElement.display + ' - '
+                    ? submissionIdentifierElement.display
                     : ''}
                 </div>
-                Submission Date.pdf
+                <span className="filename-separator"> - </span>
+                <span className="filename-block">Submission Date</span>
               </div>
             </div>
           </div>

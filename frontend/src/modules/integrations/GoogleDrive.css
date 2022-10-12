@@ -216,6 +216,8 @@
   padding-left: 40px;
   text-overflow: ellipsis;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .integration-wrapper
@@ -235,7 +237,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  display: block;
+  max-width: 11rem !important;
+  padding: 0.5rem;
 }
+
 .integration-wrapper
   > .integration-content
   > .integration-configuration
@@ -243,6 +249,21 @@
   > .value {
   margin-top: 30px;
   display: flex;
+  align-items: center;
+  border: 1px solid #aeaeae;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding: 3px;
+  align-self: center;
+  border-radius: 3px;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .file-name-preview
+  > .value:after {
+  content: '.pdf';
 }
 
 .integration-wrapper > .integration-content > .integration-controls {
@@ -259,4 +280,32 @@
   user-select: none;
   cursor: pointer;
   color: grey;
+}
+
+.file-name-preview > .value .filename-block {
+  background-color: #b3b3b3;
+  border-radius: 4px;
+  font-weight: 700;
+  font-family: Roboto;
+  color: white;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2px;
+  text-align: center;
+  height: 30px;
+  padding: 2px;
+}
+
+.file-name-preview > .value .filename-block:empty {
+  display: none !important;
+}
+.file-name-preview > .value .filename-separator {
+  color: #6a6868;
+  margin-left: -2px;
+}
+
+.file-name-preview > .value .filename-block:empty + .filename-separator {
+  display: none !important;
 }
