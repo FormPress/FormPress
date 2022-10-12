@@ -373,11 +373,10 @@ module.exports = (app) => {
           } else {
             customSubmissionFileName = identifierAnswer
           }
-          customSubmissionFileName += ' - ' + submissionDate
         }
-      } else {
-        customSubmissionFileName += submissionDate
       }
+
+      customSubmissionFileName += ' - ' + submissionDate
 
       const browser = await puppeteer.launch({
         headless: true,

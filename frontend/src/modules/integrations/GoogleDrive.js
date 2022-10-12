@@ -17,11 +17,7 @@ export default class GoogleDrive extends Component {
     super(props)
     this.state = {
       folderName: this.props.form.title,
-      submissionIdentifier:
-        this.props.integrationObject === null ||
-        this.props.integrationObject.submissionIdentifier === {}
-          ? {}
-          : this.props.integrationObject.submissionIdentifier,
+      submissionIdentifier: {},
       display: this.props.activeStatus ? 'active' : 'description',
       inputElements: [],
       isModalOpen: false,
@@ -48,6 +44,21 @@ export default class GoogleDrive extends Component {
 
   componentDidMount() {
     const props = this.props
+
+    let { submissionIdentifier } = props.integrationObject
+
+    const selectedELement = props.form.props.elements.find(
+      (element) =>
+        element.id === submissionIdentifier.id ||
+        element.type === submissionIdentifier.type
+    )
+
+    if (selectedELement) {
+      this.setState({ submissionIdentifier })
+    } else {
+      this.setState({ submissionIdentifier: {} })
+    }
+
     window.addEventListener('message', function (event) {
       if (event.data?.type === 'gdriveCallback') {
         const {
@@ -228,6 +239,7 @@ export default class GoogleDrive extends Component {
   }
 
   render() {
+    console.log(this.props, 'heh')
     const submissionIdentifierElement = this.state.inputElements.find(
       (e) => e.value === parseInt(this.state.submissionIdentifier.id)
     )
