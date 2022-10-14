@@ -81,7 +81,7 @@ export default class FileUpload extends Component {
         <>
           {imgExtensionArray.includes(file.uploadName.split('.').pop()) ? (
             <img
-              alt={file.filename}
+              alt={`File: ${file.fileName}`}
               src={bucketName + file.uploadName}
               style={{ maxWidth: '700px' }}
             />

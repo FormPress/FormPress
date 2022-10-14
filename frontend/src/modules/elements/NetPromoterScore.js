@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import { cloneDeep } from 'lodash'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import { faSignal } from '@fortawesome/free-solid-svg-icons'
@@ -35,60 +34,6 @@ export default class NetPromoterScore extends Component {
     }
   }
 
-  static IsJsonString(str) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
-
-  static dataContentOrganizer(dataContentValue, element) {
-    const tempContentValue = cloneDeep(dataContentValue)
-    let returnContent = []
-
-    if (this.IsJsonString(tempContentValue) === false) {
-      for (let elementContent of element.options) {
-        if (tempContentValue === elementContent) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
-    } else {
-      for (let elementContent of element.options) {
-        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
-    }
-
-    return returnContent
-  }
-
   static renderDataValue(entry) {
     return (
       <ul className="nps">
@@ -102,7 +47,8 @@ export default class NetPromoterScore extends Component {
                 value={item}
                 className="nps-input"
                 disabled="disabled"
-                defaultChecked={entry.value === item}></input>
+                // eslint-disable-next-line eqeqeq
+                checked={entry.value == item}></input>
               <label
                 className="net-promoter-score-label"
                 htmlFor={`q_${entry.id}_${item}`}>

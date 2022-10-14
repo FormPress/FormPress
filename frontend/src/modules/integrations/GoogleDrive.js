@@ -348,6 +348,7 @@ export default class GoogleDrive extends Component {
                       {
                         id: 1,
                         type: 'Dropdown',
+                        placeholder: 'Please select a question',
                         label: 'Select a Question as Submission Identifier',
                         value: this.state.submissionIdentifier.id,
                         options: this.state.inputElements
@@ -406,12 +407,13 @@ export default class GoogleDrive extends Component {
             <div className="file-name-preview">
               <div className="message">Your submissions will be saved as:</div>
               <div className="value">
-                <div className="chosen-label">
+                <div className="chosen-label filename-block">
                   {this.state.submissionIdentifier.id !== undefined
-                    ? submissionIdentifierElement.display + ' - '
+                    ? submissionIdentifierElement.display
                     : ''}
                 </div>
-                Submission Date.pdf
+                <span className="filename-separator"> - </span>
+                <span className="filename-block">Submission Date</span>
               </div>
             </div>
           </div>

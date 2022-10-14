@@ -53,9 +53,9 @@ exports.getQuestionsWithRenderedAnswers = (
     if (typeof Elements[element.type].renderDataValue === 'function') {
       renderedAnswer = Elements[element.type].renderDataValue(input, element)
       renderedAnswer = reactDOMServer.renderToStaticMarkup(renderedAnswer)
-    } else {
-      plainAnswer = value ? value : '-'
     }
+
+    plainAnswer = value ? value : '-'
 
     questionData.push({
       question: element.label,
