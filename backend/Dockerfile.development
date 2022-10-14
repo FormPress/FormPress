@@ -1,5 +1,7 @@
 FROM node:16.13.0-alpine3.14
 
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
 RUN apk add mailx postfix chromium
 
 RUN mkdir /src
