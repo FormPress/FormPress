@@ -1,21 +1,25 @@
-<!DOCTYPE html>
-<html>
+<html lang="">
 <head>
     <style>
+      @media print {
+        .answers{
+          display: block;
+        }
+        .QnA {
+          display: block;
+          padding-top: 0.5rem;
+          padding-bottom: 0.5rem;
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+      }
         html {
             height: 100%;
         }
         body {
             width: 780px;
-            height: 100%;
-            display: table;
             margin: auto;
             font-family: 'Montserrat', sans-serif;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.11),
-            0 2px 2px rgba(0,0,0,0.11),
-            0 4px 4px rgba(0,0,0,0.11),
-            0 6px 8px rgba(0,0,0,0.11),
-            0 8px 16px rgba(0,0,0,0.11);
             position: relative;
         }
        .header {
@@ -124,6 +128,7 @@
           color: #fff;
         }
     </style>
+    <title></title>
 </head>
 <body>
 <div class="header">
@@ -145,7 +150,7 @@
     <div class="answers">
         <%
         QUESTION_AND_ANSWERS.forEach (function (QnA) {%>
-            <div>
+            <div class="QnA">
                 <div class="question-name">
                     <%- QnA.question%>
                 </div>
