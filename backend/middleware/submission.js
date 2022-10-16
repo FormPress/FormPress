@@ -371,6 +371,31 @@ module.exports = (app) => {
         Buffer.from(base64Token, 'base64').toString()
       )
 
+      const imgEncoded = {}
+      let acceptedExtensions = [
+        'png',
+        'jpg',
+        'jpeg',
+        'gif',
+        'ico',
+        'apng',
+        'svg',
+        'webp',
+        'bmp'
+      ]
+
+      Object.keys(req.files).forEach((key) => {
+        const file = req.files[key]
+
+        const extension = file.name.split('.').pop()
+
+        if (acceptedExtensions.includes(extension) && file.size < 5000000) {
+          imgEncoded[key] = {}
+          imgEncoded[key].mimeType = file.mimetype
+          imgEncoded[key].base64 = file.data.toString('base64')
+        }
+      })
+
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
@@ -378,6 +403,7 @@ module.exports = (app) => {
             FRONTEND: FRONTEND,
             FormTitle: form.title,
             QUESTION_AND_ANSWERS: questionsAndAnswers,
+            imgEncoded,
             Submission_id: submission_id
           }
         )
@@ -432,8 +458,7 @@ module.exports = (app) => {
       try {
         pdfBuffer = await page.pdf({
           format: 'A4',
-          printBackground: true,
-          margin: { top: '10px' }
+          printBackground: true
         })
       } catch (err) {
         console.log('Error while creating the pdf file', err)

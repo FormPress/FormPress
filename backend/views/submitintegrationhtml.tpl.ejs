@@ -2,15 +2,21 @@
 <head>
     <style>
       @media print {
-        .answers{
+        .answers {
           display: block;
+          page-break-inside: avoid;
         }
         .QnA {
           display: block;
-          padding-top: 0.5rem;
-          padding-bottom: 0.5rem;
-          page-break-inside: avoid;
           break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        body {
+          box-shadow: unset;
+        }
+        @page {
+          margin: 0.4in;
         }
       }
         html {
@@ -91,44 +97,44 @@
             width: 780px;
         }
 
-        /* FOR NPS ONLY */
-        .nps {
-          list-style: none;
-          display: flex;
-          justify-content: space-around;
-          max-width: fit-content;
-          padding: 0;
-        }
+      /* FOR NPS ONLY */
+      .nps {
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        max-width: fit-content;
+        padding: 0;
+      }
 
-        .nps li {
-          display: inline-flex;
-        }
+      .nps li {
+        display: inline-flex;
+      }
 
-        .nps [type='radio'] {
-          display: none;
-        }
+      .nps [type='radio'] {
+        display: none;
+      }
 
+      .nps .net-promoter-score-label {
+        display: inline-block;
+        border: 1px solid #1c5c85;
+        background-color: #fff;
+        color: #1c5c85;
+        width: 40px;
+        height: 30px;
+        margin: 0 5px;
+        user-select: none;
+        text-align: center;
+        line-height: 28px;
+      }
 
-        .nps .net-promoter-score-label {
-          display: inline-block;
-          border: 1px solid #1c5c85;
-          background-color: #fff;
-          color: #1c5c85;
-          width: 40px;
-          height: 30px;
-          margin: 0 5px;
-          user-select: none;
-          text-align: center;
-          line-height: 28px;
-        }
+      .nps-input:checked + label {
+        border: 1px solid #1c5c85;
+        background-color: #1c5c85;
+        color: #fff;
+      }
 
-        .nps-input:checked + label {
-          border: 1px solid #1c5c85;
-          background-color: #1c5c85;
-          color: #fff;
-        }
     </style>
-    <title></title>
+    <title><%= FormTitle %></title>
 </head>
 <body>
 <div class="header">
@@ -154,9 +160,19 @@
                 <div class="question-name">
                     <%- QnA.question%>
                 </div>
+                <% if (QnA.type === 'FileUpload' && imgEncoded[`q_${QnA.id}`] !== undefined ) {
+                  const matchingFile = imgEncoded[`q_${QnA.id}`]
+                  const imgSrc = `data:${matchingFile.mimeType};base64, ${matchingFile.base64}`
+                %>
+                    <div class="answer-value">
+                        <img src="<%=imgSrc%>" alt="Uploaded image." style="max-width: 700px; padding: 10px 0 10px 0;" />
+                        <%- QnA.renderedAnswer %>
+                    </div>
+                    <% } else {%>
                 <div class="answer-value">
                     <%- QnA.renderedAnswer %>
                 </div>
+                <% }%>
             </div>
         <%})%>
     </div>
