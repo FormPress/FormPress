@@ -2,14 +2,22 @@ import React, { Component } from 'react'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImage, faFileUpload } from '@fortawesome/free-solid-svg-icons'
+import { faImage } from '@fortawesome/free-solid-svg-icons'
+
+import Cropper from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
 
 import './Image.css'
 
 export default class Image extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      image: '',
+      cropData: '',
+      cropper: undefined
+    }
   }
 
   static weight = 16
@@ -18,7 +26,8 @@ export default class Image extends Component {
     id: 0,
     type: 'Image',
     label: 'Image',
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    uploadedImageUrl: ''
   }
 
   static metaData = {
@@ -52,6 +61,7 @@ export default class Image extends Component {
           src={`${fileUploadPath}${encodeURI(file.uploadName)}`}
           target="_blank"
           key={index}
+          alt=""
         />
       ))
 
@@ -66,13 +76,31 @@ export default class Image extends Component {
     isFilled: 'defaultInputHelpers'
   }
 
+  onChange = (e) => {
+    e.preventDefault()
+    let files
+    if (e.dataTransfer) {
+      files = e.dataTransfer.files
+    } else if (e.target) {
+      files = e.target.files
+    }
+    const reader = new FileReader()
+    reader.onload = () => {
+      this.setState({ image: reader.result })
+    }
+    reader.readAsDataURL(files[0])
+  }
+
+  getCropData = () => {
+    if (typeof this.state.cropper !== 'undefined') {
+      this.setState({
+        cropData: this.state.cropper.getCroppedCanvas().toDataURL()
+      })
+    }
+  }
+
   render() {
     const { config, mode } = this.props
-
-    var display
-    if (mode === 'builder' || mode === 'viewer') {
-      display
-    }
 
     const script = (
       <script
@@ -142,32 +170,55 @@ export default class Image extends Component {
             required={config.required}
           />
         </div>
-        <div className="file-container" key={2}>
-          <label
-            className="file-wrapper"
-            htmlFor={`q_${config.id}`}
-            id={`label_${config.id}`}>
-            <input
-              className="file-input"
-              id={`q_${config.id}`}
-              type="file"
-              accept="image/*"
-              name={`q_${config.id}`}
-              onChange={this.handleChange}
+        <div>
+          <div style={{ width: '100%' }}>
+            <input type="file" onChange={this.onChange} />
+            <button>Use default img</button>
+            <br />
+            <br />
+            <Cropper
+              style={{ height: 400, width: '100%' }}
+              zoomTo={0.5}
+              initialAspectRatio={1}
+              preview=".img-preview"
+              viewMode={1}
+              minCropBoxHeight={10}
+              minCropBoxWidth={10}
+              background={false}
+              responsive={true}
+              autoCropArea={1}
+              checkOrientation={false}
+              onInitialized={(instance) => {
+                this.setState({ cropper: instance })
+              }}
+              guides={true}
             />
-            <div id={`file-content_${config.id}`} className="file-content">
-              <div className="file-infos">
-                <p className="file-icon">
-                  <FontAwesomeIcon icon={faFileUpload} size="6x" />
-                  <span className="icon-shadow"></span>
-                  <span>
-                    Click to browse
-                    <span className="has-drag"> or drop image here</span>
-                  </span>
-                </p>
-              </div>
+          </div>
+          <div>
+            <div className="box" style={{ width: '50%', float: 'right' }}>
+              <h1>Preview</h1>
+              <div
+                className="img-preview"
+                style={{ width: '100%', float: 'left', height: '300px' }}
+              />
             </div>
-          </label>
+            <div
+              className="box"
+              style={{ width: '50%', float: 'right', height: '300px' }}>
+              <h1>
+                <span>Crop</span>
+                <button style={{ float: 'right' }} onClick={this.getCropData}>
+                  Crop Image
+                </button>
+              </h1>
+              <img
+                style={{ width: '100%' }}
+                src={this.state.cropData}
+                alt="cropped"
+              />
+            </div>
+          </div>
+          <br style={{ clear: 'both' }} />
         </div>
         {mode === 'viewer' ? (
           ''
@@ -186,7 +237,6 @@ export default class Image extends Component {
                   : ''
               }
             />
-            {script}
           </div>
         )}
       </ElementContainer>
