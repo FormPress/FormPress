@@ -384,7 +384,7 @@ module.exports = (app) => {
         'bmp'
       ]
 
-      if (fileUploadCounter > -1) {
+      if (fileUploadCounter > -1 && req.files) {
         Object.keys(req.files).forEach((key) => {
           const file = req.files[key]
 

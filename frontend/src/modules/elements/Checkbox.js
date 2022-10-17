@@ -32,6 +32,11 @@ export default class Checkbox extends Component {
           value = elem.value
         }
       }
+
+      if (!Array.isArray(value)) {
+        value = [value]
+      }
+
       return value
     }
   }

@@ -25,7 +25,6 @@
 
   /* FOR NPS ONLY */
 
-
     .nps {
       list-style: none;
       display: flex;
@@ -39,9 +38,8 @@
     }
 
     .nps [type='radio'] {
-      display: none;
+      display: none !important;
     }
-
 
     .nps .net-promoter-score-label {
       display: inline-block;
@@ -58,9 +56,10 @@
 
     .nps-input:checked + label {
       border: 1px solid #1c5c85;
-      background-color: #1c5c85;
+      background-color: #1c5c85 !important;
       color: #fff;
     }
+
   </style>
 </head>
   <body>

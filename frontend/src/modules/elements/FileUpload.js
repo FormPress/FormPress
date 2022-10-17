@@ -18,7 +18,7 @@ let FRONTEND =
   REACT_APP_FP_ENV === 'development' ? REACT_APP_FRONTEND : REACT_APP_BACKEND
 
 if (FRONTEND === undefined) {
-  FRONTEND = `${FP_HOST}${FP_ENV === 'development' ? ':3000' : null}`
+  FRONTEND = `${FP_HOST}${FP_ENV === 'development' ? ':3000' : ''}`
 }
 
 // may later be refactored to get the bucketName dynamically
