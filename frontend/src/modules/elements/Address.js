@@ -156,6 +156,18 @@ export default class Address extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+    if (entry.value !== '') {
+      plainString = Object.entries(entry.value)
+        .map(([, t]) => `${t}`)
+        .join(' ')
+    } else {
+      plainString = '-'
+    }
+    return plainString
+  }
+
   static renderDataValue(entry, question) {
     return (
       Object.entries(entry.value).map((entry) => {

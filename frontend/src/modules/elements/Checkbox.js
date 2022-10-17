@@ -64,6 +64,20 @@ export default class Checkbox extends Component {
     }
   }
 
+  static getPlainStringValue(entry, question) {
+    let plainString = ''
+
+    if (entry.value.length > 0) {
+      plainString = entry.value
+        .map((value) => question.options[value])
+        .join(', ')
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry, question) {
     return question.options.map((option, index) => {
       return (

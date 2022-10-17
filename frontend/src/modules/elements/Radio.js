@@ -37,6 +37,21 @@ export default class Radio extends Component {
     }
   }
 
+  static getPlainStringValue(entry, question) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = question.options[parseInt(entry.value)]
+    } else {
+      plainString = '-'
+    }
+
+    // strip html tags in case of html input of rich text editor
+    plainString = plainString.replace(/(<([^>]+)>)/gi, '')
+
+    return plainString
+  }
+
   static renderDataValue(entry, question) {
     return question.options.map((option, index) => {
       return (

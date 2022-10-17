@@ -57,6 +57,30 @@ export default class FileUpload extends Component {
     }
   }
 
+  static getPlainStringValue(entry, question) {
+    let plainString
+
+    if (entry.value !== '') {
+      const files = JSON.parse(entry.value)
+
+      plainString = ''
+
+      files.forEach((file, index) => {
+        plainString += `${FRONTEND}/download/${question.form_id}/${
+          entry.submission_id
+        }/${question.id}/${encodeURI(file.fileName)}`
+
+        if (index > 0) {
+          plainString += ', '
+        }
+      })
+    } else {
+      return '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry, question) {
     if (entry.value !== '') {
       let files

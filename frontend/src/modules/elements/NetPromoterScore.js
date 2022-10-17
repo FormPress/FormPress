@@ -34,7 +34,19 @@ export default class NetPromoterScore extends Component {
     }
   }
 
-  static renderDataValue(entry) {
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
+  static renderDataValue(entry, question) {
     return (
       <ul className="nps">
         {this.defaultConfig.options.map((item) => {
@@ -42,16 +54,16 @@ export default class NetPromoterScore extends Component {
             <li key={item}>
               <input
                 type="radio"
-                id={`q_${entry.id}_${item}`}
-                name={`q_${entry.id}`}
+                id={`q_${question.id}_${item}`}
+                name={`q_${question.id}`}
                 value={item}
                 className="nps-input"
                 disabled="disabled"
-                // eslint-disable-next-line eqeqeq
-                checked={entry.value == item}></input>
+                style={{ display: 'none !important' }}
+                checked={`${entry.value}` === item}></input>
               <label
                 className="net-promoter-score-label"
-                htmlFor={`q_${entry.id}_${item}`}>
+                htmlFor={`q_${question.id}_${item}`}>
                 {item}
               </label>
             </li>
