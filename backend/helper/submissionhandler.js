@@ -36,12 +36,12 @@ exports.formatInput = (questions, inputs) => {
 exports.getQuestionsWithRenderedAnswers = (
   form,
   formattedInput,
-  submission_id
+  submission_id,
+  htmlRendering = false
 ) => {
   let questionData = []
   for (const input of formattedInput) {
     const question_id = parseInt(input.q_id)
-    const { value } = input
     // necessary for FileUpload
     input.submission_id = submission_id
     const element = form.props.elements.find(
@@ -50,18 +50,33 @@ exports.getQuestionsWithRenderedAnswers = (
 
     let plainAnswer, renderedAnswer
 
-    if (typeof Elements[element.type].renderDataValue === 'function') {
-      renderedAnswer = Elements[element.type].renderDataValue(input, element)
-      renderedAnswer = reactDOMServer.renderToStaticMarkup(renderedAnswer)
+    if (typeof Elements[element.type].getPlainStringValue === 'function') {
+      try {
+        plainAnswer = Elements[element.type].getPlainStringValue(input, element)
+      } catch (e) {
+        plainAnswer = 'Error retrieving answer.'
+      }
     }
 
-    plainAnswer = value ? value : '-'
+    if (htmlRendering) {
+      if (typeof Elements[element.type].renderDataValue === 'function') {
+        try {
+          renderedAnswer = Elements[element.type].renderDataValue(
+            input,
+            element
+          )
+          renderedAnswer = reactDOMServer.renderToStaticMarkup(renderedAnswer)
+        } catch (e) {
+          renderedAnswer = 'Error rendering answer.'
+        }
+      }
+    }
 
     questionData.push({
       question: element.label,
       type: element.type,
       answer: plainAnswer,
-      renderedAnswer,
+      renderedAnswer: renderedAnswer,
       id: question_id
     })
   }
