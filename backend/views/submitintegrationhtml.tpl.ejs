@@ -16,94 +16,94 @@
           box-shadow: unset;
         }
         @page {
-          margin: 0.4in;
+          margin: 0.22in;
         }
       }
-        html {
-            height: 100%;
-        }
-        body {
-            width: 780px;
-            margin: auto;
-            font-family: 'Montserrat', sans-serif;
-            position: relative;
-        }
-       .header {
-            border-top: 20px solid #8cc63f;
-            width: 100%;
-            display: flex;
-        }
-        .content-wrapper {
-            width: 780px;
-            display: grid;
-            margin-top: -10px;
-        }
-        .footer {
-            text-align: center;
-            height: 50px;
-            line-height: 50px;
-            margin-top: 40px;
-            position: absolute;
-            bottom: 0;
-            width: 780px;
-        }
-        .fp-logo {
-            margin: auto;
-        }
-        .fp-logo > svg{
-            width: 360px;
-        }
-        .hero-logo > svg{
-            margin-top: -70px;
-            width: 200px;
-            padding-left: 10px;
-        }
-        .notifier-text {
-            font-size: 18px;
-            width: calc(100% - 235px);
-            margin-top: 55px;
-            height: 62px;
-            border-bottom: 2px solid #d0d0d0;
-            margin-right: 20px;
-            display: inline-table;
+      html {
+        height: 100%;
+      }
+      body {
+        width: 780px;
+        margin: auto;
+        font-family: 'Montserrat', sans-serif;
+        position: relative;
+      }
+      .header {
+        border-top: 20px solid #8cc63f;
+        width: 100%;
+        display: flex;
+      }
+      .content-wrapper {
+        width: 780px;
+        display: grid;
+        margin-top: -10px;
+      }
+      .footer {
+        text-align: center;
+        height: 50px;
+        line-height: 50px;
+        margin-top: 40px;
+        position: absolute;
+        bottom: 0;
+        width: 780px;
+      }
+      .fp-logo {
+        margin: auto;
+      }
+      .fp-logo > svg {
+        width: 360px;
+      }
+      .hero-logo > svg {
+        width: 200px;
+      }
+      .notifier-text {
+        border-bottom: 2px solid #d0d0d0;
+      }
 
-        }
-        .notifier-text > p >strong {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            display: inline-block;
-            max-width: 42ch;
-            line-height: 15px;
-        }
-        .answers {
-            width: 720px;
-            margin: -50px 30px 0;
-            padding-bottom: 50px;
-            font-size: 18px;
-        }
+      .QnA {
+        padding: 1rem 1rem 1rem 0.2rem;
+      }
+      .answers {
+        width: 720px;
+        margin: -50px 30px 0;
+        padding-bottom: 50px;
+        font-size: 18px;
+      }
       .answer-value {
-            padding-bottom: 5px;
-            margin-left: 10px;
-            color: #333333;
-            width: 100%;
-            word-break: break-word;
-          }
+        padding: 0.5rem;
+        color: #333333;
+        width: 100%;
+        word-break: break-word;
+      }
 
       .answer-value > strong {
-            margin-right: 2px;
+        margin-right: 2px;
       }
 
       .question-name {
-            color: #113952;
-            font-weight: bold;
-            padding: 10px 0 0;
+        color: #113952;
+        font-weight: bold;
+        padding: 10px 0 0;
       }
 
-        .content {
-            display: flex;
-            width: 780px;
-        }
+      .content {
+        display: flex;
+        width: 780px;
+        flex-flow: row;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4rem;
+      }
+
+      #border {
+        position:fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        border: 2px solid gainsboro;
+      }
+
 
       /* FOR NPS ONLY */
       .nps {
@@ -145,6 +145,7 @@
     <title><%= FormTitle %></title>
 </head>
 <body>
+<div id="border"></div>
 <div class="header">
     <div class="fp-logo">
         <%- include ("../svg/formpresslogo.svg") %>
@@ -157,7 +158,7 @@
         </div>
         <div class="notifier-text">
             <p>
-            Your form <strong>&quot;<%= FormTitle %>&quot;</strong> just received a submission. Here are the responses:
+            Your form <strong>&quot;<%= FormTitle.substring(0, 50) + (FormTitle.length > 50 ? '...' : '') %>&quot;</strong> just received a submission. Here are the responses:
             </p>
         </div>
     </div>

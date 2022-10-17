@@ -17,48 +17,6 @@
       font-size: 16px;
       padding: 10px 10px 10px 30px;
     }
-    .QnA-answer strong {
-      margin-right: 3px;
-    }
-
-
-
-  /* FOR NPS ONLY */
-
-    .nps {
-      list-style: none;
-      display: flex;
-      justify-content: space-around;
-      max-width: fit-content;
-      padding: 0;
-    }
-
-    .nps li {
-      display: inline-flex;
-    }
-
-    .nps [type='radio'] {
-      display: none !important;
-    }
-
-    .nps .net-promoter-score-label {
-      display: inline-block;
-      border: 1px solid #1c5c85;
-      background-color: #fff;
-      color: #1c5c85;
-      width: 40px;
-      height: 30px;
-      margin: 0 5px;
-      user-select: none;
-      text-align: center;
-      line-height: 28px;
-    }
-
-    .nps-input:checked + label {
-      border: 1px solid #1c5c85;
-      background-color: #1c5c85 !important;
-      color: #fff;
-    }
 
   </style>
 </head>
@@ -90,13 +48,27 @@
       <div style="padding: 10px 0px 20px 10px;">
         <%
         QUESTION_AND_ANSWERS.forEach (function (QnA) {%>
-          <div>
+          <div class="QnA">
             <div class="QnA-question">
-              <%- QnA.question%>
+              <%- QnA.question %>
             </div>
-            <div class="QnA-answer">
-              <%- QnA.renderedAnswer %>
-            </div>
+
+            <% if (QnA.type === 'FileUpload' && QnA.answer !== '-') {
+              let url = QnA.answer;
+              let filename = url.split('/').pop();
+            %>
+
+              <div class="QnA-answer">
+                <a href="<%- url %>"><%- filename %></a>
+              </div>
+
+            <% } else {%>
+
+              <div class="QnA-answer">
+                <%- QnA.answer %>
+              </div>
+
+            <% }%>
           </div>
         <%})%>
       %>

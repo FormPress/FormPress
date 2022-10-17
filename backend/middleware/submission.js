@@ -259,10 +259,24 @@ module.exports = (app) => {
         break
     }
 
+    let pdfRequest = false
+    const pdfIntegrations = ['GoogleDrive']
+
+    const integrationList = form.props.integrations
+
+    for (const integration of integrationList) {
+      if (pdfIntegrations.includes(integration.type)) {
+        if (integration.active) {
+          pdfRequest = true
+        }
+      }
+    }
+
     const questionsAndAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
       form,
       formattedInput,
-      submission_id
+      submission_id,
+      pdfRequest
     )
 
     if (emailIntegration.length > 0) {
@@ -359,7 +373,6 @@ module.exports = (app) => {
       }
     }
 
-    const integrationList = form.props.integrations
     let pdfBuffer
     let customSubmissionFileName = ''
 
@@ -420,53 +433,44 @@ module.exports = (app) => {
           i.type === gDrive.submissionIdentifier.type
       )
 
-      if (identifierElement !== undefined) {
+      if (identifierElement) {
         const identifierAnswer = identifierElement.answer
-        if (identifierAnswer) {
-          if (
-            identifierElement.type === 'Name' ||
-            identifierElement.type === 'Address'
-          ) {
-            Object.values(identifierAnswer).forEach((value) => {
-              customSubmissionFileName += value + ' '
-            })
-            customSubmissionFileName = customSubmissionFileName
-              .replace(/  +/g, ' ')
-              .trim()
-          } else if (identifierElement.type === 'FileUpload') {
-            customSubmissionFileName = identifierAnswer[0].fileName
-          } else {
-            customSubmissionFileName = identifierAnswer
-          }
+        if (identifierElement.type === 'FileUpload') {
+          customSubmissionFileName = identifierAnswer.split('/').pop()
+        } else {
+          customSubmissionFileName = identifierAnswer
         }
       }
 
       customSubmissionFileName += ' - ' + submissionDate
 
-      const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: '/usr/bin/chromium-browser',
-        args: ['--no-sandbox']
-      })
-      const pages = await browser.pages()
-      const page = pages[0]
-
-      await page.setContent(htmlBody, {
-        waitUntil: 'domcontentloaded'
-      })
-
-      await page.emulateMediaType('print')
-
       try {
+        const browser = await puppeteer.launch({
+          headless: true,
+          executablePath: '/usr/bin/chromium-browser',
+          args: ['--no-sandbox']
+        })
+
+        const pages = await browser.pages()
+
+        const page = pages[0]
+
+        await page.setContent(htmlBody, {
+          waitUntil: 'domcontentloaded'
+        })
+
+        await page.emulateMediaType('print')
+
         pdfBuffer = await page.pdf({
           format: 'A4',
           printBackground: true
         })
+
+        await browser.close()
       } catch (err) {
         console.log('Error while creating the pdf file', err)
       }
 
-      await browser.close()
       try {
         await gdUploadFile(
           folderID,
