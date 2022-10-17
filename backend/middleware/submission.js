@@ -98,7 +98,7 @@ module.exports = (app) => {
       let value
 
       //upload file to GCS
-      if (type === 'FileUpload') {
+      if (type === 'FileUpload' || type === 'Image') {
         value = await storage.uploadFile(req.files[key], submission_id)
         fileUploadEntries.push(value)
       } else {

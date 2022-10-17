@@ -426,72 +426,77 @@ export default class Builder extends Component {
 
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
-    let item = getElementsKeys()[type]
-    const { form, dragIndex, dragMode, sortItem } = this.state
 
-    let elements = cloneDeep([...form.props.elements])
+    if (type.length > 0) {
+      let item = getElementsKeys()[type]
+      const { form, dragIndex, dragMode, sortItem } = this.state
 
-    if (dragMode === 'insert') {
-      //set auto increment element id
-      let maxId = Math.max(...form.props.elements.map((element) => element.id))
-      //if no elements, Math.max returns -Infinity
-      if (maxId === -Infinity) {
-        maxId = -1
-      }
+      let elements = cloneDeep([...form.props.elements])
 
-      item.id = maxId + 1
-    } else {
-      item = sortItem
-      //mark sorted element to be deleted
-      const sortedElementOriginal = elements.filter(
-        (element) => element.id === item.id
-      )
-
-      sortedElementOriginal[0].__original__ = true
-    }
-
-    const index = form.props.elements.findIndex(
-      (element) => element.id.toString() === dragIndex
-    )
-
-    let newElements
-
-    if (this.state.insertBefore === true) {
-      newElements = [
-        ...elements.slice(0, index),
-        item,
-        ...elements.slice(index)
-      ]
-    } else {
-      newElements = [
-        ...elements.slice(0, index + 1),
-        item,
-        ...elements.slice(index + 1)
-      ]
-    }
-
-    if (dragMode === 'sort') {
-      newElements = newElements.filter(
-        (element) => element.__original__ !== true
-      )
-      this.props.history.push(
-        `/editor/${formId}/builder/question/${item.id}/properties`
-      )
-    }
-
-    this.setState({
-      dragMode: 'insert',
-      sortItem: false,
-      dragging: false,
-      dragIndex: false,
-      form: {
-        ...form,
-        props: {
-          ...form.props,
-          elements: newElements
+      if (dragMode === 'insert') {
+        //set auto increment element id
+        let maxId = Math.max(
+          ...form.props.elements.map((element) => element.id)
+        )
+        //if no elements, Math.max returns -Infinity
+        if (maxId === -Infinity) {
+          maxId = -1
         }
+
+        item.id = maxId + 1
+      } else {
+        item = sortItem
+        //mark sorted element to be deleted
+        const sortedElementOriginal = elements.filter(
+          (element) => element.id === item.id
+        )
+
+        sortedElementOriginal[0].__original__ = true
       }
-    })
+
+      const index = form.props.elements.findIndex(
+        (element) => element.id.toString() === dragIndex
+      )
+
+      let newElements
+
+      if (this.state.insertBefore === true) {
+        newElements = [
+          ...elements.slice(0, index),
+          item,
+          ...elements.slice(index)
+        ]
+      } else {
+        newElements = [
+          ...elements.slice(0, index + 1),
+          item,
+          ...elements.slice(index + 1)
+        ]
+      }
+
+      if (dragMode === 'sort') {
+        newElements = newElements.filter(
+          (element) => element.__original__ !== true
+        )
+        this.props.history.push(
+          `/editor/${formId}/builder/question/${item.id}/properties`
+        )
+      }
+
+      this.setState({
+        dragMode: 'insert',
+        sortItem: false,
+        dragging: false,
+        dragIndex: false,
+        form: {
+          ...form,
+          props: {
+            ...form.props,
+            elements: newElements
+          }
+        }
+      })
+    }
   }
 
   handleAddFormElementClick(elemType) {
@@ -811,6 +816,15 @@ export default class Builder extends Component {
     })
   }
 
+  async imageUploadHandler(file) {
+    console.log(file)
+    /*URL.createObjectURL(
+      new Blob([new Uint8Array(await file.arrayBuffer())], {
+        type: file.type
+      })
+    )*/
+  }
+
   handleTitleChange(id, value) {
     const form = { ...this.state.form }
 
@@ -828,8 +842,6 @@ export default class Builder extends Component {
   }
 
   handleFormElementClick(e) {
-    e.preventDefault()
-
     let elemID = e.target
     let id = parseInt(elemID.id.replace('qc_', ''))
 
@@ -1407,6 +1419,7 @@ export default class Builder extends Component {
               handleDragStart: this.handleDragStart,
               handleFormItemMovement: this.handleFormItemMovement
             }}
+            imageUploadHandler={this.imageUploadHandler}
             rteUploadHandler={this.rteUploadHandler}
             draggingItemType={this.state.draggingItemType}
             handleLabelChange={this.handleLabelChange}
