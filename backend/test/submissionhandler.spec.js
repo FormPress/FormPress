@@ -1,80 +1,73 @@
 const path = require('path')
 const assert = require('assert').strict
 
-
 const submissionhandler = require(path.resolve('helper', 'submissionhandler'))
 
 describe('submission handler', () => {
   const formProps = [
     {
       id: 1,
-      type:"TextBox",
-      label:"Text Label"
+      type: 'TextBox',
+      label: 'Text Label'
     },
     {
       id: 3,
-      type:"TextArea",
-      label:"TextArea Label"
+      type: 'TextArea',
+      label: 'TextArea Label'
     },
     {
       id: 5,
-      type:"Dropdown",
-      label:"Dropdown Label",
-      options:[
-        "Option 1",
-        "Option 2"
-      ],
-      required:false
+      type: 'Dropdown',
+      label: 'Dropdown Label',
+      options: ['Option 1', 'Option 2'],
+      required: false
     },
     {
-      mode:"sort",
-      id:9,
-      type:"Checkbox",
-      label:"Checkbox Label",
-      required:false
+      mode: 'sort',
+      id: 9,
+      type: 'Checkbox',
+      label: 'Checkbox Label',
+      required: false
     },
     {
       id: 6,
-      type:"Radio",
-      label:"Radio Label",
-      options:[
-        "Radio option 1",
-        "Radio option 2"
-      ],
-      required:false
+      type: 'Radio',
+      label: 'Radio Label',
+      options: ['Radio option 1', 'Radio option 2'],
+      required: false
     },
     {
       id: 7,
-      type:"Name",
-      label:"Full Name Label",
-      required:false
+      type: 'Name',
+      label: 'Full Name Label',
+      required: false
     },
     {
       id: 8,
-      type:"FileUpload",
-      label:"File Upload Label",
-      required:false
+      type: 'FileUpload',
+      label: 'File Upload Label',
+      required: false
     },
     {
-      mode:"sort",
+      mode: 'sort',
       id: 2,
-      type:"Button",
-      buttonText:"SubmitButton"
+      type: 'Button',
+      buttonText: 'SubmitButton'
     }
   ]
 
   it('default values', () => {
     const input = []
     const expectedOutput = [
-      {q_id: 1, value: ''},
-      {q_id: 3, value: ''},
-      {q_id: 5, value: ''},
-      {q_id: 9, value: ''},
-      {q_id: 6, value: ''},
-      {q_id: 7, value: {}},
-      {q_id: 8, value: ''}
+      { q_id: 1, value: '' },
+      { q_id: 3, value: '' },
+      { q_id: 5, value: '' },
+      { q_id: 9, value: '' },
+      { q_id: 6, value: '' },
+      { q_id: 7, value: {} },
+      { q_id: 8, value: '' }
     ]
-    const formattedInput = submissionhandler.formatInput(formProps,input)
+    const formattedInput = submissionhandler.formatInput(formProps, input)
     assert.deepEqual(formattedInput, expectedOutput)
   })
 
@@ -84,19 +77,21 @@ describe('submission handler', () => {
       { q_id: 'q_7[lastName]', value: 'Doe' }
     ]
     const expectedOutput = [
-      {q_id: 1, value: ''},
-      {q_id: 3, value: ''},
-      {q_id: 5, value: ''},
-      {q_id: 9, value: ''},
-      {q_id: 6, value: ''},
-      {q_id: 7, value: {
-        firstName:"John",
-        lastName:"Doe"
+      { q_id: 1, value: '' },
+      { q_id: 3, value: '' },
+      { q_id: 5, value: '' },
+      { q_id: 9, value: [''] },
+      { q_id: 6, value: '' },
+      {
+        q_id: 7,
+        value: {
+          firstName: 'John',
+          lastName: 'Doe'
         }
       },
-      {q_id: 8, value: ''}
+      { q_id: 8, value: '' }
     ]
-    const formattedInput = submissionhandler.formatInput(formProps,input)
+    const formattedInput = submissionhandler.formatInput(formProps, input)
     assert.deepEqual(formattedInput, expectedOutput)
   })
 })
