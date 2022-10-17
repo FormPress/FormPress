@@ -384,17 +384,19 @@ module.exports = (app) => {
         'bmp'
       ]
 
-      Object.keys(req.files).forEach((key) => {
-        const file = req.files[key]
+      if (fileUploadCounter > -1) {
+        Object.keys(req.files).forEach((key) => {
+          const file = req.files[key]
 
-        const extension = file.name.split('.').pop()
+          const extension = file.name.split('.').pop()
 
-        if (acceptedExtensions.includes(extension) && file.size < 5000000) {
-          imgEncoded[key] = {}
-          imgEncoded[key].mimeType = file.mimetype
-          imgEncoded[key].base64 = file.data.toString('base64')
-        }
-      })
+          if (acceptedExtensions.includes(extension) && file.size < 5000000) {
+            imgEncoded[key] = {}
+            imgEncoded[key].mimeType = file.mimetype
+            imgEncoded[key].base64 = file.data.toString('base64')
+          }
+        })
+      }
 
       const htmlBody = await ejs
         .renderFile(
