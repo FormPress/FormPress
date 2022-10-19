@@ -15,7 +15,8 @@ export default class Separator extends Component {
 
   static metaData = {
     icon: faMinus,
-    displayText: 'Separator'
+    displayText: 'Separator',
+    group: 'pageElement'
   }
 
   render() {

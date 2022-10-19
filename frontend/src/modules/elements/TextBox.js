@@ -17,11 +17,12 @@ export default class TextBox extends Component {
 
   static metaData = {
     icon: faGripLines,
-    displayText: 'Short Text'
+    displayText: 'Short Text',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -32,8 +33,20 @@ export default class TextBox extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry) {
-    return entry.value
+    return entry.value ? entry.value : '-'
   }
 
   static helpers = {
@@ -62,15 +75,17 @@ export default class TextBox extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className="fl label"
-          dataPlaceholder="Type a question"
-          mode={mode}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <div className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            dataPlaceholder="Type a question"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>
         <div className="fl input">
           <input
             id={`q_${config.id}`}

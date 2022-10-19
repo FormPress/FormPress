@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import AuthContext from '../../auth.context'
 import { api, setToken } from '../../helper'
 import Renderer from '../Renderer'
 import moment from 'moment'
+import GeneralContext from '../../general.context'
 
 import './Users.css'
 const BACKEND = process.env.REACT_APP_BACKEND
@@ -150,7 +150,7 @@ class Users extends Component {
 
       if (success === true) {
         setToken(data.token)
-        this.props.auth.setAuth({
+        this.props.generalContext.auth.setAuth({
           email: data.email,
           name: data.name,
           exp: data.exp,
@@ -184,6 +184,29 @@ class Users extends Component {
         this.setState({
           saved: true,
           message: 'User cannot added in whitelist'
+        })
+      }
+    } else {
+      this.setState({ message: 'Please select a user' })
+    }
+  }
+
+  deleteUser = async () => {
+    const { selectedUserId } = this.state
+
+    if (selectedUserId !== 0) {
+      const { success } = await api({
+        resource: `/api/admin/deleteUser/${selectedUserId}`,
+        method: 'post'
+      })
+
+      if (success === true) {
+        this.setState({ saved: true, message: 'User is deleted successfully.' })
+        this.getUserList()
+      } else {
+        this.setState({
+          saved: true,
+          message: 'User cannot deleted.'
         })
       }
     } else {
@@ -233,6 +256,19 @@ class Users extends Component {
                   }
                 }}>
                 Add to Whitelist
+              </div>
+            </div>
+            <div className="userdetail">
+              <div
+                className="deleteUser"
+                onClick={() => {
+                  if (
+                    window.confirm('Are you sure you want to delete this user?')
+                  ) {
+                    this.deleteUser()
+                  }
+                }}>
+                Delete User
               </div>
             </div>
             <div className="userdetail">
@@ -288,7 +324,7 @@ class Users extends Component {
               Forms:
               {forms.map((form) => (
                 <div key={form.link}>
-                  <a href={form.link} target="_blank" rel="noreferrer">
+                  <a href={form.link} target="_blank" rel="noopener noreferrer">
                     {form.link}
                   </a>
                   <div>
@@ -305,10 +341,10 @@ class Users extends Component {
   }
 }
 
-const UsersWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Users {...props} auth={value} />}
-  </AuthContext.Consumer>
+const UserWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <Users {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
-export default UsersWrapped
+export default UserWrapped

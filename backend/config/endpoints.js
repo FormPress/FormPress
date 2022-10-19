@@ -216,6 +216,12 @@ module.exports = {
       exampleRequestPath: '/api/users/1/api-key'
     },
     {
+      method: 'get',
+      path: '/api/users/:user_id/usages',
+      protected: false,
+      exampleRequestPath: '/api/users/1/usages'
+    },
+    {
       method: 'post',
       path: '/api/create-token',
       protected: false,
@@ -224,6 +230,13 @@ module.exports = {
         form_id: 1,
         exp: 500000
       }
+    },
+    {
+      method: 'get',
+      path:
+        '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
+      protected: false,
+      exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
     }
   ]
 }

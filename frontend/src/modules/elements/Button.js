@@ -17,7 +17,8 @@ export default class Button extends Component {
 
   static metaData = {
     icon: faPaperPlane,
-    displayText: 'Submit Button'
+    displayText: 'Submit Button',
+    group: 'pageElement'
   }
 
   render() {
@@ -26,6 +27,10 @@ export default class Button extends Component {
 
     if (typeof config.onClick !== 'undefined') {
       inputProps.onClick = config.onClick
+    }
+
+    if (typeof config.disabled !== 'undefined') {
+      inputProps.disabled = config.disabled
     }
 
     return (

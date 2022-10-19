@@ -35,7 +35,7 @@ export default function LoginPicture(props) {
         <style
           dangerouslySetInnerHTML={{
             __html:
-              '.prefix__cls-2{fill:#0c2738}.prefix__cls-3{fill:#113952}.prefix__cls-4{fill:#fffcdd}.prefix__cls-7{fill:#719fbd}'
+              '.prefix__cls-2{fill:#0c2738}.prefix__cls-3{fill:#113952}.prefix__cls-4{fill:#d58066}.prefix__cls-7{fill:#719fbd}'
           }}></style>
       </defs>
       <g
@@ -247,7 +247,7 @@ export default function LoginPicture(props) {
               d="M807.4 180.832a33.949 33.949 0 1140.121 0h14.807a44.448 44.448 0 10-69.735 0z"
               data-name="Path 212"
               transform="translate(-773.681 -109.124)"
-              style={{ fill: '#fff' }}
+              style={{ fill: '#1c5c85' }}
             />
             <g
               id="prefix__Group_217"

@@ -18,11 +18,12 @@ export default class TextArea extends Component {
 
   static metaData = {
     icon: faAlignJustify,
-    displayText: 'Long Text'
+    displayText: 'Long Text',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -33,8 +34,20 @@ export default class TextArea extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry) {
-    return entry.value
+    return entry.value ? entry.value : '-'
   }
 
   static helpers = {
@@ -68,17 +81,19 @@ export default class TextArea extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className="fl label"
-          dataPlaceholder="Type a question"
-          mode={mode}
-          form_id={config.form_id}
-          question_id={config.id}
-          labelKey={config.id}
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <div className="elemLabelTitle">
+          <EditableLabel
+            className="fl label"
+            dataPlaceholder="Type a question"
+            mode={mode}
+            form_id={config.form_id}
+            question_id={config.id}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>
         <div>
           <div className="fl input">
             {config.id === 'answerExplanation' ? (

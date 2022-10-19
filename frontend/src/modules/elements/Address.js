@@ -48,11 +48,12 @@ export default class Address extends Component {
 
   static metaData = {
     icon: faMapMarkerAlt,
-    displayText: 'Address'
+    displayText: 'Address',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let valueObject = {}
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -155,14 +156,42 @@ export default class Address extends Component {
     }
   }
 
-  static renderDataValue(entry) {
+  static getPlainStringValue(entry) {
+    let plainString
     if (entry.value !== '') {
-      return Object.entries(JSON.parse(entry.value))
+      plainString = Object.entries(entry.value)
         .map(([, t]) => `${t}`)
         .join(' ')
     } else {
-      return '-'
+      plainString = '-'
     }
+    return plainString
+  }
+
+  static renderDataValue(entry, question) {
+    return (
+      Object.entries(entry.value).map((entry) => {
+        const key = entry[0]
+        const value = entry[1]
+
+        let defaultSublabel = true
+
+        if (question[`${key}SublabelText`]) {
+          defaultSublabel = false
+        }
+
+        return (
+          <div key={key}>
+            <strong
+              style={defaultSublabel ? { textTransform: 'capitalize' } : null}>
+              {defaultSublabel ? key : question[`${key}SublabelText`]}:
+            </strong>
+            {value}
+            <br />
+          </div>
+        )
+      }) || '-'
+    )
   }
 
   render() {
@@ -171,15 +200,17 @@ export default class Address extends Component {
 
     return (
       <ElementContainer type={config.type} {...this.props}>
-        <EditableLabel
-          className="fl label"
-          mode={mode}
-          labelKey={config.id}
-          dataPlaceholder="Type a question"
-          handleLabelChange={this.props.handleLabelChange}
-          value={config.label}
-          required={config.required}
-        />
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            className="fl label"
+            mode={mode}
+            labelKey={config.id}
+            dataPlaceholder="Type a question"
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>
 
         {config.street ? (
           <span className={`address-section adr-street`}>

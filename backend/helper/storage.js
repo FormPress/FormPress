@@ -82,6 +82,10 @@ exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
   }
 }
 
+exports.checkIfFileIsExist = async (uploadName) => {
+  return fileUploadBucket.file(uploadName).exists()
+}
+
 exports.downloadFile = async (uploadName) => {
   const fileToDownload = fileUploadBucket.file(uploadName)
   const out = new PassThrough()

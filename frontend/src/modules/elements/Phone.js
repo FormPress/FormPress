@@ -38,11 +38,12 @@ export default class Phone extends Component {
 
   static metaData = {
     icon: faPhone,
-    displayText: 'Phone'
+    displayText: 'Phone',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -53,8 +54,20 @@ export default class Phone extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry) {
-    return entry.value
+    return entry.value ? entry.value : '-'
   }
 
   static helpers = {
@@ -100,16 +113,18 @@ export default class Phone extends Component {
     let display
 
     display = [
-      <EditableLabel
-        className="fl label"
-        dataPlaceholder="Type a question"
-        mode={mode}
-        labelKey={config.id}
-        handleLabelChange={this.props.handleLabelChange}
-        value={config.label}
-        required={config.required}
-        key="1"
-      />,
+      <div className="elemLabelTitle" key={0}>
+        <EditableLabel
+          className="fl label"
+          dataPlaceholder="Type a question"
+          mode={mode}
+          labelKey={config.id}
+          handleLabelChange={this.props.handleLabelChange}
+          value={config.label}
+          required={config.required}
+          key="1"
+        />
+      </div>,
       <div className="fl input" key="2">
         <select
           className="dialCode"

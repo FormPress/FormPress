@@ -1,5 +1,25 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title> Your form &quot;<%= FormTitle %>&quot; just received a response.</title>
+  <style>
+    .QnA-question {
+      color: #113952;
+      font-weight: bold;
+      font-size: 16px;
+      width: 90%;
+      padding: 10px 10px 10px 30px;
+    }
+
+    .QnA-answer {
+      width: 90%;
+      color: #333333;
+      font-size: 16px;
+      padding: 10px 10px 10px 30px;
+    }
+
+  </style>
+</head>
   <body>
     <div style="padding: 10px 0">
       <div style="height: 80px; width: 100%; border-top: 6px solid #8cc63f;">
@@ -27,120 +47,34 @@
       <div style=" color:#7aad37; font-size: 18px; padding-left:40px; padding-top: 20px;">ANSWERS</div>
       <div style="padding: 10px 0px 20px 10px;">
         <%
-        let questionData = []
-        for (const data of FormattedInput) {
-          const question_id = parseInt(data.q_id)
-          const value = data.value
-          const checkQuestion = Form.props.elements.filter(
-            (element) => element.id === question_id
-          )
-          const question = checkQuestion[0]
-          const type = checkQuestion[0].type
-      
-          questionData.push({
-            question: question,
-            type: type,
-            answer: value,
-            question_id: question_id
-          })
-        }
-        const responselist = questionData.map((data) => {
-          let response = {}
-          response.question = data.question.label
-          if (data.type === 'Checkbox' && data.answer === 'off') {
-            response.answer = '-'
-          } else if (data.type === 'FileUpload') {
-            if (data.answer === '') {
-              response.answer = '-'
-            } else {
-              const value = JSON.parse(data.answer)
-              response.answer = []
-              value.forEach((file)=>{
-                let uriFileName = encodeURI(file.fileName)
-                let downloadLink = `${FRONTEND}/download/${Form.id}/${Submission_id}/${data.question_id}/${uriFileName}`
-                response.answer.push({
-                  downloadLink: downloadLink,
-                  fileName: file.fileName
-                })
-              })
-            }
-          } else if (data.type === 'Radio') {
-            response.answer = data.question.options[parseInt(data.answer)]
-          }
-          else {
-            if (data.answer === '') {
-              response.answer = '-'
-            } else {
-              response.answer = data.answer
-            }
-          }
-          response.type = data.type
-
-          return response
-        })
-
-
-        responselist.forEach (function (response) {%>
-          <div>
-            <div style=" color: #113952; font-weight: bold; font-size: 16px; width: 90%; padding: 10px 10px 10px 30px;">
-              <%- response.question%>
+        QUESTION_AND_ANSWERS.forEach (function (QnA) {%>
+          <div class="QnA">
+            <div class="QnA-question">
+              <%- QnA.question %>
             </div>
-            <% if (response.type === 'Name') {
-              for (const [key, value] of Object.entries(response.answer)) {%>
-                <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                <%if (key === 'firstName') { %>
-                  <i>First Name: </i>
-                <%} else if (key === 'lastName') {%>
-                  <i>Last Name: </i>
-                <%} else if (key === 'middleName') {%>
-                  <i>Middle Name: </i>
-                  <%} else if (key === 'suffix') {%>
-                    <i>Suffix: </i>
-                  <%} else if (key === 'prefix') {%>
-                    <i>Prefix: </i>
-                <%} else {%>
-                  <i><%= key%>: </i>
-                <%}%>
-                <% if (value === '') {%>
-                  -
-                <%} else {%>
-                  <%= value%>
-                <%}%>
-                </div>
-              <%}
-            } else if (response.type === 'FileUpload'){%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                <%if (response.answer === '-') {%>
-                  -
-                <%} else {%> 
-                  <% 
-                  response.answer.forEach((answer)=>{%>
-                    <a href="<%= answer.downloadLink %>"><%=answer.fileName%></a><br/><%
-                  })
-                  %>
-                  
-                <%}%>
-              </div>
-            <%} else if (response.type === 'Address') {
-              let addressString = ''
-                for (const [key, value] of Object.entries(response.answer)) {
-                  addressString += value + '\r\n'
 
-                }%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                  <%= addressString%>
+            <% if (QnA.type === 'FileUpload' && QnA.answer !== '-') {
+              let url = QnA.answer;
+              let filename = url.split('/').pop();
+            %>
+
+              <div class="QnA-answer">
+                <a href="<%- url %>"><%- filename %></a>
               </div>
-           <% } else {%>
-              <div style=" width: 90%; color: #113952; font-size: 16px; padding: 10px 10px 10px 30px;">
-                <%- response.answer %>
+
+            <% } else {%>
+
+              <div class="QnA-answer">
+                <%- QnA.answer %>
               </div>
-            <%}%>
+
+            <% }%>
           </div>
         <%})%>
       %>
       </div>
       <div style =" font-size: 12px;   text-align: center; color: #646569;">
-        &#169; 2021 FORMPRESS.ORG This e-mail has been sent to the address <%- Email %>, you can change the address from form properties.
+        &#169; 2022 FORMPRESS.ORG This e-mail has been sent to the address <%- Email %>, you can change the address from form properties.
       </div>
     </div>
   </body>

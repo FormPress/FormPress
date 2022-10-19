@@ -21,10 +21,13 @@
   margin: 10px;
   display: inline;
   float: left;
-  max-width: calc(100% - 131px);
+  max-width: calc(100% - 30px);
   text-overflow: ellipsis;
   overflow: hidden;
   height: 20px;
+  font-weight: 500;
+  color: #113952;
+  white-space: nowrap;
 }
 
 .question-info > .qtype {
@@ -93,6 +96,10 @@
 }
 
 #qc_prefix.elementHider ~ #qc_prefixOptions {
+  display: none !important;
+}
+
+#qc_prefix.elementHider ~ #qc_placeholder {
   display: none !important;
 }
 

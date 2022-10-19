@@ -20,7 +20,8 @@ export default class PageBreak extends Component {
 
   static metaData = {
     icon: faPlusCircle,
-    displayText: 'Page Break'
+    displayText: 'Page Break',
+    group: 'pageElement'
   }
 
   render() {

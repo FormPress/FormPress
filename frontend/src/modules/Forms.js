@@ -13,12 +13,11 @@ import Moment from 'react-moment'
 import { api } from '../helper'
 import Table from './common/Table'
 import Modal from './common/Modal'
-import AuthContext from '../auth.context'
 
 import './Forms.css'
 
 const BACKEND = process.env.REACT_APP_BACKEND
-class Forms extends Component {
+export default class Forms extends Component {
   setLoadingState(key, value) {
     this.setState({
       loading: {
@@ -32,7 +31,7 @@ class Forms extends Component {
     this.setLoadingState('forms', true)
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
     const forms = data
 
@@ -161,7 +160,7 @@ class Forms extends Component {
     })
 
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms/${form.id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form.id}`,
       method: 'delete'
     })
 
@@ -195,7 +194,7 @@ class Forms extends Component {
     form.id = null
     form.title = this.state.cloneFormName
     const { data } = await api({
-      resource: `/api/users/${this.props.auth.user_id}/forms`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`,
       method: 'post',
       body: form
     })
@@ -260,11 +259,11 @@ class Forms extends Component {
 
   render() {
     const { forms } = this.state
-    let roleLimit = 2
-    if (this.props.auth.permission.admin) {
+    let roleLimit = 5
+    if (this.props.generalContext.auth.permission.admin) {
       roleLimit = 0
     } else {
-      roleLimit = parseInt(this.props.auth.permission.formLimit)
+      roleLimit = parseInt(this.props.generalContext.auth.permission.formLimit)
     }
 
     return (
@@ -401,8 +400,29 @@ class Forms extends Component {
             {roleLimit === 0 || roleLimit > forms.length ? (
               <Link to="/editor/new">Create a new form</Link>
             ) : (
-              <span className="disabledNewForm" title="Form limit reached">
+              <span
+                className="disabledNewForm"
+                onMouseEnter={(e) => {
+                  const rect = e.target.getBoundingClientRect()
+                  const rightDiff = rect.right - e.clientX
+                  const rightPercentage = (100 * rightDiff) / rect.width
+                  const bottomDiff = rect.bottom - e.clientY
+                  const bottomPercentage = (100 * bottomDiff) / rect.height
+                  const popover = document.getElementById(
+                    'createNewForm-popover'
+                  )
+                  popover.style.position = 'fixed'
+                  popover.style.top =
+                    (bottomPercentage > 20 ? e.clientY - 20 : e.clientY - 80) +
+                    'px'
+                  popover.style.left =
+                    (rightPercentage < 20 ? e.clientX - 130 : e.clientX) + 'px'
+                }}>
                 Create a new form
+                <div id="createNewForm-popover" className="popoverText">
+                  Form limit reached.
+                  <a href="/pricing"> Upgrade your plan for more.</a>
+                </div>
               </span>
             )}
           </div>
@@ -411,11 +431,3 @@ class Forms extends Component {
     )
   }
 }
-
-const FormsWrapped = (props) => (
-  <AuthContext.Consumer>
-    {(value) => <Forms {...props} auth={value} />}
-  </AuthContext.Consumer>
-)
-
-export default FormsWrapped

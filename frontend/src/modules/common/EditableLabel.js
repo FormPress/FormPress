@@ -104,7 +104,7 @@ class EditableLabel extends Component {
               plugins: 'link image code',
               toolbar:
                 'undo redo | formatselect | ' +
-                'bold italic backcolor | alignleft aligncenter ' +
+                'bold italic | alignleft aligncenter ' +
                 'alignright alignjustify | outdent indent removeformat image ',
               file_picker_types: 'image',
               automatic_uploads: true,

@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import AuthContext from '../../auth.context'
-import CapabilitiesContext from '../../capabilities.context'
-
+import GeneralContext from '../../general.context'
 import './Status.css'
 
 class Status extends Component {
@@ -11,23 +9,28 @@ class Status extends Component {
         <div className="col-2-16 statuslist">
           <div className="status">
             Google Service Account Credentials:{' '}
-            {this.props.capabilities.googleServiceAccountCredentials
+            {this.props.generalContext.capabilities
+              .googleServiceAccountCredentials
               ? 'true'
               : 'false'}
           </div>
           <div className="status">
             Sendgrid Api Key:{' '}
-            {this.props.capabilities.sendgridApiKey ? 'true' : 'false'}
+            {this.props.generalContext.capabilities.sendgridApiKey
+              ? 'true'
+              : 'false'}
           </div>
           <div className="status">
             Google Credentials Client ID:{' '}
-            {this.props.capabilities.googleCredentialsClientID
+            {this.props.generalContext.capabilities.googleCredentialsClientID
               ? 'true'
               : 'false'}
           </div>
           <div className="status">
             File Upload Bucket:{' '}
-            {this.props.capabilities.fileUploadBucket ? 'true' : 'false'}
+            {this.props.generalContext.capabilities.fileUploadBucket
+              ? 'true'
+              : 'false'}
           </div>
         </div>
       </div>
@@ -36,15 +39,9 @@ class Status extends Component {
 }
 
 const StatusWrapped = (props) => (
-  <CapabilitiesContext.Consumer>
-    {(capabilities) => (
-      <AuthContext.Consumer>
-        {(value) => (
-          <Status {...props} auth={value} capabilities={capabilities} />
-        )}
-      </AuthContext.Consumer>
-    )}
-  </CapabilitiesContext.Consumer>
+  <GeneralContext.Consumer>
+    {(value) => <Status {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
 )
 
 export default StatusWrapped

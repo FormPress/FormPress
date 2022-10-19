@@ -29,11 +29,12 @@
     const questionContainer = document.getElementById(`qc_${question.id}`)
     const choices = questionContainer.getElementsByTagName('li')
 
-    const answer = elem.value.find((answer) => answer.value === 'checked')
+    const answerIndex = parseInt(elem.value)
+    let answered = !Number.isNaN(answerIndex)
+
     let answerIsWrong = false
 
-    if (answer) {
-      const answerIndex = elem.value.indexOf(answer)
+    if (answered) {
       const answerInput = document.getElementById(
         `q_${question.id}_${answerIndex}`
       )
