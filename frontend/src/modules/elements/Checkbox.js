@@ -80,14 +80,24 @@ export default class Checkbox extends Component {
 
   static renderDataValue(entry, question) {
     return question.options.map((option, index) => {
+      let checkedAnswers
+      // if entry is not an array make it one
+      if (!Array.isArray(entry.value)) {
+        checkedAnswers = [entry.value.toString()]
+      } else {
+        checkedAnswers = entry.value
+      }
+
+      console.log('checkedAnswers', checkedAnswers)
+
       return (
         <div className="input" key={index}>
           <input
             type={question.type.toLowerCase()}
             id={'q_required_' + index}
             className={question.toggle === true ? 'toggle-checkbox' : ''}
-            value={entry.value[index]}
-            checked={entry.value.includes(index.toString())}
+            value={index}
+            checked={checkedAnswers.includes(index.toString())}
             disabled
             readOnly
           />
