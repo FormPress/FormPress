@@ -185,13 +185,6 @@ module.exports = (app) => {
       // TODO: currently user_id is not used in the query but will be used in the future for security reasons
       // TODO: a check to make sure the viewer is the owner of the submission should be added
 
-      const radioElem = require(path.resolve(
-        'script',
-        'transformed',
-        'elements',
-        'Radio'
-      )).default
-
       const Renderer = require(path.resolve(
         'script',
         'transformed',
@@ -251,14 +244,6 @@ module.exports = (app) => {
         )
         return question !== undefined
       })
-
-      for (let entry of entriesWithQuestions) {
-        for (let question of questions) {
-          if (question.id === entry.question_id) {
-            entry.value = radioElem.dataContentOrganizer(entry.value, question)
-          }
-        }
-      }
 
       const str = reactDOMServer.renderToStaticMarkup(
         React.createElement(Renderer, {

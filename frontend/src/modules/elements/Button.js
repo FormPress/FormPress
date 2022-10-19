@@ -17,7 +17,8 @@ export default class Button extends Component {
 
   static metaData = {
     icon: faPaperPlane,
-    displayText: 'Submit Button'
+    displayText: 'Submit Button',
+    group: 'pageElement'
   }
 
   render() {

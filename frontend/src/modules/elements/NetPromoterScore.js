@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 
-import { cloneDeep } from 'lodash'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import { faSignal } from '@fortawesome/free-solid-svg-icons'
@@ -19,11 +18,12 @@ export default class NetPromoterScore extends Component {
 
   static metaData = {
     icon: faSignal,
-    displayText: 'Net Promoter Score'
+    displayText: 'Net Promoter Score',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -34,61 +34,19 @@ export default class NetPromoterScore extends Component {
     }
   }
 
-  static IsJsonString(str) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
+  static getPlainStringValue(entry) {
+    let plainString
 
-  static dataContentOrganizer(dataContentValue, element) {
-    const tempContentValue = cloneDeep(dataContentValue)
-    let returnContent = []
-
-    if (this.IsJsonString(tempContentValue) === false) {
-      for (let elementContent of element.options) {
-        if (tempContentValue === elementContent) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
+    if (entry.value !== '') {
+      plainString = entry.value
     } else {
-      for (let elementContent of element.options) {
-        if (JSON.parse(tempContentValue).includes(elementContent) === true) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
+      plainString = '-'
     }
 
-    return returnContent
+    return plainString
   }
 
-  static renderDataValue(entry) {
+  static renderDataValue(entry, question) {
     return (
       <ul className="nps">
         {this.defaultConfig.options.map((item) => {
@@ -96,15 +54,16 @@ export default class NetPromoterScore extends Component {
             <li key={item}>
               <input
                 type="radio"
-                id={`q_${entry.id}_${item}`}
-                name={`q_${entry.id}`}
+                id={`q_${question.id}_${item}`}
+                name={`q_${question.id}`}
                 value={item}
                 className="nps-input"
                 disabled="disabled"
-                defaultChecked={entry.value === item}></input>
+                style={{ display: 'none !important' }}
+                checked={`${entry.value}` === item}></input>
               <label
                 className="net-promoter-score-label"
-                htmlFor={`q_${entry.id}_${item}`}>
+                htmlFor={`q_${question.id}_${item}`}>
                 {item}
               </label>
             </li>

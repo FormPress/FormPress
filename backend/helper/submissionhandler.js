@@ -1,3 +1,5 @@
+const reactDOMServer = require('react-dom/server')
+
 const Elements = require('../script/transformed/elements/')
 
 const parseInput = (input) => {
@@ -17,7 +19,7 @@ exports.formatInput = (questions, inputs) => {
   const parsedInputs = inputs.map((input) => parseInput(input))
   questions.forEach((question) => {
     if ('submissionHandler' in Elements[question.type]) {
-      let value = Elements[question.type].submissionHandler.getQuestionValue(
+      let value = Elements[question.type].submissionHandler.findQuestionValue(
         parsedInputs,
         question.id
       )
@@ -29,4 +31,55 @@ exports.formatInput = (questions, inputs) => {
   })
 
   return formattedInput
+}
+
+exports.getQuestionsWithRenderedAnswers = (
+  form,
+  formattedInput,
+  submission_id,
+  htmlRendering = false
+) => {
+  let questionData = []
+  for (const input of formattedInput) {
+    const question_id = parseInt(input.q_id)
+    // necessary for FileUpload
+    input.submission_id = submission_id
+    const element = form.props.elements.find(
+      (element) => element.id === question_id
+    )
+
+    let plainAnswer, renderedAnswer
+
+    if (typeof Elements[element.type].getPlainStringValue === 'function') {
+      try {
+        plainAnswer = Elements[element.type].getPlainStringValue(input, element)
+      } catch (e) {
+        plainAnswer = 'Error retrieving answer.'
+      }
+    }
+
+    if (htmlRendering) {
+      if (typeof Elements[element.type].renderDataValue === 'function') {
+        try {
+          renderedAnswer = Elements[element.type].renderDataValue(
+            input,
+            element
+          )
+          renderedAnswer = reactDOMServer.renderToStaticMarkup(renderedAnswer)
+        } catch (e) {
+          renderedAnswer = 'Error rendering answer.'
+        }
+      }
+    }
+
+    questionData.push({
+      question: element.label,
+      type: element.type,
+      answer: plainAnswer,
+      renderedAnswer: renderedAnswer,
+      id: question_id
+    })
+  }
+
+  return questionData
 }

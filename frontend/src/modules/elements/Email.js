@@ -17,11 +17,12 @@ export default class Email extends Component {
 
   static metaData = {
     icon: faEnvelope,
-    displayText: 'E-mail'
+    displayText: 'E-mail',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -40,8 +41,20 @@ export default class Email extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry) {
-    return entry.value
+    return entry.value ? entry.value : '-'
   }
 
   render() {

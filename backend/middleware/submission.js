@@ -2,6 +2,8 @@ const path = require('path')
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
+const puppeteer = require('puppeteer')
+const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
@@ -11,6 +13,10 @@ const { storage, submissionhandler, error, model } = require(path.resolve(
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
+const { gdUploadFile } = require(path.resolve(
+  'integrations',
+  'googledriveapi.js'
+))
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
@@ -89,6 +95,10 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
+
+    const submissionDate = moment(new Date())
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss')
 
     const fileUploadEntries = []
 
@@ -249,24 +259,42 @@ module.exports = (app) => {
         break
     }
 
+    let pdfRequest = false
+    const pdfIntegrations = ['GoogleDrive']
+
+    const integrationList = form.props.integrations
+
+    for (const integration of integrationList) {
+      if (pdfIntegrations.includes(integration.type)) {
+        if (integration.active) {
+          pdfRequest = true
+        }
+      }
+    }
+
+    const questionsAndAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
+      form,
+      formattedInput,
+      submission_id,
+      pdfRequest
+    )
+
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to
     }
-
+    const FRONTEND =
+      FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
     if (
       sendEmailTo !== false &&
       sendEmailTo !== undefined &&
       sendEmailTo !== '' &&
       isEnvironmentVariableSet.sendgridApiKey !== false
     ) {
-      const FRONTEND =
-        FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
       const htmlBody = await ejs
         .renderFile(path.join(__dirname, '../views/submitemailhtml.tpl.ejs'), {
           FRONTEND: FRONTEND,
           FormTitle: form.title,
-          Form: form,
-          FormattedInput: formattedInput,
+          QUESTION_AND_ANSWERS: questionsAndAnswers,
           Submission_id: submission_id,
           Email: sendEmailTo
         })
@@ -301,7 +329,7 @@ module.exports = (app) => {
       }
 
       try {
-        console.log('sending email ', msg)
+        console.log('sending email')
         sgMail.send(msg)
       } catch (e) {
         console.log('Error while sending email ', e)
@@ -342,6 +370,119 @@ module.exports = (app) => {
         `,
           [formOwner, yearMonth]
         )
+      }
+    }
+
+    let pdfBuffer
+    let customSubmissionFileName = ''
+
+    const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
+    if (gDrive !== undefined && gDrive.active === true) {
+      const folderID = gDrive.folder
+      const base64Token = gDrive.value
+      const decodedToken = JSON.parse(
+        Buffer.from(base64Token, 'base64').toString()
+      )
+
+      const imgEncoded = {}
+      let acceptedExtensions = [
+        'png',
+        'jpg',
+        'jpeg',
+        'gif',
+        'ico',
+        'apng',
+        'svg',
+        'webp',
+        'bmp'
+      ]
+
+      if (fileUploadCounter > -1 && req.files) {
+        await Object.keys(req.files).forEach((key) => {
+          const file = req.files[key]
+
+          const extension = file.name.split('.').pop()
+
+          if (acceptedExtensions.includes(extension) && file.size < 5000000) {
+            imgEncoded[key] = {}
+            imgEncoded[key].mimeType = file.mimetype
+            imgEncoded[key].base64 = file.data.toString('base64')
+          }
+        })
+      }
+
+      const htmlBody = await ejs
+        .renderFile(
+          path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
+          {
+            FRONTEND: FRONTEND,
+            FormTitle: form.title,
+            QUESTION_AND_ANSWERS: questionsAndAnswers,
+            imgEncoded,
+            Submission_id: submission_id
+          }
+        )
+        .catch((err) => {
+          console.log('can not render html body', err)
+          error.errorReport(err)
+        })
+
+      const identifierElement = questionsAndAnswers.find(
+        (i) =>
+          i.id === parseInt(gDrive.submissionIdentifier.id) &&
+          i.type === gDrive.submissionIdentifier.type
+      )
+
+      if (identifierElement) {
+        const identifierAnswer = identifierElement.answer
+        if (identifierElement.type === 'FileUpload') {
+          customSubmissionFileName = identifierAnswer.split('/').pop()
+        } else {
+          customSubmissionFileName = identifierAnswer
+        }
+      }
+
+      customSubmissionFileName += ' - ' + submissionDate
+
+      const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox']
+      })
+
+      const pages = await browser.pages()
+
+      const page = pages[0]
+
+      try {
+        await page.setContent(htmlBody, {
+          waitUntil: 'domcontentloaded'
+        })
+
+        await page.emulateMediaType('print')
+
+        pdfBuffer = await page.pdf({
+          format: 'A4',
+          printBackground: true
+        })
+      } catch (err) {
+        error.errorReport(err)
+        console.log('Error while creating the pdf file', err)
+      }
+
+      await browser.close()
+
+      try {
+        await gdUploadFile(
+          folderID,
+          pdfBuffer,
+          customSubmissionFileName,
+          decodedToken
+        )
+      } catch (err) {
+        error.errorReport(err)
+
+        console.log('Error while uploading file to google drive', err)
       }
     }
   })
