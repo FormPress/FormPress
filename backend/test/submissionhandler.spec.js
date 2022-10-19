@@ -62,7 +62,7 @@ describe('submission handler', () => {
       { q_id: 1, value: '' },
       { q_id: 3, value: '' },
       { q_id: 5, value: '' },
-      { q_id: 9, value: '' },
+      { q_id: 9, value: [''] },
       { q_id: 6, value: '' },
       { q_id: 7, value: {} },
       { q_id: 8, value: '' }
