@@ -183,29 +183,36 @@
   position: absolute;
 }
 
-.formProperties .popover-container {
+.formProperties .popover-container > svg {
+  color: #113952;
+}
+
+.formProperties .autoPageBreakTooltip > .popover-container {
   float: right;
   position: relative;
   top: 17px;
   left: -175px;
 }
 
-.formProperties .popover-container:hover > .popoverText {
+.formProperties
+  .autoPageBreakTooltip
+  > .popover-container:hover
+  > .popoverText {
   width: 12rem;
   height: fit-content;
-  top: -65px;
+  top: -72px;
   left: -155px;
 }
 
 .formProperties .evaluateFormTooltip .popover-container {
   float: right;
   position: relative;
-  top: 88px;
-  left: -115px;
+  top: 85px;
+  left: -140px;
 }
 
 .formProperties .evaluateFormTooltip .popover-container:hover > .popoverText {
-  width: 12rem;
+  width: 18rem;
   height: fit-content;
   top: 20px;
   left: -170px;

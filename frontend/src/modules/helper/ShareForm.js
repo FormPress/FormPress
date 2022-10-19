@@ -98,6 +98,14 @@ class ShareForm extends Component {
                   maxLength="32"
                 />
               </div>
+              <div className="submitOnceTooltip">
+                <span className="popover-container">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                    Allows each respondent to submit the form only once
+                  </div>
+                </span>
+              </div>
               <div>
                 <input
                   id="widget_once"
@@ -107,13 +115,7 @@ class ShareForm extends Component {
                   className="shareFormSettingsInput"
                   onChange={this.onAnsweredOnceChange}
                 />
-                <span className="popover-container">
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                  <div className="popoverText">
-                    Allows each respondent only one submission
-                  </div>
-                </span>
-                <label htmlFor="widget_once">Unique submissions</label>
+                <label htmlFor="widget_once">Single submission</label>
               </div>
             </div>
             <div className="shareFormContent">

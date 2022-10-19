@@ -276,12 +276,14 @@ export default class FormProperties extends Component {
           }}
           className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
         />
-        <span className="popover-container">
-          <FontAwesomeIcon icon={faInfoCircle} />
-          <div className="popoverText">
-            Enabling this option will disable all previously added page breaks
-          </div>
-        </span>
+        <div className="autoPageBreakTooltip">
+          <span className="popover-container">
+            <FontAwesomeIcon icon={faInfoCircle} />
+            <div className="popoverText">
+              Enabling this option will disable all previously added page breaks
+            </div>
+          </span>
+        </div>
         <Renderer
           handleFieldChange={this.handleElemPerPageChange}
           theme="infernal"
