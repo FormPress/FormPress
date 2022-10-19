@@ -32,6 +32,42 @@
   text-align: center;
   padding: 15px 20px;
 }
+
+.shareFormTabCover .popover-container {
+  color: #113952;
+}
+
+.shareFormTabCover .submitOnceTooltip > .popover-container {
+  float: right;
+  position: relative;
+  top: 3px;
+  left: -125px;
+}
+
+.shareFormTabCover
+  .submitOnceTooltip
+  > .popover-container:hover
+  > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -63px;
+  left: -174px;
+}
+
+.shareFormTabCover .embedCodeTooltip .popover-container {
+  float: right;
+  position: relative;
+  top: 22px;
+  left: -73px;
+}
+
+.shareFormTabCover .embedCodeTooltip .popover-container:hover > .popoverText {
+  width: 12rem;
+  height: fit-content;
+  top: -65px;
+  left: -170px;
+}
+
 .shareFormTitle,
 .shareFormFooterTitle {
   color: #333333;

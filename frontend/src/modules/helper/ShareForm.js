@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import CopyToClipboard from '../common/CopyToClipboard'
 import './ShareForm.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+
 import {
   FacebookIcon,
   LinkedinIcon,
@@ -82,7 +85,7 @@ class ShareForm extends Component {
                 className="shareFormSettingsInput"
                 onChange={this.onWidgetChange}
               />
-              <label htmlFor="widget">Arrange form as widget</label>
+              <label htmlFor="widget">Set form as widget</label>
               <div className="shareFormSettingsWidgetContainer">
                 <label>Widget Title</label>
                 <input
@@ -95,6 +98,14 @@ class ShareForm extends Component {
                   maxLength="32"
                 />
               </div>
+              <div className="submitOnceTooltip">
+                <span className="popover-container">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                    Allows each respondent to submit the form only once
+                  </div>
+                </span>
+              </div>
               <div>
                 <input
                   id="widget_once"
@@ -104,14 +115,12 @@ class ShareForm extends Component {
                   className="shareFormSettingsInput"
                   onChange={this.onAnsweredOnceChange}
                 />
-                <label htmlFor="widget_once">
-                  Set form to &quot;can be answered once&quot;
-                </label>
+                <label htmlFor="widget_once">Single submission</label>
               </div>
             </div>
             <div className="shareFormContent">
               <div className="shareFormFormUrlArea">
-                <h3 className="shareFormFormUrlAreaTitle">URL of your form:</h3>
+                <h3 className="shareFormFormUrlAreaTitle">URL of your form</h3>
                 <input
                   type="text"
                   value={this.formLink}
@@ -123,9 +132,18 @@ class ShareForm extends Component {
                 clipboardData={this.formLink}
                 buttonText="Copy URL"
               />
+              <div className="embedCodeTooltip">
+                <span className="popover-container">
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  <div className="popoverText">
+                    Use this code to embed the form into your webpage
+                  </div>
+                </span>
+              </div>
+
               <div className="shareFormFormEmbedCodeArea">
                 <h3 className="shareFormFormEmbedCodeAreaTitle">
-                  Embed Code of your form:
+                  Embed Code of your form
                 </h3>
                 <textarea className="embedCode" value={embedCode} readOnly />
               </div>
