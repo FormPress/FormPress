@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-
+import GeneralContext from '../../general.context'
 import './Status.css'
 
-export default class Status extends Component {
+class Status extends Component {
   render() {
     return (
       <div className="statuswrap">
@@ -37,3 +37,11 @@ export default class Status extends Component {
     )
   }
 }
+
+const StatusWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <Status {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
+)
+
+export default StatusWrapped
