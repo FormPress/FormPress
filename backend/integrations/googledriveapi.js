@@ -1,6 +1,7 @@
 const { google } = require('googleapis')
 const { URLSearchParams } = require('url')
 const { Duplex } = require('stream')
+const { error } = require('../helper')
 
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const frontendPort = 3000
@@ -58,6 +59,7 @@ exports.authGoogleDrive = (app) => {
 
           status = true
         } catch (err) {
+          error.errorReport(err)
           console.log('Error while setting credentials', err)
           status = false
         }

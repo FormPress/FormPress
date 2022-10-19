@@ -398,7 +398,7 @@ module.exports = (app) => {
       ]
 
       if (fileUploadCounter > -1 && req.files) {
-        Object.keys(req.files).forEach((key) => {
+        await Object.keys(req.files).forEach((key) => {
           const file = req.files[key]
 
           const extension = file.name.split('.').pop()
@@ -444,17 +444,17 @@ module.exports = (app) => {
 
       customSubmissionFileName += ' - ' + submissionDate
 
+      const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox']
+      })
+
+      const pages = await browser.pages()
+
+      const page = pages[0]
+
       try {
-        const browser = await puppeteer.launch({
-          headless: true,
-          executablePath: '/usr/bin/chromium-browser',
-          args: ['--no-sandbox']
-        })
-
-        const pages = await browser.pages()
-
-        const page = pages[0]
-
         await page.setContent(htmlBody, {
           waitUntil: 'domcontentloaded'
         })
@@ -465,11 +465,12 @@ module.exports = (app) => {
           format: 'A4',
           printBackground: true
         })
-
-        await browser.close()
       } catch (err) {
+        error.errorReport(err)
         console.log('Error while creating the pdf file', err)
       }
+
+      await browser.close()
 
       try {
         await gdUploadFile(
@@ -479,6 +480,8 @@ module.exports = (app) => {
           decodedToken
         )
       } catch (err) {
+        error.errorReport(err)
+
         console.log('Error while uploading file to google drive', err)
       }
     }
