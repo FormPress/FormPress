@@ -925,7 +925,7 @@ export default class Data extends Component {
         const parsed = JSON.parse(entry.value)
         entry.value = parsed
       } catch (e) {
-        console.log('not parsable')
+        // do nothing
       }
       return Elements[question.type].renderDataValue(entry, question)
     } catch (e) {

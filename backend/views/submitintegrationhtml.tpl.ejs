@@ -55,9 +55,11 @@
       }
       .hero-logo > svg {
         width: 200px;
+        padding: 0 1rem 0 1rem;
       }
       .notifier-text {
         border-bottom: 2px solid #d0d0d0;
+        padding: 0 1rem 0 1rem;
       }
 
       .QnA {
@@ -189,5 +191,12 @@
 <div class="footer">
     &#169; 2022 FORMPRESS.ORG
 </div>
+<script>
+    // add display none to all images if there is an error
+    const images = document.getElementsByTagName('img');
+    for (let i = 0; i < images.length; i++) {
+        images[i].setAttribute('onerror', "this.style.display='none'");
+    }
+</script>
 </body>
 </html>

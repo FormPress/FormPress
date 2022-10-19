@@ -105,9 +105,15 @@ export default class FileUpload extends Component {
         <>
           {imgExtensionArray.includes(file.uploadName.split('.').pop()) ? (
             <img
+              id={`q${question.id}-file-${index}`}
               alt={`File: ${file.fileName}`}
               src={bucketName + file.uploadName}
               style={{ maxWidth: '700px' }}
+              onError={() => {
+                document.getElementById(
+                  `q${question.id}-file-${index}`
+                ).style.display = 'none'
+              }}
             />
           ) : null}
           <a
