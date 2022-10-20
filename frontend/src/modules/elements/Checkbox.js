@@ -88,8 +88,6 @@ export default class Checkbox extends Component {
         checkedAnswers = entry.value
       }
 
-      console.log('checkedAnswers', checkedAnswers)
-
       return (
         <div className="input" key={index}>
           <input
