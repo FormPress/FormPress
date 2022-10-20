@@ -27,8 +27,8 @@ async function runPupeteer(data) {
   })
 }
 
-exports.generatePDF = async (htmlBody) => {
-  const resData = await runPupeteer(htmlBody)
+exports.generatePDF = async (htmlPath) => {
+  const resData = await runPupeteer(htmlPath)
 
   if (resData.pdfBuffer) {
     return resData.pdfBuffer

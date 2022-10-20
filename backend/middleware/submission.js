@@ -25,6 +25,11 @@ const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
 
+const os = require('os')
+
+const appPrefix = 'formpress'
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
+
 const findQuestionType = (form, qid) => {
   for (const elem of form.props.elements) {
     if (elem.id === qid) {
@@ -447,7 +452,11 @@ module.exports = (app) => {
 
       customSubmissionFileName += ' - ' + submissionDate
 
-      const pdf = await pdfPrinter.generatePDF(htmlBody)
+      const htmlPath = path.join(tmpDir, `${submission_id}.html`)
+
+      fs.writeFileSync(htmlPath, htmlBody)
+
+      const pdf = await pdfPrinter.generatePDF(htmlPath)
       pdfBuffer = Buffer.from(pdf)
 
       try {

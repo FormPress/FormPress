@@ -14,9 +14,7 @@
   })
   const page = await browser.newPage()
 
-  await page.setContent(inputFile, {
-    waitUntil: 'domcontentloaded'
-  })
+  await page.goto(`file:///${inputFile}`, { waitUntil: 'networkidle0' })
 
   await page.emulateMediaType('print')
 
