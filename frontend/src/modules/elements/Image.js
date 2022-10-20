@@ -14,10 +14,13 @@ export default class Image extends Component {
     super(props)
 
     this.state = {
-      image: '',
       cropData: '',
-      cropper: undefined
+      cropper: undefined,
+      cropPhase: props.config.uploadedImageUrl ? 3 : 1,
+      croppedImage: props.config.uploadedImageUrl || ''
     }
+
+    this.cropperRef = React.createRef()
   }
 
   static weight = 16
@@ -35,47 +38,6 @@ export default class Image extends Component {
     displayText: 'Image'
   }
 
-  static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
-      let value = ''
-      for (const elem of inputs) {
-        if (elem.q_id === qid) {
-          value = elem.value
-        }
-      }
-      return value
-    }
-  }
-
-  static renderDataValue(entry) {
-    if (entry.value !== '') {
-      const parsedValue = JSON.parse(entry.value)
-      let fileUploadPath =
-        'https://storage.googleapis.com/formpress-stage-test-fileuploads/'
-      if (process.env.FP_ENV === 'production') {
-        fileUploadPath = 'https://storage.googleapis.com/fp-uploads-production/'
-      }
-
-      const values = parsedValue.map((file, index) => (
-        <img
-          src={`${fileUploadPath}${encodeURI(file.uploadName)}`}
-          target="_blank"
-          key={index}
-          alt=""
-        />
-      ))
-
-      return values
-    } else {
-      return ''
-    }
-  }
-
-  static helpers = {
-    getElementValue: 'defaultInputHelpers',
-    isFilled: 'defaultInputHelpers'
-  }
-
   onChange = (e) => {
     e.preventDefault()
     let files
@@ -84,77 +46,123 @@ export default class Image extends Component {
     } else if (e.target) {
       files = e.target.files
     }
+
     const reader = new FileReader()
     reader.onload = () => {
-      this.setState({ image: reader.result })
+      this.setState({ croppedImage: reader.result, cropPhase: 2 })
     }
+
     reader.readAsDataURL(files[0])
   }
 
   getCropData = () => {
     if (typeof this.state.cropper !== 'undefined') {
       this.setState({
-        cropData: this.state.cropper.getCroppedCanvas().toDataURL()
+        croppedImage: this.state.cropper
+          .getCroppedCanvas({
+            minWidth: 256,
+            minHeight: 256,
+            maxWidth: 4096,
+            maxHeight: 4096,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high',
+            fillColor: '#fff'
+          })
+          .toDataURL('image/jpeg', 1),
+        cropPhase: 3
       })
+      this.props.imageUploadHandler(
+        this.props.config.id,
+        this.state.croppedImage
+      )
     }
   }
 
   render() {
     const { config, mode } = this.props
+    let processDisplay
 
-    const script = (
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-          var image_drop_area = document.querySelector('#label_${config.id}');
-          var image_area = document.querySelector('#q_${config.id}');
-          var file_content = document.querySelector('#file-content_${config.id}');
-          var uploaded_image_${config.id};
-
-          image_drop_area.addEventListener('dragover', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            image_area.classList.add('file-input--active')
-            event.dataTransfer.dropEffect = 'copy';
-          });
-
-          image_drop_area.addEventListener('dragleave', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            image_area.classList.remove('file-input--active');
-          });
-
-          image_drop_area.addEventListener('drop', (event) => {
-            event.stopPropagation();
-            event.preventDefault();
-            fileList = event.dataTransfer.files;
-
-            image_area.classList.remove('file-input--active')
-            file_content.classList.add('hidden');
-            readImage${config.id}(fileList[0]);
-          });
-
-          image_area.addEventListener('change', function(e) {
-            if(image_area.files.length == 0) {
-              file_content.classList.remove('hidden');
-              document.querySelector('#label_${config.id}').style.backgroundImage = '';
-            }else {
-              fileList = image_area.files;
-
-              image_area.classList.remove('file-input--active')
-              file_content.classList.add('hidden');
-              readImage${config.id}(fileList[0]);
-            }
-          });
-
-          readImage${config.id} = async (file) => {
-            var blob${config.id} = new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type });
-            var blobURL${config.id} = URL.createObjectURL(blob${config.id});
-            document.querySelector('#label_${config.id}').style.backgroundImage = 'url('+blobURL${config.id}+')';
-          }`
-        }}
-      />
-    )
+    if (mode !== 'renderer') {
+      if (this.state.cropPhase === 1) {
+        processDisplay = (
+          <div className="inputContainer">
+            <label
+              htmlFor={`temp_q_${config.id}`}
+              className="image_container_before_upload">
+              Browse an image...
+            </label>
+            <input
+              type="file"
+              id={`temp_q_${config.id}`}
+              accept="image/*"
+              onChange={this.onChange}
+            />
+          </div>
+        )
+      }
+      if (this.state.cropPhase === 2) {
+        processDisplay = (
+          <div>
+            <div style={{ width: '100%' }}>
+              <Cropper
+                style={{ height: 400, width: '100%' }}
+                zoomTo={0.5}
+                preview=".img-preview"
+                src={this.state.croppedImage}
+                viewMode={2}
+                autoCropArea={1}
+                background={false}
+                cropBoxResizable={true}
+                cropBoxMovable={true}
+                maxCropBoxWidth={640}
+                maxCropBoxHeight={400}
+                responsive={true}
+                checkOrientation={false}
+                onInitialized={(instance) => {
+                  this.setState({ cropper: instance })
+                }}
+                guides={true}
+              />
+            </div>
+            <br />
+            <button className="crop-button" onClick={this.getCropData}>
+              Crop Image
+            </button>
+          </div>
+        )
+      }
+      if (this.state.cropPhase === 3) {
+        processDisplay = (
+          <div>
+            <label htmlFor={`q_${config.id}`} className="custom_image_upload">
+              <div className="label_hover_background">
+                <span>
+                  This is preview section of cropped image. <br /> You can click
+                  to add a new image.
+                </span>
+              </div>
+              <input
+                type="file"
+                id={`q_${config.id}`}
+                accept="image/*"
+                onChange={this.onChange}
+              />
+              <img
+                src={this.state.croppedImage}
+                className="cropped_image"
+                alt=""
+              />
+            </label>
+          </div>
+        )
+      }
+    } else {
+      processDisplay = (
+        <label className="custom_image_upload">
+          <img src={this.state.croppedImage} className="cropped_image" alt="" />
+        </label>
+      )
+    }
 
     return (
       <ElementContainer type={config.type} {...this.props}>
@@ -170,56 +178,7 @@ export default class Image extends Component {
             required={config.required}
           />
         </div>
-        <div>
-          <div style={{ width: '100%' }}>
-            <input type="file" onChange={this.onChange} />
-            <button>Use default img</button>
-            <br />
-            <br />
-            <Cropper
-              style={{ height: 400, width: '100%' }}
-              zoomTo={0.5}
-              initialAspectRatio={1}
-              preview=".img-preview"
-              viewMode={1}
-              minCropBoxHeight={10}
-              minCropBoxWidth={10}
-              background={false}
-              responsive={true}
-              autoCropArea={1}
-              checkOrientation={false}
-              onInitialized={(instance) => {
-                this.setState({ cropper: instance })
-              }}
-              guides={true}
-            />
-          </div>
-          <div>
-            <div className="box" style={{ width: '50%', float: 'right' }}>
-              <h1>Preview</h1>
-              <div
-                className="img-preview"
-                style={{ width: '100%', float: 'left', height: '300px' }}
-              />
-            </div>
-            <div
-              className="box"
-              style={{ width: '50%', float: 'right', height: '300px' }}>
-              <h1>
-                <span>Crop</span>
-                <button style={{ float: 'right' }} onClick={this.getCropData}>
-                  Crop Image
-                </button>
-              </h1>
-              <img
-                style={{ width: '100%' }}
-                src={this.state.cropData}
-                alt="cropped"
-              />
-            </div>
-          </div>
-          <br style={{ clear: 'both' }} />
-        </div>
+        {processDisplay}
         {mode === 'viewer' ? (
           ''
         ) : (

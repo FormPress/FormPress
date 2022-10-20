@@ -1354,6 +1354,68 @@ fp-powered + div > .form::after {
   text-align: center;
 }
 
+.image_container_before_upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 176px;
+}
+
+.custom_image_upload {
+  display: block;
+  padding: 10px;
+  z-index: 2;
+  position: relative;
+}
+
+.crop-button {
+  width: 80%;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid white;
+  cursor: pointer;
+  padding: 5px;
+  margin: auto;
+  position: relative;
+  display: block;
+}
+
+.cropped_image {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  max-width: 620px;
+}
+
+.label_hover_background {
+  display: none;
+  cursor: pointer;
+}
+
+.label_hover_background span {
+  user-select: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
+}
+
+.custom_image_upload:hover .label_hover_background {
+  display: block;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  position: absolute;
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
 @keyframes bounce {
   0% {
     transform: translateY(0px);

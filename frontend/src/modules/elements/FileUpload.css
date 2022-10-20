@@ -12,3 +12,7 @@ input[type='file'] {
 .elementFileUpload > .inputContainer > .fileDisplay {
   word-break: break-all;
 }
+
+.builder .elementFileUpload .inputContainer label {
+  pointer-events: none !important;
+}

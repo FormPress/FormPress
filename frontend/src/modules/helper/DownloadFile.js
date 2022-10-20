@@ -14,7 +14,7 @@ export default class Download extends Component {
     const params = this.props.match.params
 
     const result = await api({
-      resource: `/api/checkIfFileIsExist/${this.props.auth.user_id}/${params.formId}/${params.submissionId}/${params.questionId}/${params.fileName}`,
+      resource: `/api/checkIfFileIsExist/${this.props.generalContext.auth.user_id}/${params.formId}/${params.submissionId}/${params.questionId}/${params.fileName}`,
       method: 'get'
     })
 
