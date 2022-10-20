@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
-const puppeteer = require('puppeteer')
 const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
