@@ -171,19 +171,9 @@
                 <div class="question-name">
                     <%- QnA.question%>
                 </div>
-                <% if (QnA.type === 'FileUpload' && imgEncoded[`q_${QnA.id}`] !== undefined ) {
-                  const matchingFile = imgEncoded[`q_${QnA.id}`]
-                  const imgSrc = `data:${matchingFile.mimeType};base64, ${matchingFile.base64}`
-                %>
-                    <div class="answer-value">
-                        <img src="<%=imgSrc%>" alt="Uploaded image." style="max-width: 700px; padding: 10px 0 10px 0;" />
-                        <%- QnA.renderedAnswer %>
-                    </div>
-                    <% } else {%>
                 <div class="answer-value">
                     <%- QnA.renderedAnswer %>
                 </div>
-                <% }%>
             </div>
         <%})%>
     </div>
@@ -191,7 +181,7 @@
 <div class="footer">
     &#169; 2022 FORMPRESS.ORG
 </div>
-<script>
+<script defer>
     // add display none to all images if there is an error
     const images = document.getElementsByTagName('img');
     for (let i = 0; i < images.length; i++) {

@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
 const moment = require('moment')
@@ -25,9 +26,7 @@ const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
 
-const os = require('os')
-
-const appPrefix = 'formpress'
+const appPrefix = 'formpress-'
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
 
 const findQuestionType = (form, qid) => {
@@ -405,20 +404,6 @@ module.exports = (app) => {
         'bmp'
       ]
 
-      if (fileUploadCounter > -1 && req.files) {
-        await Object.keys(req.files).forEach((key) => {
-          const file = req.files[key]
-
-          const extension = file.name.split('.').pop()
-
-          if (acceptedExtensions.includes(extension) && file.size < 5000000) {
-            imgEncoded[key] = {}
-            imgEncoded[key].mimeType = file.mimetype
-            imgEncoded[key].base64 = file.data.toString('base64')
-          }
-        })
-      }
-
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
@@ -426,7 +411,6 @@ module.exports = (app) => {
             FRONTEND: FRONTEND,
             FormTitle: form.title,
             QUESTION_AND_ANSWERS: questionsAndAnswers,
-            imgEncoded,
             Submission_id: submission_id
           }
         )
@@ -453,6 +437,11 @@ module.exports = (app) => {
       customSubmissionFileName += ' - ' + submissionDate
 
       const htmlPath = path.join(tmpDir, `${submission_id}.html`)
+
+      fs.writeFileSync(
+        path.join(__dirname, '../views/integration.html'),
+        htmlBody
+      )
 
       fs.writeFileSync(htmlPath, htmlBody)
 

@@ -107,6 +107,7 @@ export default class FileUpload extends Component {
             <img
               id={`q${question.id}-file-${index}`}
               alt={`File: ${file.fileName}`}
+              className="fileUpload-image"
               src={bucketName + file.uploadName}
               style={{ maxWidth: '700px' }}
               onError={() => {

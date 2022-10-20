@@ -14,6 +14,12 @@
   })
   const page = await browser.newPage()
 
+  //wait for 5 seconds just to make sure bucket is ready to serve images
+  await new Promise((resolve) => setTimeout(resolve, 5000))
+
+  await page.setUserAgent(
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36 WAIT_UNTIL=load'
+  )
   await page.goto(`file:///${inputFile}`, { waitUntil: 'networkidle0' })
 
   await page.emulateMediaType('print')
