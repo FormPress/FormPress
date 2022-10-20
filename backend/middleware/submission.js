@@ -7,9 +7,13 @@ const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { storage, submissionhandler, error, model } = require(path.resolve(
-  'helper'
-))
+const {
+  storage,
+  submissionhandler,
+  error,
+  model,
+  pdfPrinter
+} = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
@@ -444,33 +448,8 @@ module.exports = (app) => {
 
       customSubmissionFileName += ' - ' + submissionDate
 
-      const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: '/usr/bin/chromium-browser',
-        args: ['--no-sandbox']
-      })
-
-      const pages = await browser.pages()
-
-      const page = pages[0]
-
-      try {
-        await page.setContent(htmlBody, {
-          waitUntil: 'domcontentloaded'
-        })
-
-        await page.emulateMediaType('print')
-
-        pdfBuffer = await page.pdf({
-          format: 'A4',
-          printBackground: true
-        })
-      } catch (err) {
-        error.errorReport(err)
-        console.log('Error while creating the pdf file', err)
-      }
-
-      await browser.close()
+      const pdf = await pdfPrinter.generatePDF(htmlBody)
+      pdfBuffer = Buffer.from(pdf)
 
       try {
         await gdUploadFile(
