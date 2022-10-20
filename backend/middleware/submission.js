@@ -391,19 +391,6 @@ module.exports = (app) => {
         Buffer.from(base64Token, 'base64').toString()
       )
 
-      const imgEncoded = {}
-      let acceptedExtensions = [
-        'png',
-        'jpg',
-        'jpeg',
-        'gif',
-        'ico',
-        'apng',
-        'svg',
-        'webp',
-        'bmp'
-      ]
-
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
