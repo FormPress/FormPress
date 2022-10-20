@@ -1,15 +1,19 @@
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
-const puppeteer = require('puppeteer')
 const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
-const { storage, submissionhandler, error, model } = require(path.resolve(
-  'helper'
-))
+const {
+  storage,
+  submissionhandler,
+  error,
+  model,
+  pdfPrinter
+} = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
@@ -21,6 +25,9 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
+
+const appPrefix = 'formpress-'
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
 
 const findQuestionType = (form, qid) => {
   for (const elem of form.props.elements) {
@@ -384,33 +391,6 @@ module.exports = (app) => {
         Buffer.from(base64Token, 'base64').toString()
       )
 
-      const imgEncoded = {}
-      let acceptedExtensions = [
-        'png',
-        'jpg',
-        'jpeg',
-        'gif',
-        'ico',
-        'apng',
-        'svg',
-        'webp',
-        'bmp'
-      ]
-
-      if (fileUploadCounter > -1 && req.files) {
-        await Object.keys(req.files).forEach((key) => {
-          const file = req.files[key]
-
-          const extension = file.name.split('.').pop()
-
-          if (acceptedExtensions.includes(extension) && file.size < 5000000) {
-            imgEncoded[key] = {}
-            imgEncoded[key].mimeType = file.mimetype
-            imgEncoded[key].base64 = file.data.toString('base64')
-          }
-        })
-      }
-
       const htmlBody = await ejs
         .renderFile(
           path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
@@ -418,7 +398,6 @@ module.exports = (app) => {
             FRONTEND: FRONTEND,
             FormTitle: form.title,
             QUESTION_AND_ANSWERS: questionsAndAnswers,
-            imgEncoded,
             Submission_id: submission_id
           }
         )
@@ -444,33 +423,17 @@ module.exports = (app) => {
 
       customSubmissionFileName += ' - ' + submissionDate
 
-      const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: '/usr/bin/chromium-browser',
-        args: ['--no-sandbox']
-      })
+      const htmlPath = path.join(tmpDir, `${submission_id}.html`)
 
-      const pages = await browser.pages()
+      fs.writeFileSync(
+        path.join(__dirname, '../views/integration.html'),
+        htmlBody
+      )
 
-      const page = pages[0]
+      fs.writeFileSync(htmlPath, htmlBody)
 
-      try {
-        await page.setContent(htmlBody, {
-          waitUntil: 'domcontentloaded'
-        })
-
-        await page.emulateMediaType('print')
-
-        pdfBuffer = await page.pdf({
-          format: 'A4',
-          printBackground: true
-        })
-      } catch (err) {
-        error.errorReport(err)
-        console.log('Error while creating the pdf file', err)
-      }
-
-      await browser.close()
+      const pdf = await pdfPrinter.generatePDF(htmlPath)
+      pdfBuffer = Buffer.from(pdf)
 
       try {
         await gdUploadFile(

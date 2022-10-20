@@ -241,7 +241,6 @@ export default class GoogleDrive extends Component {
   }
 
   render() {
-    console.log(this.props, 'heh')
     const submissionIdentifierElement = this.state.inputElements.find(
       (e) => e.value === parseInt(this.state.submissionIdentifier.id)
     )
