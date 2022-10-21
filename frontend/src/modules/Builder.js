@@ -459,6 +459,7 @@ export default class Builder extends Component {
     const { formId } = this.props.match.params
     const type = e.dataTransfer.getData('text')
 
+    //A necessary condition for the element to work with drag and drop
     if (type.length > 0) {
       let item = getElementsKeys()[type]
       const { form, dragIndex, dragMode, sortItem } = this.state
