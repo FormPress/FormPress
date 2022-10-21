@@ -22,7 +22,7 @@ export default class Image extends Component {
     this.cropperRef = React.createRef()
   }
 
-  static weight = 16
+  static weight = 8
 
   static defaultConfig = {
     id: 0,
