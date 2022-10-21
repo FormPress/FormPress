@@ -14,7 +14,6 @@ export default class Image extends Component {
     super(props)
 
     this.state = {
-      cropData: '',
       cropper: undefined,
       cropPhase: props.config.uploadedImageUrl ? 3 : 1,
       croppedImage: props.config.uploadedImageUrl || ''
@@ -57,24 +56,22 @@ export default class Image extends Component {
 
   getCropData = () => {
     if (typeof this.state.cropper !== 'undefined') {
+      const croppedImage = this.state.cropper
+        .getCroppedCanvas({
+          minWidth: 256,
+          minHeight: 256,
+          maxWidth: 4096,
+          maxHeight: 4096,
+          imageSmoothingEnabled: true,
+          imageSmoothingQuality: 'high',
+          fillColor: '#fff'
+        })
+        .toDataURL('image/jpeg', 1)
       this.setState({
-        croppedImage: this.state.cropper
-          .getCroppedCanvas({
-            minWidth: 256,
-            minHeight: 256,
-            maxWidth: 4096,
-            maxHeight: 4096,
-            imageSmoothingEnabled: true,
-            imageSmoothingQuality: 'high',
-            fillColor: '#fff'
-          })
-          .toDataURL('image/jpeg', 1),
+        croppedImage: croppedImage,
         cropPhase: 3
       })
-      this.props.imageUploadHandler(
-        this.props.config.id,
-        this.state.croppedImage
-      )
+      this.props.imageUploadHandler(this.props.config.id, croppedImage)
     }
   }
 

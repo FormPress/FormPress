@@ -856,7 +856,7 @@ export default class Builder extends Component {
 
     const image = await this.dataUrlToFile(file, Math.floor(Date.now() / 1000))
 
-    const imagePath = await new Promise((success) => {
+    elementToBeChanged[0].uploadedImageUrl = await new Promise((success) => {
       let xhr = new XMLHttpRequest()
       xhr.withCredentials = false
       xhr.open(
@@ -887,8 +887,6 @@ export default class Builder extends Component {
 
       xhr.send(formData)
     })
-
-    elementToBeChanged[0].uploadedImageUrl = imagePath
 
     this.setState({ form })
   }

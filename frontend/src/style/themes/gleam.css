@@ -1371,7 +1371,7 @@ fp-powered + div > .form::after {
 
 .crop-button {
   width: 80%;
-  background-color: black;
+  background-color: #9ee048;
   color: white;
   border-radius: 5px;
   border: 1px solid white;
