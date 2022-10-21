@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, NavLink, Switch, Route, Redirect } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { cloneDeep, isEqual } from 'lodash'
+import { Buffer } from 'buffer'
 import {
   faChevronLeft,
   faPaintBrush,
@@ -181,6 +182,27 @@ export default class Builder extends Component {
     this.shouldBlockNavigation()
 
     this.ignoreFormDifference()
+  }
+
+  dataUrlToFile = async (dataUrl, filename) => {
+    const arr = dataUrl.split(',')
+    if (arr.length < 2) {
+      return undefined
+    }
+    const mimeArr = arr[0].match(/:(.*?);/)
+    if (!mimeArr || mimeArr.length < 2) {
+      return undefined
+    }
+    const mime = mimeArr[1]
+    const buff = Buffer.from(arr[1], 'base64')
+    return new File(
+      [buff],
+      `${filename}.${dataUrl.substring(
+        'data:image/'.length,
+        dataUrl.indexOf(';base64')
+      )}`,
+      { type: mime }
+    )
   }
 
   async loadForm(formId, seamless = false) {
@@ -386,6 +408,7 @@ export default class Builder extends Component {
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
+    this.imageUploadHandler = this.imageUploadHandler.bind(this)
     this.rteUploadHandler = this.rteUploadHandler.bind(this)
     this.handleLabelClick = this.handleLabelClick.bind(this)
     this.handleIntegrationClick = this.handleIntegrationClick.bind(this)
@@ -825,13 +848,48 @@ export default class Builder extends Component {
     })
   }
 
-  async imageUploadHandler(file) {
-    console.log(file)
-    /*URL.createObjectURL(
-      new Blob([new Uint8Array(await file.arrayBuffer())], {
-        type: file.type
-      })
-    )*/
+  async imageUploadHandler(id, file) {
+    const form = cloneDeep(this.state.form)
+
+    let elementToBeChanged = form.props.elements.filter((e) => e.id === id)
+
+    const image = await this.dataUrlToFile(file, Math.floor(Date.now() / 1000))
+
+    const imagePath = await new Promise((success) => {
+      let xhr = new XMLHttpRequest()
+      xhr.withCredentials = false
+      xhr.open(
+        'POST',
+        `${BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
+      )
+
+      xhr.onload = function () {
+        let json
+
+        if (xhr.status !== 200) {
+          alert('HTTP Error: ' + xhr.status)
+          return
+        }
+
+        json = JSON.parse(xhr.responseText)
+
+        if (!json || typeof json.location != 'string') {
+          alert('Invalid JSON: ' + xhr.responseText)
+          return false
+        }
+
+        success(json.location)
+      }
+
+      let formData = new FormData()
+      formData.append('file', image, image.name)
+
+      xhr.send(formData)
+    })
+
+    elementToBeChanged[0].uploadedImageUrl = imagePath
+
+    this.setState({ form })
   }
 
   handleTitleChange(id, value) {
