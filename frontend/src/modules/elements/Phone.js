@@ -38,11 +38,12 @@ export default class Phone extends Component {
 
   static metaData = {
     icon: faPhone,
-    displayText: 'Phone'
+    displayText: 'Phone',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -53,8 +54,20 @@ export default class Phone extends Component {
     }
   }
 
+  static getPlainStringValue(entry) {
+    let plainString
+
+    if (entry.value !== '') {
+      plainString = entry.value
+    } else {
+      plainString = '-'
+    }
+
+    return plainString
+  }
+
   static renderDataValue(entry) {
-    return entry.value
+    return entry.value ? entry.value : '-'
   }
 
   static helpers = {

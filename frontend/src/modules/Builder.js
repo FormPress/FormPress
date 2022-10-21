@@ -22,6 +22,8 @@ import ShareForm from './helper/ShareForm'
 import PreviewForm from './helper/PreviewForm'
 import Modal from './common/Modal'
 import Templates from './Templates'
+import * as Integrations from './integrations'
+import FormIntegrations from './helper/FormIntegrations'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
@@ -172,7 +174,7 @@ export default class Builder extends Component {
   }
 
   handleCloseTemplateModalClick() {
-    this.props.history.push('/editor/new/builder')
+    this.props.history.replace('/editor/new/builder')
     this.setState({ isTemplateModalOpen: false, modalContent: {} })
   }
 
@@ -312,10 +314,12 @@ export default class Builder extends Component {
     const form = { ...this.state.form }
     form.props = template.props
     form.title = template.title
-    form.props.integrations[0] = {
-      type: 'email',
-      to: this.props.generalContext.auth.email
-    }
+    form.props.integrations = [
+      {
+        type: 'email',
+        to: this.props.generalContext.auth.email
+      }
+    ]
     this.setState({ form, isTemplateModalOpen: false })
     this.setState({ loading: false })
   }
@@ -339,6 +343,7 @@ export default class Builder extends Component {
       selectedLabelId: false,
       publishedForm: {},
       savedForm: {},
+      selectedIntegration: false,
       form: {
         id: null,
         user_id: null,
@@ -401,12 +406,16 @@ export default class Builder extends Component {
       this
     )
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
-    this.handleUnselectElement = this.handleUnselectElement.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
     this.imageUploadHandler = this.imageUploadHandler.bind(this)
     this.rteUploadHandler = this.rteUploadHandler.bind(this)
     this.handleLabelClick = this.handleLabelClick.bind(this)
+    this.handleIntegrationClick = this.handleIntegrationClick.bind(this)
+    this.handleCloseIntegrationClick = this.handleCloseIntegrationClick.bind(
+      this
+    )
+    this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -942,17 +951,6 @@ export default class Builder extends Component {
     }
   }
 
-  handleUnselectElement() {
-    const { location } = this.props.history
-
-    if (
-      location.pathname.endsWith('/builder') &&
-      this.state.selectedFieldId !== undefined
-    ) {
-      this.setState({ selectedFieldId: undefined })
-    }
-  }
-
   handleLabelClick(labelId) {
     this.setState({ selectedLabelId: labelId })
   }
@@ -971,7 +969,10 @@ export default class Builder extends Component {
     this.setState({ saving: false })
 
     if (form.id === null && typeof data.id !== 'undefined') {
-      this.props.history.push(`/editor/${data.id}/builder`)
+      const currentPath = this.props.history.location.pathname
+      const newPath = currentPath.replace(/new/, `${data.id}`)
+
+      this.props.history.replace(newPath)
       this.setState({
         form: {
           ...this.state.form,
@@ -1044,6 +1045,43 @@ export default class Builder extends Component {
     return !elementsToRemove.includes(elem.type)
   }
 
+  handleIntegrationClick(item) {
+    const integrationName = item.displayText.replaceAll(' ', '')
+    this.setState({
+      selectedIntegration: integrationName
+    })
+  }
+
+  handleCloseIntegrationClick() {
+    this.setState({
+      selectedIntegration: false
+    })
+  }
+
+  setRenderedIntegration() {
+    const Integration = Object.values(Integrations).find(
+      (element) => element.metaData.name === this.state.selectedIntegration
+    )
+    const integrationObject =
+      this.state.form.props.integrations.find(
+        (i) => i.type === Integration.metaData.name
+      ) || null
+    const integrationValue = integrationObject ? integrationObject.value : false
+    const activeStatus = integrationObject ? integrationObject.active : false
+
+    return (
+      <Integration
+        handleCloseIntegrationClick={this.handleCloseIntegrationClick}
+        setIntegration={this.setIntegration}
+        handlePublishClick={this.handlePublishClick}
+        form={this.state.form}
+        integrationValue={integrationValue}
+        activeStatus={activeStatus}
+        integrationObject={integrationObject}
+      />
+    )
+  }
+
   render() {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
@@ -1071,6 +1109,11 @@ export default class Builder extends Component {
         name: 'formProperties',
         text: 'Form Properties',
         path: `/editor/${formId}/builder/properties`
+      },
+      {
+        name: 'integrations',
+        text: 'Integrations',
+        path: `/editor/${formId}/builder/integrations`
       }
     ]
 
@@ -1085,7 +1128,6 @@ export default class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
-    this.handleUnselectElement()
 
     return (
       <div className="builder">
@@ -1113,7 +1155,12 @@ export default class Builder extends Component {
                   key={key}
                   exact
                   to={`${item.path}`}
-                  activeClassName="selected">
+                  activeClassName="selected"
+                  onClick={
+                    item.name !== 'integrations'
+                      ? this.handleCloseIntegrationClick
+                      : null
+                  }>
                   {item.text}
                 </NavLink>
               ))}
@@ -1326,6 +1373,13 @@ export default class Builder extends Component {
             />
           ) : null}
         </Route>
+        <Route path="/editor/:formId/builder/integrations">
+          <FormIntegrations
+            handleIntegrationClick={this.handleIntegrationClick}
+            form={form}
+            selectedIntegration={this.state.selectedIntegration}
+          />
+        </Route>
       </Switch>
     )
   }
@@ -1335,13 +1389,23 @@ export default class Builder extends Component {
 
     return (
       <div>
-        <NavLink to={`/editor/${formId}/builder`} activeClassName="selected">
+        <NavLink
+          to={`/editor/${formId}/builder`}
+          activeClassName="selected"
+          onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faPlusSquare} />
         </NavLink>
-        <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
+        {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
+        <NavLink
+          style={{ display: 'none' }}
+          to={`/editor/${formId}/design`}
+          activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
         </NavLink>
-        <NavLink to={`/editor/${formId}/share`} activeClassName="selected">
+        <NavLink
+          to={`/editor/${formId}/share`}
+          activeClassName="selected"
+          onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faShareAlt} />
         </NavLink>
       </div>
@@ -1358,7 +1422,9 @@ export default class Builder extends Component {
               {this.renderLeftMenuContents()}
             </div>
           </div>
-          {this.renderBuilder()}
+          {this.state.selectedIntegration === false
+            ? this.renderBuilder()
+            : this.setRenderedIntegration()}
         </Route>
         <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">

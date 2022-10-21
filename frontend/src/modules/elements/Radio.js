@@ -21,11 +21,12 @@ export default class Radio extends Component {
 
   static metaData = {
     icon: faDotCircle,
-    displayText: 'Single Choice'
+    displayText: 'Single Choice',
+    group: 'inputElement'
   }
 
   static submissionHandler = {
-    getQuestionValue: (inputs, qid) => {
+    findQuestionValue: (inputs, qid) => {
       let value = ''
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -36,90 +37,38 @@ export default class Radio extends Component {
     }
   }
 
-  static IsJsonString(str) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
+  static getPlainStringValue(entry, question) {
+    let plainString
 
-  static dataContentOrganizer(dataContentValue, element) {
-    const tempContentValue = cloneDeep(dataContentValue)
-    let returnContent = []
-
-    if (this.IsJsonString(tempContentValue) === false) {
-      for (let elementContent of element.options) {
-        if (
-          parseInt(tempContentValue) ===
-            element.options.indexOf(elementContent) ||
-          tempContentValue === elementContent
-        ) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
+    if (entry.value !== '') {
+      plainString = question.options[parseInt(entry.value)]
     } else {
-      for (let elementContent of element.options) {
-        if (
-          parseInt(tempContentValue) ===
-            element.options.indexOf(elementContent) ||
-          tempContentValue.includes(elementContent)
-        ) {
-          returnContent.push({
-            content: elementContent,
-            value: 'checked',
-            type: element.type,
-            toggle: element.toggle
-          })
-        } else {
-          returnContent.push({
-            content: elementContent,
-            value: '',
-            type: element.type,
-            toggle: element.toggle
-          })
-        }
-      }
+      plainString = '-'
     }
 
-    return returnContent
+    // strip html tags in case of html input of rich text editor
+    plainString = plainString.replace(/(<([^>]+)>)/gi, '')
+
+    return plainString
   }
 
-  static renderDataValue(entry) {
-    return entry.value.map((input, index) => {
+  static renderDataValue(entry, question) {
+    return question.options.map((option, index) => {
       return (
         <div className="input" key={index}>
           <input
-            type={input.type.toLowerCase()}
+            type={question.type.toLowerCase()}
             id={'q_required_' + index}
-            className={input.toggle === true ? 'toggle-checkbox' : ''}
-            defaultChecked={input.value}
+            value={entry.value}
+            defaultChecked={parseInt(entry.value) === index}
             disabled
             readOnly
           />
-          {input.toggle === true ? <span className="slider"></span> : null}
           <label
-            className={
-              input.type.toLowerCase() +
-              '-label ' +
-              (input.toggle === true ? 'toggle-label' : '')
-            }
+            className={question.type.toLowerCase() + '-label '}
             htmlFor={'q_required_' + index}
             dangerouslySetInnerHTML={{
-              __html: input.content
+              __html: option
             }}></label>
         </div>
       )
