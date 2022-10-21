@@ -276,25 +276,6 @@ export default class Data extends Component {
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
-    try {
-      for (let dataContent of data) {
-        for (let element of this.state.selectedSubmissionForm.props.elements) {
-          if (
-            element.id === dataContent.question_id &&
-            (element.type === 'Checkbox' || element.type === 'Radio')
-          ) {
-            dataContent.value = Elements[element.type].dataContentOrganizer(
-              dataContent.value,
-              element
-            )
-          }
-        }
-      }
-      this.setState({ parseError: false })
-    } catch {
-      this.setState({ parseError: true })
-    }
-
     this.setLoadingState('entries', false)
     this.setState({ entries: data })
 
@@ -936,11 +917,17 @@ export default class Data extends Component {
   renderEntryElements(entry) {
     const { selectedSubmissionForm } = this.state
     try {
-      return Elements[
-        selectedSubmissionForm.props.elements.filter(
-          (element) => element.id === entry.question_id
-        )[0].type
-      ].renderDataValue(entry)
+      const question = selectedSubmissionForm.props.elements.find(
+        (element) => element.id === entry.question_id
+      )
+
+      try {
+        const parsed = JSON.parse(entry.value)
+        entry.value = parsed
+      } catch (e) {
+        // do nothing
+      }
+      return Elements[question.type].renderDataValue(entry, question)
     } catch (e) {
       console.log(e)
       return 'This data is corrupted.'

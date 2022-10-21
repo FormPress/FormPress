@@ -21,6 +21,7 @@ import AdminPage from './modules/admin/AdminPage'
 import Pricing from './modules/helper/Pricing'
 import Profile from './Profile'
 import NotFoundPage from './modules/common/NotFoundPage'
+import ReadCallback from './modules/common/ReadCallback'
 
 import PrivateRoute from './PrivateRoute'
 import AdminRoute from './AdminRoute'
@@ -245,6 +246,7 @@ class App extends Component {
               <PrivateRoute exact path="/">
                 <Redirect to="/forms" />
               </PrivateRoute>
+
               <PrivateRoute exact strict path="/forms" component={Forms} />
               <PrivateRoute
                 exact
@@ -277,6 +279,11 @@ class App extends Component {
                 path="/editor/:formId/builder/properties"
                 component={Builder}
               />
+              <PrivateRoute
+                exact
+                path="/editor/:formId/builder/integrations"
+                component={Builder}
+              />
               <PrivateRoute exact path="/editor" component={Builder} />
               <PrivateRoute exact strict path="/data" component={Data} />
               <PrivateRoute
@@ -305,6 +312,8 @@ class App extends Component {
                 component={ResetPassword}
               />
               <PrivateRoute path="/pricing" component={Pricing} />
+
+              <Route path="/read/development" component={ReadCallback} />
               <Route path="/404" component={NotFoundPage} />
               {redirectPage}
             </Switch>

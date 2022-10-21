@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { api, setToken } from '../../helper'
 import Renderer from '../Renderer'
 import moment from 'moment'
+import GeneralContext from '../../general.context'
 
 import './Users.css'
 const BACKEND = process.env.REACT_APP_BACKEND
 
-export default class Users extends Component {
+class Users extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -339,3 +340,11 @@ export default class Users extends Component {
     )
   }
 }
+
+const UserWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <Users {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
+)
+
+export default UserWrapped
