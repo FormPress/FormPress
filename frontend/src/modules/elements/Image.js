@@ -94,7 +94,7 @@ export default class Image extends Component {
             <input
               type="file"
               id={`temp_q_${config.id}`}
-              accept="image/*"
+              accept="image/jpg, image/jpeg, image/jfif, image/pjpeg, image/pjp, image/png, image/webp"
               onChange={this.onChange}
             />
           </div>
@@ -144,7 +144,7 @@ export default class Image extends Component {
               <input
                 type="file"
                 id={`q_${config.id}`}
-                accept="image/*"
+                accept="image/jpg, image/jpeg, image/jfif, image/pjpeg, image/pjp, image/png, image/webp"
                 onChange={this.onChange}
               />
               <img
