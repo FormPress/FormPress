@@ -28,7 +28,6 @@ export default class Image extends Component {
     id: 0,
     type: 'Image',
     label: 'Image',
-    requiredText: 'Please fill this field.',
     uploadedImageUrl: ''
   }
 
