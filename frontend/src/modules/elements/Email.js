@@ -7,7 +7,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import './Email.css'
 
 export default class Email extends Component {
-  static weight = 10
+  static weight = 11
 
   static defaultConfig = {
     id: 0,

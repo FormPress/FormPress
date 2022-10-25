@@ -231,6 +231,7 @@ export default class Renderer extends Component {
                 config={elem}
                 form_id={this.props.form.id}
                 order={elem.order}
+                imageUploadHandler={this.props.imageUploadHandler}
                 rteUploadHandler={this.props.rteUploadHandler}
                 builderHandlers={builderHandlers}
                 customBuilderHandlers={customBuilderHandlers}

@@ -4,7 +4,7 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header', 'Separator', 'PageBreak']
+      exceptions: ['Button', 'Header', 'Separator', 'PageBreak', 'Image']
     },
     configurableSettings: {
       default: false,
@@ -18,7 +18,7 @@ const policy = {
   requiredText: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header', 'Separator', 'PageBreak']
+      exceptions: ['Button', 'Header', 'Separator', 'PageBreak', 'Image']
     },
     configurableSettings: {
       default: 'Required field',

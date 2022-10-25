@@ -28,7 +28,7 @@ export default class Address extends Component {
       })
   }
 
-  static weight = 9
+  static weight = 10
 
   static defaultConfig = {
     id: 0,

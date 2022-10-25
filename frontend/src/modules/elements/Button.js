@@ -7,7 +7,7 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import './Button.css'
 
 export default class Button extends Component {
-  static weight = 12
+  static weight = 13
 
   static defaultConfig = {
     id: 0,
