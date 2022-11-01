@@ -105,8 +105,17 @@ class SignUp extends Component {
 
   async handleLoginWithGoogleClick(response) {
     this.setState({ state: 'loading' })
-    const tokenID = response.tokenId
-    const email = response.profileObj.email
+
+    console.log(response)
+
+    // decode base64 string and parse JSON
+    const profile = JSON.parse(atob(response.credential.split('.')[1]))
+    console.log(profile)
+
+    this.setState({ state: 'loading', message: 'Logging in...' })
+    const tokenID = response.credential
+    const email = profile.email
+
     const { success, data } = await api({
       resource: `/api/users/loginwithgoogle`,
       method: 'post',
@@ -281,6 +290,7 @@ class SignUp extends Component {
                       <div className="or-seperator">or</div>
                       <div className="google-sign-in">
                         <LoginWithGoogle
+                          context={'signup'}
                           disabled={!this.state.tosClicked}
                           handleLoginWithGoogleButton={
                             this.handleLoginWithGoogleClick
