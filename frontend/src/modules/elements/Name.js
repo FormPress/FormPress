@@ -7,7 +7,7 @@ import { faAddressCard } from '@fortawesome/free-solid-svg-icons'
 import './Name.css'
 
 export default class Name extends Component {
-  static weight = 8
+  static weight = 9
 
   static defaultConfig = {
     id: 0,

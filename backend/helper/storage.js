@@ -11,6 +11,16 @@ const storage = new Storage({
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
 exports.uploadFile = (uploadedFile, submit_id) => {
+  let trMap = {
+    çÇ: 'c',
+    ğĞ: 'g',
+    şŞ: 's',
+    üÜ: 'u',
+    ıİ: 'i',
+    öÖ: 'o',
+    ' ': '_'
+  }
+  let newName = ''
   let uploadedFiles = []
   let results = []
   if (uploadedFile instanceof Array) {
@@ -41,9 +51,22 @@ exports.uploadFile = (uploadedFile, submit_id) => {
           resolve()
         })
     })
+
+    for (let key in trMap) {
+      newName = eachFile.name
+        .substring(0, eachFile.name.lastIndexOf('.'))
+        .replace(new RegExp('[' + key + ']', 'g'), trMap[key])
+    }
+
+    newName = newName
+      .replace(/[^-a-zA-Z0-9\s]+/gi, '')
+      .replace(/\s/gi, '-')
+      .replace(/[-]+/gi, '-')
+      .toLowerCase()
+
     results.push({
       uploadName: fileName,
-      fileName: eachFile.name,
+      fileName: `${newName}${fileExtension}`,
       fileSize: size
     })
   }
