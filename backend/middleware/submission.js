@@ -16,6 +16,7 @@ const {
 } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
+const Elements = require('../script/transformed/elements/')
 
 const { gdUploadFile } = require(path.resolve(
   'integrations',
@@ -385,11 +386,8 @@ module.exports = (app) => {
 
     const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
     if (gDrive !== undefined && gDrive.active === true) {
-      const folderID = gDrive.folder
-      const base64Token = gDrive.value
-      const decodedToken = JSON.parse(
-        Buffer.from(base64Token, 'base64').toString()
-      )
+      const { targetFolder, submissionIdentifier } = gDrive
+      const { googleCredentials } = gDrive.value
 
       const htmlBody = await ejs
         .renderFile(
@@ -406,29 +404,68 @@ module.exports = (app) => {
           error.errorReport(err)
         })
 
-      const identifierElement = questionsAndAnswers.find(
-        (i) =>
-          i.id === parseInt(gDrive.submissionIdentifier.id) &&
-          i.type === gDrive.submissionIdentifier.type
-      )
+      let curlyBraceRegex = /(?:{[^{]*?)\w(?=})}/gim
 
-      if (identifierElement) {
-        const identifierAnswer = identifierElement.answer
-        if (identifierElement.type === 'FileUpload') {
-          customSubmissionFileName = identifierAnswer.split('/').pop()
-        } else {
-          customSubmissionFileName = identifierAnswer
-        }
+      let submissionIdentifierString = submissionIdentifier
+      let curlyBraceMatches = submissionIdentifierString.match(curlyBraceRegex)
+      if (curlyBraceMatches !== null) {
+        curlyBraceMatches.forEach((match) => {
+          let matchingVariable = match.replace('{', '').replace('}', '')
+          console.log('matchingVariable', matchingVariable)
+
+          if (matchingVariable === 'submissionDate') {
+            submissionIdentifierString = submissionIdentifierString.replace(
+              match,
+              submissionDate
+            )
+          } else {
+            // then it is a question
+            // check if the variable is splitted by an underscore
+            let splittedVariable = matchingVariable.split('_')
+
+            if (splittedVariable.length !== 2) {
+              return
+            }
+
+            let questionType = splittedVariable[0]
+            let questionId = splittedVariable[1]
+
+            let validFormatting = false
+
+            if (
+              Elements[questionType] !== undefined &&
+              typeof parseInt(questionId) === 'number'
+            ) {
+              validFormatting = true
+            }
+
+            if (!validFormatting) {
+              return
+            }
+
+            const question = questionsAndAnswers.find(
+              (q) => q.type === questionType && q.id === parseInt(questionId)
+            )
+
+            if (question !== undefined) {
+              let answer = question.answer
+
+              if (questionType === 'FileUpload') {
+                answer.split('/').pop()
+              }
+
+              submissionIdentifierString = submissionIdentifierString.replace(
+                match,
+                question.answer
+              )
+            }
+          }
+        })
       }
 
-      customSubmissionFileName += ' - ' + submissionDate
+      customSubmissionFileName = submissionIdentifierString
 
       const htmlPath = path.join(tmpDir, `${submission_id}.html`)
-
-      fs.writeFileSync(
-        path.join(__dirname, '../views/integration.html'),
-        htmlBody
-      )
 
       fs.writeFileSync(htmlPath, htmlBody)
 
@@ -437,10 +474,10 @@ module.exports = (app) => {
 
       try {
         await gdUploadFile(
-          folderID,
+          targetFolder,
           pdfBuffer,
           customSubmissionFileName,
-          decodedToken
+          googleCredentials
         )
       } catch (err) {
         error.errorReport(err)
