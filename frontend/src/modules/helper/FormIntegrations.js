@@ -51,10 +51,12 @@ export default class FormIntegrations extends Component {
               onClick={() => this.props.handleIntegrationClick(item)}>
               <img alt="logo" src={item.icon} className="logo" />
               <div className="title">{item.displayText}</div>
-              <FontAwesomeIcon
-                icon={item.activeStatus ? faCheckCircle : faCircleMinus}
-                className="activeStatus"
-              />
+              {item.activeStatus ? (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  className="activeStatus"
+                />
+              ) : null}
             </div>
           ))}
         </div>
