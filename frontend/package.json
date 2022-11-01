@@ -18,6 +18,7 @@
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.4",
     "react-share": "4.4.0",
+    "react-spinner-overlay": "^0.1.33",
     "recharts": "2.1.9"
   },
   "scripts": {
