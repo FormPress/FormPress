@@ -204,7 +204,9 @@ export default class GoogleDrive extends Component {
     const tempIntegrationObject = {
       type: GoogleDrive.metaData.name,
       active: true,
-      value: { googleCredentials: decodedBase64 }
+      value: { googleCredentials: decodedBase64 },
+      targetFolder: { name: this.props.form.title, id: '' },
+      submissionIdentifier: '{submissionDate}'
     }
 
     this.setState({
@@ -320,9 +322,11 @@ export default class GoogleDrive extends Component {
     this.setState({
       display: 'description'
     })
+    // TODO: Pause integration needs to be refactored
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
-      active: false
+      active: false,
+      paused: true
     })
     await this.props.handlePublishClick()
   }
@@ -359,9 +363,8 @@ export default class GoogleDrive extends Component {
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
       active: false,
-      folder: false,
-      value: false,
-      submissionIdentifier: {}
+      value: {},
+      submissionIdentifier: ''
     })
     this.setState({
       display: 'description'
@@ -379,9 +382,9 @@ export default class GoogleDrive extends Component {
   handleFolderNameChange(elem, e) {
     const { tempIntegrationObject } = this.state
 
-    tempIntegrationObject.targetFolder = { name: e.target.value }
+    tempIntegrationObject.targetFolder = { name: e.target.value, id: '' }
 
-    this.setState({ newFolderCreation: true })
+    this.setState({ tempIntegrationObject, newFolderCreation: true })
   }
 
   handleSubmissionIdentifierChange(elem, e) {
@@ -401,7 +404,7 @@ export default class GoogleDrive extends Component {
 
     setTimeout(() => {
       sb.classList.remove('show')
-    }, 2000)
+    }, 1000)
   }
 
   render() {
@@ -513,8 +516,7 @@ export default class GoogleDrive extends Component {
                           type: 'TextBox',
                           label: 'Specify the target folder',
                           placeholder: 'Folder Name',
-                          value: this.state.tempIntegrationObject?.targetFolder
-                            ?.name
+                          value: targetFolder.name
                         }
                       ]
                     }
@@ -538,9 +540,7 @@ export default class GoogleDrive extends Component {
                         type: 'TextBox',
                         placeholder: 'Please select a question',
                         label: 'Select a Question as Submission Identifier',
-                        value:
-                          this.state.tempIntegrationObject
-                            .submissionIdentifier || ''
+                        value: submissionIdentifier
                       }
                     ]
                   }
@@ -586,7 +586,6 @@ export default class GoogleDrive extends Component {
               </div>
             </div>
           </div>
-
           <button
             type="button"
             className="complete-authentication"

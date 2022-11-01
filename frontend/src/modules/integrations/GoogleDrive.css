@@ -329,9 +329,8 @@
 .copied {
   display: none;
   min-width: 100px;
-  margin-left: -125px;
   top: 30px;
-  position: relative;
+  position: absolute;
   padding: 5px;
   border-radius: 4px;
   background-color: #444;
@@ -340,56 +339,8 @@
   z-index: 9999;
 }
 
-/* This will be activated when the copied's class is 'show' which will be added through JS */
 .copied.show {
   display: unset;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-/* Animations for fading in and out */
-@-webkit-keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 30px;
-    opacity: 1;
-  }
-}
-
-@keyframes fadein {
-  from {
-    bottom: 0;
-    opacity: 0;
-  }
-  to {
-    bottom: 30px;
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes fadeout {
-  from {
-    bottom: 30px;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes fadeout {
-  from {
-    bottom: 30px;
-    opacity: 1;
-  }
-  to {
-    bottom: 0;
-    opacity: 0;
-  }
 }
 
 .new-folder-badge {
@@ -427,6 +378,8 @@
   border: solid 2px #f5f5f5;
   background-color: #fdfdfd;
   color: #444;
+  width: 378px;
+  flex-wrap: wrap;
 }
 
 .string-vars > .submission-identifier-tag {
@@ -444,4 +397,5 @@
   overflow: hidden;
   width: unset !important;
   max-width: 575px;
+  left: unset !important;
 }

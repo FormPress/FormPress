@@ -32,7 +32,7 @@ async function createFolder(auth, title) {
       resource: fileMetadata,
       fields: 'id'
     })
-    return file.data.id
+    return { id: file.data.id, name: title }
   } catch (err) {
     console.log('Error while creating folder', err)
   }
@@ -89,8 +89,16 @@ exports.authGoogleDrive = (app) => {
     const { targetFolder, token } = req.body
     oAuth2Client.setCredentials({ refresh_token: token.refresh_token })
 
-    targetFolder.id = await createFolder(oAuth2Client, targetFolder.name)
-    res.json(targetFolder)
+    let folderName
+
+    if (targetFolder?.name) {
+      folderName = targetFolder.name
+    } else {
+      folderName = ''
+    }
+
+    const response = await createFolder(oAuth2Client, folderName)
+    res.json(response)
   })
 
   app.get('/read/googledrive', async (req, res) => {
@@ -105,6 +113,14 @@ exports.gdUploadFile = async (targetFolder, pdfBuffer, fileName, token) => {
   duplex.push(pdfBuffer)
   duplex.push(null)
 
+  let folderName
+
+  if (targetFolder?.name) {
+    folderName = targetFolder.name
+  } else {
+    folderName = ''
+  }
+
   const folderExists = await service.files
     .get({
       fileId: targetFolder.id
@@ -116,7 +132,7 @@ exports.gdUploadFile = async (targetFolder, pdfBuffer, fileName, token) => {
 
   if (!folderExists) {
     console.log('Google Drive folder does not exist. Creating folder...')
-    targetFolder.id = await createFolder(oAuth2Client, targetFolder.name)
+    targetFolder = await createFolder(oAuth2Client, folderName)
   }
 
   const fileMetadata = {
