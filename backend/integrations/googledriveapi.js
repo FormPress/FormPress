@@ -42,7 +42,7 @@ exports.authGoogleDrive = (app) => {
   app.post(`/api/integrations/googledrive/authenticate`, async (req, res) => {
     const authUrl = oAuth2Client.generateAuthUrl({
       access_type: 'offline',
-      prompt: '',
+      prompt: 'consent',
       scope: SCOPES
     })
     res.json(authUrl)
