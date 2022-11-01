@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import * as IntegrationComponents from '../integrations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faCircleMinus } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './FormIntegrations.css'
 
