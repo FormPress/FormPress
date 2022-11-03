@@ -381,7 +381,11 @@ module.exports = (app) => {
     let customSubmissionFileName = ''
 
     const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
-    if (gDrive !== undefined && gDrive.active === true) {
+    if (
+      gDrive !== undefined &&
+      gDrive.active === true &&
+      gDrive.paused !== true
+    ) {
       const { targetFolder, submissionIdentifier } = gDrive
       const { googleCredentials } = gDrive.value
 
@@ -400,7 +404,10 @@ module.exports = (app) => {
           error.errorReport(err)
         })
 
-      customSubmissionFileName = replaceWithAnswers(submissionIdentifier)
+      customSubmissionFileName = replaceWithAnswers(
+        submissionIdentifier,
+        questionsAndAnswers
+      )
 
       const htmlPath = path.join(tmpDir, `${submission_id}.html`)
 

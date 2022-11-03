@@ -307,6 +307,8 @@ export default class GoogleDrive extends Component {
 
       if (success) {
         integrationObject.targetFolder = data
+      } else {
+        return
       }
     }
 
