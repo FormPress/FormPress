@@ -75,6 +75,26 @@
   overflow-wrap: anywhere;
   cursor: pointer;
 }
+
+.integration-wrapper
+  > .integration-content
+  > .integration-controls
+  > .resume-integration
+  > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 12rem;
+  min-height: 2.6rem;
+  background-color: #9ee048;
+  border: 1px solid #9ee048;
+  outline: none;
+  color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
 .integration-wrapper
   > .integration-content
   > .integration-controls

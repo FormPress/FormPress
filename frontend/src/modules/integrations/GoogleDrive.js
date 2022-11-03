@@ -35,6 +35,7 @@ export default class GoogleDrive extends Component {
     this.handleStartAuthentication = this.handleStartAuthentication.bind(this)
     this.handleActivateClick = this.handleActivateClick.bind(this)
     this.handlePauseClick = this.handlePauseClick.bind(this)
+    this.handleResumeClick = this.handleResumeClick.bind(this)
     this.handleRemoveClick = this.handleRemoveClick.bind(this)
     this.handleEditClick = this.handleEditClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
@@ -320,14 +321,31 @@ export default class GoogleDrive extends Component {
 
   async handlePauseClick() {
     this.setState({
-      display: 'description'
+      tempIntegrationObject: {
+        ...this.state.tempIntegrationObject,
+        paused: true
+      }
     })
-    // TODO: Pause integration needs to be refactored
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
-      active: false,
       paused: true
     })
+    await this.props.handlePublishClick()
+  }
+
+  async handleResumeClick() {
+    this.setState({
+      tempIntegrationObject: {
+        ...this.state.tempIntegrationObject,
+        paused: false
+      }
+    })
+
+    this.props.setIntegration({
+      type: GoogleDrive.metaData.name,
+      paused: false
+    })
+
     await this.props.handlePublishClick()
   }
 
@@ -363,6 +381,7 @@ export default class GoogleDrive extends Component {
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
       active: false,
+      paused: false,
       value: {},
       submissionIdentifier: ''
     })
@@ -414,7 +433,17 @@ export default class GoogleDrive extends Component {
       submissionIdentifier
     } = this.state.tempIntegrationObject
 
-    if (this.props.activeStatus && this.state.display === 'active') {
+    let paused
+    if (this.props.tempIntegrationObject?.paused !== undefined) {
+      paused = this.props.tempIntegrationObject.paused
+    } else {
+      paused = this.state.tempIntegrationObject.paused
+    }
+
+    if (
+      paused ||
+      (this.props.activeStatus && this.state.display === 'active')
+    ) {
       display = (
         <>
           <div className="integration-active">
@@ -433,11 +462,19 @@ export default class GoogleDrive extends Component {
             </a>
           </div>
           <div className="integration-controls">
-            <div className="pause-integration">
-              <button type="button" onClick={this.handlePauseClick}>
-                PAUSE
-              </button>
-            </div>
+            {paused ? (
+              <div className="resume-integration">
+                <button type="button" onClick={this.handleResumeClick}>
+                  RESUME
+                </button>
+              </div>
+            ) : (
+              <div className="pause-integration">
+                <button type="button" onClick={this.handlePauseClick}>
+                  PAUSE
+                </button>
+              </div>
+            )}
             <div className="edit-integration">
               <button type="button" onClick={this.handleEditClick}>
                 EDIT
