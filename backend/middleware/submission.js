@@ -3,7 +3,6 @@ const fs = require('fs')
 const os = require('os')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
-const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
@@ -16,12 +15,13 @@ const {
 } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
-const Elements = require('../script/transformed/elements/')
 
 const { gdUploadFile } = require(path.resolve(
   'integrations',
   'googledriveapi.js'
 ))
+const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
@@ -103,10 +103,6 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
-
-    const submissionDate = moment(new Date())
-      .utc()
-      .format('YYYY-MM-DD HH:mm:ss')
 
     const fileUploadEntries = []
 
@@ -404,65 +400,7 @@ module.exports = (app) => {
           error.errorReport(err)
         })
 
-      let curlyBraceRegex = /(?:{[^{]*?)\w(?=})}/gim
-
-      let submissionIdentifierString = submissionIdentifier
-      let curlyBraceMatches = submissionIdentifierString.match(curlyBraceRegex)
-      if (curlyBraceMatches !== null) {
-        curlyBraceMatches.forEach((match) => {
-          let matchingVariable = match.replace('{', '').replace('}', '')
-
-          if (matchingVariable === 'submissionDate') {
-            submissionIdentifierString = submissionIdentifierString.replace(
-              match,
-              submissionDate
-            )
-          } else {
-            // then it is a question
-            // check if the variable is splitted by an underscore
-            let splittedVariable = matchingVariable.split('_')
-
-            if (splittedVariable.length !== 2) {
-              return
-            }
-
-            let questionType = splittedVariable[0]
-            let questionId = splittedVariable[1]
-
-            let validFormatting = false
-
-            if (
-              Elements[questionType] !== undefined &&
-              typeof parseInt(questionId) === 'number'
-            ) {
-              validFormatting = true
-            }
-
-            if (!validFormatting) {
-              return
-            }
-
-            const question = questionsAndAnswers.find(
-              (q) => q.type === questionType && q.id === parseInt(questionId)
-            )
-
-            if (question !== undefined) {
-              let answer = question.answer
-
-              if (questionType === 'FileUpload') {
-                answer.split('/').pop()
-              }
-
-              submissionIdentifierString = submissionIdentifierString.replace(
-                match,
-                question.answer
-              )
-            }
-          }
-        })
-      }
-
-      customSubmissionFileName = submissionIdentifierString
+      customSubmissionFileName = replaceWithAnswers(submissionIdentifier)
 
       const htmlPath = path.join(tmpDir, `${submission_id}.html`)
 

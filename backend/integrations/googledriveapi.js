@@ -35,6 +35,7 @@ async function createFolder(auth, title) {
     return { id: file.data.id, name: title }
   } catch (err) {
     console.log('Error while creating folder', err)
+    return false
   }
 }
 
@@ -98,6 +99,13 @@ exports.authGoogleDrive = (app) => {
     }
 
     const response = await createFolder(oAuth2Client, folderName)
+
+    if (response === false) {
+      return res
+        .status(400)
+        .json({ error: true, message: 'Error while creating folder.' })
+    }
+
     res.json(response)
   })
 
