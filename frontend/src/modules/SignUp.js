@@ -106,11 +106,7 @@ class SignUp extends Component {
   async handleLoginWithGoogleClick(response) {
     this.setState({ state: 'loading' })
 
-    console.log(response)
-
-    // decode base64 string and parse JSON
     const profile = JSON.parse(atob(response.credential.split('.')[1]))
-    console.log(profile)
 
     this.setState({ state: 'loading', message: 'Logging in...' })
     const tokenID = response.credential
@@ -144,7 +140,6 @@ class SignUp extends Component {
   }
 
   handleLoginWithGoogleFail(response) {
-    console.log(response.error)
     if (response.error === 'popup_closed_by_user') {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {

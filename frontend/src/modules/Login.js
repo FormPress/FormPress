@@ -106,7 +106,6 @@ class Login extends Component {
   }
 
   handleLoginWithGoogleFail(response) {
-    console.log(response.error)
     if (response.error === 'popup_closed_by_user') {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {

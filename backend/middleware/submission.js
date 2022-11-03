@@ -411,7 +411,6 @@ module.exports = (app) => {
       if (curlyBraceMatches !== null) {
         curlyBraceMatches.forEach((match) => {
           let matchingVariable = match.replace('{', '').replace('}', '')
-          console.log('matchingVariable', matchingVariable)
 
           if (matchingVariable === 'submissionDate') {
             submissionIdentifierString = submissionIdentifierString.replace(
