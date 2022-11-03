@@ -576,7 +576,7 @@ export default class GoogleDrive extends Component {
                         id: 1,
                         type: 'TextBox',
                         placeholder: 'Please select a question',
-                        label: 'Select a Question as Submission Identifier',
+                        label: 'Specify a target file name',
                         value: submissionIdentifier
                       }
                     ]
@@ -592,7 +592,7 @@ export default class GoogleDrive extends Component {
                         onClick={() =>
                           this.handleCopyClick(index, e.placeholder)
                         }
-                        key={e.value}
+                        key={index}
                         className="submission-identifier-tag popover-container"
                         title={e.label}>
                         {e.placeholder}
