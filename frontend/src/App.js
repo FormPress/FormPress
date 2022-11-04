@@ -20,7 +20,7 @@ import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 import Pricing from './modules/helper/Pricing'
 import Profile from './Profile'
-import NotFoundPage from './modules/common/NotFoundPage'
+// import NotFoundPage from './modules/common/NotFoundPage'
 import ReadCallback from './modules/common/ReadCallback'
 
 import PrivateRoute from './PrivateRoute'
