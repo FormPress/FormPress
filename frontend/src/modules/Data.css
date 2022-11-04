@@ -791,3 +791,60 @@ text[type='category'] tspan {
   background-color: #1c5c85;
   color: #fff;
 }
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  input[type='radio'].rating-scale-input {
+  display: none;
+}
+
+.data > .dataContent > .entriesViewer > .entry .value .rating-scale-data li {
+  display: inline-flex;
+}
+
+.data > .dataContent > .entriesViewer > .entry .value .rating-scale-Stars {
+  display: inline-block;
+  color: gray;
+  width: 38px;
+  height: 36px;
+  margin: 0 3px;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+  font-size: 16px;
+}
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  input[type='radio']:checked
+  + label.rating-scale-Numbers {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
+}
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  input[type='radio']:checked
+  + label.rating-scale-Stars {
+  color: #1c5c85;
+}
+
+.data
+  > .dataContent
+  > .entriesViewer
+  > .entry
+  .value
+  .rating-scale-Stars.extends-select {
+  color: #1c5c85;
+}
