@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import * as IntegrationComponents from '../integrations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCheckCircle, faCircleMinus } from '@fortawesome/free-solid-svg-icons'
+import { faCheckCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './FormIntegrations.css'
 
@@ -23,6 +23,7 @@ export default class FormIntegrations extends Component {
       )
       if (matchedIntegration !== undefined) {
         integration.activeStatus = matchedIntegration.active
+        integration.paused = matchedIntegration.paused
       } else {
         integration.activeStatus = false
       }
@@ -51,10 +52,18 @@ export default class FormIntegrations extends Component {
               onClick={() => this.props.handleIntegrationClick(item)}>
               <img alt="logo" src={item.icon} className="logo" />
               <div className="title">{item.displayText}</div>
-              <FontAwesomeIcon
-                icon={item.activeStatus ? faCheckCircle : faCircleMinus}
-                className="activeStatus"
-              />
+              {item.activeStatus === true && item.paused === false ? (
+                <FontAwesomeIcon
+                  icon={faCheckCircle}
+                  className="activeStatus"
+                />
+              ) : null}
+              {item.activeStatus === true && item.paused === true ? (
+                <FontAwesomeIcon
+                  icon={faPauseCircle}
+                  className="activeStatus"
+                />
+              ) : null}
             </div>
           ))}
         </div>
