@@ -3,7 +3,6 @@ const fs = require('fs')
 const os = require('os')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
-const moment = require('moment')
 const { FP_ENV, FP_HOST } = process.env
 const devPort = 3000
 const { getPool } = require(path.resolve('./', 'db'))
@@ -21,6 +20,8 @@ const { gdUploadFile } = require(path.resolve(
   'integrations',
   'googledriveapi.js'
 ))
+const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
@@ -102,10 +103,6 @@ module.exports = (app) => {
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]
     }
-
-    const submissionDate = moment(new Date())
-      .utc()
-      .format('YYYY-MM-DD HH:mm:ss')
 
     const fileUploadEntries = []
 
@@ -384,12 +381,13 @@ module.exports = (app) => {
     let customSubmissionFileName = ''
 
     const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
-    if (gDrive !== undefined && gDrive.active === true) {
-      const folderID = gDrive.folder
-      const base64Token = gDrive.value
-      const decodedToken = JSON.parse(
-        Buffer.from(base64Token, 'base64').toString()
-      )
+    if (
+      gDrive !== undefined &&
+      gDrive.active === true &&
+      gDrive.paused !== true
+    ) {
+      const { targetFolder, submissionIdentifier } = gDrive
+      const { googleCredentials } = gDrive.value
 
       const htmlBody = await ejs
         .renderFile(
@@ -406,29 +404,12 @@ module.exports = (app) => {
           error.errorReport(err)
         })
 
-      const identifierElement = questionsAndAnswers.find(
-        (i) =>
-          i.id === parseInt(gDrive.submissionIdentifier.id) &&
-          i.type === gDrive.submissionIdentifier.type
+      customSubmissionFileName = replaceWithAnswers(
+        submissionIdentifier,
+        questionsAndAnswers
       )
-
-      if (identifierElement) {
-        const identifierAnswer = identifierElement.answer
-        if (identifierElement.type === 'FileUpload') {
-          customSubmissionFileName = identifierAnswer.split('/').pop()
-        } else {
-          customSubmissionFileName = identifierAnswer
-        }
-      }
-
-      customSubmissionFileName += ' - ' + submissionDate
 
       const htmlPath = path.join(tmpDir, `${submission_id}.html`)
-
-      fs.writeFileSync(
-        path.join(__dirname, '../views/integration.html'),
-        htmlBody
-      )
 
       fs.writeFileSync(htmlPath, htmlBody)
 
@@ -437,10 +418,10 @@ module.exports = (app) => {
 
       try {
         await gdUploadFile(
-          folderID,
+          targetFolder,
           pdfBuffer,
           customSubmissionFileName,
-          decodedToken
+          googleCredentials
         )
       } catch (err) {
         error.errorReport(err)

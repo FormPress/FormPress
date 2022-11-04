@@ -61,6 +61,10 @@ export default class TextBox extends Component {
       inputProps.value = config.value
     }
 
+    if (typeof config.defaultValue !== 'undefined') {
+      inputProps.defaultValue = config.defaultValue
+    }
+
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }

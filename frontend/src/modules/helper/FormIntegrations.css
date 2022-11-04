@@ -26,6 +26,7 @@
   -o-transition: background-color 0.2s ease-out;
   -ms-transition: background-color 0.2s ease-out;
   transition: background-color 0.2s ease-out;
+  cursor: pointer;
 }
 
 .integration:hover {

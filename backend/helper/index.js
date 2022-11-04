@@ -11,6 +11,7 @@ exports.error = require(path.resolve('helper', 'error'))
 exports.testStringIsJson = require(path.resolve('helper', 'testStringIsJson'))
 exports.token = require(path.resolve('helper', 'token'))
 exports.pdfPrinter = require(path.resolve('helper', 'pdfPrinter'))
+exports.stringTools = require(path.resolve('helper', 'stringTools'))
 
 exports.storage = ''
 

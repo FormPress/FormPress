@@ -170,6 +170,8 @@
 }
 
 .google-sign-in {
+  display: flex;
+  justify-content: center;
   margin: 10px auto;
 }
 
@@ -202,4 +204,11 @@
     margin-top: 25px;
     padding-bottom: 0px;
   }
+}
+
+.login-mainContent .infernal .elementButton button {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  height: 40px;
+  border-radius: 4px;
 }
