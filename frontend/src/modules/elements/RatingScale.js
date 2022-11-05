@@ -97,10 +97,11 @@ export default class RatingScale extends Component {
                 id={`q_${question.id}_${i}`}
                 name={`q_${question.id}`}
                 value={i}
-                className="rating-scale-input"
+                className={`rating-scale-input ${
+                  question.ratingScaleOptionType
+                } ${parseInt(entry.value) - 1 === i ? 'checked' : ''}`}
                 disabled="disabled"
-                style={{ display: 'none !important' }}
-                defaultValue={`${entry.value - 1}` === i}></input>
+                style={{ display: 'none !important' }}></input>
               <label
                 className={`rating-scale-${question.ratingScaleOptionType} ${
                   question.ratingScaleOptionType === 'Stars' &&
@@ -206,7 +207,7 @@ export default class RatingScale extends Component {
                 <label
                   className={`rating-scale-${
                     config.ratingScaleOptionType
-                  } rating-scale-Stars-${config.id} ${
+                  } rating-scale-${config.ratingScaleOptionType}-${config.id} ${
                     config.ratingScaleOptionType === 'Stars' &&
                     parseInt(this.state.selectedOptionId) >= i
                       ? 'extends-select'

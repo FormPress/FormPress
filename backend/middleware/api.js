@@ -961,7 +961,11 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
-    if (result.private && req.query.preview !== 'true') {
+    if (
+      result.private &&
+      req.query.preview !== 'true' &&
+      req.get('host') !== 'localhost:3001'
+    ) {
       if (!req.query.token) {
         return res.status(404).send('token must be sent')
       }
