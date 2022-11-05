@@ -1,0 +1,86 @@
+.elementRatingScale ul {
+  list-style: none;
+  display: flex;
+  padding: 0 30px;
+}
+
+.rating-scale-float-Left {
+  justify-content: left;
+}
+
+.rating-scale-float-Center {
+  justify-content: center;
+}
+
+.rating-scale-float-Right {
+  justify-content: right;
+}
+
+.elementRatingScale ul li {
+  display: inline-flex;
+}
+
+.elementRatingScale .first-child .sublabel {
+  text-align: center;
+}
+
+.elementRatingScale [type='radio'] {
+  display: none;
+}
+
+.elementRatingScale .rating-scale-Numbers {
+  display: inline-block;
+  border: 1px solid #1c5c85;
+  background-color: #fff;
+  color: #1c5c85;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+}
+
+.elementRatingScale .rating-scale-Stars {
+  display: inline-block;
+  color: gray;
+  width: 38px;
+  height: 36px;
+  margin: 0 3px;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+}
+
+.elementRatingScale .rating-scale-Faces {
+  display: inline-block;
+  border: 1px solid #1c5c85;
+  background-color: #fff;
+  color: #1c5c85;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  user-select: none;
+  text-align: center;
+  line-height: 28px;
+}
+
+.elementRatingScale .rating-scale-label:hover {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
+}
+
+.elementRatingScale input[type='radio']:checked + label.rating-scale-Numbers {
+  border: 1px solid #1c5c85;
+  background-color: #1c5c85;
+  color: #fff;
+}
+
+.elementRatingScale input[type='radio']:checked + label.rating-scale-Stars {
+  color: #1c5c85;
+}
+
+.elementRatingScale .rating-scale-Stars.extends-select {
+  color: #1c5c85;
+}
