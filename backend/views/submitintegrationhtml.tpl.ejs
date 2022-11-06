@@ -143,6 +143,80 @@
         color: #fff;
       }
 
+      .rating-scale-input.Numbers:checked + label {
+        border: 1px solid #1c5c85;
+        background-color: #1c5c85;
+        color: #fff;
+      }
+
+      .rating-scale-input.Numbers.checked + label {
+        border: 1px solid #1c5c85;
+        background-color: #1c5c85;
+        color: #fff;
+      }
+
+      .rating-scale-data{
+        display: flex;
+        list-style: none;
+        padding-left: 0;
+        justify-content: flex-start;
+      }
+
+      .rating-scale-data [type='radio'] {
+        display: none;
+      }
+
+      .rating-scale-data li{
+        display: inline-flex;
+        user-select: none;
+        text-align: center;
+      }
+
+      .rating-scale-data .rating-scale-Numbers {
+        border: 1px solid #1c5c85;
+        background-color: #fff;
+        color: #1c5c85;
+        width: 40px;
+        height: 30px;
+        margin: 0 5px;
+        line-height: 32px;
+      }
+
+      .rating-scale-data .rating-scale-Stars {
+        color: gray;
+        width: 38px;
+        height: 36px;
+        margin: 0 3px;
+      }
+
+      .rating-scale-data .rating-scale-Faces {
+        border: 1px solid #1c5c85;
+        background-color: #fff;
+        color: #1c5c85;
+        width: 40px;
+        height: 30px;
+        margin: 0 5px;
+      }
+
+      .rating-scale-data .rating-scale-label:hover {
+        border: 1px solid #1c5c85;
+        background-color: #1c5c85;
+        color: #fff;
+      }
+
+      .rating-scale-data input[type='radio']:checked + label.rating-scale-Numbers {
+        border: 1px solid #1c5c85;
+        background-color: #1c5c85;
+        color: #fff;
+      }
+
+      .rating-scale-data input[type='radio']:checked + label.rating-scale-Stars {
+        color: #1c5c85;
+      }
+
+      .rating-scale-data .rating-scale-Stars.extends-select {
+        color: #1c5c85;
+      }
     </style>
     <title><%= FormTitle %></title>
 </head>
