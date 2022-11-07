@@ -133,23 +133,6 @@ export default class FormProperties extends Component {
       email = matchingIntegration('email')[0].to
     }
 
-    let tyPageTitle = 'Thank you!'
-
-    if (matchingIntegration('tyPageTitle').length > 0) {
-      tyPageTitle = matchingIntegration('tyPageTitle')[0].value
-    }
-
-    let tyPageText =
-      'Your submission was successful and the form owner has been notified.'
-
-    if (capabilities.sendgridApiKey === false) {
-      tyPageText = 'Your submission was successful.'
-    }
-
-    if (matchingIntegration('tyPageText').length > 0) {
-      tyPageText = matchingIntegration('tyPageText')[0].value
-    }
-
     let customCSS = ''
 
     if (this.props.form.props.customCSS !== undefined) {
@@ -176,7 +159,7 @@ export default class FormProperties extends Component {
 
     let autoPageBreak = {
       active: false,
-      elemPerPage: 0,
+      elemPerPage: 1,
       prevButtonText: 'Previous',
       nextButtonText: 'Next',
       submitButtonText: 'Submit'
@@ -240,47 +223,12 @@ export default class FormProperties extends Component {
             }
           }}
         />
-        <Renderer
-          handleFieldChange={this.handleTyPageTitleChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 2,
-                  type: 'TextBox',
-                  label: 'Thank you page title',
-                  maxLength: 128,
-                  value: tyPageTitle
-                }
-              ]
-            }
-          }}
-          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
-        />
-        <Renderer
-          handleFieldChange={this.handleTyPageTextChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 3,
-                  type: 'TextArea',
-                  label: 'Thank you page text',
-                  maxLength: 256,
-                  value: tyPageText
-                }
-              ]
-            }
-          }}
-          className={submitBehaviour === 'Show Thank You Page' ? '' : 'dn'}
-        />
         <div className="autoPageBreakTooltip">
           <span className="popover-container">
             <FontAwesomeIcon icon={faInfoCircle} />
             <div className="popoverText">
-              Enabling this option will disable all previously added page breaks
+              Enabling this option will disable all previously added page
+              breaks.
             </div>
           </span>
         </div>
@@ -298,7 +246,8 @@ export default class FormProperties extends Component {
                 {
                   id: 7,
                   type: 'Checkbox',
-                  options: ['Auto-pagination'],
+                  label: 'Auto-page break',
+                  options: ['Enable'],
                   value: autoPageBreak.active
                 },
                 {
@@ -378,7 +327,7 @@ export default class FormProperties extends Component {
           </div>
         </div>
         <details
-          className="adv-settings"
+          className="adv-settings element"
           title="This part contains advanced settings. Some settings may cause your form to stop working properly.">
           <summary className="adv-settings-summary">
             <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
