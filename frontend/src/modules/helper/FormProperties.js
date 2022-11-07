@@ -174,7 +174,7 @@ export default class FormProperties extends Component {
     return (
       <div className="formProperties">
         <div className="formPropertiesMessage">
-          Customize the setting of your form. Change the submission behavior.
+          Modify the settings of your form
         </div>
         {capabilities.sendgridApiKey ? (
           <Renderer
