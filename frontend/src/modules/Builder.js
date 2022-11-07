@@ -24,6 +24,7 @@ import Modal from './common/Modal'
 import Templates from './Templates'
 import * as Integrations from './integrations'
 import FormIntegrations from './helper/FormIntegrations'
+import PostSubmission from './helper/PostSubmission'
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
@@ -292,6 +293,9 @@ export default class Builder extends Component {
     }
 
     Object.assign(autoPageBreak, { [key]: value })
+    if (key === 'active' && autoPageBreak.elemPerPage === undefined) {
+      autoPageBreak.elemPerPage = 1
+    }
 
     Object.assign(form.props, { autoPageBreak })
 
@@ -1102,6 +1106,24 @@ export default class Builder extends Component {
     const { params } = this.props.match
     const { formId, questionId } = params
 
+    const { form } = this.state
+
+    let postSubmissionNavigatorText
+
+    const submitBevaviourIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'submitBehaviour'
+    )
+
+    if (submitBevaviourIntegration !== undefined) {
+      if (submitBevaviourIntegration.value === 'Evaluate Form') {
+        postSubmissionNavigatorText = 'Results Page'
+      } else if (submitBevaviourIntegration.value === 'Show Thank You Page') {
+        postSubmissionNavigatorText = 'Thank You Page'
+      }
+    } else {
+      postSubmissionNavigatorText = 'Thank You Page'
+    }
+
     let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
@@ -1113,6 +1135,11 @@ export default class Builder extends Component {
         name: 'integrations',
         text: 'Integrations',
         path: `/editor/${formId}/builder/integrations`
+      },
+      {
+        name: 'postsubmission',
+        text: postSubmissionNavigatorText,
+        path: `/editor/${formId}/builder/postsubmission`
       }
     ]
 
@@ -1258,19 +1285,68 @@ export default class Builder extends Component {
     }
 
     return (
-      <Switch>
-        <Route exact path="/editor/:formId/builder">
-          <div className="elements">
-            <div className="elementsMessage">
-              Drag and Drop elements into the form, or click the + icon
-              that&apos;s next to the elements
-            </div>
-            <div className="elementList">
-              {pickerElements
-                .filter((elem) => this.removeUnavailableElems(elem))
-                .map((elem) =>
-                  permission[elem.type] ? (
-                    elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
+      <div className="leftMenu leftMenuContents">
+        <Switch>
+          <Route exact path="/editor/:formId/builder">
+            <div className="elements">
+              <div className="elementsMessage">
+                Drag and Drop elements into the form, or click the + icon
+                that&apos;s next to the elements
+              </div>
+              <div className="elementList">
+                {pickerElements
+                  .filter((elem) => this.removeUnavailableElems(elem))
+                  .map((elem) =>
+                    permission[elem.type] ? (
+                      elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
+                        <div
+                          className="element disabled-element"
+                          key={elem.type}>
+                          <span className="element-picker-icon-wrapper">
+                            <FontAwesomeIcon
+                              icon={elem.icon}
+                              className="element-picker-icon"
+                            />
+                          </span>
+                          <span className="element-picker-text">
+                            {elem.displayText}
+                          </span>
+                          <span className="planover-container">
+                            <FontAwesomeIcon icon={faQuestionCircle} />
+                            <div className="popoverText">
+                              Auto Page Break is enabled. Please disable it in
+                              form properties to add manual page breaks.
+                            </div>
+                          </span>
+                        </div>
+                      ) : (
+                        <div
+                          className="element"
+                          draggable
+                          onDragStart={this.handleDragStart.bind(this, elem)}
+                          onDragEnd={this.handleDragEnd}
+                          key={elem.type}>
+                          <span className="element-picker-icon-wrapper">
+                            <FontAwesomeIcon
+                              icon={elem.icon}
+                              className="element-picker-icon"
+                            />
+                          </span>
+                          <span className="element-picker-text">
+                            {elem.displayText}
+                          </span>
+                          <span className="add-element-button">
+                            <FontAwesomeIcon
+                              icon={faPlusCircle}
+                              title="Add Field"
+                              onClick={() =>
+                                this.handleAddFormElementClick(elem.type)
+                              }
+                            />
+                          </span>
+                        </div>
+                      )
+                    ) : (
                       <div className="element disabled-element" key={elem.type}>
                         <span className="element-picker-icon-wrapper">
                           <FontAwesomeIcon
@@ -1283,103 +1359,58 @@ export default class Builder extends Component {
                         </span>
                         <span className="planover-container">
                           <FontAwesomeIcon icon={faQuestionCircle} />
+                          <a href="/pricing" className="upgrade_button">
+                            UPGRADE
+                          </a>
                           <div className="popoverText">
-                            Auto Page Break is enabled. Please disable it in
-                            form properties to add manual page breaks.
+                            Your plan does not include this element. Click here
+                            to upgrade your plan!
                           </div>
                         </span>
                       </div>
-                    ) : (
-                      <div
-                        className="element"
-                        draggable
-                        onDragStart={this.handleDragStart.bind(this, elem)}
-                        onDragEnd={this.handleDragEnd}
-                        key={elem.type}>
-                        <span className="element-picker-icon-wrapper">
-                          <FontAwesomeIcon
-                            icon={elem.icon}
-                            className="element-picker-icon"
-                          />
-                        </span>
-                        <span className="element-picker-text">
-                          {elem.displayText}
-                        </span>
-                        <span className="add-element-button">
-                          <FontAwesomeIcon
-                            icon={faPlusCircle}
-                            title="Add Field"
-                            onClick={() =>
-                              this.handleAddFormElementClick(elem.type)
-                            }
-                          />
-                        </span>
-                      </div>
                     )
-                  ) : (
-                    <div className="element disabled-element" key={elem.type}>
-                      <span className="element-picker-icon-wrapper">
-                        <FontAwesomeIcon
-                          icon={elem.icon}
-                          className="element-picker-icon"
-                        />
-                      </span>
-                      <span className="element-picker-text">
-                        {elem.displayText}
-                      </span>
-                      <span className="planover-container">
-                        <FontAwesomeIcon icon={faQuestionCircle} />
-                        <a href="/pricing" className="upgrade_button">
-                          UPGRADE
-                        </a>
-                        <div className="popoverText">
-                          Your plan does not include this element. Click here to
-                          upgrade your plan!
-                        </div>
-                      </span>
-                    </div>
-                  )
-                )}
+                  )}
+              </div>
             </div>
-          </div>
-        </Route>
-        <Route path="/editor/:formId/builder/properties">
-          <FormProperties
-            form={form}
-            generalContext={this.props.generalContext}
-            setIntegration={this.setIntegration}
-            setCSS={this.setCSS}
-            setFormTags={this.setFormTags}
-            setAutoPageBreak={this.setAutoPageBreak}
-            setFormAsPrivate={this.setFormAsPrivate}
-          />
-        </Route>
-        <Route path="/editor/:formId/builder/question/:questionId/properties">
-          {questionPropertiesReady === true ? (
-            <QuestionProperties
-              rteUploadHandler={this.rteUploadHandler}
-              selectedField={selectedField}
-              configureQuestion={this.configureQuestion}
-              customBuilderHandlers={{
-                onDelete: this.handleFormElementDeleteClick,
-                handleDragEnd: this.handleDragEnd,
-                handleDragStart: this.handleDragStart,
-                handleFormItemMovement: this.handleFormItemMovement
-              }}
-              handleLabelChange={this.handleLabelChange}
-              handleLabelClick={this.handleLabelClick}
-              selectedLabelId={this.state.selectedLabelId}
+          </Route>
+          <Route path="/editor/:formId/builder/properties">
+            <FormProperties
+              form={form}
+              generalContext={this.props.generalContext}
+              setIntegration={this.setIntegration}
+              setCSS={this.setCSS}
+              setFormTags={this.setFormTags}
+              setAutoPageBreak={this.setAutoPageBreak}
+              setFormAsPrivate={this.setFormAsPrivate}
             />
-          ) : null}
-        </Route>
-        <Route path="/editor/:formId/builder/integrations">
-          <FormIntegrations
-            handleIntegrationClick={this.handleIntegrationClick}
-            form={form}
-            selectedIntegration={this.state.selectedIntegration}
-          />
-        </Route>
-      </Switch>
+          </Route>
+          <Route path="/editor/:formId/builder/question/:questionId/properties">
+            {questionPropertiesReady === true ? (
+              <QuestionProperties
+                rteUploadHandler={this.rteUploadHandler}
+                selectedField={selectedField}
+                configureQuestion={this.configureQuestion}
+                customBuilderHandlers={{
+                  onDelete: this.handleFormElementDeleteClick,
+                  handleDragEnd: this.handleDragEnd,
+                  handleDragStart: this.handleDragStart,
+                  handleFormItemMovement: this.handleFormItemMovement
+                }}
+                handleLabelChange={this.handleLabelChange}
+                handleLabelClick={this.handleLabelClick}
+                selectedLabelId={this.state.selectedLabelId}
+              />
+            ) : null}
+          </Route>
+          <Route path="/editor/:formId/builder/integrations">
+            <FormIntegrations
+              handleIntegrationClick={this.handleIntegrationClick}
+              form={form}
+              selectedIntegration={this.state.selectedIntegration}
+            />
+          </Route>
+        </Switch>
+      </div>
     )
   }
 
@@ -1416,14 +1447,21 @@ export default class Builder extends Component {
     return (
       <Switch>
         <Route path="/editor/:formId/builder">
-          <div className="leftMenu col-5-16">
-            <div className="leftMenuContents">
-              {this.renderLeftMenuContents()}
-            </div>
-          </div>
-          {this.state.selectedIntegration === false
-            ? this.renderBuilder()
-            : this.setRenderedIntegration()}
+          {this.renderLeftMenuContents()}
+          <Switch>
+            <Route path="/editor/:formId/builder/integrations">
+              {this.state.selectedIntegration === false
+                ? this.renderBuilder()
+                : this.setRenderedIntegration()}
+            </Route>
+            <Route path="/editor/:formId/builder/postsubmission">
+              <PostSubmission
+                form={this.state.form}
+                setIntegration={this.setIntegration}
+              />
+            </Route>
+            <Route path="/editor/:formId/builder">{this.renderBuilder()}</Route>
+          </Switch>
         </Route>
         <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
