@@ -25,13 +25,13 @@
     <div class="results-header">
         <div class="r-header-section userData">
             <div class="completion-date">
-                Bitirme Tarihi:&nbsp;
+                <%= EVALUATION_PAGE_LABELS.completionDate %>:&nbsp;
                 <span id="completionDate" >
                     <%= SUBMISSION.created_at %>
                 </span>
             </div>
             <div class="completion-time">
-                Bitirme Süresi:&nbsp;
+                <%= EVALUATION_PAGE_LABELS.completionTime %>:&nbsp;
                 <span id="completionTime" >
                     <%= SUBMISSION.completion_time %>
                 </span>
@@ -44,22 +44,22 @@
             <div class="leftHand">
                 <div class="lhContent">
                     <div class="question-info-row">
-                        Soru Sayısı: <span id="questionCount" class="total-question-count"></span>
+                        <%= EVALUATION_PAGE_LABELS.questionCount %>: <span id="questionCount" class="total-question-count"></span>
                     </div>
                     <div class="answer-info-row">
-                        Doğru: &nbsp;<span id="correctAnswers" class="correct-answer-count"></span>
+                        <%= EVALUATION_PAGE_LABELS.correctAnswers %>: &nbsp;<span id="correctAnswers" class="correct-answer-count"></span>
                     </div>
                     <div class="answer-info-row">
-                        Yanlış: &nbsp;<span id="wrongAnswers" class="wrong-answer-count"></span>
+                        <%= EVALUATION_PAGE_LABELS.incorrectAnswers %>: &nbsp;<span id="wrongAnswers" class="wrong-answer-count"></span>
                     </div>
                     <div class="answer-info-row">
-                     Boş: <span id="unanswered" class="unanswered-count"></span>
+                        <%= EVALUATION_PAGE_LABELS.unansweredQuestions %>: <span id="unanswered" class="unanswered-count"></span>
                 </div>
                 </div>
             </div>
             <div class="rightHand">
                 <div class="rhContent">
-                     Başarı:&nbsp;<span id="percentageScore" class="percentage-score"></span>
+                    <%= EVALUATION_PAGE_LABELS.score %>:&nbsp;<span id="percentageScore" class="percentage-score"></span>
                 </div>
             </div>
         </div>
