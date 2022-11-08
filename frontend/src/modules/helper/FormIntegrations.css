@@ -44,6 +44,17 @@
 }
 
 .integrationsWrapper > .integration > .activeStatus {
-  margin-left: 67px;
-  margin-top: 11px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: relative;
+  margin: 11px auto 0;
+  display: block;
+}
+
+.integrationsWrapper > .integration > .activeStatus.fa-circle-check {
+  color: #00ac47;
+}
+
+.integrationsWrapper > .integration > .activeStatus.fa-circle- {
+  color: gray;
 }

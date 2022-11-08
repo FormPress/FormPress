@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignal, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faStar } from '@fortawesome/free-solid-svg-icons'
 
 import './RatingScale.css'
 
@@ -27,7 +27,7 @@ export default class RatingScale extends Component {
   }
 
   static metaData = {
-    icon: faSignal,
+    icon: faStar,
     displayText: 'Rating Scale',
     group: 'inputElement'
   }
