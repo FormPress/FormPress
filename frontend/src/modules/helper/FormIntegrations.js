@@ -18,12 +18,13 @@ export default class FormIntegrations extends Component {
 
     Object.values(IntegrationComponents).forEach((IntegrationComponent) => {
       const integration = IntegrationComponent.metaData
+      console.log(integration, this.props.form.props.integrations)
       const matchedIntegration = this.props.form.props.integrations.find(
         (i) => i.type === integration.name
       )
       if (matchedIntegration !== undefined) {
         integration.activeStatus = matchedIntegration.active
-        integration.paused = matchedIntegration.paused
+        integration.paused = matchedIntegration.paused || false
       } else {
         integration.activeStatus = false
       }
