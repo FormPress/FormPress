@@ -36,7 +36,7 @@ export default class Image extends Component {
     displayText: 'Image'
   }
 
-  onChange = (e) => {
+  imageOnChange = (e) => {
     e.preventDefault()
     let files
     if (e.dataTransfer) {
@@ -91,7 +91,7 @@ export default class Image extends Component {
               type="file"
               id={`temp_q_${config.id}`}
               accept="image/jpg, image/jpeg, image/jfif, image/pjpeg, image/pjp, image/png, image/webp"
-              onChange={this.onChange}
+              onChange={this.imageOnChange}
             />
           </div>
         )
@@ -141,7 +141,7 @@ export default class Image extends Component {
                 type="file"
                 id={`q_${config.id}`}
                 accept="image/jpg, image/jpeg, image/jfif, image/pjpeg, image/pjp, image/png, image/webp"
-                onChange={this.onChange}
+                onChange={this.imageOnChange}
               />
               <img
                 src={this.state.croppedImage}

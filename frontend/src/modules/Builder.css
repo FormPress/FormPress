@@ -413,7 +413,6 @@
 .popover-container:hover > .popoverText {
   display: block;
   width: 100px;
-  height: 22px;
   padding: 5px;
   border-radius: 4px;
   position: absolute;

@@ -236,3 +236,7 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
   font-weight: bolder;
   color: white;
 }
+
+.pricing-container {
+  font-family: 'Montserrat';
+}

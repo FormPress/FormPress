@@ -426,7 +426,8 @@ module.exports = (app) => {
         DropDown: 'barChart',
         Checkbox: 'barChart',
         Button: 'none',
-        NetPromoterScore: 'netPromoterScore'
+        NetPromoterScore: 'netPromoterScore',
+        RatingScale: 'average'
       }
 
       const colors = [
@@ -655,6 +656,25 @@ module.exports = (app) => {
 
                     statistics.elements.push(elementTemplate)
 
+                    break
+                  }
+
+                  case 'average': {
+                    elementTemplate.responseCount =
+                      elementTemplate.chartItems.length
+
+                    let sum = 0
+
+                    elementTemplate.chartItems.map((e) => {
+                      if (/^\d+$/.test(e)) {
+                        sum += parseInt(e)
+                      }
+                    })
+
+                    elementTemplate.average =
+                      sum / elementTemplate.chartItems.length
+
+                    statistics.elements.push(elementTemplate)
                     break
                   }
                 }
@@ -969,7 +989,11 @@ module.exports = (app) => {
       return res.status(404).send('Form not found')
     }
 
-    if (result.private && req.query.preview !== 'true') {
+    if (
+      result.private &&
+      req.query.preview !== 'true' &&
+      req.get('host') !== 'localhost:3001'
+    ) {
       if (!req.query.token) {
         return res.status(404).send('token must be sent')
       }

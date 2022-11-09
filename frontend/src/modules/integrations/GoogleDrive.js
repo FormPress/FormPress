@@ -5,6 +5,12 @@ import './GoogleDrive.css'
 import { api } from '../../helper'
 import * as Elements from '../elements'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFolder, faChevronRight } from '@fortawesome/free-solid-svg-icons'
+import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
+import _ from 'lodash'
+import { DotLoader } from 'react-spinner-overlay'
+
 export default class GoogleDrive extends Component {
   static metaData = {
     icon:
@@ -16,20 +22,22 @@ export default class GoogleDrive extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      folderName: this.props.form.title,
-      submissionIdentifier: {},
       display: this.props.activeStatus ? 'active' : 'description',
       inputElements: [],
       isModalOpen: false,
-      modalContent: {}
+      modalContent: {},
+      tokenClient: null,
+      authenticationPopupIsOpen: false,
+      tempIntegrationObject: { ...this.props.integrationObject },
+      newFolderCreation: true
     }
 
-    this.handleAuthenticateClick = this.handleAuthenticateClick.bind(this)
+    this.handleStartAuthentication = this.handleStartAuthentication.bind(this)
     this.handleActivateClick = this.handleActivateClick.bind(this)
     this.handlePauseClick = this.handlePauseClick.bind(this)
+    this.handleResumeClick = this.handleResumeClick.bind(this)
     this.handleRemoveClick = this.handleRemoveClick.bind(this)
     this.handleEditClick = this.handleEditClick.bind(this)
-    this.handleUpdateClick = this.handleUpdateClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
 
     this.removeIntegration = this.removeIntegration.bind(this)
@@ -40,50 +48,58 @@ export default class GoogleDrive extends Component {
 
     this.handleFolderNameChange = this.handleFolderNameChange.bind(this)
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
+    this.createPicker = this.createPicker.bind(this)
+    this.gisLoaded = this.gisLoaded.bind(this)
+    this.handlePickDriveFolder = this.handlePickDriveFolder.bind(this)
+    this.showPicker = this.showPicker.bind(this)
+    this.checkTokenValidity = this.checkTokenValidity.bind(this)
+    this.handleGoogleAuth = this.handleGoogleAuth.bind(this)
+    this.tokenMessageListener = this.tokenMessageListener.bind(this)
+    this.handleCopyClick = this.handleCopyClick.bind(this)
   }
 
   componentDidMount() {
-    const props = this.props
+    // if gis is not loaded, load it
+    if (!window.gapi || !window.google) {
+      const gis = document.createElement('script')
+      gis.src = 'https://accounts.google.com/gsi/client'
+      gis.async = true
+      gis.defer = true
+      gis.onload = this.gisLoaded
+      document.body.appendChild(gis)
 
-    if (props.integrationObject) {
-      let { submissionIdentifier } = props.integrationObject
-
-      const selectedELement = props.form.props.elements.find(
-        (element) =>
-          element.id === submissionIdentifier.id ||
-          element.type === submissionIdentifier.type
-      )
-
-      if (selectedELement) {
-        this.setState({ submissionIdentifier })
-      } else {
-        this.setState({ submissionIdentifier: {} })
+      const gapi = document.createElement('script')
+      gapi.src = 'https://apis.google.com/js/api.js'
+      gapi.async = true
+      gapi.defer = true
+      gapi.onload = () => {
+        const windowGapi = window.gapi
+        windowGapi.load('picker')
       }
+      document.body.appendChild(gapi)
     }
 
-    window.addEventListener('message', function (event) {
-      if (event.data?.type === 'gdriveCallback') {
-        const {
-          base64Token,
-          folderID,
-          submissionIdentifierId,
-          submissionIdentifierType
-        } = event.data
-
-        props.setIntegration({
-          type: GoogleDrive.metaData.name,
-          active: true,
-          value: base64Token,
-          folder: folderID,
-          submissionIdentifier: {
-            id: submissionIdentifierId,
-            type: submissionIdentifierType
-          }
-        })
-      }
-    })
+    window.addEventListener('message', this.tokenMessageListener)
 
     this.filterElementsWithInput()
+  }
+
+  componentWillUnmount() {
+    // clean up
+    window.removeEventListener('message', this.tokenMessageListener)
+
+    const gis = document.querySelector(
+      'script[src="https://accounts.google.com/gsi/client"]'
+    )
+    if (gis) {
+      gis.remove()
+    }
+    const gapi = document.querySelector(
+      'script[src="https://apis.google.com/js/api.js"]'
+    )
+    if (gapi) {
+      gapi.remove()
+    }
   }
 
   async componentDidUpdate(prevProps) {
@@ -92,17 +108,137 @@ export default class GoogleDrive extends Component {
     }
   }
 
+  showPicker(access_token) {
+    const google = window.google
+
+    const docsView = new google.picker.DocsView()
+      .setMode(google.picker.DocsViewMode.LIST)
+      .setParent('root')
+      .setIncludeFolders(true)
+      .setSelectFolderEnabled(true)
+
+    const picker = new google.picker.PickerBuilder()
+      .addView(docsView)
+      .enableFeature(google.picker.Feature.MINE_ONLY)
+      .enableFeature(google.picker.Feature.NAV_HIDDEN)
+      .setSelectableMimeTypes('application/vnd.google-apps.folder')
+      .setOAuthToken(access_token)
+      .setCallback(this.handlePickDriveFolder)
+      .build()
+    picker.setVisible(true)
+  }
+
+  async checkTokenValidity(access_token) {
+    let validToken = true
+    await fetch(
+      'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=' +
+        access_token
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          validToken = false
+        }
+      })
+
+    return validToken
+  }
+
+  async createPicker() {
+    const { tokenClient, tempIntegrationObject } = this.state
+
+    let access_token
+
+    if (tempIntegrationObject?.value?.googleCredentials) {
+      access_token = tempIntegrationObject.value.googleCredentials.access_token
+      this.showPicker(access_token)
+      return
+    } else {
+      access_token = this.props.integrationValue.googleCredentials.access_token
+    }
+
+    let validToken = await this.checkTokenValidity(access_token)
+
+    if (validToken) {
+      this.showPicker(access_token)
+    } else {
+      tokenClient.requestAccessToken({ prompt: '' })
+    }
+  }
+
+  handlePickDriveFolder(data) {
+    if (data.action === 'picked') {
+      const { id, name } = data.docs[0]
+      const { tempIntegrationObject } = this.state
+      tempIntegrationObject.targetFolder = { name, id }
+      this.setState({
+        tempIntegrationObject,
+        newFolderCreation: false
+      })
+    }
+  }
+
+  gisLoaded() {
+    const google = window.google
+
+    let tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id:
+        '763212824993-dalrag4n29c6c42r0vp13amegttagguo.apps.googleusercontent.com',
+      scope: 'https://www.googleapis.com/auth/drive.file',
+      callback: async (response) => {
+        if (response.error !== undefined) {
+          throw response
+        }
+        let { access_token } = response
+        this.showPicker(access_token)
+      }
+    })
+
+    this.setState({ tokenClient })
+  }
+
+  handleGoogleAuth(data) {
+    const { base64Token } = data
+
+    const decodedBase64 = JSON.parse(atob(base64Token))
+
+    const tempIntegrationObject = {
+      type: GoogleDrive.metaData.name,
+      active: true,
+      value: { googleCredentials: decodedBase64 },
+      targetFolder: { name: this.props.form.title, id: '' },
+      submissionIdentifier: '{submissionDate}'
+    }
+
+    this.setState({
+      tempIntegrationObject,
+      authenticationPopupIsOpen: false,
+      display: 'configuration'
+    })
+  }
+
+  tokenMessageListener(event) {
+    if (event.data?.type === 'gdriveCallback') {
+      this.handleGoogleAuth(event.data)
+    }
+  }
+
   filterElementsWithInput() {
     const elements = this.props.form.props.elements
     const inputElements = []
 
+    inputElements.push({
+      label: 'Date and time of the submission.',
+      placeholder: `{submissionDate}`
+    })
+
     elements.forEach((elem) => {
-      let elementType = elem.type
-      if (Elements[elementType].metaData.group === 'inputElement') {
+      if (Elements[elem.type].metaData.group === 'inputElement') {
         const inputElement = {
-          display: elem.label,
-          value: elem.id,
-          type: elem.type
+          label: elem.label,
+          id: elem.id,
+          type: elem.type,
+          placeholder: `{${elem.type}_${elem.id}}`
         }
         inputElements.push(inputElement)
       }
@@ -125,18 +261,17 @@ export default class GoogleDrive extends Component {
     await this.props.handlePublishClick()
   }
 
-  async handleAuthenticateClick() {
-    const { submissionIdentifier, folderName } = this.state
+  async handleStartAuthentication() {
     await this.props.handlePublishClick()
     let { success, data } = await api({
       resource: `/api/integrations/googledrive/authenticate`,
-      method: 'post',
-      body: { submissionIdentifier, folderName }
+      method: 'post'
     })
+
     if (success) {
-      window.open(data, 'Authenticate With Google', 'width=800,height=600')
+      window.open(data, 'Authenticate With Google', 'width=450,height=600')
       this.setState({
-        display: 'active'
+        authenticationPopupIsOpen: true
       })
     } else {
       this.setState({
@@ -145,14 +280,74 @@ export default class GoogleDrive extends Component {
     }
   }
 
+  async handleFinalizeAuthentication() {
+    const { newFolderCreation, tempIntegrationObject } = this.state
+
+    let token
+
+    let integrationObject = _.cloneDeep(tempIntegrationObject)
+
+    integrationObject.type = GoogleDrive.metaData.name
+
+    if (integrationObject?.value?.googleCredentials) {
+      token = integrationObject.value.googleCredentials
+    } else {
+      token = this.props.integrationValue.googleCredentials
+    }
+
+    if (newFolderCreation) {
+      let { success, data } = await api({
+        resource: `/api/integrations/googledrive/createFolder`,
+        method: 'post',
+        body: {
+          token: token,
+          targetFolder: integrationObject.targetFolder
+        }
+      })
+
+      if (success) {
+        integrationObject.targetFolder = data
+      } else {
+        return
+      }
+    }
+
+    this.props.setIntegration(integrationObject)
+
+    await this.props.handlePublishClick()
+
+    this.setState({
+      display: 'active'
+    })
+  }
+
   async handlePauseClick() {
     this.setState({
-      display: 'description'
+      tempIntegrationObject: {
+        ...this.state.tempIntegrationObject,
+        paused: true
+      }
     })
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
-      active: false
+      paused: true
     })
+    await this.props.handlePublishClick()
+  }
+
+  async handleResumeClick() {
+    this.setState({
+      tempIntegrationObject: {
+        ...this.state.tempIntegrationObject,
+        paused: false
+      }
+    })
+
+    this.props.setIntegration({
+      type: GoogleDrive.metaData.name,
+      paused: false
+    })
+
     await this.props.handlePublishClick()
   }
 
@@ -188,64 +383,69 @@ export default class GoogleDrive extends Component {
     this.props.setIntegration({
       type: GoogleDrive.metaData.name,
       active: false,
-      folder: false,
-      value: false,
-      submissionIdentifier: {}
+      paused: false,
+      value: {},
+      submissionIdentifier: ''
     })
     this.setState({
-      display: 'description',
-      folderName: this.props.form.title,
-      submissionIdentifier: {}
+      display: 'description'
     })
     this.setState({ isModalOpen: false })
   }
 
   handleEditClick() {
     this.setState({
-      display: 'update',
-      submissionIdentifier: this.state.submissionIdentifier
+      display: 'configuration',
+      newFolderCreation: false
     })
-  }
-
-  async handleUpdateClick() {
-    this.setState({
-      display: 'active'
-    })
-    this.props.setIntegration({
-      type: GoogleDrive.metaData.name,
-      submissionIdentifier: {
-        id: this.state.submissionIdentifier.id,
-        type: this.state.submissionIdentifier.type
-      }
-    })
-    await this.props.handlePublishClick()
   }
 
   handleFolderNameChange(elem, e) {
-    this.setState({
-      folderName: e.target.value
-    })
+    const { tempIntegrationObject } = this.state
+
+    tempIntegrationObject.targetFolder = { name: e.target.value, id: '' }
+
+    this.setState({ tempIntegrationObject, newFolderCreation: true })
   }
 
   handleSubmissionIdentifierChange(elem, e) {
-    const selectedSubmissionIdentifier = this.state.inputElements.find(
-      (i) => i.value === parseInt(e.target.value)
-    )
+    const string = e.target.value
+    const { tempIntegrationObject } = this.state
+    tempIntegrationObject.submissionIdentifier = string
 
-    this.setState({
-      submissionIdentifier: {
-        id: selectedSubmissionIdentifier.value,
-        type: selectedSubmissionIdentifier.type
-      }
-    })
+    this.setState({ tempIntegrationObject })
+  }
+
+  handleCopyClick(domElemId, copyText) {
+    const sb = document.getElementById(`sit-${domElemId}`)
+
+    sb.classList.add('show')
+
+    navigator.clipboard.writeText(copyText)
+
+    setTimeout(() => {
+      sb.classList.remove('show')
+    }, 1000)
   }
 
   render() {
-    const submissionIdentifierElement = this.state.inputElements.find(
-      (e) => e.value === parseInt(this.state.submissionIdentifier.id)
-    )
     let display
-    if (this.props.activeStatus && this.state.display !== 'update') {
+    let {
+      targetFolder,
+      submissionIdentifier
+    } = this.state.tempIntegrationObject
+
+    let paused
+    if (this.props.tempIntegrationObject?.paused !== undefined) {
+      paused = this.props.tempIntegrationObject.paused
+    } else {
+      paused = this.state.tempIntegrationObject.paused
+    }
+
+    if (
+      paused ||
+      (this.props.activeStatus && this.state.display === 'active')
+    ) {
       display = (
         <>
           <div className="integration-active">
@@ -255,20 +455,28 @@ export default class GoogleDrive extends Component {
             <a
               href={
                 'https://drive.google.com/drive/folders/' +
-                this.props.integrationObject.folder
+                this.props.integrationObject.targetFolder.id
               }
               target="_blank"
               rel="noopener noreferrer">
               https://drive.google.com/drive/folders/
-              {this.props.integrationObject.folder}
+              {this.props.integrationObject.targetFolder.id}
             </a>
           </div>
           <div className="integration-controls">
-            <div className="pause-integration">
-              <button type="button" onClick={this.handlePauseClick}>
-                PAUSE
-              </button>
-            </div>
+            {paused ? (
+              <div className="resume-integration">
+                <button type="button" onClick={this.handleResumeClick}>
+                  RESUME
+                </button>
+              </div>
+            ) : (
+              <div className="pause-integration">
+                <button type="button" onClick={this.handlePauseClick}>
+                  PAUSE
+                </button>
+              </div>
+            )}
             <div className="edit-integration">
               <button type="button" onClick={this.handleEditClick}>
                 EDIT
@@ -284,8 +492,9 @@ export default class GoogleDrive extends Component {
       )
     } else if (
       this.props.activeStatus === false &&
-      this.state.display !== 'configuration'
+      this.state.display === 'description'
     ) {
+      // DESCRIPTION
       display = (
         <>
           <div className="integration-motto">
@@ -299,129 +508,128 @@ export default class GoogleDrive extends Component {
             friends!
           </div>
           <div className="activation-button">
-            <button
-              className={
-                this.props.activeStatus
-                  ? 'active-authentication'
-                  : 'start-authentication'
-              }
-              type="button"
-              onClick={
-                this.props.activeStatus ? null : this.handleActivateClick
-              }>
-              {this.props.activeStatus ? 'ACTIVE' : 'ACTIVATE'}
-            </button>
+            {this.state.authenticationPopupIsOpen ? (
+              <button className="popup-open" type="button" disabled={true}>
+                <DotLoader color={'#9ee048'} loading={true} size={12} />
+              </button>
+            ) : (
+              <button
+                className={
+                  this.props.activeStatus
+                    ? 'active-authentication'
+                    : 'start-authentication'
+                }
+                type="button"
+                onClick={this.handleStartAuthentication}>
+                Authenticate with Google
+              </button>
+            )}
           </div>
         </>
       )
     } else if (this.state.display === 'configuration') {
+      // CONFIGURATION
       display = (
         <>
           <div className="integration-configuration">
             <div className="integration-inputs">
+              <div className="integration-input folderName">
+                <span
+                  className="new-folder-badge"
+                  style={
+                    this.state.newFolderCreation
+                      ? { display: 'block' }
+                      : { display: 'none' }
+                  }>
+                  NEW
+                </span>
+                <Renderer
+                  className="folder"
+                  theme="infernal"
+                  handleFieldChange={this.handleFolderNameChange}
+                  form={{
+                    props: {
+                      elements: [
+                        {
+                          id: 1,
+                          type: 'TextBox',
+                          label: 'Specify the target folder',
+                          placeholder: 'Folder Name',
+                          value: targetFolder.name
+                        }
+                      ]
+                    }
+                  }}
+                />
+                <button
+                  className={'gDrive-pick-folder'}
+                  onClick={() => this.createPicker()}>
+                  <FontAwesomeIcon icon={faFolder} />
+                </button>
+              </div>
               <Renderer
-                className="folder"
-                theme="gleam"
-                handleFieldChange={this.handleFolderNameChange}
+                handleFieldChange={this.handleSubmissionIdentifierChange}
+                className="file"
+                theme="infernal"
                 form={{
                   props: {
                     elements: [
                       {
                         id: 1,
                         type: 'TextBox',
-                        label: 'Type a Folder Name',
-                        placeholder: 'Folder Name',
-                        value: this.state.folderName
-                      }
-                    ]
-                  }
-                }}
-              />
-              <Renderer
-                handleFieldChange={this.handleSubmissionIdentifierChange}
-                className="file"
-                theme="gleam"
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 1,
-                        type: 'Dropdown',
                         placeholder: 'Please select a question',
-                        label: 'Select a Question as Submission Identifier',
-                        value: this.state.submissionIdentifier.id,
-                        options: this.state.inputElements
+                        label: 'Specify a target file name',
+                        value: submissionIdentifier
                       }
                     ]
                   }
                 }}
               />
+              <div className="string-vars-container">
+                <div className="string-vars-label">Available substitutions</div>
+                <div className="string-vars">
+                  {this.state.inputElements.map((e, index) => {
+                    return (
+                      <div
+                        onClick={() =>
+                          this.handleCopyClick(index, e.placeholder)
+                        }
+                        key={index}
+                        className="submission-identifier-tag popover-container"
+                        title={e.label}>
+                        {e.placeholder}
+                        <span id={`sit-${index}`} className="copied">
+                          Copied to clipboard!
+                        </span>
+                        <div className="popoverText">{e.label}</div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
             <div className="file-name-preview">
               <div className="message">Your submissions will be saved as:</div>
               <div className="value">
-                <div className="chosen-label filename-block">
-                  {this.state.submissionIdentifier.id !== undefined
-                    ? submissionIdentifierElement.display
-                    : ''}
-                </div>
-                <span className="filename-separator"> - </span>
-                <span className="filename-block">Submission Date</span>
+                <span>
+                  <FontAwesomeIcon icon={faGoogleDrive} />
+                </span>
+                <FontAwesomeIcon icon={faChevronRight} />
+                <span className="chosen-label">
+                  {targetFolder ? targetFolder.name : ''}
+                </span>
+                <FontAwesomeIcon icon={faChevronRight} />
+                <span className="chosen-label">
+                  {submissionIdentifier || ''}
+                </span>
               </div>
             </div>
           </div>
-
           <button
             type="button"
             className="complete-authentication"
-            onClick={() => this.handleAuthenticateClick()}>
-            AUTHENTICATE
-          </button>
-        </>
-      )
-    } else if (this.props.activeStatus && this.state.display === 'update') {
-      display = (
-        <>
-          <div className="integration-configuration">
-            <div className="integration-inputs">
-              <Renderer
-                handleFieldChange={this.handleSubmissionIdentifierChange}
-                className="file"
-                theme="gleam"
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 1,
-                        type: 'Dropdown',
-                        label: 'Select a Question as Submission Identifier',
-                        value: this.state.submissionIdentifier.id,
-                        options: [...this.state.inputElements]
-                      }
-                    ]
-                  }
-                }}
-              />
-            </div>
-            <div className="file-name-preview">
-              <div className="message">Your submissions will be saved as:</div>
-              <div className="value">
-                <div className="chosen-label filename-block">
-                  {this.state.submissionIdentifier.id !== undefined
-                    ? submissionIdentifierElement.display
-                    : ''}
-                </div>
-                <span className="filename-separator"> - </span>
-                <span className="filename-block">Submission Date</span>
-              </div>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="update-integration"
-            onClick={() => this.handleUpdateClick()}>
-            UPDATE
+            onClick={() => this.handleFinalizeAuthentication()}>
+            Complete Authentication
           </button>
         </>
       )

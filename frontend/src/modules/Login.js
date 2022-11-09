@@ -76,9 +76,11 @@ class Login extends Component {
   }
 
   async handleLoginWithGoogleClick(response) {
+    const profile = JSON.parse(atob(response.credential.split('.')[1]))
+
     this.setState({ state: 'loading', message: 'Logging in...' })
-    const tokenID = response.tokenId
-    const email = response.profileObj.email
+    const tokenID = response.credential
+    const email = profile.email
     const { success, data } = await api({
       resource: `/api/users/loginwithgoogle`,
       method: 'post',
@@ -104,7 +106,6 @@ class Login extends Component {
   }
 
   handleLoginWithGoogleFail(response) {
-    console.log(response.error)
     if (response.error === 'popup_closed_by_user') {
       this.setState({ state: 'done', message: 'Popup closed by user' })
     } else {
@@ -200,6 +201,7 @@ class Login extends Component {
                   <div className="or-seperator">or</div>
                   <div className="google-sign-in">
                     <LoginWithGoogle
+                      context={'signin'}
                       disabled={false}
                       handleLoginWithGoogleButton={
                         this.handleLoginWithGoogleClick

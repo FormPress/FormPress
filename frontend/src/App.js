@@ -20,7 +20,7 @@ import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 import Pricing from './modules/helper/Pricing'
 import Profile from './Profile'
-import NotFoundPage from './modules/common/NotFoundPage'
+// import NotFoundPage from './modules/common/NotFoundPage'
 import ReadCallback from './modules/common/ReadCallback'
 
 import PrivateRoute from './PrivateRoute'
@@ -177,9 +177,10 @@ class App extends Component {
 
     let redirectPage = <Redirect to="/login" />
 
-    if (auth.loggedIn === true) {
-      redirectPage = <Redirect path="*" to="/404" />
-    }
+    // TODO: fix this, temporarily disabled
+    // if (auth.loggedIn === true) {
+    //   redirectPage = <Redirect path="*" to="/404" />
+    // }
 
     return (
       <Router>
@@ -314,7 +315,7 @@ class App extends Component {
               <PrivateRoute path="/pricing" component={Pricing} />
 
               <Route path="/read/development" component={ReadCallback} />
-              <Route path="/404" component={NotFoundPage} />
+              {/*<Route path="/404" component={NotFoundPage} />*/}
               {redirectPage}
             </Switch>
           </div>

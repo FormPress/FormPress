@@ -7,6 +7,7 @@
     "@fortawesome/free-brands-svg-icons": "5.12.1",
     "@fortawesome/free-solid-svg-icons": "6.1.1",
     "@fortawesome/react-fontawesome": "0.1.8",
+    "@react-oauth/google": "^0.2.8",
     "@tinymce/tinymce-react": "4.1.0",
     "file-saver": "2.0.5",
     "moment": "2.24.0",
@@ -18,13 +19,14 @@
     "react-router-dom": "5.1.2",
     "react-scripts": "3.4.4",
     "react-share": "4.4.0",
+    "react-spinner-overlay": "^0.1.33",
     "recharts": "2.1.9"
   },
   "scripts": {
     "start-compose": "NODE_PATH=/node_modules react-scripts start",
     "start": "WATCHPACK_POLLING=true react-scripts start",
     "build": "react-scripts build",
-    "test": "SKIP_PREFLIGHT_CHECK=true react-scripts test",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "rebuild-frontend": "docker-compose stop frontend && docker-compose rm -f frontend && docker-compose build frontend && docker-compose create frontend && docker-compose start frontend"
   },

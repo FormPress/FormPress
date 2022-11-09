@@ -27,8 +27,8 @@ export default class Settings extends Component {
 
     const navLinks = [],
       routes = [
-        <Route exact path="/settings" key="changepassword">
-          <Redirect to="/settings/changepassword" />
+        <Route exact path="/settings" key="usages">
+          <Redirect to="/settings/usages" />
         </Route>
       ]
 
@@ -51,7 +51,7 @@ export default class Settings extends Component {
             key={module.default.menuText}
           />
         )
-        if (module.default.menuText === 'Billing') {
+        if (module.default.menuText === 'Subscriptions and Payments') {
           this.state.planNames.forEach((item) => {
             routes.push(
               <PrivateRoute

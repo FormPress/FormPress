@@ -165,7 +165,7 @@ export default class Dropdown extends Component {
                 {config.placeholder !== false ? (
                   <option
                     disabled={config.id !== 'expectedAnswer'}
-                    selected
+                    defaultValue
                     value="">
                     {config.placeholder}
                   </option>

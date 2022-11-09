@@ -731,6 +731,31 @@ export default class Data extends Component {
                           </div>
                         </div>
                       )
+                    } else if (question.chartType === 'average') {
+                      return (
+                        <div className="questionContainer" key={i}>
+                          <div className="question">{question.label}</div>
+                          <div className="response_container">
+                            <div className="response_count_container">
+                              <div className="response_count_title">
+                                {question.responseCount}
+                              </div>
+                              <div className="response_count">Response(s)</div>
+                            </div>
+                            <div className="last_responses_container">
+                              <div className="last_responses_title">
+                                Average
+                              </div>
+                              <div className="last_responses">
+                                <div title={question.average}>
+                                  &quot;{question.average.toFixed(2)}
+                                  &quot;
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )
                     }
                     return null
                   })}

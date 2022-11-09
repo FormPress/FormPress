@@ -9,18 +9,12 @@ export default class ReadCallback extends Component {
 
       const status = params.get('message')
       const base64Token = params.get('token')
-      const folderID = params.get('folderID')
-      const submissionIdentifierId = params.get('submissionIdentifierId')
-      const submissionIdentifierType = params.get('submissionIdentifierType')
 
       if (status === 'true') {
         window.opener.postMessage(
           {
             type: 'gdriveCallback',
-            base64Token,
-            folderID,
-            submissionIdentifierId,
-            submissionIdentifierType
+            base64Token
           },
           window.opener.origin
         )
