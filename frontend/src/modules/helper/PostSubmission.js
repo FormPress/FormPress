@@ -13,6 +13,21 @@ class PostSubmission extends Component {
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleInputLimit = this.handleInputLimit.bind(this)
     this.handleEvaluationTextChange = this.handleEvaluationTextChange.bind(this)
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
+    this.handleOnPaste = this.handleOnPaste.bind(this)
+  }
+
+  handleOnKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      e.target.blur()
+    }
+  }
+
+  handleOnPaste(e) {
+    e.preventDefault()
+    var text = e.clipboardData.getData('text/plain')
+    document.execCommand('insertHTML', false, text)
   }
 
   handleTyPageTitleChange(e) {
@@ -113,7 +128,10 @@ class PostSubmission extends Component {
                 <div
                   className="testing"
                   contentEditable
+                  spellCheck={false}
                   suppressContentEditableWarning
+                  onKeyDown={this.handleOnKeyDown}
+                  onPaste={this.handleOnPaste}
                   onInput={this.handleInputLimit}
                   onBlur={this.handleTyPageTitleChange}>
                   {tyPageTitle}
@@ -121,7 +139,10 @@ class PostSubmission extends Component {
                 <div
                   className="texting"
                   contentEditable
+                  spellCheck={false}
                   suppressContentEditableWarning
+                  onKeyDown={this.handleOnKeyDown}
+                  onPaste={this.handleOnPaste}
                   onInput={(e) => this.handleInputLimit(e, 256)}
                   onBlur={this.handleTyPageTextChange}>
                   {tyPageText}
@@ -161,6 +182,9 @@ class PostSubmission extends Component {
                     data-placeholder="Completed"
                     contentEditable={true}
                     spellCheck={false}
+                    suppressContentEditableWarning
+                    onKeyDown={this.handleOnKeyDown}
+                    onPaste={this.handleOnPaste}
                     onInput={(e) => this.handleInputLimit(e, 16)}
                     onBlur={(e) =>
                       this.handleEvaluationTextChange(e, 'completionDate')
@@ -176,6 +200,9 @@ class PostSubmission extends Component {
                     data-placeholder="Time"
                     contentEditable={true}
                     spellCheck={false}
+                    suppressContentEditableWarning
+                    onKeyDown={this.handleOnKeyDown}
+                    onPaste={this.handleOnPaste}
                     onInput={(e) => this.handleInputLimit(e, 16)}
                     onBlur={(e) =>
                       this.handleEvaluationTextChange(e, 'completionTime')
@@ -196,6 +223,9 @@ class PostSubmission extends Component {
                         data-placeholder="Questions"
                         contentEditable={true}
                         spellCheck={false}
+                        suppressContentEditableWarning
+                        onKeyDown={this.handleOnKeyDown}
+                        onPaste={this.handleOnPaste}
                         onInput={(e) => this.handleInputLimit(e, 16)}
                         onBlur={(e) =>
                           this.handleEvaluationTextChange(e, 'questionCount')
@@ -213,6 +243,9 @@ class PostSubmission extends Component {
                         data-placeholder="Correct"
                         contentEditable={true}
                         spellCheck={false}
+                        suppressContentEditableWarning
+                        onKeyDown={this.handleOnKeyDown}
+                        onPaste={this.handleOnPaste}
                         onInput={(e) => this.handleInputLimit(e, 16)}
                         onBlur={(e) =>
                           this.handleEvaluationTextChange(e, 'correctAnswers')
@@ -232,6 +265,9 @@ class PostSubmission extends Component {
                         data-placeholder="Incorrect"
                         contentEditable={true}
                         spellCheck={false}
+                        suppressContentEditableWarning
+                        onKeyDown={this.handleOnKeyDown}
+                        onPaste={this.handleOnPaste}
                         onInput={(e) => this.handleInputLimit(e, 16)}
                         onBlur={(e) =>
                           this.handleEvaluationTextChange(e, 'incorrectAnswers')
@@ -249,6 +285,9 @@ class PostSubmission extends Component {
                         data-placeholder="Unanswered"
                         contentEditable={true}
                         spellCheck={false}
+                        suppressContentEditableWarning
+                        onKeyDown={this.handleOnKeyDown}
+                        onPaste={this.handleOnPaste}
                         onInput={(e) => this.handleInputLimit(e, 16)}
                         onBlur={(e) =>
                           this.handleEvaluationTextChange(
@@ -272,6 +311,9 @@ class PostSubmission extends Component {
                       data-placeholder="Score"
                       contentEditable={true}
                       spellCheck={false}
+                      suppressContentEditableWarning
+                      onKeyDown={this.handleOnKeyDown}
+                      onPaste={this.handleOnPaste}
                       onInput={(e) => this.handleInputLimit(e, 16)}
                       onBlur={(e) =>
                         this.handleEvaluationTextChange(e, 'score')
