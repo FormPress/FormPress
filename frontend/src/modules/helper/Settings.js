@@ -51,6 +51,7 @@ export default class Settings extends Component {
           />
         )
         if (module.default.menuText === 'Subscriptions and Payments') {
+          console.log(module.default.planNames)
           module.default.planNames.forEach((item) => {
             routes.push(
               <PrivateRoute
