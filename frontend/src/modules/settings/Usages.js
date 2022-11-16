@@ -38,11 +38,16 @@ export default class Usages extends Component {
     }
 
     const planMap = {
-      1: 'admin',
-      2: 'free',
-      3: 'silver',
-      4: 'gold',
-      5: 'diamond'
+      1: 'Admin',
+      2: 'Free',
+      3: 'Silver',
+      4: 'Gold',
+      5: 'Diamond',
+      6: 'Daily',
+      7: 'Test',
+      10: 'BFSilver',
+      11: 'BFGold',
+      12: 'BFDiamond'
     }
 
     const limitMap = {

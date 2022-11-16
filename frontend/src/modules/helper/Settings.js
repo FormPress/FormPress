@@ -10,7 +10,6 @@ export default class Settings extends Component {
     this.state = {
       navLinks: [],
       routes: [],
-      planNames: ['silver', 'gold', 'diamond'],
       key: '-'
     }
   }
@@ -52,7 +51,7 @@ export default class Settings extends Component {
           />
         )
         if (module.default.menuText === 'Subscriptions and Payments') {
-          this.state.planNames.forEach((item) => {
+          module.default.planNames.forEach((item) => {
             routes.push(
               <PrivateRoute
                 exact
