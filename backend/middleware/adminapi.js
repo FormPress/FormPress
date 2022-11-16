@@ -9,8 +9,6 @@ const { mustHaveValidToken, mustBeAdmin } = require(path.resolve(
   'authorization'
 ))
 
-const { storage } = require(path.resolve('helper'))
-
 module.exports = (app) => {
   app.get(
     '/api/admin/roles',
