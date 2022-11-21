@@ -38,6 +38,7 @@
 .usages-wrapper > .usages-header > .needMore,
 .usages-wrapper > .usages-header > .needMore > a {
   color: #646464;
+  position: relative;
 }
 
 .usages-wrapper > .usages-list > .usage-container {
@@ -184,4 +185,41 @@
 
 .usages-list.admin .progress-knob {
   display: block;
+}
+
+.nav-pricing {
+  z-index: 4;
+  position: relative;
+}
+
+.nav-pricing + .sale-discount {
+  position: absolute;
+  top: -29px;
+  right: 10px;
+  z-index: 3;
+}
+.nav-pricing + .sale-discount svg {
+  color: red;
+  font-size: 36px;
+  position: absolute;
+  z-index: 1;
+  animation: spin 2s infinite linear;
+}
+
+.nav-pricing + .sale-discount span {
+  color: yellow;
+  font-size: 11px;
+  position: absolute;
+  z-index: 2;
+  line-height: 36px;
+  text-align: center;
+  width: 34px;
+  font-weight: bold;
+  transform: rotate(16deg);
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(180deg);
+  }
 }

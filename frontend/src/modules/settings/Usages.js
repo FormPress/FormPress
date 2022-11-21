@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import './Usages.css'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCertificate } from '@fortawesome/free-solid-svg-icons'
+
 export default class Usages extends Component {
   static componentName = 'usages'
   static path = '/settings/usages'
@@ -71,7 +74,14 @@ export default class Usages extends Component {
             </span>
           </div>
           <div className="needMore">
-            Need more? <a href="/pricing">Upgrade your plan!</a>
+            Need more?{' '}
+            <a href="/pricing" className="nav-pricing">
+              Upgrade your plan!
+            </a>
+            <span className="sale-discount">
+              <FontAwesomeIcon icon={faCertificate} />
+              <span>SALE</span>
+            </span>
           </div>
         </div>
         <div className={`usages-list ${isAdmin ? 'admin' : null}`}>

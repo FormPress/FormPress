@@ -1383,4 +1383,21 @@ module.exports = (app) => {
       }
     }
   )
+
+  app.get(
+    '/api/users/:user_id/get/payments',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+
+      const paymentsResult = await db.query(
+        `SELECT * from payments where user_id = ?`,
+        [req.params.user_id]
+      )
+      if (paymentsResult.length > 0) {
+        res.json(paymentsResult)
+      }
+    }
+  )
 }
