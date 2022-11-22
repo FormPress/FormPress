@@ -217,9 +217,3 @@
   font-weight: bold;
   transform: rotate(16deg);
 }
-
-@keyframes spin {
-  100% {
-    transform: rotate(180deg);
-  }
-}
