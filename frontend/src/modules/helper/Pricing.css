@@ -173,25 +173,7 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
 }
 
 .information-mark {
-  position: relative;
-  width: 15px;
-  height: 15px;
-  display: inline-block;
-}
-
-.information-mark:after {
-  content: 'i';
-  color: #ffffff;
-  position: absolute;
-  right: 0;
-  top: 2px;
-  width: 16px;
-  height: 16px;
-  font-size: 10px;
-  text-align: center;
-  background-color: #333333;
-  border-radius: 50%;
-  cursor: pointer;
+  font-size: 16px;
 }
 
 .available-checkmark:after {
@@ -215,9 +197,11 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
   top: calc(50% - 10px);
   width: 24px;
   height: 24px;
-  text-align: center;
   background-color: #c9c9c9;
   border-radius: 50%;
+  transform: translate(-2px, -2px);
+  font-size: 14px;
+  text-align: center;
 }
 .mobile-features {
   display: none;
@@ -239,4 +223,143 @@ table[class$='-plan']:not(.free-plan) [scope='col'] {
 
 .pricing-container {
   font-family: 'Montserrat';
+}
+
+.BlackFriday.pricing-container .black-friday-banner {
+  display: block;
+  text-align: center;
+  margin-top: 100px;
+}
+
+.BlackFriday.pricing-container .black-friday-banner-title {
+  margin-top: 20px;
+}
+.BlackFriday.pricing-container .black-friday-toggle-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  margin: 0 20px;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0071bc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .slider:before {
+  position: absolute;
+  content: '';
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.BlackFriday.pricing-container
+  .black-friday-toggle-area
+  input:checked
+  + .slider {
+  background-color: #8cc63f;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area input:focus + .slider {
+  box-shadow: 0 0 1px #8cc63f;
+}
+
+.BlackFriday.pricing-container .black-friday-advantages {
+  display: flex;
+  justify-content: center;
+  flex-flow: row wrap;
+  margin-bottom: 40px;
+}
+
+.BlackFriday.pricing-container .black-friday-advantages img {
+  max-width: 200px;
+}
+
+.BlackFriday.pricing-container
+  .black-friday-toggle-area
+  input:checked
+  + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .slider.round {
+  border-radius: 34px;
+}
+
+.BlackFriday.pricing-container .black-friday-toggle-area .slider.round:before {
+  border-radius: 50%;
+}
+
+.BlackFriday.pricing-container .yearly {
+  display: none;
+}
+
+.BlackFriday.pricing-container.pricing-yearly td.yearly {
+  display: table-cell;
+}
+
+.BlackFriday.pricing-container.pricing-yearly .monthly {
+  display: none;
+}
+
+.BlackFriday.pricing-container.pricing-monthly .yearly {
+  display: none;
+}
+
+.BlackFriday.pricing-container.pricing-monthly td.monthly {
+  display: table-cell;
+}
+
+.BlackFriday.pricing-container.pricing-monthly .purchase-link.monthly {
+  display: block;
+}
+
+.BlackFriday.pricing-container.pricing-yearly .purchase-link.yearly {
+  display: block;
+}
+
+.price-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.price-container .old-amount {
+  margin: 0 5px;
+  font-size: 16px;
+  color: #cf1f32;
+  text-decoration-color: white;
+  text-decoration-line: line-through;
+}
+
+.price-container .new-amount {
+  margin: 0 5px;
+  font-size: 32px;
 }

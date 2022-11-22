@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Pricing.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 const Pricing = (props) => {
   let { user_role } = props.generalContext.auth
+  const [period, setPeriod] = useState('pricing-yearly')
 
   return (
     <>
@@ -12,9 +15,58 @@ const Pricing = (props) => {
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
         crossOrigin="anonymous"
       />
-      <div className="pricing-container">
+      <div className={`pricing-container ${period} BlackFriday`}>
         <div className="container">
+          <div className="black-friday-banner">
+            <img
+              alt=""
+              className="img-fluid"
+              src="https://static.formpress.org/images/black-friday-pricing.png"
+            />
+            <h3 className="black-friday-banner-title">
+              %56 Discount On Yearly Plans!
+            </h3>
+          </div>
+          <div className="black-friday-advantages">
+            <img
+              alt=""
+              className="img-fluid"
+              src="https://static.formpress.org/images/arranged-discount.png"
+            />
+            <img
+              alt=""
+              className="img-fluid"
+              src="https://static.formpress.org/images/money-back.png"
+            />
+            <img
+              alt=""
+              className="img-fluid"
+              src="https://static.formpress.org/images/cancel-anytime.png"
+            />
+            <img
+              alt=""
+              className="img-fluid"
+              src="https://static.formpress.org/images/24-7-support.png"
+            />
+          </div>
           <h2 className="text-center mb-4 pricing-title">PRICING</h2>
+          <div className="black-friday-toggle-area">
+            Monthly
+            <label className="switch">
+              <input
+                id="pricing-period"
+                type="checkbox"
+                checked={period === 'pricing-yearly' ? true : false}
+                onClick={() =>
+                  period === 'pricing-monthly'
+                    ? setPeriod('pricing-yearly')
+                    : setPeriod('pricing-monthly')
+                }
+              />
+              <span className="slider round"></span>
+            </label>
+            Yearly
+          </div>
           <div className="pricing-table g-5 py-5 ">
             <div className="row align-items-baseline justify-content-center">
               <div className="col-md-2 col-sm-6 pricing-features">
@@ -89,11 +141,13 @@ const Pricing = (props) => {
                       <td>
                         <span className="mobile-features">TECH SUPPORT: </span>
                         TEXT{' '}
-                        <div
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
                           className="information-mark"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          title="Email and ticket based support"></div>
+                          title="Email and ticket based support"
+                        />
                       </td>
                     </tr>
                     <tr>
@@ -178,11 +232,13 @@ const Pricing = (props) => {
                       <td>
                         <span className="mobile-features">TECH SUPPORT: </span>
                         TEXT{' '}
-                        <div
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
                           className="information-mark"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          title="Email and ticket based support"></div>
+                          title="Email and ticket based support"
+                        />
                       </td>
                     </tr>
                     <tr>
@@ -216,9 +272,18 @@ const Pricing = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="silver-price text-white">
-                        <span className="price-amount">$19</span> / BILLED
+                      <td className="silver-price text-white monthly">
+                        <span className="price-amount">19$</span> / BILLED
                         MONTHLY
+                      </td>
+                      <td className="silver-price text-white yearly">
+                        <div className="price-block">
+                          <div className="price-container">
+                            <span className="old-amount">228$</span>
+                            <span className="new-amount">99$</span>
+                          </div>
+                          <div className="price-period">/ BILLED YEARLY</div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -229,9 +294,16 @@ const Pricing = (props) => {
                       Current Plan
                     </div>
                   </div>
-                ) : user_role > 3 ? null : (
+                ) : user_role > 3 ? null : period === 'pricing-monthly' ? (
                   <a
                     href="settings/billing/silver"
+                    target="_blank"
+                    className="text-decoration-none text-center purchase-link">
+                    <div className="purchase-button">Upgrade</div>
+                  </a>
+                ) : (
+                  <a
+                    href="settings/billing/bfsilver"
                     target="_blank"
                     className="text-decoration-none text-center purchase-link">
                     <div className="purchase-button">Upgrade</div>
@@ -273,11 +345,13 @@ const Pricing = (props) => {
                       <td>
                         <span className="mobile-features">TECH SUPPORT: </span>
                         TEXT{' '}
-                        <div
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
                           className="information-mark"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          title="Email and ticket based support"></div>
+                          title="Email and ticket based support"
+                        />
                       </td>
                     </tr>
                     <tr>
@@ -311,9 +385,18 @@ const Pricing = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="gold-price text-white">
-                        <span className="price-amount">$39</span> / BILLED
+                      <td className="gold-price text-white monthly">
+                        <span className="price-amount">39$</span> / BILLED
                         MONTHLY
+                      </td>
+                      <td className="gold-price text-white yearly">
+                        <div className="price-block">
+                          <div className="price-container">
+                            <span className="old-amount">468$</span>
+                            <span className="new-amount">199$</span>
+                          </div>
+                          <div className="price-period">/ BILLED YEARLY</div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -324,9 +407,16 @@ const Pricing = (props) => {
                       Current Plan
                     </div>
                   </div>
-                ) : user_role > 4 ? null : (
+                ) : user_role > 4 ? null : period === 'pricing-monthly' ? (
                   <a
                     href="settings/billing/gold"
+                    target="_blank"
+                    className="text-decoration-none text-center purchase-link">
+                    <div className="purchase-button">Upgrade</div>
+                  </a>
+                ) : (
+                  <a
+                    href="settings/billing/bfgold"
                     target="_blank"
                     className="text-decoration-none text-center purchase-link">
                     <div className="purchase-button">Upgrade</div>
@@ -368,11 +458,13 @@ const Pricing = (props) => {
                       <td>
                         <span className="mobile-features">TECH SUPPORT: </span>
                         TEXT & VIDEO{' '}
-                        <div
+                        <FontAwesomeIcon
+                          icon={faInfoCircle}
                           className="information-mark"
                           data-bs-toggle="tooltip"
                           data-bs-placement="top"
-                          title="Ability to schedule video calls directly with customer success engineers"></div>
+                          title="Ability to schedule video calls directly with customer success engineers"
+                        />
                       </td>
                     </tr>
                     <tr>
@@ -406,9 +498,18 @@ const Pricing = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <td className="diamond-price text-white">
-                        <span className="price-amount">$99</span> / BILLED
+                      <td className="diamond-price text-white monthly">
+                        <span className="price-amount">99$</span> / BILLED
                         MONTHLY
+                      </td>
+                      <td className="diamond-price text-white yearly">
+                        <div className="price-block">
+                          <div className="price-container">
+                            <span className="old-amount">1188$</span>
+                            <span className="new-amount">499$</span>
+                          </div>
+                          <div className="price-period">/ BILLED YEARLY</div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -419,9 +520,16 @@ const Pricing = (props) => {
                       Current Plan
                     </div>
                   </div>
-                ) : (
+                ) : period === 'pricing-monthly' ? (
                   <a
                     href="settings/billing/diamond"
+                    target="_blank"
+                    className="text-decoration-none text-center purchase-link">
+                    <div className="purchase-button">Upgrade</div>
+                  </a>
+                ) : (
+                  <a
+                    href="settings/billing/bfdiamond"
                     target="_blank"
                     className="text-decoration-none text-center purchase-link">
                     <div className="purchase-button">Upgrade</div>
