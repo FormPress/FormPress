@@ -89,8 +89,7 @@
 
 .loginAsUser,
 .statusUser,
-.addToWhitelist,
-.deleteUser {
+.addToWhitelist {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
@@ -112,15 +111,9 @@
   background-color: #b9c1c9;
 }
 
-.deleteUser {
-  width: 140px;
-  background-color: #c65c5c;
-}
-
 .loginAsUser:hover,
 .statusUser:hover,
-.addToWhitelist:hover,
-.deleteUser:hover {
+.addToWhitelist:hover {
   cursor: pointer;
   color: #ffffff;
 }
@@ -135,8 +128,4 @@
 
 .addToWhitelist:hover {
   background-color: #7188bd;
-}
-
-.deleteUser:hover {
-  background-color: #cf1f32;
 }

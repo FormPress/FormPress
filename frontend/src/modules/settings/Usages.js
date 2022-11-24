@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import './Usages.css'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCertificate } from '@fortawesome/free-solid-svg-icons'
+
 export default class Usages extends Component {
   static componentName = 'usages'
   static path = '/settings/usages'
@@ -38,11 +41,16 @@ export default class Usages extends Component {
     }
 
     const planMap = {
-      1: 'admin',
-      2: 'free',
-      3: 'silver',
-      4: 'gold',
-      5: 'diamond'
+      1: 'Admin',
+      2: 'Free',
+      3: 'Silver',
+      4: 'Gold',
+      5: 'Diamond',
+      6: 'Daily',
+      7: 'Test',
+      10: 'BFSilver',
+      11: 'BFGold',
+      12: 'BFDiamond'
     }
 
     const limitMap = {
@@ -66,7 +74,14 @@ export default class Usages extends Component {
             </span>
           </div>
           <div className="needMore">
-            Need more? <a href="/pricing">Upgrade your plan!</a>
+            Need more?{' '}
+            <a href="/pricing" className="nav-pricing">
+              Upgrade your plan!
+            </a>
+            <span className="sale-discount">
+              <FontAwesomeIcon icon={faCertificate} />
+              <span>SALE</span>
+            </span>
           </div>
         </div>
         <div className={`usages-list ${isAdmin ? 'admin' : null}`}>

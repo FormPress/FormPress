@@ -18,7 +18,6 @@ export default class FormIntegrations extends Component {
 
     Object.values(IntegrationComponents).forEach((IntegrationComponent) => {
       const integration = IntegrationComponent.metaData
-      console.log(integration, this.props.form.props.integrations)
       const matchedIntegration = this.props.form.props.integrations.find(
         (i) => i.type === integration.name
       )
