@@ -1,4 +1,4 @@
-const {genRandomString, sha512} = require('../helper/random')
+const { genRandomString, sha512 } = require('../helper/random')
 const adminPassword = process.env.ADMINPASSWORD || 'admin'
 const adminEmail = process.env.ADMINEMAIL || 'admin@formpress.org'
 
