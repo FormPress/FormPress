@@ -7,7 +7,7 @@ const fileUpload = require('express-fileupload')
 const transform = require(path.resolve('script', 'babel-transform'))
 
 transform()
-//dummy commit
+
 const isEnvironmentVariableSet = {
   googleServiceAccountCredentials:
     process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS !== '',
