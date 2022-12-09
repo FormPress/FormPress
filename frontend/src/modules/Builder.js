@@ -1332,6 +1332,7 @@ export default class Builder extends Component {
                         <a
                           href="https://formpress.org/pricing"
                           target="_blank"
+                          rel="noreferrer"
                           className="upgrade_button">
                           UPGRADE
                         </a>
@@ -1601,7 +1602,10 @@ export default class Builder extends Component {
             </div>
             <div id="branding-popover" className="popoverText">
               Want to remove branding?{' '}
-              <a href="https://formpress.org/pricing" target="_blank">
+              <a
+                href="https://formpress.org/pricing"
+                target="_blank"
+                rel="noreferrer">
                 Upgrade your plan.
               </a>
             </div>

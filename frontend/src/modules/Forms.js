@@ -429,7 +429,10 @@ export default class Forms extends Component {
                 Create a new form
                 <div id="createNewForm-popover" className="popoverText">
                   Form limit reached.
-                  <a href="https://formpress.org/pricing" target="_blank">
+                  <a
+                    href="https://formpress.org/pricing"
+                    target="_blank"
+                    rel="noreferrer">
                     {' '}
                     Upgrade your plan for more.
                   </a>

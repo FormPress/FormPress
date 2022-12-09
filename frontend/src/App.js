@@ -311,7 +311,6 @@ class App extends Component {
                 path="/resetpassword/:userId/:passwordResetCode"
                 component={ResetPassword}
               />
-              <PrivateRoute path="/pricing" />
 
               <Route path="/read/development" component={ReadCallback} />
               {/*<Route path="/404" component={NotFoundPage} />*/}
