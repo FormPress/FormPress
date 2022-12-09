@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 services:
   mysql:
     image: mysql:5.7
@@ -13,6 +13,11 @@ services:
       - MYSQL_PASSWORD=formpress
     ports:
       - '3003:3306'
+    healthcheck:
+      test: mysql $$MYSQL_DATABASE --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --silent --execute "SELECT 1;"
+      interval: 1s
+      timeout: 1s
+      retries: 30
   backend:
     build:
       context: ./backend/
@@ -45,7 +50,8 @@ services:
     links:
       - 'mysql'
     depends_on:
-      - 'mysql'
+      mysql:
+        condition: service_healthy
   frontend:
     build:
       context: ./frontend/
