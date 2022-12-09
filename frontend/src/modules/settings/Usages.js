@@ -75,7 +75,10 @@ export default class Usages extends Component {
           </div>
           <div className="needMore">
             Need more?{' '}
-            <a href="/pricing" className="nav-pricing">
+            <a
+              href="https://formpress.org/pricing"
+              target="_blank"
+              className="nav-pricing">
               Upgrade your plan!
             </a>
             <span className="sale-discount">

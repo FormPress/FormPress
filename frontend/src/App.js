@@ -18,7 +18,6 @@ import ForgotPassword from './modules/helper/ForgotPassword'
 import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
-import Pricing from './modules/helper/Pricing'
 import Profile from './Profile'
 // import NotFoundPage from './modules/common/NotFoundPage'
 import ReadCallback from './modules/common/ReadCallback'
@@ -312,7 +311,7 @@ class App extends Component {
                 path="/resetpassword/:userId/:passwordResetCode"
                 component={ResetPassword}
               />
-              <PrivateRoute path="/pricing" component={Pricing} />
+              <PrivateRoute path="/pricing" />
 
               <Route path="/read/development" component={ReadCallback} />
               {/*<Route path="/404" component={NotFoundPage} />*/}
