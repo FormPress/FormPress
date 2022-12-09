@@ -1329,7 +1329,11 @@ export default class Builder extends Component {
                       </span>
                       <span className="planover-container">
                         <FontAwesomeIcon icon={faQuestionCircle} />
-                        <a href="/pricing" className="upgrade_button">
+                        <a
+                          href="https://formpress.org/pricing"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="upgrade_button">
                           UPGRADE
                         </a>
                         <div className="popoverText">
@@ -1597,7 +1601,13 @@ export default class Builder extends Component {
               </div>
             </div>
             <div id="branding-popover" className="popoverText">
-              Want to remove branding? <a href="/pricing">Upgrade your plan.</a>
+              Want to remove branding?{' '}
+              <a
+                href="https://formpress.org/pricing"
+                target="_blank"
+                rel="noreferrer">
+                Upgrade your plan.
+              </a>
             </div>
           </span>
         ) : null}
