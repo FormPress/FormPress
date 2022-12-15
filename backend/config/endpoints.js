@@ -239,7 +239,7 @@ module.exports = {
       exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
     },
     {
-      method: 'post',
+      method: 'get',
       path: '/api/users/:user_id/single-sign-on',
       protected: false,
       exampleRequestPath: '/api/users/1/single-sign-on',
