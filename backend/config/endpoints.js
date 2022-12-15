@@ -242,14 +242,7 @@ module.exports = {
       method: 'get',
       path: '/api/users/:user_id/single-sign-on',
       protected: false,
-      exampleRequestPath: '/api/users/1/single-sign-on',
-      exampleRequestBody: {
-        ssoId: 'ssoId',
-        primaryEmailAddress: 'primaryEmailAddress@example.com',
-        isEmailAddressVerified: true,
-        username: 'userName',
-        fullName: 'fullName'
-      }
+      exampleRequestPath: '/api/users/1/single-sign-on'
     }
   ]
 }
