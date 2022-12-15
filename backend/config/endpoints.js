@@ -237,6 +237,19 @@ module.exports = {
         '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
       protected: false,
       exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
+    },
+    {
+      method: 'post',
+      path: '/api/users/:user_id/single-sign-on',
+      protected: false,
+      exampleRequestPath: '/api/users/1/single-sign-on',
+      exampleRequestBody: {
+        ssoId: 'ssoId',
+        primaryEmailAddress: 'primaryEmailAddress@example.com',
+        isEmailAddressVerified: true,
+        username: 'userName',
+        fullName: 'fullName'
+      }
     }
   ]
 }

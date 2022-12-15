@@ -6,6 +6,7 @@ import {
   faTrash,
   faPen,
   faPlusCircle,
+  faQuestionCircle,
   faClone
 } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
@@ -265,6 +266,14 @@ export default class Forms extends Component {
     return newValue
   }
 
+  async redirectToTalkyard() {
+    const { data } = await api({
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/single-sign-on`,
+      method: 'get'
+    })
+    window.open(data, '_blank')
+  }
+
   render() {
     const { forms } = this.state
     let roleLimit = 5
@@ -287,7 +296,7 @@ export default class Forms extends Component {
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
-                <div className="popover-container">
+                <div className="popover-container circle-plus-container">
                   <FontAwesomeIcon
                     icon={faPlusCircle}
                     title="Add New Form"
@@ -296,9 +305,30 @@ export default class Forms extends Component {
                   <div className="popoverText">Create a new form</div>
                 </div>
               </Link>
+              <div
+                className="popover-container circle-question-container"
+                onClick={() => this.redirectToTalkyard()}>
+                <FontAwesomeIcon
+                  icon={faQuestionCircle}
+                  title="Help"
+                  className="nav_add_new_form_logo"
+                />
+                <div className="popoverText">Help</div>
+              </div>
             </div>
           ) : (
-            ''
+            <div className="nav_add_new_form_container">
+              <div
+                className="popover-container circle-question-container"
+                onClick={() => this.redirectToTalkyard()}>
+                <FontAwesomeIcon
+                  icon={faQuestionCircle}
+                  title="Help"
+                  className="nav_add_new_form_logo"
+                />
+                <div className="popoverText">Help</div>
+              </div>
+            </div>
           )}
           <div className="headerContainer"></div>
           <div className="formsContent">
@@ -432,7 +462,7 @@ export default class Forms extends Component {
                   <a
                     href="https://formpress.org/pricing"
                     target="_blank"
-                    rel="noreferrer">
+                    rel="noopener noreferrer">
                     {' '}
                     Upgrade your plan for more.
                   </a>

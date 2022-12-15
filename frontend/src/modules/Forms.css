@@ -223,9 +223,29 @@
   font-size: 12px;
 }
 
+.circle-question-container:hover .popoverText {
+  display: block;
+  width: 120px;
+  height: 20px;
+  margin: 0;
+  padding: 4px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  top: 35px;
+  left: -43px;
+  z-index: 9999;
+  font-size: 12px;
+}
+
 @media only screen and (max-width: 767px) {
   .nav_add_new_form_link {
     left: 70%;
+  }
+  .circle-question-container {
+    left: 80%;
   }
 }
 

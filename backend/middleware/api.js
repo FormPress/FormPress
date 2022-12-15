@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const fetch = require('node-fetch')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -70,6 +71,45 @@ module.exports = (app) => {
 
       res.json({ status: 'done', id: result.insertId })
     }
+  }
+
+  const getTalkyardSSOSecret = async (user_id) => {
+    return new Promise(async (resolve, reject) => {
+      const db = await getPool()
+      const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
+        user_id
+      ])
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          ssoId: result[0].emailVerificationCode,
+          primaryEmailAddress: result[0].email,
+          isEmailAddressVerified: true,
+          username: result[0].email.split('@')[0],
+          fullName: result[0].email.split('@')[0]
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${process.env.TALKYARD_SECRET}`
+        }
+      }
+      console.log(process.env.TALKYARD_SECRET)
+      try {
+        fetch(
+          'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
+          options
+        )
+          .then((resp) => resp.json())
+          .then((json) => {
+            resolve(
+              `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+            )
+          })
+      } catch (e) {
+        reject(e)
+      }
+    })
   }
 
   app.put(
@@ -1381,6 +1421,14 @@ module.exports = (app) => {
         const usages = usagesResult[0]
         res.json(usages)
       }
+    }
+  )
+
+  app.get(
+    '/api/users/:user_id/single-sign-on',
+    mustHaveValidToken,
+    async (req, res) => {
+      res.json(await getTalkyardSSOSecret(req.params.user_id))
     }
   )
 }
