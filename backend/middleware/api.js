@@ -1408,11 +1408,7 @@ module.exports = (app) => {
           }),
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${
-              process.env.TALKYARD_SECRET === undefined
-                ? 'dHlpZD0yOjVxNnF5eGd5aWsyamg3cWpvZTc3cjcycXM='
-                : process.env.TALKYARD_SECRET
-            }`
+            Authorization: `Basic ${process.env.TALKYARD_SECRET}`
           }
         }
 
