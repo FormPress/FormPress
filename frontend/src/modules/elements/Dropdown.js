@@ -117,6 +117,10 @@ export default class Dropdown extends Component {
       inputProps.checked = config.value === true
     }
 
+    if (typeof config.defaultValue !== 'undefined') {
+      inputProps.defaultValue = config.defaultValue
+    }
+
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
     }
@@ -155,56 +159,59 @@ export default class Dropdown extends Component {
         <div key="2">
           {
             <div className="dropdown-div">
-              <select
-                className="dropdown-select"
-                id={`q_${config.id}`}
-                name={`q_${config.id}`}
-                value={mode === 'viewer' ? config.value : undefined}
-                onChange={inputProps.onChange}
-                data-fp-list={config.hasDataset ? config.dataset : ''}>
-                {config.placeholder !== false ? (
-                  <option
-                    disabled={config.id !== 'expectedAnswer'}
-                    defaultValue
-                    value="">
-                    {config.placeholder}
-                  </option>
-                ) : null}
-                {config.hasDataset && this.state.datasets[config.dataset]
-                  ? this.state.datasets[config.dataset].map((item, index) => {
-                      return (
-                        <option
-                          className="option-space"
-                          key={index}
-                          value={item.value}>
-                          {item.display}
-                        </option>
-                      )
-                    })
-                  : typeof options[0] === 'object'
-                  ? options.map((item) => {
-                      return (
-                        <option
-                          className="option-space"
-                          key={item.value}
-                          value={item.value}
-                          disabled={item.disabled}
-                          dangerouslySetInnerHTML={{
-                            __html: item.display
-                          }}></option>
-                      )
-                    })
-                  : options.map((item, index) => {
-                      return (
-                        <option
-                          className="option-space"
-                          key={index}
-                          value={item}>
-                          {item}
-                        </option>
-                      )
-                    })}
-              </select>
+              {config.options === undefined ? null : (
+                <select
+                  className="dropdown-select"
+                  id={`q_${config.id}`}
+                  name={`q_${config.id}`}
+                  value={mode === 'viewer' ? config.value : undefined}
+                  onChange={inputProps.onChange}
+                  defaultValue={inputProps.defaultValue}
+                  data-fp-list={config.hasDataset ? config.dataset : ''}>
+                  {config.placeholder !== false ? (
+                    <option
+                      disabled={config.id !== 'expectedAnswer'}
+                      defaultValue
+                      value="">
+                      {config.placeholder}
+                    </option>
+                  ) : null}
+                  {config.hasDataset && this.state.datasets[config.dataset]
+                    ? this.state.datasets[config.dataset].map((item, index) => {
+                        return (
+                          <option
+                            className="option-space"
+                            key={index}
+                            value={item.value}>
+                            {item.display}
+                          </option>
+                        )
+                      })
+                    : typeof options[0] === 'object'
+                    ? options.map((item) => {
+                        return (
+                          <option
+                            className="option-space"
+                            key={item.value}
+                            value={item.value}
+                            disabled={item.disabled}
+                            dangerouslySetInnerHTML={{
+                              __html: item.display
+                            }}></option>
+                        )
+                      })
+                    : options.map((item, index) => {
+                        return (
+                          <option
+                            className="option-space"
+                            key={index}
+                            value={item}>
+                            {item}
+                          </option>
+                        )
+                      })}
+                </select>
+              )}
             </div>
           }
         </div>,
