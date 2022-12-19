@@ -23,7 +23,7 @@ export default class FormIntegrations extends Component {
       )
       if (matchedIntegration !== undefined) {
         integration.activeStatus = matchedIntegration.active
-        integration.paused = matchedIntegration.paused
+        integration.paused = matchedIntegration.paused || false
       } else {
         integration.activeStatus = false
       }

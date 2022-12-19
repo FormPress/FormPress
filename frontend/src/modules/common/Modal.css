@@ -79,8 +79,8 @@
   font-weight: 700;
   padding-top: 8px !important;
   padding-bottom: 8px !important;
-  width: 80px;
-  margin-right: 2px;
+  min-width: 80px;
+  margin-right: 10px;
   background-color: white;
   border-radius: 3px;
   border: none;
@@ -89,6 +89,12 @@
 
 .wrapper-buttons button.negative {
   color: #be0000;
+  border: 1px solid #be0000;
+}
+
+.wrapper-buttons button.negative.disabled {
+  pointer-events: none;
+  filter: grayscale(1);
 }
 
 .wrapper-buttons button.negative:hover {
@@ -98,6 +104,7 @@
 
 .wrapper-buttons button.positive {
   color: #1c5c85;
+  border: 1px solid #1c5c85;
 }
 
 .wrapper-buttons button.positive:hover {
@@ -107,6 +114,7 @@
 
 .wrapper-buttons button.abort {
   color: #1c5c85;
+  border: 1px solid #1c5c85;
 }
 
 .wrapper-buttons button.abort:hover {
