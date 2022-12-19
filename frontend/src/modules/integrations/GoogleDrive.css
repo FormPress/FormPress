@@ -156,6 +156,9 @@
   line-height: 30px;
   padding: 0 10px;
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
 .integration-wrapper > .integration-content > .complete-authentication {
@@ -197,7 +200,9 @@
   > .integration-content
   > .integration-configuration
   > .integration-inputs {
-  display: grid;
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
 }
 .integration-wrapper > .integration-content > .integration-configuration {
   display: flex;
