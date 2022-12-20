@@ -10,7 +10,7 @@
 }
 
 .advanced-settings {
-  padding: 1rem 0 3rem 0;
+  padding: 0.5rem 0 3rem 0;
   display: flex;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -22,12 +22,17 @@
 .table-wrapper {
   max-width: 700px;
   overflow: scroll;
+  padding: 5px 0 30px 0;
+}
+
+.advanced-configuration-toggle {
+  width: 270px;
+  float: right;
+  margin-top: 35px;
 }
 
 .advanced-settings table {
   position: relative;
-  border: 1px solid #ddd;
-  border-collapse: collapse;
 }
 
 .advanced-settings td,
@@ -70,10 +75,6 @@ th {
   border-radius: 3px;
 }
 
-.table-wrapper {
-  padding: 10px 0 10px 0;
-}
-
 .table-head-row > th {
   background-color: #f8f9fa;
   color: #686c70;
@@ -86,6 +87,8 @@ th {
 
 .table-values-row > td {
   padding: 0;
+  background: white;
+  border: none;
 }
 
 .input-elems {
@@ -94,7 +97,6 @@ th {
 }
 .input-elems > .elementCheckbox:first-child {
   margin-left: 0;
-  margin-bottom: 5px;
 }
 
 .input-elems > :nth-child(odd):not(:first-child) {
@@ -116,10 +118,50 @@ th {
   max-width: 600px;
   font-size: 1rem;
 }
+.table-reference-row > th {
+  background: #99d3ff;
+  padding: 6px;
+  color: white;
+  font-weight: bold;
+  border: 1px solid white;
+}
 
 .table-reference-row > th > input {
-  background: #99d3ff;
   border: none;
-  padding: 6px;
-  border: 2px solid white;
+  background: #99d3ff;
+  color: white;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.legendCell {
+  background: white !important;
+  color: gray !important;
+  font-weight: 500 !important;
+  text-align: center;
+  padding: 6px !important;
+  border: none !important;
+}
+
+.advanced-config-values {
+  width: 100%;
+  width: -moz-available;
+}
+
+.advanced-config-reference {
+  width: 100%;
+  width: -moz-available;
+}
+
+.advanced-mapping-label {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500 !important;
+  box-sizing: border-box;
+}
+
+.spreadsheet-preview {
+  margin: 15px 0 15px 0;
 }

@@ -480,6 +480,8 @@ export default class GoogleSheets extends Component {
     const spreadsheetId = tempIntegrationObject.targetSpreadsheet.id
     const { targetSpreadsheet } = tempIntegrationObject
 
+    const { fieldMapping } = tempIntegrationObject
+
     this.setState({
       display: 'configuration',
       loading: true
@@ -502,6 +504,7 @@ export default class GoogleSheets extends Component {
     selectedSpreadsheet.chosenSheet = targetSpreadsheet.sheet.title
 
     this.setState({
+      advancedConfigEnabled: fieldMapping.advancedConfigEnabled,
       selectedSpreadsheet,
       newSpreadsheetCreation: false,
       loading: false
@@ -716,26 +719,26 @@ export default class GoogleSheets extends Component {
       // CONFIGURATION
       display = (
         <>
+          <Renderer
+            className="advanced-configuration-toggle"
+            theme="gleam"
+            handleFieldChange={this.handleAdvancedConfigEnabledChange}
+            form={{
+              props: {
+                elements: [
+                  {
+                    id: 1,
+                    type: 'Checkbox',
+                    options: ['Advanced Configuration'],
+                    toggle: true,
+                    value: this.state.advancedConfigEnabled
+                  }
+                ]
+              }
+            }}
+          />
           <div className="integration-configuration">
             <div className="integration-inputs">
-              <Renderer
-                className="advanced-configuration-toggle"
-                theme="gleam"
-                handleFieldChange={this.handleAdvancedConfigEnabledChange}
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 1,
-                        type: 'Checkbox',
-                        options: ['Advanced Configuration'],
-                        toggle: true,
-                        value: this.state.advancedConfigEnabled
-                      }
-                    ]
-                  }
-                }}
-              />
               <div className="integration-input folderName">
                 <span
                   className="new-folder-badge"
@@ -848,7 +851,9 @@ export default class GoogleSheets extends Component {
                 </div>
               ) : (
                 <div className="spreadsheet-preview">
-                  Advanced Settings
+                  <span className="advanced-mapping-label">
+                    Advanced mapping
+                  </span>
                   <div className="advanced-settings">
                     <div
                       className="table-wrapper"
@@ -864,7 +869,7 @@ export default class GoogleSheets extends Component {
                       <table>
                         <thead>
                           <tr className="table-head-row">
-                            <th className="unstyled-cell"></th>
+                            <th className="legendCell"></th>
                             <th>A</th>
                             <th>B</th>
                             <th>C</th>
@@ -893,7 +898,7 @@ export default class GoogleSheets extends Component {
                             <th>Z</th>
                           </tr>
                           <tr className="table-reference-row">
-                            <th>REFERENCE</th>
+                            <th className="legendCell">REFERENCE</th>
                             {selectedSpreadsheet.chosenSheet === 'newSheet'
                               ? this.state.inputElements.all.map(
                                   (elem, index) => {
@@ -919,7 +924,7 @@ export default class GoogleSheets extends Component {
                         </thead>
                         <tbody>
                           <tr className="table-values-row">
-                            <td>VALUES</td>
+                            <td className="legendCell">VALUE</td>
                             {this.state.inputElements.all.map((elem, index) => {
                               return (
                                 <td>
