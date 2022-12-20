@@ -67,7 +67,7 @@ const { googleDriveApi } = require(path.resolve(
 
 const { googleSheetsApi } = require(path.resolve(
   'integrations',
-  'googleSheetsApi.js'
+  'googlesheetsapi.js'
 ))
 
 app.use(function (req, res, next) {
