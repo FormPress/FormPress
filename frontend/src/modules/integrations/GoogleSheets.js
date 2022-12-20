@@ -615,6 +615,8 @@ export default class GoogleSheets extends Component {
         if (!inputElements.chosen.includes(index)) {
           return elem.label
         }
+
+        return null
       })
 
       advancedConfigElements.unshift('Choose element value')
@@ -859,7 +861,7 @@ export default class GoogleSheets extends Component {
                       className="table-wrapper"
                       onWheel={(e) => {
                         const thisElem = e.currentTarget
-                        if (e.deltaY == 0) return
+                        if (e.deltaY === 0) return
                         e.preventDefault()
                         thisElem.scrollTo({
                           left: thisElem.scrollLeft + e.deltaY
@@ -927,7 +929,7 @@ export default class GoogleSheets extends Component {
                             <td className="legendCell">VALUE</td>
                             {this.state.inputElements.all.map((elem, index) => {
                               return (
-                                <td>
+                                <td key={index}>
                                   <select
                                     className="advanced-config-values"
                                     defaultValue={''}>

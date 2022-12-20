@@ -1332,7 +1332,7 @@ export default class Builder extends Component {
                         <a
                           href="https://formpress.org/pricing"
                           target="_blank"
-                          rel="noreferrer"
+                          rel="noopener noreferrer"
                           className="upgrade_button">
                           UPGRADE
                         </a>
@@ -1605,7 +1605,7 @@ export default class Builder extends Component {
               <a
                 href="https://formpress.org/pricing"
                 target="_blank"
-                rel="noreferrer">
+                rel="noopener noreferrer">
                 Upgrade your plan.
               </a>
             </div>

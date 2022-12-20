@@ -78,7 +78,7 @@ export default class Usages extends Component {
             <a
               href="https://formpress.org/pricing"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="nav-pricing">
               Upgrade your plan!
             </a>
