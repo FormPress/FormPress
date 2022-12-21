@@ -1383,4 +1383,73 @@ module.exports = (app) => {
       }
     }
   )
+
+  app.get(
+    '/api/user/:user_id/get/settings',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const result = await db.query(
+        `SELECT * FROM \`user_settings\` WHERE user_id = ?`,
+        [user_id]
+      )
+      if (result.length > 0) {
+        return res.json(result)
+      } else {
+        return res.json([false])
+      }
+    }
+  )
+
+  app.post(
+    '/api/user/:user_id/update/settings',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const userSettings = req.body.userSettings
+
+      const reportResult = []
+
+      for (let i = 0; i < userSettings.length; i++) {
+        const key = userSettings[i].key
+        const value = JSON.stringify(userSettings[i].value)
+
+        const result = await db.query(
+          `SELECT * FROM \`user_settings\` WHERE user_id = ? AND \`key\` = ?`,
+          [user_id, key]
+        )
+
+        if (result.length > 0) {
+          const dbQuery = await db.query(
+            `UPDATE \`user_settings\` SET \`value\` = ? WHERE user_id = ? AND \`key\` = ?`,
+            [value, user_id, key]
+          )
+          reportResult.push(dbQuery)
+        } else {
+          const dbQuery = await db.query(
+            `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`) VALUES (?, ?, ?)`,
+            [user_id, key, value]
+          )
+          reportResult.push(dbQuery)
+        }
+      }
+
+      const success = reportResult.every((result) => {
+        return result.affectedRows === 1 && result.warningCount === 0
+      })
+
+      const response = {
+        message: success
+          ? 'Settings updated successfully.'
+          : 'There was an error updating settings, one or more settings were not updated.',
+        success
+      }
+
+      return res.json(response)
+    }
+  )
 }
