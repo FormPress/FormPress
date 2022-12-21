@@ -1,0 +1,27 @@
+.formBlock-wrapper {
+  padding: 0.3rem;
+}
+
+.formBlock-wrapper > .formBlock-form {
+  padding: 0.3rem;
+}
+
+.formBlock-wrapper > .formBlock-header {
+  font-weight: bolder;
+  color: #777676;
+  font-family: 'Montserrat';
+  text-transform: uppercase;
+}
+
+.formBlock-wrapper > .formBlock-form label {
+  font-size: 12pt;
+}
+
+.preferences-wrapper .task-feedback {
+  padding: 0.3rem;
+  color: #2e7d32;
+}
+
+.preferences-wrapper .task-feedback.error {
+  color: #c62828 !important;
+}

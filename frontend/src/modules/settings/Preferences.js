@@ -1,0 +1,167 @@
+import React, { Component } from 'react'
+import './Preferences.css'
+import Renderer from '../Renderer'
+import { api } from '../../helper'
+import { faCheck, faCross } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+let userSettingsForms
+try {
+  userSettingsForms = JSON.parse(process.env.REACT_APP_USERSETTINGS)
+} catch (e) {
+  userSettingsForms = []
+}
+
+class Preferences extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      userSettingsForms: userSettingsForms,
+      taskFeedback: {}
+    }
+
+    this.handleSubmitChanges = this.handleSubmitChanges.bind(this)
+  }
+
+  static componentName = 'preferences'
+  static path = '/settings/preferences'
+  static menuText = 'Preferences'
+
+  async componentDidMount() {
+    const { user_id } = this.props.generalContext.auth
+
+    await api({
+      resource: `/api/user/${user_id}/get/settings`,
+      method: 'get'
+    }).then((res) => {
+      // fill the forms with the user's settings
+      const { userSettingsForms } = this.state
+      const userSettings = res.data
+
+      if (userSettings.length === 0) {
+        return
+      }
+
+      const updated = userSettingsForms.map((form) => {
+        const elements = form.props.elements
+
+        const elemsUpdatedWithUserSettings = elements.map((elem) => {
+          const userSetting = userSettings.find(
+            (setting) => setting.key === elem.id
+          )
+          if (userSetting) {
+            if (elem.type === 'Checkbox') {
+              if (userSetting.value === 'true') {
+                elem.defaultChecked = true
+              } else if (userSetting.value === 'false') {
+                elem.defaultChecked = false
+              } else {
+                elem.defaultChecked = userSetting.value
+              }
+            }
+
+            // TODO: handle other types of elements
+          }
+          return elem
+        })
+
+        form.props.elements = elemsUpdatedWithUserSettings
+
+        return form
+      })
+
+      this.setState({ userSettingsForms: updated })
+    })
+  }
+
+  async handleSubmitChanges(e) {
+    e.preventDefault()
+
+    this.setState({ taskFeedback: {} })
+
+    const { user_id } = this.props.generalContext.auth
+
+    const elements = this.state.userSettingsForms.reduce((acc, form) => {
+      return acc.concat(form.props.elements)
+    }, [])
+
+    const formData = new FormData(e.target)
+
+    const userSettings = elements.map((elem) => {
+      if (elem.type === 'Checkbox') {
+        return {
+          key: elem.id,
+          value: formData.get(`q_${elem.id}`) ? true : false
+        }
+      }
+
+      // TODO: handle other types of elements
+      return null
+    })
+
+    const request = await api({
+      resource: `/api/user/${user_id}/update/settings`,
+      method: 'post',
+      body: { userSettings: userSettings }
+    })
+
+    this.setState({
+      taskFeedback: request.data
+    })
+  }
+
+  render() {
+    const { userSettingsForms, taskFeedback } = this.state
+
+    return (
+      <div className="preferences-wrapper">
+        <div className="settings_header">Preferences</div>
+        <form onSubmit={this.handleSubmitChanges}>
+          {userSettingsForms.map((form, index) => {
+            const singleFormBlock = (
+              <div key={index} id={form.title} className="formBlock-wrapper">
+                <div className="formBlock-header">{form.title}</div>
+                <Renderer
+                  theme="infernal"
+                  className="formBlock-form"
+                  form={form}
+                />
+              </div>
+            )
+            return singleFormBlock
+          })}
+          {userSettingsForms.length > 0 ? (
+            <Renderer
+              theme="infernal"
+              form={{
+                props: {
+                  elements: [
+                    {
+                      id: 3,
+                      type: 'Button',
+                      buttonText: 'Save Changes'
+                    }
+                  ]
+                }
+              }}
+            />
+          ) : null}
+          <div
+            className={
+              'task-feedback ' + (taskFeedback.success === false ? 'error' : '')
+            }>
+            {taskFeedback.message}
+            {taskFeedback.message && taskFeedback.success === true ? (
+              <FontAwesomeIcon icon={faCheck} />
+            ) : taskFeedback.message && taskFeedback.success === false ? (
+              <FontAwesomeIcon icon={faCross} />
+            ) : null}
+          </div>
+        </form>
+      </div>
+    )
+  }
+}
+
+export default userSettingsForms.length > 0 ? Preferences : null
