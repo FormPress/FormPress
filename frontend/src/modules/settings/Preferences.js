@@ -5,19 +5,30 @@ import { api } from '../../helper'
 import { faCheck, faCross } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-let userSettingsForms
-try {
-  userSettingsForms = JSON.parse(process.env.REACT_APP_USERSETTINGS)
-} catch (e) {
-  userSettingsForms = []
-}
-
-class Preferences extends Component {
+export default class Preferences extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      userSettingsForms: userSettingsForms,
+      userSettingsForms: [
+        {
+          title: 'Notifications',
+          props: {
+            elements: [
+              {
+                id: 'allowMarketingMails',
+                type: 'Checkbox',
+                options: ['Receive marketing emails']
+              },
+              {
+                id: 'allowProductUpdates',
+                type: 'Checkbox',
+                options: ['Receive product updates']
+              }
+            ]
+          }
+        }
+      ],
       taskFeedback: {}
     }
 
@@ -163,5 +174,3 @@ class Preferences extends Component {
     )
   }
 }
-
-export default userSettingsForms.length > 0 ? Preferences : null

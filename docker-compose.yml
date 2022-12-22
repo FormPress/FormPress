@@ -66,7 +66,6 @@ services:
       - REACT_APP_FRONTEND=http://localhost:3000
       - REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID=${GOOGLE_CREDENTIALS_CLIENT_ID}
       - REACT_APP_HOMEURL=${HOMEURL}
-      - REACT_APP_USERSETTINGS=${USERSETTINGS}
     ports:
       - '3000:3000'
     stdin_open: true
