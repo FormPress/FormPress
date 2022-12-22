@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
 version=$(git log --pretty=format:'%h' -n 1)
 PROJECT="formpress"
 CLUSTER=$1
