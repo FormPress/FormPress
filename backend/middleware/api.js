@@ -1398,7 +1398,7 @@ module.exports = (app) => {
       if (result.length > 0) {
         return res.json(result)
       } else {
-        return res.json([false])
+        return res.json([])
       }
     }
   )

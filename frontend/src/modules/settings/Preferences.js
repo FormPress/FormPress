@@ -48,10 +48,24 @@ export default class Preferences extends Component {
     }).then((res) => {
       // fill the forms with the user's settings
       const { userSettingsForms } = this.state
+
+      if (res.success === false) {
+        return
+      }
+
       const userSettings = res.data
 
       if (userSettings.length === 0) {
-        return
+        // push the default settings to user settings
+        const defaultSettings = [
+          {
+            key: 'notification.marketing',
+            value: true
+          },
+          { key: 'notification.product_update', value: true }
+        ]
+
+        userSettings.push(...defaultSettings)
       }
 
       const updated = userSettingsForms.map((form) => {
