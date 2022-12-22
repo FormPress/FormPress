@@ -16,12 +16,12 @@ export default class Preferences extends Component {
           props: {
             elements: [
               {
-                id: 'allowMarketingMails',
+                id: 'notification.marketing',
                 type: 'Checkbox',
                 options: ['Receive marketing emails']
               },
               {
-                id: 'allowProductUpdates',
+                id: 'notification.product_update',
                 type: 'Checkbox',
                 options: ['Receive product updates']
               }
