@@ -247,7 +247,7 @@ module.exports = {
     {
       method: 'post',
       path: '/api/user/:user_id/update/settings',
-      protected: true,
+      protected: false,
       exampleRequestPath: '/api/user/1/update/settings'
     }
   ]
