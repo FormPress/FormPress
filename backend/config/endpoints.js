@@ -237,6 +237,18 @@ module.exports = {
         '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
       protected: false,
       exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
+    },
+    {
+      method: 'get',
+      path: '/api/user/:user_id/get/settings',
+      protected: true,
+      exampleRequestPath: '/api/user/1/get/settings'
+    },
+    {
+      method: 'post',
+      path: '/api/user/:user_id/update/settings',
+      protected: false,
+      exampleRequestPath: '/api/user/1/update/settings'
     }
   ]
 }

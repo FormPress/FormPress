@@ -33,6 +33,10 @@ export default class Settings extends Component {
 
     for (const file of data) {
       await import('../settings/' + file).then((module) => {
+        if (module.default === null) {
+          return
+        }
+
         navLinks.push(
           <NavLink
             key={module.default.menuText}
