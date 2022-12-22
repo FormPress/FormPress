@@ -1425,13 +1425,14 @@ module.exports = (app) => {
 
         if (result.length > 0) {
           const dbQuery = await db.query(
-            `UPDATE \`user_settings\` SET \`value\` = ? WHERE user_id = ? AND \`key\` = ?`,
+            `UPDATE \`user_settings\` SET \`value\` = ?, \`updated_at\` = NOW() WHERE user_id = ? AND \`key\` = ?`,
             [value, user_id, key]
           )
+
           reportResult.push(dbQuery)
         } else {
           const dbQuery = await db.query(
-            `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`) VALUES (?, ?, ?)`,
+            `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`, \`created_at\`) VALUES (?, ?, ?, NOW())`,
             [user_id, key, value]
           )
           reportResult.push(dbQuery)
