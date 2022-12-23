@@ -243,6 +243,18 @@ module.exports = {
       path: '/api/users/:user_id/single-sign-on',
       protected: false,
       exampleRequestPath: '/api/users/1/single-sign-on'
+    },
+    {
+      method: 'get',
+      path: '/api/user/:user_id/get/settings',
+      protected: true,
+      exampleRequestPath: '/api/user/1/get/settings'
+    },
+    {
+      method: 'post',
+      path: '/api/user/:user_id/update/settings',
+      protected: false,
+      exampleRequestPath: '/api/user/1/update/settings'
     }
   ]
 }
