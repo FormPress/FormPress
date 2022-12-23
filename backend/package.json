@@ -6,7 +6,7 @@
   "scripts": {
     "test": " mocha ./test/**/*.spec.js",
     "migrate": "node script/migrate.js",
-    "start-dev": "sleep 5 && yarn migrate && nodemon app.js --ignore script/transformed --ignore /frontend",
+    "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed --ignore /frontend",
     "start": "yarn migrate && node app.js"
   },
   "author": "kemal@formpress.org",
@@ -33,7 +33,7 @@
     "express-fileupload": "^1.2.0",
     "googleapis": "^39.2.0",
     "ignore-styles": "5.0.1",
-    "iyzipay": "^2.0.26",
+    "iyzipay": "^2.0.48",
     "jsonwebtoken": "8.5.1",
     "moment": "^2.29.3",
     "nodemon": "^2.0.19",

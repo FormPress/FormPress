@@ -10,7 +10,6 @@ export default class Settings extends Component {
     this.state = {
       navLinks: [],
       routes: [],
-      planNames: ['silver', 'gold', 'diamond'],
       key: '-'
     }
   }
@@ -34,6 +33,10 @@ export default class Settings extends Component {
 
     for (const file of data) {
       await import('../settings/' + file).then((module) => {
+        if (module.default === null) {
+          return
+        }
+
         navLinks.push(
           <NavLink
             key={module.default.menuText}
@@ -52,7 +55,7 @@ export default class Settings extends Component {
           />
         )
         if (module.default.menuText === 'Subscriptions and Payments') {
-          this.state.planNames.forEach((item) => {
+          module.default.planNames.forEach((item) => {
             routes.push(
               <PrivateRoute
                 exact

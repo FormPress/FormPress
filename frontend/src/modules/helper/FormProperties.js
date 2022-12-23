@@ -68,7 +68,7 @@ export default class FormProperties extends Component {
       this.props.setAutoPageBreak('active', e.target.checked)
     }
 
-    if (elem.type === 'Number') {
+    if (elem.type === 'NumberE') {
       if (!isNaN(e.target.value)) {
         this.props.setAutoPageBreak('elemPerPage', e.target.value)
       }
@@ -252,7 +252,7 @@ export default class FormProperties extends Component {
                 },
                 {
                   id: 6,
-                  type: 'Number',
+                  type: 'NumberE',
                   label: 'Questions Per Page',
                   value: autoPageBreak.elemPerPage
                 },

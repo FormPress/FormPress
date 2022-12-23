@@ -3,14 +3,14 @@ import React, { Component } from 'react'
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
 
-import './Number.css'
+import './NumberE.css'
 
-export default class Number extends Component {
+export default class NumberE extends Component {
   static weight = 1
 
   static defaultConfig = {
     id: 0,
-    type: 'Number',
+    type: 'NumberE',
     label: 'Number'
   }
 

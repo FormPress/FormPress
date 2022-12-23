@@ -1635,7 +1635,13 @@ export default class Builder extends Component {
               </div>
             </div>
             <div id="branding-popover" className="popoverText">
-              Want to remove branding? <a href="/pricing">Upgrade your plan.</a>
+              Want to remove branding?{' '}
+              <a
+                href="https://formpress.org/pricing"
+                target="_blank"
+                rel="noreferrer">
+                Upgrade your plan.
+              </a>
             </div>
           </span>
         ) : null}

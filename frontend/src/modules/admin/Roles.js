@@ -98,7 +98,7 @@ export default class Roles extends Component {
       if (this.state.selectedRoleId !== 2) {
         this.setState({ selectedRoleName: e.target.value })
       }
-    } else if (elem.type === 'Number') {
+    } else if (elem.type === 'NumberE') {
       if (elem.label === 'Form Limit') {
         if (!isNaN(parseInt(e.target.value))) {
           newPermissions.formLimit = e.target.value
@@ -148,7 +148,7 @@ export default class Roles extends Component {
       if (key === 'formLimit') {
         return {
           id: id,
-          type: 'Number',
+          type: 'NumberE',
           label: 'Form Limit',
           value: this.state.permissions.formLimit,
           sublabelText: '(0 for unlimited)',
@@ -158,7 +158,7 @@ export default class Roles extends Component {
       } else if (key === 'submissionLimit') {
         return {
           id: id,
-          type: 'Number',
+          type: 'NumberE',
           label: 'Submission Limit (Monthly)',
           value: this.state.permissions.submissionLimit,
           sublabelText: '(0 for unlimited)',
@@ -168,7 +168,7 @@ export default class Roles extends Component {
       } else if (key === 'uploadLimit') {
         return {
           id: id,
-          type: 'Number',
+          type: 'NumberE',
           label: 'Upload Limit (in MB)',
           value: this.state.permissions.uploadLimit,
           sublabelText: '(0 for unlimited)',

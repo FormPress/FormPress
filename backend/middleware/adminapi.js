@@ -9,8 +9,6 @@ const { mustHaveValidToken, mustBeAdmin } = require(path.resolve(
   'authorization'
 ))
 
-const { storage } = require(path.resolve('helper'))
-
 module.exports = (app) => {
   app.get(
     '/api/admin/roles',
@@ -380,87 +378,6 @@ module.exports = (app) => {
           } else {
             return res.status(500).json({ message: 'error' })
           }
-        }
-      }
-    }
-  )
-
-  app.post(
-    '/api/admin/deleteUser/:user_id',
-    mustHaveValidToken,
-    mustBeAdmin,
-    async (req, res) => {
-      const { user_id } = req.params
-      const db = await getPool()
-
-      if (
-        typeof user_id !== 'undefined' &&
-        user_id !== null &&
-        user_id !== '0'
-      ) {
-        let result = await db.query(
-          `SELECT * FROM \`user\` AS u, \`user_role\` AS r WHERE \`user_id\` = ? AND u.\`id\` = r.\`user_id\` AND r.\`role_id\` != 1`,
-          [user_id]
-        )
-
-        if (result !== false) {
-          await db.query(
-            `SELECT * FROM \`user\` AS u, \`user_role\` AS r WHERE \`user_id\` = ? AND u.\`id\` = r.\`user_id\` AND r.\`role_id\` != 1`,
-            [user_id]
-          )
-          await db.query(`DELETE FROM whitelist WHERE user_id = ?`, [user_id])
-          await db.query(`DELETE FROM admins WHERE email = ?`, [result.email])
-          await db.query(`DELETE FROM api_key WHERE user_id = ?`, [user_id])
-          await db.query(`DELETE FROM submission_usage WHERE user_id = ?`, [
-            user_id
-          ])
-          await db.query(`DELETE FROM form_published WHERE user_id = ?`, [
-            user_id
-          ])
-
-          let formIds = await db.query(
-            `SELECT id FROM form WHERE user_id = ?`,
-            [user_id]
-          )
-
-          formIds = formIds.map((e) => e.id).join(',')
-
-          if (formIds !== '[]' && formIds !== '') {
-            let submissionIds = await db.query(
-              `SELECT id FROM submission WHERE form_id IN (${formIds})`
-            )
-            submissionIds = submissionIds.map((e) => e).join(',')
-
-            await db.query(
-              `DELETE FROM submission WHERE form_id IN (${formIds})`
-            )
-            if (formIds !== '[]' && submissionIds !== '') {
-              await db.query(
-                `DELETE FROM entry WHERE form_id IN (${formIds}) AND submission_id IN (${submissionIds})`
-              )
-            }
-          }
-
-          const uploadedNames = await db.query(
-            `SELECT \`upload_name\` FROM \`storage_usage\` WHERE user_id = ?`,
-            [user_id]
-          )
-
-          if (uploadedNames.length > 0) {
-            uploadedNames.forEach((fileName) => {
-              storage.deleteFile(fileName.upload_name)
-            })
-          }
-
-          await db.query(`DELETE FROM storage_usage WHERE user_id = ?`, [
-            user_id
-          ])
-
-          await db.query(`DELETE FROM form WHERE user_id = ?`, [user_id])
-
-          await db.query(`DELETE FROM user WHERE id = ?`, [user_id])
-
-          res.json({ success: true })
         }
       }
     }
