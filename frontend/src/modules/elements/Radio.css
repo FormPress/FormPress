@@ -61,3 +61,8 @@
   margin-top: unset !important;
   font-size: 11pt;
 }
+
+.answerExplanationLabel {
+  transform: translate(12px, 21px);
+  max-width: 580px !important;
+}

@@ -94,65 +94,63 @@ export default class TextArea extends Component {
             required={config.required}
           />
         </div>
-        <div>
-          <div className="fl input">
-            {config.id === 'answerExplanation' ? (
-              <div>
-                <textarea
-                  id={`q_${config.id}`}
-                  name={`q_${config.id}`}
-                  className="hidden"
-                  {...inputProps}></textarea>
-                <Editor
-                  apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
-                  value={config.value}
-                  init={{
-                    plugins: 'link image code',
-                    menubar: 'edit insert format',
-                    toolbar:
-                      'undo redo | formatselect | ' +
-                      'bold italic forecolor | image ',
-                    file_picker_types: 'image',
-                    automatic_uploads: true,
-                    image_dimensions: true,
-                    images_file_types: 'jpg,svg,png,jpeg',
-                    images_upload_handler: this.props.rteUploadHandler,
-                    resize: false,
-                    paste_block_drop: true,
-                    paste_data_images: false
-                  }}
-                  onEditorChange={(newValue) => inputProps.onChange(newValue)}
-                />
-              </div>
-            ) : (
+        <div className="fl input">
+          {config.id === 'answerExplanation' ? (
+            <>
               <textarea
                 id={`q_${config.id}`}
                 name={`q_${config.id}`}
+                className="hidden"
                 {...inputProps}></textarea>
-            )}
-          </div>
-          {mode === 'viewer' ? (
-            ''
-          ) : (
-            <div className="clearfix">
-              <EditableLabel
-                className="sublabel"
-                dataPlaceholder="Click to edit sublabel"
-                mode={mode}
-                labelKey={`sub_${config.id}`}
-                handleLabelChange={this.props.handleLabelChange}
-                value={
-                  typeof config.sublabelText !== 'undefined' &&
-                  config.sublabelText !== ''
-                    ? config.sublabelText
-                    : ''
-                }
+              <Editor
+                apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+                value={config.value}
+                init={{
+                  plugins: 'link image code',
+                  menubar: 'edit insert format',
+                  toolbar:
+                    'undo redo | formatselect | ' +
+                    'bold italic forecolor | image ',
+                  file_picker_types: 'image',
+                  automatic_uploads: true,
+                  image_dimensions: true,
+                  images_file_types: 'jpg,svg,png,jpeg',
+                  images_upload_handler: this.props.rteUploadHandler,
+                  resize: false,
+                  paste_block_drop: true,
+                  paste_data_images: false
+                }}
+                onEditorChange={(newValue) => inputProps.onChange(newValue)}
               />
-            </div>
+            </>
+          ) : (
+            <textarea
+              id={`q_${config.id}`}
+              name={`q_${config.id}`}
+              {...inputProps}></textarea>
           )}
-          <div className="fl metadata">
-            <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
+        {mode === 'viewer' ? (
+          ''
+        ) : (
+          <div className="clearfix">
+            <EditableLabel
+              className="sublabel"
+              dataPlaceholder="Click to edit sublabel"
+              mode={mode}
+              labelKey={`sub_${config.id}`}
+              handleLabelChange={this.props.handleLabelChange}
+              value={
+                typeof config.sublabelText !== 'undefined' &&
+                config.sublabelText !== ''
+                  ? config.sublabelText
+                  : ''
+              }
+            />
           </div>
+        )}
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>
     )

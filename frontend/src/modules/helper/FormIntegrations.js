@@ -37,7 +37,7 @@ export default class FormIntegrations extends Component {
     return (
       <>
         <div className="integrationsMessage">
-          Integrate Your Form to Other Applications
+          Integrate your form with other services
         </div>
         <div className="integrationsWrapper">
           {integrationList.map((item, key) => (
