@@ -155,13 +155,12 @@ export default class Checkbox extends Component {
     const { config, mode } = this.props
     const inputProps = {}
 
-    const valueType =
-      typeof config.value !== 'undefined' && Array.isArray(config.value)
-        ? 'array'
-        : typeof config.value
-
     if (typeof config.value !== 'undefined' && !Array.isArray(config.value)) {
       inputProps.checked = config.value === true
+    }
+
+    if (config.defaultChecked !== undefined) {
+      inputProps.defaultChecked = config.defaultChecked
     }
 
     if (typeof this.props.onChange !== 'undefined') {
@@ -223,10 +222,18 @@ export default class Checkbox extends Component {
             config.toggle === true ? 'checkboxCover toggle' : 'checkboxCover'
           }>
           {options.map((item, key) => {
-            const keySpecificConfig = {}
-            if (valueType === 'array') {
-              keySpecificConfig.checked = config.value.includes(key)
+            const keySpecificProps = {}
+
+            if (inputProps.defaultChecked !== undefined) {
+              if (typeof inputProps.defaultChecked === 'boolean') {
+                keySpecificProps.defaultChecked = inputProps.defaultChecked
+              } else {
+                keySpecificProps.defaultChecked = inputProps.defaultChecked.includes(
+                  key
+                )
+              }
             }
+
             return (
               <div className="fl input" key={key}>
                 <input
@@ -234,7 +241,7 @@ export default class Checkbox extends Component {
                   id={`q_${config.id}_${key}`}
                   name={`q_${config.id}`}
                   value={key}
-                  {...keySpecificConfig}
+                  {...keySpecificProps}
                   {...inputProps}
                 />
                 {config.toggle === true ? <span className="slider"></span> : ''}
