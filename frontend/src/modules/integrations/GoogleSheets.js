@@ -548,7 +548,7 @@ export default class GoogleSheets extends Component {
     let chosenMetadata = []
     let chosenInputElements = []
 
-    fieldMapping.valuesRow.forEach((e, i) => {
+    fieldMapping.valuesRow.forEach((e) => {
       if (typeof e === 'string') {
         const foundMetadata = this.state.metadata.all.find((m) => m.value === e)
         if (foundMetadata) {
