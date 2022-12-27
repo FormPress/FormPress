@@ -72,6 +72,7 @@ exports.list = async ({ user_id }) => {
     `
         SELECT
           id,
+          uuid,
           user_id,
           title,
           props,
@@ -108,4 +109,20 @@ exports.list = async ({ user_id }) => {
     return false
   }
   return result.map(hydrateForm)
+}
+
+exports.getFormIdFromUUID = async (uuid) => {
+  const db = await getPool()
+  const result = await db.query(
+    `
+      SELECT * FROM \`form\` WHERE uuid = ? AND deleted_at IS NULL LIMIT 1
+    `,
+    [uuid]
+  )
+
+  if (result.length === 0) {
+    return false
+  }
+
+  return result[0].id
 }
