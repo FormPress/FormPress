@@ -165,3 +165,7 @@ th {
 .spreadsheet-preview {
   margin: 15px 0 15px 0;
 }
+
+.cannot-be-empty input {
+  border: 2px solid red !important;
+}

@@ -35,6 +35,16 @@ export default class GoogleSheets extends Component {
       loading: false,
       advancedConfig: {},
       advancedConfigEnabled: false,
+      metadata: {
+        all: [
+          {
+            display: 'ID',
+            value: 'id'
+          },
+          { display: 'Submission Date', value: 'submissionDate' }
+        ],
+        chosen: [0, 1]
+      },
       selectedSpreadsheet: {
         chosenSheet: 'newSheet',
         mappings: []
@@ -66,6 +76,7 @@ export default class GoogleSheets extends Component {
       this
     )
     this.handleSheetSelectorChange = this.handleSheetSelectorChange.bind(this)
+    this.handleChooseMetadata = this.handleChooseMetadata.bind(this)
   }
 
   componentDidMount() {
@@ -231,7 +242,7 @@ export default class GoogleSheets extends Component {
       targetSpreadsheet: {
         title: this.props.form.title,
         id: '',
-        sheet: { title: '' }
+        sheet: { title: 'Sheet 1' }
       }
     }
 
@@ -321,6 +332,11 @@ export default class GoogleSheets extends Component {
 
     let newSheetCreation = selectedSpreadsheet.chosenSheet === 'newSheet'
 
+    if (newSheetCreation !== true) {
+      tempIntegrationObject.targetSpreadsheet.sheet.title =
+        selectedSpreadsheet.chosenSheet
+    }
+
     let token
 
     let integrationObject = _.cloneDeep(tempIntegrationObject)
@@ -331,9 +347,7 @@ export default class GoogleSheets extends Component {
       const referenceRowInputsHTMLNodes = document.querySelectorAll(
         '.advanced-config-reference'
       )
-      const referenceRowInputs = Array.from(referenceRowInputsHTMLNodes).map(
-        (v) => v.value || ''
-      )
+
       const valuesRowInputsHTMLNodes = document.querySelectorAll(
         '.advanced-config-values'
       )
@@ -341,24 +355,50 @@ export default class GoogleSheets extends Component {
         (v) => v.value || ''
       )
 
-      const valuesRowElements = valuesRowInputs.map((v) => {
+      let idColumnIndex
+
+      const valuesRowElements = valuesRowInputs.map((v, i) => {
         if (v === 'submissionDate') {
+          return v
+        }
+
+        if (v === 'id') {
+          idColumnIndex = i
           return v
         }
 
         return this.state.inputElements.all.find((e) => e.label === v) || ''
       })
 
+      const referenceRowInputs = Array.from(referenceRowInputsHTMLNodes).map(
+        (v, index) => {
+          if (idColumnIndex !== undefined && index === idColumnIndex) {
+            let sanitizedValue = v.value.replace(/[^a-zA-Z0-9]/g, '')
+
+            let formula = `=ARRAYFORMULA(IF(sequence(match(2,1/(B:B<>""),1),1,0,1) = 0, "${sanitizedValue}", sequence(match(2,1/(B:B<>""),1),1,0,1)))`
+            return formula
+          }
+
+          return v.value.replace(/[^a-zA-Z0-9]/g, '') || ''
+        }
+      )
       fieldMapping = {
         advancedConfigEnabled: true,
         referenceRow: referenceRowInputs,
         valuesRow: valuesRowElements
       }
     } else {
+      const metas = this.state.metadata.chosen.map((chosenIndex) => {
+        return this.state.metadata.all[chosenIndex].value
+      })
+      const inputElems = this.state.inputElements.chosen.map((elem, index) => {
+        return this.state.inputElements.all[index]
+      })
+
+      const merged = metas.concat(inputElems)
+
       fieldMapping = {
-        valuesRow: this.state.inputElements.chosen.map((elem, index) => {
-          return this.state.inputElements.all[index]
-        })
+        valuesRow: merged
       }
     }
 
@@ -476,7 +516,12 @@ export default class GoogleSheets extends Component {
   }
 
   async handleEditClick() {
-    const { tempIntegrationObject, selectedSpreadsheet } = this.state
+    const {
+      tempIntegrationObject,
+      selectedSpreadsheet,
+      inputElements,
+      metadata
+    } = this.state
     const spreadsheetId = tempIntegrationObject.targetSpreadsheet.id
     const { targetSpreadsheet } = tempIntegrationObject
 
@@ -500,12 +545,38 @@ export default class GoogleSheets extends Component {
       return { ...e, display: e.title, value: e.title }
     })
 
+    let chosenMetadata = []
+    let chosenInputElements = []
+
+    fieldMapping.valuesRow.forEach((e, i) => {
+      if (typeof e === 'string') {
+        const foundMetadata = this.state.metadata.all.find((m) => m.value === e)
+        if (foundMetadata) {
+          chosenMetadata.push(this.state.metadata.all.indexOf(foundMetadata))
+        }
+      } else {
+        const foundInputElement = this.state.inputElements.all.find(
+          (m) => m.id === e.id
+        )
+        if (foundInputElement) {
+          chosenInputElements.push(
+            this.state.inputElements.all.indexOf(foundInputElement)
+          )
+        }
+      }
+    })
+
+    inputElements.chosen = chosenInputElements
+    metadata.chosen = chosenMetadata
+
     selectedSpreadsheet.mappings = mappings
     selectedSpreadsheet.chosenSheet = targetSpreadsheet.sheet.title
 
     this.setState({
       advancedConfigEnabled: fieldMapping.advancedConfigEnabled,
       selectedSpreadsheet,
+      inputElements,
+      metadata,
       newSpreadsheetCreation: false,
       loading: false
     })
@@ -564,6 +635,33 @@ export default class GoogleSheets extends Component {
     this.setState({ inputElements })
   }
 
+  handleChooseMetadata(e, elem) {
+    const { metadata } = this.state
+
+    if (e.id === 1) {
+      // this is the 'Select All' option
+      if (e.value === false) {
+        metadata.chosen = metadata.all.map((elem, index) => index)
+        this.setState({ metadata })
+        return
+      } else {
+        metadata.chosen = []
+        this.setState({ metadata })
+        return
+      }
+    }
+
+    const clickedIndex = parseInt(elem.target.value)
+
+    if (metadata.chosen.includes(clickedIndex)) {
+      metadata.chosen.splice(metadata.chosen.indexOf(clickedIndex), 1)
+    } else {
+      metadata.chosen.push(clickedIndex)
+    }
+
+    this.setState({ metadata })
+  }
+
   handleAdvancedConfigEnabledChange() {
     this.setState({
       advancedConfigEnabled: !this.state.advancedConfigEnabled
@@ -571,17 +669,44 @@ export default class GoogleSheets extends Component {
   }
 
   handleSheetSelectorChange(e, elem) {
-    const { tempIntegrationObject, selectedSpreadsheet } = this.state
+    const { selectedSpreadsheet, tempIntegrationObject } = this.state
+
+    this.setState({ softLoading: true })
 
     if (elem.target.value === 'newSheet') {
-      tempIntegrationObject.targetSpreadsheet.sheet.title = ''
-    } else {
-      tempIntegrationObject.targetSpreadsheet.sheet.title = elem.target.value
+      tempIntegrationObject.targetSpreadsheet.sheet.title = 'New Sheet'
     }
 
     selectedSpreadsheet.chosenSheet = elem.target.value
 
-    this.setState({ selectedSpreadsheet, tempIntegrationObject })
+    this.setState({
+      selectedSpreadsheet,
+      tempIntegrationObject
+    })
+
+    // illusion of loading
+    setTimeout(() => {
+      this.setState({ softLoading: false })
+    }, 500)
+  }
+
+  populateDropdownOptions = (defaultValue) => {
+    return (
+      <select className="advanced-config-values" defaultValue={defaultValue}>
+        <option value="">Choose a value</option>
+        <option value="none">None</option>
+
+        <optgroup label="Elements">
+          {this.state.inputElements.all.map((elem, index) => {
+            return <option key={index}>{elem.label}</option>
+          })}
+        </optgroup>
+        <optgroup label="Meta data">
+          <option value={'id'}>ID</option>
+          <option value={'submissionDate'}>Submission Date</option>
+        </optgroup>
+      </select>
+    )
   }
 
   render() {
@@ -607,7 +732,7 @@ export default class GoogleSheets extends Component {
       paused = tempIntegrationObject.paused
     }
 
-    const { inputElements, advancedConfigEnabled } = this.state
+    const { inputElements, advancedConfigEnabled, metadata } = this.state
 
     let advancedConfigElements
     if (advancedConfigEnabled) {
@@ -729,7 +854,7 @@ export default class GoogleSheets extends Component {
               props: {
                 elements: [
                   {
-                    id: 1,
+                    id: 18,
                     type: 'Checkbox',
                     options: ['Advanced Configuration'],
                     toggle: true,
@@ -797,10 +922,14 @@ export default class GoogleSheets extends Component {
               <Renderer
                 handleFieldChange={this.handleSheetNameChange}
                 className={
-                  'file cannot-be-empty' +
+                  'file' +
                   (this.state.selectedSpreadsheet.chosenSheet === 'newSheet'
                     ? ''
-                    : ' dn')
+                    : ' dn') +
+                  (this.state.tempIntegrationObject.targetSpreadsheet.sheet
+                    .title === ''
+                    ? ' cannot-be-empty'
+                    : '')
                 }
                 theme="infernal"
                 form={{
@@ -819,6 +948,32 @@ export default class GoogleSheets extends Component {
               />
               {!this.state.advancedConfigEnabled ? (
                 <div className="string-vars-container">
+                  <div className="string-vars-label">Choose metadata</div>
+                  <Renderer
+                    handleFieldChange={this.handleChooseMetadata}
+                    theme="infernal"
+                    allowInternal={true}
+                    className={'input-elems'}
+                    form={{
+                      props: {
+                        elements: [
+                          {
+                            id: 19,
+                            type: 'Checkbox',
+                            options: ['Select All'],
+                            value:
+                              metadata.chosen.length === metadata.all.length
+                          },
+                          {
+                            id: 20,
+                            type: 'Checkbox',
+                            options: metadata.all.map((meta) => meta.display),
+                            value: metadata.chosen
+                          }
+                        ]
+                      }
+                    }}
+                  />
                   <div className="string-vars-label">Choose elements</div>
                   <Renderer
                     handleFieldChange={this.handleChooseInputElements}
@@ -829,7 +984,7 @@ export default class GoogleSheets extends Component {
                       props: {
                         elements: [
                           {
-                            id: 1,
+                            id: 21,
                             type: 'Checkbox',
                             options: ['Select All'],
                             value:
@@ -837,7 +992,7 @@ export default class GoogleSheets extends Component {
                               inputElements.all.length
                           },
                           {
-                            id: 2,
+                            id: 22,
                             type: 'Checkbox',
                             options: this.state.inputElements.all.map(
                               (elem) => {
@@ -868,97 +1023,114 @@ export default class GoogleSheets extends Component {
                           // behavior: 'smooth'
                         })
                       }}>
-                      <table>
-                        <thead>
-                          <tr className="table-head-row">
-                            <th className="legendCell"></th>
-                            <th>A</th>
-                            <th>B</th>
-                            <th>C</th>
-                            <th>D</th>
-                            <th>E</th>
-                            <th>F</th>
-                            <th>G</th>
-                            <th>H</th>
-                            <th>I</th>
-                            <th>J</th>
-                            <th>K</th>
-                            <th>L</th>
-                            <th>M</th>
-                            <th>N</th>
-                            <th>O</th>
-                            <th>P</th>
-                            <th>Q</th>
-                            <th>R</th>
-                            <th>S</th>
-                            <th>T</th>
-                            <th>U</th>
-                            <th>V</th>
-                            <th>W</th>
-                            <th>X</th>
-                            <th>Y</th>
-                            <th>Z</th>
-                          </tr>
-                          <tr className="table-reference-row">
-                            <th className="legendCell">REFERENCE</th>
-                            {selectedSpreadsheet.chosenSheet === 'newSheet'
-                              ? this.state.inputElements.all.map(
-                                  (elem, index) => {
+                      {this.state.softLoading === true ? (
+                        <div className="advancedMapping-placeholder">
+                          <DotLoader
+                            className="advancedMapping-softload"
+                            color={'#9ee048'}
+                            loading={true}
+                            size={12}
+                          />
+                        </div>
+                      ) : (
+                        <table>
+                          <thead>
+                            <tr className="table-head-row">
+                              <th className="legendCell"></th>
+                              <th>A</th>
+                              <th>B</th>
+                              <th>C</th>
+                              <th>D</th>
+                              <th>E</th>
+                              <th>F</th>
+                              <th>G</th>
+                              <th>H</th>
+                              <th>I</th>
+                              <th>J</th>
+                              <th>K</th>
+                              <th>L</th>
+                              <th>M</th>
+                              <th>N</th>
+                              <th>O</th>
+                              <th>P</th>
+                              <th>Q</th>
+                              <th>R</th>
+                              <th>S</th>
+                              <th>T</th>
+                              <th>U</th>
+                              <th>V</th>
+                              <th>W</th>
+                              <th>X</th>
+                              <th>Y</th>
+                              <th>Z</th>
+                            </tr>
+                            <tr className="table-reference-row">
+                              <th className="legendCell">REFERENCE</th>
+                              {selectedSpreadsheet.chosenSheet === 'newSheet'
+                                ? [...Array(26)].map((e, i) => {
                                     return (
-                                      <th key={index}>
+                                      <th key={i}>
                                         <input
                                           type="text"
                                           className="advanced-config-reference"></input>
                                       </th>
                                     )
-                                  }
-                                )
-                              : selectedSpreadsheet.mappings
-                                  .find(
-                                    (mapping) =>
-                                      mapping.title ===
-                                      selectedSpreadsheet.chosenSheet
-                                  )
-                                  ?.fields.map((mapping, index) => {
-                                    return <th key={index}>{mapping}</th>
-                                  })}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="table-values-row">
-                            <td className="legendCell">VALUE</td>
-                            {this.state.inputElements.all.map((elem, index) => {
-                              return (
-                                <td key={index}>
-                                  <select
-                                    className="advanced-config-values"
-                                    defaultValue={''}>
-                                    <option value="">Choose a value</option>
-                                    <option value="none">None</option>
+                                  })
+                                : selectedSpreadsheet.mappings
+                                    .find(
+                                      (mapping) =>
+                                        mapping.title ===
+                                        selectedSpreadsheet.chosenSheet
+                                    )
+                                    ?.fields.map((mapping, index) => {
+                                      return <th key={index}>{mapping}</th>
+                                    })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="table-values-row">
+                              <td className="legendCell">VALUE</td>
+                              {selectedSpreadsheet.chosenSheet === 'newSheet'
+                                ? [...Array(26)].map((e, i) => {
+                                    return (
+                                      <td key={i}>
+                                        {this.populateDropdownOptions('')}
+                                      </td>
+                                    )
+                                  })
+                                : [...Array(26)].map((e, index) => {
+                                    let foundValue = ''
 
-                                    <optgroup label="Elements">
-                                      {this.state.inputElements.all.map(
-                                        (elem, index) => {
-                                          return (
-                                            <option key={index}>
-                                              {elem.label}
-                                            </option>
-                                          )
-                                        }
-                                      )}
-                                    </optgroup>
-                                    <optgroup label="Meta data">
-                                      <option value={'submissionDate'}>
-                                        Submission Date
-                                      </option>
-                                    </optgroup>
-                                  </select>
-                                </td>
-                              )
-                            })}
-                          </tr>
-                        </tbody>
-                      </table>
+                                    if (
+                                      selectedSpreadsheet.chosenSheet ===
+                                      targetSpreadsheet.sheet.title
+                                    ) {
+                                      const foundMapping =
+                                        tempIntegrationObject.fieldMapping
+                                          .valuesRow[index]
+
+                                      if (foundMapping !== undefined) {
+                                        foundValue =
+                                          typeof foundMapping === 'object'
+                                            ? foundMapping.label
+                                            : foundMapping
+                                      }
+                                    }
+
+                                    // tempIntegrationObject.selectedSpreadsheet
+
+                                    return (
+                                      <td key={index}>
+                                        {this.populateDropdownOptions(
+                                          foundValue
+                                        )}
+                                      </td>
+                                    )
+                                  })}
+                            </tr>
+                          </tbody>
+                        </table>
+                      )}
                     </div>
                   </div>
                 </div>

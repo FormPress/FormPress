@@ -234,6 +234,14 @@ export default class Checkbox extends Component {
               }
             }
 
+            if (config.value !== undefined) {
+              if (typeof config.value === 'boolean') {
+                keySpecificProps.checked = config.value
+              } else {
+                keySpecificProps.checked = config.value.includes(key)
+              }
+            }
+
             return (
               <div className="fl input" key={key}>
                 <input

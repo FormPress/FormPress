@@ -87,7 +87,18 @@ async function prepareSheet({ token, targetSpreadsheet, fieldMapping }) {
   if (fieldMapping.advancedConfigEnabled === true) {
     referenceRow = fieldMapping.referenceRow
   } else {
-    referenceRow = fieldMapping.valuesRow.map((elem) => elem.label)
+    referenceRow = fieldMapping.valuesRow.map((elem) => {
+      if (typeof elem === 'string') {
+        if (elem === 'id') {
+          return '=ARRAYFORMULA(IF(sequence(match(2,1/(B:B<>""),1),1,0,1) = 0, "ID", sequence(match(2,1/(B:B<>""),1),1,0,1)))'
+        }
+        if (elem === 'submissionDate') {
+          return 'Submission Date'
+        }
+      }
+
+      return elem.label
+    })
   }
 
   let sheetName = targetSpreadsheet.sheet.title
@@ -277,33 +288,36 @@ exports.appendData = async ({ integrationConfig, questionsAndAnswers }) => {
 
   const { fieldMapping, targetSpreadsheet } = integrationConfig
 
-  const organizedValues = []
-
-  fieldMapping.valuesRow.forEach((elem) => {
-    if (typeof elem === 'string') {
-      if (elem === 'submissionDate') {
-        const submissionDate =
-          moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss') + ' UTC'
-        organizedValues.push(submissionDate)
-        return
-      } else {
-        organizedValues.push('')
-        return
-      }
-    }
-
-    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
-    if (foundQnA !== undefined) {
-      organizedValues.push(foundQnA.answer)
-    } else {
-      organizedValues.push('')
-    }
-  })
-
   const spreadsheetId = targetSpreadsheet.id
   const sheets = google.sheets({ version: 'v4', auth: oAuth2Client })
 
   const range = targetSpreadsheet.sheet.title + '!A1'
+
+  const organizedValues = []
+
+  fieldMapping.valuesRow.forEach((elem) => {
+    if (typeof elem === 'string') {
+      let metaDataValue = ''
+
+      if (elem === 'submissionDate') {
+        metaDataValue =
+          moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss') + ' UTC'
+      }
+
+      if (elem === 'id') {
+        // it means that this row has a formula to increment the ID, so we don't need to add anything
+      }
+
+      return organizedValues.push(metaDataValue)
+    }
+
+    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+    if (foundQnA !== undefined) {
+      return organizedValues.push(foundQnA.answer)
+    }
+
+    organizedValues.push('')
+  })
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
