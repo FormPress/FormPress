@@ -350,6 +350,7 @@ export default class Builder extends Component {
       selectedIntegration: false,
       form: {
         id: null,
+        uuid: null,
         user_id: null,
         title: 'Untitled Form',
         private: 0,
@@ -1465,7 +1466,7 @@ export default class Builder extends Component {
         </Route>
         <Route path="/editor/:formId/design"></Route>
         <Route path="/editor/:formId/share">
-          <ShareForm formId={formId} />
+          <ShareForm formId={formId} uuid={this.state.form.uuid} />
         </Route>
         <Route path="/editor/:formId/template">
           <Templates
@@ -1476,7 +1477,11 @@ export default class Builder extends Component {
           />
         </Route>
         <Route path="/editor/:formId/preview">
-          <PreviewForm formID={formId} history={this.props.history} />
+          <PreviewForm
+            formID={formId}
+            uuid={this.state.form.uuid}
+            history={this.props.history}
+          />
         </Route>
       </Switch>
     )
