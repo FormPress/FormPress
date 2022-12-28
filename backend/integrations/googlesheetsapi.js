@@ -230,6 +230,7 @@ async function getMapData({ token, spreadsheetId }) {
       }
     })
     .catch((err) => {
+      console.log(err)
       return null
     })
 
