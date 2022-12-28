@@ -46,6 +46,31 @@ async function addSheet({ token, targetSpreadsheet }) {
 
   const sheets = google.sheets({ version: 'v4', auth: oAuth2Client })
 
+  const spreadSheet = await sheets.spreadsheets.get({
+    spreadsheetId: targetSpreadsheet.id,
+    includeGridData: false
+  })
+
+  const foundSheet = spreadSheet.data.sheets.find(
+    (sheet) => sheet.properties.title === targetSpreadsheet.sheet.title
+  )
+
+  if (foundSheet !== undefined) {
+    let i = 1
+    let proposedTitle = `${targetSpreadsheet.sheet.title} (${i})`
+
+    while (
+      spreadSheet.data.sheets.find(
+        (sheet) => sheet.properties.title === proposedTitle
+      ) !== undefined
+    ) {
+      i++
+      proposedTitle = `${targetSpreadsheet.sheet.title} (${i})`
+    }
+
+    targetSpreadsheet.sheet.title = proposedTitle
+  }
+
   const resource = {
     requests: [
       {
@@ -58,12 +83,17 @@ async function addSheet({ token, targetSpreadsheet }) {
     ]
   }
 
-  const request = await sheets.spreadsheets.batchUpdate({
+  const response = await sheets.spreadsheets.batchUpdate({
     spreadsheetId: targetSpreadsheet.id,
     resource
   })
 
-  return request.status === 200
+  targetSpreadsheet.sheet.id =
+    response.data.replies[0].addSheet.properties.sheetId
+  targetSpreadsheet.sheet.title =
+    response.data.replies[0].addSheet.properties.title
+
+  return targetSpreadsheet
 }
 
 async function prepareSheet({ token, targetSpreadsheet, fieldMapping }) {
@@ -188,42 +218,69 @@ async function getMapData({ token, spreadsheetId }) {
 
   const sheets = google.sheets({ version: 'v4', auth: oAuth2Client })
 
-  const spreadSheet = await sheets.spreadsheets.get({
-    spreadsheetId: spreadsheetId
-  })
+  let spreadSheet
+
+  await sheets.spreadsheets
+    .get({
+      spreadsheetId: spreadsheetId
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        spreadSheet = response.data
+      }
+    })
+    .catch((err) => {
+      return null
+    })
+
+  if (spreadSheet === undefined || spreadSheet === null) {
+    return {
+      status: 404,
+      message: 'Spreadsheet not found'
+    }
+  }
 
   let ranges = []
 
-  spreadSheet.data.sheets.forEach((sheet) => {
+  spreadSheet.sheets.forEach((sheet) => {
     ranges.push(`${sheet.properties.title}!A1:Z1`)
   })
 
-  const response = await sheets.spreadsheets.values.batchGet({
-    spreadsheetId: spreadsheetId,
-    majorDimension: 'ROWS',
-    ranges
-  })
+  let error = false
+  let response
+  try {
+    response = await sheets.spreadsheets.values.batchGet({
+      spreadsheetId: spreadsheetId,
+      majorDimension: 'ROWS',
+      ranges
+    })
+  } catch (err) {
+    error = true
+  }
 
   let fieldMapping = []
 
-  response.data.valueRanges.forEach((range) => {
-    try {
+  if (error === true || response.data.error) {
+    return fieldMapping
+  }
+
+  if (response.data.valueRanges?.length > 0) {
+    response.data.valueRanges.forEach((range) => {
       const mappingEntry = {
         title: range.range.split('!')[0].replace(/'/g, ''),
         fields: range.values ? range.values[0] : []
       }
       fieldMapping.push(mappingEntry)
-    } catch (err) {
-      console.log(err)
-    }
-  })
+    })
+  }
 
   return fieldMapping
 }
 
 exports.googleSheetsApi = (app) => {
   app.post('/api/googlesheets/init', async (req, res) => {
-    const { token, fieldMapping, targetSpreadsheet } = req.body
+    const { token, fieldMapping } = req.body
+    let { targetSpreadsheet } = req.body
 
     if (!token) {
       return res.status(400).send('No token provided')
@@ -245,7 +302,7 @@ exports.googleSheetsApi = (app) => {
         existingSpreadsheet
       })
     } else {
-      await addSheet({ token, targetSpreadsheet })
+      targetSpreadsheet = await addSheet({ token, targetSpreadsheet })
       await prepareSheet({
         token,
         targetSpreadsheet,
@@ -263,12 +320,16 @@ exports.googleSheetsApi = (app) => {
       return res.status(400).send('No token provided')
     }
 
-    const rows = await getMapData({
+    const mapRes = await getMapData({
       token,
       spreadsheetId
     })
 
-    res.json(rows)
+    if (mapRes.status === 404) {
+      return res.status(404).json({ message: 'Spreadsheet not found' })
+    }
+
+    res.json(mapRes)
   })
 }
 
@@ -319,12 +380,16 @@ exports.appendData = async ({ integrationConfig, questionsAndAnswers }) => {
     organizedValues.push('')
   })
 
-  await sheets.spreadsheets.values.append({
-    spreadsheetId,
-    range,
-    valueInputOption: 'USER_ENTERED',
-    resource: {
-      values: [organizedValues]
-    }
-  })
+  try {
+    await sheets.spreadsheets.values.append({
+      spreadsheetId,
+      range,
+      valueInputOption: 'USER_ENTERED',
+      resource: {
+        values: [organizedValues]
+      }
+    })
+  } catch (err) {
+    return false
+  }
 }
