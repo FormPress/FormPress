@@ -92,7 +92,7 @@ export default class Name extends Component {
     if (entry.value !== '') {
       plainString = Object.entries(entry.value)
         .map(([, t]) => `${t}`)
-        .filter(text => text.trim() !== '')
+        .filter((text) => text.trim() !== '')
         .join(' ')
     } else {
       plainString = '-'
