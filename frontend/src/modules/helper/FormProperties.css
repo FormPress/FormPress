@@ -142,15 +142,19 @@
   padding: 0.2rem 2rem;
 }
 
-.formProperties > .autoPageBreakForm > .element.elementNumber {
+.formProperties > .autoPageBreakForm > .element.elementNumberE {
   padding: 0.2rem 2rem;
 }
-.formProperties > .autoPageBreakForm > .element.elementNumber > .input {
+.formProperties > .autoPageBreakForm > .element.elementNumberE > .input {
   width: 20%;
   clear: both;
   margin-top: 5px;
 }
-.formProperties > .autoPageBreakForm > .element.elementNumber > .input > input {
+.formProperties
+  > .autoPageBreakForm
+  > .element.elementNumberE
+  > .input
+  > input {
   width: 100%;
 }
 
@@ -166,7 +170,7 @@
   > .element.elementTextBox,
 .formProperties
   > .autoPageBreakForm.autoPageBreakDisabled
-  > .element.elementNumber {
+  > .element.elementNumberE {
   display: none;
 }
 
