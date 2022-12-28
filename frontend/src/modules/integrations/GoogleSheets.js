@@ -718,7 +718,9 @@ export default class GoogleSheets extends Component {
           {this.state.inputElements.all.map((elem, index) => {
             return (
               <option key={index} value={elem.label}>
-                {elem.label}
+                {elem.label.length > 45
+                  ? elem.label.substring(0, 45) + '...'
+                  : elem.label}
               </option>
             )
           })}

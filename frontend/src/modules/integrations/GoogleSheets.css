@@ -39,7 +39,7 @@
 th {
   white-space: nowrap;
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 5px;
   text-align: center;
   max-width: 160px;
   overflow: hidden;
@@ -145,9 +145,15 @@ th {
   border: none !important;
 }
 
-.advanced-config-values {
-  width: 100%;
-  width: -moz-available;
+select.advanced-config-values {
+  border-radius: 2px;
+  border: 1px solid #c9c9c8;
+  background: gainsboro;
+  width: 131px;
+}
+
+select.advanced-config-values:hover {
+  background: #d4d6d9;
 }
 
 .advanced-config-reference {
