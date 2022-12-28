@@ -94,6 +94,7 @@ th {
 .input-elems {
   border: solid 1px #c9c9c8;
   padding: 0.2rem 1rem 0.2rem 1rem;
+  margin-bottom: 20px;
 }
 .input-elems > .elementCheckbox:first-child {
   margin-left: 0;
@@ -117,6 +118,7 @@ th {
   white-space: nowrap;
   max-width: 600px;
   font-size: 1rem;
+  max-width: 550px;
 }
 .table-reference-row > th {
   background: #99d3ff;
@@ -168,4 +170,19 @@ th {
 
 .cannot-be-empty input {
   border: 2px solid red !important;
+}
+
+.integration-wrapper.GoogleSheets .string-vars-container {
+  width: 670px;
+}
+
+.integration-wrapper.GoogleSheets .integration-inputs {
+  width: 100%;
+}
+
+.static-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
