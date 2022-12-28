@@ -322,13 +322,17 @@ export default class GoogleSheets extends Component {
   }
 
   async handleFinalizeAuthentication() {
-    this.setState({ loading: true })
-
     const {
       newSpreadsheetCreation,
       tempIntegrationObject,
       selectedSpreadsheet
     } = this.state
+
+    if (tempIntegrationObject.targetSpreadsheet.sheet.title === '') {
+      return
+    }
+
+    this.setState({ loading: true })
 
     let newSheetCreation = selectedSpreadsheet.chosenSheet === 'newSheet'
 
@@ -541,30 +545,43 @@ export default class GoogleSheets extends Component {
       }
     })
 
-    const mappings = mappingRequest.data.map((e) => {
-      return { ...e, display: e.title, value: e.title }
-    })
-
+    let mappings
     let chosenMetadata = []
     let chosenInputElements = []
+    let newSpreadsheetCreation = false
 
-    fieldMapping.valuesRow.forEach((e) => {
-      if (typeof e === 'string') {
-        const foundMetadata = this.state.metadata.all.find((m) => m.value === e)
-        if (foundMetadata) {
-          chosenMetadata.push(this.state.metadata.all.indexOf(foundMetadata))
-        }
-      } else {
-        const foundInputElement = this.state.inputElements.all.find(
-          (m) => m.id === e.id
-        )
-        if (foundInputElement) {
-          chosenInputElements.push(
-            this.state.inputElements.all.indexOf(foundInputElement)
+    if (mappingRequest.success === true) {
+      mappings = mappingRequest.data.map((e) => {
+        return { ...e, display: e.title, value: e.title }
+      })
+
+      fieldMapping.valuesRow.forEach((e) => {
+        if (typeof e === 'string') {
+          const foundMetadata = this.state.metadata.all.find(
+            (m) => m.value === e
           )
+          if (foundMetadata) {
+            chosenMetadata.push(this.state.metadata.all.indexOf(foundMetadata))
+          }
+        } else {
+          const foundInputElement = this.state.inputElements.all.find(
+            (m) => m.id === e.id
+          )
+          if (foundInputElement) {
+            chosenInputElements.push(
+              this.state.inputElements.all.indexOf(foundInputElement)
+            )
+          }
         }
-      }
-    })
+      })
+    } else {
+      // Spreadsheet deleted/not found
+      mappings = []
+      newSpreadsheetCreation = true
+      chosenMetadata = metadata.all.map((e, i) => i)
+      chosenInputElements = inputElements.all.map((e, i) => i)
+      tempIntegrationObject.targetSpreadsheet.id = ''
+    }
 
     inputElements.chosen = chosenInputElements
     metadata.chosen = chosenMetadata
@@ -573,11 +590,12 @@ export default class GoogleSheets extends Component {
     selectedSpreadsheet.chosenSheet = targetSpreadsheet.sheet.title
 
     this.setState({
+      tempIntegrationObject,
       advancedConfigEnabled: fieldMapping.advancedConfigEnabled,
       selectedSpreadsheet,
       inputElements,
       metadata,
-      newSpreadsheetCreation: false,
+      newSpreadsheetCreation,
       loading: false
     })
   }
@@ -611,7 +629,7 @@ export default class GoogleSheets extends Component {
   handleChooseInputElements(e, elem) {
     const { inputElements } = this.state
 
-    if (e.id === 1) {
+    if (e.id === 21) {
       // this is the 'Select All' option
       if (e.value === false) {
         inputElements.chosen = inputElements.all.map((elem, index) => index)
@@ -638,7 +656,7 @@ export default class GoogleSheets extends Component {
   handleChooseMetadata(e, elem) {
     const { metadata } = this.state
 
-    if (e.id === 1) {
+    if (e.id === 19) {
       // this is the 'Select All' option
       if (e.value === false) {
         metadata.chosen = metadata.all.map((elem, index) => index)
@@ -698,7 +716,11 @@ export default class GoogleSheets extends Component {
 
         <optgroup label="Elements">
           {this.state.inputElements.all.map((elem, index) => {
-            return <option key={index}>{elem.label}</option>
+            return (
+              <option key={index} value={elem.label}>
+                {elem.label}
+              </option>
+            )
           })}
         </optgroup>
         <optgroup label="Meta data">
@@ -846,59 +868,61 @@ export default class GoogleSheets extends Component {
       // CONFIGURATION
       display = (
         <>
-          <Renderer
-            className="advanced-configuration-toggle"
-            theme="gleam"
-            handleFieldChange={this.handleAdvancedConfigEnabledChange}
-            form={{
-              props: {
-                elements: [
-                  {
-                    id: 18,
-                    type: 'Checkbox',
-                    options: ['Advanced Configuration'],
-                    toggle: true,
-                    value: this.state.advancedConfigEnabled
-                  }
-                ]
-              }
-            }}
-          />
           <div className="integration-configuration">
             <div className="integration-inputs">
-              <div className="integration-input folderName">
-                <span
-                  className="new-folder-badge"
-                  style={
-                    this.state.newSpreadsheetCreation
-                      ? { display: 'block' }
-                      : { display: 'none' }
-                  }>
-                  NEW
-                </span>
+              <div className="static-row">
+                <div className="integration-input folderName">
+                  <span
+                    className="new-folder-badge"
+                    style={
+                      this.state.newSpreadsheetCreation
+                        ? { display: 'block' }
+                        : { display: 'none' }
+                    }>
+                    NEW
+                  </span>
+                  <Renderer
+                    className="folder"
+                    theme="infernal"
+                    handleFieldChange={this.handleSpreadsheetNameChange}
+                    form={{
+                      props: {
+                        elements: [
+                          {
+                            id: 1,
+                            type: 'TextBox',
+                            label: 'Specify the target spreadsheet',
+                            placeholder: 'Spreadsheet Name',
+                            value: targetSpreadsheet.title
+                          }
+                        ]
+                      }
+                    }}
+                  />
+                  <button
+                    className={'gDrive-pick-folder'}
+                    onClick={() => this.createPicker()}>
+                    <FontAwesomeIcon icon={faFolder} />
+                  </button>
+                </div>
                 <Renderer
-                  className="folder cannot-be-empty"
-                  theme="infernal"
-                  handleFieldChange={this.handleSpreadsheetNameChange}
+                  className="advanced-configuration-toggle"
+                  theme="gleam"
+                  handleFieldChange={this.handleAdvancedConfigEnabledChange}
                   form={{
                     props: {
                       elements: [
                         {
-                          id: 1,
-                          type: 'TextBox',
-                          label: 'Specify the target spreadsheet',
-                          placeholder: 'Spreadsheet Name',
-                          value: targetSpreadsheet.title
+                          id: 18,
+                          type: 'Checkbox',
+                          options: ['Advanced Configuration'],
+                          toggle: true,
+                          value: this.state.advancedConfigEnabled
                         }
                       ]
                     }
                   }}
                 />
-                <button
-                  className={'gDrive-pick-folder'}
-                  onClick={() => this.createPicker()}>
-                  <FontAwesomeIcon icon={faFolder} />
-                </button>
               </div>
               <Renderer
                 handleFieldChange={this.handleSheetSelectorChange}
@@ -1092,41 +1116,52 @@ export default class GoogleSheets extends Component {
                               <td className="legendCell">VALUE</td>
                               {selectedSpreadsheet.chosenSheet === 'newSheet'
                                 ? [...Array(26)].map((e, i) => {
-                                    return (
-                                      <td key={i}>
-                                        {this.populateDropdownOptions('')}
-                                      </td>
-                                    )
-                                  })
-                                : [...Array(26)].map((e, index) => {
-                                    let foundValue = ''
-
-                                    if (
-                                      selectedSpreadsheet.chosenSheet ===
-                                      targetSpreadsheet.sheet.title
+                                    let defaultValue = ''
+                                    // lets fill with default values
+                                    if (i < metadata.all.length) {
+                                      defaultValue = metadata.all[i].value
+                                    } else if (
+                                      i <
+                                      metadata.all.length +
+                                        inputElements.all.length
                                     ) {
-                                      const foundMapping =
-                                        tempIntegrationObject.fieldMapping
-                                          .valuesRow[index]
-
-                                      if (foundMapping !== undefined) {
-                                        foundValue =
-                                          typeof foundMapping === 'object'
-                                            ? foundMapping.label
-                                            : foundMapping
-                                      }
+                                      defaultValue =
+                                        inputElements.all[
+                                          i - metadata.all.length
+                                        ].label
                                     }
 
-                                    // tempIntegrationObject.selectedSpreadsheet
-
                                     return (
-                                      <td key={index}>
+                                      <td key={i}>
                                         {this.populateDropdownOptions(
-                                          foundValue
+                                          defaultValue
                                         )}
                                       </td>
                                     )
-                                  })}
+                                  })
+                                : tempIntegrationObject.fieldMapping.valuesRow.map(
+                                    (e, index) => {
+                                      let foundValue = ''
+
+                                      if (
+                                        selectedSpreadsheet.chosenSheet ===
+                                        targetSpreadsheet.sheet.title
+                                      ) {
+                                        if (e !== undefined) {
+                                          foundValue =
+                                            typeof e === 'object' ? e.label : e
+                                        }
+                                      }
+
+                                      return (
+                                        <td key={index}>
+                                          {this.populateDropdownOptions(
+                                            foundValue
+                                          )}
+                                        </td>
+                                      )
+                                    }
+                                  )}
                             </tr>
                           </tbody>
                         </table>
@@ -1147,7 +1182,7 @@ export default class GoogleSheets extends Component {
       )
     }
     return (
-      <div className="integration-wrapper col-10-16">
+      <div className="integration-wrapper GoogleSheets col-10-16">
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}
