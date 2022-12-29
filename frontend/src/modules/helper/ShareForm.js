@@ -27,7 +27,8 @@ class ShareForm extends Component {
 
     this.hostname = window.location.protocol + '//' + window.location.host
     this.formId = this.props.formId
-    this.formLink = `${this.hostname}/form/view/${this.formId}`
+    this.uuid = this.props.uuid
+    this.formLink = `${this.hostname}/form/view/${this.uuid}`
 
     this.state = {
       widget: false,
@@ -57,7 +58,7 @@ class ShareForm extends Component {
     const embedCode = ` 
       <script 
         src="${this.hostname}/runtime/embed.js"
-        fp_id="${this.formId}"
+        fp_id="${this.formId}" uuid="${this.uuid}
         ${this.state.widget ? ' fp_widget="true"' : ''} 
         ${this.state.answered_once ? `fp_widget_cookie="${this.formId}"` : ''} 
         ${this.state.title ? ` fp_widget_title="${this.state.title}"` : ''}>
