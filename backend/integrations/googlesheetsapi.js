@@ -120,7 +120,7 @@ async function prepareSheet({ token, targetSpreadsheet, fieldMapping }) {
     referenceRow = fieldMapping.valuesRow.map((elem) => {
       if (typeof elem === 'string') {
         if (elem === 'id') {
-          return '=ARRAYFORMULA(IF(sequence(match(2,1/(B:B<>""),1),1,0,1) = 0, "ID", sequence(match(2,1/(B:B<>""),1),1,0,1)))'
+          return '=ARRAYFORMULA(IF(sequence(match(2;1/(B:B<>"");1);1;0;1) = 0; "ID"; sequence(match(2;1/(B:B<>"");1);1;0;1)))'
         }
         if (elem === 'submissionDate') {
           return 'Submission Date'

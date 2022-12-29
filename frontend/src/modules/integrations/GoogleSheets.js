@@ -379,7 +379,7 @@ export default class GoogleSheets extends Component {
           if (idColumnIndex !== undefined && index === idColumnIndex) {
             let sanitizedValue = v.value.replace(/[^a-zA-Z0-9]/g, '')
 
-            let formula = `=ARRAYFORMULA(IF(sequence(match(2,1/(B:B<>""),1),1,0,1) = 0, "${sanitizedValue}", sequence(match(2,1/(B:B<>""),1),1,0,1)))`
+            let formula = `=ARRAYFORMULA(IF(sequence(match(2;1/(B:B<>"");1);1;0;1) = 0; "${sanitizedValue}"; sequence(match(2;1/(B:B<>"");1);1;0;1)))`
             return formula
           }
 
