@@ -38,10 +38,9 @@
   // add iframe after script tag, adding after not fp_style to ignore multiple embed
   $('script[fp_id]').each(function (index, elem) {
     const formID = $(this).attr('fp_id')
-    const uuid = $(this).attr('uuid')
     const token = $(this).attr('fp_token')
 
-    let src = `${BACKEND}/form/view/${uuid}?embed=true`
+    let src = `${BACKEND}/form/view/${formID}?embed=true`
 
     if (token) {
       src += `&token=${token}`

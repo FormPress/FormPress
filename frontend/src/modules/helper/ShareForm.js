@@ -58,7 +58,7 @@ class ShareForm extends Component {
     const embedCode = ` 
       <script 
         src="${this.hostname}/runtime/embed.js"
-        fp_id="${this.formId}" uuid="${this.uuid}
+        fp_id="${this.uuid}"
         ${this.state.widget ? ' fp_widget="true"' : ''} 
         ${this.state.answered_once ? `fp_widget_cookie="${this.formId}"` : ''} 
         ${this.state.title ? ` fp_widget_title="${this.state.title}"` : ''}>
