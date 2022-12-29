@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 class PreviewForm extends Component {
   render() {
     const BACKEND = process.env.REACT_APP_BACKEND
-    const { formID, uuid } = this.props
+    const { formID } = this.props
 
     return (
       <div className="preview-form-wrapper">
@@ -45,7 +45,7 @@ class PreviewForm extends Component {
         </div>
         <div className="iframe-wrapper">
           <iframe
-            src={`${BACKEND}/form/view/${uuid}?preview=true`}
+            src={`${BACKEND}/form/view/${formID}?preview=true`}
             title={`FP_FORM_${formID}`}
           />
         </div>

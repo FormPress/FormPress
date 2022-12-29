@@ -49,7 +49,7 @@ class Users extends Component {
 
     data.forEach((form) => {
       result.push({
-        link: `${BACKEND}/form/view/${form.uuid}`,
+        link: `${BACKEND}/form/view/${form.id}`,
         created_at: form.created_at
       })
     })
