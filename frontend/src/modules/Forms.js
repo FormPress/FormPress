@@ -233,9 +233,9 @@ export default class Forms extends Component {
   }
 
   handlePreviewClick(form) {
-    const { uuid } = form
+    const { id } = form
 
-    window.open(`${BACKEND}/form/view/${uuid}`, '_blank')
+    window.open(`${BACKEND}/form/view/${id}`, '_blank')
   }
 
   handleCloseModalClick() {
