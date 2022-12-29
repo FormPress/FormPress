@@ -195,7 +195,7 @@ module.exports = (app) => {
       }
       if (result.length === 1) {
         const lastFiveForms = await db.query(
-          `SELECT \`uuid\`, \`created_at\` FROM \`form\` WHERE user_id = ? ORDER BY \`created_at\` DESC LIMIT 5`,
+          `SELECT \`id\`, \`created_at\` FROM \`form\` WHERE user_id = ? ORDER BY \`created_at\` DESC LIMIT 5`,
           [user_id]
         )
         return res.json(lastFiveForms).status(200)

@@ -5,7 +5,6 @@ const archiver = require('archiver')
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
-const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 
 const { getPool } = require(path.resolve('./', 'db'))
@@ -165,14 +164,7 @@ module.exports = (app) => {
 
   // return form questions
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
-    let { form_id } = req.params
-
-    if (validate(form_id)) {
-      form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
-    }
-
+    const { form_id } = req.params
     const elems = (await formModel.get({ form_id })).props.elements
 
     // remove the keys that are named 'expectedAnswer' out of the elements
@@ -991,16 +983,7 @@ module.exports = (app) => {
 
   // view or preview a form
   app.get('/form/view/:id', async (req, res) => {
-    let form_id = req.params.id
-    let uuid = null
-
-    if (validate(form_id)) {
-      uuid = form_id
-      form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
-    }
-
+    const form_id = req.params.id
     const result = await formModel.get({ form_id })
     if (result === false) {
       return res.status(404).send('Form not found')
@@ -1098,11 +1081,10 @@ module.exports = (app) => {
     }
 
     //form table has "published_version" while form_published has "version"
-    const id = uuid ? uuid : form_id
     const postTarget =
       form.version === undefined
-        ? `${BACKEND}/form/submit/${id}`
-        : `${BACKEND}/form/submit/${id}/${form.version}`
+        ? `${BACKEND}/form/submit/${form_id}`
+        : `${BACKEND}/form/submit/${form_id}/${form.version}`
 
     res.render('form.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

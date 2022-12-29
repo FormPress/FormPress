@@ -45,14 +45,10 @@ const findQuestionType = (form, qid) => {
 module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id/:version?', async (req, res) => {
-    let form_id = req.params.id
+    let form_id = parseInt(req.params.id)
 
-    if (validate(form_id)) {
-      form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
-    } else {
-      form_id = parseInt(form_id)
+    if (isNaN(form_id)) {
+      form_id = req.params.id
     }
 
     const regularForm = await formModel.get({ form_id })
