@@ -375,6 +375,10 @@ exports.appendData = async ({ integrationConfig, questionsAndAnswers }) => {
 
     const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
     if (foundQnA !== undefined) {
+      if (foundQnA.type === 'Phone') {
+        return organizedValues.push(`"${foundQnA.answer}"`)
+      }
+
       return organizedValues.push(foundQnA.answer)
     }
 
