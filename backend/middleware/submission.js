@@ -21,7 +21,6 @@ const { gdUploadFile } = require(path.resolve(
   'googledriveapi.js'
 ))
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
-const { validate } = require('uuid')
 const { appendData } = require('../integrations/googlesheetsapi')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
