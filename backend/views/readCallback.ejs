@@ -2,26 +2,25 @@
 <html>
 <head>
    <script>
-       const urlArray = window.location.pathname.split('/')
-       const integrationType = urlArray[urlArray.length - 1]
-       if (integrationType === 'googledrive') {
-          const params = new URLSearchParams(window.location.search)
+      const urlArray = window.location.pathname.split('/')
+      const callbackType = urlArray[urlArray.length - 1]
+      if (callbackType === 'googleAuth') {
+         const params = new URLSearchParams(window.location.search)
 
-          const status = params.get('message')
-          const base64Token = params.get('token')
+         const status = params.get('message')
+         const base64Token = params.get('token')
 
-          if (status === 'true') {
-             window.opener.postMessage(
-                     {
-                        type: 'gdriveCallback',
-                        base64Token
-                     },
-                     window.opener.origin
-             )
-          }
-
-            window.close()
-       }
+         if (status === 'true') {
+            window.opener.postMessage(
+                    {
+                       type: 'googleAuthToken',
+                       base64Token
+                    },
+                    window.opener.origin
+            )
+         }
+      }
+      window.close()
 
    </script>
 </head>

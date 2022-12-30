@@ -21,6 +21,7 @@ const { gdUploadFile } = require(path.resolve(
   'googledriveapi.js'
 ))
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
+const { appendData } = require('../integrations/googlesheetsapi')
 const { validate } = require('uuid')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -433,6 +434,18 @@ module.exports = (app) => {
 
         console.log('Error while uploading file to google drive', err)
       }
+    }
+
+    const gSheets = integrationList.find((i) => i.type === 'GoogleSheets')
+    if (
+      gSheets !== undefined &&
+      gSheets.active === true &&
+      gSheets.paused !== true
+    ) {
+      await appendData({
+        integrationConfig: gSheets,
+        questionsAndAnswers
+      })
     }
   })
 

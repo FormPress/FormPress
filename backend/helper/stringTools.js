@@ -4,7 +4,8 @@ const moment = require('moment')
 exports.replaceWithAnswers = (str, questionsAndAnswers) => {
   const curlyBraceRegex = /(?:{[^{]*?)\w(?=})}/gim
 
-  const submissionDate = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss')
+  const submissionDate =
+    moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss') + ' UTC'
 
   let string = str
   let curlyBraceMatches = string.match(curlyBraceRegex)
