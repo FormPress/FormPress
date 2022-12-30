@@ -433,9 +433,7 @@ export default class GoogleSheets extends Component {
 
       if (success === true) {
         integrationObject.targetSpreadsheet = data.targetSpreadsheet
-      }
-
-      if (!success) {
+      } else {
         this.setState({ loading: false })
         return
       }

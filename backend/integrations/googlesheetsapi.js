@@ -295,6 +295,14 @@ exports.googleSheetsApi = (app) => {
         targetSpreadsheet
       })
 
+      if (
+        targetSpreadsheet.id === null ||
+        targetSpreadsheet.id === undefined ||
+        targetSpreadsheet.id === ''
+      ) {
+        return res.status(500).json({ message: 'Error creating spreadsheet.' })
+      }
+
       await prepareSheet({
         token,
         targetSpreadsheet,
