@@ -288,13 +288,12 @@ exports.googleSheetsApi = (app) => {
     }
     let existingSpreadsheet = true
 
-    if (targetSpreadsheet.id === '') {
+    if (targetSpreadsheet.id === '' || targetSpreadsheet.id === undefined) {
       existingSpreadsheet = false
-      const spreadsheetId = await create({
+      targetSpreadsheet.id = await create({
         token,
         targetSpreadsheet
       })
-      targetSpreadsheet.id = spreadsheetId
 
       await prepareSheet({
         token,
