@@ -2,7 +2,6 @@
   font-family: 'Montserrat', sans-serif;
   box-shadow: 0 3px 10px #00000014;
   padding: 1.5rem !important;
-  height: calc(100vh - 150px);
   min-height: 360px;
   background-color: #ffffff;
 }
@@ -26,7 +25,6 @@
 }
 .integration-wrapper > .integration-content {
   margin-top: 25px;
-  margin-left: 15px;
 }
 
 .integration-wrapper > .integration-content > .activation-button {
@@ -156,6 +154,9 @@
   line-height: 30px;
   padding: 0 10px;
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
 }
 
 .integration-wrapper > .integration-content > .complete-authentication {
@@ -197,7 +198,9 @@
   > .integration-content
   > .integration-configuration
   > .integration-inputs {
-  display: grid;
+  display: flex;
+  align-items: baseline;
+  flex-direction: column;
 }
 .integration-wrapper > .integration-content > .integration-configuration {
   display: flex;
