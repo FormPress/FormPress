@@ -17,7 +17,7 @@
     encType="multipart/form-data"
   >
     <%- form %>
-    <input type="hidden" name="completion_time" id="completion_time" value="0" />
+    <input type="hidden" name="form_starting_time" id="form_starting_time" value="0" />
   </form>
   <% if(showBranding === true) {%>
     <%- include ("branding.tpl.ejs") %>
@@ -28,11 +28,10 @@
     var USERID = "<%= USERID %>"
   </script>
   <script>
-    var el = document.getElementById('completion_time');
-
-    setInterval(function(){
-      el.value = parseInt(el.value) + 1;
-    }, 1000);
+    (function(){
+      var el = document.getElementById('form_starting_time');
+      el.value = Math.floor(Date.now() / 1000)
+    })();
   </script>
   <script src="<%= RUNTIMEJSURL %>"></script>
 </body>

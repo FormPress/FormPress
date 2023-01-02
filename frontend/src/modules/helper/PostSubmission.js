@@ -330,7 +330,10 @@ class PostSubmission extends Component {
             </div>
             <div className="fp-powered">
               powered by{' '}
-              <a href="https://formpress.org" target="_blank" rel="noreferrer">
+              <a
+                href="https://formpress.org"
+                target="_blank"
+                rel="noopener noreferrer">
                 <img
                   alt="Go to Formpress."
                   src="https://static.formpress.org/images/formpressBrand.svg"
