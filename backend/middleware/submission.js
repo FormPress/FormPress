@@ -98,7 +98,11 @@ module.exports = (app) => {
         (form_id, created_at, version, completion_time)
       VALUES
         (?, NOW(), ?, ?)`,
-      [form_id, version, parseInt(req.body.completion_time)]
+      [
+        form_id,
+        version,
+        Math.floor(Date.now() / 1000) - parseInt(req.body.form_starting_time)
+      ]
     )
     const submission_id = result.insertId
 
