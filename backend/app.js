@@ -54,9 +54,20 @@ const authenticationMiddleware = require(path.resolve(
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
-const { authGoogleDrive } = require(path.resolve(
+
+const googleApisMiddleware = require(path.resolve(
+  'middleware',
+  'googleApisAuth'
+))
+
+const { googleDriveApi } = require(path.resolve(
   'integrations',
   'googledriveapi.js'
+))
+
+const { googleSheetsApi } = require(path.resolve(
+  'integrations',
+  'googlesheetsapi.js'
 ))
 
 app.use(function (req, res, next) {
@@ -86,7 +97,9 @@ loginMiddleware(app)
 signupMiddleware(app)
 submissionMiddleware(app)
 changePasswordMiddleware(app)
-authGoogleDrive(app)
+googleApisMiddleware(app)
+googleDriveApi(app)
+googleSheetsApi(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)

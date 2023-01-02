@@ -11,6 +11,8 @@ import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import _ from 'lodash'
 import { DotLoader } from 'react-spinner-overlay'
 
+const { REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID } = process.env
+
 export default class GoogleDrive extends Component {
   static metaData = {
     icon:
@@ -182,8 +184,7 @@ export default class GoogleDrive extends Component {
     const google = window.google
 
     let tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id:
-        '763212824993-dalrag4n29c6c42r0vp13amegttagguo.apps.googleusercontent.com',
+      client_id: REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID,
       scope: 'https://www.googleapis.com/auth/drive.file',
       callback: async (response) => {
         if (response.error !== undefined) {
@@ -218,7 +219,7 @@ export default class GoogleDrive extends Component {
   }
 
   tokenMessageListener(event) {
-    if (event.data?.type === 'gdriveCallback') {
+    if (event.data?.type === 'googleAuthToken') {
       this.handleGoogleAuth(event.data)
     }
   }
@@ -264,7 +265,10 @@ export default class GoogleDrive extends Component {
   async handleStartAuthentication() {
     await this.props.handlePublishClick()
     let { success, data } = await api({
-      resource: `/api/integrations/googledrive/authenticate`,
+      resource: `/api/services/google/generateAuthURL`,
+      body: {
+        scope: ['https://www.googleapis.com/auth/drive.file']
+      },
       method: 'post'
     })
 

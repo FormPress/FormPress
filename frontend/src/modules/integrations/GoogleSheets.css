@@ -1,0 +1,194 @@
+.integration-loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 650px;
+}
+
+.integration-loader-container > svg {
+  scale: 3;
+}
+
+.advanced-settings {
+  padding: 0.5rem 0 3rem 0;
+  display: flex;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 90%;
+  color: #333;
+  justify-content: center;
+}
+
+.table-wrapper {
+  max-width: 700px;
+  overflow: scroll;
+  padding: 5px 0 30px 0;
+}
+
+.advanced-configuration-toggle {
+  width: 270px;
+  float: right;
+  margin-top: 35px;
+}
+
+.advanced-settings table {
+  position: relative;
+}
+
+.advanced-settings td,
+th {
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  padding: 5px;
+  text-align: center;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.advanced-settings th {
+  background-color: #eee;
+  position: sticky;
+  top: -1px;
+  z-index: 2;
+}
+.advanced-settings th:first-of-type {
+  left: 0;
+  z-index: 3;
+}
+
+.advanced-settings tbody tr td:first-of-type {
+  background-color: #eee;
+  position: sticky;
+  left: -1px;
+  text-align: left;
+}
+
+.advanced-configuration-toggle {
+  float: right;
+}
+
+.spreadsheet-element-selector {
+  width: 100%;
+  height: 56px;
+  border: 1px solid;
+  border-radius: 3px;
+}
+
+.table-head-row > th {
+  background-color: #f8f9fa;
+  color: #686c70;
+  border: 1px solid #dee2e6;
+}
+
+.table-reference-row > th {
+  padding: 0;
+}
+
+.table-values-row > td {
+  padding: 0;
+  background: white;
+  border: none;
+}
+
+.input-elems {
+  border: solid 1px #c9c9c8;
+  padding: 0.2rem 1rem 0.2rem 1rem;
+  margin-bottom: 20px;
+}
+.input-elems > .elementCheckbox:first-child {
+  margin-left: 0;
+}
+
+.input-elems > :nth-child(odd):not(:first-child) {
+  background-color: #d4d6d9 !important;
+}
+
+.input-elems > .elementCheckbox {
+  margin-left: 10px;
+}
+
+.input-elems > .elementCheckbox > div {
+  margin: 3px 0 3px 0;
+}
+
+.input-elems > .elementCheckbox label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 600px;
+  font-size: 1rem;
+  max-width: 550px;
+}
+.table-reference-row > th {
+  background: #99d3ff;
+  padding: 6px;
+  color: white;
+  font-weight: bold;
+  border: 1px solid white;
+}
+
+.table-reference-row > th > input {
+  border: none;
+  background: #99d3ff;
+  color: white;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.legendCell {
+  background: white !important;
+  color: gray !important;
+  font-weight: 500 !important;
+  text-align: center;
+  padding: 6px !important;
+  border: none !important;
+}
+
+select.advanced-config-values {
+  border-radius: 2px;
+  border: 1px solid #c9c9c8;
+  background: gainsboro;
+  width: 131px;
+}
+
+select.advanced-config-values:hover {
+  background: #d4d6d9;
+}
+
+.advanced-config-reference {
+  width: 100%;
+  width: -moz-available;
+}
+
+.advanced-mapping-label {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500 !important;
+  box-sizing: border-box;
+}
+
+.spreadsheet-preview {
+  margin: 15px 0 15px 0;
+}
+
+.cannot-be-empty input {
+  border: 2px solid red !important;
+}
+
+.integration-wrapper.GoogleSheets .string-vars-container {
+  width: 670px;
+}
+
+.integration-wrapper.GoogleSheets .integration-inputs {
+  width: 100%;
+}
+
+.static-row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

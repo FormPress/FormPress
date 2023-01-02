@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 export default class ReadCallback extends Component {
   componentDidMount() {
     const urlArray = window.location.pathname.split('/')
-    const integrationType = urlArray[urlArray.length - 1]
-    if (integrationType === 'googledrive') {
+    const callbackType = urlArray[urlArray.length - 1]
+    if (callbackType === 'googleAuth') {
       const params = new URLSearchParams(window.location.search)
 
       const status = params.get('message')
@@ -13,7 +13,7 @@ export default class ReadCallback extends Component {
       if (status === 'true') {
         window.opener.postMessage(
           {
-            type: 'gdriveCallback',
+            type: 'googleAuthToken',
             base64Token
           },
           window.opener.origin
