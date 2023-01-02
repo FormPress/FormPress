@@ -1101,6 +1101,11 @@ ul li.expected {
   height: 100%;
 }
 
+.results-header > .userData {
+  text-align: left !important;
+  padding: 10px;
+}
+
 .results-header > .userData,
 .results-header > .formInfo,
 .results-header > .testResults > .leftHand,
@@ -1116,6 +1121,11 @@ ul li.expected {
 .results-header > .testResults > .leftHand > .lhContent > .answer-info-row {
   color: #113952;
 }
+
+.results-header > .testResults > .leftHand > .lhContent > div {
+  padding: 0.2rem 0 0.2rem 0;
+}
+
 .results-header
   > .testResults
   > .leftHand

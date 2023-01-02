@@ -246,6 +246,33 @@ module.exports = (app) => {
         return question !== undefined
       })
 
+      const defaultPageLabels = {
+        questionCount: 'Questions',
+        correctAnswers: 'Correct',
+        incorrectAnswers: 'Incorrect',
+        unansweredQuestions: 'Unanswered',
+        score: 'Score',
+        completionDate: 'Completed',
+        completionTime: 'Time'
+      }
+
+      let evaluationPageLabels
+
+      const evaluationPageLabelsIntegration = form.props.integrations.find(
+        (integration) => integration.type === 'evaluationPageLabels'
+      )
+
+      if (evaluationPageLabelsIntegration !== undefined) {
+        evaluationPageLabels = evaluationPageLabelsIntegration
+      } else {
+        evaluationPageLabels = {}
+      }
+
+      evaluationPageLabels = {
+        ...defaultPageLabels,
+        ...evaluationPageLabels
+      }
+
       const str = reactDOMServer.renderToStaticMarkup(
         React.createElement(Renderer, {
           className: 'form',
@@ -281,7 +308,8 @@ module.exports = (app) => {
         FORMID: form_id,
         USERID: form.user_id,
         BACKEND,
-        SUBMISSION: submission
+        SUBMISSION: submission,
+        EVALUATION_PAGE_LABELS: evaluationPageLabels
       }
 
       res.render('results.tpl.ejs', templateProps)

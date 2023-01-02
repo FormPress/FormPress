@@ -118,7 +118,7 @@ export default class Radio extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Make options unselectable']
+        options: ['Add a button to clear selection']
       }
     },
     expectedAnswer: {
@@ -173,7 +173,6 @@ export default class Radio extends Component {
 
   render() {
     const { config, mode, selectedLabelId, selectedField } = this.props
-    const { isDetailOpen } = this.state
 
     const options =
       Array.isArray(config.options) === true ||
@@ -289,24 +288,21 @@ export default class Radio extends Component {
         </div>,
         config.answerExplanation && config.answerExplanation !== '' ? (
           <div className="fl metadata answerExplanationContainer" key="4">
-            <details
-              title={'Click to edit answer explanation'}
-              open={this.state.isDetailOpen}
-              onClick={() => this.setState({ isDetailOpen: !isDetailOpen })}>
+            <EditableLabel
+              className="sublabel answerExplanationLabel"
+              dataPlaceholder="Click to edit answer title"
+              mode={mode}
+              labelKey={`radio_${config.id}_answerLabel`}
+              handleLabelChange={this.props.handleLabelChange}
+              value={
+                typeof config.answerLabelText !== 'undefined' &&
+                config.answerLabelText !== ''
+                  ? config.answerLabelText
+                  : ''
+              }
+            />
+            <details title={'Click to edit answer explanation'}>
               <summary>
-                <EditableLabel
-                  className="sublabel"
-                  dataPlaceholder="Click to edit answer title"
-                  mode={mode}
-                  labelKey={`radio_${config.id}_answerLabel`}
-                  handleLabelChange={this.props.handleLabelChange}
-                  value={
-                    typeof config.answerLabelText !== 'undefined' &&
-                    config.answerLabelText !== ''
-                      ? config.answerLabelText
-                      : ''
-                  }
-                />
                 <span className="popover-container">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div className="popoverText">

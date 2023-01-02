@@ -101,6 +101,8 @@
   padding-top: 40px;
   width: 1200px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 /* Builder */
@@ -144,15 +146,17 @@
 
 .builder > .content > .leftMenu {
   min-height: 500px;
-}
-
-.builder > .content > .leftMenu > .leftMenuContents {
-  position: fixed;
-  top: 126px;
-  width: 359px;
   height: calc(100vh - 150px);
   overflow: auto;
   box-shadow: 0px 3px 10px #00000014;
+  width: 30%;
+  position: sticky;
+  /*top: 15%;*/
+  top: 126px;
+}
+
+.builder > .content > .leftMenu:empty {
+  display: none !important;
 }
 
 .leftMenuContents .elementTextArea .fl.input {
