@@ -6,6 +6,8 @@ import { ProfileSVG } from './svg'
 import './Profile.css'
 import SettingsSVG from './svg/SettingsSVG'
 import LogoutSVG from './svg/LogoutSVG'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 const Profile = (props) => {
   const logout = (e) => {
@@ -72,6 +74,12 @@ const Profile = (props) => {
             ) : (
               ''
             )}
+            <div className="profileMenuEntry">
+              <span onClick={() => this.redirectToTalkyard()}>
+                <FontAwesomeIcon icon={faQuestion} className="fa-question" />
+                Help
+              </span>
+            </div>
             <div className="profileMenuEntry">
               <span onClick={logout}>
                 <LogoutSVG width={16} heigth={16} />

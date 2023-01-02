@@ -6,7 +6,6 @@ import {
   faTrash,
   faPen,
   faPlusCircle,
-  faQuestionCircle,
   faClone
 } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
@@ -305,30 +304,9 @@ export default class Forms extends Component {
                   <div className="popoverText">Create a new form</div>
                 </div>
               </Link>
-              <div
-                className="popover-container circle-question-container"
-                onClick={() => this.redirectToTalkyard()}>
-                <FontAwesomeIcon
-                  icon={faQuestionCircle}
-                  title="Help"
-                  className="nav_add_new_form_logo"
-                />
-                <div className="popoverText">Help</div>
-              </div>
             </div>
           ) : (
-            <div className="nav_add_new_form_container">
-              <div
-                className="popover-container circle-question-container"
-                onClick={() => this.redirectToTalkyard()}>
-                <FontAwesomeIcon
-                  icon={faQuestionCircle}
-                  title="Help"
-                  className="nav_add_new_form_logo"
-                />
-                <div className="popoverText">Help</div>
-              </div>
-            </div>
+            ''
           )}
           <div className="headerContainer"></div>
           <div className="formsContent">

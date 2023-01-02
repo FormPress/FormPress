@@ -78,6 +78,11 @@
   padding: 6px 0 6px 2px;
 }
 
+.profileMenuEntry .fa-question {
+  width: 16px;
+  height: 16px;
+}
+
 .header > .profile_container > .profile .wrapper-welcome > .profileSVG {
   cursor: pointer;
   margin-top: 5px;
