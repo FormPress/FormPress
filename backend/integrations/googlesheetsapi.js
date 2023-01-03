@@ -85,17 +85,23 @@ async function addSheet({ token, targetSpreadsheet }) {
     ]
   }
 
-  const response = await sheets.spreadsheets.batchUpdate({
-    spreadsheetId: targetSpreadsheet.id,
-    resource
-  })
+  try {
+    let response = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: targetSpreadsheet.id,
+      resource
+    })
 
-  targetSpreadsheet.sheet.id =
-    response.data.replies[0].addSheet.properties.sheetId
-  targetSpreadsheet.sheet.title =
-    response.data.replies[0].addSheet.properties.title
+    targetSpreadsheet.sheet.id =
+      response.data.replies[0].addSheet.properties.sheetId
+    targetSpreadsheet.sheet.title =
+      response.data.replies[0].addSheet.properties.title
 
-  return targetSpreadsheet
+    return targetSpreadsheet
+  } catch (err) {
+    error.errorReport(err)
+    console.log('Error adding sheet:', err)
+    return null
+  }
 }
 
 async function prepareSheet({ token, targetSpreadsheet, fieldMapping }) {
@@ -309,6 +315,11 @@ exports.googleSheetsApi = (app) => {
       })
     } else {
       targetSpreadsheet = await addSheet({ token, targetSpreadsheet })
+
+      if (targetSpreadsheet === null) {
+        return res.status(500).json({ message: 'Error adding worksheet.' })
+      }
+
       await prepareSheet({
         token,
         targetSpreadsheet,
