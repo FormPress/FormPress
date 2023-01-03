@@ -25,14 +25,16 @@ async function create({ token, targetSpreadsheet }) {
       }
     ]
   }
+
   try {
     const spreadsheet = await service.spreadsheets.create({
       resource
     })
     return spreadsheet.data.spreadsheetId
   } catch (err) {
-    console.log(err)
     error.errorReport(err)
+    console.log('Error creating spreadsheet:', err)
+    return null
   }
 }
 
@@ -295,11 +297,7 @@ exports.googleSheetsApi = (app) => {
         targetSpreadsheet
       })
 
-      if (
-        targetSpreadsheet.id === null ||
-        targetSpreadsheet.id === undefined ||
-        targetSpreadsheet.id === ''
-      ) {
+      if (targetSpreadsheet.id === null) {
         return res.status(500).json({ message: 'Error creating spreadsheet.' })
       }
 
