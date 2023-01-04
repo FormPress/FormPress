@@ -70,11 +70,6 @@
   font-size: 24px;
 }
 
-.payment div {
-  display: inline-block;
-  line-height: 40px;
-}
-
 .payment {
   width: 100%;
 }
@@ -89,7 +84,7 @@
 
 .payment .actions_container {
   border-radius: 50%;
-  background-color: #f5f5f5;
+  background-color: #a5a5a5;
   vertical-align: inherit;
   height: 24px;
   width: 24px;
@@ -101,15 +96,16 @@
 .payment .actions_container:before {
   content: '...';
   position: relative;
-  color: #c9c9c9;
+  color: #ffffff;
   font-size: 23px;
   width: 24px;
   height: 24px;
   display: flex;
   align-items: flex-end;
-  padding: 26px 0 0 3px;
+  padding: 26px 0 0 2px;
   cursor: pointer;
   border-radius: 50%;
+  line-height: 40px;
 }
 
 .payment .actions_container:hover {
@@ -130,8 +126,8 @@
   width: 120px;
   background-color: #fff;
   left: -44px;
-  top: 27px;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 15%);
+  top: -7px;
+  line-height: 22px;
 }
 
 .payment .hidden {
@@ -154,14 +150,23 @@
 .cancel_subscription {
   color: #be0000;
   cursor: pointer;
-  margin-right: 5px;
-  display: block !important;
+}
+.cancel_subscription:hover {
+  color: #ffffff;
+  background-color: #be0000;
+  border: 1px solid #be0000;
+  border-radius: 10px;
 }
 
 .upgrade_subscription {
   color: #7aad37;
   cursor: pointer;
-  margin-left: 5px;
+}
+.upgrade_subscription:hover {
+  color: #ffffff;
+  background-color: #7aad37;
+  border: 1px solid #7aad37;
+  border-radius: 10px;
 }
 
 .refund_button {
