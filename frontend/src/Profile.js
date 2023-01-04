@@ -46,6 +46,14 @@ const Profile = (props) => {
     }
   }
 
+  const redirectToTalkyard = async () => {
+    const { data } = await api({
+      resource: `/api/users/${props.generalContext.auth.user_id}/single-sign-on`,
+      method: 'get'
+    })
+    window.open(data, '_blank')
+  }
+
   const { auth } = props.generalContext
 
   return auth.loggedIn ? (
@@ -75,7 +83,7 @@ const Profile = (props) => {
               ''
             )}
             <div className="profileMenuEntry">
-              <span onClick={() => this.redirectToTalkyard()}>
+              <span onClick={redirectToTalkyard}>
                 <FontAwesomeIcon icon={faQuestion} className="fa-question" />
                 Help
               </span>

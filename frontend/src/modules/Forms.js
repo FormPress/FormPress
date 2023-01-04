@@ -265,14 +265,6 @@ export default class Forms extends Component {
     return newValue
   }
 
-  async redirectToTalkyard() {
-    const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/single-sign-on`,
-      method: 'get'
-    })
-    window.open(data, '_blank')
-  }
-
   render() {
     const { forms } = this.state
     let roleLimit = 5
