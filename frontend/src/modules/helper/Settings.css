@@ -83,51 +83,13 @@
 }
 
 .payment .actions_container {
-  border-radius: 50%;
-  background-color: #a5a5a5;
-  vertical-align: inherit;
-  height: 24px;
-  width: 24px;
   position: relative;
-  display: flex;
-  margin: auto;
-}
-
-.payment .actions_container:before {
-  content: '...';
-  position: relative;
-  color: #ffffff;
-  font-size: 23px;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: flex-end;
-  padding: 26px 0 0 2px;
-  cursor: pointer;
-  border-radius: 50%;
-  line-height: 40px;
-}
-
-.payment .actions_container:hover {
-  background-color: #9ee048;
-}
-
-.payment .actions_container:hover:before {
-  color: #fff;
-}
-
-.payment .actions_container:hover .actions_content {
-  display: block;
 }
 
 .payment .actions_content {
-  display: none;
-  position: absolute;
-  width: 120px;
+  display: flex;
   background-color: #fff;
-  left: -44px;
-  top: -7px;
-  line-height: 22px;
+  flex-direction: column;
 }
 
 .payment .hidden {
@@ -149,7 +111,10 @@
 
 .cancel_subscription {
   color: #be0000;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
   cursor: pointer;
+  line-height: 26px;
 }
 .cancel_subscription:hover {
   color: #ffffff;
@@ -160,7 +125,10 @@
 
 .upgrade_subscription {
   color: #7aad37;
+  background-color: #ffffff;
+  border: 1px solid #ffffff;
   cursor: pointer;
+  line-height: 26px;
 }
 .upgrade_subscription:hover {
   color: #ffffff;
