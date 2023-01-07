@@ -104,7 +104,6 @@ class SignUp extends Component {
   }
 
   async handleLoginWithGoogleClick(response) {
-    console.log(response.get('CF-IPCountry'))
     this.setState({ state: 'loading' })
 
     const profile = JSON.parse(atob(response.credential.split('.')[1]))
