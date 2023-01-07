@@ -103,7 +103,7 @@ export default class TextArea extends Component {
                 className="hidden"
                 {...inputProps}></textarea>
               <Editor
-                apiKey="8919uh992pdzk74njdu67g6onb1vbj8k8r9fqsbn16fjtnx2"
+                apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
                 value={config.value}
                 init={{
                   plugins: 'link image code',

@@ -10,6 +10,7 @@ const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
 const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
+const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
 
 module.exports = (app) => {
   app.post('/api/users/signup', async (req, res) => {
@@ -45,6 +46,8 @@ module.exports = (app) => {
         VALUES
         ('${newEntry.insertId}', '2')
       `)
+
+      await locationFinder(newEntry.insertId, req.get('CF-IPCountry'))
 
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(

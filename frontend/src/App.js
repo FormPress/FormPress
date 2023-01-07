@@ -98,15 +98,15 @@ class App extends Component {
 
   handleSetAuth(
     {
-      email,
-      user_id,
-      user_role,
-      token,
-      impersonate,
-      admin,
-      loggedIn,
-      exp,
-      permission
+      email = this.state.email,
+      user_id = this.state.user_id,
+      user_role = this.state.user_role,
+      token = this.state.token,
+      impersonate = this.state.impersonate,
+      admin = this.state.admin,
+      loggedIn = this.state.loggedIn,
+      exp = this.state.exp,
+      permission = this.state.permission
     },
     persist = true
   ) {

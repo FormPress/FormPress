@@ -3,6 +3,7 @@ const https = require('https')
 const { genRandomString } = require(path.resolve('helper')).random
 const { getPool } = require(path.resolve('./', 'db'))
 const { token } = require(path.resolve('helper')).token
+const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
 
 async function checkWithGoogle(token) {
   const checkUrl = '/oauth2/v3/tokeninfo?id_token=' + token
@@ -115,6 +116,8 @@ module.exports = (app) => {
       admin: isAdmin,
       permission: JSON.parse(user.permission)
     }
+
+    await locationFinder(user.id, req.get('CF-IPCountry'))
 
     const data = await token(jwt_data)
     return res.status(200).json(data)
