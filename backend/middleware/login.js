@@ -3,6 +3,7 @@ const path = require('path')
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { token } = require(path.resolve('helper')).token
 const { getPool } = require(path.resolve('./', 'db'))
+const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
 
 module.exports = (app) => {
   app.post('/api/users/login', async (req, res) => {
@@ -57,6 +58,8 @@ module.exports = (app) => {
           admin: isAdmin,
           permission: JSON.parse(user.permission)
         }
+
+        await locationFinder(user.id, req.get('CF-IPCountry'))
 
         const data = await token(jwt_data)
         return res.status(200).json(data)
