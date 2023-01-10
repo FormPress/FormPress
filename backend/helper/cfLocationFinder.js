@@ -15,6 +15,10 @@ exports.locationFinder = async (user_id, cf_ipcountry) => {
         `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`, \`created_at\`) VALUES (?, ?, ?, NOW())`,
         [user_id, 'location.first', cf_ipcountry]
       )
+      await db.query(
+        `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`, \`created_at\`) VALUES (?, ?, ?, NOW())`,
+        [user_id, 'location.last', cf_ipcountry]
+      )
     } else {
       const searchSecondLocation = await db.query(
         `SELECT * FROM \`user_settings\` WHERE user_id = ? AND \`key\` = ? AND \`value\` IS NOT NULL`,
