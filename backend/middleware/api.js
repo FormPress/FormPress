@@ -1459,7 +1459,6 @@ module.exports = (app) => {
           }
 
           console.log(options)
-
           await fetch(
             'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
             options
