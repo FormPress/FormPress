@@ -1441,35 +1441,43 @@ module.exports = (app) => {
       const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
         user_id
       ])
-
-      if (result.length > 0) {
-        const options = {
-          method: 'POST',
-          body: JSON.stringify({
-            ssoId: result[0].emailVerificationCode,
-            primaryEmailAddress: result[0].email,
-            isEmailAddressVerified: true,
-            username: result[0].email.split('@')[0],
-            fullName: result[0].email.split('@')[0]
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Basic ${process.env.TALKYARD_SECRET}`
+      try {
+        if (result.length > 0) {
+          const options = {
+            method: 'POST',
+            body: JSON.stringify({
+              ssoId: result[0].emailVerificationCode,
+              primaryEmailAddress: result[0].email,
+              isEmailAddressVerified: true,
+              username: result[0].email.split('@')[0],
+              fullName: result[0].email.split('@')[0]
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Basic ${process.env.TALKYARD_SECRET}`
+            }
           }
-        }
 
-        await fetch(
-          'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
-          options
-        )
-          .then((resp) => resp.json())
-          .then((json) => {
-            res.json(
-              `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
-            )
-          })
-      } else {
-        res.json({ status: 'error', error_message: 'User not found.' })
+          console.log(options)
+          await fetch(
+            'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
+            options
+          )
+            .then(async (resp) => {
+              let jsonResponse = await resp.json()
+              console.log(jsonResponse)
+              return jsonResponse
+            })
+            .then((json) => {
+              res.json(
+                `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+              )
+            })
+        } else {
+          res.json({ status: 'error', error_message: 'User not found.' })
+        }
+      } catch (e) {
+        console.log(e)
       }
     }
   )
