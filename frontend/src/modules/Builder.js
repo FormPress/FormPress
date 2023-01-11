@@ -807,11 +807,11 @@ export default class Builder extends Component {
   }
 
   async rteUploadHandler(blobInfo) {
-    return new Promise((success, failure) => {
+    return new Promise((resolve, reject) => {
       const image_size = blobInfo.blob().size / 1000,
         max_size = 3000
       if (image_size > max_size) {
-        failure(
+        reject(
           'Image is too large ( ' +
             image_size +
             ') ,Maximum image size is:' +
@@ -843,7 +843,7 @@ export default class Builder extends Component {
             return false
           }
 
-          success(json.location)
+          resolve(json.location)
         }
 
         formData = new FormData()
@@ -1360,7 +1360,11 @@ export default class Builder extends Component {
                         </span>
                         <span className="planover-container">
                           <FontAwesomeIcon icon={faQuestionCircle} />
-                          <a href="/pricing" className="upgrade_button">
+                          <a
+                            href="/pricing"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="upgrade_button">
                             UPGRADE
                           </a>
                           <div className="popoverText">

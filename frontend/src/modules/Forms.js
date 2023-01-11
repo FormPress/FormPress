@@ -287,7 +287,7 @@ export default class Forms extends Component {
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
-                <div className="popover-container">
+                <div className="popover-container circle-plus-container">
                   <FontAwesomeIcon
                     icon={faPlusCircle}
                     title="Add New Form"

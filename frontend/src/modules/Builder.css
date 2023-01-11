@@ -406,11 +406,35 @@
   position: relative;
 }
 
+.circle-question-container {
+  cursor: pointer;
+  display: inline;
+  position: fixed;
+  top: 25px;
+  left: 59.5%;
+  z-index: 12;
+  color: #113952;
+}
+
 .builder.form .element > h4 > .label > span {
   padding: 3px;
 }
 
-.popover-container:hover > .popoverText {
+.circle-plus-container:hover .popoverText {
+  display: block;
+  width: 100px;
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  top: -30px;
+  left: -35px;
+  z-index: 9999;
+}
+
+.circle-question-container:hover .popoverText {
   display: block;
   width: 100px;
   padding: 5px;

@@ -44,6 +44,7 @@ services:
       - ADMINEMAIL=${ADMINEMAIL}
       - ADMINPASSWORD=${ADMINPASSWORD}
       - TINYMCE_API_KEY={TINYMCE_API_KEY}
+      - TALKYARD_SECRET=${TALKYARD_SECRET}
     ports:
       - '3001:3001'
     links:

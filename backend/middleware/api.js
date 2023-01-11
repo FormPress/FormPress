@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const fetch = require('node-fetch')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -1426,6 +1427,49 @@ module.exports = (app) => {
       if (usagesResult.length > 0) {
         const usages = usagesResult[0]
         res.json(usages)
+      }
+    }
+  )
+
+  app.get(
+    '/api/users/:user_id/single-sign-on',
+    mustHaveValidToken,
+    async (req, res) => {
+      const { user_id } = req.params
+
+      const db = await getPool()
+      const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
+        user_id
+      ])
+
+      if (result.length > 0) {
+        const options = {
+          method: 'POST',
+          body: JSON.stringify({
+            ssoId: result[0].emailVerificationCode,
+            primaryEmailAddress: result[0].email,
+            isEmailAddressVerified: true,
+            username: result[0].email.split('@')[0],
+            fullName: result[0].email.split('@')[0]
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Basic ${process.env.TALKYARD_SECRET}`
+          }
+        }
+
+        await fetch(
+          'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
+          options
+        )
+          .then((resp) => resp.json())
+          .then((json) => {
+            res.json(
+              `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+            )
+          })
+      } else {
+        res.json({ status: 'error', error_message: 'User not found.' })
       }
     }
   )

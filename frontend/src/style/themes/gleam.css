@@ -39,10 +39,10 @@
 }
 
 .label span.required:after {
-  content: ' *';
+  content: '*';
   color: red;
   position: absolute;
-  left: 1px;
+  left: 0;
   font-size: 20px;
 }
 
