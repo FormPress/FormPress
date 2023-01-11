@@ -1458,16 +1458,11 @@ module.exports = (app) => {
             }
           }
 
-          console.log(options)
           await fetch(
             'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
             options
           )
-            .then(async (resp) => {
-              let jsonResponse = await resp.json()
-              console.log(jsonResponse)
-              return jsonResponse
-            })
+            .then(async (resp) => resp.json())
             .then((json) => {
               res.json(
                 `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`

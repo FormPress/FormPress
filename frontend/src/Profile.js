@@ -82,7 +82,7 @@ const Profile = (props) => {
             ) : (
               ''
             )}
-            <div className="profileMenuEntry hidden">
+            <div className="profileMenuEntry">
               <span onClick={redirectToTalkyard}>
                 <FontAwesomeIcon icon={faQuestion} className="fa-question" />
                 Help
