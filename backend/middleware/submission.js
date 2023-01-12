@@ -49,7 +49,7 @@ module.exports = (app) => {
 
     if (validate(form_id)) {
       form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
+    } else if (parseInt(form_id) > 1200) {
       res.status(404).send('Form Not Found')
     } else {
       form_id = parseInt(form_id)
