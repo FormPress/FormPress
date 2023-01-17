@@ -1441,6 +1441,7 @@ module.exports = (app) => {
       const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
         user_id
       ])
+
       try {
         if (result.length > 0) {
           const options = {
@@ -1459,13 +1460,13 @@ module.exports = (app) => {
           }
 
           await fetch(
-            'https://test--formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
+            'https://formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
             options
           )
             .then(async (resp) => resp.json())
             .then((json) => {
               res.json(
-                `https://test--formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+                `https://formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
               )
             })
         } else {
@@ -1473,6 +1474,7 @@ module.exports = (app) => {
         }
       } catch (e) {
         console.log(e)
+        console.log(user_id, result[0].email, process.env.TALKYARD_SECRET)
       }
     }
   )
