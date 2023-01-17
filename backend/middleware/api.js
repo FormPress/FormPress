@@ -1463,10 +1463,7 @@ module.exports = (app) => {
             'https://formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
             options
           )
-            .then(async (resp) => {
-              console.log(resp)
-              return resp.json()
-            })
+            .then(async (resp) => resp.json())
             .then((json) => {
               res.json(
                 `https://formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
@@ -1477,12 +1474,6 @@ module.exports = (app) => {
         }
       } catch (e) {
         console.log(e)
-        console.log(
-          user_id,
-          result[0].email,
-          process.env.TALKYARD_SECRET,
-          options
-        )
       }
     }
   )
