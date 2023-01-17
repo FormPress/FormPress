@@ -182,7 +182,7 @@
   float: right;
   position: relative;
   top: 17px;
-  left: -190px;
+  left: -193px;
 }
 
 .formProperties
@@ -191,22 +191,42 @@
   > .popoverText {
   width: 12rem;
   height: fit-content;
-  top: 25px;
-  left: -90px;
+  top: -42px;
+  left: -86px;
+  width: 12rem;
+  padding: 4px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  font-size: 12px;
+  display: block;
 }
 
 .formProperties .evaluateFormTooltip .popover-container {
   float: right;
   position: relative;
   top: 73px;
-  left: -188px;
+  left: -190px;
 }
 
 .formProperties .evaluateFormTooltip .popover-container:hover > .popoverText {
   width: 18rem;
   height: fit-content;
-  top: 20px;
-  left: -135px;
+  top: -70px;
+  left: -86px;
+  width: 12rem;
+  padding: 4px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  z-index: 9999;
+  font-size: 12px;
+  display: block;
 }
 
 .formProperties .privateFormTooltip .popover-container {
