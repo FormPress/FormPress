@@ -25,14 +25,16 @@ async function create({ token, targetSpreadsheet }) {
       }
     ]
   }
+
   try {
     const spreadsheet = await service.spreadsheets.create({
       resource
     })
     return spreadsheet.data.spreadsheetId
   } catch (err) {
-    console.log(err)
     error.errorReport(err)
+    console.log('Error creating spreadsheet:', err)
+    return null
   }
 }
 
@@ -83,17 +85,23 @@ async function addSheet({ token, targetSpreadsheet }) {
     ]
   }
 
-  const response = await sheets.spreadsheets.batchUpdate({
-    spreadsheetId: targetSpreadsheet.id,
-    resource
-  })
+  try {
+    let response = await sheets.spreadsheets.batchUpdate({
+      spreadsheetId: targetSpreadsheet.id,
+      resource
+    })
 
-  targetSpreadsheet.sheet.id =
-    response.data.replies[0].addSheet.properties.sheetId
-  targetSpreadsheet.sheet.title =
-    response.data.replies[0].addSheet.properties.title
+    targetSpreadsheet.sheet.id =
+      response.data.replies[0].addSheet.properties.sheetId
+    targetSpreadsheet.sheet.title =
+      response.data.replies[0].addSheet.properties.title
 
-  return targetSpreadsheet
+    return targetSpreadsheet
+  } catch (err) {
+    error.errorReport(err)
+    console.log('Error adding sheet:', err)
+    return null
+  }
 }
 
 async function prepareSheet({ token, targetSpreadsheet, fieldMapping }) {
@@ -288,13 +296,16 @@ exports.googleSheetsApi = (app) => {
     }
     let existingSpreadsheet = true
 
-    if (targetSpreadsheet.id === '') {
+    if (targetSpreadsheet.id === '' || targetSpreadsheet.id === undefined) {
       existingSpreadsheet = false
-      const spreadsheetId = await create({
+      targetSpreadsheet.id = await create({
         token,
         targetSpreadsheet
       })
-      targetSpreadsheet.id = spreadsheetId
+
+      if (targetSpreadsheet.id === null) {
+        return res.status(500).json({ message: 'Error creating spreadsheet.' })
+      }
 
       await prepareSheet({
         token,
@@ -304,6 +315,11 @@ exports.googleSheetsApi = (app) => {
       })
     } else {
       targetSpreadsheet = await addSheet({ token, targetSpreadsheet })
+
+      if (targetSpreadsheet === null) {
+        return res.status(500).json({ message: 'Error adding worksheet.' })
+      }
+
       await prepareSheet({
         token,
         targetSpreadsheet,

@@ -186,6 +186,20 @@ select.advanced-config-values:hover {
   width: 100%;
 }
 
+.integration-wrapper.GoogleSheets
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .file
+  > .element
+  > div
+  > .dropdown-div
+  > select {
+  height: 30px;
+  width: 245px;
+  padding: 0 0 0 6px;
+}
+
 .static-row {
   width: 100%;
   display: flex;
