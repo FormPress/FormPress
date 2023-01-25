@@ -168,12 +168,6 @@ module.exports = (app) => {
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     let { form_id } = req.params
 
-    if (validate(form_id)) {
-      form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1200) {
-      return res.status(404).send('Form Not Found')
-    }
-
     const elems = (await formModel.get({ form_id })).props.elements
 
     // remove the keys that are named 'expectedAnswer' out of the elements
