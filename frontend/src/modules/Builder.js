@@ -31,8 +31,6 @@ import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
 import '../style/themes/gleam.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 const getElements = () =>
   Object.values(Elements).map((element) => {
     const config = Object.assign({}, element.defaultConfig)
@@ -825,7 +823,7 @@ export default class Builder extends Component {
         xhr.withCredentials = false
         xhr.open(
           'POST',
-          `${BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
+          `${global.env.FE_BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
         )
 
         xhr.onload = function () {
@@ -866,7 +864,7 @@ export default class Builder extends Component {
       xhr.withCredentials = false
       xhr.open(
         'POST',
-        `${BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
+        `${global.env.FE_BACKEND}/api/upload/${this.state.form.id}/${this.state.selectedFieldId}`
       )
 
       xhr.onload = function () {
@@ -1632,7 +1630,7 @@ export default class Builder extends Component {
               title="Upgrade your plan to remove branding.">
               <img
                 alt="Formpress Logo"
-                src="https://storage.googleapis.com/static.formpress.org/images/formpresslogomotto.png"
+                src="https://static.formpress.org/images/formpresslogomotto.png"
                 className="formpress-logo"
               />
               <div

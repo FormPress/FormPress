@@ -6,8 +6,6 @@ import { faPhone } from '@fortawesome/free-solid-svg-icons'
 
 import './Phone.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 export default class Phone extends Component {
   constructor(props) {
     super(props)
@@ -17,7 +15,11 @@ export default class Phone extends Component {
   }
 
   componentDidMount() {
-    fetch(`${BACKEND}/api/datasets?dataset=countriesDialCodes`)
+    fetch(
+      `${
+        process.env.FE_BACKEND || global.env.FE_BACKEND
+      }/api/datasets?dataset=countriesDialCodes`
+    )
       .then((response) => {
         return response.json()
       })

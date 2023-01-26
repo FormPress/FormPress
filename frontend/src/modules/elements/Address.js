@@ -6,8 +6,6 @@ import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
 
 import './Address.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 export default class Address extends Component {
   constructor(props) {
     super(props)
@@ -17,7 +15,11 @@ export default class Address extends Component {
   }
 
   componentDidMount() {
-    fetch(`${BACKEND}/api/datasets?dataset=countriesWithFlags,usStates`)
+    fetch(
+      `${
+        process.env.FE_BACKEND || global.env.FE_BACKEND
+      }/api/datasets?dataset=countriesWithFlags,usStates`
+    )
       .then((response) => {
         return response.json()
       })

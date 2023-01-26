@@ -1432,10 +1432,20 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/api/users/:user_id/single-sign-on',
+    '/api/users/:user_id/talkyard-sso',
     mustHaveValidToken,
     async (req, res) => {
       const { user_id } = req.params
+
+      if (
+        process.env.TALKYARD_SECRET === '' ||
+        process.env.TALKYARD_SECRET === undefined
+      ) {
+        return res.json({
+          status: 'error',
+          error_message: 'Talkyard secret is not provided'
+        })
+      }
 
       const db = await getPool()
       const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
@@ -1460,13 +1470,13 @@ module.exports = (app) => {
       try {
         if (result.length > 0) {
           await fetch(
-            'https://formpress.talkyard.net/-/v0/sso-upsert-user-generate-login-secret',
+            `https://${process.env.TALKYARD_SERVER}/-/v0/sso-upsert-user-generate-login-secret`,
             options
           )
             .then(async (resp) => resp.json())
             .then((json) => {
               res.json(
-                `https://formpress.talkyard.net/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+                `https://${process.env.TALKYARD_SERVER}/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
               )
             })
         } else {
@@ -1547,4 +1557,16 @@ module.exports = (app) => {
       return res.json(response)
     }
   )
+
+  //send all variables starting with 'FE_' to frontend
+  app.get('/api/loadvariables', async (req, res) => {
+    const feVariables = {}
+    for (const [key, value] of Object.entries(process.env)) {
+      if (key.indexOf('FE_') >= 0) {
+        feVariables[key] = value !== '' ? value : undefined
+      }
+    }
+
+    return res.json(feVariables)
+  })
 }

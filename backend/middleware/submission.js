@@ -335,7 +335,7 @@ module.exports = (app) => {
         to: sendEmailTo,
         from: {
           name: 'FormPress',
-          email: 'submission-notifications-noreply@api.formpress.org'
+          email: `submission-notifications-noreply@api.${process.env.EMAIL_DOMAIN}`
         },
         subject: `New Response: ${form.title}`,
         text: textBody,

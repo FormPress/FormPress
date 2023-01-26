@@ -44,7 +44,7 @@ variable "deployments" {
       "sql_instance_deletion_protection" = "true",
       "sql_instance_tier"                = "db-n1-standard-1",
       "database_name"                    = "formpress",
-      "hostname"                         = "app.formpress.org",
+      "hostname"                         = "",
       "bucket_name"                      = "file_upload_bucket",
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",

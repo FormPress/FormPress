@@ -48,7 +48,7 @@ const Profile = (props) => {
 
   const redirectToTalkyard = async () => {
     const { data } = await api({
-      resource: `/api/users/${props.generalContext.auth.user_id}/single-sign-on`,
+      resource: `/api/users/${props.generalContext.auth.user_id}/talkyard-sso`,
       method: 'get'
     })
     window.open(data, '_blank')

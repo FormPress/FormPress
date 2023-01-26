@@ -67,3 +67,9 @@
   width: 30px !important;
   height: 30px;
 }
+
+.loading-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}

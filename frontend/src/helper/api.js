@@ -2,8 +2,6 @@
   Generic method handles api requests
 */
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 let token = ''
 
 export const setToken = (_token) => {
@@ -36,7 +34,7 @@ export const api = ({
     let success = true
     let status
 
-    fetch(`${BACKEND}${resource}`, options)
+    fetch(`${global.env.FE_BACKEND}${resource}`, options)
       .then((response) => {
         success = response.ok
         status = response.status

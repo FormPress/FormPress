@@ -16,7 +16,6 @@ import Modal from './common/Modal'
 
 import './Forms.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
 export default class Forms extends Component {
   setLoadingState(key, value) {
     this.setState({
@@ -235,7 +234,7 @@ export default class Forms extends Component {
   handlePreviewClick(form) {
     const { uuid } = form
 
-    window.open(`${BACKEND}/form/view/${uuid}`, '_blank')
+    window.open(`${global.env.FE_BACKEND}/form/view/${uuid}`, '_blank')
   }
 
   handleCloseModalClick() {

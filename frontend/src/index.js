@@ -8,11 +8,15 @@ import './index.css'
 
 import App from './App'
 
-const FP_ENV = process.env.REACT_APP_FP_ENV
+global.env = {}
+global.env.FP_ENV = process.env.NODE_ENV
 let render = true
-
+global.env.FE_BACKEND = 'http://localhost:3001'
+global.env.FE_FRONTEND = 'http://localhost:3000'
 //Redirect to https on production
-if (FP_ENV === 'production') {
+if (global.env.FP_ENV === 'production') {
+  global.env.FE_BACKEND = `https://${window.location.hostname}`
+  global.env.FE_FRONTEND = `https://${window.location.hostname}`
   const { location } = document
   const { protocol, host, pathname } = location
 
