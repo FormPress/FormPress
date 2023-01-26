@@ -123,16 +123,20 @@ class ForgotPassword extends Component {
               </p>
               <div className="have-trouble">
                 Having trouble?
-                <span className="wip-placeholder" title="WIP">
-                  <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
+                <span className="have-trouble">
+                  <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
+                    &nbsp;Contact us!
+                  </a>
                 </span>
               </div>
             </div>
           </div>
           <div className="footer cw center grid">
-            <div className="col-8-16">Copyright © 2022 formpress.org</div>
+            <div className="col-8-16">Copyright © 2023 formpress.org</div>
             <div className="col-8-16 tr">
-              <a href="mailto:support@formpress.org">Contact</a>
+              <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
+                Contact
+              </a>
             </div>
           </div>
         </div>

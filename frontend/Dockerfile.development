@@ -3,7 +3,6 @@ FROM node:16.13.0-alpine3.14
 RUN mkdir /src
 
 ENV PATH="/node_modules/.bin:$PATH"
-ENV REACT_APP_FP_ENV="development"
 
 WORKDIR /src
 ADD package.json /package.json

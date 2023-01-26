@@ -11,8 +11,6 @@ import { faGoogleDrive } from '@fortawesome/free-brands-svg-icons'
 import _ from 'lodash'
 import { DotLoader } from 'react-spinner-overlay'
 
-const { REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID } = process.env
-
 export default class GoogleDrive extends Component {
   static metaData = {
     icon:
@@ -184,7 +182,7 @@ export default class GoogleDrive extends Component {
     const google = window.google
 
     let tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID,
+      client_id: global.env.FE_GOOGLE_CREDENTIALS_CLIENT_ID,
       scope: 'https://www.googleapis.com/auth/drive.file',
       callback: async (response) => {
         if (response.error !== undefined) {

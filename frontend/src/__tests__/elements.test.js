@@ -4,6 +4,8 @@ import * as Elements from '../modules/elements'
 
 const excludedKeys = ['Button', 'Header', 'Separator', 'Address', 'PageBreak', 'Image']
 const keys = Object.keys(Elements)
+process.env.FE_BACKEND = 'backendUrlForTests'
+
 for (const key of keys) {
   const Component = Elements[key]
 

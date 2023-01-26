@@ -98,7 +98,7 @@ class EditableLabel extends Component {
         <div {...extraProps}>
           <Editor
             key={order}
-            apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+            apiKey={global.env.FE_TINYMCE_API_KEY}
             initialValue={props.value}
             init={{
               plugins: 'link image code',
