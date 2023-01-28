@@ -31,6 +31,42 @@ import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
 import '../style/themes/gleam.css'
 
+const DEFAULT_FORM = {
+  id: null,
+  uuid: null,
+  user_id: null,
+  title: 'Untitled Form',
+  private: 0,
+  props: {
+    integrations: [
+      {
+        type: 'email',
+        value: ''
+      }
+    ],
+    elements: [
+      {
+        id: 1,
+        type: 'TextBox',
+        placeholder: '',
+        required: false,
+        label: 'Short Text',
+        requiredText: 'Please fill this field.'
+      },
+      {
+        id: 2,
+        type: 'Button',
+        buttonText: 'Submit'
+      }
+    ],
+    customCSS: {
+      value: '',
+      isEncoded: false
+    },
+    tags: []
+  }
+}
+
 const getElements = () =>
   Object.values(Elements).map((element) => {
     const config = Object.assign({}, element.defaultConfig)
@@ -93,7 +129,6 @@ export default class Builder extends Component {
 
       if (formId !== 'new') {
         await this.loadForm(formId)
-        window.localStorage.setItem('lastEditedFormId', formId)
       } else {
         window.scrollTo(0, 0)
         const { form } = this.state
@@ -212,11 +247,15 @@ export default class Builder extends Component {
     const { data, status } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${formId}`
     })
-    if (status === 403) {
-      this.setState({ redirect: true })
+
+    if (status === 403 || data.id === undefined) {
+      this.props.history.replace('/editor/new/builder')
+      localStorage.removeItem('lastEditedFormId')
+      this.setState({ loading: false })
 
       return
     }
+
     if (typeof data.props === 'undefined') {
       this.setState({
         loading: false
@@ -251,6 +290,8 @@ export default class Builder extends Component {
       savedForm,
       publishedForm: publishedFormResult.data
     })
+
+    window.localStorage.setItem('lastEditedFormId', form.id)
   }
 
   setFormTags(tags) {
@@ -344,43 +385,9 @@ export default class Builder extends Component {
       selectedFieldId: false,
       selectedLabelId: false,
       publishedForm: {},
-      savedForm: {},
       selectedIntegration: false,
-      form: {
-        id: null,
-        uuid: null,
-        user_id: null,
-        title: 'Untitled Form',
-        private: 0,
-        props: {
-          integrations: [
-            {
-              type: 'email',
-              value: ''
-            }
-          ],
-          elements: [
-            {
-              id: 1,
-              type: 'TextBox',
-              placeholder: '',
-              required: false,
-              label: 'Short Text',
-              requiredText: 'Please fill this field.'
-            },
-            {
-              id: 2,
-              type: 'Button',
-              buttonText: 'Submit'
-            }
-          ],
-          customCSS: {
-            value: '',
-            isEncoded: false
-          },
-          tags: []
-        }
-      },
+      form: DEFAULT_FORM,
+      savedForm: DEFAULT_FORM,
       autoPBEnabled: false
     }
     //this.handleClick = this.handleClick.bind(this)
