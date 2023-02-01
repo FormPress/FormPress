@@ -78,10 +78,28 @@ export default class Radio extends Component {
   static helpers = {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
-      return Array.from(nodeList)
+      const labels = document.querySelectorAll(`label[for^="q_${id}"]`)
+
+      const values = []
+
+      Array.from(nodeList).forEach((elem, index) => {
+        values.push({
+          index: elem.value,
+          checked: elem.checked,
+          value: labels[index].innerText
+        })
+      })
+
+      return values
     },
-    isFilled: (value) => {
-      return !value.every((item) => item.checked === false)
+    isFilled: (values) => {
+      let filled = false
+      values.forEach((elem) => {
+        if (elem.checked) {
+          filled = true
+        }
+      })
+      return filled
     }
   }
 

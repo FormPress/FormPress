@@ -55,9 +55,17 @@ export default class Checkbox extends Component {
   static helpers = {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
-      const checkboxes = Array.from(nodeList)
+      const labels = document.querySelectorAll(`label[for^="q_${id}"]`)
 
-      return checkboxes
+      const options = Array.from(nodeList).map((elem, index) => {
+        return {
+          index: elem.value,
+          checked: elem.checked,
+          value: labels[index].innerText
+        }
+      })
+
+      return options
     },
     isFilled: (value) => {
       return !value.every((item) => item.checked === false)

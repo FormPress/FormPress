@@ -147,14 +147,34 @@ export default class Address extends Component {
     getElementValue: (id) => {
       const addressElem = document.getElementById(`qc_${id}`)
       const addressInputs = addressElem.querySelectorAll('input[type="text"]')
+      const addressSelects = addressElem.querySelectorAll('select')
+
       const values = []
-      addressInputs.forEach((input) => {
-        values.push(input.value)
-      })
+
+      for (const input of addressInputs) {
+        values.push({
+          type: input.dataset.addresstype,
+          value: input.value
+        })
+      }
+
+      for (const select of addressSelects) {
+        values.push({
+          type: select.dataset.addresstype,
+          value: select.value
+        })
+      }
+
       return values
     },
     isFilled: (values) => {
-      return !values.every((item) => item === '')
+      let filled = 0
+      for (const value of values) {
+        if (value.value !== '') {
+          filled++
+        }
+      }
+      return filled >= 2
     }
   }
 
@@ -218,6 +238,7 @@ export default class Address extends Component {
           <span className={`address-section adr-street`}>
             <input
               id={`address-street_${config.id}`}
+              data-addressType="street"
               name={`q_${config.id}[street]`}
               type="text"
             />
@@ -242,6 +263,7 @@ export default class Address extends Component {
           <span className={`address-section adr-street`}>
             <input
               id={`address-street2_${config.id}`}
+              data-addressType="street2"
               name={`q_${config.id}[street2]`}
               type="text"
             />
@@ -267,6 +289,7 @@ export default class Address extends Component {
             <span className={` address-section adr-city`}>
               <input
                 id={`address-city_${config.id}`}
+                data-addressType="city"
                 name={`q_${config.id}[city]`}
                 type="text"
               />
@@ -291,6 +314,7 @@ export default class Address extends Component {
             <span className={`address-section adr-zip`}>
               <input
                 id={`address-zip_${config.id}`}
+                data-addressType="zip"
                 name={`q_${config.id}[zip]`}
                 type="text"
               />
@@ -317,6 +341,7 @@ export default class Address extends Component {
                 <select
                   className="dropdown-select"
                   id={`address-state_${config.id}`}
+                  data-addressType="state"
                   name={`q_${config.id}[state]`}
                   defaultValue={config.value ? config.value : ''}
                   data-fp-list={'usStates'}>
@@ -333,6 +358,7 @@ export default class Address extends Component {
               ) : (
                 <input
                   id={`address-state_${config.id}`}
+                  data-addressType="state"
                   name={`q_${config.id}[state]`}
                   type="text"
                 />
@@ -359,6 +385,7 @@ export default class Address extends Component {
               <select
                 className="dropdown-select"
                 id={`address-country_${config.id}`}
+                data-addressType="country"
                 name={`q_${config.id}[country]`}
                 data-fp-defaultvalue={config.defaultCountry}
                 value={

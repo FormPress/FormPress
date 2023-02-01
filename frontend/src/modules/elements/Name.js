@@ -137,16 +137,19 @@ export default class Name extends Component {
       const lastName = document.querySelector(`#lname_${id}`)
       const prefix = document.querySelector(`#prefix_${id}`)
 
-      values.push(firstName, lastName)
+      values.push(
+        { type: 'firstName', value: firstName.value },
+        { type: 'lastName', value: lastName.value }
+      )
 
       if (prefix.parentElement.classList.contains('hidden') === false) {
-        values.push(prefix)
+        values.push({ type: 'prefix', value: prefix.value })
       }
 
       return values
     },
-    isFilled: (value) => {
-      return !value.some((item) => item.value.trim() === '')
+    isFilled: (values) => {
+      return values.every((value) => value.value !== '')
     }
   }
 
