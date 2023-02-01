@@ -9,6 +9,10 @@
     })
   const extensions = [
     {
+      name: 'conditional',
+      check: () => formHasConditionalLogic === true
+    },
+    {
       name: 'required',
       check: (element) => element.required === true
     },
@@ -90,6 +94,18 @@
     validateGoodToGo: true
   }
 
+  const rulesQuery = await api({
+    resource: `/api/users/${USERID}/forms/${FORMID}/rules`
+  })
+
+  if (rulesQuery.success === false) {
+    return alert('Error while loading form rules.')
+  }
+
+  window.FORMPRESS.rules = rulesQuery.data || []
+
+  const formHasConditionalLogic = window.FORMPRESS.rules.length > 0
+
   const validatorsQuery = await api({
     resource: `/api/form/element/validators?elements=${elements
       .map((e) => e.type)
@@ -151,6 +167,8 @@
   }
 
   await Promise.all(extensionstoLoad.map(loadScript))
+  // unhide form
+  document.body.style.display = 'block'
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
