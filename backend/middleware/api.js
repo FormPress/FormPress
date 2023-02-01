@@ -180,6 +180,20 @@ module.exports = (app) => {
     res.json(sanitizedElems || [])
   })
 
+  app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
+    let { form_id } = req.params
+
+    if (validate(form_id)) {
+      form_id = await formModel.getFormIdFromUUID(form_id)
+    } else if (parseInt(form_id) > 1500) {
+      res.status(404).send('Form Not Found')
+    }
+
+    const rules = (await formModel.get({ form_id })).props.rules
+
+    res.json(rules || [])
+  })
+
   // a new endpoint to return an ejs template for exam evaluations
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
