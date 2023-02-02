@@ -213,14 +213,18 @@ class RuleBuilder extends Component {
       (prevProps.editingRule === null ||
         prevProps.editingRule.id !== this.props.editingRule.id)
     ) {
+      const selectedIfField = this.props.form.props.elements.find(
+        (e) => e.id === parseInt(this.props.editingRule.if.field)
+      )
       this.setState({
-        currentRule: this.props.editingRule
+        currentRule: this.props.editingRule,
+        selectedIfField
       })
     }
   }
 
   addRule() {
-    const { currentRule } = this.state
+    const { currentRule, selectedIfField } = this.state
     const { if: ifRule, then: thenRule } = currentRule
 
     if (
@@ -232,10 +236,24 @@ class RuleBuilder extends Component {
       return
     }
 
+    const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
+
+    let arrayValueField = false
+    if (selectedIfField !== undefined) {
+      arrayValueField = elemsThatHasArrayValue.includes(selectedIfField.type)
+    }
+
+    // if the field is an array value field, it's sure that fieldlink can't be true
+    if (arrayValueField) {
+      currentRule.fieldLink = false
+    }
+
     this.props.setFormRule(currentRule)
 
     this.setState({
       currentRule: {
+        fieldLink: true,
+        type: 'showHide',
         if: {
           field: '',
           operator: '',
@@ -307,13 +325,10 @@ class RuleBuilder extends Component {
 
   render() {
     const { currentRule, selectedIfField } = this.state
-
     const { operator } = currentRule.if
-
     const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
 
     let arrayValueField = false
-
     if (selectedIfField !== undefined) {
       arrayValueField = elemsThatHasArrayValue.includes(selectedIfField.type)
     }

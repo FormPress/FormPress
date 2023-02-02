@@ -73,9 +73,8 @@
           .getElementValue(ifRule.field)
           .filter(
             (node) =>
-              node.value !== '' ||
-              node.checked === true ||
-              node.checked === undefined
+              node.value !== '' &&
+              (node.checked === true || node.checked === undefined)
             // but not false
           )
           .map((node) => node.value)
@@ -122,7 +121,7 @@
         const executeCommand = commandFunctions[command]
 
         const assessment = operatorFunction(
-          ifFieldValue,
+          ifFieldValue.toLowerCase(),
           expectedValue.toLowerCase()
         )
 
