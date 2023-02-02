@@ -470,7 +470,7 @@ class RuleBuilder extends Component {
                                   id: 1,
                                   type: 'Checkbox',
                                   options: ['Link to another field'],
-                                  value: this.state.fieldLink
+                                  value: this.state.currentRule.fieldLink
                                 }
                               ]
                             }
