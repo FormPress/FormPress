@@ -1,4 +1,4 @@
-;(async () => {
+;(() => {
   // this dependency script is for conditional logic
   const operatorFunctions = {
     equals: (value1, value2) => value1 === value2,
