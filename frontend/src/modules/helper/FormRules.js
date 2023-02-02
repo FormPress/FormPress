@@ -118,7 +118,7 @@ class FormRules extends Component {
                       />
                     </div>
                     <div className="formRule-body">
-                      If...{' '}
+                      If{' '}
                       <span className="ifField">
                         {elements
                           .find((e) => e.id === parseInt(rule.if.field))
@@ -207,7 +207,6 @@ class RuleBuilder extends Component {
       (prevProps.editingRule === null ||
         prevProps.editingRule.id !== this.props.editingRule.id)
     ) {
-      this.filterElementsWithInput()
       this.setState({
         currentRule: this.props.editingRule
       })

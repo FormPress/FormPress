@@ -187,6 +187,12 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/users/:user_id/forms/:form_id/rules',
+      protected: false,
+      exampleRequestPath: 'api/users/1/forms/1/rules'
+    },
+    {
+      method: 'get',
       path: '/api/datasets',
       protected: false,
       exampleRequestPath: 'api/datasets?dataset=countries'
