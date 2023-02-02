@@ -4,9 +4,9 @@ import Renderer from '../Renderer'
 import * as Elements from '../elements'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faChevronLeft,
   faEye,
   faPlusCircle,
+  faTimes,
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -63,71 +63,89 @@ class FormRules extends Component {
 
     const rules = form.props.rules || []
 
+    let dynamicButtonJSX
+
+    if (mode === 'view') {
+      dynamicButtonJSX = (
+        <>
+          <FontAwesomeIcon icon={faPlusCircle} /> Add New Rule{' '}
+        </>
+      )
+    } else {
+      dynamicButtonJSX = (
+        <>
+          <FontAwesomeIcon icon={faTimes} /> Close rule builder{' '}
+        </>
+      )
+    }
+
     return (
       <div className="formRules-wrapper">
         <div>
           <div className="formRules-title">Form Rules</div>
-          {mode === 'build' ? (
-            <RuleBuilder
-              form={this.props.form}
-              setFormRule={this.props.setFormRule}
-              handleToggleRuleBuilder={this.handleToggleRuleBuilder}
-            />
-          ) : (
-            <>
-              <button
-                className="addNewRule-button"
-                onClick={() => this.handleToggleRuleBuilder()}>
-                <FontAwesomeIcon icon={faPlusCircle} /> Add New Rule{' '}
-              </button>
-              <div className="formRules-list">
-                {rules.map((rule, index) => {
-                  return (
-                    <div className="formRule" key={index}>
-                      <div className="formRule-header">
-                        <FontAwesomeIcon icon={faEye} /> Show / Hide Fields{' '}
-                        {/* TODO: needs dynamic overhaul */}
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className={'deleteRule'}
-                          title={'Remove Rule'}
-                          onClick={() => this.deleteRule(rule)}
-                        />{' '}
-                      </div>
-                      <div className="formRule-body">
-                        If...{' '}
-                        <span className="ifField">
-                          {elements
-                            .find((e) => e.id === parseInt(rule.if.field))
-                            ?.label.substring(0, 35)}
-                        </span>{' '}
-                        <span className="ifOperator">
-                          {operators[rule.if.operator].toLowerCase()}
-                        </span>{' '}
-                        <span className="ifValue">
-                          {rule.fieldLink === true
-                            ? elements
-                                .find((e) => e.id === parseInt(rule.if.value))
-                                ?.label.substring(0, 35)
-                            : rule.if.value}
-                        </span>
-                        ,{' '}
-                        <span className="thenCommand">
-                          {commands[rule.then.command].toLowerCase()}
-                        </span>
-                        <span className="thenField">
-                          {elements
-                            .find((e) => e.id === parseInt(rule.then.field))
-                            ?.label.substring(0, 35)}
-                        </span>
-                      </div>
+          <>
+            <button
+              className={
+                'addNewRule-button' + (mode === 'build' ? ' active' : '')
+              }
+              onClick={() => this.handleToggleRuleBuilder()}>
+              {dynamicButtonJSX}
+            </button>
+            <div
+              className={'formRules-list' + (mode === 'build' ? ' build' : '')}>
+              {rules.map((rule, index) => {
+                return (
+                  <div className="formRule" key={index}>
+                    <div className="formRule-header">
+                      <FontAwesomeIcon icon={faEye} /> Show / Hide Fields{' '}
+                      {/* TODO: needs dynamic overhaul */}
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        className={'deleteRule'}
+                        title={'Remove Rule'}
+                        onClick={() => this.deleteRule(rule)}
+                      />{' '}
                     </div>
-                  )
-                })}
-              </div>
-            </>
-          )}
+                    <div className="formRule-body">
+                      If...{' '}
+                      <span className="ifField">
+                        {elements
+                          .find((e) => e.id === parseInt(rule.if.field))
+                          ?.label.substring(0, 35)}
+                      </span>{' '}
+                      <span className="ifOperator">
+                        {operators[rule.if.operator].toLowerCase()}
+                      </span>{' '}
+                      <span className="ifValue">
+                        {rule.fieldLink === true
+                          ? elements
+                              .find((e) => e.id === parseInt(rule.if.value))
+                              ?.label.substring(0, 35)
+                          : rule.if.value}
+                      </span>
+                      ,{' '}
+                      <span className="thenCommand">
+                        {commands[rule.then.command].toLowerCase()}
+                      </span>
+                      <span className="thenField">
+                        {elements
+                          .find((e) => e.id === parseInt(rule.then.field))
+                          ?.label.substring(0, 35)}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </>
         </div>
+        {mode === 'build' ? (
+          <RuleBuilder
+            form={this.props.form}
+            setFormRule={this.props.setFormRule}
+            handleToggleRuleBuilder={this.handleToggleRuleBuilder}
+          />
+        ) : null}
       </div>
     )
   }
@@ -286,9 +304,6 @@ class RuleBuilder extends Component {
 
     return (
       <div className="ruleBuilder-wrapper">
-        <button onClick={this.props.handleToggleRuleBuilder}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </button>
         <div>
           <div className="bs-mild">
             <div className="ruleBuilder-header">
