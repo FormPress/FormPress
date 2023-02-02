@@ -10,7 +10,8 @@ import {
   faShareAlt,
   faPlusCircle,
   faQuestionCircle,
-  faPen
+  faPen,
+  faBoltLightning
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -19,6 +20,8 @@ import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
 import ShareForm from './helper/ShareForm'
+import FormRules from './helper/FormRules'
+
 import PreviewForm from './helper/PreviewForm'
 import Modal from './common/Modal'
 import Templates from './Templates'
@@ -323,6 +326,39 @@ export default class Builder extends Component {
     this.setState({ form })
   }
 
+  setFormRule(_rule) {
+    const form = { ...this.state.form }
+
+    form.props.rules = [...(form.props.rules || [])]
+
+    if (_rule.delete === true) {
+      const index = form.props.rules.indexOf(_rule)
+      form.props.rules.splice(index, 1)
+
+      this.setState({ form })
+      return
+    }
+
+    const matched = form.props.rules.find((rule) => rule.id === _rule.id)
+
+    if (matched !== undefined) {
+      const index = form.props.rules.indexOf(matched)
+
+      form.props.rules[index] = {
+        ...form.props.rules[index],
+        ..._rule
+      }
+    } else {
+      // auto increment rule id
+      const ruleId = form.props.rules.length + 1
+
+      _rule.id = ruleId
+      form.props.rules.push(_rule)
+    }
+
+    this.setState({ form })
+  }
+
   setAutoPageBreak(key, value) {
     const form = { ...this.state.form }
     let autoPageBreak = { ...form.props.autoPageBreak }
@@ -426,6 +462,7 @@ export default class Builder extends Component {
       this
     )
     this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
+    this.setFormRule = this.setFormRule.bind(this)
   }
 
   handleDragStart(_item, e) {
@@ -1435,6 +1472,12 @@ export default class Builder extends Component {
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faPlusSquare} />
         </NavLink>
+        <NavLink
+          to={`/editor/${formId}/rules`}
+          activeClassName="selected"
+          onClick={this.handleCloseIntegrationClick}>
+          <FontAwesomeIcon icon={faBoltLightning} />
+        </NavLink>
         {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
         <NavLink
           style={{ display: 'none' }}
@@ -1474,6 +1517,14 @@ export default class Builder extends Component {
           </Switch>
         </Route>
         <Route path="/editor/:formId/design"></Route>
+        <Route path="/editor/:formId/rules">
+          <FormRules
+            formId={formId}
+            form={this.state.form}
+            uuid={this.state.form.uuid}
+            setFormRule={this.setFormRule}
+          />
+        </Route>
         <Route path="/editor/:formId/share">
           <ShareForm formId={formId} uuid={this.state.form.uuid} />
         </Route>
