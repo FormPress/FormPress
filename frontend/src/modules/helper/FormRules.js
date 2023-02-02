@@ -5,6 +5,7 @@ import * as Elements from '../elements'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEye,
+  faPencilSquare,
   faPlusCircle,
   faTimes,
   faTrash
@@ -36,7 +37,8 @@ class FormRules extends Component {
     this.uuid = this.props.uuid
 
     this.state = {
-      mode: 'view'
+      mode: 'view',
+      editingRule: null
     }
 
     this.handleToggleRuleBuilder = this.handleToggleRuleBuilder.bind(this)
@@ -48,11 +50,15 @@ class FormRules extends Component {
     this.props.setFormRule(rule)
   }
 
-  handleToggleRuleBuilder(elem, e) {
+  editRule(rule) {
+    this.setState({ mode: 'build', editingRule: rule })
+  }
+
+  handleToggleRuleBuilder() {
     if (this.state.mode === 'build') {
-      this.setState({ mode: 'view' })
+      this.setState({ mode: 'view', editingRule: null })
     } else {
-      this.setState({ mode: 'build' })
+      this.setState({ mode: 'build', editingRule: null })
     }
   }
 
@@ -97,14 +103,19 @@ class FormRules extends Component {
                 return (
                   <div className="formRule" key={index}>
                     <div className="formRule-header">
-                      <FontAwesomeIcon icon={faEye} /> Show / Hide Fields{' '}
-                      {/* TODO: needs dynamic overhaul */}
+                      <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
+                      <FontAwesomeIcon
+                        icon={faPencilSquare}
+                        className={'editRule'}
+                        title={'Edit Rule'}
+                        onClick={() => this.editRule(rule)}
+                      />
                       <FontAwesomeIcon
                         icon={faTrash}
                         className={'deleteRule'}
                         title={'Remove Rule'}
                         onClick={() => this.deleteRule(rule)}
-                      />{' '}
+                      />
                     </div>
                     <div className="formRule-body">
                       If...{' '}
@@ -130,7 +141,7 @@ class FormRules extends Component {
                       <span className="thenField">
                         {elements
                           .find((e) => e.id === parseInt(rule.then.field))
-                          ?.label.substring(0, 35)}
+                          ?.label?.substring(0, 35) || ' '}
                       </span>
                     </div>
                   </div>
@@ -139,13 +150,13 @@ class FormRules extends Component {
             </div>
           </>
         </div>
-        {mode === 'build' ? (
-          <RuleBuilder
-            form={this.props.form}
-            setFormRule={this.props.setFormRule}
-            handleToggleRuleBuilder={this.handleToggleRuleBuilder}
-          />
-        ) : null}
+        <RuleBuilder
+          className={mode === 'build' ? ' build' : ''}
+          form={this.props.form}
+          setFormRule={this.props.setFormRule}
+          editingRule={this.state.editingRule}
+          handleToggleRuleBuilder={this.handleToggleRuleBuilder}
+        />
       </div>
     )
   }
@@ -189,6 +200,20 @@ class RuleBuilder extends Component {
     this.filterElementsWithInput()
   }
 
+  // eslint-disable-next-line no-unused-vars
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      this.props.editingRule !== null &&
+      (prevProps.editingRule === null ||
+        prevProps.editingRule.id !== this.props.editingRule.id)
+    ) {
+      this.filterElementsWithInput()
+      this.setState({
+        currentRule: this.props.editingRule
+      })
+    }
+  }
+
   addRule() {
     const { currentRule } = this.state
     const { if: ifRule, then: thenRule } = currentRule
@@ -196,7 +221,6 @@ class RuleBuilder extends Component {
     if (
       ifRule.field === '' ||
       ifRule.operator === '' ||
-      ifRule.value === '' ||
       thenRule.command === '' ||
       thenRule.field === ''
     ) {
@@ -279,6 +303,8 @@ class RuleBuilder extends Component {
   render() {
     const { currentRule, selectedIfField } = this.state
 
+    const { operator } = currentRule.if
+
     const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
 
     let arrayValueField = false
@@ -303,7 +329,7 @@ class RuleBuilder extends Component {
     }
 
     return (
-      <div className="ruleBuilder-wrapper">
+      <div className={'ruleBuilder-wrapper' + this.props.className}>
         <div>
           <div className="bs-mild">
             <div className="ruleBuilder-header">
@@ -360,98 +386,101 @@ class RuleBuilder extends Component {
                     }}
                   />
                 </div>
-                <div className="input-block">
-                  <div className="input-block-title">VALUE</div>
-                  <div className="fieldLink-row">
-                    {arrayValueField === true ? (
-                      <Renderer
-                        className="form"
-                        theme="infernal"
-                        allowInternal={true}
-                        handleFieldChange={(elem, e) =>
-                          this.changeRule('ifValue', e.target.value)
-                        }
-                        form={{
-                          props: {
-                            elements: [
-                              {
-                                id: 1,
-                                type: 'Dropdown',
-                                options: selectedIfField.options || [],
-                                placeholder: 'Select a field',
-                                value: currentRule.if.value
-                              }
-                            ]
-                          }
-                        }}
-                      />
-                    ) : currentRule.fieldLink ? (
-                      <Renderer
-                        className="form"
-                        theme="infernal"
-                        allowInternal={true}
-                        handleFieldChange={(elem, e) =>
-                          this.changeRule('ifValue', e.target.value)
-                        }
-                        form={{
-                          props: {
-                            elements: [
-                              {
-                                id: 1,
-                                type: 'Dropdown',
-                                options: this.state.inputElements,
-                                placeholder: 'Select a field',
-                                value: currentRule.if.value
-                              }
-                            ]
-                          }
-                        }}
-                      />
-                    ) : (
-                      <Renderer
-                        className="form"
-                        theme="infernal"
-                        allowInternal={true}
-                        handleFieldChange={(elem, e) =>
-                          this.changeRule('ifValue', e.target.value)
-                        }
-                        form={{
-                          props: {
-                            elements: [
-                              {
-                                id: 1,
-                                type: 'TextBox',
-                                placeholder: 'Enter a value',
-                                value: currentRule.if.value
-                              }
-                            ]
-                          }
-                        }}
-                      />
-                    )}
+                {operator === 'isFilled' || operator === 'isEmpty' ? null : (
+                  <div className="input-block">
+                    <div className="input-block-title">VALUE</div>
 
-                    {arrayValueField === true ? null : (
-                      <Renderer
-                        className="form"
-                        theme="infernal"
-                        allowInternal={true}
-                        handleFieldChange={() => this.changeRule('fieldLink')}
-                        form={{
-                          props: {
-                            elements: [
-                              {
-                                id: 1,
-                                type: 'Checkbox',
-                                options: ['Link to another field'],
-                                value: this.state.fieldLink
-                              }
-                            ]
+                    <div className="fieldLink-row">
+                      {arrayValueField === true ? (
+                        <Renderer
+                          className="form"
+                          theme="infernal"
+                          allowInternal={true}
+                          handleFieldChange={(elem, e) =>
+                            this.changeRule('ifValue', e.target.value)
                           }
-                        }}
-                      />
-                    )}
+                          form={{
+                            props: {
+                              elements: [
+                                {
+                                  id: 1,
+                                  type: 'Dropdown',
+                                  options: selectedIfField.options || [],
+                                  placeholder: 'Select a field',
+                                  value: currentRule.if.value
+                                }
+                              ]
+                            }
+                          }}
+                        />
+                      ) : currentRule.fieldLink ? (
+                        <Renderer
+                          className="form"
+                          theme="infernal"
+                          allowInternal={true}
+                          handleFieldChange={(elem, e) =>
+                            this.changeRule('ifValue', e.target.value)
+                          }
+                          form={{
+                            props: {
+                              elements: [
+                                {
+                                  id: 1,
+                                  type: 'Dropdown',
+                                  options: this.state.inputElements,
+                                  placeholder: 'Select a field',
+                                  value: currentRule.if.value
+                                }
+                              ]
+                            }
+                          }}
+                        />
+                      ) : (
+                        <Renderer
+                          className="form"
+                          theme="infernal"
+                          allowInternal={true}
+                          handleFieldChange={(elem, e) =>
+                            this.changeRule('ifValue', e.target.value)
+                          }
+                          form={{
+                            props: {
+                              elements: [
+                                {
+                                  id: 1,
+                                  type: 'TextBox',
+                                  placeholder: 'Enter a value',
+                                  value: currentRule.if.value
+                                }
+                              ]
+                            }
+                          }}
+                        />
+                      )}
+
+                      {arrayValueField === true ? null : (
+                        <Renderer
+                          className="form"
+                          theme="infernal"
+                          allowInternal={true}
+                          handleFieldChange={() => this.changeRule('fieldLink')}
+                          form={{
+                            props: {
+                              elements: [
+                                {
+                                  id: 1,
+                                  type: 'Checkbox',
+                                  options: ['Link to another field'],
+                                  value: this.state.fieldLink
+                                }
+                              ]
+                            }
+                          }}
+                        />
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
 
               <div className={'thenBlock'}>

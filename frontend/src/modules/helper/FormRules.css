@@ -1,8 +1,6 @@
 .formRules-wrapper {
   width: 100%;
   display: flex;
-  align-items: center;
-  /*justify-content: space-between;*/
 }
 
 .formRules-wrapper .addNewRule-button {
@@ -55,20 +53,24 @@
 }
 
 .formRules-list.build {
-  /*// i need 0.3 opacity, grayscale, blur, and transition*/
   opacity: 0.3;
   filter: grayscale(100%);
-  -webkit-filter: grayscale(100%);
-  -moz-filter: grayscale(100%);
-  -o-filter: grayscale(100%);
-  -ms-filter: grayscale(100%);
+  pointer-events: none;
 }
 
 .ruleBuilder-wrapper {
   width: 50%;
   padding: 1rem;
   font-family: 'Montserrat', sans-serif;
-  margin-top: -67px;
+  transition: all 0.3s ease-in-out;
+  margin-top: 44px;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.ruleBuilder-wrapper.build {
+  visibility: visible;
+  opacity: 1;
 }
 
 .ruleBuilder-wrapper .addRule-button {
@@ -84,7 +86,7 @@
 }
 
 .ruleBuilder-content {
-  background: #005a872b;
+  background: #005a8712;
   display: flex;
   flex-direction: column;
   padding: 1.3rem 1.1rem 1.1rem 1.1rem;
@@ -157,8 +159,18 @@
   cursor: pointer;
 }
 
+.formRule > .formRule-header > .editRule {
+  float: right;
+  color: gray;
+  cursor: pointer;
+}
+
 .formRule > .formRule-header > .deleteRule:hover {
   color: #dd3d3d;
+}
+
+.formRule > .formRule-header > .editRule:hover {
+  color: #005a87;
 }
 
 .formRule > .formRule-body {
