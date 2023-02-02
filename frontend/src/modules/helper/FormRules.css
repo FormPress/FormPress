@@ -52,6 +52,11 @@
   transition: all 0.3s ease-in-out;
 }
 
+.formRules-list .noRule {
+  font-family: 'Montserrat';
+  font-weight: 500;
+}
+
 .formRules-list.build {
   opacity: 0.3;
   filter: grayscale(100%);

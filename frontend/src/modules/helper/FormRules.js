@@ -99,54 +99,60 @@ class FormRules extends Component {
             </button>
             <div
               className={'formRules-list' + (mode === 'build' ? ' build' : '')}>
-              {rules.map((rule, index) => {
-                return (
-                  <div className="formRule" key={index}>
-                    <div className="formRule-header">
-                      <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
-                      <FontAwesomeIcon
-                        icon={faPencilSquare}
-                        className={'editRule'}
-                        title={'Edit Rule'}
-                        onClick={() => this.editRule(rule)}
-                      />
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        className={'deleteRule'}
-                        title={'Remove Rule'}
-                        onClick={() => this.deleteRule(rule)}
-                      />
+              {rules.length === 0 ? (
+                <div className="noRules">
+                  No rules found. Click the button above to start adding rules.
+                </div>
+              ) : (
+                rules.map((rule, index) => {
+                  return (
+                    <div className="formRule" key={index}>
+                      <div className="formRule-header">
+                        <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
+                        <FontAwesomeIcon
+                          icon={faPencilSquare}
+                          className={'editRule'}
+                          title={'Edit Rule'}
+                          onClick={() => this.editRule(rule)}
+                        />
+                        <FontAwesomeIcon
+                          icon={faTrash}
+                          className={'deleteRule'}
+                          title={'Remove Rule'}
+                          onClick={() => this.deleteRule(rule)}
+                        />
+                      </div>
+                      <div className="formRule-body">
+                        If{' '}
+                        <span className="ifField">
+                          {elements
+                            .find((e) => e.id === parseInt(rule.if.field))
+                            ?.label.substring(0, 35)}
+                        </span>{' '}
+                        <span className="ifOperator">
+                          {operators[rule.if.operator].toLowerCase()}
+                        </span>{' '}
+                        <span className="ifValue">
+                          {rule.fieldLink === true
+                            ? elements
+                                .find((e) => e.id === parseInt(rule.if.value))
+                                ?.label.substring(0, 35)
+                            : rule.if.value}
+                        </span>
+                        ,{' '}
+                        <span className="thenCommand">
+                          {commands[rule.then.command].toLowerCase()}
+                        </span>
+                        <span className="thenField">
+                          {elements
+                            .find((e) => e.id === parseInt(rule.then.field))
+                            ?.label?.substring(0, 35) || ' '}
+                        </span>
+                      </div>
                     </div>
-                    <div className="formRule-body">
-                      If{' '}
-                      <span className="ifField">
-                        {elements
-                          .find((e) => e.id === parseInt(rule.if.field))
-                          ?.label.substring(0, 35)}
-                      </span>{' '}
-                      <span className="ifOperator">
-                        {operators[rule.if.operator].toLowerCase()}
-                      </span>{' '}
-                      <span className="ifValue">
-                        {rule.fieldLink === true
-                          ? elements
-                              .find((e) => e.id === parseInt(rule.if.value))
-                              ?.label.substring(0, 35)
-                          : rule.if.value}
-                      </span>
-                      ,{' '}
-                      <span className="thenCommand">
-                        {commands[rule.then.command].toLowerCase()}
-                      </span>
-                      <span className="thenField">
-                        {elements
-                          .find((e) => e.id === parseInt(rule.then.field))
-                          ?.label?.substring(0, 35) || ' '}
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              )}
             </div>
           </>
         </div>
