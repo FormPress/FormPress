@@ -236,7 +236,12 @@ class RuleBuilder extends Component {
       return
     }
 
-    const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
+    const elemsThatHasArrayValue = [
+      'Checkbox',
+      'Radio',
+      'NetPromoterScore',
+      'RatingScale'
+    ]
 
     let arrayValueField = false
     if (selectedIfField !== undefined) {
@@ -326,7 +331,12 @@ class RuleBuilder extends Component {
   render() {
     const { currentRule, selectedIfField } = this.state
     const { operator } = currentRule.if
-    const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
+    const elemsThatHasArrayValue = [
+      'Checkbox',
+      'Radio',
+      'NetPromoterScore',
+      'RatingScale'
+    ]
 
     let arrayValueField = false
     if (selectedIfField !== undefined) {
