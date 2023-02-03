@@ -22,6 +22,7 @@ const { gdUploadFile } = require(path.resolve(
 ))
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
 const { appendData } = require('../integrations/googlesheetsapi')
+const { sendWebhook } = require('../integrations/discordapi')
 const { validate } = require('uuid')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -449,6 +450,19 @@ module.exports = (app) => {
       await appendData({
         integrationConfig: gSheets,
         questionsAndAnswers
+      })
+    }
+
+    const discordWebhook = integrationList.find((i) => i.type === 'Discord')
+    if (
+      discordWebhook !== undefined &&
+      discordWebhook.active === true &&
+      discordWebhook.paused !== true
+    ) {
+      await sendWebhook({
+        integrationConfig: discordWebhook,
+        questionsAndAnswers,
+        formTitle: form.title
       })
     }
   })

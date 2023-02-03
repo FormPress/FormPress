@@ -70,6 +70,8 @@ const { googleSheetsApi } = require(path.resolve(
   'googlesheetsapi.js'
 ))
 
+const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
+
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
@@ -100,6 +102,7 @@ changePasswordMiddleware(app)
 googleApisMiddleware(app)
 googleDriveApi(app)
 googleSheetsApi(app)
+discordApi(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)
