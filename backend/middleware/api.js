@@ -183,9 +183,14 @@ module.exports = (app) => {
   app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
     let { form_id } = req.params
 
-    const rules = (await formModel.get({ form_id })).props.rules
+    const form = await formModel.get({ form_id })
 
-    res.json(rules || [])
+    try {
+      const rules = form.props.rules
+      return res.json(rules || [])
+    } catch (e) {
+      res.json([])
+    }
   })
 
   // a new endpoint to return an ejs template for exam evaluations
