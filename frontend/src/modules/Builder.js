@@ -357,6 +357,8 @@ export default class Builder extends Component {
     }
 
     this.setState({ form })
+
+    this.handleSaveClick()
   }
 
   setAutoPageBreak(key, value) {
