@@ -162,7 +162,7 @@ export default class Dropdown extends Component {
         <div key="2">
           {
             <div className="dropdown-div">
-              {config.options === undefined ? null : (
+              {!config.hasDataset && config.options === undefined ? null : (
                 <select
                   className="dropdown-select"
                   id={`q_${config.id}`}
