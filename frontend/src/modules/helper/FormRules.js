@@ -105,48 +105,99 @@ class FormRules extends Component {
                 </div>
               ) : (
                 rules.map((rule, index) => {
+                  const resolvedTexts = {
+                    ifField: '',
+                    ifOperator: operators[rule.if.operator].toLowerCase(),
+                    ifValue: '',
+                    thenCommand: commands[rule.then.command].toLowerCase(),
+                    thenField: ''
+                  }
+
+                  const foundIfField = elements.find(
+                    (e) => e.id === parseInt(rule.if.field)
+                  )
+
+                  if (foundIfField !== undefined) {
+                    if (foundIfField.type !== 'Button') {
+                      resolvedTexts.ifField =
+                        foundIfField.label ||
+                        foundIfField.type ||
+                        ` Field ${foundIfField.id}`
+                    } else {
+                      resolvedTexts.ifField =
+                        foundIfField.buttonText || 'Button'
+                    }
+                  }
+
+                  let foundIfValueRefField = null
+
+                  if (rule.fieldLink === true) {
+                    foundIfValueRefField = elements.find(
+                      (e) => e.id === parseInt(rule.if.value)
+                    )
+                    if (foundIfValueRefField !== undefined) {
+                      resolvedTexts.ifValue =
+                        foundIfValueRefField.label ||
+                        foundIfValueRefField.type ||
+                        ` Field ${foundIfValueRefField.id}`
+                    }
+                  } else {
+                    resolvedTexts.ifValue = rule.if.value
+                  }
+
+                  const foundThenField = elements.find(
+                    (e) => e.id === parseInt(rule.then.field)
+                  )
+
+                  if (foundThenField !== undefined) {
+                    if (foundThenField.type !== 'Button') {
+                      resolvedTexts.thenField =
+                        foundThenField.label ||
+                        foundThenField.type ||
+                        ` Field ${foundThenField.id}`
+                    } else {
+                      resolvedTexts.thenField =
+                        foundThenField.buttonText || 'Button'
+                    }
+                  }
+
                   return (
                     <div className="formRule" key={index}>
                       <div className="formRule-header">
                         <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
-                        <FontAwesomeIcon
-                          icon={faPencilSquare}
-                          className={'editRule'}
-                          title={'Edit Rule'}
-                          onClick={() => this.editRule(rule)}
-                        />
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className={'deleteRule'}
-                          title={'Remove Rule'}
-                          onClick={() => this.deleteRule(rule)}
-                        />
+                        <div className="formRule-controls">
+                          <FontAwesomeIcon
+                            icon={faPencilSquare}
+                            className={'editRule'}
+                            title={'Edit Rule'}
+                            onClick={() => this.editRule(rule)}
+                          />
+                          &nbsp;&nbsp;
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className={'deleteRule'}
+                            title={'Remove Rule'}
+                            onClick={() => this.deleteRule(rule)}
+                          />
+                        </div>
                       </div>
                       <div className="formRule-body">
                         If{' '}
                         <span className="ifField">
-                          {elements
-                            .find((e) => e.id === parseInt(rule.if.field))
-                            ?.label.substring(0, 35)}
+                          {resolvedTexts.ifField.substring(0, 35)}
                         </span>{' '}
                         <span className="ifOperator">
-                          {operators[rule.if.operator].toLowerCase()}
+                          {resolvedTexts.ifOperator}
                         </span>{' '}
                         <span className="ifValue">
-                          {rule.fieldLink === true
-                            ? elements
-                                .find((e) => e.id === parseInt(rule.if.value))
-                                ?.label.substring(0, 35)
-                            : rule.if.value}
+                          {resolvedTexts.ifValue.substring(0, 35)}
                         </span>
                         ,{' '}
                         <span className="thenCommand">
-                          {commands[rule.then.command].toLowerCase()}
+                          {resolvedTexts.thenCommand}
                         </span>
                         <span className="thenField">
-                          {elements
-                            .find((e) => e.id === parseInt(rule.then.field))
-                            ?.label?.substring(0, 35) || ' '}
+                          {resolvedTexts.thenField.substring(0, 35)}
                         </span>
                       </div>
                     </div>
@@ -338,17 +389,32 @@ class RuleBuilder extends Component {
       'RatingScale'
     ]
 
+    const excludedFields = []
+
     let arrayValueField = false
     if (selectedIfField !== undefined) {
       arrayValueField = elemsThatHasArrayValue.includes(selectedIfField.type)
+      excludedFields.push(selectedIfField.id)
     }
 
-    let thenFields = this.props.form.props.elements.map((elem) => {
-      return {
-        display: elem.label || elem.buttonText || elem.type,
-        value: elem.id
-      }
-    })
+    let thenFields = this.props.form.props.elements
+      .filter((elem) => {
+        if (elem.type === 'PageBreak') {
+          return false
+        }
+
+        if (excludedFields.includes(elem.id)) {
+          return false
+        }
+
+        return true
+      })
+      .map((elem) => {
+        return {
+          display: elem.label || elem.buttonText || elem.type,
+          value: elem.id
+        }
+      })
 
     let ruleTypeFormattedText = ''
     let ruleTypeIcon = faEye // TODO: improve this
@@ -363,7 +429,7 @@ class RuleBuilder extends Component {
         <div>
           <div className="bs-mild">
             <div className="ruleBuilder-header">
-              <FontAwesomeIcon icon={ruleTypeIcon} />
+              <FontAwesomeIcon icon={ruleTypeIcon} />{' '}
               {ruleTypeFormattedText || ' Show / Hide Fields'}
             </div>
             <div className="ruleBuilder-content">
@@ -457,7 +523,14 @@ class RuleBuilder extends Component {
                                 {
                                   id: 1,
                                   type: 'Dropdown',
-                                  options: this.state.inputElements,
+                                  options: this.state.inputElements.filter(
+                                    (elem) => {
+                                      return (
+                                        elem.value !==
+                                        parseInt(currentRule.if.field)
+                                      )
+                                    }
+                                  ),
                                   placeholder: 'Select a field',
                                   value: currentRule.if.value
                                 }
