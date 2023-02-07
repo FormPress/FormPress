@@ -1499,6 +1499,11 @@ export default class Builder extends Component {
 
   renderMainContent() {
     const { formId } = this.props.match.params
+
+    if (this.state.loading === true) {
+      return null
+    }
+
     return (
       <Switch>
         <Route path="/editor/:formId/builder">
