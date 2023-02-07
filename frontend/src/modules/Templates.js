@@ -5,8 +5,6 @@ import { api } from '../helper'
 
 import './Templates.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
-
 export default class Templates extends Component {
   constructor(props) {
     super(props)
@@ -167,7 +165,7 @@ export default class Templates extends Component {
           <div className="selected-template-wrapper">
             <iframe
               id={'template-iframe'}
-              src={`${BACKEND}/templates/view/${selectedTemplate.id}`}
+              src={`${global.env.FE_BACKEND}/templates/view/${selectedTemplate.id}`}
               title={`FP_FORM_${selectedTemplate.id}`}
               className={'template-iframe'}
             />

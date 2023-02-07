@@ -5,7 +5,6 @@ import ElementContainer from '../common/ElementContainer'
 import { faSort } from '@fortawesome/free-solid-svg-icons'
 
 import './Dropdown.css'
-const BACKEND = process.env.REACT_APP_BACKEND
 
 export default class Dropdown extends Component {
   constructor(props) {
@@ -37,7 +36,11 @@ export default class Dropdown extends Component {
   populateDropdownWithDataset = (requestedDataset) => {
     const availableDatasets = this.state.datasets
 
-    fetch(`${BACKEND}/api/datasets?dataset=${requestedDataset}`)
+    fetch(
+      `${
+        process.env.FE_BACKEND || global.env.FE_BACKEND
+      }/api/datasets?dataset=${requestedDataset}`
+    )
       .then((response) => {
         return response.json()
       })

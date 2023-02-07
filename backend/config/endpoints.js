@@ -240,9 +240,9 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/single-sign-on',
+      path: '/api/users/:user_id/talkyard-sso',
       protected: false,
-      exampleRequestPath: '/api/users/1/single-sign-on'
+      exampleRequestPath: '/api/users/1/talkyard-sso'
     },
     {
       method: 'get',
@@ -261,6 +261,11 @@ module.exports = {
       path: '/api/user/getCountryAlpha2Code',
       protected: false,
       exampleRequestPath: '/api/user/getCountryAlpha2Code'
+    },
+    {
+      method: 'get',
+      path: '/api/loadvariables',
+      protected: false
     }
   ]
 }

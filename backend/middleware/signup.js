@@ -88,7 +88,7 @@ module.exports = (app) => {
 
       const msg = {
         to: email,
-        from: 'verify-account-noreply@api.formpress.org',
+        from: `verify-account-noreply@api.${process.env.EMAIL_DOMAIN}`,
         subject: 'FORMPRESS Verify Account',
         text: textBody,
         html: htmlBody

@@ -340,7 +340,7 @@ class PostSubmission extends Component {
                 />
               </a>
             </div>
-            <div id="FORMPRESS_FORM_165">
+            <div>
               <div
                 className="form renderer gleam formPage-1 "
                 data-fp-pagenumber="1">

@@ -5,7 +5,6 @@ import moment from 'moment'
 import GeneralContext from '../../general.context'
 
 import './Users.css'
-const BACKEND = process.env.REACT_APP_BACKEND
 
 class Users extends Component {
   constructor(props) {
@@ -49,7 +48,9 @@ class Users extends Component {
 
     data.forEach((form) => {
       result.push({
-        link: `${BACKEND}/form/view/${form.uuid}`,
+        link: `${process.env.FE_BACKEND || global.env.FE_BACKEND}/form/view/${
+          form.uuid
+        }`,
         created_at: form.created_at
       })
     })

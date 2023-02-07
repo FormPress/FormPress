@@ -1,7 +1,6 @@
 const { genRandomString, sha512 } = require('../helper/random')
-const adminPassword = process.env.ADMINPASSWORD || 'admin'
-const adminEmail = process.env.ADMINEMAIL || 'admin@formpress.org'
-
+const adminPassword = process.env.ADMINPASSWORD
+const adminEmail = process.env.ADMINEMAIL
 module.exports = async (db) => {
   console.log('Executing first migration')
 
@@ -75,7 +74,7 @@ module.exports = async (db) => {
   `)
 
   const hash = sha512(adminPassword, genRandomString(128))
-  // insert default user email: admin@formpress.org and password: admin
+
   await db.query(`
     INSERT INTO \`user\`
       (name, email, password, salt)

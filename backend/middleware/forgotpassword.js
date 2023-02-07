@@ -76,7 +76,7 @@ module.exports = (app) => {
 
       const msg = {
         to: email,
-        from: 'password-reset-noreply@api.formpress.org',
+        from: `password-reset-noreply@api.${process.env.EMAIL_DOMAIN}`,
         subject: 'FORMPRESS Password Reset',
         text: textBody,
         html: htmlBody
