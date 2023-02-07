@@ -54,10 +54,6 @@
       `qc_${thenRule.field}`
     )
 
-    // execute the negative of the command to set the initial state
-    const negativeCommand = commandFunctions[commandNegatives[command]]
-    negativeCommand(thenFieldElementContainer)
-
     let ifFieldValueGetter =
       FP_ELEMENT_HELPERS[foundIfElem.type].getElementValue
 
@@ -112,30 +108,39 @@
       }
     }
 
-    elemsThatRequireEventListener.forEach((elem) => {
-      elem.addEventListener('input', (e) => {
-        let ifFieldValue = ifFieldValueGetter(ifRule.field)
-        let expectedValue = expectedValueGetter()
+    const listener = (e) => {
+      let ifFieldValue = ifFieldValueGetter(ifRule.field)
+      let expectedValue = expectedValueGetter()
 
-        const operatorFunction = operatorFunctions[operator]
-        const executeCommand = commandFunctions[command]
-        const revertCommand = commandFunctions[commandNegatives[command]]
+      const operatorFunction = operatorFunctions[operator]
+      const executeCommand = commandFunctions[command]
+      const revertCommand = commandFunctions[commandNegatives[command]]
 
-        if (!ifFieldValue || !expectedValue) {
-          return revertCommand(thenFieldElementContainer)
-        }
+      if (!ifFieldValue || !expectedValue) {
+        return revertCommand(thenFieldElementContainer)
+      }
 
-        const assessment = operatorFunction(
-          ifFieldValue.toLowerCase(),
-          expectedValue.toLowerCase()
-        )
+      const assessment = operatorFunction(
+        ifFieldValue.toLowerCase(),
+        expectedValue.toLowerCase()
+      )
 
+      try {
         if (assessment === true) {
           executeCommand(thenFieldElementContainer)
         } else {
           revertCommand(thenFieldElementContainer)
         }
-      })
+      } catch (e) {
+        console.error(e)
+      }
+    }
+
+    // apply the listener for the first time to set the initial state
+    listener()
+
+    elemsThatRequireEventListener.forEach((elem) => {
+      elem.addEventListener('input', listener)
     })
   }
 })()
