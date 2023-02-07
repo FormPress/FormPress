@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
+const crypto = require('crypto')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -1545,6 +1546,22 @@ module.exports = (app) => {
       }
 
       return res.json(response)
+    }
+  )
+
+  app.get(
+    '/api/user/getCountryAlpha2Code',
+    mustHaveValidToken,
+    async (req, res) => {
+      if (
+        ![undefined, 'undefined', 'XX', 'xx', ''].includes(
+          req.get('CF-IPCountry')
+        )
+      ) {
+        res.json(req.get('CF-IPCountry'))
+      } else {
+        res.json('US')
+      }
     }
   )
 }

@@ -255,6 +255,12 @@ module.exports = {
       path: '/api/user/:user_id/update/settings',
       protected: false,
       exampleRequestPath: '/api/user/1/update/settings'
+    },
+    {
+      method: 'get',
+      path: '/api/user/getCountryAlpha2Code',
+      protected: false,
+      exampleRequestPath: '/api/user/getCountryAlpha2Code'
     }
   ]
 }
