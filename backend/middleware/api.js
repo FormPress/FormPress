@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
-const crypto = require('crypto')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
