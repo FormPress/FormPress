@@ -119,6 +119,11 @@
 
         const operatorFunction = operatorFunctions[operator]
         const executeCommand = commandFunctions[command]
+        const revertCommand = commandFunctions[commandNegatives[command]]
+
+        if (!ifFieldValue || !expectedValue) {
+          return revertCommand(thenFieldElementContainer)
+        }
 
         const assessment = operatorFunction(
           ifFieldValue.toLowerCase(),
@@ -128,7 +133,6 @@
         if (assessment === true) {
           executeCommand(thenFieldElementContainer)
         } else {
-          const revertCommand = commandFunctions[commandNegatives[command]]
           revertCommand(thenFieldElementContainer)
         }
       })
