@@ -158,23 +158,20 @@
   color: #68942f;
 }
 
-.formRule > .formRule-header > .deleteRule {
+.formRule > .formRule-header > .formRule-controls {
   float: right;
+}
+
+.formRule > .formRule-header > .formRule-controls > * {
   color: gray;
   cursor: pointer;
 }
 
-.formRule > .formRule-header > .editRule {
-  float: right;
-  color: gray;
-  cursor: pointer;
-}
-
-.formRule > .formRule-header > .deleteRule:hover {
+.formRule > .formRule-header > .formRule-controls > .deleteRule:hover {
   color: #dd3d3d;
 }
 
-.formRule > .formRule-header > .editRule:hover {
+.formRule > .formRule-header > .formRule-controls > .editRule:hover {
   color: #005a87;
 }
 
