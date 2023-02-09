@@ -295,10 +295,8 @@ class RuleBuilder extends Component {
       'Dropdown'
     ]
 
-    console.log('selectedIfField', selectedIfField)
     let arrayValueField = false
     if (selectedIfField !== undefined) {
-      console.log('asd', elemsThatHasArrayValue.includes(selectedIfField.type))
       arrayValueField = elemsThatHasArrayValue.includes(selectedIfField.type)
     }
 
@@ -506,7 +504,7 @@ class RuleBuilder extends Component {
                                   id: 1,
                                   type: 'Dropdown',
                                   options: selectedIfField.options || [],
-                                  placeholder: 'Select a field',
+                                  placeholder: 'Select a value',
                                   value: currentRule.if.value
                                 }
                               ]
