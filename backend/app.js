@@ -71,6 +71,7 @@ const { googleSheetsApi } = require(path.resolve(
 ))
 
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
+const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
 
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
@@ -103,6 +104,7 @@ googleApisMiddleware(app)
 googleDriveApi(app)
 googleSheetsApi(app)
 discordApi(app)
+slackApi(app)
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)

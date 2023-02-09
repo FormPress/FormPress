@@ -23,6 +23,7 @@ const { gdUploadFile } = require(path.resolve(
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
 const { appendData } = require('../integrations/googlesheetsapi')
 const { sendWebhook } = require('../integrations/discordapi')
+const { triggerWebhook } = require('../integrations/slackapi')
 const { validate } = require('uuid')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
@@ -461,6 +462,19 @@ module.exports = (app) => {
     ) {
       await sendWebhook({
         integrationConfig: discordWebhook,
+        questionsAndAnswers,
+        formTitle: form.title
+      })
+    }
+
+    const slackWebhook = integrationList.find((i) => i.type === 'Slack')
+    if (
+      slackWebhook !== undefined &&
+      slackWebhook.active === true &&
+      slackWebhook.paused !== true
+    ) {
+      await triggerWebhook({
+        integrationConfig: slackWebhook,
         questionsAndAnswers,
         formTitle: form.title
       })
