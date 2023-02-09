@@ -291,11 +291,14 @@ class RuleBuilder extends Component {
       'Checkbox',
       'Radio',
       'NetPromoterScore',
-      'RatingScale'
+      'RatingScale',
+      'Dropdown'
     ]
 
+    console.log('selectedIfField', selectedIfField)
     let arrayValueField = false
     if (selectedIfField !== undefined) {
+      console.log('asd', elemsThatHasArrayValue.includes(selectedIfField.type))
       arrayValueField = elemsThatHasArrayValue.includes(selectedIfField.type)
     }
 
@@ -386,7 +389,8 @@ class RuleBuilder extends Component {
       'Checkbox',
       'Radio',
       'NetPromoterScore',
-      'RatingScale'
+      'RatingScale',
+      'Dropdown'
     ]
 
     const excludedFields = []
