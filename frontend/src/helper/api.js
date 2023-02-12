@@ -18,8 +18,7 @@ export const api = ({
   new Promise((resolve, reject) => {
     const options = {
       headers: {
-        'Content-Type': 'application/json',
-        'CF-IPCountry': 'TR'
+        'Content-Type': 'application/json'
       },
       method
     }
