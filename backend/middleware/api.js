@@ -180,6 +180,19 @@ module.exports = (app) => {
     res.json(sanitizedElems || [])
   })
 
+  app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
+    let { form_id } = req.params
+
+    const form = await formModel.get({ form_id })
+
+    try {
+      const rules = form.props.rules
+      return res.json(rules || [])
+    } catch (e) {
+      res.json([])
+    }
+  })
+
   // a new endpoint to return an ejs template for exam evaluations
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',

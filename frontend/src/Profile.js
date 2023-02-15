@@ -65,7 +65,7 @@ const Profile = (props) => {
             <i title={auth.email}> {auth.email.match(/[^@]+/)}</i>
           </div>
           <ProfileSVG key="1" className="profileSVG" />
-          <div className="profileMenuContent dn">
+          <div className="profileMenuContent">
             <div className="profileMenuEntry">
               <NavLink to="/settings" activeClassName="selected">
                 <SettingsSVG />
