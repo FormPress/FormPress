@@ -2,62 +2,169 @@ const { IncomingWebhook } = require('@slack/webhook')
 
 const { error } = require('../helper')
 
-const blockGenerator = (QnA, title) => {
-  //Initialize block with header
-  let blocks = [
-    {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: `New Response: ${title}`
+const blockGenerator = (QnA, title, index, length) => {
+  let block = []
+  //SINGLE BLOCK
+  if (length === 1) {
+    //ADD HEADER
+    block.push(
+      {
+        type: 'divider'
+      },
+      {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: `New Response: ${title}`
+        }
       }
-    },
-    {
-      type: 'divider'
-    }
-  ]
-  //Add form data
-  QnA.forEach((currentQnA) => {
-    let questionField = {
-      type: 'header',
-      text: {
-        type: 'plain_text',
-        text: currentQnA.question
-      }
-    }
-    let answerField = {
-      type: 'section',
-      text: {
-        type: 'plain_text',
-        text: currentQnA.answer
-      }
-    }
+    )
 
-    blocks.push(questionField, answerField)
-  })
+    //Add form data
+    QnA.forEach((currentQnA) => {
+      let questionField = {
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: currentQnA.question
+        }
+      }
+      let answerField = {
+        type: 'section',
+        text: {
+          type: 'plain_text',
+          text: currentQnA.answer
+        }
+      }
 
-  //ADD FOOTER
-  blocks.push(
-    {
-      type: 'divider'
-    },
-    {
-      type: 'context',
-      elements: [
+      block.push(questionField, answerField)
+    })
+
+    //ADD FOOTER
+    block.push(
+      {
+        type: 'context',
+        elements: [
+          {
+            type: 'image',
+            image_url:
+              'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+            alt_text: 'formpress logo'
+          },
+          {
+            type: 'mrkdwn',
+            text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+          }
+        ]
+      },
+      {
+        type: 'divider'
+      }
+    )
+    //MULTIPLE BLOCKS
+  } else {
+    if (index === 0) {
+      //ADD HEADER
+      block.push(
         {
-          type: 'image',
-          image_url:
-            'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
-          alt_text: 'formpress logo'
+          type: 'divider'
         },
         {
-          type: 'mrkdwn',
-          text: 'Copyright © 2022 *FormPress*'
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: `New Response: ${title}`
+          }
         }
-      ]
+      )
+
+      //Add form data
+      QnA.forEach((currentQnA) => {
+        let questionField = {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: currentQnA.question
+          }
+        }
+        let answerField = {
+          type: 'section',
+          text: {
+            type: 'plain_text',
+            text: currentQnA.answer
+          }
+        }
+
+        block.push(questionField, answerField)
+      })
+
+      //ADD FOOTER
+      block.push(
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'image',
+              image_url:
+                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              alt_text: 'formpress logo'
+            },
+            {
+              type: 'mrkdwn',
+              text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+            }
+          ]
+        },
+        {
+          type: 'divider'
+        }
+      )
+    } else {
+      //Add form data
+      QnA.forEach((currentQnA) => {
+        let questionField = {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: currentQnA.question
+          }
+        }
+        let answerField = {
+          type: 'section',
+          text: {
+            type: 'plain_text',
+            text: currentQnA.answer
+          }
+        }
+
+        block.push(questionField, answerField)
+      })
+
+      //ADD FOOTER
+      block.push(
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'image',
+              image_url:
+                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              alt_text: 'formpress logo'
+            },
+            {
+              type: 'mrkdwn',
+              text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+            }
+          ]
+        },
+        {
+          type: 'divider'
+        }
+      )
     }
-  )
-  return blocks
+  }
+
+  return block
 }
 
 exports.triggerWebhook = async ({
@@ -76,17 +183,30 @@ exports.triggerWebhook = async ({
     }
   })
 
-  const blocks = blockGenerator(selectedQnA, formTitle)
+  //Puts questions in order, without this form selecting and deselecting items breaks the question order.
+  selectedQnA.sort((a, b) => {
+    return a.id - b.id
+  })
 
-  try {
-    const webhook = new IncomingWebhook(url)
+  //Group Question and Answer data so that message blocks won't exceed item limit.
+  const dataGroups = []
+  for (let i = 0; i < selectedQnA.length; i += 23) {
+    dataGroups.push(selectedQnA.slice(i, i + 23))
+  }
 
-    await webhook.send({
-      blocks: blocks
-    })
-  } catch (err) {
-    console.log('Could not send slack webhook', err)
-    error.errorReport(err)
+  //send each block/group separately
+  for (const [index, value] of dataGroups.entries()) {
+    const block = blockGenerator(value, formTitle, index, dataGroups.length)
+    try {
+      const webhook = new IncomingWebhook(url)
+
+      await webhook.send({
+        blocks: block
+      })
+    } catch (err) {
+      console.log('Could not send slack webhook', err)
+      error.errorReport(err)
+    }
   }
 }
 
@@ -101,9 +221,6 @@ exports.slackApi = (app) => {
           type: 'plain_text',
           text: `Now Active for form ${formTitle}!`
         }
-      },
-      {
-        type: 'divider'
       },
       {
         type: 'context',
