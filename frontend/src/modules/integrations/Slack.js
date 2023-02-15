@@ -173,7 +173,6 @@ export default class Slack extends Component {
       header: 'Remove integration?',
       status: 'warning'
     }
-    //https://hooks.slack.com/services/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
     modalContent.dialogue = {
       negativeText: 'Remove',
       negativeClick: this.removeIntegration,

@@ -7,18 +7,13 @@ const blockGenerator = (QnA, title, index, length) => {
   //SINGLE BLOCK
   if (length === 1) {
     //ADD HEADER
-    block.push(
-      {
-        type: 'divider'
-      },
-      {
-        type: 'header',
-        text: {
-          type: 'plain_text',
-          text: `New Response: ${title}`
-        }
+    block.push({
+      type: 'header',
+      text: {
+        type: 'plain_text',
+        text: `New Response: ${title}`
       }
-    )
+    })
 
     //Add form data
     QnA.forEach((currentQnA) => {
@@ -65,18 +60,13 @@ const blockGenerator = (QnA, title, index, length) => {
   } else {
     if (index === 0) {
       //ADD HEADER
-      block.push(
-        {
-          type: 'divider'
-        },
-        {
-          type: 'header',
-          text: {
-            type: 'plain_text',
-            text: `New Response: ${title}`
-          }
+      block.push({
+        type: 'header',
+        text: {
+          type: 'plain_text',
+          text: `New Response: ${title}`
         }
-      )
+      })
 
       //Add form data
       QnA.forEach((currentQnA) => {
@@ -236,6 +226,9 @@ exports.slackApi = (app) => {
             text: 'Copyright © 2022 *FormPress*'
           }
         ]
+      },
+      {
+        type: 'divider'
       }
     ]
 
