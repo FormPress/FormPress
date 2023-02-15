@@ -6,29 +6,6 @@ import { faFileArrowUp } from '@fortawesome/free-solid-svg-icons'
 
 import './FileUpload.css'
 
-const {
-  REACT_APP_FP_ENV,
-  REACT_APP_FRONTEND,
-  REACT_APP_BACKEND,
-  FP_HOST,
-  FP_ENV
-} = process.env
-
-let FRONTEND =
-  REACT_APP_FP_ENV === 'development' ? REACT_APP_FRONTEND : REACT_APP_BACKEND
-
-if (FRONTEND === undefined) {
-  FRONTEND = `${FP_HOST}${FP_ENV === 'development' ? ':3000' : ''}`
-}
-
-// may later be refactored to get the bucketName dynamically
-let bucketName =
-  'http://storage.googleapis.com/formpress-stage-test-fileuploads/'
-
-if (REACT_APP_FP_ENV === 'production' || FP_ENV === 'production') {
-  bucketName = 'http://storage.googleapis.com/fp-uploads-production/'
-}
-
 export default class FileUpload extends Component {
   static weight = 7
 
@@ -66,9 +43,11 @@ export default class FileUpload extends Component {
       plainString = ''
 
       files.forEach((file, index) => {
-        plainString += `${FRONTEND}/download/${question.form_id}/${
-          entry.submission_id
-        }/${question.id}/${encodeURI(file.fileName)}`
+        plainString += `${
+          process.env.FE_FRONTEND || global.env.FE_FRONTEND
+        }/download/${question.form_id}/${entry.submission_id}/${
+          question.id
+        }/${encodeURI(file.fileName)}`
 
         if (index > 0) {
           plainString += ', '
@@ -108,7 +87,10 @@ export default class FileUpload extends Component {
               id={`q${question.id}-file-${index}`}
               alt={`File: ${file.fileName}`}
               className="fileUpload-image"
-              src={bucketName + file.uploadName}
+              src={
+                process.env.FILE_UPLOAD_BUCKET ||
+                'noUseInFrontend' + file.uploadName
+              }
               style={{ maxWidth: '700px' }}
               onError={() => {
                 document.getElementById(
@@ -118,9 +100,11 @@ export default class FileUpload extends Component {
             />
           ) : null}
           <a
-            href={`${FRONTEND}/download/${question.form_id}/${
-              entry.submission_id
-            }/${question.id}/${encodeURI(file.fileName)}`}
+            href={`${
+              process.env.FE_FRONTEND || global.env.FE_FRONTEND
+            }/download/${question.form_id}/${entry.submission_id}/${
+              question.id
+            }/${encodeURI(file.fileName)}`}
             target="_blank"
             rel="noopener noreferrer"
             key={index}

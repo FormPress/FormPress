@@ -29,7 +29,7 @@ import { api, setToken } from './helper'
 
 import GeneralContext from './general.context'
 
-import { Logo } from './svg'
+import { Logo, FPLoader } from './svg'
 
 import './App.css'
 import './style/themes/infernal.css'
@@ -44,6 +44,7 @@ let initialAuthObject = {
   impersonate: 0,
   exp: '',
   admin: false,
+  loading: true,
   loggedIn: false
 }
 
@@ -82,6 +83,8 @@ class App extends Component {
     this.setState({ capabilities })
 
     await this.getUsages()
+
+    this.loadEnvVars()
   }
 
   getUsages = async () => {
@@ -93,6 +96,21 @@ class App extends Component {
       })
       user.usages = data
       this.setState({ user })
+    }
+  }
+  //load env vars
+  loadEnvVars = async () => {
+    try {
+      const response = await api({
+        resource: `/api/loadvariables`
+      })
+      for (const [key, value] of Object.entries(response.data)) {
+        global.env[key] = value
+      }
+
+      this.setState({ loading: false })
+    } catch (e) {
+      console.log('Error loading variables')
     }
   }
 
@@ -164,14 +182,8 @@ class App extends Component {
     }
 
     let homeUrl = undefined
-    //after permission update old logged accounts create error dont have permissions
-    if (auth.permission === undefined) {
-      window.localStorage.removeItem('auth')
-      window.localStorage.removeItem('lastEditedFormId')
-      window.location.reload()
-    }
-    if (process.env.REACT_APP_HOMEURL !== '') {
-      homeUrl = process.env.REACT_APP_HOMEURL
+    if (global.env.FE_HOMEURL !== '' || global.env.FE_HOMEURL !== undefined) {
+      homeUrl = global.env.FE_HOMEURL
     }
 
     let redirectPage = <Redirect to="/login" />
@@ -180,6 +192,14 @@ class App extends Component {
     // if (auth.loggedIn === true) {
     //   redirectPage = <Redirect path="*" to="/404" />
     // }
+
+    if (this.state.loading) {
+      return (
+        <div className="loading-logo">
+          <FPLoader />
+        </div>
+      )
+    }
 
     return (
       <Router>

@@ -105,14 +105,9 @@ Features disabled if this variable is unset:
 These are the environment variables for admin account as the name suggests.
 
 ```sh
-ADMINEMAIL=someid
+ADMINEMAIL=someEmail
 ADMINPASSWORD=somepassword
 ```
-
-Unless these variables are set, default credentials for the initial admin account will be:
-
-- **E-Mail**: admin@formpress.org
-- **Password**: admin
 
 ## License
 

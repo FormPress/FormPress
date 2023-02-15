@@ -16,7 +16,6 @@ import Modal from './common/Modal'
 
 import './Forms.css'
 
-const BACKEND = process.env.REACT_APP_BACKEND
 export default class Forms extends Component {
   setLoadingState(key, value) {
     this.setState({
@@ -235,7 +234,7 @@ export default class Forms extends Component {
   handlePreviewClick(form) {
     const { uuid } = form
 
-    window.open(`${BACKEND}/form/view/${uuid}`, '_blank')
+    window.open(`${global.env.FE_BACKEND}/form/view/${uuid}`, '_blank')
   }
 
   handleCloseModalClick() {
@@ -287,7 +286,7 @@ export default class Forms extends Component {
           {roleLimit === 0 || roleLimit > forms.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
-                <div className="popover-container">
+                <div className="popover-container circle-plus-container">
                   <FontAwesomeIcon
                     icon={faPlusCircle}
                     title="Add New Form"

@@ -187,6 +187,12 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/users/:user_id/forms/:form_id/rules',
+      protected: false,
+      exampleRequestPath: 'api/users/1/forms/1/rules'
+    },
+    {
+      method: 'get',
       path: '/api/datasets',
       protected: false,
       exampleRequestPath: 'api/datasets?dataset=countries'
@@ -240,6 +246,12 @@ module.exports = {
     },
     {
       method: 'get',
+      path: '/api/users/:user_id/talkyard-sso',
+      protected: false,
+      exampleRequestPath: '/api/users/1/talkyard-sso'
+    },
+    {
+      method: 'get',
       path: '/api/user/:user_id/get/settings',
       protected: true,
       exampleRequestPath: '/api/user/1/get/settings'
@@ -249,6 +261,11 @@ module.exports = {
       path: '/api/user/:user_id/update/settings',
       protected: false,
       exampleRequestPath: '/api/user/1/update/settings'
+    },
+    {
+      method: 'get',
+      path: '/api/loadvariables',
+      protected: false
     }
   ]
 }

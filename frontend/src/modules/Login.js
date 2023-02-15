@@ -224,14 +224,18 @@ class Login extends Component {
               </div>
               <div className="have-trouble">
                 Having trouble?
-                <a href="mailto:support@formpress.org">&nbsp;Contact us!</a>
+                <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
+                  &nbsp;Contact us!
+                </a>
               </div>
             </div>
           </div>
           <div className="footer cw center grid">
-            <div className="col-8-16">Copyright © 2022 formpress.org</div>
+            <div className="col-8-16">Copyright © 2023 formpress.org</div>
             <div className="col-8-16 tr">
-              <a href="mailto:support@formpress.org">Contact</a>
+              <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
+                Contact
+              </a>
             </div>
           </div>
         </div>

@@ -126,12 +126,14 @@ export default class RatingScale extends Component {
   static helpers = {
     getElementValue: (id) => {
       const nodeList = document.getElementsByName(`q_${id}`)
-      const ratingScaleRadioButtons = Array.from(nodeList)
-
-      return ratingScaleRadioButtons
+      for (let i = 0; i < nodeList.length; i++) {
+        if (nodeList[i].checked) {
+          return nodeList[i].value
+        }
+      }
     },
     isFilled: (value) => {
-      return !value.every((item) => item.checked === false)
+      return value !== '' && value !== undefined
     }
   }
 

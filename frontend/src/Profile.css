@@ -8,7 +8,7 @@
   display: none;
   background-color: white;
   position: absolute;
-  top: 50px;
+  top: 52px;
   width: 245px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
   padding: 5px;
@@ -57,7 +57,7 @@
 .header > .profile_container > .profile .wrapper-welcome {
   display: inline-block;
   width: 255px;
-  margin-top: 5px;
+  margin-top: 9px;
   height: 40px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16);
   background-color: white;
@@ -76,6 +76,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 6px 0 6px 2px;
+}
+
+.profileMenuEntry .fa-question {
+  width: 16px;
+  height: 16px;
 }
 
 .header > .profile_container > .profile .wrapper-welcome > .profileSVG {

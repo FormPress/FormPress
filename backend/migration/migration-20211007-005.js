@@ -1,4 +1,4 @@
-const adminEmail = process.env.ADMINEMAIL || 'admin@formpress.org'
+const adminEmail = process.env.ADMINEMAIL
 
 module.exports = async (db) => {
   await db.query(`

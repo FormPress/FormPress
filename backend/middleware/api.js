@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
+const fetch = require('node-fetch')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -167,12 +168,6 @@ module.exports = (app) => {
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     let { form_id } = req.params
 
-    if (validate(form_id)) {
-      form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
-    }
-
     const elems = (await formModel.get({ form_id })).props.elements
 
     // remove the keys that are named 'expectedAnswer' out of the elements
@@ -183,6 +178,19 @@ module.exports = (app) => {
     })
 
     res.json(sanitizedElems || [])
+  })
+
+  app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
+    let { form_id } = req.params
+
+    const form = await formModel.get({ form_id })
+
+    try {
+      const rules = form.props.rules
+      return res.json(rules || [])
+    } catch (e) {
+      res.json([])
+    }
   })
 
   // a new endpoint to return an ejs template for exam evaluations
@@ -997,8 +1005,8 @@ module.exports = (app) => {
     if (validate(form_id)) {
       uuid = form_id
       form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
+    } else if (parseInt(form_id) > 1200) {
+      return res.status(404).send('Form Not Found')
     }
 
     const result = await formModel.get({ form_id })
@@ -1431,6 +1439,63 @@ module.exports = (app) => {
   )
 
   app.get(
+    '/api/users/:user_id/talkyard-sso',
+    mustHaveValidToken,
+    async (req, res) => {
+      const { user_id } = req.params
+
+      if (
+        process.env.TALKYARD_SECRET === '' ||
+        process.env.TALKYARD_SECRET === undefined
+      ) {
+        return res.json({
+          status: 'error',
+          error_message: 'Talkyard secret is not provided'
+        })
+      }
+
+      const db = await getPool()
+      const result = await db.query(`SELECT * FROM \`user\` WHERE id = ?`, [
+        user_id
+      ])
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          ssoId: result[0].emailVerificationCode,
+          primaryEmailAddress: result[0].email,
+          isEmailAddressVerified: true,
+          username: result[0].email.split('@')[0],
+          fullName: result[0].email.split('@')[0]
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${process.env.TALKYARD_SECRET}`
+        }
+      }
+
+      try {
+        if (result.length > 0) {
+          await fetch(
+            `https://${process.env.TALKYARD_SERVER}/-/v0/sso-upsert-user-generate-login-secret`,
+            options
+          )
+            .then(async (resp) => resp.json())
+            .then((json) => {
+              res.json(
+                `https://${process.env.TALKYARD_SERVER}/-/v0/login-with-secret?oneTimeSecret=${json.ssoLoginSecret}&thenGoTo=/`
+              )
+            })
+        } else {
+          res.json({ status: 'error', error_message: 'User not found.' })
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  )
+
+  app.get(
     '/api/user/:user_id/get/settings',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
@@ -1499,4 +1564,16 @@ module.exports = (app) => {
       return res.json(response)
     }
   )
+
+  //send all variables starting with 'FE_' to frontend
+  app.get('/api/loadvariables', async (req, res) => {
+    const feVariables = {}
+    for (const [key, value] of Object.entries(process.env)) {
+      if (key.indexOf('FE_') >= 0) {
+        feVariables[key] = value !== '' ? value : undefined
+      }
+    }
+
+    return res.json(feVariables)
+  })
 }

@@ -11,8 +11,6 @@ import _ from 'lodash'
 import { DotLoader } from 'react-spinner-overlay'
 import { FPLoader } from '../../svg'
 
-const { REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID } = process.env
-
 export default class GoogleSheets extends Component {
   static metaData = {
     icon:
@@ -216,7 +214,7 @@ export default class GoogleSheets extends Component {
     const google = window.google
 
     let tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: REACT_APP_GOOGLE_CREDENTIALS_CLIENT_ID,
+      client_id: global.env.FE_GOOGLE_CREDENTIALS_CLIENT_ID,
       scope: 'https://www.googleapis.com/auth/drive.file',
       callback: async (response) => {
         if (response.error !== undefined) {
@@ -275,6 +273,11 @@ export default class GoogleSheets extends Component {
           type: elem.type,
           placeholder: `{${elem.type}_${elem.id}}`
         }
+
+        if (elem.type === 'Radio') {
+          inputElement.editor = elem.editor
+        }
+
         all.push(inputElement)
         chosen.push(index)
       })
@@ -428,9 +431,7 @@ export default class GoogleSheets extends Component {
 
       if (success === true) {
         integrationObject.targetSpreadsheet = data.targetSpreadsheet
-      }
-
-      if (!success) {
+      } else {
         this.setState({ loading: false })
         return
       }
@@ -587,7 +588,12 @@ export default class GoogleSheets extends Component {
     metadata.chosen = chosenMetadata
 
     selectedSpreadsheet.mappings = mappings
-    selectedSpreadsheet.chosenSheet = targetSpreadsheet.sheet.title
+
+    if (mappings.find((e) => e.title === targetSpreadsheet.sheet.title)) {
+      selectedSpreadsheet.chosenSheet = targetSpreadsheet.sheet.title
+    } else {
+      selectedSpreadsheet.chosenSheet = 'newSheet'
+    }
 
     this.setState({
       tempIntegrationObject,
@@ -716,11 +722,19 @@ export default class GoogleSheets extends Component {
 
         <optgroup label="Elements">
           {this.state.inputElements.all.map((elem, index) => {
+            let label = elem.label
+
+            if (elem.type === 'Radio' && elem.editor === true) {
+              label = elem.label.replace(/(<([^>]+)>)/gi, '')
+            }
+
+            if (elem.label.length > 45) {
+              label = label.substring(0, 45) + '...'
+            }
+
             return (
               <option key={index} value={elem.label}>
-                {elem.label.length > 45
-                  ? elem.label.substring(0, 45) + '...'
-                  : elem.label}
+                {label}
               </option>
             )
           })}

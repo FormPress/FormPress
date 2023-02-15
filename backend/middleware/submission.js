@@ -51,8 +51,8 @@ module.exports = (app) => {
 
     if (validate(form_id)) {
       form_id = await formModel.getFormIdFromUUID(form_id)
-    } else if (parseInt(form_id) > 1500) {
-      res.status(404).send('Form Not Found')
+    } else if (parseInt(form_id) > 1200) {
+      return res.status(404).send('Form Not Found')
     } else {
       form_id = parseInt(form_id)
     }
@@ -337,7 +337,7 @@ module.exports = (app) => {
         to: sendEmailTo,
         from: {
           name: 'FormPress',
-          email: 'submission-notifications-noreply@api.formpress.org'
+          email: `submission-notifications-noreply@api.${process.env.EMAIL_DOMAIN}`
         },
         subject: `New Response: ${form.title}`,
         text: textBody,
