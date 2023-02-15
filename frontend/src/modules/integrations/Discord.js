@@ -74,9 +74,7 @@ export default class Discord extends Component {
       chosen = []
       chosen = this.props.integrationObject.inputElements.chosen
     }
-    chosen.sort((a, b) => {
-      return a - b
-    })
+
     this.setState({ inputElements: { all, chosen } })
   }
 
@@ -205,15 +203,23 @@ export default class Discord extends Component {
     this.setState({ modalContent, isModalOpen: true })
   }
   async removeIntegration() {
+    const { all } = this.state.inputElements
+    const chosen = all.map((elem, index) => {
+      return index
+    })
+
     this.props.setIntegration({
       type: Discord.metaData.name,
       active: false,
       value: ''
     })
+
     this.setState({
-      display: 'description'
+      display: 'description',
+      inputElements: { all, chosen },
+      webhookUrl: '',
+      isModalOpen: false
     })
-    this.setState({ isModalOpen: false })
   }
 
   handleEditClick() {
@@ -310,9 +316,16 @@ export default class Discord extends Component {
       display = (
         <>
           <div className="integration-motto">
-            Receive submission data via discord!
+            Get instant updates on your form submissions with Discord!
           </div>
-          <div className="integration-text">integration description</div>
+          <div className="integration-text">
+            With the Discord Webhook integration, you can receive real-time
+            notifications in your Discord channels. All you have to do is enter
+            your Discord Webhook URL, and every time a form is submitted, its
+            data will be sent straight to the designated Discord channel. No
+            need to constantly check your form builder for new submissions, let
+            Discord do the work for you!
+          </div>
           <div className="activation-button">
             <button type="button" onClick={this.handleConfigureWebhook}>
               Start Configuration
