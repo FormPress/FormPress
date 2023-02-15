@@ -4,6 +4,10 @@ const icon =
   'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png'
 
 const embedBuilder = (QnA, title) => {
+  QnA.sort(function (a, b) {
+    return a.id - b.id
+  })
+
   let embeds = []
   const maxFieldCount = 25
   const embedCount = Math.ceil(QnA.length / maxFieldCount)
