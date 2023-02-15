@@ -73,9 +73,7 @@ export default class Slack extends Component {
       chosen = []
       chosen = this.props.integrationObject.inputElements.chosen
     }
-    chosen.sort((a, b) => {
-      return a - b
-    })
+
     this.setState({ inputElements: { all, chosen } })
   }
 
@@ -153,7 +151,8 @@ export default class Slack extends Component {
         invalidUrl: true,
         webhookUrl: ''
       })
-      document.querySelector('.integration-header').scrollIntoView({
+      const element = document.querySelector('.integration-header')
+      element.scrollIntoView({
         behavior: 'smooth'
       })
       this.props.setIntegration({
@@ -292,9 +291,16 @@ export default class Slack extends Component {
       display = (
         <>
           <div className="integration-motto">
-            Receive submission data via Slack!
+            Get instant updates on your form submissions with Slack!
           </div>
-          <div className="integration-text">integration description</div>
+          <div className="integration-text">
+            The Slack Webhook integration allows you to receive real-time
+            notifications of form submissions directly in your Slack channels.
+            Simply set up the integration with your Slack Webhook URL and never
+            miss a submission again. All of your form data will be delivered
+            straight to the designated Slack channel, keeping you organized and
+            up-to-date.
+          </div>
           <div className="activation-button">
             <button type="button" onClick={this.handleConfigureWebhook}>
               Start Configuration
