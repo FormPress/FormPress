@@ -1558,10 +1558,10 @@ module.exports = (app) => {
     async (req, res) => {
       if (
         ![undefined, 'undefined', 'XX', 'xx', ''].includes(
-          req.get('CF-IPCountry')
+          req.get('cf-ipcountry')
         )
       ) {
-        res.json(req.get('CF-IPCountry'))
+        res.json(req.get('cf-ipcountry'))
       } else {
         res.json('US')
       }
