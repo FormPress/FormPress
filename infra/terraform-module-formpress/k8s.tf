@@ -116,7 +116,7 @@ resource "kubernetes_deployment" "formpress" {
 
       spec {
         container {
-          image = "gcr.io/formpress/formpress:${each.value.version}"
+          image = "${each.value.image_repo}:${each.value.image_tag}"
           name  = "formpress"
 
           env {

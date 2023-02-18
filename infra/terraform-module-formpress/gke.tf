@@ -57,7 +57,7 @@ module "gke" {
       local_ssd_count    = 0
       disk_size_gb       = 100
       disk_type          = "pd-standard"
-      image_type         = "COS"
+      image_type         = "COS_CONTAINERD"
       auto_repair        = true
       auto_upgrade       = true
       preemptible        = false
@@ -65,5 +65,8 @@ module "gke" {
     }
   ]
 
-  depends_on = [module.vpc]
+  depends_on = [
+    module.vpc,
+    google_project_service.gcp_services
+    ]
 }

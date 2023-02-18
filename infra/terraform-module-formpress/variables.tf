@@ -15,9 +15,19 @@ variable "zones" {
   type        = list(string)
 }
 
+variable "gcp_service_list" {
+  default = [
+    "compute.googleapis.com",
+    "container.googleapis.com",
+    "sqladmin.googleapis.com"
+  ]
+  description = "GCP services to enable"
+}
+
 variable "deployments" {
   type = map(object({
-    version                          = string
+    image_tag                        = string
+    image_repo                       = string
     machine_type                     = string
     min_count                        = number
     max_count                        = number
@@ -35,7 +45,8 @@ variable "deployments" {
 
   default = {
     production = {
-      "version"                          = "856367d"
+      "image_tag"                        = "v1.0.0"
+      "image_repo"                       = "formpress/main"
       "machine_type"                     = "g1-small",
       "min_count"                        = 1,
       "max_count"                        = 1,
