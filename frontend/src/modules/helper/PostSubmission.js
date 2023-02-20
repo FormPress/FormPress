@@ -157,7 +157,7 @@ class PostSubmission extends Component {
                 <br />{' '}
                 <span className="click">
                   <a
-                    href="https://app.formpress.org"
+                    href="https://formpress.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     title="Visit FORMPRESS and start building awesome forms!">
