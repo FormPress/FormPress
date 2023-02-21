@@ -87,7 +87,12 @@ export default class FileUpload extends Component {
               id={`q${question.id}-file-${index}`}
               alt={`File: ${file.fileName}`}
               className="fileUpload-image"
-              src={process.env.FILE_UPLOAD_BUCKET + file.uploadName}
+              src={
+                'https://storage.googleapis.com/' +
+                process.env.FILE_UPLOAD_BUCKET +
+                '/' +
+                file.uploadName
+              }
               style={{ maxWidth: '700px' }}
               onError={() => {
                 document.getElementById(
