@@ -6,6 +6,11 @@ variable "cluster_name" {
   description = "Cluster Name"
 }
 
+variable "control_plane_version" {
+  default     = "latest"
+  description = "Version of kubernetes control plane"
+}
+
 variable "region" {
   description = "Cluster Region"
 }
@@ -32,6 +37,7 @@ variable "deployments" {
     min_count                        = number
     max_count                        = number
     initial_node_count               = number
+    fp_replicas                      = number
     sql_instance_name                = string
     sql_instance_deletion_protection = string
     sql_instance_tier                = string
@@ -51,6 +57,7 @@ variable "deployments" {
       "min_count"                        = 1,
       "max_count"                        = 1,
       "initial_node_count"               = 1,
+      "fp_replicas"                      = 1,
       "sql_instance_name"                = "production",
       "sql_instance_deletion_protection" = "true",
       "sql_instance_tier"                = "db-n1-standard-1",

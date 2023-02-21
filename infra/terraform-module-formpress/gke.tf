@@ -43,6 +43,7 @@ module "gke" {
   zones                      = var.zones
   http_load_balancing        = true
   horizontal_pod_autoscaling = true
+  kubernetes_version         = var.control_plane_version
   network_policy             = false
   network                    = "formpress-default"
   subnetwork                 = "formpress-subnet"
@@ -68,5 +69,5 @@ module "gke" {
   depends_on = [
     module.vpc,
     google_project_service.gcp_services
-    ]
+  ]
 }

@@ -99,7 +99,7 @@ resource "kubernetes_deployment" "formpress" {
   }
 
   spec {
-    replicas = 1
+    replicas = each.value.fp_replicas
 
     selector {
       match_labels = {
