@@ -24,7 +24,7 @@ variable "region" {
 }
 
 variable "upload_bucket" {
-  default  = ""
+  default     = ""
   description = "Bucket name for file uploads"
 }
 
