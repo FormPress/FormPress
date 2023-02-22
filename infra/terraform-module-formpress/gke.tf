@@ -62,6 +62,7 @@ module "gke" {
       auto_repair        = true
       auto_upgrade       = true
       preemptible        = false
+      spot               = var.deployments[key].spot
       initial_node_count = var.deployments[key].initial_node_count
     }
   ]

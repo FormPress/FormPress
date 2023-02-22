@@ -16,6 +16,7 @@ module "formpress" {
       "min_count"                        = 1,
       "max_count"                        = 1,
       "initial_node_count"               = 1,
+      "spot"                             = "false"
       "fp_replicas"                      = 1,
       "sql_instance_name"                = "formpress",
       "sql_instance_deletion_protection" = "true",

@@ -37,6 +37,7 @@ variable "deployments" {
     min_count                        = number
     max_count                        = number
     initial_node_count               = number
+    spot                             = string
     fp_replicas                      = number
     sql_instance_name                = string
     sql_instance_deletion_protection = string
@@ -44,6 +45,7 @@ variable "deployments" {
     database_name                    = string
     hostname                         = string
     bucket_name                      = string
+    public_bucket_name               = string
     google_client_id                 = string
     sendgrid_api_key                 = string
     env_var                          = map(string)
@@ -57,6 +59,7 @@ variable "deployments" {
       "min_count"                        = 1,
       "max_count"                        = 1,
       "initial_node_count"               = 1,
+      "spot"                             = "true"
       "fp_replicas"                      = 1,
       "sql_instance_name"                = "production",
       "sql_instance_deletion_protection" = "true",
@@ -64,6 +67,7 @@ variable "deployments" {
       "database_name"                    = "formpress",
       "hostname"                         = "",
       "bucket_name"                      = "file_upload_bucket",
+      "public_bucket_name"               = "public_bucket",
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",
       "env_var"                          = {}
