@@ -157,14 +157,14 @@ const blockGenerator = (QnA, title, index, length) => {
   return block
 }
 
-exports.triggerWebhook = async ({
+exports.triggerSlackWebhook = async ({
   integrationConfig,
   questionsAndAnswers,
   formTitle
 }) => {
   const url = integrationConfig.value
   const chosenInputElems = integrationConfig.chosenInputs
-
+  console.log('asdas', integrationConfig)
   const selectedQnA = []
   chosenInputElems.forEach((elem) => {
     const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
@@ -173,7 +173,7 @@ exports.triggerWebhook = async ({
     }
   })
 
-  //Puts questions in order, without this form selecting and deselecting items breaks the question order.
+  //Puts questions in order, without this function selecting and deselecting items breaks the question order.
   selectedQnA.sort((a, b) => {
     return a.id - b.id
   })

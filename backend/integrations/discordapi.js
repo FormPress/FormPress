@@ -112,7 +112,7 @@ exports.discordApi = (app) => {
   })
 }
 
-exports.sendWebhook = async ({
+exports.triggerDiscordWebhook = async ({
   integrationConfig,
   questionsAndAnswers,
   formTitle
