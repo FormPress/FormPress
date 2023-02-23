@@ -1565,7 +1565,22 @@ module.exports = (app) => {
     }
   )
 
-  //send all variables starting with 'FE_' to frontend
+  app.get(
+    '/api/user/getCountryAlpha2Code',
+    mustHaveValidToken,
+    async (req, res) => {
+      if (
+        ![undefined, 'undefined', 'XX', 'xx', ''].includes(
+          req.get('cf-ipcountry')
+        )
+      ) {
+        res.json(req.get('cf-ipcountry'))
+      } else {
+        res.json('US')
+      }
+    }
+  )
+
   app.get('/api/loadvariables', async (req, res) => {
     const feVariables = {}
     for (const [key, value] of Object.entries(process.env)) {
