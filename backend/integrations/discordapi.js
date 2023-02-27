@@ -9,9 +9,6 @@ const embedBuilder = (QnA, title) => {
   })
 
   let embeds = []
-  const maxFieldCount = 25
-  const embedCount = Math.ceil(QnA.length / maxFieldCount)
-
   let currentEmbed = []
 
   QnA.forEach((currentQnAData) => {
@@ -29,56 +26,19 @@ const embedBuilder = (QnA, title) => {
 
   const embedsCombined = []
   embeds.forEach((fieldData, index) => {
-    let embed
-
-    if (embedCount === 1) {
-      embed = new EmbedBuilder()
-        .setTitle(`New Response: ${title}`)
-        .setColor(3324696)
-        .addFields(...fieldData)
-        .setTimestamp()
-        .setFooter({
-          text:
-            `${index + 1}/${embeds.length}` +
-            ' '.repeat(50) +
-            'Copyright © 2022 FormPress'
-        })
-    } else {
-      if (index === 0) {
-        embed = new EmbedBuilder()
-          .setTitle(`New Response: ${title}`)
-          .setColor(3324696)
-          .addFields(...fieldData)
-          .setTimestamp()
-          .setFooter({
-            text:
-              `${index + 1}/${embeds.length}` +
-              ' '.repeat(50) +
-              'Copyright © 2022 FormPress'
-          })
-      } else if (index === embedCount - 1) {
-        embed = new EmbedBuilder()
-          .setColor(3324696)
-          .addFields(...fieldData)
-          .setTimestamp()
-          .setFooter({
-            text:
-              `${index + 1}/${embeds.length}` +
-              ' '.repeat(50) +
-              'Copyright © 2022 FormPress'
-          })
-      } else {
-        embed = new EmbedBuilder()
-          .setColor(3324696)
-          .addFields(...fieldData)
-          .setTimestamp()
-          .setFooter({
-            text:
-              `${index + 1}/${embeds.length}` +
-              ' '.repeat(50) +
-              'Copyright © 2022 FormPress'
-          })
-      }
+    let embed = new EmbedBuilder()
+      .setColor(3324696)
+      .addFields(...fieldData)
+      .setTimestamp()
+      .setFooter({
+        text:
+          `${index + 1}/${embeds.length}` +
+          ' '.repeat(50) +
+          'Copyright © 2023 FormPress',
+        iconURL: icon
+      })
+    if (index === 0) {
+      embed.setTitle(`New Response: ${title}`)
     }
 
     embedsCombined.push(embed)
@@ -107,7 +67,9 @@ exports.discordApi = (app) => {
       })
       return res.status(200).json({ message: 'connection established' })
     } catch (err) {
-      return res.status(400).json({ message: 'cannot create webhook client' })
+      return res
+        .status(400)
+        .json({ message: 'cannot create discord webhook client' })
     }
   })
 }
