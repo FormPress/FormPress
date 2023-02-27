@@ -2,6 +2,9 @@ const ejs = require('ejs')
 const path = require('path')
 const fs = require('fs')
 const os = require('os')
+const { FP_ENV, FP_HOST } = process.env
+const devPort = 3000
+const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 const { error, pdfPrinter } = require(path.resolve('helper'))
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
 
@@ -28,10 +31,8 @@ const { triggerCustomWebhook } = require(path.resolve(
 
 exports.triggerIntegrations = async (
   form,
-  FRONTEND,
   questionsAndAnswers,
-  submission_id,
-  form_id
+  submission_id
 ) => {
   let pdfBuffer
   let customSubmissionFileName = ''
@@ -137,7 +138,7 @@ exports.triggerIntegrations = async (
       integrationConfig: customWebhook,
       questionsAndAnswers,
       formTitle: form.title,
-      formId: form_id,
+      formId: form.id,
       submissionId: submission_id
     })
   }

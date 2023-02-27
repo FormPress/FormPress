@@ -379,10 +379,8 @@ module.exports = (app) => {
 
     await integrationhelper.triggerIntegrations(
       form,
-      FRONTEND,
       questionsAndAnswers,
-      submission_id,
-      form_id
+      submission_id
     )
   })
 
