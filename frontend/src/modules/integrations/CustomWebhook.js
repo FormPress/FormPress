@@ -21,7 +21,18 @@ export default class CustomWebhook extends Component {
       isModalOpen: false,
       modalContent: {},
       tempIntegrationObject: { ...this.props.integrationObject },
-      webhookUrl: ''
+      webhookUrl: '',
+      invalidUrl: false,
+      examplePayload: {
+        formId: 7,
+        submissionId: 28,
+        formTitle: 'Untitled Form',
+        submissionDate: '2023-02-27 12:34:56 UTC',
+        submissionData: {
+          q1_question: 'answer',
+          'q3_What is your name': 'John Doe'
+        }
+      }
     }
 
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
@@ -115,21 +126,30 @@ export default class CustomWebhook extends Component {
     const chosenInputs = this.state.inputElements.chosen.map((elem) => {
       return this.state.inputElements.all[elem]
     })
+    const urlRegex = /^(https?|http):\/\//i
 
-    const tempIntegrationObject = {
-      type: CustomWebhook.metaData.name,
-      active: true,
-      value: webhookUrl,
-      chosenInputs,
-      inputElements
+    if (urlRegex.test(webhookUrl)) {
+      const tempIntegrationObject = {
+        type: CustomWebhook.metaData.name,
+        active: true,
+        value: webhookUrl,
+        chosenInputs,
+        inputElements
+      }
+      this.setState({
+        tempIntegrationObject,
+        display: 'active',
+        invalidUrl: false
+      })
+
+      this.props.setIntegration(tempIntegrationObject)
+      await this.props.handlePublishClick()
+    } else {
+      this.setState({ invalidUrl: true, webhookUrl: '' })
+      document.querySelector('.integration-header').scrollIntoView({
+        behavior: 'smooth'
+      })
     }
-    this.setState({
-      tempIntegrationObject,
-      display: 'active'
-    })
-
-    this.props.setIntegration(tempIntegrationObject)
-    await this.props.handlePublishClick()
   }
 
   handleCloseModalClick() {
@@ -280,11 +300,22 @@ export default class CustomWebhook extends Component {
       // CONFIGURATION
       display = (
         <>
+          <div className="payload-preview">
+            <pre>
+              Example Payload
+              <br />
+              {JSON.stringify(this.state.examplePayload, null, 4)}
+            </pre>
+          </div>
           <div className="integration-configuration">
             <div className="integration-inputs">
               <Renderer
                 handleFieldChange={this.handleWebhookUrlChange}
-                className="webhookUrl"
+                className={
+                  this.state.invalidUrl
+                    ? 'invalid-url webhookUrl'
+                    : 'webhookUrl'
+                }
                 theme="infernal"
                 form={{
                   props: {
