@@ -26,7 +26,6 @@ exports.triggerCustomWebhook = async ({
   /* A DIFFERENT TYPE OF PAYLOAD
 
   const submissionData = selectedQnA.map((QnA) => {
-    console.log('QnA', QnA)
     const payloadData = {}
     payloadData.question = QnA.question
     payloadData.answer = QnA.answer

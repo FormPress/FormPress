@@ -164,7 +164,6 @@ exports.triggerSlackWebhook = async ({
 }) => {
   const url = integrationConfig.value
   const chosenInputElems = integrationConfig.chosenInputs
-  console.log('asdas', integrationConfig)
   const selectedQnA = []
   chosenInputElems.forEach((elem) => {
     const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
