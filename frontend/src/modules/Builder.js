@@ -11,7 +11,8 @@ import {
   faPlusCircle,
   faQuestionCircle,
   faPen,
-  faBoltLightning
+  faBoltLightning,
+  faEnvelopeOpen
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -291,7 +292,8 @@ export default class Builder extends Component {
       loading: false,
       form,
       savedForm,
-      publishedForm: publishedFormResult.data
+      publishedForm: publishedFormResult.data,
+      formLoaded: true
     })
 
     window.localStorage.setItem('lastEditedFormId', form.id)
@@ -1151,24 +1153,6 @@ export default class Builder extends Component {
     const { params } = this.props.match
     const { formId, questionId } = params
 
-    const { form } = this.state
-
-    let postSubmissionNavigatorText
-
-    const submitBevaviourIntegration = form.props.integrations.find(
-      (integration) => integration.type === 'submitBehaviour'
-    )
-
-    if (submitBevaviourIntegration !== undefined) {
-      if (submitBevaviourIntegration.value === 'Evaluate Form') {
-        postSubmissionNavigatorText = 'Results Page'
-      } else if (submitBevaviourIntegration.value === 'Show Thank You Page') {
-        postSubmissionNavigatorText = 'Thank You Page'
-      }
-    } else {
-      postSubmissionNavigatorText = 'Thank You Page'
-    }
-
     let tabs = [
       { name: 'elements', text: 'Elements', path: `/editor/${formId}/builder` },
       {
@@ -1180,11 +1164,6 @@ export default class Builder extends Component {
         name: 'integrations',
         text: 'Integrations',
         path: `/editor/${formId}/builder/integrations`
-      },
-      {
-        name: 'postsubmission',
-        text: postSubmissionNavigatorText,
-        path: `/editor/${formId}/builder/postsubmission`
       }
     ]
 
@@ -1480,6 +1459,12 @@ export default class Builder extends Component {
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faBoltLightning} />
         </NavLink>
+        <NavLink
+          to={`/editor/${formId}/postsubmission`}
+          activeClassName="selected"
+          onClick={this.handleCloseIntegrationClick}>
+          <FontAwesomeIcon icon={faEnvelopeOpen} />
+        </NavLink>
         {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
         <NavLink
           style={{ display: 'none' }}
@@ -1500,7 +1485,7 @@ export default class Builder extends Component {
   renderMainContent() {
     const { formId } = this.props.match.params
 
-    if (this.state.loading === true) {
+    if (formId !== 'new' && this.state.formLoaded !== true) {
       return null
     }
 
@@ -1514,12 +1499,7 @@ export default class Builder extends Component {
                 ? this.renderBuilder()
                 : this.setRenderedIntegration()}
             </Route>
-            <Route path="/editor/:formId/builder/postsubmission">
-              <PostSubmission
-                form={this.state.form}
-                setIntegration={this.setIntegration}
-              />
-            </Route>
+
             <Route path="/editor/:formId/builder">{this.renderBuilder()}</Route>
           </Switch>
         </Route>
@@ -1530,6 +1510,12 @@ export default class Builder extends Component {
             form={this.state.form}
             uuid={this.state.form.uuid}
             setFormRule={this.setFormRule}
+          />
+        </Route>
+        <Route path="/editor/:formId/postsubmission">
+          <PostSubmission
+            form={this.state.form}
+            setIntegration={this.setIntegration}
           />
         </Route>
         <Route path="/editor/:formId/share">
@@ -1701,7 +1687,7 @@ export default class Builder extends Component {
               <div
                 className="branding-text"
                 title="Visit FormPress and start building awesome forms!">
-                Created by FormPress{' '}
+                Created via FormPress{' '}
                 <a
                   href="https://formpress.org"
                   target="_blank"
