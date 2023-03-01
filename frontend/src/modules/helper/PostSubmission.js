@@ -113,7 +113,7 @@ class PostSubmission extends Component {
     }
   }
 
-  handleSetTyPage(elem, e) {
+  handleSetTyPage() {
     const { selectedPostSubmissionPage } = this.state
 
     this.props.setIntegration({
