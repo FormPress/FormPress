@@ -1701,9 +1701,13 @@ export default class Builder extends Component {
               <div
                 className="branding-text"
                 title="Visit FormPress and start building awesome forms!">
-                This form has been created on FormPress. <br />
-                <span className="fake-link">Click here</span> to create your own
-                form now! It is free!
+                Created by FormPress{' '}
+                <a
+                  href="https://formpress.org"
+                  target="_blank"
+                  rel="noreferrer">
+                  Online Form Builder.
+                </a>{' '}
               </div>
             </div>
             <div id="branding-popover" className="popoverText">
