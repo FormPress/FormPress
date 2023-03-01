@@ -12,5 +12,8 @@
     </head>
     <body>
         <%- htmlContent %>
+        <% if(showBranding === true) {%>
+            <%- include ("branding.tpl.ejs") %>
+        <%} else {null} %>
     </body>
 </html>
