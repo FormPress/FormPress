@@ -216,6 +216,8 @@ module.exports = (app) => {
     }
 
     let sendEmailTo = false
+    let thankYouIntegrationCount_LEGACY = 0
+
     const integrations = form.props.integrations || []
     const emailIntegration = integrations.filter(
       (integration) => integration.type === 'email'
@@ -230,6 +232,7 @@ module.exports = (app) => {
       tyTitleIntegration[0].value.length > 0
     ) {
       tyPageTitle = tyTitleIntegration[0].value
+      thankYouIntegrationCount_LEGACY++
     }
 
     const tyTextIntegration = integrations.filter(
@@ -238,6 +241,7 @@ module.exports = (app) => {
 
     if (tyTextIntegration.length > 0 && tyTextIntegration[0].value.length > 0) {
       tyPageText = tyTextIntegration[0].value
+      thankYouIntegrationCount_LEGACY++
     }
 
     let submitBehaviour
@@ -258,14 +262,62 @@ module.exports = (app) => {
         )
         break
       case 'Show Thank You Page':
-        res.render('submit-success.tpl.ejs', {
-          headerAppend: `<style type='text/css'>${style}</style>`,
-          tyTitle: tyPageTitle,
-          tyText: tyPageText
-        })
+        if (thankYouIntegrationCount_LEGACY > 0) {
+          // support for legacy thank you page integration
+          res.render('submit-success.tpl-LEGACY.ejs', {
+            headerAppend: `<style type='text/css'>${style}</style>`,
+            tyTitle: tyPageTitle,
+            tyText: tyPageText
+          })
+        } else {
+          let tyPageId
+          const tyPageIdIntegration = form.props.integrations.find(
+            (integration) => integration.type === 'tyPageId'
+          )
+
+          if (tyPageIdIntegration !== undefined) {
+            tyPageId = tyPageIdIntegration.value
+          } else {
+            tyPageId = 1
+          }
+
+          const dbResult = await db.query(
+            `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR user_id = 0`,
+            [form.user_id, tyPageId]
+          )
+
+          if (dbResult.length > 0) {
+            const customThankYou = dbResult[1]
+            const defaultThankYou = dbResult[0]
+
+            let html
+            if (customThankYou) {
+              html = customThankYou.html
+            } else {
+              html = defaultThankYou.html
+            }
+
+            const userRoleResult = await db.query(
+              `SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?`,
+              [form.user_id]
+            )
+
+            let showBranding = false
+
+            if (userRoleResult[0].role_id === 2) {
+              showBranding = true
+            }
+
+            res.render('submit-success.tpl.ejs', {
+              headerAppend: `<style type='text/css'>${style}</style>`,
+              htmlContent: html,
+              showBranding: showBranding
+            })
+          }
+        }
         break
       default:
-        res.render('submit-success.tpl.ejs', {
+        res.render('submit-success.tpl-LEGACY.ejs', {
           headerAppend: `<style type='text/css'>${style}</style>`,
           tyTitle: tyPageTitle,
           tyText: tyPageText
