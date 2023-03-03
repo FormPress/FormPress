@@ -292,8 +292,7 @@ export default class Builder extends Component {
       loading: false,
       form,
       savedForm,
-      publishedForm: publishedFormResult.data,
-      formLoaded: true
+      publishedForm: publishedFormResult.data
     })
 
     window.localStorage.setItem('lastEditedFormId', form.id)
@@ -1485,7 +1484,7 @@ export default class Builder extends Component {
   renderMainContent() {
     const { formId } = this.props.match.params
 
-    if (formId !== 'new' && this.state.formLoaded !== true) {
+    if (this.state.loading === true) {
       return null
     }
 
