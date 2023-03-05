@@ -115,6 +115,26 @@ class PostSubmission extends Component {
 
   handleSetTyPage() {
     const { selectedPostSubmissionPage } = this.state
+    const { form } = this.props
+
+    let formSetToDefaultPage = false
+
+    const foundTyPageIdInIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'tyPageId'
+    )
+
+    if (foundTyPageIdInIntegration === undefined) {
+      formSetToDefaultPage = true
+    } else if (foundTyPageIdInIntegration.value === 1) {
+      formSetToDefaultPage = true
+    }
+
+    if (formSetToDefaultPage === false) {
+      return this.props.setIntegration({
+        type: 'tyPageId',
+        value: 1
+      })
+    }
 
     this.props.setIntegration({
       type: 'tyPageId',
