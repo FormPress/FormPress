@@ -255,6 +255,10 @@ module.exports = (app) => {
       submitBehaviour = 'Show Thank You Page'
     }
 
+    const tyPageIdIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'tyPageId'
+    )
+
     switch (submitBehaviour) {
       case 'Evaluate Form':
         res.redirect(
@@ -262,7 +266,10 @@ module.exports = (app) => {
         )
         break
       case 'Show Thank You Page':
-        if (thankYouIntegrationCount_LEGACY > 0) {
+        if (
+          thankYouIntegrationCount_LEGACY > 0 &&
+          tyPageIdIntegration === undefined
+        ) {
           // support for legacy thank you page integration
           res.render('submit-success.tpl-LEGACY.ejs', {
             headerAppend: `<style type='text/css'>${style}</style>`,
@@ -271,9 +278,6 @@ module.exports = (app) => {
           })
         } else {
           let tyPageId
-          const tyPageIdIntegration = form.props.integrations.find(
-            (integration) => integration.type === 'tyPageId'
-          )
 
           if (tyPageIdIntegration !== undefined) {
             tyPageId = tyPageIdIntegration.value
