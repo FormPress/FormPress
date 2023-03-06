@@ -142,7 +142,7 @@ export default class Builder extends Component {
         })
 
         const savedForm = cloneDeep(form)
-        this.setState({ savedForm })
+        this.setState({ savedForm, loading: false })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
@@ -413,7 +413,7 @@ export default class Builder extends Component {
       redirect: false,
       isModalOpen: false,
       saving: false,
-      loading: false,
+      loading: true,
       modalContent: {},
       dragging: false,
       dragIndex: false,
