@@ -6,6 +6,7 @@ import Renderer from '../Renderer'
 import { api } from '../../helper'
 import GeneralContext from '../../general.context'
 import EditableLabel from '../common/EditableLabel'
+import Modal from '../common/Modal'
 
 class PostSubmission extends Component {
   constructor(props) {
@@ -21,11 +22,16 @@ class PostSubmission extends Component {
     this.loadPostSubmissionPages = this.loadPostSubmissionPages.bind(this)
     this.renderCustomPageManager = this.renderCustomPageManager.bind(this)
     this.handleOnSave = this.handleOnSave.bind(this)
-    this.handleOnDelete = this.handleOnDelete.bind(this)
+    this.handleDeletePage = this.handleDeletePage.bind(this)
+    this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this)
+    this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
+    this.getCurrentIntegration = this.getCurrentIntegration.bind(this)
+    this.handleOnHTMLEditorPaste = this.handleOnHTMLEditorPaste.bind(this)
     this.handleChoosePostSubmissionPage = this.handleChoosePostSubmissionPage.bind(
       this
     )
     this.handleSetTyPage = this.handleSetTyPage.bind(this)
+    this.handleOnHTMLEditorKeyDown = this.handleOnHTMLEditorKeyDown.bind(this)
 
     this.editor = React.createRef()
 
@@ -34,7 +40,9 @@ class PostSubmission extends Component {
       postSubmissionPages: [],
       warningMessage: '',
       selectorOptions: [],
-      selectedPostSubmissionPage: null
+      selectedPostSubmissionPage: null,
+      isModalOpen: false,
+      modalContent: {}
     }
   }
 
@@ -93,15 +101,11 @@ class PostSubmission extends Component {
 
     await this.loadPostSubmissionPages()
 
-    const { form } = this.props
+    const tyPageIdIntegration = this.getCurrentIntegration()
 
-    const foundTyPageIdIntegration = form.props.integrations.find(
-      (integration) => integration.type === 'tyPageId'
-    )
-
-    if (foundTyPageIdIntegration) {
+    if (tyPageIdIntegration !== false) {
       const foundTyPage = this.state.postSubmissionPages.find(
-        (page) => page.id === foundTyPageIdIntegration.value
+        (page) => page.id === tyPageIdIntegration.value
       )
 
       if (foundTyPage) {
@@ -115,17 +119,14 @@ class PostSubmission extends Component {
 
   handleSetTyPage() {
     const { selectedPostSubmissionPage } = this.state
-    const { form } = this.props
 
     let formSetToDefaultPage = false
 
-    const foundTyPageIdInIntegration = form.props.integrations.find(
-      (integration) => integration.type === 'tyPageId'
-    )
+    const tyPageIdIntegration = this.getCurrentIntegration()
 
-    if (foundTyPageIdInIntegration === undefined) {
+    if (tyPageIdIntegration === false) {
       formSetToDefaultPage = true
-    } else if (foundTyPageIdInIntegration.value === 1) {
+    } else if (tyPageIdIntegration.value === 1) {
       formSetToDefaultPage = true
     }
 
@@ -172,11 +173,105 @@ class PostSubmission extends Component {
     }
   }
 
-  async handleOnDelete() {
+  getCurrentIntegration() {
+    const { form } = this.props
+
+    const foundTyPageIdIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'tyPageId'
+    )
+
+    return foundTyPageIdIntegration || false
+  }
+
+  handleCloseModalClick() {
+    this.setState({
+      isModalOpen: false,
+      modalContent: {}
+    })
+  }
+
+  handleOnHTMLEditorPaste(e) {
+    e.preventDefault()
+
+    const text = e.clipboardData.getData('text/plain')
+
+    document.execCommand('insertHTML', false, text)
+  }
+
+  handleOnHTMLEditorKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      e.target.blur()
+      return
+    }
+
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;')
+      return
+    }
+
+    if (e.key === 'Backspace') {
+      const selection = window.getSelection()
+      const range = selection.getRangeAt(0)
+      const text = range.startContainer.textContent
+      if (text === '') {
+        e.preventDefault()
+        return
+      }
+    }
+  }
+
+  handleOnDeleteClick() {
+    const { selectedPostSubmissionPage } = this.state
+    const modalContent = {
+      header: `Delete page ${selectedPostSubmissionPage.title}?`,
+      status: 'warning'
+    }
+
+    modalContent.dialogue = {
+      negativeText: 'Delete',
+      negativeClick: this.handleDeletePage,
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick
+    }
+
+    modalContent.content = (
+      <div>
+        Selected page will be
+        <span
+          style={{
+            color: '#be0000',
+            fontWeight: 'bold',
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+            wordBreak: 'break-all'
+          }}>
+          {' '}
+          PERMANENTLY
+        </span>{' '}
+        deleted. Are you sure you want to delete this page?
+      </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+  async handleDeletePage() {
     const { selectedPostSubmissionPage } = this.state
 
     if (selectedPostSubmissionPage.id === 1) {
       return
+    }
+    let pageIsSelected
+
+    const tyPageIdInIntegration = this.getCurrentIntegration()
+
+    if (tyPageIdInIntegration) {
+      pageIsSelected =
+        tyPageIdInIntegration.value === selectedPostSubmissionPage.id
+    } else {
+      pageIsSelected = selectedPostSubmissionPage.id === 1
     }
 
     await api({
@@ -184,7 +279,16 @@ class PostSubmission extends Component {
       method: 'delete'
     })
 
-    this.loadPostSubmissionPages()
+    if (pageIsSelected) {
+      await this.props.setIntegration({
+        type: 'tyPageId',
+        value: 1
+      })
+    }
+
+    await this.loadPostSubmissionPages()
+
+    this.handleCloseModalClick()
   }
 
   handleChoosePostSubmissionPage(elem, e) {
@@ -251,7 +355,6 @@ class PostSubmission extends Component {
     }
 
     const { id } = selectedPostSubmissionPage
-    const { form } = this.props
 
     let defaultPage = false
 
@@ -261,13 +364,11 @@ class PostSubmission extends Component {
 
     let pageIsSelected
 
-    const foundTyPageIdInIntegration = form.props.integrations.find(
-      (integration) => integration.type === 'tyPageId'
-    )
+    const tyPageIdInIntegration = this.getCurrentIntegration()
 
-    if (foundTyPageIdInIntegration) {
+    if (tyPageIdInIntegration) {
       pageIsSelected =
-        foundTyPageIdInIntegration.value === selectedPostSubmissionPage.id
+        tyPageIdInIntegration.value === selectedPostSubmissionPage.id
     } else {
       pageIsSelected = selectedPostSubmissionPage.id === 1
     }
@@ -303,6 +404,7 @@ class PostSubmission extends Component {
                 labelKey="title"
                 handleLabelChange={this.handleTyPageTitleChange}
                 value={selectedPostSubmissionPage.title}
+                limit={128}
               />
             </div>
             <div className="custom-page-select">
@@ -334,7 +436,7 @@ class PostSubmission extends Component {
                 <>
                   <button
                     className="postSubmissionPage-delete"
-                    onClick={this.handleOnDelete}>
+                    onClick={this.handleOnDeleteClick}>
                     Delete
                   </button>
                   <button
@@ -393,6 +495,11 @@ class PostSubmission extends Component {
 
     return (
       <div className="postSubmission-wrapper">
+        <Modal
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
+        />
         <div className="postSubmission-message">Customize {mode} Page</div>
         {mode === 'Thank You' ? (
           <>
@@ -400,7 +507,9 @@ class PostSubmission extends Component {
             <div
               className="thankYouPage-preview"
               ref={this.editor}
-              contentEditable={true}></div>
+              contentEditable={true}
+              onPaste={this.handleOnHTMLEditorPaste}
+              onKeyDown={this.handleOnHTMLEditorKeyDown}></div>
           </>
         ) : (
           <div className="evaluatePage-preview">
