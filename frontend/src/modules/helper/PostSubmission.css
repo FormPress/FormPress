@@ -277,6 +277,7 @@
 
 .custom-pages-selector select {
   padding-left: 15px;
+  max-width: 1129px;
 }
 
 .custom-page-controls {
