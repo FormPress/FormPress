@@ -9,7 +9,8 @@ frontend/node_modules
 
 **/settings/*.plugin.js
 **/settings/*.plugin.css
-**/plugins/*.plugin.js
+**/plugins
+!**/plugins/.gitkeep
 **/migration/*plugin.js
 
 k8s
@@ -18,4 +19,3 @@ node_modules
 
 ignore*.sh
 *.pem
-**/billing-plugin-helper/*.js
