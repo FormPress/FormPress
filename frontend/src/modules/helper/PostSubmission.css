@@ -323,33 +323,39 @@
 }
 
 .postSubmissionPage-save {
-  margin: 0;
   font-family: Montserrat;
-  font-weight: bolder;
-  padding: 5px 10px;
-  font-size: 16px;
-  width: 7rem;
-  min-height: 2.6rem;
-  background-color: #9ee048;
-  border: 1px solid #9ee048;
-  outline: none;
-  color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  min-width: 80px;
+  margin-right: 10px;
+  background-color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #1c5c85;
+  border: 1px solid #1c5c85;
+}
+
+.postSubmissionPage-save:hover {
+  color: #fff;
+  background-color: #1c5c85;
   cursor: pointer;
 }
 
 .postSubmissionPage-delete {
   font-family: Montserrat;
-  font-weight: bolder;
-  padding: 5px 10px;
-  font-size: 16px;
-  width: 7rem;
-  min-height: 2.6rem;
-  background-color: white;
-  border: 1px solid #be0000;
-  outline: none;
-  color: #be0000;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+  font-weight: 700;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  min-width: 80px;
   margin-right: 10px;
+  background-color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #be0000;
+  border: 1px solid #be0000;
+}
+.postSubmissionPage-delete:hover {
+  color: #fff;
+  background-color: #be0000;
 }

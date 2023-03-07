@@ -224,8 +224,11 @@ class PostSubmission extends Component {
 
   handleOnDeleteClick() {
     const { selectedPostSubmissionPage } = this.state
+    const { title } = selectedPostSubmissionPage
     const modalContent = {
-      header: `Delete page ${selectedPostSubmissionPage.title}?`,
+      header: `Delete ${
+        title.length > 35 ? title.substring(0, 35) + '...' : title
+      }?`,
       status: 'warning'
     }
 
