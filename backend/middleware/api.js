@@ -307,6 +307,9 @@ module.exports = (app) => {
         path.resolve('../', 'frontend/src/style/themes/gleam.css')
       )
       style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/exam_results.css')
+      )
+      style += fs.readFileSync(
         path.resolve('../', 'frontend/src/modules/elements/index.css')
       )
       style += ' body {background-color: #f5f5f5;} '
