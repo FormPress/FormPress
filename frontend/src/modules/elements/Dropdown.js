@@ -184,18 +184,18 @@ export default class Dropdown extends Component {
                         return (
                           <option
                             className="option-space"
-                            key={index}
+                            key={`dropdown_${config.id}_` + index}
                             value={item.value}>
                             {item.display}
                           </option>
                         )
                       })
                     : typeof options[0] === 'object'
-                    ? options.map((item) => {
+                    ? options.map((item, index) => {
                         return (
                           <option
                             className="option-space"
-                            key={item.value}
+                            key={`dropdown_${config.id}_` + index}
                             value={item.value}
                             disabled={item.disabled}
                             dangerouslySetInnerHTML={{
@@ -207,7 +207,7 @@ export default class Dropdown extends Component {
                         return (
                           <option
                             className="option-space"
-                            key={index}
+                            key={`dropdown_${config.id}_` + index}
                             value={item}>
                             {item}
                           </option>
