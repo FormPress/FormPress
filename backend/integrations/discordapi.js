@@ -2,7 +2,8 @@ const { EmbedBuilder, WebhookClient } = require('discord.js')
 const { error } = require('../helper')
 const icon =
   'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png'
-
+const discordFieldValueCharacterLimit = 1000
+const discordFieldNameCharacterLimit = 250
 const embedBuilder = (QnA, title) => {
   QnA.sort(function (a, b) {
     return a.id - b.id
@@ -10,11 +11,22 @@ const embedBuilder = (QnA, title) => {
 
   let embeds = []
   let currentEmbed = []
-
+  let question
+  let answer
   QnA.forEach((currentQnAData) => {
+    question = currentQnAData.question
+    answer = currentQnAData.answer
+
+    if (question.length > discordFieldNameCharacterLimit) {
+      question = question.substring(0, discordFieldNameCharacterLimit)
+    }
+    if (answer.length > discordFieldValueCharacterLimit) {
+      answer = answer.substring(0, discordFieldValueCharacterLimit)
+    }
+
     currentEmbed.push({
-      name: currentQnAData.question,
-      value: currentQnAData.answer
+      name: question,
+      value: answer
     })
 
     if (currentEmbed.length === 25) {
@@ -27,7 +39,7 @@ const embedBuilder = (QnA, title) => {
   const embedsCombined = []
   embeds.forEach((fieldData, index) => {
     let embed = new EmbedBuilder()
-      .setColor(3324696)
+      .setColor(29116)
       .addFields(...fieldData)
       .setTimestamp()
       .setFooter({
@@ -53,7 +65,7 @@ exports.discordApi = (app) => {
 
     const activationEmbed = new EmbedBuilder()
       .setTitle(`Submission Notifier Is Now Active for form **${formTitle}**!`)
-      .setColor(0x00ffff)
+      .setColor(9225791)
 
     try {
       const webhookClient = new WebhookClient({

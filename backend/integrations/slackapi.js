@@ -48,7 +48,7 @@ const blockGenerator = (QnA, title, index, length) => {
           },
           {
             type: 'mrkdwn',
-            text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+            text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
           }
         ]
       },
@@ -101,7 +101,7 @@ const blockGenerator = (QnA, title, index, length) => {
             },
             {
               type: 'mrkdwn',
-              text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+              text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
             }
           ]
         },
@@ -143,7 +143,7 @@ const blockGenerator = (QnA, title, index, length) => {
             },
             {
               type: 'mrkdwn',
-              text: `${index + 1}/${length} Copyright © 2022 *FormPress*`
+              text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
             }
           ]
         },
@@ -185,7 +185,13 @@ exports.triggerSlackWebhook = async ({
 
   //send each block/group separately
   for (const [index, value] of dataGroups.entries()) {
-    const block = blockGenerator(value, formTitle, index, dataGroups.length)
+    let block
+    try {
+      block = blockGenerator(value, formTitle, index, dataGroups.length)
+    } catch (err) {
+      console.log('Error while creating slack block')
+      error.errorReport(err)
+    }
     try {
       const webhook = new IncomingWebhook(url)
 
@@ -222,7 +228,7 @@ exports.slackApi = (app) => {
           },
           {
             type: 'mrkdwn',
-            text: 'Copyright © 2022 *FormPress*'
+            text: 'Copyright © 2023 *FormPress*'
           }
         ]
       },
