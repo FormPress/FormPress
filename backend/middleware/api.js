@@ -1088,9 +1088,16 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
     style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+      path.resolve('../', `frontend/src/style/themes/${designTheme}.css`)
     )
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
