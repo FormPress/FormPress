@@ -45,6 +45,11 @@
   border-top-right-radius: 9px;
 }
 
+.wrapper-header.error,
+.wrapper-header.warning {
+  color: #be0000;
+}
+
 .wrapper-body {
   background-color: white;
   position: relative;
@@ -120,6 +125,5 @@
 .wrapper-buttons button.abort:hover {
   color: #fff;
   background-color: #1c5c85;
-  border: none;
   cursor: pointer;
 }
