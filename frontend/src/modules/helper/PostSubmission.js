@@ -24,6 +24,7 @@ class PostSubmission extends Component {
     this.handleOnSave = this.handleOnSave.bind(this)
     this.handleDeletePage = this.handleDeletePage.bind(this)
     this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this)
+    this.handleOnCreateNewPageClick = this.handleOnCreateNewPageClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.getCurrentIntegration = this.getCurrentIntegration.bind(this)
     this.handleOnHTMLEditorPaste = this.handleOnHTMLEditorPaste.bind(this)
@@ -41,6 +42,7 @@ class PostSubmission extends Component {
       warningMessage: '',
       selectorOptions: [],
       selectedPostSubmissionPage: null,
+      newPageTitle: '',
       isModalOpen: false,
       modalContent: {}
     }
@@ -143,9 +145,9 @@ class PostSubmission extends Component {
     })
   }
 
-  async handleOnSave() {
+  async handleOnSave(createNew = false) {
     const html = this.editor.current.innerHTML
-    const { selectedPostSubmissionPage } = this.state
+    const { selectedPostSubmissionPage, newPageTitle } = this.state
 
     let id = selectedPostSubmissionPage.id
 
@@ -157,6 +159,14 @@ class PostSubmission extends Component {
       title: selectedPostSubmissionPage.title,
       html,
       id
+    }
+
+    if (createNew === true) {
+      data.title = newPageTitle
+    }
+
+    if (data.title === '') {
+      data.title = 'Untitled'
     }
 
     const saveResult = await api({
@@ -171,6 +181,8 @@ class PostSubmission extends Component {
       selectedPostSubmissionPage.id = saveResult.data.tyPageId
       this.setState({ selectedPostSubmissionPage })
     }
+
+    this.handleCloseModalClick()
   }
 
   getCurrentIntegration() {
@@ -188,6 +200,29 @@ class PostSubmission extends Component {
       isModalOpen: false,
       modalContent: {}
     })
+  }
+
+  handleOnCreateNewPageClick() {
+    const modalContent = {
+      header: 'Create new thank you page',
+      status: 'information'
+    }
+
+    modalContent.dialogue = {
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick,
+      positiveText: 'Create',
+      positiveClick: () => this.handleOnSave(true),
+      inputValue: () => {
+        return this.state.newPageTitle
+      },
+      inputOnChange: (e) =>
+        this.handleTyPageTitleChange(undefined, undefined, e)
+    }
+
+    modalContent.content = <div>Please specify a name for the new page</div>
+
+    this.setState({ modalContent, isModalOpen: true })
   }
 
   handleOnHTMLEditorPaste(e) {
@@ -318,11 +353,17 @@ class PostSubmission extends Component {
     document.execCommand('insertHTML', false, text)
   }
 
-  handleTyPageTitleChange(id, value) {
-    const { selectedPostSubmissionPage } = this.state
-    selectedPostSubmissionPage.title = value
+  handleTyPageTitleChange(id, value, e) {
+    // e is only passed when the function is called from the modal
+    if (e) {
+      const newTitle = e.target.value
+      this.setState({ newPageTitle: newTitle })
+    } else {
+      const { selectedPostSubmissionPage } = this.state
+      selectedPostSubmissionPage.title = value
 
-    this.setState({ selectedPostSubmissionPage })
+      this.setState({ selectedPostSubmissionPage })
+    }
   }
 
   handleTyPageTextChange(e) {
@@ -399,7 +440,7 @@ class PostSubmission extends Component {
           />
           <button
             className="postSubmissionPage-save"
-            onClick={this.handleOnSave}>
+            onClick={this.handleOnCreateNewPageClick}>
             Create New Page
           </button>
         </div>
@@ -462,7 +503,6 @@ class PostSubmission extends Component {
   }
 
   render() {
-    console.log('this.ref', this.props)
     const { selectedPostSubmissionPage } = this.state
     const { form } = this.props
     const { integrations } = this.props.form.props
