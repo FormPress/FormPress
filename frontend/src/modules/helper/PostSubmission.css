@@ -339,6 +339,13 @@
   padding: 2px 5px;
 }
 
+.formsUsingThisPage-listItem {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .custom-page-title span[contenteditable='true'] {
   border: 1px dashed;
 }

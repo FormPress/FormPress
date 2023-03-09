@@ -301,32 +301,49 @@ class PostSubmission extends Component {
     if (selectedPostSubmissionPage.id === 1) {
       return
     }
-    let pageIsSelected
 
-    const tyPageIdInIntegration = this.getCurrentIntegration()
-
-    if (tyPageIdInIntegration) {
-      pageIsSelected =
-        tyPageIdInIntegration.value === selectedPostSubmissionPage.id
-    } else {
-      pageIsSelected = selectedPostSubmissionPage.id === 1
-    }
-
-    await api({
+    const { data } = await api({
       resource: `/api/user/${this.props.generalContext.auth.user_id}/delete/thankyou/${selectedPostSubmissionPage.id}`,
       method: 'delete'
     })
 
-    if (pageIsSelected) {
-      await this.props.setIntegration({
-        type: 'tyPageId',
-        value: 1
-      })
+    if (data.success === true) {
+      await this.loadPostSubmissionPages()
+
+      return this.handleCloseModalClick()
+    } else {
+      if (data.error === 'forms_using_this_page') {
+        const { formsUsingThisPage } = data
+
+        const modalContent = {
+          header: 'Could not delete page',
+          status: 'error'
+        }
+
+        modalContent.dialogue = {
+          abortText: 'Close',
+          abortClick: this.handleCloseModalClick
+        }
+
+        modalContent.content = (
+          <div>
+            The page you are trying to delete is currently in use by the
+            following forms:
+            <ul>
+              {formsUsingThisPage.map((form, i) => (
+                <li className="formsUsingThisPage-listItem" key={i}>
+                  • {form}
+                </li>
+              ))}
+            </ul>
+            Please remove the page from the forms listed above before deleting
+            it.
+          </div>
+        )
+
+        this.setState({ modalContent, isModalOpen: true })
+      }
     }
-
-    await this.loadPostSubmissionPages()
-
-    this.handleCloseModalClick()
   }
 
   handleChoosePostSubmissionPage(elem, e) {
