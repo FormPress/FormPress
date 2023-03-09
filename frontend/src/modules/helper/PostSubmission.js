@@ -7,6 +7,8 @@ import { api } from '../../helper'
 import GeneralContext from '../../general.context'
 import EditableLabel from '../common/EditableLabel'
 import Modal from '../common/Modal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck, faCross } from '@fortawesome/free-solid-svg-icons'
 
 class PostSubmission extends Component {
   constructor(props) {
@@ -44,7 +46,8 @@ class PostSubmission extends Component {
       selectedPostSubmissionPage: null,
       newPageTitle: '',
       isModalOpen: false,
-      modalContent: {}
+      modalContent: {},
+      taskFeedback: {}
     }
   }
 
@@ -177,12 +180,33 @@ class PostSubmission extends Component {
 
     await this.loadPostSubmissionPages(true)
 
+    const taskFeedback = {}
+
     if (saveResult.data.tyPageId !== undefined) {
       selectedPostSubmissionPage.id = saveResult.data.tyPageId
       this.setState({ selectedPostSubmissionPage })
+      taskFeedback.message = 'Page saved successfully.'
+    } else {
+      taskFeedback.message = 'There has been an error saving the page.'
     }
 
-    this.handleCloseModalClick()
+    taskFeedback.success = saveResult.success
+
+    if (saveResult.data.tyPageId !== undefined) {
+    }
+
+    this.setState({
+      isModalOpen: false,
+      modalContent: {},
+      newPageTitle: '',
+      taskFeedback
+    })
+
+    setTimeout(() => {
+      this.setState({
+        taskFeedback: {}
+      })
+    }, 2000)
   }
 
   getCurrentIntegration() {
@@ -409,7 +433,7 @@ class PostSubmission extends Component {
   }
 
   renderCustomPageManager() {
-    const { selectedPostSubmissionPage } = this.state
+    const { selectedPostSubmissionPage, taskFeedback } = this.state
 
     if (selectedPostSubmissionPage === null) {
       return
@@ -514,6 +538,20 @@ class PostSubmission extends Component {
               )}
             </div>
           </div>
+          {taskFeedback.message ? (
+            <span
+              className={
+                'task-feedback ' +
+                (taskFeedback.success === false ? 'error' : '')
+              }>
+              {taskFeedback.success === true ? (
+                <FontAwesomeIcon icon={faCheck} />
+              ) : (
+                <FontAwesomeIcon icon={faCross} />
+              )}
+              &nbsp;&nbsp;{taskFeedback.message}
+            </span>
+          ) : null}
         </div>
       </>
     )

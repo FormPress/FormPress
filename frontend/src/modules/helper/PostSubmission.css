@@ -312,7 +312,7 @@
 }
 
 .custom-pages-manager {
-  padding: 1rem;
+  padding: 1.2rem 1rem 1.4rem 1rem;
   background: white;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -386,4 +386,39 @@
 .postSubmissionPage-delete:hover {
   color: #fff;
   background-color: #be0000;
+}
+
+.postSubmission-wrapper .task-feedback {
+  float: right;
+  color: #2e7d32;
+
+  animation: feedback-fadeOut 1s 1;
+  -webkit-animation: feedback-fadeOut 1s 1;
+  animation-fill-mode: forwards;
+
+  animation-delay: 2s;
+  -webkit-animation-delay: 1s; /* Safari and Chrome */
+  -webkit-animation-fill-mode: forwards;
+}
+
+.postSubmission-wrapper .task-feedback.error {
+  color: #c62828 !important;
+}
+
+@keyframes feedback-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes feedback-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
