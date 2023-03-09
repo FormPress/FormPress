@@ -382,6 +382,7 @@ class PostSubmission extends Component {
           <Renderer
             theme="infernal"
             handleFieldChange={this.handleChoosePostSubmissionPage}
+            className="pagesSelector-dropdown"
             form={{
               props: {
                 elements: [
@@ -396,17 +397,26 @@ class PostSubmission extends Component {
               }
             }}
           />
+          <button
+            className="postSubmissionPage-save"
+            onClick={this.handleOnSave}>
+            Create New Page
+          </button>
         </div>
         <div className="custom-pages-manager">
           <div className="pageIdentifier">
             <div className="custom-page-title">
               <EditableLabel
                 className="label"
-                mode="builder"
+                mode={defaultPage ? 'view' : 'builder'}
                 dataPlaceholder="Click to edit page title"
                 labelKey="title"
                 handleLabelChange={this.handleTyPageTitleChange}
-                value={selectedPostSubmissionPage.title}
+                value={
+                  defaultPage
+                    ? 'Default Thank You Page'
+                    : selectedPostSubmissionPage.title
+                }
                 limit={128}
               />
             </div>
@@ -421,7 +431,8 @@ class PostSubmission extends Component {
                         id: 6,
                         type: 'Checkbox',
                         options: ['Show this page after submission'],
-                        value: pageIsSelected
+                        value: pageIsSelected,
+                        disabled: defaultPage && pageIsSelected
                       }
                     ]
                   }
@@ -429,13 +440,7 @@ class PostSubmission extends Component {
               />
             </div>
             <div className="custom-page-controls">
-              {defaultPage ? (
-                <button
-                  className="postSubmissionPage-save"
-                  onClick={this.handleOnSave}>
-                  Create New Page
-                </button>
-              ) : (
+              {defaultPage ? null : (
                 <>
                   <button
                     className="postSubmissionPage-delete"
@@ -457,8 +462,17 @@ class PostSubmission extends Component {
   }
 
   render() {
+    console.log('this.ref', this.props)
+    const { selectedPostSubmissionPage } = this.state
     const { form } = this.props
     const { integrations } = this.props.form.props
+
+    let defaultPage = false
+
+    if (selectedPostSubmissionPage) {
+      const { id } = selectedPostSubmissionPage
+      defaultPage = id === undefined || id <= 1
+    }
 
     const matchingIntegration = (type) =>
       integrations.filter((integration) => integration.type === type)
@@ -510,7 +524,7 @@ class PostSubmission extends Component {
             <div
               className="thankYouPage-preview"
               ref={this.editor}
-              contentEditable={true}
+              contentEditable={!defaultPage}
               onPaste={this.handleOnHTMLEditorPaste}
               onKeyDown={this.handleOnHTMLEditorKeyDown}></div>
           </>
