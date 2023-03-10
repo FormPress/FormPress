@@ -193,11 +193,6 @@ exports.triggerSlackWebhook = async ({
     }
   })
 
-  //Puts questions in order, without this function selecting and deselecting items breaks the question order.
-  selectedQnA.sort((a, b) => {
-    return a.id - b.id
-  })
-
   //Group Question and Answer data so that message blocks won't exceed item limit.
   const dataGroups = []
   for (let i = 0; i < selectedQnA.length; i += 23) {

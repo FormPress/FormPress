@@ -5,10 +5,6 @@ const icon =
 const discordFieldValueCharacterLimit = 1000
 const discordFieldNameCharacterLimit = 250
 const embedBuilder = (QnA, title) => {
-  QnA.sort(function (a, b) {
-    return a.id - b.id
-  })
-
   let embeds = []
   let currentEmbed = []
   QnA.forEach((currentQnAData) => {

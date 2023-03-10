@@ -100,7 +100,9 @@ export default class Discord extends Component {
     } else {
       inputElements.chosen.push(clickedIndex)
     }
-
+    inputElements.chosen.sort((a, b) => {
+      return a - b
+    })
     this.setState({ inputElements })
   }
 
