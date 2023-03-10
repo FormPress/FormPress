@@ -427,7 +427,8 @@ export default class Builder extends Component {
       selectedIntegration: false,
       form: DEFAULT_FORM,
       savedForm: DEFAULT_FORM,
-      autoPBEnabled: false
+      autoPBEnabled: false,
+      additionalSaveFunction: null
     }
     //this.handleClick = this.handleClick.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
@@ -466,6 +467,11 @@ export default class Builder extends Component {
     )
     this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
     this.setFormRule = this.setFormRule.bind(this)
+    this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
+  }
+
+  setAdditionalSaveFunction(func) {
+    this.setState({ additionalSaveFunction: func })
   }
 
   handleDragStart(_item, e) {
@@ -1005,7 +1011,7 @@ export default class Builder extends Component {
   }
 
   async handleSaveClick() {
-    const { form } = this.state
+    const { form, additionalSaveFunction } = this.state
 
     this.setState({ saving: true })
 
@@ -1041,6 +1047,12 @@ export default class Builder extends Component {
     }
     const savedForm = cloneDeep(this.state.form)
     this.setState({ savedForm })
+
+    // additionalSaveFunction is a function that is set by the child component eg. PostSubmission, FormProperties
+    // and is used to save additional data that is not part of the form object
+    if (additionalSaveFunction !== null) {
+      additionalSaveFunction()
+    }
   }
 
   async handlePublishClick() {
@@ -1177,13 +1189,7 @@ export default class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
-    const {
-      form,
-      publishedForm,
-      loading,
-      saving,
-      publishing
-    } = this.state
+    const { form, publishedForm, loading, saving, publishing } = this.state
     const isPublishRequired = form.updated_at !== publishedForm.created_at
     const saveButtonProps = {}
 
@@ -1228,7 +1234,7 @@ export default class Builder extends Component {
               ))}
             </div>
           </div>
-        <div className="builderStageHeader builderStage">
+          <div className="builderStageHeader builderStage">
             <div className="formTitle col-12-16">
               {loading === false ? (
                 <EditableLabel
@@ -1273,7 +1279,7 @@ export default class Builder extends Component {
                 </button>
               )}
             </div>
-        </div>
+          </div>
         </div>
         <div className="content">
           <div
@@ -1557,8 +1563,9 @@ export default class Builder extends Component {
                 ? this.renderBuilder()
                 : this.setRenderedIntegration()}
             </Route>
-
-            <Route path="/editor/:formId/builder">{this.renderBuilder()}</Route>
+            <Route
+              path="/editor/:formId/builder"
+              render={() => this.renderBuilder()}></Route>
           </Switch>
         </Route>
         <Route path="/editor/:formId/design"></Route>
@@ -1573,6 +1580,7 @@ export default class Builder extends Component {
         <Route path="/editor/:formId/postsubmission">
           <PostSubmission
             form={this.state.form}
+            setAdditionalSaveFunction={this.setAdditionalSaveFunction}
             setIntegration={this.setIntegration}
           />
         </Route>
@@ -1599,16 +1607,7 @@ export default class Builder extends Component {
   }
 
   renderBuilder() {
-    const {
-      dragging,
-      form,
-      dragMode,
-      sortItem,
-      publishedForm,
-      loading,
-      saving,
-      publishing
-    } = this.state
+    const { dragging, form, dragMode, sortItem, loading } = this.state
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
