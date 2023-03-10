@@ -1236,9 +1236,8 @@ export default class Builder extends Component {
           </div>
           <div
             className={
-              'builderStageHeader builderStage' + noComponentPresent
-                ? ' dn'
-                : ''
+              'builderStageHeader builderStage' +
+              (noComponentPresent ? ' dn' : '')
             }>
             <div className="formTitle col-12-16">
               {loading === false ? (
@@ -1700,7 +1699,7 @@ export default class Builder extends Component {
                 <a
                   href="https://formpress.org"
                   target="_blank"
-                  rel="noreferrer">
+                  rel="noopener noreferrer">
                   Online Form Builder.
                 </a>{' '}
               </div>
