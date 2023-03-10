@@ -1666,6 +1666,7 @@ module.exports = (app) => {
         return res.json({
           message: 'Thank you page updated successfully.',
           tyPageId: id === null ? result.insertId : id,
+          tyPageTitle: title,
           success: true
         })
       } else {
