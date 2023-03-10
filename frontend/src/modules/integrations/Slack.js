@@ -70,7 +70,6 @@ export default class Slack extends Component {
         chosen.push(index)
       })
     if (this.props.integrationObject) {
-      chosen = []
       chosen = this.props.integrationObject.inputElements.chosen
     }
 

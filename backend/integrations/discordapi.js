@@ -11,22 +11,16 @@ const embedBuilder = (QnA, title) => {
 
   let embeds = []
   let currentEmbed = []
-  let question
-  let answer
   QnA.forEach((currentQnAData) => {
-    question = currentQnAData.question
-    answer = currentQnAData.answer
-
-    if (question.length > discordFieldNameCharacterLimit) {
-      question = question.substring(0, discordFieldNameCharacterLimit)
-    }
-    if (answer.length > discordFieldValueCharacterLimit) {
-      answer = answer.substring(0, discordFieldValueCharacterLimit)
-    }
-
     currentEmbed.push({
-      name: question,
-      value: answer
+      name:
+        currentQnAData.question.length > discordFieldNameCharacterLimit
+          ? currentQnAData.question.substring(0, discordFieldNameCharacterLimit)
+          : currentQnAData.question,
+      value:
+        currentQnAData.answer.length > discordFieldValueCharacterLimit
+          ? currentQnAData.answer.substring(0, discordFieldValueCharacterLimit)
+          : currentQnAData.answer
     })
 
     if (currentEmbed.length === 25) {
@@ -50,6 +44,9 @@ const embedBuilder = (QnA, title) => {
         iconURL: icon
       })
     if (index === 0) {
+      if (title.length > 190) {
+        title = title.substring(0, 190) + '...'
+      }
       embed.setTitle(`New Response: ${title}`)
     }
 
@@ -61,8 +58,10 @@ const embedBuilder = (QnA, title) => {
 
 exports.discordApi = (app) => {
   app.post('/api/discord/init', async (req, res) => {
-    const { url, formTitle } = req.body
-
+    let { url, formTitle } = req.body
+    if (formTitle.length > 190) {
+      formTitle = formTitle.substring(0, 190) + '...'
+    }
     const activationEmbed = new EmbedBuilder()
       .setTitle(`Submission Notifier Is Now Active for form **${formTitle}**!`)
       .setColor(9225791)

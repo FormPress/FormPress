@@ -3,6 +3,9 @@ const { IncomingWebhook } = require('@slack/webhook')
 const { error } = require('../helper')
 
 const blockGenerator = (QnA, title, index, length) => {
+  if (title.length > 130) {
+    title = title.substring(0, 130) + '...'
+  }
   let block = []
   //SINGLE BLOCK
   if (length === 1) {
@@ -21,14 +24,20 @@ const blockGenerator = (QnA, title, index, length) => {
         type: 'header',
         text: {
           type: 'plain_text',
-          text: currentQnA.question
+          text:
+            currentQnA.question.length > 140
+              ? currentQnA.question.substring(0, 140) + '...'
+              : currentQnA.question
         }
       }
       let answerField = {
         type: 'section',
         text: {
           type: 'plain_text',
-          text: currentQnA.answer
+          text:
+            currentQnA.answer.length > 2048
+              ? currentQnA.answer.substring(0, 2048) + '...'
+              : currentQnA.answer
         }
       }
 
@@ -74,14 +83,20 @@ const blockGenerator = (QnA, title, index, length) => {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: currentQnA.question
+            text:
+              currentQnA.question.length > 140
+                ? currentQnA.question.substring(0, 140) + '...'
+                : currentQnA.question
           }
         }
         let answerField = {
           type: 'section',
           text: {
             type: 'plain_text',
-            text: currentQnA.answer
+            text:
+              currentQnA.answer.length > 2048
+                ? currentQnA.answer.substring(0, 2048) + '...'
+                : currentQnA.answer
           }
         }
 
@@ -116,14 +131,20 @@ const blockGenerator = (QnA, title, index, length) => {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: currentQnA.question
+            text:
+              currentQnA.question.length > 140
+                ? currentQnA.question.substring(0, 140) + '...'
+                : currentQnA.question
           }
         }
         let answerField = {
           type: 'section',
           text: {
             type: 'plain_text',
-            text: currentQnA.answer
+            text:
+              currentQnA.answer.length > 2048
+                ? currentQnA.answer.substring(0, 2048) + '...'
+                : currentQnA.answer
           }
         }
 
@@ -207,8 +228,10 @@ exports.triggerSlackWebhook = async ({
 
 exports.slackApi = (app) => {
   app.post('/api/slack/init', async (req, res) => {
-    const { url, formTitle } = req.body
-
+    let { url, formTitle } = req.body
+    if (formTitle.length > 120) {
+      formTitle = formTitle.substring(0, 120) + '...'
+    }
     const activationMessage = [
       {
         type: 'header',
