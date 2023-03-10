@@ -1234,7 +1234,12 @@ export default class Builder extends Component {
               ))}
             </div>
           </div>
-          <div className="builderStageHeader builderStage">
+          <div
+            className={
+              'builderStageHeader builderStage' + noComponentPresent
+                ? ' dn'
+                : ''
+            }>
             <div className="formTitle col-12-16">
               {loading === false ? (
                 <EditableLabel
