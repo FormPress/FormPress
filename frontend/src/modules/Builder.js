@@ -1177,6 +1177,19 @@ export default class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
+    const {
+      form,
+      publishedForm,
+      loading,
+      saving,
+      publishing
+    } = this.state
+    const isPublishRequired = form.updated_at !== publishedForm.created_at
+    const saveButtonProps = {}
+
+    if (saving === true || loading === true) {
+      saveButtonProps.disabled = true
+    }
 
     return (
       <div className="builder">
@@ -1215,6 +1228,52 @@ export default class Builder extends Component {
               ))}
             </div>
           </div>
+        <div className="builderStageHeader builderStage">
+            <div className="formTitle col-12-16">
+              {loading === false ? (
+                <EditableLabel
+                  className="label"
+                  mode="builder"
+                  dataPlaceholder="Click to edit form title"
+                  labelKey="title"
+                  handleLabelChange={this.handleTitleChange}
+                  value={form.title}
+                />
+              ) : null}
+            </div>
+            <div className="col-4-16 formControls">
+              <button onClick={this.handleSaveClick} {...saveButtonProps}>
+                {saving === true ? 'Saving...' : 'Save'}
+              </button>
+              {typeof this.state.form.id === 'number' ? (
+                <NavLink to={`/editor/${params.formId}/preview`}>
+                  <button>Preview</button>
+                </NavLink>
+              ) : (
+                <span>
+                  <button
+                    className="preview-disabled-button"
+                    title="Form has to be saved before it can be previewed.">
+                    Preview
+                  </button>
+                </span>
+              )}
+              {typeof this.state.form.id === 'number' ? (
+                <button className="publish" onClick={this.handlePublishClick}>
+                  {publishing === true ? 'Publishing...' : 'Publish'}
+                  {isPublishRequired === true ? (
+                    <div className="publishRequired"></div>
+                  ) : null}
+                </button>
+              ) : (
+                <button
+                  className="publish-disabled-button"
+                  title="Form has to be saved before it can be published.">
+                  Publish
+                </button>
+              )}
+            </div>
+        </div>
         </div>
         <div className="content">
           <div
@@ -1553,13 +1612,6 @@ export default class Builder extends Component {
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
-    const isPublishRequired = form.updated_at !== publishedForm.created_at
-    const saveButtonProps = {}
-
-    if (saving === true || loading === true) {
-      saveButtonProps.disabled = true
-    }
-
     return (
       <div className="builderStage col-10-16 grid">
         {this.state.isWindows ? (
@@ -1575,52 +1627,6 @@ export default class Builder extends Component {
             }}
           />
         ) : null}
-        <div className="builderStageHeader">
-          <div className="formTitle col-16-16">
-            {loading === false ? (
-              <EditableLabel
-                className="label"
-                mode="builder"
-                dataPlaceholder="Click to edit form title"
-                labelKey="title"
-                handleLabelChange={this.handleTitleChange}
-                value={form.title}
-              />
-            ) : null}
-          </div>
-          <div className="col-16-16 formControls">
-            <button onClick={this.handleSaveClick} {...saveButtonProps}>
-              {saving === true ? 'Saving...' : 'Save'}
-            </button>
-            {typeof this.state.form.id === 'number' ? (
-              <NavLink to={`/editor/${params.formId}/preview`}>
-                <button>Preview</button>
-              </NavLink>
-            ) : (
-              <span>
-                <button
-                  className="preview-disabled-button"
-                  title="Form has to be saved before it can be previewed.">
-                  Preview
-                </button>
-              </span>
-            )}
-            {typeof this.state.form.id === 'number' ? (
-              <button className="publish" onClick={this.handlePublishClick}>
-                {publishing === true ? 'Publishing...' : 'Publish'}
-                {isPublishRequired === true ? (
-                  <div className="publishRequired"></div>
-                ) : null}
-              </button>
-            ) : (
-              <button
-                className="publish-disabled-button"
-                title="Form has to be saved before it can be published.">
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
         {loading === true ? (
           'Loading...'
         ) : (
