@@ -35,6 +35,9 @@ class PostSubmission extends Component {
     )
     this.handleSetTyPage = this.handleSetTyPage.bind(this)
     this.handleOnHTMLEditorKeyDown = this.handleOnHTMLEditorKeyDown.bind(this)
+    this.organizePageSelectorEntries = this.organizePageSelectorEntries.bind(
+      this
+    )
 
     this.editor = React.createRef()
 
@@ -60,29 +63,9 @@ class PostSubmission extends Component {
     const { data } = result
 
     if (data.length > 0) {
-      const selectorOptions = data.map((page) => {
-        if (page.id === 1) {
-          return {
-            display: 'Default',
-            value: page.id
-          }
-        }
-
-        return {
-          display:
-            page.title +
-            ' - ' +
-            (page.updated_at
-              ? moment(page.updated_at).format('YYYY-MM-DD HH:mm')
-              : moment(page.created_at).format('YYYY-MM-DD HH:mm')),
-          value: page.id
-        }
-      })
-
       const defaultPostSubmissionPage = data[0]
 
       this.setState({
-        selectorOptions,
         postSubmissionPages: data
       })
 
@@ -92,6 +75,8 @@ class PostSubmission extends Component {
         })
         this.editor.current.innerHTML = defaultPostSubmissionPage.html
       }
+
+      await this.organizePageSelectorEntries()
     } else {
       return this.setState({
         warningMessage: 'There has been an error loading pages.'
@@ -99,10 +84,43 @@ class PostSubmission extends Component {
     }
   }
 
+  async organizePageSelectorEntries() {
+    const { postSubmissionPages } = this.state
+
+    const selectorOptions = postSubmissionPages.map((page) => {
+      if (page.id === 1) {
+        return {
+          display: 'Default',
+          value: page.id
+        }
+      }
+
+      const tyPageIdIntegration = this.getCurrentIntegration()
+
+      return {
+        display:
+          page.title +
+          ' - ' +
+          (tyPageIdIntegration !== false &&
+          tyPageIdIntegration.value === page.id
+            ? '(Active) - '
+            : '') +
+          (page.updated_at
+            ? moment(page.updated_at).format('YYYY-MM-DD HH:mm')
+            : moment(page.created_at).format('YYYY-MM-DD HH:mm')),
+        value: page.id
+      }
+    })
+
+    this.setState({ selectorOptions })
+  }
+
   async componentDidMount() {
     if (this.editor.current === null) {
       return
     }
+
+    this.props.setAdditionalSaveFunction(() => this.handleOnSave())
 
     await this.loadPostSubmissionPages()
 
@@ -122,30 +140,33 @@ class PostSubmission extends Component {
     }
   }
 
-  handleSetTyPage() {
+  async handleSetTyPage(e) {
     const { selectedPostSubmissionPage } = this.state
 
-    let formSetToDefaultPage = false
+    let unselecting = false
 
-    const tyPageIdIntegration = this.getCurrentIntegration()
-
-    if (tyPageIdIntegration === false) {
-      formSetToDefaultPage = true
-    } else if (tyPageIdIntegration.value === 1) {
-      formSetToDefaultPage = true
+    if (e.target.checked === false) {
+      unselecting = true
     }
 
-    if (formSetToDefaultPage === false) {
-      return this.props.setIntegration({
+    if (unselecting === true) {
+      this.props.setIntegration({
         type: 'tyPageId',
         value: 1
       })
+      return
     }
 
     this.props.setIntegration({
       type: 'tyPageId',
       value: selectedPostSubmissionPage.id
     })
+
+    await this.organizePageSelectorEntries()
+  }
+
+  componentWillUnmount() {
+    this.props.setAdditionalSaveFunction(null)
   }
 
   async handleOnSave(createNew = false) {
@@ -184,7 +205,7 @@ class PostSubmission extends Component {
 
     if (saveResult.data.tyPageId !== undefined) {
       selectedPostSubmissionPage.id = saveResult.data.tyPageId
-      this.setState({ selectedPostSubmissionPage })
+      selectedPostSubmissionPage.title = saveResult.data.tyPageTitle
       taskFeedback.message = 'Page saved successfully.'
     } else {
       taskFeedback.message = 'There has been an error saving the page.'
@@ -192,14 +213,12 @@ class PostSubmission extends Component {
 
     taskFeedback.success = saveResult.success
 
-    if (saveResult.data.tyPageId !== undefined) {
-    }
-
     this.setState({
       isModalOpen: false,
       modalContent: {},
       newPageTitle: '',
-      taskFeedback
+      taskFeedback,
+      selectedPostSubmissionPage
     })
 
     setTimeout(() => {
@@ -505,7 +524,7 @@ class PostSubmission extends Component {
             <div className="custom-page-select">
               <Renderer
                 theme="infernal"
-                handleFieldChange={this.handleSetTyPage}
+                handleFieldChange={(elem, e) => this.handleSetTyPage(e)}
                 form={{
                   props: {
                     elements: [
@@ -527,12 +546,7 @@ class PostSubmission extends Component {
                   <button
                     className="postSubmissionPage-delete"
                     onClick={this.handleOnDeleteClick}>
-                    Delete
-                  </button>
-                  <button
-                    className="postSubmissionPage-save"
-                    onClick={this.handleOnSave}>
-                    Save
+                    Delete Page
                   </button>
                 </>
               )}
@@ -612,7 +626,10 @@ class PostSubmission extends Component {
           modalContent={this.state.modalContent}
           closeModal={this.handleCloseModalClick}
         />
-        <div className="postSubmission-message">Customize {mode} Page</div>
+        <div className="postSubmission-message">
+          Here you can customize {mode} Page. Don&apos;t forget to save after
+          making changes!
+        </div>
         {mode === 'Thank You' ? (
           <>
             <div className="pageManager">{this.renderCustomPageManager()}</div>
