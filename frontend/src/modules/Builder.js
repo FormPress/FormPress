@@ -1247,6 +1247,7 @@ export default class Builder extends Component {
                   dataPlaceholder="Click to edit form title"
                   labelKey="title"
                   handleLabelChange={this.handleTitleChange}
+                  limit={128}
                   value={form.title}
                 />
               ) : null}

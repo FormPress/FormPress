@@ -92,6 +92,12 @@
   min-height: 20px;
 }
 
+.formTitle span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .header > .formControls {
   width: 400px;
   margin-left: 20px;
