@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
+const sanitizeHtml = require('sanitize-html')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -1591,4 +1592,135 @@ module.exports = (app) => {
 
     return res.json(feVariables)
   })
+
+  // to get user's custom thank you pages from the database
+  app.get(
+    '/api/user/:user_id/get/thankyou',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+
+      const result = await db.query(
+        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`,
+        [user_id]
+      )
+
+      if (result.length > 0) {
+        return res.json(result)
+      } else {
+        return res.json([])
+      }
+    }
+  )
+
+  // to edit / create a custom thank you page in the database
+  app.post(
+    '/api/user/:user_id/update/thankyou',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const { html, title, id } = req.body
+
+      if (id === 1) {
+        return res.json({
+          message: 'You cannot edit the default thank you page.',
+          success: false
+        })
+      }
+
+      const cleanHtml = sanitizeHtml(html, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+          'img',
+          'ellipse',
+          'svg',
+          'path',
+          'a',
+          'g',
+          'defs',
+          'use',
+          'symbol',
+          'rect'
+        ]),
+        allowedAttributes: {
+          ...sanitizeHtml.defaults.allowedAttributes,
+          img: ['src'],
+          svg: ['*'],
+          path: ['*'],
+          a: ['*'],
+          g: ['*'],
+          defs: ['*'],
+          use: ['*'],
+          symbol: ['*'],
+          rect: ['*'],
+          ellipse: ['*']
+        },
+        allowedClasses: {
+          '*': ['*']
+        }
+      })
+
+      let result
+
+      if (id === null) {
+        result = await db.query(
+          `INSERT INTO \`custom_thank_you\` (user_id, html, title, created_at) VALUES (?, ?, ?, NOW())`,
+          [user_id, cleanHtml, title]
+        )
+      } else {
+        result = await db.query(
+          `UPDATE \`custom_thank_you\` SET html = ?, title = ?, updated_at = NOW() WHERE id = ? AND user_id = ?`,
+          [cleanHtml, title, id, user_id]
+        )
+      }
+
+      if (result.affectedRows === 1 && result.warningCount === 0) {
+        return res.json({
+          message: 'Thank you page updated successfully.',
+          tyPageId: id === null ? result.insertId : id,
+          success: true
+        })
+      } else {
+        return res.json({
+          message: 'There was an error updating the thank you page.',
+          success: false
+        })
+      }
+    }
+  )
+
+  // to delete a custom thank you page from the database
+  app.delete(
+    '/api/user/:user_id/delete/thankyou/:id',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const db = await getPool()
+      const user_id = req.params.user_id
+      const id = req.params.id
+
+      if (id === 1 || id === '1') {
+        return res.json({
+          message: 'You cannot delete the default thank you page.',
+          success: false
+        })
+      }
+
+      const result = await db.query(
+        `DELETE FROM \`custom_thank_you\` WHERE id = ? AND user_id = ?`,
+        [id, user_id]
+      )
+
+      if (result.affectedRows === 1 && result.warningCount === 0) {
+        return res.json({ message: 'Thank you page deleted successfully.' })
+      } else {
+        return res.json({
+          message: 'There was an error deleting the thank you page.'
+        })
+      }
+    }
+  )
 }

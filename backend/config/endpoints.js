@@ -272,6 +272,24 @@ module.exports = {
       method: 'get',
       path: '/api/loadvariables',
       protected: false
+    },
+    {
+      method: 'get',
+      path: '/api/user/:user_id/get/thankyou',
+      protected: false,
+      exampleRequestPath: '/api/user/1/get/thankyou'
+    },
+    {
+      method: 'post',
+      path: '/api/user/:user_id/update/thankyou',
+      protected: false,
+      exampleRequestPath: '/api/user/1/update/thankyou'
+    },
+    {
+      method: 'delete',
+      path: '/api/user/:user_id/delete/thankyou/:id',
+      protected: false,
+      exampleRequestPath: '/api/user/1/delete/thankyou/1'
     }
   ]
 }
