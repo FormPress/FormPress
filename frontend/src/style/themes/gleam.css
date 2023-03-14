@@ -67,7 +67,7 @@
   display: inline-block;
   border: 1px solid transparent;
   word-break: break-word;
-  color: #113952;
+  color: #0c2738;
 }
 .builder.gleam.form
   .element
@@ -265,23 +265,7 @@
   background-color: #f5f5f5;
   color: #646464;
   box-sizing: content-box;
-  padding: 5px 0;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option {
-  background-color: #fdfdfd;
-  color: #333333;
-  padding: 5px 80px;
-  margin: 10px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option:checked {
-  color: #68942f;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option:hover {
-  background-color: #68942f;
-  color: #ffffff;
+  padding: 5px;
 }
 
 .gleam .elementRadio ul {
@@ -299,7 +283,7 @@
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #a0a0a0;
+  border: 1px solid #646464;
   border-radius: 50%;
   transition-duration: 0.3s;
   outline: none;
@@ -342,7 +326,7 @@
 
 .gleam .elementRadio .unselect-button {
   visibility: hidden;
-  background-color: #719fbd;
+  background-color: #1c5c85;
   outline: 0;
   border: 0;
   border-radius: 0;
@@ -353,6 +337,7 @@
   cursor: pointer;
   word-wrap: break-word;
   float: right;
+  border: 1px solid;
 }
 
 .gleam .elementRadio .radioList.dirty + .unselect-button {
@@ -360,11 +345,15 @@
 }
 
 .gleam .elementRadio .unselect-button:hover {
-  background-color: #5e8c9e;
+  color: #1c5c85;
+  background-color: #ffffff;
+}
+
+.gleam .elementRadio .unselect-button:hover > .unselect-label > span {
+  color: #1c5c85 !important;
 }
 
 .gleam .elementRadio .unselect-button > .unselect-label > span {
-  color: white !important;
   margin: unset !important;
   font-size: 11pt;
 }
@@ -534,7 +523,7 @@
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #a0a0a0;
+  border: 1px solid #646464;
   border-radius: 4px;
   outline: none;
   background-color: #fdfdfd;
@@ -545,7 +534,7 @@
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
-  border: 1px solid #a0a0a0;
+  border: 1px solid #646464;
   background-color: #8cc63f;
 }
 
@@ -570,7 +559,7 @@
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
-  border: 1px solid #a0a0a0;
+  border: 1px solid #646464;
 }
 
 .builder.gleam .elementCheckbox .toggle {
