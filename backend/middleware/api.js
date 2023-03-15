@@ -1720,7 +1720,10 @@ module.exports = (app) => {
       )
 
       if (result.affectedRows === 1 && result.warningCount === 0) {
-        return res.json({ message: 'Thank you page deleted successfully.' })
+        return res.json({
+          message: 'Thank you page deleted successfully.',
+          success: true
+        })
       } else {
         return res.json({
           message: 'There was an error deleting the thank you page.'
