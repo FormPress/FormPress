@@ -1698,7 +1698,7 @@ module.exports = (app) => {
       const userForms = (await formModel.list({ user_id })) || []
 
       const formsUsingThisPage = userForms.filter((form) => {
-        const tyPageId = form.props.integrations.find(
+        const tyPageId = form.props?.integrations.find(
           (i) => i.type === 'tyPageId'
         )
         return tyPageId && tyPageId.value === parseInt(id)
