@@ -24,6 +24,7 @@ class PostSubmission extends Component {
     this.loadPostSubmissionPages = this.loadPostSubmissionPages.bind(this)
     this.renderCustomPageManager = this.renderCustomPageManager.bind(this)
     this.handleOnSave = this.handleOnSave.bind(this)
+    this.handleOnCreate = this.handleOnCreate.bind(this)
     this.handleDeletePage = this.handleDeletePage.bind(this)
     this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this)
     this.handleOnCreateNewPageClick = this.handleOnCreateNewPageClick.bind(this)
@@ -54,7 +55,8 @@ class PostSubmission extends Component {
     }
   }
 
-  async loadPostSubmissionPages(seamless = false) {
+  async loadPostSubmissionPages(seamless = false, pageId = 1) {
+    // pageId is used when we want to load a specific page after the initial load
     const result = await api({
       resource: `/api/user/${this.props.generalContext.auth.user_id}/get/thankyou`,
       method: 'get'
@@ -63,17 +65,22 @@ class PostSubmission extends Component {
     const { data } = result
 
     if (data.length > 0) {
-      const defaultPostSubmissionPage = data[0]
-
       this.setState({
         postSubmissionPages: data
       })
 
       if (seamless === false) {
-        this.setState({
-          selectedPostSubmissionPage: defaultPostSubmissionPage
-        })
-        this.editor.current.innerHTML = defaultPostSubmissionPage.html
+        const selectedPostSubmissionPage = data.find(
+          (page) => page.id === pageId
+        )
+
+        if (selectedPostSubmissionPage) {
+          this.setState({
+            selectedPostSubmissionPage
+          })
+
+          this.editor.current.innerHTML = selectedPostSubmissionPage.html
+        }
       }
 
       await this.organizePageSelectorEntries()
@@ -122,22 +129,15 @@ class PostSubmission extends Component {
 
     this.props.setAdditionalSaveFunction(() => this.handleOnSave())
 
-    await this.loadPostSubmissionPages()
-
     const tyPageIdIntegration = this.getCurrentIntegration()
 
-    if (tyPageIdIntegration !== false) {
-      const foundTyPage = this.state.postSubmissionPages.find(
-        (page) => page.id === tyPageIdIntegration.value
-      )
+    let pageIdToBeLoaded = 1
 
-      if (foundTyPage) {
-        this.setState({
-          selectedPostSubmissionPage: foundTyPage
-        })
-        this.editor.current.innerHTML = foundTyPage.html
-      }
+    if (tyPageIdIntegration !== false) {
+      pageIdToBeLoaded = tyPageIdIntegration.value
     }
+
+    await this.loadPostSubmissionPages(false, pageIdToBeLoaded)
   }
 
   async handleSetTyPage(e) {
@@ -169,24 +169,13 @@ class PostSubmission extends Component {
     this.props.setAdditionalSaveFunction(null)
   }
 
-  async handleOnSave(createNew = false) {
-    const html = this.editor.current.innerHTML
-    const { selectedPostSubmissionPage, newPageTitle } = this.state
-
-    let id = selectedPostSubmissionPage.id
-
-    if (id <= 1) {
-      id = null
-    }
+  async handleOnCreate() {
+    const { newPageTitle, postSubmissionPages } = this.state
 
     const data = {
-      title: selectedPostSubmissionPage.title,
-      html,
-      id
-    }
-
-    if (createNew === true) {
-      data.title = newPageTitle
+      title: newPageTitle,
+      id: null,
+      html: postSubmissionPages[0].html
     }
 
     if (data.title === '') {
@@ -199,16 +188,14 @@ class PostSubmission extends Component {
       body: data
     })
 
-    await this.loadPostSubmissionPages(true)
+    await this.loadPostSubmissionPages(false, saveResult.data.tyPageId || 1)
 
     const taskFeedback = {}
 
     if (saveResult.data.tyPageId !== undefined) {
-      selectedPostSubmissionPage.id = saveResult.data.tyPageId
-      selectedPostSubmissionPage.title = saveResult.data.tyPageTitle
-      taskFeedback.message = 'Page saved successfully.'
+      taskFeedback.message = 'Page created successfully.'
     } else {
-      taskFeedback.message = 'There has been an error saving the page.'
+      taskFeedback.message = 'There has been an error creating the page.'
     }
 
     taskFeedback.success = saveResult.success
@@ -217,8 +204,59 @@ class PostSubmission extends Component {
       isModalOpen: false,
       modalContent: {},
       newPageTitle: '',
-      taskFeedback,
-      selectedPostSubmissionPage
+      taskFeedback
+    })
+
+    setTimeout(() => {
+      this.setState({
+        taskFeedback: {}
+      })
+    }, 2000)
+  }
+
+  async handleOnSave() {
+    const { selectedPostSubmissionPage } = this.state
+
+    let id = selectedPostSubmissionPage.id
+
+    if (id <= 1) {
+      return
+    }
+
+    const html = this.editor.current.innerHTML
+
+    const data = {
+      title: selectedPostSubmissionPage.title,
+      html,
+      id
+    }
+
+    if (data.title === '') {
+      data.title = 'Untitled'
+    }
+
+    const saveResult = await api({
+      resource: `/api/user/${this.props.generalContext.auth.user_id}/update/thankyou`,
+      method: 'post',
+      body: data
+    })
+
+    const taskFeedback = {}
+
+    if (saveResult.data.tyPageId !== undefined) {
+      taskFeedback.message = 'Page saved successfully.'
+    } else {
+      taskFeedback.message = 'There has been an error saving the page.'
+    }
+
+    await this.loadPostSubmissionPages(true)
+
+    taskFeedback.success = saveResult.success
+
+    this.setState({
+      isModalOpen: false,
+      modalContent: {},
+      taskFeedback
     })
 
     setTimeout(() => {
@@ -255,7 +293,7 @@ class PostSubmission extends Component {
       abortText: 'Cancel',
       abortClick: this.handleCloseModalClick,
       positiveText: 'Create',
-      positiveClick: () => this.handleOnSave(true),
+      positiveClick: () => this.handleOnCreate(),
       inputValue: () => {
         return this.state.newPageTitle
       },
