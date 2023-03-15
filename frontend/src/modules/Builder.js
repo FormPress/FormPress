@@ -12,7 +12,7 @@ import {
   faQuestionCircle,
   faPen,
   faBoltLightning,
-  faEnvelopeOpen
+  faCircleCheck
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -1532,7 +1532,7 @@ export default class Builder extends Component {
           to={`/editor/${formId}/postsubmission`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
-          <FontAwesomeIcon icon={faEnvelopeOpen} />
+          <FontAwesomeIcon icon={faCircleCheck} />
         </NavLink>
         {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
         <NavLink
