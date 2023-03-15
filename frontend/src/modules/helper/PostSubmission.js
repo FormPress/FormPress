@@ -161,8 +161,6 @@ class PostSubmission extends Component {
       type: 'tyPageId',
       value: selectedPostSubmissionPage.id
     })
-
-    await this.organizePageSelectorEntries()
   }
 
   componentWillUnmount() {
