@@ -109,6 +109,7 @@
 
 .builder > .content > .leftTabs {
   min-height: 100px;
+  z-index: 1;
 }
 
 .builder > .content > .leftTabs > div {
@@ -142,6 +143,49 @@
 .builder > .content > .leftTabs > div > a.selected {
   color: white;
   background-color: rgb(168, 227, 57);
+}
+
+.builder > .content > .leftTabs > div > a > span {
+  position: absolute;
+  background-color: #fefefe;
+  padding: 2px 15px;
+  border-radius: 8px;
+  margin-left: 10px;
+  font-size: 15px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.2s all ease;
+  color: #8cc63f;
+  width: max-content;
+  font-weight: bolder;
+  height: 30px;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  line-height: 1.8;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.builder > .content > .leftTabs > div > a:hover > span {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media screen and (max-width: 1480px) {
+  .builder > .content > .leftTabs > div > a > span {
+    left: 10px !important;
+  }
+  .builder > .content > .leftTabs > div > a:hover > span {
+    left: 70px !important;
+  }
+}
+
+@media screen and (min-width: 1481px) {
+  .builder > .content > .leftTabs > div > a > span {
+    right: 10px !important;
+  }
+  .builder > .content > .leftTabs > div > a:hover > span {
+    right: 70px !important;
+  }
 }
 
 .builder > .content > .leftMenu {

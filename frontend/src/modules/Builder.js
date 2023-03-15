@@ -1443,6 +1443,23 @@ export default class Builder extends Component {
 
   renderLeftVerticalTabs() {
     const { formId } = this.props.match.params
+    const { form } = this.state
+
+    let submitBehaviour = 'Show Thank You Page'
+    // find submitBehaviour in form props.integrations
+    if (form.props.integrations) {
+      const foundSubmitBehaviour = form.props.integrations.find(
+        (integration) => integration.type === 'submitBehaviour'
+      )
+      if (foundSubmitBehaviour) {
+        submitBehaviour = foundSubmitBehaviour.value
+      }
+    }
+
+    const postSubmissionText =
+      submitBehaviour === 'Show Thank You Page'
+        ? 'Thank You Page'
+        : 'Evaluation Page'
 
     return (
       <div>
@@ -1451,18 +1468,21 @@ export default class Builder extends Component {
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faPlusSquare} />
+          <span>Build</span>
         </NavLink>
         <NavLink
           to={`/editor/${formId}/rules`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faBoltLightning} />
+          <span>Rules</span>
         </NavLink>
         <NavLink
           to={`/editor/${formId}/postsubmission`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faEnvelopeOpen} />
+          <span>{postSubmissionText}</span>
         </NavLink>
         {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
         <NavLink
@@ -1470,12 +1490,14 @@ export default class Builder extends Component {
           to={`/editor/${formId}/design`}
           activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
+          <span>Design</span>
         </NavLink>
         <NavLink
           to={`/editor/${formId}/share`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faShareAlt} />
+          <span>Share</span>
         </NavLink>
       </div>
     )
