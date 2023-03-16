@@ -93,25 +93,26 @@ class PostSubmission extends Component {
 
   async organizePageSelectorEntries() {
     const { postSubmissionPages } = this.state
+    const tyPageIdIntegration = this.getCurrentIntegration()
 
     const selectorOptions = postSubmissionPages.map((page) => {
+      const activePage =
+        tyPageIdIntegration !== false && tyPageIdIntegration.value === page.id
+
       if (page.id === 1) {
         return {
-          display: 'Default',
+          display:
+            'Default' +
+            (activePage || !tyPageIdIntegration ? ' - (Active)' : ''),
           value: page.id
         }
       }
-
-      const tyPageIdIntegration = this.getCurrentIntegration()
 
       return {
         display:
           page.title +
           ' - ' +
-          (tyPageIdIntegration !== false &&
-          tyPageIdIntegration.value === page.id
-            ? '(Active) - '
-            : '') +
+          (activePage ? '(Active) - ' : '') +
           (page.updated_at
             ? moment(page.updated_at).format('YYYY-MM-DD HH:mm')
             : moment(page.created_at).format('YYYY-MM-DD HH:mm')),
