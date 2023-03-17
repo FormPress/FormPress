@@ -246,6 +246,14 @@
   margin: 0 auto;
 }
 
+.builder.templates .builderStageHeader {
+  display: none;
+}
+
+.builder.templates .content {
+  padding-top: 50px;
+}
+
 .builderStage {
   margin-bottom: 50px;
 }
