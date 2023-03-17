@@ -7,6 +7,8 @@ import { api } from '../../helper'
 import GeneralContext from '../../general.context'
 import EditableLabel from '../common/EditableLabel'
 import Modal from '../common/Modal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCheck, faCross } from '@fortawesome/free-solid-svg-icons'
 
 class PostSubmission extends Component {
   constructor(props) {
@@ -22,8 +24,10 @@ class PostSubmission extends Component {
     this.loadPostSubmissionPages = this.loadPostSubmissionPages.bind(this)
     this.renderCustomPageManager = this.renderCustomPageManager.bind(this)
     this.handleOnSave = this.handleOnSave.bind(this)
+    this.handleOnCreate = this.handleOnCreate.bind(this)
     this.handleDeletePage = this.handleDeletePage.bind(this)
     this.handleOnDeleteClick = this.handleOnDeleteClick.bind(this)
+    this.handleOnCreateNewPageClick = this.handleOnCreateNewPageClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.getCurrentIntegration = this.getCurrentIntegration.bind(this)
     this.handleOnHTMLEditorPaste = this.handleOnHTMLEditorPaste.bind(this)
@@ -32,6 +36,9 @@ class PostSubmission extends Component {
     )
     this.handleSetTyPage = this.handleSetTyPage.bind(this)
     this.handleOnHTMLEditorKeyDown = this.handleOnHTMLEditorKeyDown.bind(this)
+    this.organizePageSelectorEntries = this.organizePageSelectorEntries.bind(
+      this
+    )
 
     this.editor = React.createRef()
 
@@ -41,12 +48,15 @@ class PostSubmission extends Component {
       warningMessage: '',
       selectorOptions: [],
       selectedPostSubmissionPage: null,
+      newPageTitle: '',
       isModalOpen: false,
-      modalContent: {}
+      modalContent: {},
+      taskFeedback: {}
     }
   }
 
-  async loadPostSubmissionPages(seamless = false) {
+  async loadPostSubmissionPages(seamless = false, pageId = 1) {
+    // pageId is used when we want to load a specific page after the initial load
     const result = await api({
       resource: `/api/user/${this.props.generalContext.auth.user_id}/get/thankyou`,
       method: 'get'
@@ -55,38 +65,25 @@ class PostSubmission extends Component {
     const { data } = result
 
     if (data.length > 0) {
-      const selectorOptions = data.map((page) => {
-        if (page.id === 1) {
-          return {
-            display: 'Default',
-            value: page.id
-          }
-        }
-
-        return {
-          display:
-            page.title +
-            ' - ' +
-            (page.updated_at
-              ? moment(page.updated_at).format('YYYY-MM-DD HH:mm')
-              : moment(page.created_at).format('YYYY-MM-DD HH:mm')),
-          value: page.id
-        }
-      })
-
-      const defaultPostSubmissionPage = data[0]
-
       this.setState({
-        selectorOptions,
         postSubmissionPages: data
       })
 
       if (seamless === false) {
-        this.setState({
-          selectedPostSubmissionPage: defaultPostSubmissionPage
-        })
-        this.editor.current.innerHTML = defaultPostSubmissionPage.html
+        const selectedPostSubmissionPage = data.find(
+          (page) => page.id === pageId
+        )
+
+        if (selectedPostSubmissionPage) {
+          this.setState({
+            selectedPostSubmissionPage
+          })
+
+          this.editor.current.innerHTML = selectedPostSubmissionPage.html
+        }
       }
+
+      await this.organizePageSelectorEntries()
     } else {
       return this.setState({
         warningMessage: 'There has been an error loading pages.'
@@ -94,47 +91,71 @@ class PostSubmission extends Component {
     }
   }
 
+  async organizePageSelectorEntries() {
+    const { postSubmissionPages } = this.state
+    const tyPageIdIntegration = this.getCurrentIntegration()
+
+    const selectorOptions = postSubmissionPages.map((page) => {
+      const activePage =
+        tyPageIdIntegration !== false && tyPageIdIntegration.value === page.id
+
+      if (page.id === 1) {
+        return {
+          display:
+            'Default' +
+            (activePage || !tyPageIdIntegration ? ' - (Active)' : ''),
+          value: page.id
+        }
+      }
+
+      return {
+        display:
+          page.title +
+          ' - ' +
+          (activePage ? '(Active) - ' : '') +
+          (page.updated_at
+            ? moment(page.updated_at).format('YYYY-MM-DD HH:mm')
+            : moment(page.created_at).format('YYYY-MM-DD HH:mm')),
+        value: page.id
+      }
+    })
+
+    this.setState({ selectorOptions })
+  }
+
   async componentDidMount() {
     if (this.editor.current === null) {
       return
     }
 
-    await this.loadPostSubmissionPages()
+    this.props.setAdditionalSaveFunction(() => this.handleOnSave())
 
     const tyPageIdIntegration = this.getCurrentIntegration()
+
+    let pageIdToBeLoaded = 1
 
     if (tyPageIdIntegration !== false) {
-      const foundTyPage = this.state.postSubmissionPages.find(
-        (page) => page.id === tyPageIdIntegration.value
-      )
-
-      if (foundTyPage) {
-        this.setState({
-          selectedPostSubmissionPage: foundTyPage
-        })
-        this.editor.current.innerHTML = foundTyPage.html
-      }
+      pageIdToBeLoaded = tyPageIdIntegration.value
     }
+
+    await this.loadPostSubmissionPages(false, pageIdToBeLoaded)
   }
 
-  handleSetTyPage() {
+  async handleSetTyPage(e) {
     const { selectedPostSubmissionPage } = this.state
 
-    let formSetToDefaultPage = false
+    let unselecting = false
 
-    const tyPageIdIntegration = this.getCurrentIntegration()
-
-    if (tyPageIdIntegration === false) {
-      formSetToDefaultPage = true
-    } else if (tyPageIdIntegration.value === 1) {
-      formSetToDefaultPage = true
+    if (e.target.checked === false) {
+      unselecting = true
     }
 
-    if (formSetToDefaultPage === false) {
-      return this.props.setIntegration({
+    if (unselecting === true) {
+      this.props.setIntegration({
         type: 'tyPageId',
         value: 1
       })
+      return
     }
 
     this.props.setIntegration({
@@ -143,20 +164,21 @@ class PostSubmission extends Component {
     })
   }
 
-  async handleOnSave() {
-    const html = this.editor.current.innerHTML
-    const { selectedPostSubmissionPage } = this.state
+  componentWillUnmount() {
+    this.props.setAdditionalSaveFunction(null)
+  }
 
-    let id = selectedPostSubmissionPage.id
-
-    if (id <= 1) {
-      id = null
-    }
+  async handleOnCreate() {
+    const { newPageTitle, postSubmissionPages } = this.state
 
     const data = {
-      title: selectedPostSubmissionPage.title,
-      html,
-      id
+      title: newPageTitle,
+      id: null,
+      html: postSubmissionPages[0].html
+    }
+
+    if (data.title === '') {
+      data.title = 'Untitled'
     }
 
     const saveResult = await api({
@@ -165,12 +187,82 @@ class PostSubmission extends Component {
       body: data
     })
 
-    await this.loadPostSubmissionPages(true)
+    await this.loadPostSubmissionPages(false, saveResult.data.tyPageId || 1)
+
+    const taskFeedback = {}
 
     if (saveResult.data.tyPageId !== undefined) {
-      selectedPostSubmissionPage.id = saveResult.data.tyPageId
-      this.setState({ selectedPostSubmissionPage })
+      taskFeedback.message = 'Page created successfully.'
+    } else {
+      taskFeedback.message = 'There has been an error creating the page.'
     }
+
+    taskFeedback.success = saveResult.success
+
+    this.setState({
+      isModalOpen: false,
+      modalContent: {},
+      newPageTitle: '',
+      taskFeedback
+    })
+
+    setTimeout(() => {
+      this.setState({
+        taskFeedback: {}
+      })
+    }, 2000)
+  }
+
+  async handleOnSave() {
+    const { selectedPostSubmissionPage } = this.state
+
+    let id = selectedPostSubmissionPage.id
+
+    if (id <= 1) {
+      return
+    }
+
+    const html = this.editor.current.innerHTML
+
+    const data = {
+      title: selectedPostSubmissionPage.title,
+      html,
+      id
+    }
+
+    if (data.title === '') {
+      data.title = 'Untitled'
+    }
+
+    const saveResult = await api({
+      resource: `/api/user/${this.props.generalContext.auth.user_id}/update/thankyou`,
+      method: 'post',
+      body: data
+    })
+
+    const taskFeedback = {}
+
+    if (saveResult.data.tyPageId !== undefined) {
+      taskFeedback.message = 'Page saved successfully.'
+    } else {
+      taskFeedback.message = 'There has been an error saving the page.'
+    }
+
+    await this.loadPostSubmissionPages(true)
+
+    taskFeedback.success = saveResult.success
+
+    this.setState({
+      isModalOpen: false,
+      modalContent: {},
+      taskFeedback
+    })
+
+    setTimeout(() => {
+      this.setState({
+        taskFeedback: {}
+      })
+    }, 2000)
   }
 
   getCurrentIntegration() {
@@ -188,6 +280,29 @@ class PostSubmission extends Component {
       isModalOpen: false,
       modalContent: {}
     })
+  }
+
+  handleOnCreateNewPageClick() {
+    const modalContent = {
+      header: 'Create new thank you page',
+      status: 'information'
+    }
+
+    modalContent.dialogue = {
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick,
+      positiveText: 'Create',
+      positiveClick: () => this.handleOnCreate(),
+      inputValue: () => {
+        return this.state.newPageTitle
+      },
+      inputOnChange: (e) =>
+        this.handleTyPageTitleChange(undefined, undefined, e)
+    }
+
+    modalContent.content = <div>Please specify a name for the new page</div>
+
+    this.setState({ modalContent, isModalOpen: true })
   }
 
   handleOnHTMLEditorPaste(e) {
@@ -266,32 +381,49 @@ class PostSubmission extends Component {
     if (selectedPostSubmissionPage.id === 1) {
       return
     }
-    let pageIsSelected
 
-    const tyPageIdInIntegration = this.getCurrentIntegration()
-
-    if (tyPageIdInIntegration) {
-      pageIsSelected =
-        tyPageIdInIntegration.value === selectedPostSubmissionPage.id
-    } else {
-      pageIsSelected = selectedPostSubmissionPage.id === 1
-    }
-
-    await api({
+    const { data } = await api({
       resource: `/api/user/${this.props.generalContext.auth.user_id}/delete/thankyou/${selectedPostSubmissionPage.id}`,
       method: 'delete'
     })
 
-    if (pageIsSelected) {
-      await this.props.setIntegration({
-        type: 'tyPageId',
-        value: 1
-      })
+    if (data.success === true) {
+      await this.loadPostSubmissionPages()
+
+      return this.handleCloseModalClick()
+    } else {
+      if (data.error === 'forms_using_this_page') {
+        const { formsUsingThisPage } = data
+
+        const modalContent = {
+          header: 'Could not delete page',
+          status: 'error'
+        }
+
+        modalContent.dialogue = {
+          abortText: 'Close',
+          abortClick: this.handleCloseModalClick
+        }
+
+        modalContent.content = (
+          <div>
+            The page you are trying to delete is currently in use by the
+            following forms:
+            <ul>
+              {formsUsingThisPage.map((form, i) => (
+                <li className="formsUsingThisPage-listItem" key={i}>
+                  • {form}
+                </li>
+              ))}
+            </ul>
+            Please remove the page from the forms listed above before deleting
+            it.
+          </div>
+        )
+
+        this.setState({ modalContent, isModalOpen: true })
+      }
     }
-
-    await this.loadPostSubmissionPages()
-
-    this.handleCloseModalClick()
   }
 
   handleChoosePostSubmissionPage(elem, e) {
@@ -318,11 +450,17 @@ class PostSubmission extends Component {
     document.execCommand('insertHTML', false, text)
   }
 
-  handleTyPageTitleChange(id, value) {
-    const { selectedPostSubmissionPage } = this.state
-    selectedPostSubmissionPage.title = value
+  handleTyPageTitleChange(id, value, e) {
+    // e is only passed when the function is called from the modal
+    if (e) {
+      const newTitle = e.target.value
+      this.setState({ newPageTitle: newTitle })
+    } else {
+      const { selectedPostSubmissionPage } = this.state
+      selectedPostSubmissionPage.title = value
 
-    this.setState({ selectedPostSubmissionPage })
+      this.setState({ selectedPostSubmissionPage })
+    }
   }
 
   handleTyPageTextChange(e) {
@@ -351,7 +489,7 @@ class PostSubmission extends Component {
   }
 
   renderCustomPageManager() {
-    const { selectedPostSubmissionPage } = this.state
+    const { selectedPostSubmissionPage, taskFeedback } = this.state
 
     if (selectedPostSubmissionPage === null) {
       return
@@ -382,6 +520,7 @@ class PostSubmission extends Component {
           <Renderer
             theme="infernal"
             handleFieldChange={this.handleChoosePostSubmissionPage}
+            className="pagesSelector-dropdown"
             form={{
               props: {
                 elements: [
@@ -396,24 +535,33 @@ class PostSubmission extends Component {
               }
             }}
           />
+          <button
+            className="postSubmissionPage-save"
+            onClick={this.handleOnCreateNewPageClick}>
+            Create New Page
+          </button>
         </div>
         <div className="custom-pages-manager">
           <div className="pageIdentifier">
             <div className="custom-page-title">
               <EditableLabel
                 className="label"
-                mode="builder"
+                mode={defaultPage ? 'view' : 'builder'}
                 dataPlaceholder="Click to edit page title"
                 labelKey="title"
                 handleLabelChange={this.handleTyPageTitleChange}
-                value={selectedPostSubmissionPage.title}
+                value={
+                  defaultPage
+                    ? 'Default Thank You Page'
+                    : selectedPostSubmissionPage.title
+                }
                 limit={128}
               />
             </div>
             <div className="custom-page-select">
               <Renderer
                 theme="infernal"
-                handleFieldChange={this.handleSetTyPage}
+                handleFieldChange={(elem, e) => this.handleSetTyPage(e)}
                 form={{
                   props: {
                     elements: [
@@ -421,7 +569,8 @@ class PostSubmission extends Component {
                         id: 6,
                         type: 'Checkbox',
                         options: ['Show this page after submission'],
-                        value: pageIsSelected
+                        value: pageIsSelected,
+                        disabled: defaultPage && pageIsSelected
                       }
                     ]
                   }
@@ -429,36 +578,47 @@ class PostSubmission extends Component {
               />
             </div>
             <div className="custom-page-controls">
-              {defaultPage ? (
-                <button
-                  className="postSubmissionPage-save"
-                  onClick={this.handleOnSave}>
-                  Create New Page
-                </button>
-              ) : (
+              {defaultPage ? null : (
                 <>
                   <button
                     className="postSubmissionPage-delete"
                     onClick={this.handleOnDeleteClick}>
-                    Delete
-                  </button>
-                  <button
-                    className="postSubmissionPage-save"
-                    onClick={this.handleOnSave}>
-                    Save
+                    Delete Page
                   </button>
                 </>
               )}
             </div>
           </div>
+          {taskFeedback.message ? (
+            <span
+              className={
+                'task-feedback ' +
+                (taskFeedback.success === false ? 'error' : '')
+              }>
+              {taskFeedback.success === true ? (
+                <FontAwesomeIcon icon={faCheck} />
+              ) : (
+                <FontAwesomeIcon icon={faCross} />
+              )}
+              &nbsp;&nbsp;{taskFeedback.message}
+            </span>
+          ) : null}
         </div>
       </>
     )
   }
 
   render() {
+    const { selectedPostSubmissionPage } = this.state
     const { form } = this.props
     const { integrations } = this.props.form.props
+
+    let defaultPage = false
+
+    if (selectedPostSubmissionPage) {
+      const { id } = selectedPostSubmissionPage
+      defaultPage = id === undefined || id <= 1
+    }
 
     const matchingIntegration = (type) =>
       integrations.filter((integration) => integration.type === type)
@@ -503,14 +663,17 @@ class PostSubmission extends Component {
           modalContent={this.state.modalContent}
           closeModal={this.handleCloseModalClick}
         />
-        <div className="postSubmission-message">Customize {mode} Page</div>
+        <div className="postSubmission-message">
+          Here you can customize {mode} Page. Don&apos;t forget to save after
+          making changes!
+        </div>
         {mode === 'Thank You' ? (
           <>
             <div className="pageManager">{this.renderCustomPageManager()}</div>
             <div
               className="thankYouPage-preview"
               ref={this.editor}
-              contentEditable={true}
+              contentEditable={!defaultPage}
               onPaste={this.handleOnHTMLEditorPaste}
               onKeyDown={this.handleOnHTMLEditorKeyDown}></div>
           </>

@@ -21,12 +21,16 @@ class EditableLabel extends Component {
       limit = this.props.limit
     }
 
-    let isADeletingEvent = false
+    let deletingOrNavigatingEvent = false
     if (e.type === 'keydown') {
-      isADeletingEvent = e.key === 'Backspace' || e.key === 'Delete'
+      deletingOrNavigatingEvent =
+        e.key === 'Backspace' ||
+        e.key === 'Delete' ||
+        e.key === 'ArrowLeft' ||
+        e.key === 'ArrowRight'
     }
 
-    if (text.length >= limit && !isADeletingEvent) {
+    if (text.length >= limit && !deletingOrNavigatingEvent) {
       e.preventDefault()
     }
   }
