@@ -391,6 +391,17 @@ export default class Builder extends Component {
   setFormDesign(_design) {
     const form = { ...this.state.form }
     const design = {..._design}
+
+    let oldTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      oldTheme = form.props.design.theme
+    }
+
+    if (oldTheme !== _design.theme) {
+      console.log('Loading theme: ', _design.theme)
+      require(`../style/themes/${_design.theme}.css`)
+    }
+
     form.props.design = design
 
     this.setState({ form })

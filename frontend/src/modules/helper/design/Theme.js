@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 
 export default class Theme extends Component {
-  constructor(props){
-  super(props)
-  }
 
   render () {
     const themeList = [
@@ -12,8 +9,8 @@ export default class Theme extends Component {
         displayText: 'Gleam'
       },
       {
-        name: 'testtheme',
-        displayText: 'Test Theme'
+        name: 'comet',
+        displayText: 'Comet'
       }
     ]
     return (

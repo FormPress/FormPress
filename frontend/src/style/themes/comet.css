@@ -1,0 +1,110 @@
+.renderer.comet {
+  background-color: #ffffff;
+  width: 750px;
+  margin: 20px auto 90px auto;
+  padding: 30px 45px 20px;
+  box-sizing: border-box;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
+.comet .elemLabelTitle {
+  font-size: large;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #0f6361;
+}
+
+.comet .input {
+  background-color: #edf5f7;
+  width: 100%;
+}
+
+.comet .input input {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+}
+
+.comet .element {
+  box-sizing: border-box;
+  padding: 25px 8px;
+  margin: 2px 0;
+  position: relative;
+  overflow: visible;
+  display: grid;
+  border: 2px solid transparent;
+}
+
+.comet .input textarea {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+  height: 92px;
+  resize: none;
+}
+
+.comet .elementDropdown .dropdown-div .dropdown-select,
+.comet .elementDropdown .dropdown-div .dropdown-select:focus {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+}
+
+.comet .elementRadio ul li input {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  -o-appearance: none;
+  appearance: none;
+  border: 1px solid #a0a0a0;
+  border-radius: 50%;
+  transition-duration: 0.3s;
+  outline: none;
+  background-color: #fdfdfd;
+  cursor: pointer;
+  vertical-align: top;
+  margin-top: 3px;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 0px;
+}
+
+.comet .elementRadio ul {
+  padding: 0;
+  list-style: none;
+}
+
+.comet .elementCheckbox .input, .comet .elementRadio li {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+}
+
+.renderer.comet .elementRadio ul li input {
+  margin-top: 0px;
+}
+
+.renderer.comet.form .elementRadio .input .radio-label {
+  color: #4a7795;
+  max-width: calc(100% - 25px);
+  margin-top: 0px;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+  min-width: 60px;
+  display: inline-block;
+  word-break: normal;
+  white-space: break-spaces;
+}
