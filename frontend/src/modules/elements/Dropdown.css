@@ -26,8 +26,8 @@ select::-ms-expand {
   height: 3em;
   line-height: 3;
   overflow: hidden;
-  border-radius: 0.25em;
 }
+
 #edit-preview-button {
   background-color: white;
   color: black;

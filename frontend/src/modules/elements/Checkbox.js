@@ -167,6 +167,10 @@ export default class Checkbox extends Component {
       inputProps.checked = config.value === true
     }
 
+    if (typeof config.disabled !== 'undefined') {
+      inputProps.disabled = config.disabled
+    }
+
     if (config.defaultChecked !== undefined) {
       inputProps.defaultChecked = config.defaultChecked
     }

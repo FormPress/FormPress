@@ -15,7 +15,7 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  min-width: 400px;
+  min-width: 550px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -43,6 +43,11 @@
   background-color: white;
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
+}
+
+.wrapper-header.error,
+.wrapper-header.warning {
+  color: #be0000;
 }
 
 .wrapper-body {
@@ -120,6 +125,5 @@
 .wrapper-buttons button.abort:hover {
   color: #fff;
   background-color: #1c5c85;
-  border: none;
   cursor: pointer;
 }
