@@ -1077,14 +1077,6 @@ module.exports = (app) => {
       showBranding = true
     }
 
-    const str = reactDOMServer.renderToStaticMarkup(
-      React.createElement(Renderer, {
-        className: 'form',
-        form,
-        mode: 'renderer'
-      })
-    )
-
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )
@@ -1092,9 +1084,16 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
     style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+      path.resolve('../', `frontend/src/style/themes/${designTheme}.css`)
     )
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
@@ -1108,6 +1107,15 @@ module.exports = (app) => {
       // remove the part that says 'Never Submit Passwords'
       style += ' .renderer.gleam::after {content: none !important; }'
     }
+
+    const str = reactDOMServer.renderToStaticMarkup(
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer',
+        theme: designTheme
+      })
+    )
 
     //form table has "published_version" while form_published has "version"
     const id = uuid ? uuid : form_id
