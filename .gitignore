@@ -7,7 +7,6 @@ backend/formpress-2bb91771c29b.json
 
 frontend/public/runtime/
 frontend/node_modules
-
 **/package-lock.json
 **/settings/*.plugin.js
 **/settings/*.plugin.css
