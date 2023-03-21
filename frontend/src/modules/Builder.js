@@ -1223,7 +1223,7 @@ export default class Builder extends Component {
     }
 
     return (
-      <div className="builder">
+      <div className={`builder` + (isInTemplates ? ' templates' : '')}>
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}

@@ -1709,7 +1709,6 @@ module.exports = (app) => {
       const userForms = (await formModel.list({ user_id })) || []
 
       const formsUsingThisPage = userForms.filter((form) => {
-        delete form.props.integrations
         const tyPageId = form.props.integrations?.find(
           (i) => i.type === 'tyPageId'
         )
