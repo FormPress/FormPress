@@ -6,14 +6,14 @@ class EditableLabel extends Component {
   constructor(props) {
     super(props)
 
-    this.handleOnInput = this.handleOnInput.bind(this)
+    this.charLimiter = this.charLimiter.bind(this)
     this.handleOnBlur = this.handleOnBlur.bind(this)
     this.handleOnClick = this.handleOnClick.bind(this)
     this.handleOnKeyDown = this.handleOnKeyDown.bind(this)
     this.handleOnPaste = this.handleOnPaste.bind(this)
   }
 
-  handleOnInput(e) {
+  charLimiter(e) {
     const text = e.target.innerText
     let limit = 256
 
@@ -21,17 +21,17 @@ class EditableLabel extends Component {
       limit = this.props.limit
     }
 
-    if (typeof this.props.limit !== 'undefined') {
-      limit = this.props.limit
+    let deletingOrNavigatingEvent = false
+    if (e.type === 'keydown') {
+      deletingOrNavigatingEvent =
+        e.key === 'Backspace' ||
+        e.key === 'Delete' ||
+        e.key === 'ArrowLeft' ||
+        e.key === 'ArrowRight'
     }
 
-    if (text.length >= limit) {
-      e.target.innerText = text.substr(0, limit)
-      this.props.handleLabelChange(this.props.labelKey, e.target.innerText)
-
-      e.target.focus()
-      document.execCommand('selectAll', false, null)
-      document.getSelection().collapseToEnd()
+    if (text.length >= limit && !deletingOrNavigatingEvent) {
+      e.preventDefault()
     }
   }
 
@@ -47,14 +47,19 @@ class EditableLabel extends Component {
     if (e.key === 'Enter') {
       e.preventDefault()
       e.target.blur()
+      return
     }
+
+    this.charLimiter(e)
   }
 
   handleOnPaste(e) {
+    this.charLimiter(e)
+
     e.preventDefault()
 
     // get text representation of clipboard
-    var text = e.clipboardData.getData('text/plain')
+    const text = e.clipboardData.getData('text/plain')
 
     // insert text manually
     document.execCommand('insertHTML', false, text)
@@ -125,7 +130,6 @@ class EditableLabel extends Component {
     return (
       <div className={props.className}>
         <span
-          onInput={this.handleOnInput}
           onBlur={this.handleOnBlur}
           onKeyDown={this.handleOnKeyDown}
           onPaste={this.handleOnPaste}

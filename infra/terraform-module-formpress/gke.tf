@@ -43,6 +43,7 @@ module "gke" {
   zones                      = var.zones
   http_load_balancing        = true
   horizontal_pod_autoscaling = true
+  kubernetes_version         = var.control_plane_version
   network_policy             = false
   network                    = "formpress-default"
   subnetwork                 = "formpress-subnet"
@@ -57,13 +58,17 @@ module "gke" {
       local_ssd_count    = 0
       disk_size_gb       = 100
       disk_type          = "pd-standard"
-      image_type         = "COS"
+      image_type         = "COS_CONTAINERD"
       auto_repair        = true
       auto_upgrade       = true
       preemptible        = false
+      spot               = var.deployments[key].spot
       initial_node_count = var.deployments[key].initial_node_count
     }
   ]
 
-  depends_on = [module.vpc]
+  depends_on = [
+    module.vpc,
+    google_project_service.gcp_services
+  ]
 }

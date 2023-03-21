@@ -5,7 +5,7 @@
 .builder > .headerContainer,
 .forms > .headerContainer,
 .data > .headerContainer {
-  height: 31px;
+  height: 30px;
   top: 86px;
   width: 100%;
   position: fixed;
@@ -92,13 +92,19 @@
   min-height: 20px;
 }
 
+.formTitle span {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .header > .formControls {
   width: 400px;
   margin-left: 20px;
 }
 
 .builder > .content {
-  padding-top: 40px;
+  padding-top: 100px;
   width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -235,6 +241,19 @@
   color: #68942f;
 }
 
+.builderStageHeader {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.builder.templates .builderStageHeader {
+  display: none;
+}
+
+.builder.templates .content {
+  padding-top: 50px;
+}
+
 .builderStage {
   margin-bottom: 50px;
 }
@@ -244,7 +263,7 @@
   font-size: 18px;
   display: flex;
   flex: 1 0 auto;
-  min-height: 60px;
+  min-height: 40px;
   padding: 0;
   color: #1c5c85;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
@@ -260,17 +279,18 @@
   margin-bottom: 10px;
   background-color: #fdfdfd;
   text-align: right;
-  height: 24px;
+  height: 40px;
   padding-right: 0;
-  border-top: solid 1px #f5f5f5;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: right;
 }
 
 .builderStage .formControls > button,
 .builderStage .formControls > a > button,
 .builderStage .formControls > span > button {
   border: none;
-  height: 24px;
+  height: 40px;
   font-size: 14px;
   font-weight: bold;
   background-color: transparent;
@@ -716,4 +736,11 @@
   color: white;
   text-decoration: underline;
   font-weight: bold;
+}
+.builderStageHeader.builderStage::before {
+  content: '';
+  min-height: 10px;
+  background: #f5f5f5;
+  width: 100%;
+  display: block;
 }

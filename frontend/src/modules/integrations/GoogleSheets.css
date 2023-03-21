@@ -36,7 +36,7 @@
 }
 
 .advanced-settings td,
-th {
+.advanced-settings th {
   white-space: nowrap;
   border: 1px solid #ddd;
   padding: 5px;

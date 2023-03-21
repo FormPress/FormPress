@@ -99,7 +99,7 @@ resource "kubernetes_deployment" "formpress" {
   }
 
   spec {
-    replicas = 1
+    replicas = each.value.fp_replicas
 
     selector {
       match_labels = {
@@ -116,7 +116,7 @@ resource "kubernetes_deployment" "formpress" {
 
       spec {
         container {
-          image = "gcr.io/formpress/formpress:${each.value.version}"
+          image = "${each.value.image_repo}:${each.value.image_tag}"
           name  = "formpress"
 
           env {

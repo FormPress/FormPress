@@ -1,6 +1,3 @@
-.thankYouPage-preview > * {
-  scale: 0.8;
-}
 .postSubmission-wrapper {
   display: block;
   width: 100%;
@@ -12,25 +9,21 @@
   font-size: 14px;
   text-align: center;
   padding: 15px 20px;
-  margin-bottom: 10px;
 }
 .thankYouPage-preview {
   width: 100%;
-  /*float: right;*/
-  /*border: 2px dotted #c4c4c4;*/
   background-color: #ffffff;
 }
 
-.thankYouPage-preview .testing[contenteditable='true'],
-.thankYouPage-preview .texting[contenteditable='true'] {
+.thankYouPage-preview[contenteditable='true'] .testing,
+.thankYouPage-preview[contenteditable='true'] .texting {
   border: 2px dotted #c8c2c2;
-  padding: 0.2rem;
 }
 
-.thankYouPage-preview .testing[contenteditable='true']:hover,
-.thankYouPage-preview .texting[contenteditable='true']:hover,
-.thankYouPage-preview .testing[contenteditable='true']:focus,
-.thankYouPage-preview .texting[contenteditable='true']:focus {
+.thankYouPage-preview[contenteditable='true'] .testing:hover,
+.thankYouPage-preview[contenteditable='true'] .texting:hover,
+.thankYouPage-preview[contenteditable='true'] .testing:focus,
+.thankYouPage-preview[contenteditable='true'] .texting:focus {
   border: 2px dotted #646464;
 }
 
@@ -49,9 +42,9 @@
 }
 .thankYouPage-preview .xy {
   width: 349px;
-
   height: 302px;
 }
+
 .thankYouPage-preview .big-box {
   height: 614px;
   display: flex;
@@ -80,6 +73,7 @@
   word-break: break-word;
 }
 .thankYouPage-preview .texting {
+  padding: 0.2rem;
   font-weight: 500;
   font-size: 18px;
   font-family: Montserrat;
@@ -259,21 +253,170 @@
   display: inline-block;
 }
 
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true'],
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true'] {
+.evaluatePage-preview .evaluationPage-variable,
+.evaluatePage-preview .evaluationPage-variable {
   border: 2px dotted #c8c2c2;
   padding: 0.1rem;
   margin-right: 3px;
 }
 
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true']:hover,
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true']:hover,
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true']:focus,
-.evaluatePage-preview .evaluationPage-variable[contenteditable='true']:focus {
+.evaluatePage-preview .evaluationPage-variable:hover,
+.evaluatePage-preview .evaluationPage-variable:hover,
+.evaluatePage-preview .evaluationPage-variable:focus,
+.evaluatePage-preview .evaluationPage-variable:focus {
   border: 2px dotted #646464;
 }
 
 .evaluationPage-variable:empty:before {
   content: attr(data-placeholder);
   color: #c8c2c2;
+}
+
+.custom-pages-selector {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  height: 40px;
+}
+
+.custom-pages-selector > .pagesSelector-dropdown {
+  width: 85%;
+}
+
+.custom-pages-selector select {
+  padding-left: 15px;
+}
+
+.custom-pages-selector select {
+  height: 35px;
+}
+.custom-pages-selector button {
+  height: 33px;
+  padding-top: unset !important;
+  padding-bottom: unset !important;
+}
+
+.custom-page-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pageIdentifier {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.custom-pages-manager {
+  padding: 1.2rem 1rem 1.4rem 1rem;
+  background: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.custom-page-title {
+  width: 50%;
+}
+
+.custom-page-title span {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 18px;
+  color: #1c5c85;
+  -webkit-user-modify: read-write;
+  overflow-wrap: break-word;
+  -webkit-line-break: after-white-space;
+  box-sizing: border-box;
+  min-height: 22px;
+  display: block;
+  word-break: break-all;
+  padding: 2px 5px;
+}
+
+.formsUsingThisPage-listItem {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-page-title span[contenteditable='true'] {
+  border: 1px dashed;
+}
+
+.postSubmissionPage-save {
+  font-family: Montserrat;
+  font-weight: 700;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  min-width: 80px;
+  margin-right: 10px;
+  background-color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #1c5c85;
+  border: 1px solid #1c5c85;
+}
+
+.postSubmissionPage-save:hover {
+  color: #fff;
+  background-color: #1c5c85;
+  cursor: pointer;
+}
+
+.postSubmissionPage-delete {
+  font-family: Montserrat;
+  font-weight: 700;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  min-width: 80px;
+  margin-right: 10px;
+  background-color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  color: #be0000;
+  border: 1px solid #be0000;
+}
+.postSubmissionPage-delete:hover {
+  color: #fff;
+  background-color: #be0000;
+}
+
+.postSubmission-wrapper .task-feedback {
+  float: right;
+  color: #2e7d32;
+
+  animation: feedback-fadeOut 1s 1;
+  -webkit-animation: feedback-fadeOut 1s 1;
+  animation-fill-mode: forwards;
+
+  animation-delay: 2s;
+  -webkit-animation-delay: 1s; /* Safari and Chrome */
+  -webkit-animation-fill-mode: forwards;
+}
+
+.postSubmission-wrapper .task-feedback.error {
+  color: #c62828 !important;
+}
+
+@keyframes feedback-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes feedback-fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

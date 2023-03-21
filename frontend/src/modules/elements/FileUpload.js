@@ -88,8 +88,10 @@ export default class FileUpload extends Component {
               alt={`File: ${file.fileName}`}
               className="fileUpload-image"
               src={
-                process.env.FILE_UPLOAD_BUCKET ||
-                'noUseInFrontend' + file.uploadName
+                'https://storage.googleapis.com/' +
+                process.env.FILE_UPLOAD_BUCKET +
+                '/' +
+                file.uploadName
               }
               style={{ maxWidth: '700px' }}
               onError={() => {
