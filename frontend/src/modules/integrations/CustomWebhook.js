@@ -28,10 +28,10 @@ export default class CustomWebhook extends Component {
         submissionId: 28,
         formTitle: 'Untitled Form',
         submissionDate: '2023-02-27 12:34:56 UTC',
-        submissionData: {
-          q1_question: 'answer',
-          'q3_What is your name': 'John Doe'
-        }
+        submissionData: [
+          { question: 'question', answer: 'answer' },
+          { question: 'What is your name', answer: 'John Doe' }
+        ]
       }
     }
 

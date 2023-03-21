@@ -23,19 +23,12 @@ exports.triggerCustomWebhook = async ({
   selectedQnA.sort((a, b) => {
     return a.id - b.id
   })
-  /* A DIFFERENT TYPE OF PAYLOAD
 
-  const submissionData = selectedQnA.map((QnA) => {
-    const payloadData = {}
-    payloadData.question = QnA.question
-    payloadData.answer = QnA.answer
-    return payloadData
-  })
-*/
-  const submissionData = {}
-
-  selectedQnA.forEach((data) => {
-    submissionData[`q${data.id}_${data.question}`] = data.answer
+  const submissions = selectedQnA.map((QnA) => {
+    const submission = {}
+    submission.question = QnA.question
+    submission.answer = QnA.answer
+    return submission
   })
 
   const webhookUrl = integrationConfig.value
@@ -48,7 +41,7 @@ exports.triggerCustomWebhook = async ({
       formTitle,
       submissionDate
     },
-    submissionData
+    submissions
   }
 
   try {
