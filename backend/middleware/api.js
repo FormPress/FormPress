@@ -1566,7 +1566,6 @@ module.exports = (app) => {
     }
   )
 
-  //send all variables starting with 'FE_' to frontend
   app.get('/api/loadvariables', async (req, res) => {
     const feVariables = {}
     for (const [key, value] of Object.entries(process.env)) {
