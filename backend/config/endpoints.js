@@ -264,12 +264,6 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/user/getCountryAlpha2Code',
-      protected: false,
-      exampleRequestPath: '/api/user/getCountryAlpha2Code'
-    },
-    {
-      method: 'get',
       path: '/api/loadvariables',
       protected: false
     },
