@@ -1681,6 +1681,7 @@ module.exports = (app) => {
         return res.json({
           message: 'Thank you page updated successfully.',
           tyPageId: id === null ? result.insertId : id,
+          tyPageTitle: title,
           success: true
         })
       } else {
@@ -1709,13 +1710,35 @@ module.exports = (app) => {
         })
       }
 
+      const userForms = (await formModel.list({ user_id })) || []
+
+      const formsUsingThisPage = userForms.filter((form) => {
+        const tyPageId = form.props.integrations?.find(
+          (i) => i.type === 'tyPageId'
+        )
+        return tyPageId && tyPageId.value === parseInt(id)
+      })
+
+      if (formsUsingThisPage.length > 0) {
+        return res.json({
+          error: 'forms_using_this_page',
+          message:
+            'You cannot delete a thank you page that is being used by one or more forms.',
+          formsUsingThisPage: formsUsingThisPage.map((form) => form.title),
+          success: false
+        })
+      }
+
       const result = await db.query(
         `DELETE FROM \`custom_thank_you\` WHERE id = ? AND user_id = ?`,
         [id, user_id]
       )
 
       if (result.affectedRows === 1 && result.warningCount === 0) {
-        return res.json({ message: 'Thank you page deleted successfully.' })
+        return res.json({
+          message: 'Thank you page deleted successfully.',
+          success: true
+        })
       } else {
         return res.json({
           message: 'There was an error deleting the thank you page.'
