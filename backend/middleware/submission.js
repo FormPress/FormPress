@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-const os = require('os')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
 const { FP_ENV, FP_HOST } = process.env
@@ -11,26 +10,17 @@ const {
   submissionhandler,
   error,
   model,
-  pdfPrinter
+  integrationhelper
 } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
-const { gdUploadFile } = require(path.resolve(
-  'integrations',
-  'googledriveapi.js'
-))
-const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
-const { appendData } = require('../integrations/googlesheetsapi')
 const { validate } = require('uuid')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
   sendgridApiKey: process.env.SENDGRID_API_KEY !== ''
 }
-
-const appPrefix = 'formpress-'
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix))
 
 const findQuestionType = (form, qid) => {
   for (const elem of form.props.elements) {
@@ -443,70 +433,11 @@ module.exports = (app) => {
       }
     }
 
-    let pdfBuffer
-    let customSubmissionFileName = ''
-
-    const gDrive = integrationList.find((i) => i.type === 'GoogleDrive')
-    if (
-      gDrive !== undefined &&
-      gDrive.active === true &&
-      gDrive.paused !== true
-    ) {
-      const { targetFolder, submissionIdentifier } = gDrive
-      const { googleCredentials } = gDrive.value
-
-      const htmlBody = await ejs
-        .renderFile(
-          path.join(__dirname, '../views/submitintegrationhtml.tpl.ejs'),
-          {
-            FRONTEND: FRONTEND,
-            FormTitle: form.title,
-            QUESTION_AND_ANSWERS: questionsAndAnswers,
-            Submission_id: submission_id
-          }
-        )
-        .catch((err) => {
-          console.log('can not render html body', err)
-          error.errorReport(err)
-        })
-
-      customSubmissionFileName = replaceWithAnswers(
-        submissionIdentifier,
-        questionsAndAnswers
-      )
-
-      const htmlPath = path.join(tmpDir, `${submission_id}.html`)
-
-      fs.writeFileSync(htmlPath, htmlBody)
-
-      const pdf = await pdfPrinter.generatePDF(htmlPath)
-      pdfBuffer = Buffer.from(pdf)
-
-      try {
-        await gdUploadFile(
-          targetFolder,
-          pdfBuffer,
-          customSubmissionFileName,
-          googleCredentials
-        )
-      } catch (err) {
-        error.errorReport(err)
-
-        console.log('Error while uploading file to google drive', err)
-      }
-    }
-
-    const gSheets = integrationList.find((i) => i.type === 'GoogleSheets')
-    if (
-      gSheets !== undefined &&
-      gSheets.active === true &&
-      gSheets.paused !== true
-    ) {
-      await appendData({
-        integrationConfig: gSheets,
-        questionsAndAnswers
-      })
-    }
+    await integrationhelper.triggerIntegrations(
+      form,
+      questionsAndAnswers,
+      submission_id
+    )
   })
 
   app.post('/templates/submit/:id', async (req, res) => {
