@@ -424,7 +424,7 @@
   color: #333333;
   display: inline-block;
   margin-top: -2px;
-  #ffffff-space: nowrap;
+  white-space: nowrap;
   max-width: 600px;
   overflow: hidden;
   user-select: none;
@@ -434,7 +434,7 @@
 .builder.gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
-  #ffffff-space: nowrap;
+  white-space: nowrap;
   max-width: 600px;
   overflow: hidden;
   -webkit-user-select: none;
@@ -452,7 +452,7 @@
   min-width: 60px;
   display: inline-block;
   word-break: break-all;
-  #ffffff-space: break-spaces;
+  white-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
@@ -464,7 +464,7 @@
   min-width: 60px;
   display: inline-block;
   word-break: normal;
-  #ffffff-space: break-spaces;
+  white-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label p {
@@ -484,7 +484,7 @@
   min-width: 60px;
   display: block;
   word-break: break-all;
-  #ffffff-space: break-spaces;
+  white-space: break-spaces;
 }
 
 .gleam.form
@@ -505,7 +505,7 @@
   min-width: 60px;
   display: block;
   word-break: break-all;
-  #ffffff-space: break-spaces;
+  white-space: break-spaces;
 }
 
 .gleam.form
