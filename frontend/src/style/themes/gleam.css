@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 .renderer.gleam {
-  background-color: white;
+  background-color: #ffffff;
   width: 750px;
   margin: 20px auto 90px auto;
   padding: 30px 45px 20px;
@@ -35,12 +35,12 @@
 
 .gleam.form > .element.invalidError > .input > input {
   border-radius: 5px;
-  border: 2px solid red;
+  border: 2px solid #ff0000ff;
 }
 
 .label span.required:after {
   content: '*';
-  color: red;
+  color: #ff0000ff;
   position: absolute;
   left: 0;
   font-size: 20px;
@@ -81,7 +81,7 @@
 }
 .gleam.form .element > .elemLabelTitle > .label > .requiredMarker {
   display: inline-block;
-  color: red;
+  color: #ff0000ff;
   padding: 0;
   margin: 0;
   min-width: 5px !important;
@@ -103,16 +103,16 @@
   min-height: 19px;
   margin-top: 10px;
   padding: 3px;
-  color: gray;
+  color: #646464;
   border: 1px solid transparent;
   display: block;
   word-break: break-word;
 }
 .builder.gleam.form span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
+  border: 1px dashed #646464;
 }
 .builder.gleam.form span[contentEditable='true']:hover {
-  border: 1px dashed black !important;
+  border: 1px dashed #000000 !important;
 }
 .gleam.form span[contentEditable='true']:focus-visible {
   outline: none;
@@ -125,7 +125,7 @@
   border: 1px solid transparent;
 }
 .formTitle span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
+  border: 1px dashed #646464;
 }
 .formTitle span[contentEditable='true']:hover {
   border: 1px dashed;
@@ -135,7 +135,7 @@
 }
 .formTitle span.emptySpan[contentEditable='true']:before {
   content: attr(dataPlaceholder);
-  color: gray;
+  color: #646464;
   display: inline-block;
 }
 .formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
@@ -143,7 +143,7 @@
 }
 .builder.gleam .emptySpan:before {
   content: attr(dataPlaceholder);
-  color: gray;
+  color: #646464;
   display: inline-block;
 }
 
@@ -333,7 +333,7 @@
   padding: 0.25rem;
   width: 9rem;
   min-height: 2.5rem;
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   word-wrap: break-word;
   float: right;
@@ -424,7 +424,7 @@
   color: #333333;
   display: inline-block;
   margin-top: -2px;
-  white-space: nowrap;
+  #ffffff-space: nowrap;
   max-width: 600px;
   overflow: hidden;
   user-select: none;
@@ -434,7 +434,7 @@
 .builder.gleam.form .elementRadio .input .radio-label {
   color: #333333;
   display: inline-block;
-  white-space: nowrap;
+  #ffffff-space: nowrap;
   max-width: 600px;
   overflow: hidden;
   -webkit-user-select: none;
@@ -452,7 +452,7 @@
   min-width: 60px;
   display: inline-block;
   word-break: break-all;
-  white-space: break-spaces;
+  #ffffff-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
@@ -464,7 +464,7 @@
   min-width: 60px;
   display: inline-block;
   word-break: normal;
-  white-space: break-spaces;
+  #ffffff-space: break-spaces;
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label p {
@@ -476,7 +476,7 @@
   .input
   .radio-label
   span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
+  border: 1px dashed #646464;
 }
 
 .gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
@@ -484,7 +484,7 @@
   min-width: 60px;
   display: block;
   word-break: break-all;
-  white-space: break-spaces;
+  #ffffff-space: break-spaces;
 }
 
 .gleam.form
@@ -492,7 +492,7 @@
   .input
   .checkbox-label
   span[contentEditable='true']:hover {
-  border: 1px dashed black;
+  border: 1px dashed #000000;
 }
 
 .gleam.form
@@ -505,7 +505,7 @@
   min-width: 60px;
   display: block;
   word-break: break-all;
-  white-space: break-spaces;
+  #ffffff-space: break-spaces;
 }
 
 .gleam.form
@@ -513,7 +513,7 @@
   .input
   .radio-label
   span[contentEditable='true']:hover {
-  border: 1px dashed black;
+  border: 1px dashed #000000;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox'] {
@@ -620,7 +620,8 @@
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider {
-  background-color: #cae1ab;
+  background-color: #8cc63f;
+  filter: brightness(1.2);
 }
 
 .gleam .elementCheckbox .toggle .input input:focus + .slider {
@@ -671,7 +672,7 @@
   padding: 0px 24px 0px 4px;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='#000000' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
   background-position-y: 0px;
@@ -696,30 +697,6 @@
     width: auto;
     padding: 10px;
   }
-
-  .branding {
-    margin: 0;
-    width: auto;
-    padding: 10px;
-  }
-
-  .branding > .branding-text {
-    margin: auto;
-  }
-}
-
-@media screen and (max-width: 690px) {
-  .branding {
-    justify-content: center;
-  }
-  .branding > .branding-text {
-    display: none;
-  }
-
-  .branding > img {
-    width: auto;
-    margin: auto;
-  }
 }
 
 @media screen and (max-width: 590px) {
@@ -733,51 +710,24 @@
 }
 
 .branding {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  bottom: 0px;
-  position: fixed;
-  position: -ms-device-fixed;
-  z-index: 20;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: white;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: #ffffff;
 }
 
-.branding > img {
-  width: 200px;
-  height: 60px;
-}
-
-.branding > .Group_170 {
-  /* This is formpress logo svg. */
-  width: 200px;
-  height: 60px;
-}
-
-.branding > .branding-text {
-  font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  color: black !important;
-  text-align: right;
-  margin: auto 0 auto 90px;
-}
 .renderer.gleam:after {
   /* the password warning after the form */
   border-top: 1px solid #f5f5f5;
   content: 'Never submit passwords via FORMPRESS forms.';
-  color: black;
+  color: #000000;
   display: inline-block;
   text-align: center;
   width: 100%;
   padding-top: 20px;
 }
-input[type='file'] {
+
+.gleam .form input[type='file'] {
   display: none;
 }
+
 .custom-file-upload {
   border: 1px solid #ccc;
   display: inline-block;
@@ -914,7 +864,7 @@ input[type='file'] {
 }
 
 .renderer.gleam .pagebreak-button > button {
-  color: white;
+  color: #ffffff;
   cursor: pointer;
   background-color: #9ee048;
   width: 7rem;
@@ -1068,7 +1018,7 @@ input[type='file'] {
 
 .elementRatingScale .rating-scale-Stars {
   display: inline-block;
-  color: gray;
+  color: #646464;
   width: 38px;
   height: 36px;
   margin: 0 3px;
@@ -1108,28 +1058,4 @@ input[type='file'] {
 
 .elementRatingScale .rating-scale-Stars.extends-select {
   color: #1c5c85;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes shrink {
-  0% {
-    width: 95px;
-  }
-  50% {
-    width: 75px;
-  }
-  100% {
-    width: 95px;
-  }
 }
