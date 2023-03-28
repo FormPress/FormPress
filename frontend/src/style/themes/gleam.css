@@ -1,12 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+:root {
+  --bg-form: #ffffff; /* form background */
+  --bg-static-markup-body: #f5f5f5; /*  */
+  --bg-elem-required: #ffbebb; /* required elem background */
+  --bg-input-field: #f5f5f5; /* input field background */
+  --bg-separator-lines: #f5f5f5; /* separator lines */
 
+  --primary-color: #0c2738; /* not used */
+  --secondary-color: #1c5c85; /* COMMON ACCENT DARK */
+
+  --accent-required: #ff0000; /* required/invalid elem border, marker */
+  --accent-main-dark: #8cc63f; /* COMMON ACCENT DARK */
+  --accent-main-light: #9ee048; /* COMMON ACCENT LIGHT - BUTTONS BG */
+
+  --text-color-elem-title: #0c2738; /* ELEM TITLES */
+  --text-color-user-input: #333333; /* user input during form filling */
+  --text-color-labels-entries: #333333; /* radio checkbox entries etc, form bound text */
+
+  /* below are the colors that are used once or twice */
+  --color-0: #ffffff; /* common white */
+  --color-1: #ffbebb; /* required elem background            DONE */
+  --color-2: #ff0000; /* required/invalid elem border        DONE */
+  --color-3: #0c2738; /* ELEM TITLES                         DONE */
+  --color-4: #646464; /* slate grey */
+  --color-5: #333333; /* ALL INPUT TEXT COLOR                DONE */
+  --color-6: #c9c9c9; /* silver */
+  --color-7: #f5f5f5; /* bg of most input areas              DONE */
+  --color-8: #8cc63f; /* COMMON ACCENT DARK                  DONE */
+  --color-9: #1c5c85; /* sapphire                            DONE */
+  --color-10: #9ee048; /* COMMON ACCENT LIGHT - BUTTONS BG   DONE */
+  --color-11: #d9dedc; /* pale grey */
+  --color-12: #bec6c4; /* bluish grey */
+  --color-13: #cccccc; /* light grey */
+  --color-14: #68942f; /* forest green */
+}
+
+.static-markup-body {
+  background-color: var(--bg-static-markup-body);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 .renderer.gleam {
-  background-color: #ffffff;
+  box-sizing: border-box;
   width: 750px;
   margin: 20px auto 90px auto;
   padding: 30px 45px 20px;
-  box-sizing: border-box;
+  background-color: var(--bg-form);
 }
+
 .gleam.form {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
@@ -16,34 +56,36 @@
 }
 
 .gleam.form > .element {
-  box-sizing: border-box;
-  padding: 25px 8px;
-  margin: 2px 0;
-  position: relative;
-  overflow: visible;
-  display: grid;
-  border: 2px solid transparent;
   font-family: 'Montserrat', sans-serif;
+  position: relative;
+  display: grid;
+  overflow: visible;
+  box-sizing: border-box;
+  margin: 2px 0;
+  padding: 25px 8px;
+  border: 2px solid transparent;
 }
+
 .gleam.form > .element.requiredError {
-  background-color: #ffbebb;
   border-radius: 3px;
+  background-color: var(--bg-elem-required);
 }
+
 .gleam.form > .element.requiredError > span {
-  background-color: #ffbebb !important;
+  background-color: var(--bg-elem-required) !important;
 }
 
 .gleam.form > .element.invalidError > .input > input {
+  border: 2px solid var(--accent-required);
   border-radius: 5px;
-  border: 2px solid #ff0000ff;
 }
 
 .label span.required:after {
-  content: '*';
-  color: #ff0000ff;
+  font-size: 20px;
   position: absolute;
   left: 0;
-  font-size: 20px;
+  content: '*';
+  color: var(--accent-required);
 }
 
 .label span.required[editor='true']:after {
@@ -51,9 +93,9 @@
 }
 
 .gleam.form .element > .elemLabelTitle {
+  font-weight: 500;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-weight: 500;
 }
 
 .gleam.form .element > .elemLabelTitle > .label {
@@ -62,89 +104,38 @@
 
 .gleam.form .element > .elemLabelTitle > .label > span {
   font-family: Montserrat;
+  display: inline-block;
   min-width: 125px;
   max-width: calc(100% - 20px);
-  display: inline-block;
-  border: 1px solid transparent;
   word-break: break-word;
-  color: #0c2738;
+  color: var(--text-color-elem-title);
+  border: 1px solid transparent;
 }
-.builder.gleam.form
-  .element
-  > .elemLabelTitle
-  > .label
-  > span[contentEditable='true']:hover {
-  border: 1px dashed;
-}
+
 .gleam.form .element > .elemLabelTitle > .label > span.emptySpan {
   border: 1px dashed transparent;
 }
+
 .gleam.form .element > .elemLabelTitle > .label > .requiredMarker {
   display: inline-block;
-  color: #ff0000ff;
-  padding: 0;
-  margin: 0;
   min-width: 5px !important;
+  margin: 0;
   margin-left: 5px;
+  padding: 0;
   vertical-align: top;
+  color: var(--accent-required);
 }
+
 .gleam .element .input {
   width: 100%;
 }
+
 .gleam.form .sublabel:not(.header) {
-  position: relative;
   font-size: 12px;
+  position: relative;
   display: inline-block;
   max-width: 600px;
   word-break: break-word;
-}
-.gleam.form .sublabel:not(.header) span[contentEditable='true'] {
-  min-width: 123px;
-  min-height: 19px;
-  margin-top: 10px;
-  padding: 3px;
-  color: #646464;
-  border: 1px solid transparent;
-  display: block;
-  word-break: break-word;
-}
-.builder.gleam.form span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
-}
-.builder.gleam.form span[contentEditable='true']:hover {
-  border: 1px dashed #000000 !important;
-}
-.gleam.form span[contentEditable='true']:focus-visible {
-  outline: none;
-}
-.formTitle span[contentEditable='true'] {
-  min-height: 22px;
-  display: block;
-  word-break: break-all;
-  padding: 2px 5px;
-  border: 1px solid transparent;
-}
-.formTitle span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
-}
-.formTitle span[contentEditable='true']:hover {
-  border: 1px dashed;
-}
-.formTitle span[contentEditable='true']:focus-visible {
-  outline: none;
-}
-.formTitle span.emptySpan[contentEditable='true']:before {
-  content: attr(dataPlaceholder);
-  color: #646464;
-  display: inline-block;
-}
-.formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
-  content: '';
-}
-.builder.gleam .emptySpan:before {
-  content: attr(dataPlaceholder);
-  color: #646464;
-  display: inline-block;
 }
 
 .gleam .emptySpan:not(:empty):before {
@@ -155,6 +146,7 @@
   position: relative;
   max-width: 728px;
 }
+
 .gleam.form .header.label.alignLeft {
   text-align: left;
 }
@@ -171,22 +163,25 @@
 .gleam.form .header.label.alignundefined {
   text-align: center;
 }
+
 .gleam.form .header.sublabel.alignundefined {
   text-align: center;
 }
 
 .gleam.form .header.label span {
   font-family: Montserrat;
-  padding: 3px 5px;
-  width: 100%;
   display: block;
-  border: 1px dashed transparent;
+  width: 100%;
+  padding: 3px 5px;
   word-break: break-word;
+  border: 1px dashed transparent;
 }
+
 .gleam.form .header.sublabel {
   position: relative;
   max-width: 728px;
 }
+
 .gleam.form .header.sublabel.alignLeft {
   text-align: left;
 }
@@ -198,118 +193,130 @@
 .gleam.form .header.sublabel.alignCenter {
   text-align: center;
 }
+
 .gleam.form .header.sublabel span {
-  padding: 3px 5px;
-  width: 100%;
   display: block;
-  border: 1px dashed transparent;
+  width: 100%;
+  padding: 3px 5px;
   word-break: break-word;
+  border: 1px dashed transparent;
 }
+
 .gleam.form .clearfix {
   clear: both;
 }
+
 .gleam .elementTextBox .label {
-  float: none;
   display: block;
+  float: none;
 }
+
 .gleam .elementTextBox .input {
   width: 100%;
 }
+
 .gleam .elementTextBox .input input,
 .gleam .elementEmail .input input {
-  color: #333333;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
   width: 100%;
-  padding: 5px 16px;
   height: 42px;
-  border: solid 1px #c9c9c9;
+  padding: 5px 16px;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  background-color: var(--bg-input-field);
 }
+
 .gleam.form .element > .fl.label {
-  margin-bottom: 10px;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
-  border: solid 1px #c9c9c9;
-  padding: 5px 16px;
-  background-color: #f5f5f5;
-  height: 92px;
-  resize: none;
-  width: 100%;
-  outline: 0;
-  color: #333333;
-  box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  height: 92px;
+  padding: 5px 16px;
+  resize: none;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
+  outline: 0;
+  background-color: var(--bg-input-field);
 }
+
 .gleam .elementCheckbox {
   background-color: transparent;
 }
 
 .gleam .elementDropdown .dropdown-div {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 100%;
 }
+
 .gleam .elementDropdown .dropdown-div .dropdown-select,
 .gleam .elementDropdown .dropdown-div .dropdown-select:focus {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
-  outline: 0;
-  width: 200px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border: solid 1px #c9c9c9;
-  background-color: #f5f5f5;
-  color: #646464;
   box-sizing: content-box;
+  width: 200px;
   padding: 5px;
+  color: var(--text-color-labels-entries);
+  border: solid 1px var(--color-6);
+  outline: 0;
+  background-color: var(--bg-input-field);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .gleam .elementRadio ul {
   padding: 0;
   list-style: none;
 }
+
 .renderer.gleam .elementRadio ul li input {
-  margin-top: 0px;
+  margin-top: 0;
 }
+
 .gleam .elementRadio ul li input {
   position: relative;
+  display: inline-block;
   width: 18px;
   height: 18px;
+  margin-top: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  vertical-align: top;
+  border: 1px solid var(--color-4);
+  border-radius: 50%;
+  outline: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #646464;
-  border-radius: 50%;
-  transition-duration: 0.3s;
-  outline: none;
-  background-color: #fdfdfd;
-  cursor: pointer;
-  vertical-align: top;
-  margin-top: 3px;
-  display: inline-block;
-  margin-right: 5px;
 }
+
 .gleam .elementRadio ul li input:checked {
-  background-color: #8cc63f;
-  border: 1px solid #8cc63f;
+  border: 1px solid var(--accent-main-dark);
+  background-color: var(--accent-main-dark);
 }
+
 .gleam .elementRadio ul li input:checked::after {
-  content: ' ';
+  position: absolute;
   width: 10px;
   height: 10px;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  background-color: #8cc63f;
-  position: absolute;
   margin: 3px;
+  content: ' ';
+  border: 3px solid var(--color-0);
+  border-radius: 50%;
+  background-color: var(--accent-main-dark);
 }
+
 .gleam .elementRadio ul li input:checked + label {
-  color: #8cc63f;
+  color: var(--accent-main-dark);
 }
 
 .elementRadio > .answerExplanationContainer > details {
@@ -326,18 +333,18 @@
 
 .gleam .elementRadio .unselect-button {
   visibility: hidden;
-  background-color: #1c5c85;
-  outline: 0;
-  border: 0;
-  border-radius: 0;
-  padding: 0.25rem;
+  float: right;
   width: 9rem;
   min-height: 2.5rem;
-  color: #ffffff;
+  padding: 0.25rem;
   cursor: pointer;
   word-wrap: break-word;
-  float: right;
+  color: var(--color-0);
+  border: 0;
   border: 1px solid;
+  border-radius: 0;
+  outline: 0;
+  background-color: var(--secondary-color);
 }
 
 .gleam .elementRadio .radioList.dirty + .unselect-button {
@@ -345,17 +352,17 @@
 }
 
 .gleam .elementRadio .unselect-button:hover {
-  color: #1c5c85;
-  background-color: #ffffff;
+  color: var(--secondary-color);
+  background-color: var(--color-0);
 }
 
 .gleam .elementRadio .unselect-button:hover > .unselect-label > span {
-  color: #1c5c85 !important;
+  color: var(--secondary-color) !important;
 }
 
 .gleam .elementRadio .unselect-button > .unselect-label > span {
-  margin: unset !important;
   font-size: 11pt;
+  margin: unset !important;
 }
 
 .gleam .elementName {
@@ -364,17 +371,25 @@
 
 .elementName > .nameContainer > * > input,
 .elementName > .nameContainer > * > select {
+  font-family: 'Montserrat', sans-serif;
   height: 32px;
-  border: solid 1px #c9c9c9;
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  font-family: 'Montserrat', sans-serif;
-  color: #333333;
+  color: var(--text-color-user-input);
+  background-color: var(--bg-input-field);
+}
+
+.gleam .elementSeparator hr {
+  color: var(--bg-separator-lines);
 }
 
 .gleam .elementFileUpload {
   background-color: transparent;
+}
+
+.gleam .elementFileUpload input[type='file'] {
+  display: none;
 }
 
 .elementFileUpload > .inputContainer > .fileDisplay {
@@ -386,180 +401,128 @@
 .elementButton button,
 .elementButton button:focus {
   font-family: Montserrat;
-  font-weight: bolder;
-  padding: 5px 10px;
   font-size: 16px;
+  font-weight: bolder;
+  float: right;
   width: 7rem;
   min-height: 2.6rem;
-  background-color: #9ee048;
-  border: 1px solid #9ee048;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: var(--color-0);
+  border: 1px solid var(--accent-main-light);
   outline: none;
-  color: #ffffff;
-  float: right;
+  background-color: var(--accent-main-light);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   overflow-wrap: anywhere;
-  cursor: pointer;
 }
 
 .gleam .elementButton button:hover {
   cursor: pointer;
 }
 
-.builder.gleam .elementButton button span[contentEditable='true'] {
-  display: block;
-  border: 1px solid #9ee048;
-  overflow-wrap: break-word;
-}
-
 .gleam .elementCheckbox .input,
 .gleam .elementRadio li {
-  display: block;
   position: relative;
+  display: block;
   width: 100%;
   margin-bottom: 10px;
   padding: 6px;
 }
 
 .builder.gleam .elementCheckbox .input .checkbox-label {
-  color: #333333;
   display: inline-block;
-  margin-top: -2px;
-  white-space: nowrap;
-  max-width: 600px;
   overflow: hidden;
-  user-select: none;
   min-width: 115px;
+  max-width: 600px;
+  margin-top: -2px;
+  user-select: none;
+  white-space: nowrap;
+  color: var(--text-color-labels-entries);
 }
 
-.builder.gleam.form .elementRadio .input .radio-label {
-  color: #333333;
+.gleam.form .elementRadio .input .radio-label {
   display: inline-block;
-  white-space: nowrap;
-  max-width: 600px;
   overflow: hidden;
+  min-width: 115px;
+  max-width: 600px;
   -webkit-user-select: none;
   user-select: none;
-  min-width: 115px;
   vertical-align: bottom;
+  white-space: nowrap;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam .elementCheckbox .input .checkbox-label {
-  color: #333333;
-  margin-top: 0px;
-  max-width: calc(100% - 25px);
-  overflow: hidden;
-  user-select: none;
-  min-width: 60px;
   display: inline-block;
-  word-break: break-all;
+  overflow: hidden;
+  min-width: 60px;
+  max-width: calc(100% - 25px);
+  margin-top: 0;
+  user-select: none;
   white-space: break-spaces;
+  word-break: break-all;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
-  color: #333333;
-  max-width: calc(100% - 25px);
-  margin-top: 0px;
-  overflow: hidden;
-  user-select: none;
-  min-width: 60px;
   display: inline-block;
-  word-break: normal;
+  overflow: hidden;
+  min-width: 60px;
+  max-width: calc(100% - 25px);
+  margin-top: 0;
+  user-select: none;
   white-space: break-spaces;
+  word-break: normal;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label p {
   margin: 0;
 }
 
-.gleam.form
-  .elementRadio
-  .input
-  .radio-label
-  span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
-}
-
-.gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
-  border: 1px dashed transparent;
-  min-width: 60px;
-  display: block;
-  word-break: break-all;
-  white-space: break-spaces;
-}
-
-.gleam.form
-  .elementCheckbox
-  .input
-  .checkbox-label
-  span[contentEditable='true']:hover {
-  border: 1px dashed #000000;
-}
-
-.gleam.form
-  .elementCheckbox
-  .input
-  .checkbox-label
-  span[contentEditable='true'] {
-  border: 1px dashed transparent;
-  /*padding: 2px 5px;*/
-  min-width: 60px;
-  display: block;
-  word-break: break-all;
-  white-space: break-spaces;
-}
-
-.gleam.form
-  .elementRadio
-  .input
-  .radio-label
-  span[contentEditable='true']:hover {
-  border: 1px dashed #000000;
-}
-
 .gleam .elementCheckbox .input > input[type='checkbox'] {
+  display: inline-block;
   width: 18px;
   height: 18px;
+  margin-right: 5px;
+  cursor: pointer;
+  vertical-align: top;
+  border: 1px solid var(--color-4);
+  border-radius: 4px;
+  outline: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #646464;
-  border-radius: 4px;
-  outline: none;
-  background-color: #fdfdfd;
-  cursor: pointer;
-  vertical-align: top;
-  display: inline-block;
-  margin-right: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
-  border: 1px solid #646464;
-  background-color: #8cc63f;
+  border: 1px solid var(--color-4);
+  background-color: var(--accent-main-dark);
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
   max-width: calc(100% - 50px);
+  word-break: break-word;
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
   max-width: calc(100% - 50px);
+  word-break: break-word;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked::before {
-  content: '\2713';
-  display: block;
-  text-align: center;
-  color: #ffffff;
   position: absolute;
-  left: 9px;
   top: 6px;
+  left: 9px;
+  display: block;
+  content: '\2713';
+  text-align: center;
+  color: var(--color-0);
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
-  border: 1px solid #646464;
+  border: 1px solid var(--color-4);
 }
 
 .builder.gleam .elementCheckbox .toggle {
@@ -568,6 +531,7 @@
   width: auto;
   height: auto;
 }
+
 .checkboxCover {
   display: inline-grid;
   width: 100%;
@@ -575,71 +539,71 @@
 
 .builder.gleam .elementCheckbox textarea#options-textarea,
 .builder.gleam .elementCheckbox textarea#options-textarea:focus {
-  border: 1px solid #c9c9c9;
-  padding: 5px 16px;
-  background-color: #f5f5f5;
-  height: 80px;
-  resize: none;
   width: 100%;
+  height: 80px;
+  padding: 5px 16px;
+  resize: none;
+  color: var(--text-color-user-input);
+  border: 1px solid var(--color-6);
   outline: 0;
-  color: #333333;
+  background-color: var(--bg-input-field);
 }
 
 .gleam .elementCheckbox .toggle .input input[type='checkbox'] {
-  opacity: 0;
+  position: relative;
+  z-index: 9999;
   width: 40px;
   height: 18px;
-  z-index: 9999;
-  position: relative;
+  opacity: 0;
 }
 
 .gleam .elementCheckbox .toggle .input .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background-color: #d9dedc;
-  transition: 0.4s;
+  left: 0;
   width: 40px;
   height: 22px;
+  cursor: pointer;
+  transition: 0.4s;
   border-radius: 16px;
+  background-color: var(--color-11);
 }
 
 .gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
-  content: '';
-  height: 22px;
-  width: 22px;
-  left: 0px;
   bottom: 0;
-  background-color: #bec6c4;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  content: '';
   transition: 0.4s;
   border-radius: 12px;
+  background-color: var(--color-12);
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider {
-  background-color: #8cc63f;
+  background-color: var(--accent-main-dark);
   filter: brightness(1.2);
 }
 
 .gleam .elementCheckbox .toggle .input input:focus + .slider {
-  box-shadow: 0 0 1px #8cc63f;
+  box-shadow: 0 0 1px var(--accent-main-dark);
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider:before {
-  background-color: #8cc63f;
   -webkit-transform: translateX(18px);
   -ms-transform: translateX(18px);
   transform: translateX(18px);
+  background-color: var(--accent-main-dark);
 }
 
 .gleam .nameContainer {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: start;
   align-items: flex-start;
+  -ms-flex-align: start;
   flex-flow: row nowrap;
 }
 
@@ -651,7 +615,7 @@
 .gleam .nameContainer > * > * {
   width: 100%;
   min-height: 24px;
-  color: #333333;
+  color: var(--text-color-user-input);
 }
 
 .gleam .nameContainer .clearfix {
@@ -664,21 +628,15 @@
   box-sizing: border-box;
 }
 
-.gleam .nameContainer .name_span {
-}
-
 .gleam .nameContainer .prefix_span select {
   align-self: stretch;
-  padding: 0px 24px 0px 4px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='#000000' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  padding: 0 24px 0 4px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='#333333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
-  background-position-y: 0px;
-}
-
-.gleam .nameContainer .suffix_span {
+  background-position-y: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .gleam .hidden {
@@ -686,15 +644,15 @@
 }
 
 .verification_back {
-  text-align: center;
-  padding: 0 40px;
   line-height: 20px;
+  padding: 0 40px;
+  text-align: center;
 }
 
 @media screen and (max-width: 992px) {
   .renderer.gleam {
-    margin: 0;
     width: auto;
+    margin: 0;
     padding: 10px;
   }
 }
@@ -703,6 +661,7 @@
   .renderer.gleam .elementNetPromoterScore ul {
     padding: 0 !important;
   }
+
   .renderer.gleam .elementNetPromoterScore ul li label {
     width: 30px !important;
     margin: 0 1px !important;
@@ -710,18 +669,18 @@
 }
 
 .branding {
-  background-color: #ffffff;
+  background-color: var(--color-0);
 }
 
 .renderer.gleam:after {
-  /* the password warning after the form */
-  border-top: 1px solid #f5f5f5;
-  content: 'Never submit passwords via FORMPRESS forms.';
-  color: #000000;
   display: inline-block;
-  text-align: center;
   width: 100%;
   padding-top: 20px;
+  content: 'Never submit passwords via FORMPRESS forms.';
+  text-align: center;
+  color: var(--text-color-labels-entries);
+  /* the password warning after the form */
+  border-top: 1px solid var(--bg-separator-lines);
 }
 
 .gleam .form input[type='file'] {
@@ -729,12 +688,13 @@
 }
 
 .custom-file-upload {
-  border: 1px solid #ccc;
   display: inline-block;
+  width: 90px;
   padding: 6px 12px;
   cursor: pointer;
-  width: 90px;
+  border: 1px solid var(--color-13);
 }
+
 .inputContainer > span {
   margin-left: 5px;
 }
@@ -742,15 +702,15 @@
 .address-section > input,
 .address-section > select {
   height: 2.3rem;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
-  background-color: #f5f5f5;
-  border: solid 1px #c9c9c9;
-  color: #333;
   outline: 0;
+  background-color: var(--bg-input-field);
 }
 
 .gleam .elementAddress .address-section > select option:checked {
-  color: #68942f;
+  color: var(--color-14);
 }
 
 .address-section {
@@ -769,12 +729,12 @@
 }
 
 .address-section > input {
-  background-color: #f5f5f5;
-  border: solid 1px #c9c9c9;
-  height: 2.3rem;
-  border-radius: 3px;
   font-family: 'Montserrat', sans-serif;
-  color: #333333;
+  height: 2.3rem;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
+  border-radius: 3px;
+  background-color: var(--bg-input-field);
 }
 
 .address-section > input:focus-visible {
@@ -807,10 +767,10 @@
 }
 
 .renderer.gleam .elementNetPromoterScore ul {
-  list-style: none;
   display: flex;
   justify-content: space-evenly;
   padding: 0 30px;
+  list-style: none;
 }
 
 .renderer.gleam .elementNetPromoterScore ul li {
@@ -826,28 +786,30 @@
 }
 
 .renderer.gleam .elementNetPromoterScore .net-promoter-score-label {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  background-color: var(--bg-input-field);
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .renderer.gleam .elementNetPromoterScore .net-promoter-score-label:hover {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .renderer.gleam .elementNetPromoterScore input[type='radio']:checked + label {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .form-hidden {
@@ -855,8 +817,8 @@
 }
 
 .renderer.gleam .pagebreak-separator {
-  color: #f5f5f5;
   width: 100%;
+  color: var(--bg-separator-lines);
 }
 
 .renderer.gleam .pagebreak-button {
@@ -864,15 +826,15 @@
 }
 
 .renderer.gleam .pagebreak-button > button {
-  color: #ffffff;
-  cursor: pointer;
-  background-color: #9ee048;
+  font-size: 16px;
+  font-weight: bolder;
   width: 7rem;
   min-height: 2.6rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  color: var(--color-0);
   border: none;
-  font-weight: bolder;
-  font-size: 16px;
+  background-color: var(--accent-main-light);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .renderer.gleam .pagebreak-navControls {
@@ -880,17 +842,19 @@
 }
 
 .renderer.gleam .pagebreak-pageCount {
-  text-align: center;
   margin-top: 1rem;
+  text-align: center;
 }
+
 .currentPageSelector > .currentPageSelector-select {
-  text-align: right;
   width: min-content !important;
+  text-align: right;
 }
 
 .pagebreak-button.pb-previous {
   float: left;
 }
+
 .pagebreak-button.pb-next,
 .pagebreak-button.pb-submit {
   float: right;
@@ -933,8 +897,8 @@
   > div
   > span {
   display: block;
-  border: #9ee048 solid 1px;
   width: 5.7rem;
+  border: var(--accent-main-light) solid 1px;
   overflow-wrap: break-word;
 }
 
@@ -946,37 +910,39 @@
 
 .renderer.gleam .elementPhone > .input > .dialCode {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
-  width: 3.1rem;
   font-size: x-large;
-  border: solid 1px #c9c9c9;
+  width: 3.1rem;
+  opacity: 1;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  opacity: 1;
+  background-color: var(--bg-input-field);
 }
 
 .renderer.gleam .elementPhone > .input > .dialCode:hover,
 .renderer.gleam .elementPhone > .input > .dialCode:focus {
-  width: 12rem;
   font-size: medium;
+  width: 12rem;
 }
 
 .renderer.gleam .elementPhone > .input > .phoneInput {
+  box-sizing: border-box;
   width: 100%;
-  padding: 5px 16px;
   height: 42px;
-  border: solid 1px #c9c9c9;
+  color: var(--text-color-user-input);
+  margin-left: 5px;
+  padding: 5px 16px;
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  box-sizing: border-box;
-  margin-left: 5px;
+  background-color: var(--bg-input-field);
 }
 
 .elementRatingScale ul {
-  list-style: none;
   display: flex;
   padding: 0 30px;
+  list-style: none;
 }
 
 .rating-scale-float-Left {
@@ -1004,58 +970,60 @@
 }
 
 .elementRatingScale .rating-scale-Numbers {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  background-color: var(--bg-input-field);
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .elementRatingScale .rating-scale-Stars {
+  line-height: 28px;
   display: inline-block;
-  color: #646464;
   width: 38px;
   height: 36px;
   margin: 0 3px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--color-4);
 }
 
 .elementRatingScale .rating-scale-Faces {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--color-0);
 }
 
 .elementRatingScale .rating-scale-label:hover {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .elementRatingScale input[type='radio']:checked + label.rating-scale-Numbers {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .elementRatingScale input[type='radio']:checked + label.rating-scale-Stars {
-  color: #1c5c85;
+  color: var(--secondary-color);
 }
 
 .elementRatingScale .rating-scale-Stars.extends-select {
-  color: #1c5c85;
+  color: var(--secondary-color);
 }
