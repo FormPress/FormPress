@@ -4,6 +4,7 @@
   --bg-elem-required: #ffbebb; /* required elem background */
   --bg-input-field: #f5f5f5; /* input field background */
   --bg-separator-lines: #f5f5f5; /* separator lines */
+  --bg-branding: #ffffff; /* branding background */
 
   --primary-color: #0c2738; /* not used */
   --secondary-color: #1c5c85; /* COMMON ACCENT DARK */
@@ -15,19 +16,12 @@
   --text-color-elem-title: #0c2738; /* ELEM TITLES */
   --text-color-user-input: #333333; /* user input during form filling */
   --text-color-labels-entries: #333333; /* radio checkbox entries etc, form bound text */
+  --text-color-branding: #333333; /* branding text */
 
   /* below are the colors that are used once or twice */
   --color-0: #ffffff; /* common white */
-  --color-1: #ffbebb; /* required elem background            DONE */
-  --color-2: #ff0000; /* required/invalid elem border        DONE */
-  --color-3: #0c2738; /* ELEM TITLES                         DONE */
   --color-4: #646464; /* slate grey */
-  --color-5: #333333; /* ALL INPUT TEXT COLOR                DONE */
   --color-6: #c9c9c9; /* silver */
-  --color-7: #f5f5f5; /* bg of most input areas              DONE */
-  --color-8: #8cc63f; /* COMMON ACCENT DARK                  DONE */
-  --color-9: #1c5c85; /* sapphire                            DONE */
-  --color-10: #9ee048; /* COMMON ACCENT LIGHT - BUTTONS BG   DONE */
   --color-11: #d9dedc; /* pale grey */
   --color-12: #bec6c4; /* bluish grey */
   --color-13: #cccccc; /* light grey */
