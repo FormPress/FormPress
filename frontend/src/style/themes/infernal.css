@@ -177,3 +177,8 @@
 .infernal .elementCheckbox .input > input:active {
   border: 1px solid #a0a0a0;
 }
+
+.infernal span.emptySpan:before,
+.infernal span.emptySpan[contentEditable='true']:before {
+  content: '' !important;
+}
