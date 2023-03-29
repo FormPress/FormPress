@@ -1,4 +1,67 @@
 <div class="branding">
+    <style>
+
+      .branding {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        bottom: 0px;
+        position: fixed;
+        position: -ms-device-fixed;
+        z-index: 20;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        color: var(--text-color-branding);
+        background-color: var(--bg-branding);
+        box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+      }
+
+      .branding > img {
+        width: 200px;
+        height: 60px;
+      }
+
+      .branding > .Group_170 {
+        /* This is formpress logo svg. */
+        width: 200px;
+        height: 60px;
+      }
+
+      .branding > .branding-text {
+        font-family: Montserrat;
+        font-size: 16px;
+        font-weight: 500;
+        text-align: right;
+        margin: auto 0 auto 90px;
+        color: var(--text-color-branding);
+      }
+
+      @media screen and (max-width: 992px) {
+        .branding {
+          margin: 0;
+          width: auto;
+          padding: 10px;
+        }
+
+        .branding > .branding-text {
+          margin: auto;
+        }
+      }
+
+      @media screen and (max-width: 690px) {
+        .branding {
+          justify-content: center;
+        }
+        .branding > .branding-text {
+          display: none;
+        }
+
+        .branding > img {
+          width: auto;
+          margin: auto;
+        }
+      }
+    </style>
     <%- include ("../svg/formpresslogo.svg") %>
     <div class="branding-text">
         Created via FormPress <a href="https://formpress.org" target="_blank">Online Form Builder.</a>
