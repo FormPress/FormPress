@@ -5,6 +5,7 @@
   padding: 30px 45px 20px;
   box-sizing: border-box;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  font-family: 'Roboto', sans-serif;
 }
 
 .comet .elemLabelTitle {
@@ -18,6 +19,7 @@
 .comet .input {
   background-color: #edf5f7;
   width: 100%;
+  border-radius: 5px;
 }
 
 .comet .input input {
@@ -27,6 +29,8 @@
   outline: 0;
   border: 0;
   padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
 }
 
 .comet .element {
@@ -48,6 +52,8 @@
   padding: 10px;
   height: 92px;
   resize: none;
+  box-sizing: border-box;
+  border-radius: 5px;
 }
 
 .comet .elementDropdown .dropdown-div .dropdown-select,
@@ -66,16 +72,18 @@
   height: 18px;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #a0a0a0;
+  outline: 1px solid #0f6361;
   border-radius: 50%;
-  transition-duration: 0.3s;
-  outline: none;
-  background-color: #fdfdfd;
+  transition: all 0.3s ease-out;
+  -webkit-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
+  -moz-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
+  -o-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
+  transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
   cursor: pointer;
   vertical-align: top;
   margin-top: 3px;
   display: inline-block;
-  margin-right: 5px;
+  margin-right: 8px;
   padding: 0px;
 }
 
@@ -84,7 +92,7 @@
   list-style: none;
 }
 
-.comet .elementCheckbox .input, .comet .elementRadio li {
+.comet .elementRadio li {
   display: block;
   position: relative;
   width: 100%;
@@ -98,7 +106,7 @@
 
 .renderer.comet.form .elementRadio .input .radio-label {
   color: #4a7795;
-  max-width: calc(100% - 25px);
+  max-width: calc(100% - 30px);
   margin-top: 0px;
   overflow: hidden;
   -webkit-user-select: none;
@@ -107,4 +115,289 @@
   display: inline-block;
   word-break: normal;
   white-space: break-spaces;
+  cursor: pointer;
+}
+.comet .elementRadio ul li input:checked {
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 50%;
+  background: #0f6361;
+  border: 3px solid #edf5f7;
+  outline: 2px solid #0f6361;
+}
+
+.comet .elementRatingScale .rating-scale-Numbers {
+  display: inline-block;
+  border: 2px solid #0f6361;
+  background-color: #edf5f7;
+  color: #0f6361;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  line-height: 27px;
+  cursor: pointer;
+}
+
+.comet .elementRatingScale .rating-scale-Numbers:hover {
+  background-color: #bdd2d5;
+}
+
+.comet .elementRatingScale input[type="radio"]:checked + label.rating-scale-Numbers {
+  background-color: #0f6361;
+  color: #fff;
+}
+
+.comet .elementRatingScale ul {
+  list-style: none;
+  display: flex;
+  padding: 0 30px;
+  justify-content: center;
+}
+
+.comet .elementRatingScale [type="radio"] {
+  display: none;
+}
+
+.comet .elementNetPromoterScore ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0 10px;
+}
+
+.comet .elementNetPromoterScore [type="radio"] {
+  display: none;
+}
+
+.comet .elementNetPromoterScore .net-promoter-score-label {
+  display: inline-block;
+  border: 2px solid #0f6361;
+  background-color: #edf5f7;
+  color: #0f6361;
+  width: 40px;
+  height: 30px;
+  margin: 0 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  text-align: center;
+  line-height: 27px;
+  cursor: pointer;
+}
+
+.comet .elementNetPromoterScore input[type="radio"]:checked + label {
+  background-color: #0f6361;
+  color: #fff;
+}
+
+.comet .elementNetPromoterScore .net-promoter-score-label:hover {
+  background-color: #bdd2d5;
+}
+
+.comet.form .sublabel:not(.header) {
+  position: relative;
+  font-size: 12px;
+  display: inline-block;
+  max-width: 600px;
+  word-break: break-word;
+  color: #0f6361;
+  padding: 5px;
+}
+
+.comet .elementNetPromoterScore .clearfix.first-child {
+  background-color: #edf5f7;
+}
+
+.comet .elementCheckbox .input > input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  border: 2px solid #0f6361;
+  border-radius: 4px;
+  outline: none;
+  background-color: #edf5f7;
+  cursor: pointer;
+  vertical-align: top;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.comet .elementCheckbox .input .checkbox-label {
+  cursor: pointer;
+  color: #0f6361;
+  margin-top: 2px;
+  max-width: calc(100% - 35px);
+  overflow: hidden;
+  user-select: none;
+  min-width: 60px;
+  display: inline-block;
+  word-break: break-all;
+  white-space: break-spaces;
+}
+
+.comet .elementCheckbox .input .checkbox-label:hover {
+  color: #204964;
+}
+
+.comet .elementCheckbox .checkboxCover {
+  background-color: #edf5f7;
+  border-radius: 5px;
+}
+
+.comet .elementCheckbox .input {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 6px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.comet .elementCheckbox .input:hover > input[type="checkbox"] {
+  background-color: #bdd2d5;
+}
+
+.comet .elementCheckbox .input > input[type="checkbox"]:checked::before {
+  content: '';
+  display: block;
+  text-align: center;
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  background-color: #edf5f7;
+  left: 14px;
+  top: 9px;
+  border-right: 3px solid #0f6361;
+  border-bottom: 3px solid #0f6361;
+  border-bottom-right-radius: 2px;
+  rotate: 45deg;
+  box-sizing: border-box;
+}
+
+.comet .elementCheckbox .input:hover > input[type="checkbox"]:checked::before {
+  background-color: #bdd2d5;
+}
+
+.comet .hidden {
+  display: none !important;
+}
+
+.comet .nameContainer {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  flex-flow: row nowrap;
+}
+
+.comet .nameContainer > * {
+  flex: 1 1 100%;
+  padding: 0 2px 0 2px;
+  box-sizing: border-box;
+}
+
+.comet .nameContainer input {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.comet .nameContainer select {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+}
+
+.comet .elementPhone > .input > .dialCode {
+font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+width: 3.1rem;
+font-size: x-large;
+border: 0;
+border-radius: 3px;
+outline: 0;
+background-color: #edf5f7;
+opacity: 1;
+width: 12rem;
+font-size: medium;
+color: #4a7795;
+margin-right: 6px;
+border-radius: 5px;
+}
+
+.comet .elementPhone > .input {
+  display: flex;
+  width: 100%;
+  margin-top: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 5px;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.comet.form .header.label span {
+  padding: 3px 5px;
+  width: 100%;
+  display: block;
+  border: 1px dashed transparent;
+  word-break: break-word;
+  color: #204964;
+}
+
+.comet.form .header.sublabel span {
+  padding: 3px 5px;
+  width: 100%;
+  display: block;
+  border: 1px dashed transparent;
+  word-break: break-word;
+  color: #4a7795;
+}
+
+.comet .elementButton button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 7rem;
+  min-height: 2.6rem;
+  background-color: #204964;
+  border: 1px solid #204964;
+  outline: none;
+  color: #ffffff;
+  margin-right: 0px;
+  margin-left: auto;
+  display: block;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.comet .elementButton button:hover {
+  background-color: #bdd2d5;
+  border: 1px solid #bdd2d5;
+  color: #55617a;
+}
+
+.renderer.comet::after {
+  border-top: 1px solid #bdd2d5;
+  content: 'Never submit passwords via FORMPRESS forms.';
+  color: #719fbd;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  padding-top: 20px;
 }
