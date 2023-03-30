@@ -122,7 +122,7 @@ export default class Image extends Component {
             </div>
             <br />
             <button className="crop-button" onClick={this.getCropData}>
-              Crop Image
+              Finish Cropping & Save Image
             </button>
           </div>
         )

@@ -1,12 +1,46 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+:root {
+  --bg-form: #ffffff; /* form background */
+  --bg-static-markup-body: #f5f5f5; /*  */
+  --bg-elem-required: #ffbebb; /* required elem background */
+  --bg-input-field: #f5f5f5; /* input field background */
+  --bg-separator-lines: #f5f5f5; /* separator lines */
+  --bg-branding: #ffffff; /* branding background */
 
+  --primary-color: #0c2738; /* not used */
+  --secondary-color: #1c5c85; /* COMMON ACCENT DARK */
+
+  --accent-required: #ff0000; /* required/invalid elem border, marker */
+  --accent-main-dark: #8cc63f; /* COMMON ACCENT DARK */
+  --accent-main-light: #9ee048; /* COMMON ACCENT LIGHT - BUTTONS BG */
+
+  --text-color-elem-title: #0c2738; /* ELEM TITLES */
+  --text-color-user-input: #333333; /* user input during form filling */
+  --text-color-labels-entries: #333333; /* radio checkbox entries etc, form bound text */
+  --text-color-branding: #333333; /* branding text */
+
+  /* below are the colors that are used once or twice */
+  --color-0: #ffffff; /* common white */
+  --color-4: #646464; /* slate grey */
+  --color-6: #c9c9c9; /* silver */
+  --color-11: #d9dedc; /* pale grey */
+  --color-12: #bec6c4; /* bluish grey */
+  --color-13: #cccccc; /* light grey */
+  --color-14: #68942f; /* forest green */
+}
+
+.static-markup-body {
+  background-color: var(--bg-static-markup-body);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 .renderer.gleam {
-  background-color: white;
+  box-sizing: border-box;
   width: 750px;
   margin: 20px auto 90px auto;
   padding: 30px 45px 20px;
-  box-sizing: border-box;
+  background-color: var(--bg-form);
 }
+
 .gleam.form {
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
@@ -16,34 +50,36 @@
 }
 
 .gleam.form > .element {
-  box-sizing: border-box;
-  padding: 25px 8px;
-  margin: 2px 0;
-  position: relative;
-  overflow: visible;
-  display: grid;
-  border: 2px solid transparent;
   font-family: 'Montserrat', sans-serif;
+  position: relative;
+  display: grid;
+  overflow: visible;
+  box-sizing: border-box;
+  margin: 2px 0;
+  padding: 25px 8px;
+  border: 2px solid transparent;
 }
+
 .gleam.form > .element.requiredError {
-  background-color: #ffbebb;
   border-radius: 3px;
+  background-color: var(--bg-elem-required);
 }
+
 .gleam.form > .element.requiredError > span {
-  background-color: #ffbebb !important;
+  background-color: var(--bg-elem-required) !important;
 }
 
 .gleam.form > .element.invalidError > .input > input {
+  border: 2px solid var(--accent-required);
   border-radius: 5px;
-  border: 2px solid red;
 }
 
 .label span.required:after {
-  content: '*';
-  color: red;
+  font-size: 20px;
   position: absolute;
   left: 0;
-  font-size: 20px;
+  content: '*';
+  color: var(--accent-required);
 }
 
 .label span.required[editor='true']:after {
@@ -51,9 +87,9 @@
 }
 
 .gleam.form .element > .elemLabelTitle {
+  font-weight: 500;
   margin-top: 5px;
   margin-bottom: 5px;
-  font-weight: 500;
 }
 
 .gleam.form .element > .elemLabelTitle > .label {
@@ -62,90 +98,38 @@
 
 .gleam.form .element > .elemLabelTitle > .label > span {
   font-family: Montserrat;
+  display: inline-block;
   min-width: 125px;
   max-width: calc(100% - 20px);
-  display: inline-block;
-  /*padding: 2px 5px;*/
-  border: 1px solid transparent;
   word-break: break-word;
-  color: #113952;
+  color: var(--text-color-elem-title);
+  border: 1px solid transparent;
 }
-.builder.gleam.form
-  .element
-  > .elemLabelTitle
-  > .label
-  > span[contentEditable='true']:hover {
-  border: 1px dashed;
-}
+
 .gleam.form .element > .elemLabelTitle > .label > span.emptySpan {
   border: 1px dashed transparent;
 }
+
 .gleam.form .element > .elemLabelTitle > .label > .requiredMarker {
   display: inline-block;
-  color: red;
-  padding: 0;
-  margin: 0;
   min-width: 5px !important;
+  margin: 0;
   margin-left: 5px;
+  padding: 0;
   vertical-align: top;
+  color: var(--accent-required);
 }
+
 .gleam .element .input {
   width: 100%;
 }
+
 .gleam.form .sublabel:not(.header) {
-  position: relative;
   font-size: 12px;
+  position: relative;
   display: inline-block;
   max-width: 600px;
   word-break: break-word;
-}
-.gleam.form .sublabel:not(.header) span[contentEditable='true'] {
-  min-width: 123px;
-  min-height: 19px;
-  margin-top: 10px;
-  padding: 3px;
-  color: gray;
-  border: 1px solid transparent;
-  display: block;
-  word-break: break-word;
-}
-.builder.gleam.form span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
-}
-.builder.gleam.form span[contentEditable='true']:hover {
-  border: 1px dashed black !important;
-}
-.gleam.form span[contentEditable='true']:focus-visible {
-  outline: none;
-}
-.formTitle span[contentEditable='true'] {
-  min-height: 22px;
-  display: block;
-  word-break: break-all;
-  padding: 2px 5px;
-  border: 1px solid transparent;
-}
-.formTitle span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
-}
-.formTitle span[contentEditable='true']:hover {
-  border: 1px dashed;
-}
-.formTitle span[contentEditable='true']:focus-visible {
-  outline: none;
-}
-.formTitle span.emptySpan[contentEditable='true']:before {
-  content: attr(dataPlaceholder);
-  color: gray;
-  display: inline-block;
-}
-.formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
-  content: '';
-}
-.builder.gleam .emptySpan:before {
-  content: attr(dataPlaceholder);
-  color: gray;
-  display: inline-block;
 }
 
 .gleam .emptySpan:not(:empty):before {
@@ -156,6 +140,7 @@
   position: relative;
   max-width: 728px;
 }
+
 .gleam.form .header.label.alignLeft {
   text-align: left;
 }
@@ -172,22 +157,25 @@
 .gleam.form .header.label.alignundefined {
   text-align: center;
 }
+
 .gleam.form .header.sublabel.alignundefined {
   text-align: center;
 }
 
 .gleam.form .header.label span {
   font-family: Montserrat;
-  padding: 3px 5px;
-  width: 100%;
   display: block;
-  border: 1px dashed transparent;
+  width: 100%;
+  padding: 3px 5px;
   word-break: break-word;
+  border: 1px dashed transparent;
 }
+
 .gleam.form .header.sublabel {
   position: relative;
   max-width: 728px;
 }
+
 .gleam.form .header.sublabel.alignLeft {
   text-align: left;
 }
@@ -199,134 +187,130 @@
 .gleam.form .header.sublabel.alignCenter {
   text-align: center;
 }
+
 .gleam.form .header.sublabel span {
-  padding: 3px 5px;
-  width: 100%;
   display: block;
-  border: 1px dashed transparent;
+  width: 100%;
+  padding: 3px 5px;
   word-break: break-word;
+  border: 1px dashed transparent;
 }
+
 .gleam.form .clearfix {
   clear: both;
 }
+
 .gleam .elementTextBox .label {
-  float: none;
   display: block;
+  float: none;
 }
+
 .gleam .elementTextBox .input {
   width: 100%;
 }
+
 .gleam .elementTextBox .input input,
 .gleam .elementEmail .input input {
-  color: #333333;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
   width: 100%;
-  padding: 5px 16px;
   height: 42px;
-  border: solid 1px #c9c9c9;
+  padding: 5px 16px;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+  background-color: var(--bg-input-field);
 }
+
 .gleam.form .element > .fl.label {
-  margin-bottom: 10px;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .gleam .elementTextArea textarea,
 .gleam .elementTextArea textarea:focus {
-  border: solid 1px #c9c9c9;
-  padding: 5px 16px;
-  background-color: #f5f5f5;
-  height: 92px;
-  resize: none;
-  width: 100%;
-  outline: 0;
-  color: #333333;
-  box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+  width: 100%;
+  height: 92px;
+  padding: 5px 16px;
+  resize: none;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
+  outline: 0;
+  background-color: var(--bg-input-field);
 }
+
 .gleam .elementCheckbox {
   background-color: transparent;
 }
 
 .gleam .elementDropdown .dropdown-div {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 100%;
 }
+
 .gleam .elementDropdown .dropdown-div .dropdown-select,
 .gleam .elementDropdown .dropdown-div .dropdown-select:focus {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
-  outline: 0;
-  width: 200px;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border: solid 1px #c9c9c9;
-  background-color: #f5f5f5;
-  color: #646464;
   box-sizing: content-box;
-  padding: 5px 0;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option {
-  background-color: #fdfdfd;
-  color: #333333;
-  padding: 5px 80px;
-  margin: 10px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option:checked {
-  color: #68942f;
-}
-.gleam .elementDropdown .dropdown-div .dropdown-select option:hover {
-  background-color: #68942f;
-  color: #ffffff;
+  width: 200px;
+  padding: 5px;
+  color: var(--text-color-labels-entries);
+  border: solid 1px var(--color-6);
+  outline: 0;
+  background-color: var(--bg-input-field);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .gleam .elementRadio ul {
   padding: 0;
   list-style: none;
 }
+
 .renderer.gleam .elementRadio ul li input {
-  margin-top: 0px;
+  margin-top: 0;
 }
+
 .gleam .elementRadio ul li input {
   position: relative;
+  display: inline-block;
   width: 18px;
   height: 18px;
+  margin-top: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  vertical-align: top;
+  border: 1px solid var(--color-4);
+  border-radius: 50%;
+  outline: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #a0a0a0;
-  border-radius: 50%;
-  transition-duration: 0.3s;
-  outline: none;
-  background-color: #fdfdfd;
-  cursor: pointer;
-  vertical-align: top;
-  margin-top: 3px;
-  display: inline-block;
-  margin-right: 5px;
 }
+
 .gleam .elementRadio ul li input:checked {
-  background-color: #8cc63f;
-  border: 1px solid #8cc63f;
+  border: 1px solid var(--accent-main-dark);
+  background-color: var(--accent-main-dark);
 }
+
 .gleam .elementRadio ul li input:checked::after {
-  content: ' ';
+  position: absolute;
   width: 10px;
   height: 10px;
-  border: 3px solid #ffffff;
-  border-radius: 50%;
-  background-color: #8cc63f;
-  position: absolute;
   margin: 3px;
+  content: ' ';
+  border: 3px solid var(--color-0);
+  border-radius: 50%;
+  background-color: var(--accent-main-dark);
 }
+
 .gleam .elementRadio ul li input:checked + label {
-  color: #8cc63f;
+  color: var(--accent-main-dark);
 }
 
 .elementRadio > .answerExplanationContainer > details {
@@ -343,17 +327,18 @@
 
 .gleam .elementRadio .unselect-button {
   visibility: hidden;
-  background-color: #719fbd;
-  outline: 0;
-  border: 0;
-  border-radius: 0;
-  padding: 0.25rem;
+  float: right;
   width: 9rem;
   min-height: 2.5rem;
-  color: white;
+  padding: 0.25rem;
   cursor: pointer;
   word-wrap: break-word;
-  float: right;
+  color: var(--color-0);
+  border: 0;
+  border: 1px solid;
+  border-radius: 0;
+  outline: 0;
+  background-color: var(--secondary-color);
 }
 
 .gleam .elementRadio .radioList.dirty + .unselect-button {
@@ -361,13 +346,17 @@
 }
 
 .gleam .elementRadio .unselect-button:hover {
-  background-color: #5e8c9e;
+  color: var(--secondary-color);
+  background-color: var(--color-0);
+}
+
+.gleam .elementRadio .unselect-button:hover > .unselect-label > span {
+  color: var(--secondary-color) !important;
 }
 
 .gleam .elementRadio .unselect-button > .unselect-label > span {
-  color: white !important;
-  margin: unset !important;
   font-size: 11pt;
+  margin: unset !important;
 }
 
 .gleam .elementName {
@@ -376,17 +365,25 @@
 
 .elementName > .nameContainer > * > input,
 .elementName > .nameContainer > * > select {
+  font-family: 'Montserrat', sans-serif;
   height: 32px;
-  border: solid 1px #c9c9c9;
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  font-family: 'Montserrat', sans-serif;
-  color: #333333;
+  color: var(--text-color-user-input);
+  background-color: var(--bg-input-field);
+}
+
+.gleam .elementSeparator hr {
+  color: var(--bg-separator-lines);
 }
 
 .gleam .elementFileUpload {
   background-color: transparent;
+}
+
+.gleam .elementFileUpload input[type='file'] {
+  display: none;
 }
 
 .elementFileUpload > .inputContainer > .fileDisplay {
@@ -398,180 +395,128 @@
 .elementButton button,
 .elementButton button:focus {
   font-family: Montserrat;
-  font-weight: bolder;
-  padding: 5px 10px;
   font-size: 16px;
+  font-weight: bolder;
+  float: right;
   width: 7rem;
   min-height: 2.6rem;
-  background-color: #9ee048;
-  border: 1px solid #9ee048;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: var(--color-0);
+  border: 1px solid var(--accent-main-light);
   outline: none;
-  color: #ffffff;
-  float: right;
+  background-color: var(--accent-main-light);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   overflow-wrap: anywhere;
-  cursor: pointer;
 }
 
 .gleam .elementButton button:hover {
   cursor: pointer;
 }
 
-.builder.gleam .elementButton button span[contentEditable='true'] {
-  display: block;
-  border: 1px solid #9ee048;
-  overflow-wrap: break-word;
-}
-
 .gleam .elementCheckbox .input,
 .gleam .elementRadio li {
-  display: block;
   position: relative;
+  display: block;
   width: 100%;
   margin-bottom: 10px;
   padding: 6px;
 }
 
 .builder.gleam .elementCheckbox .input .checkbox-label {
-  color: #333333;
   display: inline-block;
-  margin-top: -2px;
-  white-space: nowrap;
-  max-width: 600px;
   overflow: hidden;
-  user-select: none;
   min-width: 115px;
+  max-width: 600px;
+  margin-top: -2px;
+  user-select: none;
+  white-space: nowrap;
+  color: var(--text-color-labels-entries);
 }
 
-.builder.gleam.form .elementRadio .input .radio-label {
-  color: #333333;
+.gleam.form .elementRadio .input .radio-label {
   display: inline-block;
-  white-space: nowrap;
-  max-width: 600px;
   overflow: hidden;
+  min-width: 115px;
+  max-width: 600px;
   -webkit-user-select: none;
   user-select: none;
-  min-width: 115px;
   vertical-align: bottom;
+  white-space: nowrap;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam .elementCheckbox .input .checkbox-label {
-  color: #333333;
-  margin-top: 0px;
-  max-width: calc(100% - 25px);
-  overflow: hidden;
-  user-select: none;
-  min-width: 60px;
   display: inline-block;
-  word-break: break-all;
+  overflow: hidden;
+  min-width: 60px;
+  max-width: calc(100% - 25px);
+  margin-top: 0;
+  user-select: none;
   white-space: break-spaces;
+  word-break: break-all;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label {
-  color: #333333;
-  max-width: calc(100% - 25px);
-  margin-top: 0px;
-  overflow: hidden;
-  user-select: none;
-  min-width: 60px;
   display: inline-block;
-  word-break: normal;
+  overflow: hidden;
+  min-width: 60px;
+  max-width: calc(100% - 25px);
+  margin-top: 0;
+  user-select: none;
   white-space: break-spaces;
+  word-break: normal;
+  color: var(--text-color-labels-entries);
 }
 
 .renderer.gleam.form .elementRadio .input .radio-label p {
   margin: 0;
 }
 
-.gleam.form
-  .elementRadio
-  .input
-  .radio-label
-  span.emptySpan[contentEditable='true'] {
-  border: 1px dashed gray;
-}
-
-.gleam.form .elementRadio .input .radio-label span[contentEditable='true'] {
-  border: 1px dashed transparent;
-  min-width: 60px;
-  display: block;
-  word-break: break-all;
-  white-space: break-spaces;
-}
-
-.gleam.form
-  .elementCheckbox
-  .input
-  .checkbox-label
-  span[contentEditable='true']:hover {
-  border: 1px dashed black;
-}
-
-.gleam.form
-  .elementCheckbox
-  .input
-  .checkbox-label
-  span[contentEditable='true'] {
-  border: 1px dashed transparent;
-  /*padding: 2px 5px;*/
-  min-width: 60px;
-  display: block;
-  word-break: break-all;
-  white-space: break-spaces;
-}
-
-.gleam.form
-  .elementRadio
-  .input
-  .radio-label
-  span[contentEditable='true']:hover {
-  border: 1px dashed black;
-}
-
 .gleam .elementCheckbox .input > input[type='checkbox'] {
+  display: inline-block;
   width: 18px;
   height: 18px;
+  margin-right: 5px;
+  cursor: pointer;
+  vertical-align: top;
+  border: 1px solid var(--color-4);
+  border-radius: 4px;
+  outline: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #a0a0a0;
-  border-radius: 4px;
-  outline: none;
-  background-color: #fdfdfd;
-  cursor: pointer;
-  vertical-align: top;
-  display: inline-block;
-  margin-right: 5px;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked {
-  border: 1px solid #a0a0a0;
-  background-color: #8cc63f;
+  border: 1px solid var(--color-4);
+  background-color: var(--accent-main-dark);
 }
 
 .renderer.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
   max-width: calc(100% - 50px);
+  word-break: break-word;
 }
 
 .builder.gleam .elementCheckbox .toggle .input .checkbox-label {
-  word-break: break-word;
   max-width: calc(100% - 50px);
+  word-break: break-word;
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:checked::before {
-  content: '\2713';
-  display: block;
-  text-align: center;
-  color: #ffffff;
   position: absolute;
-  left: 9px;
   top: 6px;
+  left: 9px;
+  display: block;
+  content: '\2713';
+  text-align: center;
+  color: var(--color-0);
 }
 
 .gleam .elementCheckbox .input > input[type='checkbox']:active {
-  border: 1px solid #a0a0a0;
+  border: 1px solid var(--color-4);
 }
 
 .builder.gleam .elementCheckbox .toggle {
@@ -580,6 +525,7 @@
   width: auto;
   height: auto;
 }
+
 .checkboxCover {
   display: inline-grid;
   width: 100%;
@@ -587,70 +533,71 @@
 
 .builder.gleam .elementCheckbox textarea#options-textarea,
 .builder.gleam .elementCheckbox textarea#options-textarea:focus {
-  border: 1px solid #c9c9c9;
-  padding: 5px 16px;
-  background-color: #f5f5f5;
-  height: 80px;
-  resize: none;
   width: 100%;
+  height: 80px;
+  padding: 5px 16px;
+  resize: none;
+  color: var(--text-color-user-input);
+  border: 1px solid var(--color-6);
   outline: 0;
-  color: #333333;
+  background-color: var(--bg-input-field);
 }
 
 .gleam .elementCheckbox .toggle .input input[type='checkbox'] {
-  opacity: 0;
+  position: relative;
+  z-index: 9999;
   width: 40px;
   height: 18px;
-  z-index: 9999;
-  position: relative;
+  opacity: 0;
 }
 
 .gleam .elementCheckbox .toggle .input .slider {
   position: absolute;
-  cursor: pointer;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
-  background-color: #d9dedc;
-  transition: 0.4s;
+  left: 0;
   width: 40px;
   height: 22px;
+  cursor: pointer;
+  transition: 0.4s;
   border-radius: 16px;
+  background-color: var(--color-11);
 }
 
 .gleam .elementCheckbox .toggle .input .slider:before {
   position: absolute;
-  content: '';
-  height: 22px;
-  width: 22px;
-  left: 0px;
   bottom: 0;
-  background-color: #bec6c4;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  content: '';
   transition: 0.4s;
   border-radius: 12px;
+  background-color: var(--color-12);
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider {
-  background-color: #cae1ab;
+  background-color: var(--accent-main-dark);
+  filter: brightness(1.2);
 }
 
 .gleam .elementCheckbox .toggle .input input:focus + .slider {
-  box-shadow: 0 0 1px #8cc63f;
+  box-shadow: 0 0 1px var(--accent-main-dark);
 }
 
 .gleam .elementCheckbox .toggle .input input:checked + .slider:before {
-  background-color: #8cc63f;
   -webkit-transform: translateX(18px);
   -ms-transform: translateX(18px);
   transform: translateX(18px);
+  background-color: var(--accent-main-dark);
 }
 
 .gleam .nameContainer {
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-align: start;
   align-items: flex-start;
+  -ms-flex-align: start;
   flex-flow: row nowrap;
 }
 
@@ -662,7 +609,7 @@
 .gleam .nameContainer > * > * {
   width: 100%;
   min-height: 24px;
-  color: #333333;
+  color: var(--text-color-user-input);
 }
 
 .gleam .nameContainer .clearfix {
@@ -675,21 +622,15 @@
   box-sizing: border-box;
 }
 
-.gleam .nameContainer .name_span {
-}
-
 .gleam .nameContainer .prefix_span select {
   align-self: stretch;
-  padding: 0px 24px 0px 4px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  padding: 0 24px 0 4px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='#333333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position-x: 100%;
-  background-position-y: 0px;
-}
-
-.gleam .nameContainer .suffix_span {
+  background-position-y: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .gleam .hidden {
@@ -697,40 +638,16 @@
 }
 
 .verification_back {
-  text-align: center;
-  padding: 0 40px;
   line-height: 20px;
+  padding: 0 40px;
+  text-align: center;
 }
 
 @media screen and (max-width: 992px) {
   .renderer.gleam {
+    width: auto;
     margin: 0;
-    width: auto;
     padding: 10px;
-  }
-
-  .branding {
-    margin: 0;
-    width: auto;
-    padding: 10px;
-  }
-
-  .branding > .branding-text {
-    margin: auto;
-  }
-}
-
-@media screen and (max-width: 690px) {
-  .branding {
-    justify-content: center;
-  }
-  .branding > .branding-text {
-    display: none;
-  }
-
-  .branding > img {
-    width: auto;
-    margin: auto;
   }
 }
 
@@ -738,6 +655,7 @@
   .renderer.gleam .elementNetPromoterScore ul {
     padding: 0 !important;
   }
+
   .renderer.gleam .elementNetPromoterScore ul li label {
     width: 30px !important;
     margin: 0 1px !important;
@@ -745,58 +663,32 @@
 }
 
 .branding {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  bottom: 0px;
-  position: fixed;
-  position: -ms-device-fixed;
-  z-index: 20;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: white;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  background-color: var(--color-0);
 }
 
-.branding > img {
-  width: 200px;
-  height: 60px;
-}
-
-.branding > .Group_170 {
-  /* This is formpress logo svg. */
-  width: 200px;
-  height: 60px;
-}
-
-.branding > .branding-text {
-  font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 500;
-  color: black !important;
-  text-align: right;
-  margin: auto 0 auto 90px;
-}
 .renderer.gleam:after {
-  /* the password warning after the form */
-  border-top: 1px solid #f5f5f5;
-  content: 'Never submit passwords via FORMPRESS forms.';
-  color: black;
   display: inline-block;
-  text-align: center;
   width: 100%;
   padding-top: 20px;
+  content: 'Never submit passwords via FORMPRESS forms.';
+  text-align: center;
+  color: var(--text-color-labels-entries);
+  /* the password warning after the form */
+  border-top: 1px solid var(--bg-separator-lines);
 }
-input[type='file'] {
+
+.gleam .form input[type='file'] {
   display: none;
 }
+
 .custom-file-upload {
-  border: 1px solid #ccc;
   display: inline-block;
+  width: 90px;
   padding: 6px 12px;
   cursor: pointer;
-  width: 90px;
+  border: 1px solid var(--color-13);
 }
+
 .inputContainer > span {
   margin-left: 5px;
 }
@@ -804,15 +696,15 @@ input[type='file'] {
 .address-section > input,
 .address-section > select {
   height: 2.3rem;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
-  background-color: #f5f5f5;
-  border: solid 1px #c9c9c9;
-  color: #333;
   outline: 0;
+  background-color: var(--bg-input-field);
 }
 
 .gleam .elementAddress .address-section > select option:checked {
-  color: #68942f;
+  color: var(--color-14);
 }
 
 .address-section {
@@ -831,12 +723,12 @@ input[type='file'] {
 }
 
 .address-section > input {
-  background-color: #f5f5f5;
-  border: solid 1px #c9c9c9;
-  height: 2.3rem;
-  border-radius: 3px;
   font-family: 'Montserrat', sans-serif;
-  color: #333333;
+  height: 2.3rem;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
+  border-radius: 3px;
+  background-color: var(--bg-input-field);
 }
 
 .address-section > input:focus-visible {
@@ -869,10 +761,10 @@ input[type='file'] {
 }
 
 .renderer.gleam .elementNetPromoterScore ul {
-  list-style: none;
   display: flex;
   justify-content: space-evenly;
   padding: 0 30px;
+  list-style: none;
 }
 
 .renderer.gleam .elementNetPromoterScore ul li {
@@ -888,28 +780,30 @@ input[type='file'] {
 }
 
 .renderer.gleam .elementNetPromoterScore .net-promoter-score-label {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  background-color: var(--bg-input-field);
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .renderer.gleam .elementNetPromoterScore .net-promoter-score-label:hover {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .renderer.gleam .elementNetPromoterScore input[type='radio']:checked + label {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .form-hidden {
@@ -917,8 +811,8 @@ input[type='file'] {
 }
 
 .renderer.gleam .pagebreak-separator {
-  color: #f5f5f5;
   width: 100%;
+  color: var(--bg-separator-lines);
 }
 
 .renderer.gleam .pagebreak-button {
@@ -926,15 +820,15 @@ input[type='file'] {
 }
 
 .renderer.gleam .pagebreak-button > button {
-  color: white;
-  cursor: pointer;
-  background-color: #9ee048;
+  font-size: 16px;
+  font-weight: bolder;
   width: 7rem;
   min-height: 2.6rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  color: var(--color-0);
   border: none;
-  font-weight: bolder;
-  font-size: 16px;
+  background-color: var(--accent-main-light);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 
 .renderer.gleam .pagebreak-navControls {
@@ -942,17 +836,19 @@ input[type='file'] {
 }
 
 .renderer.gleam .pagebreak-pageCount {
-  text-align: center;
   margin-top: 1rem;
+  text-align: center;
 }
+
 .currentPageSelector > .currentPageSelector-select {
-  text-align: right;
   width: min-content !important;
+  text-align: right;
 }
 
 .pagebreak-button.pb-previous {
   float: left;
 }
+
 .pagebreak-button.pb-next,
 .pagebreak-button.pb-submit {
   float: right;
@@ -995,8 +891,8 @@ input[type='file'] {
   > div
   > span {
   display: block;
-  border: #9ee048 solid 1px;
   width: 5.7rem;
+  border: var(--accent-main-light) solid 1px;
   overflow-wrap: break-word;
 }
 
@@ -1008,428 +904,39 @@ input[type='file'] {
 
 .renderer.gleam .elementPhone > .input > .dialCode {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
-  width: 3.1rem;
   font-size: x-large;
-  border: solid 1px #c9c9c9;
+  width: 3.1rem;
+  opacity: 1;
+  color: var(--text-color-user-input);
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  opacity: 1;
+  background-color: var(--bg-input-field);
 }
 
 .renderer.gleam .elementPhone > .input > .dialCode:hover,
 .renderer.gleam .elementPhone > .input > .dialCode:focus {
-  width: 12rem;
   font-size: medium;
+  width: 12rem;
 }
 
 .renderer.gleam .elementPhone > .input > .phoneInput {
+  box-sizing: border-box;
   width: 100%;
-  padding: 5px 16px;
   height: 42px;
-  border: solid 1px #c9c9c9;
+  color: var(--text-color-user-input);
+  margin-left: 5px;
+  padding: 5px 16px;
+  border: solid 1px var(--color-6);
   border-radius: 3px;
   outline: 0;
-  background-color: #f5f5f5;
-  box-sizing: border-box;
-  margin-left: 5px;
-}
-
-/* PART BELOW IS ABOUT EXAM EVALUATION PAGE */
-ul li.correct > label::after {
-  content: ' \2713';
-  display: inline-block;
-  color: #7fcc0a;
-  padding: 0 6px 0 0;
-}
-
-ul li.wrong {
-  background-color: palevioletred;
-  border-radius: 4px;
-}
-
-ul li.expected {
-  background-color: lightgreen;
-  border-radius: 4px;
-}
-
-.results-header {
-  background: white;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  font-family: 'Montserrat';
-}
-.results-header > .r-header-section {
-  width: 33%;
-  float: left;
-  border-right: 1px solid #eee;
-}
-
-.results-header > .userData {
-  display: block;
-  color: #113952;
-}
-.results-header > .userData .completion-date > #completionDate,
-.results-header > .userData .completion-time > #completionTime {
-  color: black;
-}
-
-.results-header > .formInfo {
-  text-align: center;
-  color: #0071bc;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.results-header > .testResults {
-  padding: 0.4rem;
-}
-
-.results-header > .testResults > .leftHand {
-  width: 50%;
-  float: left;
-}
-.results-header > .testResults > .rightHand {
-  width: 45%;
-  float: right;
-  text-align: center;
-  border-left: 1px solid #eee;
-  height: 100%;
-}
-
-.results-header > .userData {
-  text-align: left !important;
-  padding: 10px;
-}
-
-.results-header > .userData,
-.results-header > .formInfo,
-.results-header > .testResults > .leftHand,
-.results-header > .testResults > .rightHand {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.results-header > .testResults > .leftHand > .lhContent > .question-info-row,
-.results-header > .testResults > .leftHand > .lhContent > .answer-info-row {
-  color: #113952;
-}
-
-.results-header > .testResults > .leftHand > .lhContent > div {
-  padding: 0.2rem 0 0.2rem 0;
-}
-
-.results-header
-  > .testResults
-  > .leftHand
-  > .lhContent
-  > .answer-info-row
-  > #correctAnswers {
-  color: #6dd76d;
-}
-.results-header
-  > .testResults
-  > .leftHand
-  > .lhContent
-  > .answer-info-row
-  > #wrongAnswers {
-  color: #d75454;
-}
-
-.results-header
-  > .testResults
-  > .leftHand
-  > .lhContent
-  > .answer-info-row
-  > #unanswered {
-  color: rgb(123, 116, 116);
-}
-
-.results-header
-  > .testResults
-  > .rightHand
-  > .rhContent
-  > #percentageScore::after {
-  content: '%';
-  color: black;
-  font-family: 'Montserrat';
-  font-weight: 600;
-}
-
-.fp-powered {
-  display: flex;
-  width: 13rem;
-  align-items: center;
-  color: #847e7e;
-  font-size: 9pt;
-  font-weight: bold;
-  font-family: 'Montserrat';
-  padding: 0 0.2rem;
-}
-.fp-powered > a {
-  text-decoration: none;
-}
-
-.fp-powered > a > img {
-  height: 2rem;
-  width: 5.8rem;
-  margin-left: 0.5rem;
-}
-
-fp-powered + div > .form::after {
-  content: none;
-}
-
-/* PART ABOVE IS ABOUT EXAM EVALUATION PAGE*/
-
-.file-container {
-  font-family: sans-serif;
-  font-size: 13pt;
-  color: #4d4d4d;
-}
-
-.file-container .file-wrapper {
-  position: relative;
-  display: block;
-  margin: 20px auto auto;
-  background-color: #e9ecef;
-  z-index: 3;
-  border-radius: 20px;
-  padding: 20px 18px;
-  width: 640px;
-  height: 320px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-origin: content-box;
-  background-position: center;
-}
-
-.file-container .file-wrapper .file-input {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: #000;
-  z-index: 2;
-  cursor: pointer;
-  opacity: 0;
-}
-
-.file-container .file-wrapper .file-input--active + .file-content {
-  background: #e3e5e8;
-}
-
-.file-container .file-wrapper .file-input--active + .file-content .file-icon {
-  opacity: 0.5;
-}
-
-.file-container
-  .file-wrapper
-  .file-input--active
-  + .file-content
-  .file-icon
-  svg {
-  animation-name: bounce;
-  animation-duration: 0.6s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease;
-}
-
-.file-container
-  .file-wrapper
-  .file-input--active
-  + .file-content
-  .file-icon
-  .icon-shadow {
-  animation-name: shrink;
-  animation-duration: 0.6s;
-  animation-iteration-count: infinite;
-}
-
-.file-container .file-wrapper .file-content {
-  position: absolute;
-  display: block;
-  border: 8px dashed rgba(73, 80, 87, 0.6);
-  border-radius: 20px;
-  transition: 0.2s;
-  width: 604px;
-  height: 280px;
-}
-
-.file-container .file-wrapper .file-content .file-infos {
-  position: absolute;
-  display: flex;
-  width: 50%;
-  height: 50%;
-  min-width: 400px;
-  min-height: 200px;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  margin: auto;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  color: rgba(73, 80, 87, 0.6);
-  background-color: #f1f1f1;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: inset 0px 0px 6px 0px #ccc;
-  transition: 0.2s;
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon svg {
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.file-container
-  .file-wrapper
-  .file-content
-  .file-infos
-  .file-icon
-  .icon-shadow {
-  position: relative;
-  display: block;
-  width: 95px;
-  height: 7px;
-  border-radius: 100%;
-  background-color: #e3e5e8;
-  top: 0px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon > span {
-  position: absolute;
-  bottom: 20px;
-  width: calc(100% - 40px);
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon > span span {
-  display: none;
-}
-
-.file-container
-  .file-wrapper
-  .file-content
-  .file-infos
-  .file-icon
-  > span
-  .has-drag {
-  display: inline;
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon svg,
-.file-container .file-wrapper .file-content .file-infos .file-icon span {
-  display: block;
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.file-container .file-wrapper .file-content .file-infos .file-icon svg {
-  display: block;
-  margin: auto;
-  max-height: 110px;
-}
-
-.file-container .file-wrapper .file-content .file-name {
-  position: absolute;
-  width: 100%;
-  text-align: middle;
-  left: 0;
-  bottom: 20px;
-  right: 0;
-  font-weight: bold;
-  font-size: 15pt;
-  margin: auto;
-  text-align: center;
-}
-
-.image_container_before_upload {
-  border: 1px solid #ccc;
-  display: inline-block;
-  padding: 6px 12px;
-  cursor: pointer;
-  width: 176px;
-}
-
-.custom_image_upload {
-  display: block;
-  padding: 10px;
-  z-index: 2;
-  position: relative;
-}
-
-.crop-button {
-  width: 80%;
-  background-color: #9ee048;
-  color: white;
-  border-radius: 5px;
-  border: 1px solid white;
-  cursor: pointer;
-  padding: 5px;
-  margin: auto;
-  position: relative;
-  display: block;
-}
-
-.cropped_image {
-  position: relative;
-  z-index: 1;
-  display: inline-block;
-  max-width: 620px;
-}
-
-.label_hover_background {
-  display: none;
-  cursor: pointer;
-}
-
-.label_hover_background span {
-  user-select: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  transform: translate(-50%, -50%);
-}
-
-.custom_image_upload:hover .label_hover_background {
-  display: block;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 3;
-  position: absolute;
-  width: calc(100% - 20px);
-  height: calc(100% - 20px);
-  color: #fff;
-  font-size: 20px;
-  font-weight: 600;
-  text-align: center;
+  background-color: var(--bg-input-field);
 }
 
 .elementRatingScale ul {
-  list-style: none;
   display: flex;
   padding: 0 30px;
+  list-style: none;
 }
 
 .rating-scale-float-Left {
@@ -1457,82 +964,60 @@ fp-powered + div > .form::after {
 }
 
 .elementRatingScale .rating-scale-Numbers {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+  background-color: var(--bg-input-field);
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .elementRatingScale .rating-scale-Stars {
+  line-height: 28px;
   display: inline-block;
-  color: gray;
   width: 38px;
   height: 36px;
   margin: 0 3px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--color-4);
 }
 
 .elementRatingScale .rating-scale-Faces {
+  line-height: 28px;
   display: inline-block;
-  border: 1px solid #1c5c85;
-  background-color: #fff;
-  color: #1c5c85;
   width: 40px;
   height: 30px;
   margin: 0 5px;
   user-select: none;
   text-align: center;
-  line-height: 28px;
+  color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--color-0);
 }
 
 .elementRatingScale .rating-scale-label:hover {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .elementRatingScale input[type='radio']:checked + label.rating-scale-Numbers {
-  border: 1px solid #1c5c85;
-  background-color: #1c5c85;
-  color: #fff;
+  color: var(--color-0);
+  border: 1px solid var(--secondary-color);
+  background-color: var(--secondary-color);
 }
 
 .elementRatingScale input[type='radio']:checked + label.rating-scale-Stars {
-  color: #1c5c85;
+  color: var(--secondary-color);
 }
 
 .elementRatingScale .rating-scale-Stars.extends-select {
-  color: #1c5c85;
-}
-
-@keyframes bounce {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-
-@keyframes shrink {
-  0% {
-    width: 95px;
-  }
-  50% {
-    width: 75px;
-  }
-  100% {
-    width: 95px;
-  }
+  color: var(--secondary-color);
 }

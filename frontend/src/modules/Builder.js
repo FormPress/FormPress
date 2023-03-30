@@ -391,7 +391,7 @@ export default class Builder extends Component {
 
   setFormDesign(_design) {
     const form = { ...this.state.form }
-    const design = {..._design}
+    const design = { ..._design }
 
     let oldTheme = 'gleam'
     if (form.props.design !== undefined) {
@@ -1223,7 +1223,7 @@ export default class Builder extends Component {
     }
 
     return (
-      <div className="builder">
+      <div className={`builder` + (isInTemplates ? ' templates' : '')}>
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}
@@ -1558,9 +1558,7 @@ export default class Builder extends Component {
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faCircleCheck} />
         </NavLink>
-        <NavLink
-          to={`/editor/${formId}/design`}
-          activeClassName="selected">
+        <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
         </NavLink>
         <NavLink
@@ -1646,7 +1644,10 @@ export default class Builder extends Component {
     let selectedFieldId = parseInt(params.questionId)
 
     // backward compatibility for old forms without design
-    const theme = this.state.form.props.design === undefined ? 'gleam' : this.state.form.props.design.theme
+    const theme =
+      this.state.form.props.design === undefined
+        ? 'gleam'
+        : this.state.form.props.design.theme
 
     return (
       <div className="builderStage col-10-16 grid">

@@ -246,6 +246,14 @@
   margin: 0 auto;
 }
 
+.builder.templates .builderStageHeader {
+  display: none;
+}
+
+.builder.templates .content {
+  padding-top: 50px;
+}
+
 .builderStage {
   margin-bottom: 50px;
 }
@@ -735,4 +743,170 @@
   background: #f5f5f5;
   width: 100%;
   display: block;
+}
+
+.branding {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  position: -ms-device-fixed;
+  z-index: 20;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: var(--text-color-branding);
+  background-color: var(--bg-branding);
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
+.branding > img {
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .Group_170 {
+  /* This is formpress logo svg. */
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .branding-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: right;
+  margin: auto 0 auto 90px;
+}
+
+@media screen and (max-width: 992px) {
+  .branding {
+    margin: 0;
+    width: auto;
+    padding: 10px;
+  }
+
+  .branding > .branding-text {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .branding {
+    justify-content: center;
+  }
+  .branding > .branding-text {
+    display: none;
+  }
+
+  .branding > img {
+    width: auto;
+    margin: auto;
+  }
+}
+
+.form .sublabel:not(.header) span[contentEditable='true'] {
+  display: block;
+  min-width: 123px;
+  min-height: 19px;
+  margin-top: 10px;
+  padding: 3px;
+  word-break: break-word;
+  color: #646464;
+  border: 1px solid transparent;
+}
+
+.builder.form span.emptySpan[contentEditable='true'] {
+  border: 1px dashed #646464;
+}
+
+.builder.form span[contentEditable='true']:hover {
+  border: 1px dashed #333333 !important;
+}
+
+.form span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+
+.formTitle span[contentEditable='true'] {
+  display: block;
+  min-height: 22px;
+  padding: 2px 5px;
+  word-break: break-all;
+  border: 1px solid transparent;
+}
+
+.formTitle span.emptySpan[contentEditable='true'] {
+  border: 1px dashed #646464;
+}
+
+.formTitle span[contentEditable='true']:hover {
+  border: 1px dashed;
+}
+
+.formTitle span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+
+.formTitle span.emptySpan[contentEditable='true']:before {
+  display: inline-block;
+  content: attr(dataPlaceholder);
+  color: #646464;
+}
+
+.formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
+  content: '';
+}
+
+.builder .emptySpan:before {
+  display: inline-block;
+  content: attr(dataPlaceholder);
+  color: #646464;
+}
+
+.builder.form
+  .element
+  > .elemLabelTitle
+  > .label
+  > span[contentEditable='true']:hover {
+  border: 1px dashed;
+}
+
+.builder .elementButton button span[contentEditable='true'] {
+  display: block;
+  border: 1px solid var(--accent-main-light);
+  overflow-wrap: break-word;
+}
+
+.form .elementRadio .input .radio-label span.emptySpan[contentEditable='true'] {
+  border: 1px dashed #646464;
+}
+
+.form .elementRadio .input .radio-label span[contentEditable='true'] {
+  display: block;
+  min-width: 60px;
+  white-space: break-spaces;
+  word-break: break-all;
+  border: 1px dashed transparent;
+}
+
+/*take this away*/
+.form
+  .elementCheckbox
+  .input
+  .checkbox-label
+  span[contentEditable='true']:hover {
+  border: 1px dashed #333333;
+}
+
+.form .elementCheckbox .input .checkbox-label span[contentEditable='true'] {
+  display: block;
+  min-width: 60px;
+  white-space: break-spaces;
+  word-break: break-all;
+  border: 1px dashed transparent;
+}
+
+.form .elementRadio .input .radio-label span[contentEditable='true']:hover {
+  border: 1px dashed #333333;
 }

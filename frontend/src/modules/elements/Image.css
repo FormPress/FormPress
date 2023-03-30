@@ -15,15 +15,22 @@
 
 .crop-button {
   width: 80%;
-  background-color: #9ee048;
-  color: white;
+  color: #1c5c85;
+  border: 1px solid #1c5c85;
+  background: white;
   border-radius: 5px;
-  border: 1px solid white;
   cursor: pointer;
   padding: 5px;
   margin: auto;
   position: relative;
   display: block;
+  font-weight: bolder;
+}
+
+.crop-button:hover {
+  color: #fff;
+  background-color: #1c5c85;
+  cursor: pointer;
 }
 
 .cropped_image {
@@ -58,4 +65,40 @@
   font-size: 20px;
   font-weight: 600;
   text-align: center;
+}
+
+.image_container_before_upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  width: 176px;
+}
+
+.custom_image_upload {
+  display: block;
+  padding: 10px;
+  z-index: 2;
+  position: relative;
+}
+
+.cropped_image {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  max-width: 620px;
+}
+
+.label_hover_background {
+  display: none;
+  cursor: pointer;
+}
+
+.label_hover_background span {
+  user-select: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  transform: translate(-50%, -50%);
 }
