@@ -1,0 +1,1033 @@
+$bg-form: #ffffff; /* form background */
+$bg-static-markup-body: #f5f5f5; /*  */
+$bg-elem-required: #ffbebb; /* required elem background */
+$bg-input-field: #f5f5f5; /* input field background */
+$bg-separator-lines: #f5f5f5; /* separator lines */
+$bg-branding: #ffffff; /* branding background */
+
+$primary-color: #0c2738; /* not used */
+$secondary-color: #1c5c85; /* COMMON ACCENT DARK */
+
+$border-sublabel: 1px dashed #646464; /* sublabel border */
+$text-color-sublabel: #646464; /* sublabel text */
+
+$accent-required: #ff0000; /* required/invalid elem border, marker */
+$accent-main-dark: #8cc63f; /* COMMON ACCENT DARK */
+$accent-main-light: #9ee048; /* COMMON ACCENT LIGHT - BUTTONS BG */
+$text-color-elem-title: #0c2738; /* ELEM TITLES */
+$text-color-user-input: #333333; /* user input during form filling */
+$text-color-labels-entries: #333333; /* radio checkbox entries etc, form bound text */
+$text-color-branding: #333333; /* branding text */
+
+/* below are the colors that are used once or twice */
+$color-0: #ffffff; /* common white */
+$color-4: #646464; /* slate grey */
+$color-6: #c9c9c9; /* silver */
+$color-11: #d9dedc; /* pale grey */
+$color-12: #bec6c4; /* bluish grey */
+$color-13: #cccccc; /* light grey */
+$color-14: #68942f; /* forest green */
+
+.static-markup-body {
+  background-color: $bg-static-markup-body;
+}
+
+.branding {
+  color: $text-color-branding;
+  background-color: $bg-branding;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+
+.gleam {
+  box-sizing: border-box;
+  width: 750px;
+  margin: 20px auto 90px auto;
+  padding: 30px 45px 20px;
+  background-color: $bg-form;
+
+  &.form {
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  .bs-mild {
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  &.form > .element {
+    font-family: 'Montserrat', sans-serif;
+    position: relative;
+    display: grid;
+    overflow: visible;
+    box-sizing: border-box;
+    margin: 2px 0;
+    padding: 25px 8px;
+    border: 2px solid transparent;
+  }
+
+  &.form > .element.requiredError {
+    border-radius: 3px;
+    background-color: $bg-elem-required;
+  }
+
+  &.form > .element.requiredError > span {
+    background-color: $bg-elem-required !important;
+  }
+
+  &.form > .element.invalidError > .input > input {
+    border: 2px solid $accent-required;
+    border-radius: 5px;
+  }
+
+  .label span.required:after {
+    font-size: 20px;
+    position: absolute;
+    left: 0;
+    content: '*';
+    color: $accent-required;
+  }
+
+  .label span.required[editor='true']:after {
+    margin-top: -30px;
+  }
+
+  &.form .element > .elemLabelTitle {
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  &.form .element > .elemLabelTitle > .label {
+    float: none;
+  }
+
+  &.form .element > .elemLabelTitle > .label > span {
+    font-family: Montserrat;
+    display: inline-block;
+    min-width: 125px;
+    max-width: calc(100% - 20px);
+    word-break: break-word;
+    color: $text-color-elem-title;
+    border: 1px solid transparent;
+  }
+
+  &.form .element > .elemLabelTitle > .label > span.emptySpan {
+    border: 1px dashed transparent;
+  }
+
+  &.form .element > .elemLabelTitle > .label > .requiredMarker {
+    display: inline-block;
+    min-width: 5px !important;
+    margin: 0;
+    margin-left: 5px;
+    padding: 0;
+    vertical-align: top;
+    color: $accent-required;
+  }
+
+  .element .input {
+    width: 100%;
+  }
+
+  &.form .sublabel:not(.header) span[contentEditable='true'] {
+    border: $secondary-color;
+  }
+
+  &.form .sublabel:not(.header) span[contentEditable='true']:hover {
+    border: $primary-color;
+  }
+
+  &.form .sublabel:not(.header) {
+    color: $text-color-sublabel;
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    max-width: 600px;
+    word-break: break-word;
+  }
+
+  .emptySpan:not(:empty):before {
+    content: '';
+  }
+
+  &.form .header.label {
+    position: relative;
+    max-width: 728px;
+  }
+
+  &.form .header.label.alignLeft {
+    text-align: left;
+  }
+
+  &.form .header.label.alignRight {
+    text-align: right;
+  }
+
+  &.form .header.label.alignCenter {
+    text-align: center;
+  }
+
+  /* header alignment feature backwards compatibility */
+  &.form .header.label.alignundefined {
+    text-align: center;
+  }
+
+  &.form .header.sublabel.alignundefined {
+    text-align: center;
+  }
+
+  &.form .header.label span {
+    font-family: Montserrat;
+    display: block;
+    width: 100%;
+    padding: 3px 5px;
+    word-break: break-word;
+    border: 1px dashed transparent;
+  }
+
+  &.form .header.sublabel {
+    position: relative;
+    max-width: 728px;
+  }
+
+  &.form .header.sublabel.alignLeft {
+    text-align: left;
+  }
+
+  &.form .header.sublabel.alignRight {
+    text-align: right;
+  }
+
+  &.form .header.sublabel.alignCenter {
+    text-align: center;
+  }
+
+  &.form .header.sublabel span {
+    display: block;
+    width: 100%;
+    padding: 3px 5px;
+    word-break: break-word;
+    border: 1px dashed transparent;
+  }
+
+  &.form .clearfix {
+    clear: both;
+  }
+
+  .elementTextBox .label {
+    display: block;
+    float: none;
+  }
+
+  .elementTextBox .input {
+    width: 100%;
+  }
+
+  .elementTextBox .input input,
+  .elementEmail .input input {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+    height: 42px;
+    padding: 5px 16px;
+    color: $text-color-user-input;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  &.form .element > .fl.label {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .elementTextArea textarea,
+  .elementTextArea textarea:focus {
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+    height: 92px;
+    padding: 5px 16px;
+    resize: none;
+    color: $text-color-user-input;
+    border: solid 1px $color-6;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  .elementCheckbox {
+    background-color: transparent;
+  }
+
+  .elementDropdown .dropdown-div {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .elementDropdown .dropdown-div .dropdown-select,
+  .elementDropdown .dropdown-div .dropdown-select:focus {
+    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
+    box-sizing: content-box;
+    width: 200px;
+    padding: 5px;
+    color: $text-color-labels-entries;
+    border: solid 1px $color-6;
+    outline: 0;
+    background-color: $bg-input-field;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  }
+
+  .elementRadio ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .elementRadio ul li input {
+    margin-top: 0;
+  }
+
+  .elementRadio ul li input {
+    position: relative;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-top: 3px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+    vertical-align: top;
+    border: 1px solid $color-4;
+    border-radius: 50%;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+  }
+
+  .elementRadio ul li input:checked {
+    border: 1px solid $accent-main-dark;
+    background-color: $accent-main-dark;
+  }
+
+  .elementRadio ul li input:checked::after {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    margin: 3px;
+    content: ' ';
+    border: 3px solid $color-0;
+    border-radius: 50%;
+    background-color: $accent-main-dark;
+  }
+
+  .elementRadio ul li input:checked + label {
+    color: $accent-main-dark;
+  }
+
+  .elementRadio > .answerExplanationContainer > details {
+    word-break: break-all;
+  }
+
+  .elementRadio > .answerExplanation > details {
+    word-break: break-all;
+  }
+
+  .label.radio-label > span > p {
+    margin: unset;
+  }
+
+  .elementRadio .unselect-button {
+    visibility: hidden;
+    float: right;
+    width: 9rem;
+    min-height: 2.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
+    word-wrap: break-word;
+    color: $color-0;
+    border: 0;
+    border: 1px solid;
+    border-radius: 0;
+    outline: 0;
+    background-color: $secondary-color;
+  }
+
+  .elementRadio .radioList.dirty + .unselect-button {
+    visibility: visible;
+  }
+
+  .elementRadio .unselect-button:hover {
+    color: $secondary-color;
+    background-color: $color-0;
+  }
+
+  .elementRadio .unselect-button:hover > .unselect-label > span {
+    color: $secondary-color !important;
+  }
+
+  .elementRadio .unselect-button > .unselect-label > span {
+    font-size: 11pt;
+    margin: unset !important;
+  }
+
+  .elementName {
+    background-color: transparent;
+  }
+
+  .elementName > .nameContainer > * > input,
+  .elementName > .nameContainer > * > select {
+    font-family: 'Montserrat', sans-serif;
+    height: 32px;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    color: $text-color-user-input;
+    background-color: $bg-input-field;
+  }
+
+  .elementSeparator hr {
+    color: $bg-separator-lines;
+  }
+
+  .elementFileUpload {
+    background-color: transparent;
+  }
+
+  .elementFileUpload input[type='file'] {
+    display: none;
+  }
+
+  .elementFileUpload > .inputContainer > .fileDisplay {
+    word-break: break-all;
+  }
+
+  .elementButton button,
+  .elementButton button:focus,
+  .elementButton button,
+  .elementButton button:focus {
+    font-family: Montserrat;
+    font-size: 16px;
+    font-weight: bolder;
+    float: right;
+    width: 7rem;
+    min-height: 2.6rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: $color-0;
+    border: 1px solid $accent-main-light;
+    outline: none;
+    background-color: $accent-main-light;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    overflow-wrap: anywhere;
+  }
+
+  .elementButton button:hover {
+    cursor: pointer;
+  }
+
+  .elementCheckbox .input,
+  .elementRadio li {
+    position: relative;
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 6px;
+  }
+
+  .elementCheckbox .input .checkbox-label {
+    display: inline-block;
+    overflow: hidden;
+    min-width: 115px;
+    max-width: 600px;
+    margin-top: -2px;
+    user-select: none;
+    white-space: nowrap;
+    color: $text-color-labels-entries;
+  }
+
+  &.form .elementRadio .input .radio-label {
+    display: inline-block;
+    overflow: hidden;
+    min-width: 115px;
+    max-width: 600px;
+    -webkit-user-select: none;
+    user-select: none;
+    vertical-align: bottom;
+    white-space: nowrap;
+    color: $text-color-labels-entries;
+  }
+
+  .elementCheckbox .input .checkbox-label {
+    display: inline-block;
+    overflow: hidden;
+    min-width: 60px;
+    max-width: calc(100% - 25px);
+    margin-top: 0;
+    user-select: none;
+    white-space: break-spaces;
+    word-break: break-all;
+    color: $text-color-labels-entries;
+  }
+
+  &.form .elementRadio .input .radio-label {
+    display: inline-block;
+    overflow: hidden;
+    min-width: 60px;
+    max-width: calc(100% - 25px);
+    margin-top: 0;
+    user-select: none;
+    white-space: break-spaces;
+    word-break: normal;
+    color: $text-color-labels-entries;
+  }
+
+  &.form .elementRadio .input .radio-label p {
+    margin: 0;
+  }
+
+  .elementCheckbox .input > input[type='checkbox'] {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+    cursor: pointer;
+    vertical-align: top;
+    border: 1px solid $color-4;
+    border-radius: 4px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+  }
+
+  .elementCheckbox .input > input[type='checkbox']:checked {
+    border: 1px solid $color-4;
+    background-color: $accent-main-dark;
+  }
+
+  .elementCheckbox .toggle .input .checkbox-label {
+    max-width: calc(100% - 50px);
+    word-break: break-word;
+  }
+
+  .elementCheckbox .toggle .input .checkbox-label {
+    max-width: calc(100% - 50px);
+    word-break: break-word;
+  }
+
+  .elementCheckbox .input > input[type='checkbox']:checked::before {
+    position: absolute;
+    top: 6px;
+    left: 9px;
+    display: block;
+    content: '\2713';
+    text-align: center;
+    color: $color-0;
+  }
+
+  .elementCheckbox .input > input[type='checkbox']:active {
+    border: 1px solid $color-4;
+  }
+
+  .elementCheckbox .toggle {
+    position: relative;
+    display: block;
+    width: auto;
+    height: auto;
+  }
+
+  .checkboxCover {
+    display: inline-grid;
+    width: 100%;
+  }
+
+  .elementCheckbox textarea#options-textarea,
+  .elementCheckbox textarea#options-textarea:focus {
+    width: 100%;
+    height: 80px;
+    padding: 5px 16px;
+    resize: none;
+    color: $text-color-user-input;
+    border: 1px solid $color-6;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  .elementCheckbox .toggle .input input[type='checkbox'] {
+    position: relative;
+    z-index: 9999;
+    width: 40px;
+    height: 18px;
+    opacity: 0;
+  }
+
+  .elementCheckbox .toggle .input .slider {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+    transition: 0.4s;
+    border-radius: 16px;
+    background-color: $color-11;
+  }
+
+  .elementCheckbox .toggle .input .slider:before {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    content: '';
+    transition: 0.4s;
+    border-radius: 12px;
+    background-color: $color-12;
+  }
+
+  .elementCheckbox .toggle .input input:checked + .slider {
+    background-color: $accent-main-dark;
+    filter: brightness(1.2);
+  }
+
+  .elementCheckbox .toggle .input input:focus + .slider {
+    box-shadow: 0 0 1px $accent-main-dark;
+  }
+
+  .elementCheckbox .toggle .input input:checked + .slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
+    background-color: $accent-main-dark;
+  }
+
+  .nameContainer {
+    display: -ms-flexbox;
+    display: flex;
+    align-items: flex-start;
+    -ms-flex-align: start;
+    flex-flow: row nowrap;
+  }
+
+  .nameContainer > * {
+    flex: 1 1 100%;
+    padding: 0 2px 0 2px;
+  }
+
+  .nameContainer > * > * {
+    width: 100%;
+    min-height: 24px;
+    color: $text-color-user-input;
+  }
+
+  .nameContainer .clearfix {
+    display: grid;
+  }
+
+  *,
+  *:after,
+  *:before {
+    box-sizing: border-box;
+  }
+
+  .nameContainer .prefix_span select {
+    align-self: stretch;
+    padding: 0 24px 0 4px;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='#333333' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+    background-repeat: no-repeat;
+    background-position-x: 100%;
+    background-position-y: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .verification_back {
+    line-height: 20px;
+    padding: 0 40px;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 992px) {
+    .renderer {
+      width: auto;
+      margin: 0;
+      padding: 10px;
+    }
+  }
+
+  @media screen and (max-width: 590px) {
+    .renderer .elementNetPromoterScore ul {
+      padding: 0 !important;
+    }
+
+    .renderer .elementNetPromoterScore ul li label {
+      width: 30px !important;
+      margin: 0 1px !important;
+    }
+  }
+
+  .branding {
+    background-color: $color-0;
+  }
+
+  &:after {
+    display: inline-block;
+    width: 100%;
+    padding-top: 20px;
+    content: 'Never submit passwords via FORMPRESS forms.';
+    text-align: center;
+    color: $text-color-labels-entries;
+    /* the password warning after the form */
+    border-top: 1px solid $bg-separator-lines;
+  }
+
+  .form input[type='file'] {
+    display: none;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    width: 90px;
+    padding: 6px 12px;
+    cursor: pointer;
+    border: 1px solid $color-13;
+  }
+
+  .inputContainer > span {
+    margin-left: 5px;
+  }
+
+  .address-section > input,
+  .address-section > select {
+    height: 2.3rem;
+    color: $text-color-user-input;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  .elementAddress .address-section > select option:checked {
+    color: $color-14;
+  }
+
+  .address-section {
+    display: inline-block;
+    float: left;
+    margin: 0 0 10px 0;
+  }
+
+  .elementAddress {
+    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
+  }
+
+  .address-section.adr-street {
+    width: 100%;
+    padding: 0 2px 0 2px;
+  }
+
+  .address-section > input {
+    font-family: 'Montserrat', sans-serif;
+    height: 2.3rem;
+    color: $text-color-user-input;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    background-color: $bg-input-field;
+  }
+
+  .address-section > input:focus-visible {
+    outline: 0;
+  }
+
+  .adr-street > input {
+    width: 99%;
+  }
+
+  .adr-state,
+  .adr-country,
+  .adr-city,
+  .adr-zip {
+    padding: 0 2px 0 2px;
+  }
+
+  .adr-state > input,
+  .adr-state > select,
+  .adr-country > select,
+  .adr-zip > input,
+  .adr-city > input {
+    width: 100%;
+  }
+
+  .address-flex-row {
+    display: flex;
+    clear: both;
+    justify-content: space-between;
+  }
+
+  .elementNetPromoterScore ul {
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0 30px;
+    list-style: none;
+  }
+
+  .elementNetPromoterScore ul li {
+    display: inline-flex;
+  }
+
+  .elementNetPromoterScore .first-child .sublabel {
+    text-align: center;
+  }
+
+  .elementNetPromoterScore [type='radio'] {
+    display: none;
+  }
+
+  .elementNetPromoterScore .net-promoter-score-label {
+    line-height: 28px;
+    display: inline-block;
+    width: 40px;
+    height: 30px;
+    margin: 0 5px;
+    user-select: none;
+    text-align: center;
+    color: $secondary-color;
+    border: 2px solid $secondary-color;
+    background-color: $bg-input-field;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .elementNetPromoterScore .net-promoter-score-label:hover {
+    color: $color-0;
+    border: 1px solid $secondary-color;
+    background-color: $secondary-color;
+  }
+
+  .elementNetPromoterScore input[type='radio']:checked + label {
+    color: $color-0;
+    border: 1px solid $secondary-color;
+    background-color: $secondary-color;
+  }
+
+  .form-hidden {
+    display: none;
+  }
+
+  .pagebreak-separator {
+    width: 100%;
+    color: $bg-separator-lines;
+  }
+
+  .pagebreak-button {
+    display: inline-block;
+  }
+
+  .pagebreak-button > button {
+    font-size: 16px;
+    font-weight: bolder;
+    width: 7rem;
+    min-height: 2.6rem;
+    cursor: pointer;
+    color: $color-0;
+    border: none;
+    background-color: $accent-main-light;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  .pagebreak-navControls {
+    padding-top: 10px;
+  }
+
+  .pagebreak-pageCount {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  .currentPageSelector > .currentPageSelector-select {
+    width: min-content !important;
+    text-align: right;
+  }
+
+  .pagebreak-button.pb-previous {
+    float: left;
+  }
+
+  .pagebreak-button.pb-next,
+  .pagebreak-button.pb-submit {
+    float: right;
+  }
+
+  .pagebreak-navControls > .pagebreak-button > button > div,
+  .gleam
+    .pagebreak-navControls
+    > .pagebreak-button
+    > input[type='button']
+    > div,
+  .gleam
+    .pagebreak-navControls
+    > .pagebreak-button
+    > input[type='submit']
+    > div {
+    padding: 0.3rem;
+  }
+
+  .pagebreak-button > button > * {
+    pointer-events: none;
+  }
+
+  .gleam .pagebreak-navControls > .pagebreak-button > button > div > span,
+  .gleam
+    .pagebreak-navControls
+    > .pagebreak-button
+    > input[type='button']
+    > div
+    > span,
+  .gleam
+    .pagebreak-navControls
+    > .pagebreak-button
+    > input[type='submit']
+    > div
+    > span {
+    display: block;
+    width: 5.7rem;
+    border: $accent-main-light solid 1px;
+    overflow-wrap: break-word;
+  }
+
+  .elementPhone > .input {
+    display: flex;
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .elementPhone > .input > .dialCode {
+    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+    font-size: x-large;
+    width: 3.1rem;
+    opacity: 1;
+    color: $text-color-user-input;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  .elementPhone > .input > .dialCode:hover,
+  .elementPhone > .input > .dialCode:focus {
+    font-size: medium;
+    width: 12rem;
+  }
+
+  .elementPhone > .input > .phoneInput {
+    box-sizing: border-box;
+    width: 100%;
+    height: 42px;
+    color: $text-color-user-input;
+    margin-left: 5px;
+    padding: 5px 16px;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    background-color: $bg-input-field;
+  }
+
+  .elementRatingScale ul {
+    display: flex;
+    padding: 0 30px;
+    list-style: none;
+  }
+
+  .rating-scale-float-Left {
+    justify-content: left;
+  }
+
+  .rating-scale-float-Center {
+    justify-content: center;
+  }
+
+  .rating-scale-float-Right {
+    justify-content: right;
+  }
+
+  .elementRatingScale ul li {
+    display: inline-flex;
+  }
+
+  .elementRatingScale .first-child .sublabel {
+    text-align: center;
+  }
+
+  .elementRatingScale [type='radio'] {
+    display: none;
+  }
+
+  .elementRatingScale .rating-scale-Numbers {
+    line-height: 28px;
+    display: inline-block;
+    width: 40px;
+    height: 30px;
+    margin: 0 5px;
+    user-select: none;
+    text-align: center;
+    color: $secondary-color;
+    border: 2px solid $secondary-color;
+    background-color: $bg-input-field;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .elementRatingScale .rating-scale-Stars {
+    line-height: 28px;
+    display: inline-block;
+    width: 38px;
+    height: 36px;
+    margin: 0 3px;
+    user-select: none;
+    text-align: center;
+    color: $color-4;
+  }
+
+  .elementRatingScale .rating-scale-Faces {
+    line-height: 28px;
+    display: inline-block;
+    width: 40px;
+    height: 30px;
+    margin: 0 5px;
+    user-select: none;
+    text-align: center;
+    color: $secondary-color;
+    border: 1px solid $secondary-color;
+    background-color: $color-0;
+  }
+
+  .elementRatingScale .rating-scale-label:hover {
+    color: $color-0;
+    border: 1px solid $secondary-color;
+    background-color: $secondary-color;
+  }
+
+  .elementRatingScale input[type='radio']:checked + label.rating-scale-Numbers {
+    color: $color-0;
+    border: 1px solid $secondary-color;
+    background-color: $secondary-color;
+  }
+
+  .elementRatingScale input[type='radio']:checked + label.rating-scale-Stars {
+    color: $secondary-color;
+  }
+
+  .elementRatingScale .rating-scale-Stars.extends-select {
+    color: $secondary-color;
+  }
+}

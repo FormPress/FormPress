@@ -34,7 +34,6 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
-import '../style/themes/gleam.css'
 
 const DEFAULT_FORM = {
   id: null,
@@ -400,7 +399,7 @@ export default class Builder extends Component {
 
     if (oldTheme !== _design.theme) {
       console.log('Loading theme: ', _design.theme)
-      require(`../style/themes/${_design.theme}.css`)
+      // require(`../style/themes/${_design.theme}.css`)
     }
 
     form.props.design = design

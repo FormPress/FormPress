@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Renderer from '../../Renderer'
 
 export default class CustomCSS extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
 
     this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
@@ -15,7 +15,7 @@ export default class CustomCSS extends Component {
     })
   }
 
-  render () {
+  render() {
     let customCSS = ''
 
     if (this.props.form.props.customCSS !== undefined) {
@@ -25,13 +25,10 @@ export default class CustomCSS extends Component {
     return (
       <div>
         <div className="shareFormMessage">
-        Custom CSS is an advanced feature.
-        Incorrect use{' '}
-        <strong>
-          may break the form
-        </strong>{' '}and cause it to {' '}<strong>not render correctly</strong>.
-        Please use with caution.
-      </div>
+          Custom CSS is an advanced feature. Incorrect use{' '}
+          <strong>may break the form</strong> and cause it to{' '}
+          <strong>not render correctly</strong>. Please use with caution.
+        </div>
         <Renderer
           handleFieldChange={this.handleCustomCSSTextChange}
           theme="infernal"

@@ -19,7 +19,8 @@
     "react-scripts": "3.4.4",
     "react-share": "4.4.0",
     "react-spinner-overlay": "^0.1.33",
-    "recharts": "2.1.9"
+    "recharts": "2.1.9",
+    "sass": "^1.60.0"
   },
   "scripts": {
     "start-compose": "NODE_PATH=/node_modules react-scripts start",

@@ -3,6 +3,7 @@ const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
 const sanitizeHtml = require('sanitize-html')
+const sass = require('sass')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -1090,9 +1091,20 @@ module.exports = (app) => {
       designTheme = form.props.design.theme
     }
 
-    style += fs.readFileSync(
-      path.resolve('../', `frontend/src/style/themes/${designTheme}.css`)
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
     )
+
+    try {
+      const result = sass.renderSync({
+        file: themePath
+      })
+      const css = result.css.toString('utf8').trim()
+      style += css
+    } catch (e) {
+      console.log('Error loading theme:  \n ', e)
+    }
 
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
