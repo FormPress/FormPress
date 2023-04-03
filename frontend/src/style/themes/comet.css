@@ -135,6 +135,7 @@
   height: 30px;
   margin: 0 5px;
   -webkit-user-select: none;
+  font-weight: bold;
   user-select: none;
   text-align: center;
   line-height: 27px;
@@ -183,6 +184,7 @@
   -webkit-user-select: none;
   user-select: none;
   text-align: center;
+  font-weight: bold;
   line-height: 27px;
   cursor: pointer;
 }
@@ -236,7 +238,7 @@
   user-select: none;
   min-width: 60px;
   display: inline-block;
-  word-break: break-all;
+  word-break: break-word;
   white-space: break-spaces;
 }
 
@@ -323,7 +325,7 @@
 }
 
 .comet .elementPhone > .input > .dialCode {
-font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+font-family: 'Twemoji Country Flags', 'Roboto', sans-serif;
 width: 3.1rem;
 font-size: x-large;
 border: 0;
@@ -392,6 +394,10 @@ border-radius: 5px;
   color: #55617a;
 }
 
+.comet .elementButton .sublabel {
+  float: right;
+}
+
 .renderer.comet::after {
   border-top: 1px solid #bdd2d5;
   content: 'Never submit passwords via FORMPRESS forms.';
@@ -400,4 +406,277 @@ border-radius: 5px;
   text-align: center;
   width: 100%;
   padding-top: 20px;
+}
+
+.form-hidden {
+  display: none !important;
+}
+
+.comet.form > .element.requiredError {
+  border-radius: 5px;
+  background-color: #d5c0bd;
+}
+
+
+.comet .label span.required::after {
+  font-size: 20px;
+  position: absolute;
+  left: 0;
+  content: '*';
+  color: #d5c0bd;
+}
+
+.comet .element.requiredError .metadata .requiredErrorText {
+  display: block;
+  font-size: 14px;
+  color: #204964;
+  margin-top: 10px;
+  word-break: break-word;
+}
+
+.comet .address-section {
+  display: inline-block;
+  float: left;
+  margin: 0 0 10px 0;
+  box-sizing: border-box;
+}
+
+.comet .address-section.adr-street {
+  width: 100%;
+  padding: 0 2px 0 2px;
+}
+
+.comet .address-section > input {
+  color: #4a7795;
+  background-color: #edf5f7;
+  width: 100%;
+  outline: 0;
+  border: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.comet .address-flex-row {
+  display: flex;
+  clear: both;
+  justify-content: space-between;
+}
+
+.comet .address-flex-row > .adr-city {
+  margin-right: 5px;
+}
+
+.comet .address-flex-row > .adr-zip {
+  margin-right: 5px;
+}
+.comet .address-flex-row > .adr-state {
+  margin-right: 5px;
+}
+.comet .elementAddress .adr-country > select {
+  font-family: 'Twemoji Country Flags', 'Roboto', sans-serif;
+  border: 0;
+  border-radius: 5px;
+  outline: 0;
+  background-color: #edf5f7;
+  opacity: 1;
+  padding: 10px;
+  font-size: medium;
+  color: #4a7795;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.comet hr {
+  box-sizing: content-box;
+  height: 1px;
+  overflow: visible;
+  width: 100%;
+  border: none;
+  background-color: #204964;
+}
+
+.comet .pagebreak-button.pb-previous {
+  float: left;
+}
+
+.comet .pagebreak-button.pb-next, .comet .pagebreak-button.pb-submit {
+  float: right;
+}
+
+.comet .pagebreak-button.pb-previous > button > div,
+.comet .pagebreak-button.pb-next > button > div,
+.comet .pagebreak-button.pb-submit > button > div
+ {
+  float: none;
+}
+
+.comet .pagebreak-pageCount {
+  margin-top: 1rem;
+  text-align: center;
+  color: #719fbd;
+}
+
+.comet .pagebreak-button.pb-next > button,
+.comet .pagebreak-button.pb-submit > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 7rem;
+  min-height: 2.6rem;
+  background-color: #204964;
+  border: 1px solid #204964;
+  outline: none;
+  color: #ffffff;
+  margin-right: 0px;
+  margin-left: auto;
+  display: block;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.comet .pagebreak-button.pb-next > button:hover,
+.comet .pagebreak-button.pb-submit > button:hover {
+  background-color: #bdd2d5;
+  border: 1px solid #bdd2d5;
+  color: #55617a;
+}
+
+.comet .pagebreak-button.pb-previous > button {
+  font-weight: bolder;
+  padding: 5px 10px;
+  font-size: 16px;
+  width: 7rem;
+  min-height: 2.6rem;
+  background-color: #f5f5f5;
+  border: 1px solid #f5f5f5;
+  outline: none;
+  color: #a0a0a0;
+  margin-right: 0px;
+  margin-left: auto;
+  display: block;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.comet .pagebreak-button.pb-previous > button:hover {
+  background-color: #bdd2d5;
+  border: 1px solid #bdd2d5;
+  color: #55617a;
+}
+
+.comet .elementFileUpload input[type="file"] {
+  display: none;
+}
+
+.comet .custom-file-upload {
+  display: inline-block;
+  width: 90px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border: 1px solid #204964;
+  color: #0f6361;
+}
+
+.comet .custom-file-upload:hover {
+  border: 1px solid #bdd2d5;
+  background-color: #bdd2d5;
+  color: #55617a;
+}
+
+.comet .elementFileUpload > .inputContainer > .fileDisplay {
+  margin-left: 5px;
+  word-break: break-all;
+  color: #4a7795;
+}
+
+.comet .pagebreak-pageCount select {
+  color: #4a7795;
+  background-color: #edf5f7;
+  outline: 0;
+  border: 0;
+}
+
+.comet .elementCheckbox .toggle .input input[type="checkbox"] {
+  position: relative;
+  z-index: 9999;
+  width: 40px;
+  height: 18px;
+  opacity: 0;
+}
+
+.comet .elementCheckbox .toggle .input .slider::before {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  content: '';
+  transition: 0.4s;
+  border-radius: 7px;
+  background-color: #a0a0a0;
+  box-sizing: border-box;
+}
+
+.comet .elementCheckbox .toggle .input .checkbox-label {
+  max-width: calc(100% - 50px);
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.comet .elementCheckbox .toggle .input .slider {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  bottom: 0;
+  left: 6px;
+  width: 40px;
+  height: 22px;
+  cursor: pointer;
+  border: 2px solid #a0a0a0;
+  transition: 0.4s;
+  border-radius: 16px;
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+}
+
+.comet .elementCheckbox .toggle .input input:checked + .slider {
+  color: #0f6361;
+  border: 2px solid #0f6361;
+  background-color: #edf5f7;
+  transition: 0.4s;
+  filter: brightness(1.2);
+  box-sizing: border-box;
+}
+
+.comet .elementCheckbox .toggle .input input:checked + .slider::before {
+  position: absolute;
+  bottom: 2px;
+  left: 20px;
+  width: 14px;
+  height: 14px;
+  content: '';
+  transition: 0.4s;
+  border-radius: 8px;
+  background-color: #0f6361;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 992px) {
+  .renderehr.comet {
+    width: auto;
+    margin: 0;
+    padding: 10px;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .renderer.comet .elementNetPromoterScore ul {
+    padding: 0 !important;
+  }
+
+  .renderer.comet .elementNetPromoterScore ul li label {
+    width: 30px !important;
+    margin: 0 1px !important;
+  }
 }
