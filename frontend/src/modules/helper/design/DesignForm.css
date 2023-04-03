@@ -42,7 +42,7 @@
   cursor: pointer;
 }
 
-.themeSelect:hover{
+.themeSelect:hover {
   border: solid 1px #005a87;
   color: #1c5c85;
 }

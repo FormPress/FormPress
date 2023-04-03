@@ -1214,43 +1214,6 @@ module.exports = (app) => {
     res.send(templates)
   })
 
-  // an endpoint that returns a combined string of all styles
-
-  app.get('/api/get/styles', async (req, res) => {
-    const form = {}
-
-    let style = fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/normalize.css')
-    )
-
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/common.css')
-    )
-    //fall back to default theme
-    let designTheme = 'gleam'
-    if (form.props.design !== undefined) {
-      designTheme = form.props.design.theme
-    }
-
-    style += fs.readFileSync(
-      path.resolve('../', `frontend/src/style/themes/${designTheme}.css`)
-    )
-
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/modules/elements/index.css')
-    )
-
-    if (req.query.embed === 'true') {
-      style +=
-        ' body {background: none !important; margin: 3px; padding-bottom: 3px; } '
-    }
-
-    if (form.private) {
-      // remove the part that says 'Never Submit Passwords'
-      style += ' .renderer.gleam::after {content: none !important; }'
-    }
-  })
-
   app.get('/api/server/capabilities', async (req, res) => {
     const isEnvironmentVariableSet = {
       googleServiceAccountCredentials:
