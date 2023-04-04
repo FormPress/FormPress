@@ -28,3 +28,7 @@
 .tl {
   text-align: left;
 }
+
+.form-hidden {
+  display: none;
+}

@@ -101,7 +101,7 @@ export default class DesignForm extends Component {
           form={this.props.form}
           theme={theme}
           mode="renderer"
-          className="col-16-16 form"
+          className="fl form"
         />
       </div>
     )

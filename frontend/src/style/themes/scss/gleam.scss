@@ -8,6 +8,8 @@ $bg-branding: #ffffff; /* branding background */
 $primary-color: #0c2738; /* not used */
 $secondary-color: #1c5c85; /* COMMON ACCENT DARK */
 
+$font-form: 'Montserrat', sans-serif; /* form font */
+
 $border-sublabel: #646464; /* sublabel border */
 $text-color-sublabel: #646464; /* sublabel text */
 
@@ -55,7 +57,7 @@ $color-14: #68942f; /* forest green */
   }
 
   &.form > .element {
-    font-family: 'Montserrat', sans-serif;
+    font-family: $font-form;
     position: relative;
     display: grid;
     overflow: visible;
@@ -102,7 +104,6 @@ $color-14: #68942f; /* forest green */
   }
 
   &.form .element > .elemLabelTitle > .label > span {
-    font-family: Montserrat;
     display: inline-block;
     min-width: 125px;
     max-width: calc(100% - 20px);
@@ -122,6 +123,10 @@ $color-14: #68942f; /* forest green */
 
   .element .input {
     width: 100%;
+  }
+
+  &.form .emptySpan::before {
+    color: $text-color-sublabel;
   }
 
   &.form .label:not(.header) span[contentEditable='true'] {
@@ -180,7 +185,6 @@ $color-14: #68942f; /* forest green */
   }
 
   &.form .header.label span {
-    font-family: Montserrat;
     display: block;
     width: 100%;
     padding: 3px 5px;
@@ -228,7 +232,6 @@ $color-14: #68942f; /* forest green */
 
   .elementTextBox .input input,
   .elementEmail .input input {
-    font-family: 'Montserrat', sans-serif;
     box-sizing: border-box;
     width: 100%;
     height: 42px;
@@ -247,7 +250,6 @@ $color-14: #68942f; /* forest green */
 
   .elementTextArea textarea,
   .elementTextArea textarea:focus {
-    font-family: 'Montserrat', sans-serif;
     box-sizing: border-box;
     width: 100%;
     height: 92px;
@@ -271,11 +273,11 @@ $color-14: #68942f; /* forest green */
 
   .elementDropdown .dropdown-div .dropdown-select,
   .elementDropdown .dropdown-div .dropdown-select:focus {
-    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
+    font-family: 'Twemoji Country Flags', $font-form !important;
     box-sizing: content-box;
     width: 200px;
     padding: 5px;
-    color: $text-color-labels-entries;
+    color: $text-color-user-input;
     border: solid 1px $color-6;
     outline: 0;
     background-color: $bg-input-field;
@@ -382,7 +384,6 @@ $color-14: #68942f; /* forest green */
 
   .elementName > .nameContainer > * > input,
   .elementName > .nameContainer > * > select {
-    font-family: 'Montserrat', sans-serif;
     height: 32px;
     border: solid 1px $color-6;
     border-radius: 3px;
@@ -411,7 +412,6 @@ $color-14: #68942f; /* forest green */
   .elementButton button:focus,
   .elementButton button,
   .elementButton button:focus {
-    font-family: Montserrat;
     font-size: 16px;
     font-weight: bolder;
     float: right;
@@ -683,7 +683,7 @@ $color-14: #68942f; /* forest green */
     background-color: $color-0;
   }
 
-  &:after {
+  &.renderer:after {
     display: inline-block;
     width: 100%;
     padding-top: 20px;
@@ -731,7 +731,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .elementAddress {
-    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
+    font-family: 'Twemoji Country Flags', $font-form !important;
   }
 
   .address-section.adr-street {
@@ -740,7 +740,6 @@ $color-14: #68942f; /* forest green */
   }
 
   .address-section > input {
-    font-family: 'Montserrat', sans-serif;
     height: 2.3rem;
     color: $text-color-user-input;
     border: solid 1px $color-6;
@@ -853,6 +852,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .pagebreak-pageCount {
+    color: $text-color-labels-entries;
     margin-top: 1rem;
     text-align: center;
   }
@@ -915,7 +915,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .elementPhone > .input > .dialCode {
-    font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif;
+    font-family: 'Twemoji Country Flags', $font-form;
     font-size: x-large;
     width: 3.1rem;
     opacity: 1;
