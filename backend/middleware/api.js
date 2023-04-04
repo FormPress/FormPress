@@ -1096,14 +1096,22 @@ module.exports = (app) => {
       `frontend/src/style/themes/scss/${designTheme}.scss`
     )
 
-    try {
-      const result = sass.renderSync({
-        file: themePath
-      })
-      const css = result.css.toString('utf8').trim()
-      style += css
-    } catch (e) {
-      console.log('Error loading theme:  \n ', e)
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
     }
 
     style += fs.readFileSync(
@@ -1117,7 +1125,7 @@ module.exports = (app) => {
 
     if (form.private) {
       // remove the part that says 'Never Submit Passwords'
-      style += ' .renderer.gleam::after {content: none !important; }'
+      style += ' .renderer::after {content: none !important; }'
     }
 
     const str = reactDOMServer.renderToStaticMarkup(
@@ -1175,6 +1183,36 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
+
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
+    )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/themes/gleam.css')
     )
