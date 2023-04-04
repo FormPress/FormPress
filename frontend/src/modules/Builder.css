@@ -755,8 +755,6 @@
   z-index: 20;
   padding-top: 5px;
   padding-bottom: 5px;
-  color: var(--text-color-branding);
-  background-color: var(--bg-branding);
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
@@ -812,16 +810,6 @@
   margin-top: 10px;
   padding: 3px;
   word-break: break-word;
-  color: #646464;
-  border: 1px solid transparent;
-}
-
-.builder.form span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
-}
-
-.builder.form span[contentEditable='true']:hover {
-  border: 1px dashed #333333 !important;
 }
 
 .form span[contentEditable='true']:focus-visible {
@@ -833,15 +821,6 @@
   min-height: 22px;
   padding: 2px 5px;
   word-break: break-all;
-  border: 1px solid transparent;
-}
-
-.formTitle span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
-}
-
-.formTitle span[contentEditable='true']:hover {
-  border: 1px dashed;
 }
 
 .formTitle span[contentEditable='true']:focus-visible {
@@ -864,22 +843,9 @@
   color: #646464;
 }
 
-.builder.form
-  .element
-  > .elemLabelTitle
-  > .label
-  > span[contentEditable='true']:hover {
-  border: 1px dashed;
-}
-
 .builder .elementButton button span[contentEditable='true'] {
   display: block;
-  border: 1px solid var(--accent-main-light);
   overflow-wrap: break-word;
-}
-
-.form .elementRadio .input .radio-label span.emptySpan[contentEditable='true'] {
-  border: 1px dashed #646464;
 }
 
 .form .elementRadio .input .radio-label span[contentEditable='true'] {
@@ -887,16 +853,6 @@
   min-width: 60px;
   white-space: break-spaces;
   word-break: break-all;
-  border: 1px dashed transparent;
-}
-
-/*take this away*/
-.form
-  .elementCheckbox
-  .input
-  .checkbox-label
-  span[contentEditable='true']:hover {
-  border: 1px dashed #333333;
 }
 
 .form .elementCheckbox .input .checkbox-label span[contentEditable='true'] {
@@ -904,9 +860,4 @@
   min-width: 60px;
   white-space: break-spaces;
   word-break: break-all;
-  border: 1px dashed transparent;
-}
-
-.form .elementRadio .input .radio-label span[contentEditable='true']:hover {
-  border: 1px dashed #333333;
 }

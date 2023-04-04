@@ -1104,7 +1104,7 @@ module.exports = (app) => {
       style += fs.readFileSync(themePath)
     } else {
       try {
-        const result = sass.renderSync({
+        const result = await sass.renderSync({
           file: themePath
         })
         const css = result.css.toString('utf8').trim()
@@ -1214,13 +1214,8 @@ module.exports = (app) => {
     }
 
     style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
-    )
-    style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
-    style += ' body {background-color: #f5f5f5;} '
-    style += ' form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16); margin: 35px;}'
 
     res.render('template.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,
