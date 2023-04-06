@@ -81,7 +81,7 @@ export default class Image extends Component {
     if (mode !== 'renderer') {
       if (this.state.cropPhase === 1) {
         processDisplay = (
-          <div className="inputContainer">
+          <div className="input inputContainer">
             <label
               htmlFor={`temp_q_${config.id}`}
               className="image_container_before_upload">

@@ -402,7 +402,7 @@
 
 .form.builder > .element:hover {
   border-radius: 6px;
-  background-color: #e5fbda;
+  /*background-color: #e5fbda;*/
 }
 
 .form.builder > .element:hover > .action,
@@ -474,9 +474,6 @@
 
 .leftMenuContents .elementHeader {
   padding: 10px 10px 0 0;
-}
-#qc_required .input {
-  float: right;
 }
 
 .planover-container {
@@ -805,9 +802,9 @@
 
 .form .sublabel:not(.header) span[contentEditable='true'] {
   display: block;
-  min-width: 123px;
-  min-height: 19px;
-  margin-top: 10px;
+  min-width: 120px;
+  min-height: 20px;
+  /*margin-top: 10px;*/
   padding: 3px;
   word-break: break-word;
 }

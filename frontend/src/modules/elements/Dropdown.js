@@ -161,7 +161,7 @@ export default class Dropdown extends Component {
         </div>,
         <div key="2">
           {
-            <div className="dropdown-div">
+            <div className="dropdown-div input">
               {!config.hasDataset && config.options === undefined ? null : (
                 <select
                   className="dropdown-select"
@@ -247,7 +247,7 @@ export default class Dropdown extends Component {
             required={config.required}
           />
         </div>,
-        <div key="2" className="dropdown-div">
+        <div key="2" className="dropdown-div input">
           <select
             className="dropdown-select"
             id={`q_${config.id}`}

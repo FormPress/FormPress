@@ -1667,7 +1667,7 @@ export default class Builder extends Component {
           'Loading...'
         ) : (
           <Renderer
-            className={`col-16-16 form`}
+            className={`fl form`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,

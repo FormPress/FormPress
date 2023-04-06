@@ -234,63 +234,13 @@ export default class Address extends Component {
           />
         </div>
 
-        {config.street ? (
-          <span className={`address-section adr-street`}>
-            <input
-              id={`address-street_${config.id}`}
-              data-addressType="street"
-              name={`q_${config.id}[street]`}
-              type="text"
-            />
-            <div className="clearfix">
-              <EditableLabel
-                className="sublabel"
-                dataPlaceholder="Click to edit sublabel"
-                mode={mode}
-                labelKey={`address_${config.id}_street`}
-                handleLabelChange={this.props.handleLabelChange}
-                value={
-                  typeof config.streetSublabelText !== 'undefined'
-                    ? config.streetSublabelText
-                    : 'Street Line'
-                }
-              />
-            </div>
-          </span>
-        ) : null}
-
-        {config.street2 ? (
-          <span className={`address-section adr-street`}>
-            <input
-              id={`address-street2_${config.id}`}
-              data-addressType="street2"
-              name={`q_${config.id}[street2]`}
-              type="text"
-            />
-            <div className="clearfix">
-              <EditableLabel
-                className="sublabel"
-                dataPlaceholder="Click to edit sublabel"
-                mode={mode}
-                labelKey={`address_${config.id}_street2`}
-                handleLabelChange={this.props.handleLabelChange}
-                value={
-                  typeof config.street2SublabelText !== 'undefined'
-                    ? config.street2SublabelText
-                    : 'Street Line 2'
-                }
-              />
-            </div>
-          </span>
-        ) : null}
-
-        <div className={`address-flex-row`}>
-          {config.city ? (
-            <span className={` address-section adr-city`}>
+        <div className="input">
+          {config.street ? (
+            <span className={`address-section adr-street`}>
               <input
-                id={`address-city_${config.id}`}
-                data-addressType="city"
-                name={`q_${config.id}[city]`}
+                id={`address-street_${config.id}`}
+                data-addressType="street"
+                name={`q_${config.id}[street]`}
                 type="text"
               />
               <div className="clearfix">
@@ -298,24 +248,24 @@ export default class Address extends Component {
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
                   mode={mode}
-                  labelKey={`address_${config.id}_city`}
+                  labelKey={`address_${config.id}_street`}
                   handleLabelChange={this.props.handleLabelChange}
                   value={
-                    typeof config.citySublabelText !== 'undefined'
-                      ? config.citySublabelText
-                      : 'City'
+                    typeof config.streetSublabelText !== 'undefined'
+                      ? config.streetSublabelText
+                      : 'Street Line'
                   }
                 />
               </div>
             </span>
           ) : null}
 
-          {config.zip ? (
-            <span className={`address-section adr-zip`}>
+          {config.street2 ? (
+            <span className={`address-section adr-street`}>
               <input
-                id={`address-zip_${config.id}`}
-                data-addressType="zip"
-                name={`q_${config.id}[zip]`}
+                id={`address-street2_${config.id}`}
+                data-addressType="street2"
+                name={`q_${config.id}[street2]`}
                 type="text"
               />
               <div className="clearfix">
@@ -323,105 +273,158 @@ export default class Address extends Component {
                   className="sublabel"
                   dataPlaceholder="Click to edit sublabel"
                   mode={mode}
-                  labelKey={`address_${config.id}_zip`}
+                  labelKey={`address_${config.id}_street2`}
                   handleLabelChange={this.props.handleLabelChange}
                   value={
-                    typeof config.zipSublabelText !== 'undefined'
-                      ? config.zipSublabelText
-                      : 'Zip'
+                    typeof config.street2SublabelText !== 'undefined'
+                      ? config.street2SublabelText
+                      : 'Street Line 2'
                   }
                 />
               </div>
             </span>
           ) : null}
 
-          {config.state ? (
-            <span className={`address-section adr-state`}>
-              {config.countriesType === 'US' ? (
+          <div className={`address-flex-row`}>
+            {config.city ? (
+              <span className={` address-section adr-city`}>
+                <input
+                  id={`address-city_${config.id}`}
+                  data-addressType="city"
+                  name={`q_${config.id}[city]`}
+                  type="text"
+                />
+                <div className="clearfix">
+                  <EditableLabel
+                    className="sublabel"
+                    dataPlaceholder="Click to edit sublabel"
+                    mode={mode}
+                    labelKey={`address_${config.id}_city`}
+                    handleLabelChange={this.props.handleLabelChange}
+                    value={
+                      typeof config.citySublabelText !== 'undefined'
+                        ? config.citySublabelText
+                        : 'City'
+                    }
+                  />
+                </div>
+              </span>
+            ) : null}
+
+            {config.zip ? (
+              <span className={`address-section adr-zip`}>
+                <input
+                  id={`address-zip_${config.id}`}
+                  data-addressType="zip"
+                  name={`q_${config.id}[zip]`}
+                  type="text"
+                />
+                <div className="clearfix">
+                  <EditableLabel
+                    className="sublabel"
+                    dataPlaceholder="Click to edit sublabel"
+                    mode={mode}
+                    labelKey={`address_${config.id}_zip`}
+                    handleLabelChange={this.props.handleLabelChange}
+                    value={
+                      typeof config.zipSublabelText !== 'undefined'
+                        ? config.zipSublabelText
+                        : 'Zip'
+                    }
+                  />
+                </div>
+              </span>
+            ) : null}
+
+            {config.state ? (
+              <span className={`address-section adr-state`}>
+                {config.countriesType === 'US' ? (
+                  <select
+                    className="dropdown-select"
+                    id={`address-state_${config.id}`}
+                    data-addressType="state"
+                    name={`q_${config.id}[state]`}
+                    defaultValue={config.value ? config.value : ''}
+                    data-fp-list={'usStates'}>
+                    {datasets && datasets.usStates
+                      ? datasets.usStates.map((state, index) => {
+                          return (
+                            <option key={index} value={state.value}>
+                              {state.display}
+                            </option>
+                          )
+                        })
+                      : null}
+                  </select>
+                ) : (
+                  <input
+                    id={`address-state_${config.id}`}
+                    data-addressType="state"
+                    name={`q_${config.id}[state]`}
+                    type="text"
+                  />
+                )}
+                <div className="clearfix">
+                  <EditableLabel
+                    className="sublabel"
+                    dataPlaceholder="Click to edit sublabel"
+                    mode={mode}
+                    labelKey={`address_${config.id}_state`}
+                    handleLabelChange={this.props.handleLabelChange}
+                    value={
+                      typeof config.stateSublabelText !== 'undefined'
+                        ? config.stateSublabelText
+                        : 'State'
+                    }
+                  />
+                </div>
+              </span>
+            ) : null}
+
+            {config.country && config.countriesType === 'International' ? (
+              <span className={`address-section adr-country`}>
                 <select
                   className="dropdown-select"
-                  id={`address-state_${config.id}`}
-                  data-addressType="state"
-                  name={`q_${config.id}[state]`}
-                  defaultValue={config.value ? config.value : ''}
-                  data-fp-list={'usStates'}>
-                  {datasets && datasets.usStates
-                    ? datasets.usStates.map((state, index) => {
+                  id={`address-country_${config.id}`}
+                  data-addressType="country"
+                  name={`q_${config.id}[country]`}
+                  data-fp-defaultvalue={config.defaultCountry}
+                  value={
+                    config.defaultCountry
+                      ? config.defaultCountry
+                      : 'United States'
+                  }
+                  readOnly={mode === 'builder'}
+                  data-fp-list={'countriesWithFlags'}
+                  disabled={mode !== 'renderer'}>
+                  {datasets && datasets.countriesWithFlags
+                    ? datasets.countriesWithFlags.map((country, index) => {
                         return (
-                          <option key={index} value={state.value}>
-                            {state.display}
+                          <option key={index} value={country.value}>
+                            {country.display}
                           </option>
                         )
                       })
                     : null}
                 </select>
-              ) : (
-                <input
-                  id={`address-state_${config.id}`}
-                  data-addressType="state"
-                  name={`q_${config.id}[state]`}
-                  type="text"
-                />
-              )}
-              <div className="clearfix">
-                <EditableLabel
-                  className="sublabel"
-                  dataPlaceholder="Click to edit sublabel"
-                  mode={mode}
-                  labelKey={`address_${config.id}_state`}
-                  handleLabelChange={this.props.handleLabelChange}
-                  value={
-                    typeof config.stateSublabelText !== 'undefined'
-                      ? config.stateSublabelText
-                      : 'State'
-                  }
-                />
-              </div>
-            </span>
-          ) : null}
 
-          {config.country && config.countriesType === 'International' ? (
-            <span className={`address-section adr-country`}>
-              <select
-                className="dropdown-select"
-                id={`address-country_${config.id}`}
-                data-addressType="country"
-                name={`q_${config.id}[country]`}
-                data-fp-defaultvalue={config.defaultCountry}
-                value={
-                  config.defaultCountry
-                    ? config.defaultCountry
-                    : 'United States'
-                }
-                readOnly={mode === 'builder'}
-                data-fp-list={'countriesWithFlags'}
-                disabled={mode !== 'renderer'}>
-                {datasets && datasets.countriesWithFlags
-                  ? datasets.countriesWithFlags.map((country, index) => {
-                      return (
-                        <option key={index} value={country.value}>
-                          {country.display}
-                        </option>
-                      )
-                    })
-                  : null}
-              </select>
-              <div className="clearfix">
-                <EditableLabel
-                  className="sublabel"
-                  dataPlaceholder="Click to edit sublabel"
-                  mode={mode}
-                  labelKey={`address_${config.id}_country`}
-                  handleLabelChange={this.props.handleLabelChange}
-                  value={
-                    typeof config.countrySublabelText !== 'undefined'
-                      ? config.countrySublabelText
-                      : 'Country'
-                  }
-                />
-              </div>
-            </span>
-          ) : null}
+                <div className="clearfix">
+                  <EditableLabel
+                    className="sublabel"
+                    dataPlaceholder="Click to edit sublabel"
+                    mode={mode}
+                    labelKey={`address_${config.id}_country`}
+                    handleLabelChange={this.props.handleLabelChange}
+                    value={
+                      typeof config.countrySublabelText !== 'undefined'
+                        ? config.countrySublabelText
+                        : 'Country'
+                    }
+                  />
+                </div>
+              </span>
+            ) : null}
+          </div>
         </div>
       </ElementContainer>
     )
