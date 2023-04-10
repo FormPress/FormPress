@@ -59,7 +59,7 @@ module.exports = (app) => {
           permission: JSON.parse(user.permission)
         }
 
-        await locationFinder(user.id, req.get('CF-IPCountry'))
+        await locationFinder(user.id, req.get('cf-ipcountry'))
 
         const data = await token(jwt_data)
         return res.status(200).json(data)

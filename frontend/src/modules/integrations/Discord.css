@@ -1,0 +1,30 @@
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .webhookUrl
+  > .elementTextBox
+  > .input
+  > input {
+  width: 700px;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .invalid-url
+  > .elementTextBox
+  > .input
+  > input {
+  border-radius: 5px;
+  border: 2px solid red;
+}
+
+.integration-wrapper
+  > .integration-content
+  > .integration-configuration
+  > .integration-inputs
+  > .field-limit-reached {
+  border: 2px solid red;
+}

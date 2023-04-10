@@ -47,7 +47,7 @@ module.exports = (app) => {
         ('${newEntry.insertId}', '2')
       `)
 
-      await locationFinder(newEntry.insertId, req.get('CF-IPCountry'))
+      await locationFinder(newEntry.insertId, req.get('cf-ipcountry'))
 
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(

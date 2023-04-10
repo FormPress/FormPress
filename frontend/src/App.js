@@ -78,6 +78,7 @@ class App extends Component {
       resource: `/api/server/capabilities`,
       method: 'get'
     })
+
     const capabilities = capabilitiesResult.data
 
     this.setState({ capabilities })
