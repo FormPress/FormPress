@@ -42,11 +42,17 @@ $color-14: #68942f; /* forest green */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 .gleam {
-  box-sizing: border-box;
-  width: 750px;
-  margin: 20px auto 90px auto;
-  padding: 30px 45px 20px;
-  background-color: $bg-form;
+  &.builder.form {
+    background-color: $bg-form;
+  }
+
+  &.form.renderer {
+    box-sizing: border-box;
+    width: 750px;
+    margin: 20px auto 90px auto;
+    padding: 30px 45px 20px;
+    background-color: $bg-form;
+  }
 
   &.form {
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
@@ -345,6 +351,9 @@ $color-14: #68942f; /* forest green */
     margin: unset;
   }
 
+  .elementRadio .unselect-button span {
+    color: $color-0 !important;
+  }
   .elementRadio .unselect-button {
     visibility: hidden;
     float: right;
@@ -353,7 +362,6 @@ $color-14: #68942f; /* forest green */
     padding: 0.25rem;
     cursor: pointer;
     word-wrap: break-word;
-    color: $color-0;
     border: 0;
     border: 1px solid;
     border-radius: 0;

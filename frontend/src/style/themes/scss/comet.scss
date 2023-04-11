@@ -40,12 +40,18 @@ $color-14: #68942f; /* forest green */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
 
 .comet {
-  background-color: $bg-form;
-  width: 750px;
-  margin: 20px auto 90px auto;
-  padding: 30px 45px 20px;
-  box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  &.builder.form {
+    background-color: $bg-form;
+  }
+
+  &.form.renderer {
+    box-sizing: border-box;
+    width: 750px;
+    margin: 20px auto 90px auto;
+    padding: 30px 45px 20px;
+    background-color: $bg-form;
+    font-family: 'Roboto', sans-serif;
+  }
 
   &.form {
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
@@ -329,6 +335,9 @@ $color-14: #68942f; /* forest green */
 
   .label.radio-label > span > p {
     margin: unset;
+  }
+  .elementRadio .unselect-button span {
+    color: $color-0 !important;
   }
 
   .elementRadio .unselect-button {
