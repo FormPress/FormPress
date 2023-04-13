@@ -52,6 +52,10 @@
   background-color: #e5fbda;
 }
 
+.desingForm > .form.renderer {
+  margin: unset !important;
+}
+
 .desingForm > .gleam.form.renderer {
   margin: unset !important;
 }
