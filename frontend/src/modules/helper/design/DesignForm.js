@@ -56,7 +56,7 @@ export default class DesignForm extends Component {
       colorScheme = this.props.form.props.design.colorScheme
     }
     return (
-      <div className="col-15-16 desingForm">
+      <>
         <div className="FormTabCover fl col-5-16">
           <h2 className="shareFormTitle">Design Your Form</h2>
           <div className="designtabs">
@@ -97,13 +97,16 @@ export default class DesignForm extends Component {
           </Switch>
           <div></div>
         </div>
-        <Renderer
-          form={this.props.form}
-          theme={theme}
-          mode="renderer"
-          className="fl form"
-        />
-      </div>
+
+        <div className="desingForm">
+          <Renderer
+            form={this.props.form}
+            theme={theme}
+            mode="renderer"
+            className="fl form"
+          />
+        </div>
+      </>
     )
   }
 }
