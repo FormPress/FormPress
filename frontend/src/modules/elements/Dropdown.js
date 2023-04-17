@@ -159,8 +159,7 @@ export default class Dropdown extends Component {
             required={config.required}
           />
         </div>,
-
-        <div className="dropdown-div input">
+        <div key={1} className="dropdown-div input">
           {!config.hasDataset && config.options === undefined ? null : (
             <select
               className="dropdown-select"

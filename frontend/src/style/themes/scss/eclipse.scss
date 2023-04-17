@@ -62,7 +62,7 @@ $color-14: #68942f; /* forest green */
     background-color: #fdfdfd;
   }
 
-  .elementFileUpload > * {
+  .elementFileUpload .input > * {
     color: $text-color-elem-title;
   }
 
@@ -74,7 +74,7 @@ $color-14: #68942f; /* forest green */
     content: ' ';
     border: 0px solid #ffffff;
     border-radius: 50%;
-    background-color: #646464;
+    background-color: #dbdbdb;
   }
 
   .elementRadio .radioList input[type='radio']:checked {
@@ -88,7 +88,7 @@ $color-14: #68942f; /* forest green */
 
   .elementRadio ul li input,
   .elementCheckbox input {
-    border: 2px solid #646464 !important;
+    border: 2px solid #dbdbdb !important;
   }
 
   &.form > .element > .elemLabelTitle {
@@ -153,7 +153,7 @@ $color-14: #68942f; /* forest green */
   &.form .element > .elemLabelTitle {
     font-weight: 500;
     margin-top: 5px;
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
   }
 
   &.form .element > .elemLabelTitle > .label {
@@ -420,6 +420,7 @@ $color-14: #68942f; /* forest green */
     border-radius: 0;
     outline: 0;
     background-color: $secondary-color;
+    margin-top: 10px;
   }
 
   .elementRadio .radioList.dirty + .unselect-button {
