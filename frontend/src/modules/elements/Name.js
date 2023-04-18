@@ -191,7 +191,7 @@ export default class Name extends Component {
             required={config.required}
           />
         </div>
-        <div className="nameContainer">
+        <div className="input nameContainer">
           <span
             className={`prefix_span${
               typeof config.prefix !== 'undefined' && config.prefix === true

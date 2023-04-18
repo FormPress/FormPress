@@ -39,13 +39,15 @@
 .addNewToggle,
 .addNewCheckbox,
 .addNewRadio {
-  border: 1px dashed;
+  border: 2px dashed;
   position: relative;
-  width: 180px;
+  width: 150px;
   text-align: center;
   padding: 9px;
   cursor: pointer;
+  -webkit-user-select: none;
   user-select: none;
+  margin: 10px;
 }
 .addNewToggle:hover,
 .addNewCheckbox:hover,

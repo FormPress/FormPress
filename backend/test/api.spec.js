@@ -6,7 +6,10 @@ const sinon = require('sinon')
 const jwt = require('jsonwebtoken')
 const cheerio = require('cheerio')
 const transform = require(path.resolve('script', 'babel-transform'))
+const sassCompile = require(path.resolve('script', 'sass-compiler'))
+
 transform()
+sassCompile()
 
 process.env.JWT_SECRET = 'somesecretforunittesting'
 process.env.FILE_UPLOAD_BUCKET = 'someBucketName'
@@ -14,7 +17,10 @@ process.env.FILE_UPLOAD_BUCKET = 'someBucketName'
 const db = require(path.resolve('./', 'db'))
 const getPoolStub = sinon.stub(db, 'getPool')
 
-const authenticationMiddleware = require(path.resolve('middleware', 'authentication'))
+const authenticationMiddleware = require(path.resolve(
+  'middleware',
+  'authentication'
+))
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const endpoints = require(path.resolve('config', 'endpoints'))
 
@@ -22,17 +28,17 @@ const words = ['post', 'get', 'delete', 'put']
 const expressMock = {}
 
 for (const word of words) {
-  expressMock[`data_${word}`] = [],
-  expressMock[word] = (path) => {
-    expressMock[`data_${word}`].push(path)
-  }
+  ;(expressMock[`data_${word}`] = []),
+    (expressMock[word] = (path) => {
+      expressMock[`data_${word}`].push(path)
+    })
 }
 
 apiMiddleware(expressMock)
 
 const app = express()
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header(
     'Access-Control-Allow-Headers',
@@ -54,8 +60,9 @@ describe('Api', () => {
   describe('Endpoints coverage in middleware', () => {
     for (const endpoint of endpoints.endpoints) {
       it(`Endpoint in config/endpoints.js(${endpoint.method}::${endpoint.path}) actually defined in api middleware only once`, () => {
-        const filtered = expressMock[`data_${endpoint.method}`]
-          .filter((mocked_endpoint) => mocked_endpoint === endpoint.path)
+        const filtered = expressMock[`data_${endpoint.method}`].filter(
+          (mocked_endpoint) => mocked_endpoint === endpoint.path
+        )
 
         assert.equal(filtered.length, 1)
       })
@@ -66,13 +73,10 @@ describe('Api', () => {
     for (const word of words) {
       for (const mocked_endpoint of expressMock[`data_${word}`]) {
         it(`Endpoint in api middleware(${word}::${mocked_endpoint}) is defined in config/endpoints.js only once`, () => {
-          const filtered = endpoints
-            .endpoints
-            .filter(
-              (endpoint) => (
-                endpoint.path === mocked_endpoint && endpoint.method === word
-              )
-            )
+          const filtered = endpoints.endpoints.filter(
+            (endpoint) =>
+              endpoint.path === mocked_endpoint && endpoint.method === word
+          )
 
           assert.equal(filtered.length, 1)
         })
@@ -84,11 +88,11 @@ describe('Api', () => {
     const protected_endpoints = endpoints.endpoints.filter(
       (endpoint) => endpoint.protected
     )
-    const exp = Math.floor(Date.now() / 1000) + (60 * 60 * 24 *7)
+    const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
     const jwt_data = {
       user_id: 1,
       email: 'test@formpress.org',
-      permission:{admin:true},
+      permission: { admin: true },
       exp
     }
     const jwt_data2 = {
@@ -116,9 +120,8 @@ describe('Api', () => {
         if (typeof endpoint.exampleRequestBody !== 'undefined') {
           pro.send(endpoint.exampleRequestBody)
         }
-        
-        pro.expect('Content-Type', /json/)
-          .expect(403, done) //method is called with no token, should return 403 
+
+        pro.expect('Content-Type', /json/).expect(403, done) //method is called with no token, should return 403
       })
 
       it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP200 to a request with valid auth token`, (done) => {
@@ -132,16 +135,15 @@ describe('Api', () => {
         const pro = request(app)
           [endpoint.method](endpoint.exampleRequestPath)
           .set({
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`
           })
 
         if (typeof endpoint.exampleRequestBody !== 'undefined') {
           pro.send(endpoint.exampleRequestBody)
         }
-        
-        pro.expect('Content-Type', /json/)
-          .expect(200, done) //method is called with a valid token, should return 200
+
+        pro.expect('Content-Type', /json/).expect(200, done) //method is called with a valid token, should return 200
       })
 
       it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request with valid auth token belonging to another user`, (done) => {
@@ -155,16 +157,15 @@ describe('Api', () => {
         const pro = request(app)
           [endpoint.method](endpoint.exampleRequestPath)
           .set({
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token_otheruser}`
+            Accept: 'application/json',
+            Authorization: `Bearer ${token_otheruser}`
           })
 
         if (typeof endpoint.exampleRequestBody !== 'undefined') {
           pro.send(endpoint.exampleRequestBody)
         }
-        
-        pro.expect('Content-Type', /json/)
-          .expect(403, done) //method is called with a valid token of another user, should return 403
+
+        pro.expect('Content-Type', /json/).expect(403, done) //method is called with a valid token of another user, should return 403
       })
     }
   })
@@ -175,7 +176,7 @@ describe('Api', () => {
         id: 1,
         title: 'test form',
         props: {
-          elements: [  
+          elements: [
             {
               id: 1,
               type: 'TextBox',
@@ -198,25 +199,29 @@ describe('Api', () => {
       getPoolStub.returns({
         query: async (sql, params) => {
           //console.log('Query is called with ', sql, params)
-          return [{
-            ...form,
-            props: JSON.stringify(form.props)
-          }]
+          return [
+            {
+              ...form,
+              props: JSON.stringify(form.props)
+            }
+          ]
         }
       })
 
-      const pro = request(app)
-        .get('/form/view/1')
-        .set({
-          'Accept': 'text/html'
-        })
+      const pro = request(app).get('/form/view/1').set({
+        Accept: 'text/html'
+      })
 
-      pro.expect('Content-Type', /text\/html/)
+      pro
+        .expect('Content-Type', /text\/html/)
         .expect(200)
         .then((res) => {
           const html = res.text
 
-          assert(html.length > 100, 'Rendered form html length is shorter than 100 characters')
+          assert(
+            html.length > 100,
+            'Rendered form html length is shorter than 100 characters'
+          )
 
           const $ = cheerio.load(html)
 
@@ -224,11 +229,16 @@ describe('Api', () => {
             const rendered = $(`#q_${elem.id}`)
 
             if (elem.type !== 'Button') {
-              assert(rendered.length === 1, `Question ${elem.id} of test form is successfully rendered`)
+              assert(
+                rendered.length === 1,
+                `Question ${elem.id} of test form is successfully rendered`
+              )
             } else {
-              assert(rendered.length === 0, `Question ${elem.id} of type submit Should not be rendered with id`)
+              assert(
+                rendered.length === 0,
+                `Question ${elem.id} of type submit Should not be rendered with id`
+              )
             }
-            
           }
 
           done()

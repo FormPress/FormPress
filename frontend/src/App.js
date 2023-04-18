@@ -32,7 +32,7 @@ import GeneralContext from './general.context'
 import { Logo, FPLoader } from './svg'
 
 import './App.css'
-import './style/themes/infernal.css'
+import './style/themes/scss/index.scss'
 
 const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {

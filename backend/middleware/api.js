@@ -3,6 +3,7 @@ const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
 const sanitizeHtml = require('sanitize-html')
+const sass = require('sass')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -306,6 +307,9 @@ module.exports = (app) => {
       )
       style += fs.readFileSync(
         path.resolve('../', 'frontend/src/style/themes/gleam.css')
+      )
+      style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/exam_results.css')
       )
       style += fs.readFileSync(
         path.resolve('../', 'frontend/src/modules/elements/index.css')
@@ -1074,14 +1078,6 @@ module.exports = (app) => {
       showBranding = true
     }
 
-    const str = reactDOMServer.renderToStaticMarkup(
-      React.createElement(Renderer, {
-        className: 'form',
-        form,
-        mode: 'renderer'
-      })
-    )
-
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )
@@ -1089,9 +1085,35 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
     )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = await sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
@@ -1103,8 +1125,17 @@ module.exports = (app) => {
 
     if (form.private) {
       // remove the part that says 'Never Submit Passwords'
-      style += ' .renderer.gleam::after {content: none !important; }'
+      style += ' .renderer::after {content: none !important; }'
     }
+
+    const str = reactDOMServer.renderToStaticMarkup(
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer',
+        theme: designTheme
+      })
+    )
 
     //form table has "published_version" while form_published has "version"
     const id = uuid ? uuid : form_id
@@ -1152,14 +1183,39 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
     )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
-    style += ' body {background-color: #f5f5f5;} '
-    style += ' form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16); margin: 35px;}'
 
     res.render('template.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,

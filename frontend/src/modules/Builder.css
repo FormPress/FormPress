@@ -402,7 +402,7 @@
 
 .form.builder > .element:hover {
   border-radius: 6px;
-  background-color: #e5fbda;
+  /*background-color: #e5fbda;*/
 }
 
 .form.builder > .element:hover > .action,
@@ -474,9 +474,6 @@
 
 .leftMenuContents .elementHeader {
   padding: 10px 10px 0 0;
-}
-#qc_required .input {
-  float: right;
 }
 
 .planover-container {
@@ -743,4 +740,180 @@
   background: #f5f5f5;
   width: 100%;
   display: block;
+}
+
+.branding {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  position: -ms-device-fixed;
+  z-index: 20;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background-color: white;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
+.branding > img {
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .Group_170 {
+  /* This is formpress logo svg. */
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .branding-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: right;
+  margin: auto 0 auto 90px;
+}
+
+@media screen and (max-width: 992px) {
+  .branding {
+    margin: 0;
+    width: auto;
+    padding: 10px;
+  }
+
+  .branding > .branding-text {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .branding {
+    justify-content: center;
+  }
+  .branding > .branding-text {
+    display: none;
+  }
+
+  .branding > img {
+    width: auto;
+    margin: auto;
+  }
+}
+
+.branding {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: 0px;
+  position: fixed;
+  position: -ms-device-fixed;
+  z-index: 20;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+}
+
+.branding > img {
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .Group_170 {
+  /* This is formpress logo svg. */
+  width: 200px;
+  height: 60px;
+}
+
+.branding > .branding-text {
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: right;
+  margin: auto 0 auto 90px;
+}
+
+@media screen and (max-width: 992px) {
+  .branding {
+    margin: 0;
+    width: auto;
+    padding: 10px;
+  }
+
+  .branding > .branding-text {
+    margin: auto;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .branding {
+    justify-content: center;
+  }
+  .branding > .branding-text {
+    display: none;
+  }
+
+  .branding > img {
+    width: auto;
+    margin: auto;
+  }
+}
+
+.form .sublabel:not(.header) span[contentEditable='true'] {
+  display: block;
+  min-width: 120px;
+  min-height: 20px;
+  /*margin-top: 10px;*/
+  /*padding: 3px;*/
+  word-break: break-word;
+}
+
+.form span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+
+.formTitle span[contentEditable='true'] {
+  display: block;
+  min-height: 22px;
+  padding: 2px 5px;
+  word-break: break-all;
+}
+
+.formTitle span[contentEditable='true']:focus-visible {
+  outline: none;
+}
+
+.formTitle span.emptySpan[contentEditable='true']:before {
+  display: inline-block;
+  content: attr(dataPlaceholder);
+  color: #646464;
+}
+
+.formTitle span.emptySpan[contentEditable='true']:not(:empty):before {
+  content: '';
+}
+
+.builder .emptySpan:before {
+  display: inline-block;
+  content: attr(dataPlaceholder);
+  color: #646464;
+}
+
+.builder .elementButton button span[contentEditable='true'] {
+  display: block;
+  overflow-wrap: break-word;
+}
+
+.form .elementRadio .input .radio-label span[contentEditable='true'] {
+  display: block;
+  min-width: 60px;
+  white-space: break-spaces;
+  word-break: break-all;
+}
+
+.form .elementCheckbox .input .checkbox-label span[contentEditable='true'] {
+  display: block;
+  min-width: 60px;
+  white-space: break-spaces;
+  word-break: break-all;
 }

@@ -5,6 +5,13 @@ const cors = require('cors')
 
 const fileUpload = require('express-fileupload')
 const transform = require(path.resolve('script', 'babel-transform'))
+const sassCompile = require(path.resolve('script', 'sass-compiler'))
+
+const { FP_ENV } = process.env
+
+if (FP_ENV !== 'development') {
+  sassCompile()
+}
 
 transform()
 

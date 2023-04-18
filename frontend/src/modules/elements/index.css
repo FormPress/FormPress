@@ -1,14 +1,7 @@
 .builderStage .form {
-  background-color: white;
   width: 750px;
   margin: 0 auto;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-}
-
-.builderStage .form > .element {
-  box-sizing: border-box;
-  padding: 25px 10px;
-  margin: 2px 0;
 }
 
 .builderStage .form > .element.requiredError {
@@ -26,12 +19,6 @@
 
 .form > .element > .label {
   min-width: 200px;
-}
-
-.builderStage .form > .element > button,
-.builderStage .form > .element > input[type='submit'] {
-  padding: 5px 10px;
-  font-size: 16px;
 }
 
 .form > .element > .metadata {

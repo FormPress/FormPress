@@ -147,14 +147,15 @@ class EditableList extends Component {
               : `'builderAddNewButton addNew${config.type}`
           }
           onClick={() => this.handleAddingItem(parseInt(config.id))}>
-          Add New {config.toggle === true ? 'Toggle' : `${config.type}`}
+          <FontAwesomeIcon icon={faPlusCircle} />
+          &nbsp;&nbsp;Add New
         </div>
       ]
 
       return <div className="checkboxCover">{display}</div>
     } else if (config.type === 'Radio') {
       return (
-        <ul>
+        <ul className="radioList">
           {options.map((item, key) => {
             return (
               <li key={key}>
@@ -256,7 +257,8 @@ class EditableList extends Component {
           <div
             className={`'builderAddNewButton addNew${config.type}`}
             onClick={() => this.handleAddingItem(parseInt(config.id))}>
-            Add New {`${config.type}`}
+            <FontAwesomeIcon icon={faPlusCircle} />
+            &nbsp;&nbsp;Add New
           </div>
         </ul>
       )

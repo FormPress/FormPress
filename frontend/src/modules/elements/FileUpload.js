@@ -194,7 +194,7 @@ export default class FileUpload extends Component {
             required={config.required}
           />
         </div>
-        <div className="inputContainer">
+        <div className="inputContainer input">
           <label htmlFor={`q_${config.id}`} className="custom-file-upload">
             Browse...
           </label>

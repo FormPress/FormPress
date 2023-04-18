@@ -20,6 +20,7 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
+import DesignForm from './helper/design/DesignForm'
 import ShareForm from './helper/ShareForm'
 import FormRules from './helper/FormRules'
 
@@ -33,7 +34,6 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
-import '../style/themes/gleam.css'
 
 const DEFAULT_FORM = {
   id: null,
@@ -63,6 +63,10 @@ const DEFAULT_FORM = {
         buttonText: 'Submit'
       }
     ],
+    design: {
+      theme: 'gleam',
+      colorScheme: 'default'
+    },
     customCSS: {
       value: '',
       isEncoded: false
@@ -384,6 +388,25 @@ export default class Builder extends Component {
     }
   }
 
+  setFormDesign(_design) {
+    const form = { ...this.state.form }
+    const design = { ..._design }
+
+    let oldTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      oldTheme = form.props.design.theme
+    }
+
+    if (oldTheme !== _design.theme) {
+      console.log('Loading theme: ', _design.theme)
+      // require(`../style/themes/${_design.theme}.css`)
+    }
+
+    form.props.design = design
+
+    this.setState({ form })
+  }
+
   setCSS(cssProp) {
     const form = { ...this.state.form }
     form.props.customCSS = cssProp
@@ -467,6 +490,7 @@ export default class Builder extends Component {
     )
     this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
     this.setFormRule = this.setFormRule.bind(this)
+    this.setFormDesign = this.setFormDesign.bind(this)
     this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
   }
 
@@ -1475,7 +1499,6 @@ export default class Builder extends Component {
               form={form}
               generalContext={this.props.generalContext}
               setIntegration={this.setIntegration}
-              setCSS={this.setCSS}
               setFormTags={this.setFormTags}
               setAutoPageBreak={this.setAutoPageBreak}
               setFormAsPrivate={this.setFormAsPrivate}
@@ -1534,11 +1557,7 @@ export default class Builder extends Component {
           onClick={this.handleCloseIntegrationClick}>
           <FontAwesomeIcon icon={faCircleCheck} />
         </NavLink>
-        {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
-        <NavLink
-          style={{ display: 'none' }}
-          to={`/editor/${formId}/design`}
-          activeClassName="selected">
+        <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
         </NavLink>
         <NavLink
@@ -1573,7 +1592,14 @@ export default class Builder extends Component {
               render={() => this.renderBuilder()}></Route>
           </Switch>
         </Route>
-        <Route path="/editor/:formId/design"></Route>
+        <Route path="/editor/:formId/design">
+          <DesignForm
+            form={this.state.form}
+            uuid={this.state.form.uuid}
+            setCSS={this.setCSS}
+            setFormDesign={this.setFormDesign}
+          />
+        </Route>
         <Route path="/editor/:formId/rules">
           <FormRules
             formId={formId}
@@ -1616,6 +1642,12 @@ export default class Builder extends Component {
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
+    // backward compatibility for old forms without design
+    const theme =
+      this.state.form.props.design === undefined
+        ? 'gleam'
+        : this.state.form.props.design.theme
+
     return (
       <div className="builderStage col-10-16 grid">
         {this.state.isWindows ? (
@@ -1635,7 +1667,7 @@ export default class Builder extends Component {
           'Loading...'
         ) : (
           <Renderer
-            className={`col-16-16 form`}
+            className={`fl form`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
@@ -1662,6 +1694,7 @@ export default class Builder extends Component {
             selectedField={selectedFieldId}
             selectedLabelId={this.state.selectedLabelId}
             mode="builder"
+            theme={theme}
           />
         )}
         {form.props.elements.length > 0 && !this.state.autoPBEnabled ? (

@@ -2,6 +2,7 @@
   background: white;
   height: calc(100vh - 130px);
   overflow: hidden;
+  width: 1200px;
 }
 
 .leftColumn {

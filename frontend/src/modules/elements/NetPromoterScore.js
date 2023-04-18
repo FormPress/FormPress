@@ -130,7 +130,7 @@ export default class NetPromoterScore extends Component {
           })}
         </ul>
       </div>,
-      <div className="clearfix first-child" key="3">
+      <div className="clearfix scale-legend" key="3">
         <EditableLabel
           className="sublabel"
           dataPlaceholder="Click to edit sublabel"
