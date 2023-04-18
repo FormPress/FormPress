@@ -117,6 +117,21 @@ module.exports = (app) => {
         fileUploadEntries.push(value)
       } else {
         value = req.body[key]
+
+        if (key.includes('date')) {
+          if (value.includes(' ')) {
+            let time = value.split(' ')[1]
+            value = value.split(' ')[0]
+
+            preformatInputs.push({ q_id: key, value: value })
+            preformatInputs.push({
+              q_id: `q_${question_id}[time]`,
+              value: time
+            })
+
+            continue
+          }
+        }
       }
       preformatInputs.push({ q_id: key, value: value })
     }
