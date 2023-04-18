@@ -100,7 +100,8 @@ $color-14: #68942f; /* forest green */
     margin-bottom: 5px;
   }
 
-  &.form > .element > .input {
+  &.form > .element > .input,
+  .datePickerContainer {
     order: 3;
   }
 

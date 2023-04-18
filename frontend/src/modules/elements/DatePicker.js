@@ -243,7 +243,7 @@ export default class DatePicker extends Component {
                 id={`date_${config.id}`}
                 name={`q_${config.id}[date]`}
                 type={'text'}
-                flatpickrOptions={JSON.stringify(flatpickrOptions)}
+                flatpickroptions={JSON.stringify(flatpickrOptions)}
                 {...inputProps}
               />
             )}
