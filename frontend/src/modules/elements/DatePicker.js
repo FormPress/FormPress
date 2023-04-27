@@ -3,12 +3,12 @@ import _ from 'lodash'
 
 import EditableLabel from '../common/EditableLabel'
 import ElementContainer from '../common/ElementContainer'
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
 
 import './DatePicker.css'
 
 export default class DatePicker extends Component {
-  static weight = 16
+  static weight = 12
 
   constructor(props) {
     super(props)
@@ -80,7 +80,7 @@ export default class DatePicker extends Component {
   }
 
   static metaData = {
-    icon: faEnvelope,
+    icon: faCalendarDays,
     displayText: 'DatePicker',
     group: 'inputElement'
   }

@@ -448,7 +448,8 @@ module.exports = (app) => {
         Checkbox: 'barChart',
         Button: 'none',
         NetPromoterScore: 'netPromoterScore',
-        RatingScale: 'average'
+        RatingScale: 'average',
+        DatePicker: 'lastFive'
       }
 
       const colors = [
@@ -536,7 +537,10 @@ module.exports = (app) => {
                 ])
 
                 if (questionStatistics.length > 0) {
-                  if (elementTemplate.elementType === 'Name') {
+                  if (
+                    elementTemplate.elementType === 'Name' ||
+                    elementTemplate.elementType === 'DatePicker'
+                  ) {
                     elementTemplate.chartItems.push(
                       Object.values(JSON.parse(questionStatistics[0].value))
                         .join(' ')

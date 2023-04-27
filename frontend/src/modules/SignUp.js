@@ -127,6 +127,7 @@ class SignUp extends Component {
         token: data.token,
         user_id: data.user_id,
         user_role: data.user_role,
+        role_name: data.role_name,
         permission: data.permission,
         loggedIn: true
       })
