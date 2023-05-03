@@ -297,6 +297,16 @@ module.exports = (app) => {
               html = defaultThankYou.html
             }
 
+            if (html === undefined || html === null) {
+              console.error(
+                'Html is undefined or null',
+                `User ID: ${form.user_id}`,
+                `Form ID: ${form_id}`,
+                `Submission ID: ${submission_id}`
+              )
+              html = ''
+            }
+
             const userRoleResult = await db.query(
               `SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?`,
               [form.user_id]
