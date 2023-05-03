@@ -343,9 +343,22 @@ module.exports = (app) => {
     const elementValidators = {}
 
     elementQuery.forEach((element) => {
-      elementValidators[element] =
-        require(path.resolve('script', 'transformed', 'elements', `${element}`))
-          .default.helpers || 'unset'
+      const elemClass = require(path.resolve(
+        'script',
+        'transformed',
+        'elements',
+        `${element}`
+      ))
+
+      if (elemClass.default !== undefined) {
+        elementValidators[element] = elemClass.default?.helpers || 'unset'
+      } else {
+        elementValidators[element] = 'unset'
+        console.error(
+          `Element class default not found for ${element}`,
+          `req.query.elements: ${req.query.elements}`
+        )
+      }
     })
 
     const output = JSON.stringify(
