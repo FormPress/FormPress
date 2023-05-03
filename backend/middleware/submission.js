@@ -37,6 +37,8 @@ module.exports = (app) => {
   app.post('/form/submit/:id/:version?', async (req, res) => {
     let form_id = req.params.id
 
+    let overrideTyPageId = req.query.tyPageId || false
+
     if (validate(form_id)) {
       form_id = await formModel.getFormIdFromUUID(form_id)
     } else if (parseInt(form_id) > 1200) {
@@ -273,6 +275,10 @@ module.exports = (app) => {
             tyPageId = tyPageIdIntegration.value
           } else {
             tyPageId = 1
+          }
+
+          if (overrideTyPageId !== false) {
+            tyPageId = parseInt(overrideTyPageId)
           }
 
           const dbResult = await db.query(

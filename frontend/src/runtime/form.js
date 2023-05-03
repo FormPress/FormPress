@@ -9,12 +9,8 @@
     })
   const extensions = [
     {
-      name: 'conditional',
-      check: () => formHasConditionalLogic === true
-    },
-    {
       name: 'required',
-      check: (element) => element.required === true
+      check: (element) => element.required === true || formHasConditionalLogic
     },
     {
       name: '3rdparty/iframeSizer.contentWindow.min',
@@ -31,6 +27,10 @@
     {
       name: 'multistep',
       check: (element) => element.type === 'PageBreak' || formHasAutoPageBreaks
+    },
+    {
+      name: 'conditional',
+      check: () => formHasConditionalLogic === true
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>
@@ -172,7 +172,29 @@
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)
   form.addEventListener('submit', (event) => {
+    // Prevent default form submission behavior
     event.preventDefault()
+
+    // Check if there is an input with name 'fp_rule_changeTyPage'
+    const changeTyPageInputs = document.querySelectorAll(
+      'input[name="fp_rule_changeTyPage"]'
+    )
+    if (changeTyPageInputs.length > 0) {
+      // Extract the last value of 'fp_rule_changeTyPage'
+      const lastChangeTypePage =
+        changeTyPageInputs[changeTyPageInputs.length - 1]
+      const pageId = lastChangeTypePage.value.trim()
+      if (pageId !== '') {
+        // Modify form action attribute to add 'tyPageId' parameter to the URL
+        const formAction = form.action
+        const formActionWithoutParams = formAction.split('?')[0]
+        const separator = formAction.includes('?') ? '&' : '?'
+        const newFormAction = `${formActionWithoutParams}${separator}tyPageId=${pageId}`
+        form.action = newFormAction
+      }
+    }
+
+    // Check if form is valid and submit if true, otherwise log an error message
     if (FORMPRESS.requiredGoodToGo && FORMPRESS.validateGoodToGo) {
       form.submit()
     } else {
