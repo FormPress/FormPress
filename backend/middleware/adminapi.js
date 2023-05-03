@@ -272,6 +272,7 @@ module.exports = (app) => {
           SELECT
             u.*,
             ur.role_id AS role_id,
+            r.name AS role_name,
             r.permission AS permission
           FROM \`user\` AS u
             JOIN \`user_role\` AS ur ON u.id = ur.user_id
@@ -292,6 +293,7 @@ module.exports = (app) => {
           user_id: user.id,
           email: user.email,
           user_role: user.role_id,
+          role_name: user.role_name,
           admin: false,
           impersonate: admin[0].id,
           permission: JSON.parse(user.permission)
@@ -315,6 +317,7 @@ module.exports = (app) => {
         SELECT
           u.*,
           ur.role_id AS role_id,
+          r.name AS role_name,
           r.permission AS permission
         FROM \`user\` AS u
           JOIN \`user_role\` AS ur ON u.id = ur.user_id
@@ -329,6 +332,7 @@ module.exports = (app) => {
           user_id: user.id,
           email: user.email,
           user_role: user.role_id,
+          role_name: user.role_name,
           admin: true,
           permission: JSON.parse(user.permission)
         }

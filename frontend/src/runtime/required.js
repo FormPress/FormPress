@@ -7,7 +7,8 @@
     TextArea: ['input'],
     TextBox: ['input'],
     Address: ['input'],
-    Phone: ['input']
+    Phone: ['input'],
+    DatePicker: ['input']
   }
 
   for (const elem of FORMPRESS.elements) {

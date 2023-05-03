@@ -389,6 +389,16 @@ $color-14: #68942f; /* forest green */
     border-radius: 5px;
   }
 
+  .elementDatePicker > .datePickerContainer > * > input {
+    height: 32px;
+    border: solid 1px $color-6;
+    border-radius: 3px;
+    outline: 0;
+    background-color: $bg-input-field;
+    font-family: 'Montserrat', sans-serif;
+    color: $text-color-user-input;
+  }
+
   .elementSeparator hr {
     color: $bg-separator-lines;
   }
@@ -636,7 +646,8 @@ $color-14: #68942f; /* forest green */
     box-shadow: 0 0 1px $accent-main-dark;
   }
 
-  .nameContainer {
+  .nameContainer,
+  .datePickerContainer {
     display: -ms-flexbox;
     display: flex;
     align-items: flex-start;
@@ -644,18 +655,22 @@ $color-14: #68942f; /* forest green */
     flex-flow: row nowrap;
   }
 
-  .nameContainer > * {
+  .nameContainer > *,
+  .datePickerContainer > * {
     flex: 1 1 100%;
     padding: 0 2px 0 2px;
+    max-width: 50%;
   }
 
-  .nameContainer > * > * {
+  .nameContainer > * > *,
+  .datePickerContainer > * > * {
     width: 100%;
     min-height: 24px;
     color: $text-color-user-input;
   }
 
-  .nameContainer .clearfix {
+  .nameContainer .clearfix,
+  .datePickerContainer .clearfix {
     display: grid;
   }
 

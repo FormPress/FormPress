@@ -36,6 +36,15 @@ for (const key of keys) {
             myTestObject.findAllByProps({ name: 'q_0[lastName]' })
           )
           expect(multipleNames.length).toBeGreaterThan(1)
+        }else if(key === 'DatePicker'){
+          const myTestObject = component.root
+          const nameAttributes = myTestObject.findAllByProps({
+            name: 'q_0[date]'
+          })
+          const multipleNames = nameAttributes.concat(
+            myTestObject.findAllByProps({ name: 'q_0[time]' })
+          )
+          expect(multipleNames.length).toBeGreaterThan(1)
         } else {
           const myTestObject = component.root
           //assuming defaultConfig have id:0
