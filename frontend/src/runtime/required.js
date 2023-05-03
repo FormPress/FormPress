@@ -48,11 +48,11 @@
       page: elementPageNumber
     }
 
-    containerElem.addEventListener('change', requiredCheck(id))
+    containerElem.addEventListener('change', () => requiredCheck(id))
 
     if (additionalElemEventListeners[elem.type]) {
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
-        containerElem.addEventListener(eventListener, requiredCheck(id))
+        containerElem.addEventListener(eventListener, () => requiredCheck(id))
       })
     }
   }
@@ -66,10 +66,12 @@
     delete FORMPRESS.requireds[id]
     containerElem.classList.remove('requiredError')
 
-    containerElem.removeEventListener('change', requiredCheck(id))
+    containerElem.removeEventListener('change', () => requiredCheck(id))
     if (additionalElemEventListeners[elem.type]) {
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
-        containerElem.removeEventListener(eventListener, requiredCheck(id))
+        containerElem.removeEventListener(eventListener, () =>
+          requiredCheck(id)
+        )
       })
     }
   }
