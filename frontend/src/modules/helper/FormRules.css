@@ -57,7 +57,8 @@
   font-weight: 500;
 }
 
-.formRules-list.build {
+.formRules-list.build,
+.formRules-list.typeSelect {
   opacity: 0.3;
   filter: grayscale(100%);
   pointer-events: none;
@@ -78,16 +79,42 @@
   opacity: 1;
 }
 
+.ruleBuilder-container.showHide > .ruleBuilder-header {
+  background-color: #e2f6ca;
+  color: #68942f;
+}
+
+.ruleBuilder-container.showHide > .ruleBuilder-content {
+  background: #effae2;
+}
+
+.ruleBuilder-container.changeTyPage > .ruleBuilder-header {
+  /*  TODO: will do the same as above, but with blue colors */
+  background-color: #005a875c;
+  color: #005a87;
+}
+
+.ruleBuilder-container.changeTyPage > .ruleBuilder-content {
+  /*  TODO: will do the same as above, but with blue colors */
+}
+
+.ruleBuilder-container.changeRequiredStatus > .ruleBuilder-header {
+  background-color: #dd3d3d5c;
+  color: #dd3d3d;
+}
+
+.ruleBuilder-container.changeRequiredStatus > .ruleBuilder-content {
+  background: #dd3d3d12;
+}
+
 .ruleBuilder-wrapper .addRule-button {
   box-shadow: none !important;
 }
 
 .ruleBuilder-header {
-  background-color: #005a875c;
   font-size: 14px;
   font-weight: 600;
   padding: 0.7rem;
-  color: #005a87;
 }
 
 .ruleBuilder-content {
@@ -131,7 +158,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: baseline;
 }
 
 .ruleBuilder-content .fieldLink-row > div:first-of-type {
@@ -156,6 +183,35 @@
   font-weight: 600;
   padding: 0.7rem;
   color: #68942f;
+}
+
+.formRule.showHide > .formRule-header {
+  background-color: #e2f6ca;
+  color: #68942f;
+}
+
+.formRule.showHide > .formRule-body {
+  background: #effae2;
+}
+
+.formRule.changeTyPage > .formRule-header {
+  background-color: #005a875c;
+  color: #005a87;
+}
+
+.formRule.changeTyPage > .formRule-body {
+  background: #005a8712;
+}
+
+/*// same as above but for .changeRequiredStatus class and with pastel red colors*/
+
+.formRule.changeRequiredStatus > .formRule-header {
+  background-color: #dd3d3d5c;
+  color: #dd3d3d;
+}
+
+.formRule.changeRequiredStatus > .formRule-body {
+  background: #dd3d3d12;
 }
 
 .formRule > .formRule-header > .formRule-controls {
@@ -195,4 +251,69 @@
   color: #a0a0a0;
   margin: 0 2px 0 2px;
   font-weight: 700;
+}
+
+.rule-selector {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 44px;
+  width: 100%;
+}
+
+.rule-selector .rule {
+  width: calc(33.3333% - 1rem);
+  height: 5rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rule-selector .rule:hover {
+  transform: scale(1.1);
+}
+
+.rule-selector .rule.selected {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.rule-selector .rule-icon {
+  margin-right: 0.5rem;
+}
+
+.rule-selector .rule-display {
+  font-weight: bold;
+}
+
+.rule-selector .rule-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.rule:not(:hover) {
+  background: white !important;
+  /*color: black !important;*/
+}
+
+.rule.showHide {
+  background-color: #e2f6ca;
+  color: #68942f;
+}
+
+.rule.changeTyPage {
+  background-color: #005a875c;
+  color: #005a87;
+}
+
+.rule.changeRequiredStatus {
+  background-color: #dd3d3d5c;
+  color: #dd3d3d;
 }

@@ -1,4 +1,8 @@
 ;(() => {
+  if (FORMPRESS.requireds === undefined) {
+    FORMPRESS.requireds = {}
+  }
+
   // this dependency script is for conditional logic
   const operatorFunctions = {
     equals: (value1, value2) => value1 === value2,
@@ -13,22 +17,65 @@
     isFilled: (value) => value.trim().length > 0
   }
 
+  const ruleTypeSpecificInitializers = {
+    changeTyPage: (rule) => {
+      // create a hidden input with a default value of null
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = `fp_rule_changeTyPage`
+      input.id = `fp_rule_changeTyPage_${rule.id}`
+
+      input.value = ''
+      document.querySelector('form').appendChild(input)
+      return input
+    }
+  }
+
   const commandFunctions = {
     show: (elementContainer) => elementContainer.classList.remove('dn'),
-    hide: (elementContainer) => elementContainer.classList.add('dn')
+    hide: (elementContainer) => elementContainer.classList.add('dn'),
+    displaySelectedPage: (hiddenInput, rule) => {
+      const { then } = rule
+      const { field, value } = then
+
+      hiddenInput.value = field
+    },
+    unsetSelectedPage: (hiddenInput) => {
+      hiddenInput.value = ''
+    },
+    setRequired: (elementContainer) => {
+      const id = elementContainer.id.split('_')[1]
+      try {
+        FORMPRESS.requiredApi.setRequired(id)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    setNotRequired: (elementContainer) => {
+      const id = elementContainer.id.split('_')[1]
+      try {
+        FORMPRESS.requiredApi.setNotRequired(id)
+      } catch (e) {
+        console.log(e)
+      }
+    }
   }
 
   const commandNegatives = {
     show: 'hide',
-    hide: 'show'
+    hide: 'show',
+    displaySelectedPage: 'unsetSelectedPage',
+    unsetSelectedPage: 'displaySelectedPage',
+    setRequired: 'setNotRequired',
+    setNotRequired: 'setRequired'
   }
 
   const rules = window.FORMPRESS.rules
 
   for (const rule of rules) {
-    const { if: ifRule, then: thenRule } = rule
-    const { field: ifField, operator, value: expectedValue } = ifRule
-    const { command, field: thenField, value: thenValue } = thenRule
+    let { if: ifRule, then: thenRule } = rule
+    let { field: ifField, operator, value: expectedValue } = ifRule
+    let { command, field: thenField, value: thenValue } = thenRule
 
     // continue if any of these are not found
     if (!ifField || !operator || !expectedValue || !command || !thenField) {
@@ -39,20 +86,24 @@
       return elem.id === parseInt(ifRule.field)
     })
 
-    const foundThenElem = FORMPRESS.elements.find((elem) => {
-      return elem.id === parseInt(thenRule.field)
-    })
-
-    if (foundIfElem === undefined || foundThenElem === undefined) {
+    if (foundIfElem === undefined) {
       continue
     }
 
     const ifFieldElementContainer = document.getElementById(
       `qc_${ifRule.field}`
     )
-    const thenFieldElementContainer = document.getElementById(
-      `qc_${thenRule.field}`
-    )
+
+    let thenFieldElementContainer
+
+    if (rule.type === 'changeTyPage') {
+      const initialInput = ruleTypeSpecificInitializers.changeTyPage(rule)
+      thenFieldElementContainer = initialInput
+    } else {
+      thenFieldElementContainer = document.getElementById(
+        `qc_${thenRule.field}`
+      )
+    }
 
     let ifFieldValueGetter =
       FP_ELEMENT_HELPERS[foundIfElem.type].getElementValue
@@ -127,7 +178,7 @@
 
       try {
         if (assessment === true) {
-          executeCommand(thenFieldElementContainer)
+          executeCommand(thenFieldElementContainer, rule)
         } else {
           revertCommand(thenFieldElementContainer)
         }

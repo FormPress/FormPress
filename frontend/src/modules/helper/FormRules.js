@@ -5,11 +5,34 @@ import * as Elements from '../elements'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEye,
+  faCircleCheck,
+  faAsterisk,
   faPencilSquare,
   faPlusCircle,
   faTimes,
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
+
+import { api } from '../../helper'
+import GeneralContext from '../../general.context'
+
+const rulesWithMetadata = [
+  {
+    icon: faEye,
+    display: 'Show/Hide Elements',
+    value: 'showHide'
+  },
+  {
+    icon: faCircleCheck,
+    display: 'Change Thank You Page',
+    value: 'changeTyPage'
+  },
+  {
+    icon: faAsterisk, // font-size: 15pt; olacak
+    display: 'Change Required Status',
+    value: 'changeRequiredStatus'
+  }
+]
 
 const operators = {
   equals: 'Is Equal To',
@@ -24,9 +47,33 @@ const operators = {
   isFilled: 'Is Filled'
 }
 
-const commands = {
-  show: 'Show',
-  hide: 'Hide'
+const commandsDict = {
+  changeTyPage: [
+    {
+      display: 'Display Selected Page',
+      value: 'displaySelectedPage'
+    }
+  ],
+  showHide: [
+    {
+      display: 'Show',
+      value: 'show'
+    },
+    {
+      display: 'Hide',
+      value: 'hide'
+    }
+  ],
+  changeRequiredStatus: [
+    {
+      display: 'Set as Required',
+      value: 'setRequired'
+    },
+    {
+      display: 'Set as Not Required',
+      value: 'setNotRequired'
+    }
+  ]
 }
 
 class FormRules extends Component {
@@ -38,11 +85,13 @@ class FormRules extends Component {
 
     this.state = {
       mode: 'view',
-      editingRule: null
+      editingRule: null,
+      ruleConfig: null
     }
 
     this.handleToggleRuleBuilder = this.handleToggleRuleBuilder.bind(this)
     this.deleteRule = this.deleteRule.bind(this)
+    this.renderTypeSelect = this.renderTypeSelect.bind(this)
   }
 
   deleteRule(rule) {
@@ -55,11 +104,33 @@ class FormRules extends Component {
   }
 
   handleToggleRuleBuilder() {
-    if (this.state.mode === 'build') {
-      this.setState({ mode: 'view', editingRule: null })
+    // will replace build with typeSelect
+    if (this.state.mode === 'view') {
+      this.setState({ mode: 'typeSelect', editingRule: null })
     } else {
-      this.setState({ mode: 'build', editingRule: null })
+      this.setState({ mode: 'view', editingRule: null, ruleConfig: null })
     }
+  }
+
+  renderTypeSelect() {
+    const handleRuleClick = (rule) => {
+      this.setState({ ruleConfig: rule, mode: 'build' })
+    }
+    return (
+      <div className="rule-selector">
+        {rulesWithMetadata.map((rule, index) => (
+          <div
+            key={index}
+            className={`rule ` + (rule.value ? rule.value : '')}
+            onClick={() => handleRuleClick(rule)}>
+            <div className="rule-icon">
+              <FontAwesomeIcon icon={rule.icon || faEye} />
+            </div>
+            <div className="rule-display">{rule.display}</div>
+          </div>
+        ))}
+      </div>
+    )
   }
 
   render() {
@@ -92,24 +163,29 @@ class FormRules extends Component {
           <>
             <button
               className={
-                'addNewRule-button' + (mode === 'build' ? ' active' : '')
+                'addNewRule-button' + (mode !== 'view' ? ' active' : '')
               }
               onClick={() => this.handleToggleRuleBuilder()}>
               {dynamicButtonJSX}
             </button>
-            <div
-              className={'formRules-list' + (mode === 'build' ? ' build' : '')}>
+            <div className={'formRules-list' + (mode ? ` ${mode}` : '')}>
               {rules.length === 0 ? (
                 <div className="noRules">
                   No rules found. Click the button above to start adding rules.
                 </div>
               ) : (
                 rules.map((rule, index) => {
+                  const matchedRuleConfig = rulesWithMetadata.find(
+                    (r) => r.value === rule.type
+                  )
+
                   const resolvedTexts = {
                     ifField: '',
                     ifOperator: operators[rule.if.operator].toLowerCase(),
                     ifValue: '',
-                    thenCommand: commands[rule.then.command].toLowerCase(),
+                    thenCommand: commandsDict[rule.type].find(
+                      (c) => c.value === rule.then.command
+                    )?.display,
                     thenField: ''
                   }
 
@@ -162,9 +238,11 @@ class FormRules extends Component {
                   }
 
                   return (
-                    <div className="formRule" key={index}>
+                    <div className={'formRule ' + rule.type} key={index}>
                       <div className="formRule-header">
-                        <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
+                        <FontAwesomeIcon icon={matchedRuleConfig.icon} />
+                        {' ' + matchedRuleConfig.display}
+
                         <div className="formRule-controls">
                           <FontAwesomeIcon
                             icon={faPencilSquare}
@@ -207,13 +285,20 @@ class FormRules extends Component {
             </div>
           </>
         </div>
-        <RuleBuilder
-          className={mode === 'build' ? ' build' : ''}
-          form={this.props.form}
-          setFormRule={this.props.setFormRule}
-          editingRule={this.state.editingRule}
-          handleToggleRuleBuilder={this.handleToggleRuleBuilder}
-        />
+
+        {mode === 'typeSelect' ? <>{this.renderTypeSelect()}</> : null}
+
+        {mode === 'build' ? (
+          <RuleBuilder
+            className={mode === 'build' ? ' build' : ''}
+            form={this.props.form}
+            setFormRule={this.props.setFormRule}
+            editingRule={() => this.state.editingRule}
+            ruleConfig={this.state.ruleConfig}
+            generalContext={this.props.generalContext}
+            handleToggleRuleBuilder={this.handleToggleRuleBuilder}
+          />
+        ) : null}
       </div>
     )
   }
@@ -223,15 +308,16 @@ class RuleBuilder extends Component {
   constructor(props) {
     super(props)
 
+    this.ruleConfig = this.props.ruleConfig
+
     this.state = {
       inputElements: [],
+      userTyPages: [],
       fieldLink: true,
       operators: Object.keys(operators).map((key) => {
         return { value: key, display: operators[key] }
       }),
-      commands: Object.keys(commands).map((key) => {
-        return { value: key, display: commands[key] }
-      }),
+      commands: commandsDict[this.ruleConfig.value],
       currentRule: {
         if: {
           field: '',
@@ -244,7 +330,7 @@ class RuleBuilder extends Component {
           value: ''
         },
         fieldLink: true,
-        type: 'showHide'
+        type: null
       }
     }
 
@@ -253,24 +339,29 @@ class RuleBuilder extends Component {
     this.addRule = this.addRule.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.filterElementsWithInput()
-  }
 
-  // eslint-disable-next-line no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      this.props.editingRule !== null &&
-      (prevProps.editingRule === null ||
-        prevProps.editingRule.id !== this.props.editingRule.id)
-    ) {
-      const selectedIfField = this.props.form.props.elements.find(
-        (e) => e.id === parseInt(this.props.editingRule.if.field)
-      )
-      this.setState({
-        currentRule: this.props.editingRule,
-        selectedIfField
+    const { ruleConfig } = this.props
+
+    if (ruleConfig !== null) {
+      const { currentRule } = this.state
+      currentRule.type = ruleConfig.value
+
+      this.setState({ currentRule })
+    }
+
+    if (ruleConfig.value === 'changeTyPage') {
+      const result = await api({
+        resource: `/api/user/${this.props.generalContext.auth.user_id}/get/thankyou`,
+        method: 'get'
       })
+
+      const { data } = result
+
+      if (data.length > 0) {
+        this.setState({ userTyPages: data })
+      }
     }
   }
 
@@ -310,7 +401,7 @@ class RuleBuilder extends Component {
     this.setState({
       currentRule: {
         fieldLink: true,
-        type: 'showHide',
+        type: null,
         if: {
           field: '',
           operator: '',
@@ -335,11 +426,13 @@ class RuleBuilder extends Component {
       if (Elements[elem.type].metaData.group === 'inputElement') {
         const inputElement = {
           display: elem.label,
-          value: elem.id
+          value: elem.id,
+          required: elem.required
         }
         inputElements.push(inputElement)
       }
     })
+
     this.setState({ inputElements: inputElements })
   }
 
@@ -382,6 +475,13 @@ class RuleBuilder extends Component {
 
   render() {
     const { currentRule, selectedIfField } = this.state
+
+    const { ruleConfig } = this.props
+
+    if (currentRule.type === null) {
+      return null
+    }
+
     const { operator } = currentRule.if
     const elemsThatHasArrayValue = [
       'Checkbox',
@@ -399,40 +499,66 @@ class RuleBuilder extends Component {
       excludedFields.push(selectedIfField.id)
     }
 
-    let thenFields = this.props.form.props.elements
-      .filter((elem) => {
-        if (elem.type === 'PageBreak') {
-          return false
-        }
+    let thenFields
 
-        if (excludedFields.includes(elem.id)) {
-          return false
-        }
-
-        return true
+    if (currentRule.type === 'changeTyPage') {
+      thenFields = this.state.userTyPages.map((elem) => {
+        return { display: elem.title, value: elem.id }
       })
-      .map((elem) => {
-        return {
-          display: elem.label || elem.buttonText || elem.type,
-          value: elem.id
-        }
-      })
+    } else if (currentRule.type === 'showHide') {
+      thenFields = this.props.form.props.elements
+        .filter((elem) => {
+          if (elem.type === 'PageBreak') {
+            return false
+          }
 
-    let ruleTypeFormattedText = ''
-    let ruleTypeIcon = faEye // TODO: improve this
+          if (excludedFields.includes(elem.id)) {
+            return false
+          }
 
-    if (currentRule.type === 'showHide') {
-      ruleTypeFormattedText = 'Show / Hide Fields'
-      ruleTypeIcon = faEye
+          return true
+        })
+        .map((elem) => {
+          return {
+            display: elem.label || elem.buttonText || elem.type,
+            value: elem.id
+          }
+        })
+    } else if (currentRule.type === 'changeRequiredStatus') {
+      const { then } = currentRule
+      thenFields = this.props.form.props.elements
+        .filter((elem) => {
+          if (elem.type === 'PageBreak') {
+            return false
+          }
+
+          if (excludedFields.includes(elem.id)) {
+            return false
+          }
+
+          if (then.command === 'setRequired') {
+            return elem.required === false
+          } else if (then.command === 'setNotRequired') {
+            return elem.required === true
+          }
+
+          return true
+        })
+        .map((elem) => {
+          return {
+            display: elem.label || elem.buttonText || elem.type,
+            value: elem.id
+          }
+        })
     }
 
     return (
       <div className={'ruleBuilder-wrapper' + this.props.className}>
         <div>
-          <div className="bs-mild">
+          <div className={'bs-mild ruleBuilder-container ' + ruleConfig.value}>
             <div className="ruleBuilder-header">
-              <FontAwesomeIcon icon={ruleTypeIcon} />{' '}
-              {ruleTypeFormattedText || ' Show / Hide Fields'}
+              <FontAwesomeIcon icon={ruleConfig.icon} />{' '}
+              {this.props.ruleConfig.display || 'err'}
             </div>
             <div className="ruleBuilder-content">
               <div className={'ifBlock'}>
@@ -614,7 +740,7 @@ class RuleBuilder extends Component {
                   />
                 </div>
                 <div className="input-block">
-                  <div className="input-block-title">FIELD</div>
+                  <div className="input-block-title">TARGET</div>
                   <Renderer
                     className="form"
                     theme="infernal"
@@ -662,5 +788,10 @@ class RuleBuilder extends Component {
     )
   }
 }
+const FormRulesWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <FormRules {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
+)
 
-export default FormRules
+export default FormRulesWrapped
