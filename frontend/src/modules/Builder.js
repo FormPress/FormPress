@@ -1576,7 +1576,7 @@ export default class Builder extends Component {
           to={`/editor/${formId}/postsubmission`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
-          <FontAwesomeIcon icon={faEnvelopeOpen} />
+          <FontAwesomeIcon icon={faCircleCheck} />
           <span>{postSubmissionText}</span>
         </NavLink>
         <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
