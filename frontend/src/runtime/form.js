@@ -29,6 +29,10 @@
       check: (element) => element.type === 'PageBreak' || formHasAutoPageBreaks
     },
     {
+      name: 'dateSupport',
+      check: (element) => element.type === 'DatePicker'
+    },
+    {
       name: 'conditional',
       check: () => formHasConditionalLogic === true
     }

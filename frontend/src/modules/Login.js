@@ -55,6 +55,7 @@ class Login extends Component {
 
     if (success === true) {
       setToken(data.token)
+
       this.props.generalContext.auth.setAuth({
         email,
         name: data.name,
@@ -62,6 +63,7 @@ class Login extends Component {
         token: data.token,
         user_id: data.user_id,
         user_role: data.user_role,
+        role_name: data.role_name,
         permission: data.permission,
         admin: data.admin,
         loggedIn: true
@@ -96,6 +98,7 @@ class Login extends Component {
         token: data.token,
         user_id: data.user_id,
         user_role: data.user_role,
+        role_name: data.role_name,
         permission: data.permission,
         admin: data.admin,
         loggedIn: true

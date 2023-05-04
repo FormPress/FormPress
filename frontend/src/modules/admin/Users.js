@@ -159,6 +159,7 @@ class Users extends Component {
           impersonate: data.impersonate,
           user_id: data.user_id,
           user_role: data.user_role,
+          role_name: data.role_name,
           permission: data.permission,
           admin: data.admin,
           loggedIn: true
