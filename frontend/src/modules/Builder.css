@@ -108,7 +108,7 @@
   width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
 }
 
 /* Builder */
@@ -203,6 +203,7 @@
   position: sticky;
   /*top: 15%;*/
   top: 126px;
+  margin-right: 10px;
 }
 
 .builder > .content > .leftMenu:empty {

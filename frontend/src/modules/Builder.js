@@ -12,7 +12,8 @@ import {
   faQuestionCircle,
   faPen,
   faBoltLightning,
-  faCircleCheck
+  faCircleCheck,
+  faGears
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -27,7 +28,6 @@ import FormRules from './helper/FormRules'
 import PreviewForm from './helper/PreviewForm'
 import Modal from './common/Modal'
 import Templates from './Templates'
-import * as Integrations from './integrations'
 import FormIntegrations from './helper/FormIntegrations'
 import PostSubmission from './helper/PostSubmission'
 import { api } from '../helper'
@@ -484,11 +484,6 @@ export default class Builder extends Component {
     this.imageUploadHandler = this.imageUploadHandler.bind(this)
     this.rteUploadHandler = this.rteUploadHandler.bind(this)
     this.handleLabelClick = this.handleLabelClick.bind(this)
-    this.handleIntegrationClick = this.handleIntegrationClick.bind(this)
-    this.handleCloseIntegrationClick = this.handleCloseIntegrationClick.bind(
-      this
-    )
-    this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
     this.setFormRule = this.setFormRule.bind(this)
     this.setFormDesign = this.setFormDesign.bind(this)
     this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
@@ -1132,43 +1127,6 @@ export default class Builder extends Component {
     return !elementsToRemove.includes(elem.type)
   }
 
-  handleIntegrationClick(item) {
-    const integrationName = item.displayText.replaceAll(' ', '')
-    this.setState({
-      selectedIntegration: integrationName
-    })
-  }
-
-  handleCloseIntegrationClick() {
-    this.setState({
-      selectedIntegration: false
-    })
-  }
-
-  setRenderedIntegration() {
-    const Integration = Object.values(Integrations).find(
-      (element) => element.metaData.name === this.state.selectedIntegration
-    )
-    const integrationObject =
-      this.state.form.props.integrations.find(
-        (i) => i.type === Integration.metaData.name
-      ) || null
-    const integrationValue = integrationObject ? integrationObject.value : false
-    const activeStatus = integrationObject ? integrationObject.active : false
-
-    return (
-      <Integration
-        handleCloseIntegrationClick={this.handleCloseIntegrationClick}
-        setIntegration={this.setIntegration}
-        handlePublishClick={this.handlePublishClick}
-        form={this.state.form}
-        integrationValue={integrationValue}
-        activeStatus={activeStatus}
-        integrationObject={integrationObject}
-      />
-    )
-  }
-
   render() {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
@@ -1566,6 +1524,13 @@ export default class Builder extends Component {
           <span>Build</span>
         </NavLink>
         <NavLink
+          to={`/editor/${formId}/integrations`}
+          activeClassName="selected"
+          onClick={this.handleCloseIntegrationClick}>
+          <FontAwesomeIcon icon={faGears} />
+          <span>Integrations</span>
+        </NavLink>
+        <NavLink
           to={`/editor/${formId}/rules`}
           activeClassName="selected"
           onClick={this.handleCloseIntegrationClick}>
@@ -1597,6 +1562,8 @@ export default class Builder extends Component {
   renderMainContent() {
     const { formId } = this.props.match.params
 
+    const { form } = this.state
+
     if (this.state.loading === true) {
       return null
     }
@@ -1605,16 +1572,14 @@ export default class Builder extends Component {
       <Switch>
         <Route path="/editor/:formId/builder">
           {this.renderLeftMenuContents()}
-          <Switch>
-            <Route path="/editor/:formId/builder/integrations">
-              {this.state.selectedIntegration === false
-                ? this.renderBuilder()
-                : this.setRenderedIntegration()}
-            </Route>
-            <Route
-              path="/editor/:formId/builder"
-              render={() => this.renderBuilder()}></Route>
-          </Switch>
+          {this.renderBuilder()}
+        </Route>
+        <Route path="/editor/:formId/integrations">
+          <FormIntegrations
+            setIntegration={this.setIntegration}
+            handlePublishClick={this.handlePublishClick}
+            form={form}
+          />
         </Route>
         <Route path="/editor/:formId/design">
           <DesignForm
