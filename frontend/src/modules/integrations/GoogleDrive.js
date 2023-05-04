@@ -104,7 +104,7 @@ export default class GoogleDrive extends Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     }
   }
 
@@ -257,11 +257,11 @@ export default class GoogleDrive extends Component {
     } else {
       this.setState({ display: 'configuration' })
     }
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   async handleStartAuthentication() {
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
     let { success, data } = await api({
       resource: `/api/services/google/generateAuthURL`,
       body: {
@@ -316,7 +316,7 @@ export default class GoogleDrive extends Component {
 
     this.props.setIntegration(integrationObject)
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
 
     this.setState({
       display: 'active'
@@ -334,7 +334,7 @@ export default class GoogleDrive extends Component {
       type: GoogleDrive.metaData.name,
       paused: true
     })
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   async handleResumeClick() {
@@ -350,7 +350,7 @@ export default class GoogleDrive extends Component {
       paused: false
     })
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   handleCloseModalClick() {

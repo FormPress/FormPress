@@ -1577,7 +1577,7 @@ export default class Builder extends Component {
         <Route path="/editor/:formId/integrations">
           <FormIntegrations
             setIntegration={this.setIntegration}
-            handlePublishClick={this.handlePublishClick}
+            handleSaveClick={this.handleSaveClick}
             form={form}
           />
         </Route>

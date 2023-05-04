@@ -54,7 +54,7 @@ export default class CustomWebhook extends Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     }
   }
 
@@ -143,7 +143,7 @@ export default class CustomWebhook extends Component {
       })
 
       this.props.setIntegration(tempIntegrationObject)
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     } else {
       this.setState({ invalidUrl: true, webhookUrl: '' })
       document.querySelector('.integration-header').scrollIntoView({
@@ -207,7 +207,7 @@ export default class CustomWebhook extends Component {
       type: CustomWebhook.metaData.name,
       paused: true
     })
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   async handleResumeClick() {
@@ -222,7 +222,7 @@ export default class CustomWebhook extends Component {
       paused: false
     })
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
   render() {
     let { inputElements, webhookUrl } = this.state

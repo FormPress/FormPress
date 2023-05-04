@@ -123,7 +123,7 @@ export default class GoogleSheets extends Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     }
   }
 
@@ -296,11 +296,11 @@ export default class GoogleSheets extends Component {
     } else {
       this.setState({ display: 'configuration' })
     }
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   async handleStartAuthentication() {
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
     let { success, data } = await api({
       resource: `/api/services/google/generateAuthURL`,
       body: {
@@ -439,7 +439,7 @@ export default class GoogleSheets extends Component {
 
     await this.props.setIntegration(integrationObject)
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
 
     this.setState({
       tempIntegrationObject: integrationObject,
@@ -459,7 +459,7 @@ export default class GoogleSheets extends Component {
       type: GoogleSheets.metaData.name,
       paused: true
     })
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   async handleResumeClick() {
@@ -475,7 +475,7 @@ export default class GoogleSheets extends Component {
       paused: false
     })
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
 
   handleCloseModalClick() {
