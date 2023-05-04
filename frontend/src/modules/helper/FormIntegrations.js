@@ -70,7 +70,7 @@ export default class FormIntegrations extends Component {
 
     return (
       <Integration
-        className="integrationWrapper"
+        className="integration-wrapper"
         handleCloseIntegrationClick={this.handleCloseIntegrationClick}
         setIntegration={this.setIntegration}
         handleSaveClick={this.props.handleSaveClick}
