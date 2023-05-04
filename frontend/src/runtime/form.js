@@ -10,7 +10,7 @@
   const extensions = [
     {
       name: 'required',
-      check: (element) => element.required === true || formHasConditionalLogic
+      check: (element) => element.required === true || conditionsHaveRequired
     },
     {
       name: '3rdparty/iframeSizer.contentWindow.min',
@@ -109,6 +109,11 @@
   window.FORMPRESS.rules = rulesQuery.data || []
 
   const formHasConditionalLogic = window.FORMPRESS.rules.length > 0
+
+  // if any of the rules has 'setRequiredStatus' type, we need to load the required extension
+  const conditionsHaveRequired = window.FORMPRESS.rules.some(
+    (rule) => rule.type === 'changeRequiredStatus'
+  )
 
   const validatorsQuery = await api({
     resource: `/api/form/element/validators?elements=${elements
