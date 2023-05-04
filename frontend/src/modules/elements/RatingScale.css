@@ -20,7 +20,7 @@
   display: inline-flex;
 }
 
-.elementRatingScale .first-child .sublabel {
+.elementRatingScale .scale-legend .sublabel {
   text-align: center;
 }
 

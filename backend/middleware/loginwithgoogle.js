@@ -52,6 +52,7 @@ module.exports = (app) => {
           SELECT
             u.*,
             ur.role_id AS role_id,
+            r.name AS role_name,
             r.permission AS permission
           FROM \`user\` AS u
             JOIN \`user_role\` AS ur ON u.id = ur.user_id
@@ -113,11 +114,12 @@ module.exports = (app) => {
       user_id: user.id,
       email: user.email,
       user_role: user.role_id,
+      role_name: user.role_name,
       admin: isAdmin,
       permission: JSON.parse(user.permission)
     }
 
-    await locationFinder(user.id, req.get('CF-IPCountry'))
+    await locationFinder(user.id, req.get('cf-ipcountry'))
 
     const data = await token(jwt_data)
     return res.status(200).json(data)

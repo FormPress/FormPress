@@ -145,6 +145,12 @@
   background-color: #113952;
 }
 
+.infernal .elementCheckbox .input > input[disabled='']:checked,
+.infernal .elementCheckbox .input > input[disabled='true']:checked {
+  background-color: #a0a0a0;
+  color: #a0a0a0;
+}
+
 .infernal .elementCheckbox .input > input::before {
   content: '';
   left: 9px;
@@ -170,4 +176,9 @@
 }
 .infernal .elementCheckbox .input > input:active {
   border: 1px solid #a0a0a0;
+}
+
+.infernal span.emptySpan:before,
+.infernal span.emptySpan[contentEditable='true']:before {
+  content: '' !important;
 }

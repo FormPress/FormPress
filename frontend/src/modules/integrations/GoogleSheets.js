@@ -398,8 +398,8 @@ export default class GoogleSheets extends Component {
       const metas = this.state.metadata.chosen.map((chosenIndex) => {
         return this.state.metadata.all[chosenIndex].value
       })
-      const inputElems = this.state.inputElements.chosen.map((elem, index) => {
-        return this.state.inputElements.all[index]
+      const inputElems = this.state.inputElements.chosen.map((elem) => {
+        return this.state.inputElements.all[elem]
       })
 
       const merged = metas.concat(inputElems)

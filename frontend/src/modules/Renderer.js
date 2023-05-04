@@ -153,7 +153,7 @@ export default class Renderer extends Component {
           key={index}
           className={
             className +
-            ` formPage-${index + 1}` +
+            ` form formPage-${index + 1}` +
             (autoPageBreakEnabled ? ' autoPageBreak' : '') +
             ` ${
               this.props.mode === 'renderer' && index > 0 ? 'form-hidden' : ''

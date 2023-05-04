@@ -12,7 +12,7 @@ import {
   faQuestionCircle,
   faPen,
   faBoltLightning,
-  faEnvelopeOpen
+  faCircleCheck
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as Elements from './elements'
@@ -20,6 +20,7 @@ import Renderer from './Renderer'
 import EditableLabel from './common/EditableLabel'
 import FormProperties from './helper/FormProperties'
 import QuestionProperties from './helper/QuestionProperties'
+import DesignForm from './helper/design/DesignForm'
 import ShareForm from './helper/ShareForm'
 import FormRules from './helper/FormRules'
 
@@ -33,7 +34,6 @@ import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
 import './Builder.css'
-import '../style/themes/gleam.css'
 
 const DEFAULT_FORM = {
   id: null,
@@ -63,6 +63,10 @@ const DEFAULT_FORM = {
         buttonText: 'Submit'
       }
     ],
+    design: {
+      theme: 'gleam',
+      colorScheme: 'default'
+    },
     customCSS: {
       value: '',
       isEncoded: false
@@ -384,6 +388,25 @@ export default class Builder extends Component {
     }
   }
 
+  setFormDesign(_design) {
+    const form = { ...this.state.form }
+    const design = { ..._design }
+
+    let oldTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      oldTheme = form.props.design.theme
+    }
+
+    if (oldTheme !== _design.theme) {
+      console.log('Loading theme: ', _design.theme)
+      // require(`../style/themes/${_design.theme}.css`)
+    }
+
+    form.props.design = design
+
+    this.setState({ form })
+  }
+
   setCSS(cssProp) {
     const form = { ...this.state.form }
     form.props.customCSS = cssProp
@@ -427,7 +450,8 @@ export default class Builder extends Component {
       selectedIntegration: false,
       form: DEFAULT_FORM,
       savedForm: DEFAULT_FORM,
-      autoPBEnabled: false
+      autoPBEnabled: false,
+      additionalSaveFunction: null
     }
     //this.handleClick = this.handleClick.bind(this)
     this.handleDragStart = this.handleDragStart.bind(this)
@@ -466,6 +490,12 @@ export default class Builder extends Component {
     )
     this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
     this.setFormRule = this.setFormRule.bind(this)
+    this.setFormDesign = this.setFormDesign.bind(this)
+    this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
+  }
+
+  setAdditionalSaveFunction(func) {
+    this.setState({ additionalSaveFunction: func })
   }
 
   handleDragStart(_item, e) {
@@ -689,6 +719,8 @@ export default class Builder extends Component {
         question[`${itemID}ButtonText`] = value
       } else if (id.split('_')[0] === 'radio') {
         question[`${itemID}Text`] = value
+      } else if (id.split('_')[0] === 'date' || id.split('_')[0] === 'time') {
+        question[`${itemID}SublabelText`] = value
       } else {
         try {
           if (question.type === 'Button') {
@@ -1005,7 +1037,7 @@ export default class Builder extends Component {
   }
 
   async handleSaveClick() {
-    const { form } = this.state
+    const { form, additionalSaveFunction } = this.state
 
     this.setState({ saving: true })
 
@@ -1041,6 +1073,12 @@ export default class Builder extends Component {
     }
     const savedForm = cloneDeep(this.state.form)
     this.setState({ savedForm })
+
+    // additionalSaveFunction is a function that is set by the child component eg. PostSubmission, FormProperties
+    // and is used to save additional data that is not part of the form object
+    if (additionalSaveFunction !== null) {
+      additionalSaveFunction()
+    }
   }
 
   async handlePublishClick() {
@@ -1177,9 +1215,16 @@ export default class Builder extends Component {
         path: `/editor/${formId}/builder/question/${params.questionId}/properties`
       })
     }
+    const { form, publishedForm, loading, saving, publishing } = this.state
+    const isPublishRequired = form.updated_at !== publishedForm.created_at
+    const saveButtonProps = {}
+
+    if (saving === true || loading === true) {
+      saveButtonProps.disabled = true
+    }
 
     return (
-      <div className="builder">
+      <div className={`builder` + (isInTemplates ? ' templates' : '')}>
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}
@@ -1213,6 +1258,57 @@ export default class Builder extends Component {
                   {item.text}
                 </NavLink>
               ))}
+            </div>
+          </div>
+          <div
+            className={
+              'builderStageHeader builderStage' +
+              (noComponentPresent ? ' dn' : '')
+            }>
+            <div className="formTitle col-12-16">
+              {loading === false ? (
+                <EditableLabel
+                  className="label"
+                  mode="builder"
+                  dataPlaceholder="Click to edit form title"
+                  labelKey="title"
+                  handleLabelChange={this.handleTitleChange}
+                  limit={128}
+                  value={form.title}
+                />
+              ) : null}
+            </div>
+            <div className="col-4-16 formControls">
+              <button onClick={this.handleSaveClick} {...saveButtonProps}>
+                {saving === true ? 'Saving...' : 'Save'}
+              </button>
+              {typeof this.state.form.id === 'number' ? (
+                <NavLink to={`/editor/${params.formId}/preview`}>
+                  <button>Preview</button>
+                </NavLink>
+              ) : (
+                <span>
+                  <button
+                    className="preview-disabled-button"
+                    title="Form has to be saved before it can be previewed.">
+                    Preview
+                  </button>
+                </span>
+              )}
+              {typeof this.state.form.id === 'number' ? (
+                <button className="publish" onClick={this.handlePublishClick}>
+                  {publishing === true ? 'Publishing...' : 'Publish'}
+                  {isPublishRequired === true ? (
+                    <div className="publishRequired"></div>
+                  ) : null}
+                </button>
+              ) : (
+                <button
+                  className="publish-disabled-button"
+                  title="Form has to be saved before it can be published.">
+                  Publish
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -1405,7 +1501,6 @@ export default class Builder extends Component {
               form={form}
               generalContext={this.props.generalContext}
               setIntegration={this.setIntegration}
-              setCSS={this.setCSS}
               setFormTags={this.setFormTags}
               setAutoPageBreak={this.setAutoPageBreak}
               setFormAsPrivate={this.setFormAsPrivate}
@@ -1484,11 +1579,7 @@ export default class Builder extends Component {
           <FontAwesomeIcon icon={faEnvelopeOpen} />
           <span>{postSubmissionText}</span>
         </NavLink>
-        {/*Form Designer Icon is hidden for now since form designer is incomplete.*/}
-        <NavLink
-          style={{ display: 'none' }}
-          to={`/editor/${formId}/design`}
-          activeClassName="selected">
+        <NavLink to={`/editor/${formId}/design`} activeClassName="selected">
           <FontAwesomeIcon icon={faPaintBrush} />
           <span>Design</span>
         </NavLink>
@@ -1520,11 +1611,19 @@ export default class Builder extends Component {
                 ? this.renderBuilder()
                 : this.setRenderedIntegration()}
             </Route>
-
-            <Route path="/editor/:formId/builder">{this.renderBuilder()}</Route>
+            <Route
+              path="/editor/:formId/builder"
+              render={() => this.renderBuilder()}></Route>
           </Switch>
         </Route>
-        <Route path="/editor/:formId/design"></Route>
+        <Route path="/editor/:formId/design">
+          <DesignForm
+            form={this.state.form}
+            uuid={this.state.form.uuid}
+            setCSS={this.setCSS}
+            setFormDesign={this.setFormDesign}
+          />
+        </Route>
         <Route path="/editor/:formId/rules">
           <FormRules
             formId={formId}
@@ -1536,6 +1635,7 @@ export default class Builder extends Component {
         <Route path="/editor/:formId/postsubmission">
           <PostSubmission
             form={this.state.form}
+            setAdditionalSaveFunction={this.setAdditionalSaveFunction}
             setIntegration={this.setIntegration}
           />
         </Route>
@@ -1562,25 +1662,15 @@ export default class Builder extends Component {
   }
 
   renderBuilder() {
-    const {
-      dragging,
-      form,
-      dragMode,
-      sortItem,
-      publishedForm,
-      loading,
-      saving,
-      publishing
-    } = this.state
+    const { dragging, form, dragMode, sortItem, loading } = this.state
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
-    const isPublishRequired = form.updated_at !== publishedForm.created_at
-    const saveButtonProps = {}
-
-    if (saving === true || loading === true) {
-      saveButtonProps.disabled = true
-    }
+    // backward compatibility for old forms without design
+    const theme =
+      this.state.form.props.design === undefined
+        ? 'gleam'
+        : this.state.form.props.design.theme
 
     return (
       <div className="builderStage col-10-16 grid">
@@ -1597,57 +1687,11 @@ export default class Builder extends Component {
             }}
           />
         ) : null}
-        <div className="builderStageHeader">
-          <div className="formTitle col-16-16">
-            {loading === false ? (
-              <EditableLabel
-                className="label"
-                mode="builder"
-                dataPlaceholder="Click to edit form title"
-                labelKey="title"
-                handleLabelChange={this.handleTitleChange}
-                value={form.title}
-              />
-            ) : null}
-          </div>
-          <div className="col-16-16 formControls">
-            <button onClick={this.handleSaveClick} {...saveButtonProps}>
-              {saving === true ? 'Saving...' : 'Save'}
-            </button>
-            {typeof this.state.form.id === 'number' ? (
-              <NavLink to={`/editor/${params.formId}/preview`}>
-                <button>Preview</button>
-              </NavLink>
-            ) : (
-              <span>
-                <button
-                  className="preview-disabled-button"
-                  title="Form has to be saved before it can be previewed.">
-                  Preview
-                </button>
-              </span>
-            )}
-            {typeof this.state.form.id === 'number' ? (
-              <button className="publish" onClick={this.handlePublishClick}>
-                {publishing === true ? 'Publishing...' : 'Publish'}
-                {isPublishRequired === true ? (
-                  <div className="publishRequired"></div>
-                ) : null}
-              </button>
-            ) : (
-              <button
-                className="publish-disabled-button"
-                title="Form has to be saved before it can be published.">
-                Publish
-              </button>
-            )}
-          </div>
-        </div>
         {loading === true ? (
           'Loading...'
         ) : (
           <Renderer
-            className={`col-16-16 form`}
+            className={`fl form`}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
@@ -1674,6 +1718,7 @@ export default class Builder extends Component {
             selectedField={selectedFieldId}
             selectedLabelId={this.state.selectedLabelId}
             mode="builder"
+            theme={theme}
           />
         )}
         {form.props.elements.length > 0 && !this.state.autoPBEnabled ? (
@@ -1712,7 +1757,7 @@ export default class Builder extends Component {
                 <a
                   href="https://formpress.org"
                   target="_blank"
-                  rel="noreferrer">
+                  rel="noopener noreferrer">
                   Online Form Builder.
                 </a>{' '}
               </div>

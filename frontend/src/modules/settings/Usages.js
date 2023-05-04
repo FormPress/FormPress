@@ -37,19 +37,6 @@ export default class Usages extends Component {
       uploadUsage: 'Storage'
     }
 
-    const planMap = {
-      1: 'Admin',
-      2: 'Free',
-      3: 'Silver',
-      4: 'Gold',
-      5: 'Diamond',
-      6: 'Daily',
-      7: 'Test',
-      10: 'BFSilver',
-      11: 'BFGold',
-      12: 'BFDiamond'
-    }
-
     const limitMap = {
       formUsage: 'formLimit',
       submissionUsage: 'submissionLimit',
@@ -66,8 +53,8 @@ export default class Usages extends Component {
         <div className="usages-header">
           <div className="currentPlan">
             Current plan:{' '}
-            <span className={'plan-badge ' + planMap[auth.user_role]}>
-              {planMap[auth.user_role]}
+            <span className={'plan-badge ' + auth.role_name}>
+              {auth.role_name}
             </span>
           </div>
           <div className="needMore">

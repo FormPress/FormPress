@@ -3,6 +3,7 @@ const fs = require('fs')
 const archiver = require('archiver')
 const fetch = require('node-fetch')
 const sanitizeHtml = require('sanitize-html')
+const sass = require('sass')
 
 const moment = require('moment')
 const uuidAPIKey = require('uuid-apikey')
@@ -308,6 +309,9 @@ module.exports = (app) => {
         path.resolve('../', 'frontend/src/style/themes/gleam.css')
       )
       style += fs.readFileSync(
+        path.resolve('../', 'frontend/src/style/exam_results.css')
+      )
+      style += fs.readFileSync(
         path.resolve('../', 'frontend/src/modules/elements/index.css')
       )
       style += ' body {background-color: #f5f5f5;} '
@@ -339,9 +343,22 @@ module.exports = (app) => {
     const elementValidators = {}
 
     elementQuery.forEach((element) => {
-      elementValidators[element] =
-        require(path.resolve('script', 'transformed', 'elements', `${element}`))
-          .default.helpers || 'unset'
+      const elemClass = require(path.resolve(
+        'script',
+        'transformed',
+        'elements',
+        `${element}`
+      ))
+
+      if (elemClass.default !== undefined) {
+        elementValidators[element] = elemClass.default?.helpers || 'unset'
+      } else {
+        elementValidators[element] = 'unset'
+        console.error(
+          `Element class default not found for ${element}`,
+          `req.query.elements: ${req.query.elements}`
+        )
+      }
     })
 
     const output = JSON.stringify(
@@ -444,7 +461,8 @@ module.exports = (app) => {
         Checkbox: 'barChart',
         Button: 'none',
         NetPromoterScore: 'netPromoterScore',
-        RatingScale: 'average'
+        RatingScale: 'average',
+        DatePicker: 'lastFive'
       }
 
       const colors = [
@@ -532,7 +550,10 @@ module.exports = (app) => {
                 ])
 
                 if (questionStatistics.length > 0) {
-                  if (elementTemplate.elementType === 'Name') {
+                  if (
+                    elementTemplate.elementType === 'Name' ||
+                    elementTemplate.elementType === 'DatePicker'
+                  ) {
                     elementTemplate.chartItems.push(
                       Object.values(JSON.parse(questionStatistics[0].value))
                         .join(' ')
@@ -1074,14 +1095,6 @@ module.exports = (app) => {
       showBranding = true
     }
 
-    const str = reactDOMServer.renderToStaticMarkup(
-      React.createElement(Renderer, {
-        className: 'form',
-        form,
-        mode: 'renderer'
-      })
-    )
-
     let style = fs.readFileSync(
       path.resolve('../', 'frontend/src/style/normalize.css')
     )
@@ -1089,9 +1102,35 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
     )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = await sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
@@ -1103,8 +1142,17 @@ module.exports = (app) => {
 
     if (form.private) {
       // remove the part that says 'Never Submit Passwords'
-      style += ' .renderer.gleam::after {content: none !important; }'
+      style += ' .renderer::after {content: none !important; }'
     }
+
+    const str = reactDOMServer.renderToStaticMarkup(
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer',
+        theme: designTheme
+      })
+    )
 
     //form table has "published_version" while form_published has "version"
     const id = uuid ? uuid : form_id
@@ -1152,14 +1200,39 @@ module.exports = (app) => {
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/style/common.css')
     )
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/themes/gleam.css')
+
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
     )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
     style += fs.readFileSync(
       path.resolve('../', 'frontend/src/modules/elements/index.css')
     )
-    style += ' body {background-color: #f5f5f5;} '
-    style += ' form {box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16); margin: 35px;}'
 
     res.render('template.tpl.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,
@@ -1566,7 +1639,6 @@ module.exports = (app) => {
     }
   )
 
-  //send all variables starting with 'FE_' to frontend
   app.get('/api/loadvariables', async (req, res) => {
     const feVariables = {}
     for (const [key, value] of Object.entries(process.env)) {
@@ -1666,6 +1738,7 @@ module.exports = (app) => {
         return res.json({
           message: 'Thank you page updated successfully.',
           tyPageId: id === null ? result.insertId : id,
+          tyPageTitle: title,
           success: true
         })
       } else {
@@ -1694,13 +1767,35 @@ module.exports = (app) => {
         })
       }
 
+      const userForms = (await formModel.list({ user_id })) || []
+
+      const formsUsingThisPage = userForms.filter((form) => {
+        const tyPageId = form.props.integrations?.find(
+          (i) => i.type === 'tyPageId'
+        )
+        return tyPageId && tyPageId.value === parseInt(id)
+      })
+
+      if (formsUsingThisPage.length > 0) {
+        return res.json({
+          error: 'forms_using_this_page',
+          message:
+            'You cannot delete a thank you page that is being used by one or more forms.',
+          formsUsingThisPage: formsUsingThisPage.map((form) => form.title),
+          success: false
+        })
+      }
+
       const result = await db.query(
         `DELETE FROM \`custom_thank_you\` WHERE id = ? AND user_id = ?`,
         [id, user_id]
       )
 
       if (result.affectedRows === 1 && result.warningCount === 0) {
-        return res.json({ message: 'Thank you page deleted successfully.' })
+        return res.json({
+          message: 'Thank you page deleted successfully.',
+          success: true
+        })
       } else {
         return res.json({
           message: 'There was an error deleting the thank you page.'

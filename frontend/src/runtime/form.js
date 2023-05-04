@@ -31,6 +31,10 @@
     {
       name: 'multistep',
       check: (element) => element.type === 'PageBreak' || formHasAutoPageBreaks
+    },
+    {
+      name: 'dateSupport',
+      check: (element) => element.type === 'DatePicker'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>

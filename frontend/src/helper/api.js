@@ -38,6 +38,7 @@ export const api = ({
       .then((response) => {
         success = response.ok
         status = response.status
+
         if (useBlob && success) {
           return response.blob()
         } else {

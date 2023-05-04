@@ -19,7 +19,6 @@ export default class FormProperties extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
-    this.handleCustomCSSTextChange = this.handleCustomCSSTextChange.bind(this)
     this.handleAddTag = this.handleAddTag.bind(this)
     this.handleSubmitBehaviourChange = this.handleSubmitBehaviourChange.bind(
       this
@@ -46,13 +45,6 @@ export default class FormProperties extends Component {
     this.props.setIntegration({
       type: 'tyPageText',
       value: e.target.value
-    })
-  }
-
-  handleCustomCSSTextChange(elem, e) {
-    this.props.setCSS({
-      value: e.target.value,
-      isEncoded: false
     })
   }
 
@@ -131,12 +123,6 @@ export default class FormProperties extends Component {
 
     if (matchingIntegration('email').length > 0) {
       email = matchingIntegration('email')[0].to
-    }
-
-    let customCSS = ''
-
-    if (this.props.form.props.customCSS !== undefined) {
-      customCSS = this.props.form.props.customCSS.value
     }
 
     let privateForm = 0
@@ -279,22 +265,6 @@ export default class FormProperties extends Component {
                   maxLength: 32,
                   value: autoPageBreak.submitButtonText,
                   placeholder: 'Submit'
-                }
-              ]
-            }
-          }}
-        />
-        <Renderer
-          handleFieldChange={this.handleCustomCSSTextChange}
-          theme="infernal"
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 4,
-                  type: 'TextArea',
-                  label: 'Custom CSS',
-                  value: customCSS
                 }
               ]
             }

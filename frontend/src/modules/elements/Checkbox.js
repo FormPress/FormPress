@@ -167,6 +167,10 @@ export default class Checkbox extends Component {
       inputProps.checked = config.value === true
     }
 
+    if (typeof config.disabled !== 'undefined') {
+      inputProps.disabled = config.disabled
+    }
+
     if (config.defaultChecked !== undefined) {
       inputProps.defaultChecked = config.defaultChecked
     }
@@ -196,7 +200,9 @@ export default class Checkbox extends Component {
             required={config.required}
           />
         </div>,
-        <div key="2" className={config.toggle === true ? 'toggle' : ''}>
+        <div
+          key="2"
+          className={config.toggle === true ? 'input toggle' : 'input'}>
           <EditableList
             config={config}
             mode={mode}
@@ -227,7 +233,9 @@ export default class Checkbox extends Component {
         <div
           key="2"
           className={
-            config.toggle === true ? 'checkboxCover toggle' : 'checkboxCover'
+            config.toggle === true
+              ? 'input checkboxCover toggle'
+              : 'input checkboxCover'
           }>
           {options.map((item, key) => {
             const keySpecificProps = {}

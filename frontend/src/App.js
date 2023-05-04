@@ -32,7 +32,7 @@ import GeneralContext from './general.context'
 import { Logo, FPLoader } from './svg'
 
 import './App.css'
-import './style/themes/infernal.css'
+import './style/themes/scss/index.scss'
 
 const auth = window.localStorage.getItem('auth')
 let initialAuthObject = {
@@ -78,6 +78,7 @@ class App extends Component {
       resource: `/api/server/capabilities`,
       method: 'get'
     })
+
     const capabilities = capabilitiesResult.data
 
     this.setState({ capabilities })
@@ -119,6 +120,7 @@ class App extends Component {
       email = this.state.email,
       user_id = this.state.user_id,
       user_role = this.state.user_role,
+      role_name = this.state.role_name,
       token = this.state.token,
       impersonate = this.state.impersonate,
       admin = this.state.admin,
@@ -132,6 +134,7 @@ class App extends Component {
       email,
       user_id,
       user_role,
+      role_name,
       token,
       impersonate,
       admin,
@@ -147,6 +150,7 @@ class App extends Component {
           email,
           user_id,
           user_role,
+          role_name,
           token,
           impersonate,
           admin,
@@ -165,6 +169,7 @@ class App extends Component {
       email: this.state.email,
       user_id: this.state.user_id,
       user_role: this.state.user_role,
+      role_name: this.state.role_name,
       permission: this.state.permission,
       admin: this.state.admin,
       loggedIn: this.state.loggedIn,
