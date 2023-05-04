@@ -787,7 +787,7 @@ export default class GoogleSheets extends Component {
 
     if (this.state.loading === true) {
       return (
-        <div className="integration-wrapper col-10-16">
+        <div className="integration-wrapper ">
           <div className="integration-loader-container">
             <FPLoader />
           </div>
@@ -1198,7 +1198,7 @@ export default class GoogleSheets extends Component {
       )
     }
     return (
-      <div className="integration-wrapper GoogleSheets col-10-16">
+      <div className="integration-wrapper GoogleSheets ">
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}

@@ -373,7 +373,7 @@ export default class CustomWebhook extends Component {
       )
     }
     return (
-      <div className="integration-wrapper col-10-16">
+      <div className="integration-wrapper ">
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}
