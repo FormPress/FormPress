@@ -1154,11 +1154,6 @@ export default class Builder extends Component {
         name: 'formProperties',
         text: 'Form Properties',
         path: `/editor/${formId}/builder/properties`
-      },
-      {
-        name: 'integrations',
-        text: 'Integrations',
-        path: `/editor/${formId}/builder/integrations`
       }
     ]
 
@@ -1207,12 +1202,7 @@ export default class Builder extends Component {
                   key={key}
                   exact
                   to={`${item.path}`}
-                  activeClassName="selected"
-                  onClick={
-                    item.name !== 'integrations'
-                      ? this.handleCloseIntegrationClick
-                      : null
-                  }>
+                  activeClassName="selected">
                   {item.text}
                 </NavLink>
               ))}
@@ -1482,13 +1472,6 @@ export default class Builder extends Component {
               />
             ) : null}
           </Route>
-          <Route path="/editor/:formId/builder/integrations">
-            <FormIntegrations
-              handleIntegrationClick={this.handleIntegrationClick}
-              form={form}
-              selectedIntegration={this.state.selectedIntegration}
-            />
-          </Route>
         </Switch>
       </div>
     )
@@ -1638,7 +1621,7 @@ export default class Builder extends Component {
         : this.state.form.props.design.theme
 
     return (
-      <div className="builderStage col-10-16 grid">
+      <div className="builderStage">
         {this.state.isWindows ? (
           <style
             dangerouslySetInnerHTML={{

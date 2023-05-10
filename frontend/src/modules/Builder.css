@@ -107,8 +107,11 @@
   padding-top: 100px;
   width: 1200px;
   margin: 0 auto;
-  display: flex;
+  /*display: flex;*/
   /*justify-content: space-between;*/
+  display: grid;
+  grid-template-columns: 70px 360px 750px;
+  grid-column-gap: 10px;
 }
 
 /* Builder */
@@ -199,11 +202,11 @@
   height: calc(100vh - 150px);
   overflow: auto;
   box-shadow: 0px 3px 10px #00000014;
-  width: 30%;
-  position: sticky;
+  /*width: 30%;*/
+  /*position: sticky;*/
   /*top: 15%;*/
-  top: 126px;
-  margin-right: 10px;
+  /*top: 126px;*/
+  /*margin-right: 10px;*/
 }
 
 .builder > .content > .leftMenu:empty {
