@@ -1262,7 +1262,7 @@ export default class Builder extends Component {
         </div>
         <div className="content">
           <div
-            className={`leftTabs col-1-16 ${
+            className={`leftTabs ${
               isInTemplates || noComponentPresent ? ' dn' : null
             }`}>
             {this.renderLeftVerticalTabs()}
@@ -1498,7 +1498,7 @@ export default class Builder extends Component {
         : 'Evaluation Page'
 
     return (
-      <div>
+      <>
         <NavLink
           to={`/editor/${formId}/builder`}
           activeClassName="selected"
@@ -1538,7 +1538,7 @@ export default class Builder extends Component {
           <FontAwesomeIcon icon={faShareAlt} />
           <span>Share</span>
         </NavLink>
-      </div>
+      </>
     )
   }
 

@@ -121,40 +121,41 @@
   z-index: 1;
 }
 
-.builder > .content > .leftTabs > div {
+.builder > .content > .leftTabs {
   list-style: none;
   box-shadow: 0px 3px 10px #00000014;
   background-color: white;
-  margin: 0;
-  padding: 0;
-  position: fixed;
-  width: 57px;
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: fit-content;
 }
 
-.builder > .content > .leftTabs > div > a {
-  width: 59px;
-  height: 57px;
+.builder > .content > .leftTabs > a {
+  width: 60px;
+  height: 60px;
   font-size: 25px;
   line-height: 57px;
   text-align: center;
   display: inline-block;
 }
 
-.builder > .content > .leftTabs > div > a,
-.builder > .content > .leftTabs > div > a:visited {
+.builder > .content > .leftTabs > a,
+.builder > .content > .leftTabs > a:visited {
   color: rgb(148, 200, 50);
 }
-.builder > .content > .leftTabs > div > a:hover {
+.builder > .content > .leftTabs > a:hover {
   color: white;
   background-color: rgb(148, 200, 50);
 }
 
-.builder > .content > .leftTabs > div > a.selected {
+.builder > .content > .leftTabs > a.selected {
   color: white;
   background-color: rgb(168, 227, 57);
 }
 
-.builder > .content > .leftTabs > div > a > span {
+.builder > .content > .leftTabs > a > span {
   position: absolute;
   background-color: #fefefe;
   padding: 2px 15px;
@@ -174,25 +175,25 @@
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
 
-.builder > .content > .leftTabs > div > a:hover > span {
+.builder > .content > .leftTabs > a:hover > span {
   opacity: 1;
   visibility: visible;
 }
 
 @media screen and (max-width: 1480px) {
-  .builder > .content > .leftTabs > div > a > span {
+  .builder > .content > .leftTabs > a > span {
     left: 10px !important;
   }
-  .builder > .content > .leftTabs > div > a:hover > span {
+  .builder > .content > .leftTabs > a:hover > span {
     left: 70px !important;
   }
 }
 
 @media screen and (min-width: 1481px) {
-  .builder > .content > .leftTabs > div > a > span {
+  .builder > .content > .leftTabs > a > span {
     right: 10px !important;
   }
-  .builder > .content > .leftTabs > div > a:hover > span {
+  .builder > .content > .leftTabs > a:hover > span {
     right: 70px !important;
   }
 }
