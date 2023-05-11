@@ -55,10 +55,10 @@ export default class Preferences extends Component {
 
       const userSettings = res.data
 
-      const noNotificationSettings =
-        userSettings.filter(
-          (setting) => setting.key.indexOf('notification') === -1
-        ).length === 0
+      // if there are no notification settings, push the default settings to user settings
+      const noNotificationSettings = !userSettings.some(
+        (setting) => setting.key.indexOf('notification') > -1
+      )
 
       if (noNotificationSettings) {
         // push the default settings to user settings
