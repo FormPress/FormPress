@@ -180,6 +180,8 @@
   color: #a0a0a0;
   padding: 0.7rem;
   height: 100%;
+  word-break: break-all;
+  font-weight: 700;
 }
 
 .formRule-body > .ifField,
