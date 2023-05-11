@@ -129,10 +129,8 @@ class FormRules extends Component {
                     }
                   }
 
-                  let foundIfValueRefField = null
-
                   if (rule.fieldLink === true) {
-                    foundIfValueRefField = elements.find(
+                    let foundIfValueRefField = elements.find(
                       (e) => e.id === parseInt(rule.if.value)
                     )
                     if (foundIfValueRefField !== undefined) {
@@ -161,6 +159,13 @@ class FormRules extends Component {
                     }
                   }
 
+                  Object.keys(resolvedTexts).forEach((key) => {
+                    if (resolvedTexts[key].length > 20) {
+                      resolvedTexts[key] =
+                        resolvedTexts[key].substring(0, 20) + '...'
+                    }
+                  })
+
                   return (
                     <div className="formRule" key={index}>
                       <div className="formRule-header">
@@ -183,21 +188,17 @@ class FormRules extends Component {
                       </div>
                       <div className="formRule-body">
                         If{' '}
-                        <span className="ifField">
-                          {resolvedTexts.ifField.substring(0, 35)}
-                        </span>{' '}
+                        <span className="ifField">{resolvedTexts.ifField}</span>{' '}
                         <span className="ifOperator">
                           {resolvedTexts.ifOperator}
                         </span>{' '}
-                        <span className="ifValue">
-                          {resolvedTexts.ifValue.substring(0, 35)}
-                        </span>
+                        <span className="ifValue">{resolvedTexts.ifValue}</span>
                         ,{' '}
                         <span className="thenCommand">
                           {resolvedTexts.thenCommand}
                         </span>
                         <span className="thenField">
-                          {resolvedTexts.thenField.substring(0, 35)}
+                          {resolvedTexts.thenField}
                         </span>
                       </div>
                     </div>
@@ -503,7 +504,23 @@ class RuleBuilder extends Component {
                                 {
                                   id: 1,
                                   type: 'Dropdown',
-                                  options: selectedIfField.options || [],
+                                  options: (() => {
+                                    if (
+                                      selectedIfField.type === 'RatingScale'
+                                    ) {
+                                      const length =
+                                        selectedIfField.ratingScaleOptionTopLimit ||
+                                        5
+                                      const options = Array.from(
+                                        { length },
+                                        (_, i) => (i + 1).toString()
+                                      )
+
+                                      return options || []
+                                    }
+
+                                    return selectedIfField.options
+                                  })(),
                                   placeholder: 'Select a value',
                                   value: currentRule.if.value
                                 }
