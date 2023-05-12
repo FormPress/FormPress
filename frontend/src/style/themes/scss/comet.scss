@@ -219,6 +219,15 @@ $color-14: #68942f; /* forest green */
     clear: both;
   }
 
+  .elementImage {
+    .cropped_image {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      max-width: 620px;
+    }
+  }
+
   .elementTextBox .label {
     display: block;
     float: none;
