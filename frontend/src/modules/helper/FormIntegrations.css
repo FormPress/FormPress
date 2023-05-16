@@ -38,6 +38,7 @@
 .integration-wrapper {
   height: max-content;
   display: inline-block;
+  width: 100%;
 }
 
 .integrationsList > .active {
