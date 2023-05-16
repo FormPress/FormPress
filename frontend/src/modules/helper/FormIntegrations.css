@@ -36,7 +36,8 @@
 }
 
 .integration-wrapper {
-  height: 100%;
+  height: max-content;
+  display: inline-block;
 }
 
 .integrationsList > .active {
@@ -93,4 +94,10 @@
 
 .integrationsWrapper > .integration > .activeStatus.fa-circle- {
   color: gray;
+}
+
+.integration-content .complete-authentication {
+  /*clear: both;*/
+  /*width: 100% !important;*/
+  /*float: unset !important;*/
 }
