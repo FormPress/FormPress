@@ -1,22 +1,44 @@
 import React, { Component } from 'react'
 
-import * as IntegrationComponents from '../integrations'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './FormIntegrations.css'
+import * as Integrations from '../integrations'
 
 export default class FormIntegrations extends Component {
   constructor(props) {
     super(props)
 
     this.getIntegrationMetaData = this.getIntegrationMetaData.bind(this)
+    this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
+    this.handleCloseIntegrationClick = this.handleCloseIntegrationClick.bind(
+      this
+    )
+    this.handleOpenIntegrationClick = this.handleOpenIntegrationClick.bind(this)
+
+    this.state = {
+      selectedIntegration: null
+    }
+  }
+
+  handleOpenIntegrationClick(item) {
+    const integrationName = item.displayText.replaceAll(' ', '')
+    this.setState({
+      selectedIntegration: integrationName
+    })
+  }
+
+  handleCloseIntegrationClick() {
+    this.setState({
+      selectedIntegration: false
+    })
   }
 
   getIntegrationMetaData() {
     const list = []
 
-    Object.values(IntegrationComponents).forEach((IntegrationComponent) => {
+    Object.values(Integrations).forEach((IntegrationComponent) => {
       const integration = IntegrationComponent.metaData
       const matchedIntegration = this.props.form.props.integrations.find(
         (i) => i.type === integration.name
@@ -32,24 +54,56 @@ export default class FormIntegrations extends Component {
     return list
   }
 
+  setRenderedIntegration() {
+    const { form } = this.props
+    const { selectedIntegration } = this.state
+
+    const Integration = Object.values(Integrations).find(
+      (element) => element.metaData.name === selectedIntegration
+    )
+    const integrationObject =
+      form.props.integrations.find(
+        (i) => i.type === Integration.metaData.name
+      ) || null
+    const integrationValue = integrationObject ? integrationObject.value : false
+    const activeStatus = integrationObject ? integrationObject.active : false
+
+    return (
+      <Integration
+        className="integration-wrapper"
+        handleCloseIntegrationClick={this.handleCloseIntegrationClick}
+        setIntegration={this.props.setIntegration}
+        handleSaveClick={this.props.handleSaveClick}
+        form={form}
+        integrationValue={integrationValue}
+        activeStatus={activeStatus}
+        integrationObject={integrationObject}
+      />
+    )
+  }
+
   render() {
     const integrationList = this.getIntegrationMetaData()
+    const { selectedIntegration } = this.state
+
     return (
-      <>
+      <div
+        className={
+          'integrationsWrapper' + (selectedIntegration ? ' open' : '')
+        }>
         <div className="integrationsMessage">
           Integrate your form with other services
         </div>
-        <div className="integrationsWrapper">
+        <div className="integrationsList">
           {integrationList.map((item, key) => (
             <div
               className={
-                this.props.selectedIntegration ===
-                item.displayText.replaceAll(' ', '')
+                selectedIntegration === item.displayText.replaceAll(' ', '')
                   ? 'integration active'
                   : 'integration'
               }
               key={key}
-              onClick={() => this.props.handleIntegrationClick(item)}>
+              onClick={() => this.handleOpenIntegrationClick(item)}>
               <img alt="logo" src={item.icon} className="logo" />
               <div className="title">{item.displayText}</div>
               {item.activeStatus === true && item.paused === false ? (
@@ -67,7 +121,12 @@ export default class FormIntegrations extends Component {
             </div>
           ))}
         </div>
-      </>
+        <div className="integration-display-right">
+          {this.state.selectedIntegration
+            ? this.setRenderedIntegration()
+            : null}
+        </div>
+      </div>
     )
   }
 }

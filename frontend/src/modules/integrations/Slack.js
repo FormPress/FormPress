@@ -47,7 +47,7 @@ export default class Slack extends Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     }
   }
 
@@ -145,7 +145,7 @@ export default class Slack extends Component {
       })
 
       this.props.setIntegration(tempIntegrationObject)
-      await this.props.handlePublishClick()
+      await this.props.handleSaveClick()
     } else {
       //IF THE URL IS INVALID
       this.setState({
@@ -219,7 +219,7 @@ export default class Slack extends Component {
       type: Slack.metaData.name,
       paused: true
     })
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
   async handleResumeClick() {
     this.setState({
@@ -234,7 +234,7 @@ export default class Slack extends Component {
       paused: false
     })
 
-    await this.props.handlePublishClick()
+    await this.props.handleSaveClick()
   }
   render() {
     let { inputElements, webhookUrl } = this.state
@@ -379,7 +379,7 @@ export default class Slack extends Component {
       )
     }
     return (
-      <div className="integration-wrapper col-10-16">
+      <div className="integration-wrapper ">
         {this.state.isModalOpen ? (
           <Modal
             isOpen={this.state.isModalOpen}

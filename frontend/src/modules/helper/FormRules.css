@@ -1,6 +1,8 @@
 .formRules-wrapper {
   width: 95%;
   display: flex;
+  grid-column-start: 2;
+  grid-column-end: 4;
 }
 
 .formRules-wrapper .addNewRule-button {
