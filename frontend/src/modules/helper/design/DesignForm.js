@@ -57,7 +57,7 @@ export default class DesignForm extends Component {
     }
     return (
       <>
-        <div className="FormTabCover fl col-5-16">
+        <div className="FormTabCover">
           <h2 className="shareFormTitle">Design Your Form</h2>
           <div className="designtabs">
             <NavLink

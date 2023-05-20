@@ -1,6 +1,8 @@
 .formRules-wrapper {
   width: 95%;
   display: flex;
+  grid-column-start: 2;
+  grid-column-end: 4;
 }
 
 .formRules-wrapper .addNewRule-button {
@@ -236,6 +238,8 @@
   color: #a0a0a0;
   padding: 0.7rem;
   height: 100%;
+  word-break: break-all;
+  font-weight: 700;
 }
 
 .formRule-body > .ifField,

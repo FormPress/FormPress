@@ -54,7 +54,7 @@ $color-14: #68942f; /* forest green */
     background-color: $bg-form;
   }
 
-  &.form {
+  &.form.renderer {
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
   }
 
@@ -635,7 +635,7 @@ $color-14: #68942f; /* forest green */
     -webkit-transform: translateX(18px);
     -ms-transform: translateX(18px);
     transform: translateX(18px);
-    background-color: $accent-main-dark;
+    background-color: $color-14;
   }
 
   .nameContainer,

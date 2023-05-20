@@ -1,6 +1,8 @@
 .postSubmission-wrapper {
   display: block;
   width: 100%;
+  grid-column-start: 2;
+  grid-column-end: 4;
 }
 
 .postSubmission-message {
@@ -280,7 +282,7 @@
 }
 
 .custom-pages-selector > .pagesSelector-dropdown {
-  width: 85%;
+  width: 83%;
 }
 
 .custom-pages-selector select {
@@ -291,7 +293,7 @@
   height: 35px;
 }
 .custom-pages-selector button {
-  height: 33px;
+  height: 35px;
   padding-top: unset !important;
   padding-bottom: unset !important;
 }
