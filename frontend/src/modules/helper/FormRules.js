@@ -47,6 +47,136 @@ const operators = {
   isFilled: 'Is Filled'
 }
 
+// TODO: Improve policies
+const operatorsWithMetadata = [
+  {
+    value: 'equals',
+    display: 'Is Equal To',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name'
+    ]
+  },
+  {
+    value: 'notEquals',
+    display: 'Is Not Equal To',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name'
+    ]
+  },
+  {
+    value: 'contains',
+    display: 'Contains',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Checkbox',
+      'Name',
+      'Address'
+    ]
+  },
+  {
+    value: 'notContains',
+    display: 'Does Not Contain',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Checkbox',
+      'Name',
+      'Address'
+    ]
+  },
+  {
+    value: 'startsWith',
+    display: 'Starts With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'notStartsWith',
+    display: 'Does Not Start With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'endsWith',
+    display: 'Ends With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'notEndsWith',
+    display: 'Does Not End With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'isEmpty',
+    display: 'Is Empty',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'DatePicker',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name',
+      'Address',
+      'FileUpload'
+    ]
+  },
+  {
+    value: 'isFilled',
+    display: 'Is Filled',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'DatePicker',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name',
+      'Address',
+      'FileUpload'
+    ]
+  },
+  {
+    value: 'isEarlierThan',
+    display: 'Is Earlier Than',
+    applyTo: ['DatePicker']
+  },
+  {
+    value: 'isLaterThan',
+    display: 'Is Later Than',
+    applyTo: ['DatePicker']
+  }
+]
+
 const commandsDict = {
   changeTyPage: [
     {
@@ -100,7 +230,14 @@ class FormRules extends Component {
   }
 
   editRule(rule) {
-    this.setState({ mode: 'build', editingRule: rule })
+    const ruleConfig = rulesWithMetadata.find(
+      (item) => item.value === rule.type
+    )
+    if (!ruleConfig) {
+      console.error('Rule config not found')
+      return
+    }
+    this.setState({ mode: 'build', editingRule: rule, ruleConfig })
   }
 
   handleToggleRuleBuilder() {
@@ -294,7 +431,7 @@ class FormRules extends Component {
             className={mode === 'build' ? ' build' : ''}
             form={this.props.form}
             setFormRule={this.props.setFormRule}
-            editingRule={() => this.state.editingRule}
+            editingRule={this.state.editingRule}
             ruleConfig={this.state.ruleConfig}
             generalContext={this.props.generalContext}
             handleToggleRuleBuilder={this.handleToggleRuleBuilder}
@@ -314,10 +451,7 @@ class RuleBuilder extends Component {
     this.state = {
       inputElements: [],
       userTyPages: [],
-      fieldLink: true,
-      operators: Object.keys(operators).map((key) => {
-        return { value: key, display: operators[key] }
-      }),
+      operators: operatorsWithMetadata,
       commands: commandsDict[this.ruleConfig.value],
       currentRule: {
         if: {
@@ -330,7 +464,7 @@ class RuleBuilder extends Component {
           field: '',
           value: ''
         },
-        fieldLink: true,
+        fieldLink: false,
         type: null
       }
     }
@@ -344,12 +478,20 @@ class RuleBuilder extends Component {
     this.filterElementsWithInput()
 
     const { ruleConfig } = this.props
+    const { currentRule } = this.state
 
     if (ruleConfig !== null) {
-      const { currentRule } = this.state
       currentRule.type = ruleConfig.value
+    }
 
-      this.setState({ currentRule })
+    const { editingRule } = this.props
+
+    if (editingRule !== null) {
+      Object.keys(currentRule).forEach((key) => {
+        if (editingRule[key] !== undefined) {
+          currentRule[key] = editingRule[key]
+        }
+      })
     }
 
     if (ruleConfig.value === 'changeTyPage') {
@@ -364,6 +506,8 @@ class RuleBuilder extends Component {
         this.setState({ userTyPages: data })
       }
     }
+
+    this.setState({ currentRule })
   }
 
   addRule() {
@@ -602,7 +746,14 @@ class RuleBuilder extends Component {
                           {
                             id: 1,
                             type: 'Dropdown',
-                            options: this.state.operators,
+                            options: this.state.operators.filter((elem) => {
+                              if (selectedIfField !== undefined) {
+                                return !!elem.applyTo.includes(
+                                  selectedIfField.type
+                                )
+                              }
+                              return true
+                            }),
                             placeholder: 'Select a statement',
                             value: currentRule.if.operator
                           }
@@ -629,7 +780,7 @@ class RuleBuilder extends Component {
                               elements: [
                                 {
                                   id: 1,
-                                  type: 'Dropdown',
+                                  type: 'DatePicker',
                                   options: (() => {
                                     if (
                                       selectedIfField.type === 'RatingScale'

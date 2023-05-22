@@ -14,7 +14,19 @@
     endsWith: (value1, value2) => value1.endsWith(value2),
     notEndsWith: (value1, value2) => !value1.endsWith(value2),
     isEmpty: (value) => value.trim().length === 0,
-    isFilled: (value) => value.trim().length > 0
+    isFilled: (value) => value.trim().length > 0,
+    isEarlierThan: (value1, value2) => {
+      const date1 = new Date(value1)
+      const date2 = new Date(value2)
+
+      return date1 < date2
+    },
+    isLaterThan: (value1, value2) => {
+      const date1 = new Date(value1)
+      const date2 = new Date(value2)
+
+      return date1 > date2
+    }
   }
 
   const ruleTypeSpecificInitializers = {
