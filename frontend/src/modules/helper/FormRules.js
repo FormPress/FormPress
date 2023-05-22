@@ -34,19 +34,6 @@ const rulesWithMetadata = [
   }
 ]
 
-const operators = {
-  equals: 'Is Equal To',
-  notEquals: 'Is Not Equal To',
-  contains: 'Contains',
-  notContains: 'Does Not Contain',
-  startsWith: 'Starts With',
-  notStartsWith: 'Does Not Start With',
-  endsWith: 'Ends With',
-  notEndsWith: 'Does Not End With',
-  isEmpty: 'Is Empty',
-  isFilled: 'Is Filled'
-}
-
 // TODO: Improve policies
 const operatorsWithMetadata = [
   {
@@ -318,7 +305,9 @@ class FormRules extends Component {
 
                   const resolvedTexts = {
                     ifField: '',
-                    ifOperator: operators[rule.if.operator].toLowerCase(),
+                    ifOperator: operatorsWithMetadata.find(
+                      (o) => o.value === rule.if.operator
+                    )?.display,
                     ifValue: '',
                     thenCommand: commandsDict[rule.type].find(
                       (c) => c.value === rule.then.command
@@ -769,7 +758,7 @@ class RuleBuilder extends Component {
                     <div className="fieldLink-row">
                       {arrayValueField === true ? (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -780,7 +769,7 @@ class RuleBuilder extends Component {
                               elements: [
                                 {
                                   id: 1,
-                                  type: 'DatePicker',
+                                  type: 'Dropdown',
                                   options: (() => {
                                     if (
                                       selectedIfField.type === 'RatingScale'
@@ -807,7 +796,7 @@ class RuleBuilder extends Component {
                         />
                       ) : currentRule.fieldLink ? (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -836,7 +825,7 @@ class RuleBuilder extends Component {
                         />
                       ) : (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -847,7 +836,11 @@ class RuleBuilder extends Component {
                               elements: [
                                 {
                                   id: 1,
-                                  type: 'TextBox',
+                                  type:
+                                    operator === 'isEarlierThan' ||
+                                    operator === 'isLaterThan'
+                                      ? 'DatePicker'
+                                      : 'TextBox',
                                   placeholder: 'Enter a value',
                                   value: currentRule.if.value
                                 }
@@ -859,7 +852,7 @@ class RuleBuilder extends Component {
 
                       {arrayValueField === true ? null : (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-checkbox"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={() => this.changeRule('fieldLink')}

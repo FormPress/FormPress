@@ -89,6 +89,13 @@
     let { field: ifField, operator, value: expectedValue } = ifRule
     let { command, field: thenField, value: thenValue } = thenRule
 
+    // lets debug with console.log
+    console.log('ifRule', ifRule)
+    console.log('thenRule', thenRule)
+    console.log('ifField', ifField)
+    console.log('operator', operator)
+    console.log('expectedValue', expectedValue)
+
     // continue if any of these are not found
     if (!ifField || !operator || !expectedValue || !command || !thenField) {
       continue
@@ -124,7 +131,13 @@
       return expectedValue
     }
 
-    const elemsThatHasArrayValue = ['Checkbox', 'Radio', 'Address', 'Name']
+    const elemsThatHasArrayValue = [
+      'Checkbox',
+      'Radio',
+      'Address',
+      'Name',
+      'DatePicker'
+    ]
 
     if (elemsThatHasArrayValue.includes(foundIfElem.type)) {
       ifFieldValueGetter = () => {
@@ -182,6 +195,9 @@
       if (!ifFieldValue || !expectedValue) {
         return revertCommand(thenFieldElementContainer)
       }
+
+      console.log('ifFieldValue IMPORTANT', ifFieldValue)
+      console.log('expectedValue IMPORTANT', expectedValue)
 
       const assessment = operatorFunction(
         ifFieldValue.toLowerCase(),
