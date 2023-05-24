@@ -461,6 +461,7 @@ class RuleBuilder extends Component {
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
     this.changeRule = this.changeRule.bind(this)
     this.addRule = this.addRule.bind(this)
+    this.isStepReadyToDisplay = this.isStepReadyToDisplay.bind(this)
   }
 
   async componentDidMount() {
@@ -588,7 +589,21 @@ class RuleBuilder extends Component {
         currentRule.if.field = value
         break
       case 'ifOperator':
+        // and if the operator is isFilled or isEmpty and the previous value was a non-isFilled or non-isEmpty operator, then we need to reset the rest of the rule
+        // to avoid errors and wrongfully configured rules
+        if (
+          (value === 'isFilled' || value === 'isEmpty') &&
+          currentRule.if.operator !== 'isFilled' &&
+          currentRule.if.operator !== 'isEmpty'
+        ) {
+          currentRule.if.value = ''
+          currentRule.then.command = ''
+          currentRule.then.field = ''
+          currentRule.then.value = ''
+        }
+
         currentRule.if.operator = value
+
         break
       case 'ifValue':
         currentRule.if.value = value
@@ -609,14 +624,58 @@ class RuleBuilder extends Component {
     this.setState({ currentRule, selectedIfField })
   }
 
+  isStepReadyToDisplay(stepName) {
+    // this function is used to hide/show the rule steps based on the user entry
+    // only if the user selected a step, the next step will be shown
+    const { currentRule } = this.state
+    let emptyOrFilledOperator = false
+
+    if (
+      currentRule.if.operator === 'isFilled' ||
+      currentRule.if.operator === 'isEmpty'
+    ) {
+      emptyOrFilledOperator = true
+    }
+
+    switch (stepName) {
+      case 'ifField':
+        return currentRule.type !== null
+      case 'ifOperator':
+        return currentRule.if.field !== ''
+      case 'ifValue':
+        if (currentRule.if.operator === '' || emptyOrFilledOperator === true) {
+          return false
+        } else {
+          return true
+        }
+      case 'thenCommand':
+        // if empty or filled operator is selected, only the step above can be hidden
+        return currentRule.if.value !== '' || emptyOrFilledOperator === true
+      case 'thenField':
+        return currentRule.then.command !== ''
+      case 'thenValue':
+        return currentRule.then.field !== ''
+      case 'saveRule':
+        if (
+          currentRule.if.field === '' ||
+          (currentRule.if.value === '' && emptyOrFilledOperator === false) ||
+          currentRule.if.operator === '' ||
+          currentRule.then.command === '' ||
+          currentRule.then.field === ''
+        ) {
+          return false
+        } else {
+          return true
+        }
+      default:
+        return false
+    }
+  }
+
   render() {
     const { currentRule, selectedIfField } = this.state
 
     const { ruleConfig } = this.props
-
-    if (currentRule.type === null) {
-      return null
-    }
 
     const { operator } = currentRule.if
     const elemsThatHasArrayValue = [
@@ -662,30 +721,19 @@ class RuleBuilder extends Component {
         })
     } else if (currentRule.type === 'changeRequiredStatus') {
       const { then } = currentRule
-      thenFields = this.props.form.props.elements
-        .filter((elem) => {
-          if (elem.type === 'PageBreak') {
-            return false
-          }
+      thenFields = this.state.inputElements.filter((elem) => {
+        if (excludedFields.includes(elem.id)) {
+          return false
+        }
 
-          if (excludedFields.includes(elem.id)) {
-            return false
-          }
+        if (then.command === 'setRequired') {
+          return elem.required === false || elem.required === undefined
+        } else if (then.command === 'setNotRequired') {
+          return elem.required === true
+        }
 
-          if (then.command === 'setRequired') {
-            return elem.required === false
-          } else if (then.command === 'setNotRequired') {
-            return elem.required === true
-          }
-
-          return true
-        })
-        .map((elem) => {
-          return {
-            display: elem.label || elem.buttonText || elem.type,
-            value: elem.id
-          }
-        })
+        return true
+      })
     }
 
     return (
@@ -722,38 +770,41 @@ class RuleBuilder extends Component {
                     }}
                   />
                 </div>
-                <div className="input-block">
-                  <div className="input-block-title">STATEMENT</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('ifOperator', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: this.state.operators.filter((elem) => {
-                              if (selectedIfField !== undefined) {
-                                return !!elem.applyTo.includes(
-                                  selectedIfField.type
-                                )
-                              }
-                              return true
-                            }),
-                            placeholder: 'Select a statement',
-                            value: currentRule.if.operator
-                          }
-                        ]
+                {this.isStepReadyToDisplay('ifOperator') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">STATEMENT</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('ifOperator', e.target.value)
                       }
-                    }}
-                  />
-                </div>
-                {operator === 'isFilled' || operator === 'isEmpty' ? null : (
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: this.state.operators.filter((elem) => {
+                                if (selectedIfField !== undefined) {
+                                  return !!elem.applyTo.includes(
+                                    selectedIfField.type
+                                  )
+                                }
+                                return true
+                              }),
+                              placeholder: 'Select a statement',
+                              value: currentRule.if.operator
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
+
+                {this.isStepReadyToDisplay('ifValue') ? (
                   <div className="input-block">
                     <div className="input-block-title">VALUE</div>
 
@@ -874,78 +925,86 @@ class RuleBuilder extends Component {
                       )}
                     </div>
                   </div>
-                )}
+                ) : null}
               </div>
 
               <div className={'thenBlock'}>
-                <div className="input-block">
-                  <div className="input-block-title">THEN</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('thenCommand', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: this.state.commands,
-                            placeholder: 'Select a command',
-                            value: currentRule.then.command
-                          }
-                        ]
+                {this.isStepReadyToDisplay('thenCommand') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">THEN</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('thenCommand', e.target.value)
                       }
-                    }}
-                  />
-                </div>
-                <div className="input-block">
-                  <div className="input-block-title">TARGET</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('thenField', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: thenFields,
-                            placeholder: 'Select a field',
-                            value: currentRule.then.field
-                          }
-                        ]
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: this.state.commands,
+                              placeholder: 'Select a command',
+                              value: currentRule.then.command
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
+
+                {this.isStepReadyToDisplay('thenField') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">TARGET</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('thenField', e.target.value)
                       }
-                    }}
-                  />
-                </div>
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: thenFields,
+                              placeholder: 'Select a field',
+                              value: currentRule.then.field
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
-          <Renderer
-            className="form addRule-button"
-            theme="gleam"
-            allowInternal={true}
-            form={{
-              props: {
-                elements: [
-                  {
-                    id: 1,
-                    type: 'Button',
-                    buttonText: 'Save',
-                    onClick: () => this.addRule()
-                  }
-                ]
-              }
-            }}
-          />
+
+          {this.isStepReadyToDisplay('saveRule') ? (
+            <Renderer
+              className="form addRule-button"
+              theme="gleam"
+              allowInternal={true}
+              form={{
+                props: {
+                  elements: [
+                    {
+                      id: 1,
+                      type: 'Button',
+                      buttonText: 'Save',
+                      onClick: () => this.addRule()
+                    }
+                  ]
+                }
+              }}
+            />
+          ) : null}
         </div>
       </div>
     )
