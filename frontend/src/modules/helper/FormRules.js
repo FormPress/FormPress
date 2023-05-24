@@ -480,6 +480,8 @@ class RuleBuilder extends Component {
         if (editingRule[key] !== undefined) {
           currentRule[key] = editingRule[key]
         }
+
+        currentRule.id = editingRule.id
       })
     }
 
