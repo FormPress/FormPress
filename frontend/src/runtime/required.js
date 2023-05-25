@@ -18,7 +18,7 @@
     const elem = FORMPRESS.elements.find((elem) => {
       return elem.id === parseInt(id)
     })
-    const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
+    const elemHelpers = window.FP_ELEMENT_HELPERS[elem.type]
 
     let value = elemHelpers.getElementValue(id)
     FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
@@ -49,6 +49,11 @@
       page: elementPageNumber
     }
 
+    const labelElem = containerElem.querySelector(`#label_${id}`)
+    if (labelElem) {
+      labelElem.classList.add('required')
+    }
+
     containerElem.addEventListener('change', () => requiredCheck(id))
 
     if (additionalElemEventListeners[elem.type]) {
@@ -67,6 +72,11 @@
     delete FORMPRESS.requireds[id]
     containerElem.classList.remove('requiredError')
 
+    const labelElem = containerElem.querySelector(`#label_${id}`)
+    if (labelElem) {
+      labelElem.classList.remove('required')
+    }
+
     containerElem.removeEventListener('change', () => requiredCheck(id))
     if (additionalElemEventListeners[elem.type]) {
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
@@ -81,6 +91,7 @@
     if (elem.required !== true) {
       continue
     }
+    const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
 
     if (elemHelpers.isFilled === undefined) {
       continue
