@@ -5,28 +5,192 @@ import * as Elements from '../elements'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faEye,
+  faCircleCheck,
+  faAsterisk,
   faPencilSquare,
   faPlusCircle,
   faTimes,
   faTrash
 } from '@fortawesome/free-solid-svg-icons'
 
-const operators = {
-  equals: 'Is Equal To',
-  notEquals: 'Is Not Equal To',
-  contains: 'Contains',
-  notContains: 'Does Not Contain',
-  startsWith: 'Starts With',
-  notStartsWith: 'Does Not Start With',
-  endsWith: 'Ends With',
-  notEndsWith: 'Does Not End With',
-  isEmpty: 'Is Empty',
-  isFilled: 'Is Filled'
-}
+import { api } from '../../helper'
+import GeneralContext from '../../general.context'
 
-const commands = {
-  show: 'Show',
-  hide: 'Hide'
+const rulesWithMetadata = [
+  {
+    icon: faEye,
+    display: 'Show/Hide Elements',
+    value: 'showHide'
+  },
+  {
+    icon: faCircleCheck,
+    display: 'Change Thank You Page',
+    value: 'changeTyPage'
+  },
+  {
+    icon: faAsterisk, // font-size: 15pt; olacak
+    display: 'Change Required Status',
+    value: 'changeRequiredStatus'
+  }
+]
+
+// TODO: Improve policies
+const operatorsWithMetadata = [
+  {
+    value: 'equals',
+    display: 'Is Equal To',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name'
+    ]
+  },
+  {
+    value: 'notEquals',
+    display: 'Is Not Equal To',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name'
+    ]
+  },
+  {
+    value: 'contains',
+    display: 'Contains',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Checkbox',
+      'Name',
+      'Address'
+    ]
+  },
+  {
+    value: 'notContains',
+    display: 'Does Not Contain',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'Checkbox',
+      'Name',
+      'Address'
+    ]
+  },
+  {
+    value: 'startsWith',
+    display: 'Starts With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'notStartsWith',
+    display: 'Does Not Start With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'endsWith',
+    display: 'Ends With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'notEndsWith',
+    display: 'Does Not End With',
+    applyTo: ['TextBox', 'TextArea', 'Email', 'Phone', 'Checkbox', 'Name']
+  },
+  {
+    value: 'isEmpty',
+    display: 'Is Empty',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'DatePicker',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name',
+      'Address',
+      'FileUpload'
+    ]
+  },
+  {
+    value: 'isFilled',
+    display: 'Is Filled',
+    applyTo: [
+      'TextBox',
+      'TextArea',
+      'Email',
+      'Phone',
+      'DatePicker',
+      'Dropdown',
+      'Checkbox',
+      'Radio',
+      'RatingScale',
+      'NetPromoterScore',
+      'Name',
+      'Address',
+      'FileUpload'
+    ]
+  },
+  {
+    value: 'isEarlierThan',
+    display: 'Is Earlier Than',
+    applyTo: ['DatePicker']
+  },
+  {
+    value: 'isLaterThan',
+    display: 'Is Later Than',
+    applyTo: ['DatePicker']
+  }
+]
+
+const commandsDict = {
+  changeTyPage: [
+    {
+      display: 'Display Selected Page',
+      value: 'displaySelectedPage'
+    }
+  ],
+  showHide: [
+    {
+      display: 'Show',
+      value: 'show'
+    },
+    {
+      display: 'Hide',
+      value: 'hide'
+    }
+  ],
+  changeRequiredStatus: [
+    {
+      display: 'Set as Required',
+      value: 'setRequired'
+    },
+    {
+      display: 'Set as Not Required',
+      value: 'setNotRequired'
+    }
+  ]
 }
 
 class FormRules extends Component {
@@ -38,11 +202,13 @@ class FormRules extends Component {
 
     this.state = {
       mode: 'view',
-      editingRule: null
+      editingRule: null,
+      ruleConfig: null
     }
 
     this.handleToggleRuleBuilder = this.handleToggleRuleBuilder.bind(this)
     this.deleteRule = this.deleteRule.bind(this)
+    this.renderTypeSelect = this.renderTypeSelect.bind(this)
   }
 
   deleteRule(rule) {
@@ -51,15 +217,44 @@ class FormRules extends Component {
   }
 
   editRule(rule) {
-    this.setState({ mode: 'build', editingRule: rule })
+    const ruleConfig = rulesWithMetadata.find(
+      (item) => item.value === rule.type
+    )
+    if (!ruleConfig) {
+      console.error('Rule config not found')
+      return
+    }
+    this.setState({ mode: 'build', editingRule: rule, ruleConfig })
   }
 
   handleToggleRuleBuilder() {
-    if (this.state.mode === 'build') {
-      this.setState({ mode: 'view', editingRule: null })
+    // will replace build with typeSelect
+    if (this.state.mode === 'view') {
+      this.setState({ mode: 'typeSelect', editingRule: null })
     } else {
-      this.setState({ mode: 'build', editingRule: null })
+      this.setState({ mode: 'view', editingRule: null, ruleConfig: null })
     }
+  }
+
+  renderTypeSelect() {
+    const handleRuleClick = (rule) => {
+      this.setState({ ruleConfig: rule, mode: 'build' })
+    }
+    return (
+      <div className="rule-selector">
+        {rulesWithMetadata.map((rule, index) => (
+          <div
+            key={index}
+            className={`rule ` + (rule.value ? rule.value : '')}
+            onClick={() => handleRuleClick(rule)}>
+            <div className="rule-icon">
+              <FontAwesomeIcon icon={rule.icon || faEye} />
+            </div>
+            <div className="rule-display">{rule.display}</div>
+          </div>
+        ))}
+      </div>
+    )
   }
 
   render() {
@@ -92,24 +287,31 @@ class FormRules extends Component {
           <>
             <button
               className={
-                'addNewRule-button' + (mode === 'build' ? ' active' : '')
+                'addNewRule-button' + (mode !== 'view' ? ' active' : '')
               }
               onClick={() => this.handleToggleRuleBuilder()}>
               {dynamicButtonJSX}
             </button>
-            <div
-              className={'formRules-list' + (mode === 'build' ? ' build' : '')}>
+            <div className={'formRules-list' + (mode ? ` ${mode}` : '')}>
               {rules.length === 0 ? (
                 <div className="noRules">
                   No rules found. Click the button above to start adding rules.
                 </div>
               ) : (
                 rules.map((rule, index) => {
+                  const matchedRuleConfig = rulesWithMetadata.find(
+                    (r) => r.value === rule.type
+                  )
+
                   const resolvedTexts = {
                     ifField: '',
-                    ifOperator: operators[rule.if.operator].toLowerCase(),
+                    ifOperator: operatorsWithMetadata.find(
+                      (o) => o.value === rule.if.operator
+                    )?.display,
                     ifValue: '',
-                    thenCommand: commands[rule.then.command].toLowerCase(),
+                    thenCommand: commandsDict[rule.type].find(
+                      (c) => c.value === rule.then.command
+                    )?.display,
                     thenField: ''
                   }
 
@@ -167,9 +369,11 @@ class FormRules extends Component {
                   })
 
                   return (
-                    <div className="formRule" key={index}>
+                    <div className={'formRule ' + rule.type} key={index}>
                       <div className="formRule-header">
-                        <FontAwesomeIcon icon={faEye} /> Show / Hide Fields
+                        <FontAwesomeIcon icon={matchedRuleConfig.icon} />
+                        {' ' + matchedRuleConfig.display}
+
                         <div className="formRule-controls">
                           <FontAwesomeIcon
                             icon={faPencilSquare}
@@ -208,13 +412,20 @@ class FormRules extends Component {
             </div>
           </>
         </div>
-        <RuleBuilder
-          className={mode === 'build' ? ' build' : ''}
-          form={this.props.form}
-          setFormRule={this.props.setFormRule}
-          editingRule={this.state.editingRule}
-          handleToggleRuleBuilder={this.handleToggleRuleBuilder}
-        />
+
+        {mode === 'typeSelect' ? <>{this.renderTypeSelect()}</> : null}
+
+        {mode === 'build' ? (
+          <RuleBuilder
+            className={mode === 'build' ? ' build' : ''}
+            form={this.props.form}
+            setFormRule={this.props.setFormRule}
+            editingRule={this.state.editingRule}
+            ruleConfig={this.state.ruleConfig}
+            generalContext={this.props.generalContext}
+            handleToggleRuleBuilder={this.handleToggleRuleBuilder}
+          />
+        ) : null}
       </div>
     )
   }
@@ -224,15 +435,13 @@ class RuleBuilder extends Component {
   constructor(props) {
     super(props)
 
+    this.ruleConfig = this.props.ruleConfig
+
     this.state = {
       inputElements: [],
-      fieldLink: true,
-      operators: Object.keys(operators).map((key) => {
-        return { value: key, display: operators[key] }
-      }),
-      commands: Object.keys(commands).map((key) => {
-        return { value: key, display: commands[key] }
-      }),
+      userTyPages: [],
+      operators: operatorsWithMetadata,
+      commands: commandsDict[this.ruleConfig.value],
       currentRule: {
         if: {
           field: '',
@@ -244,35 +453,53 @@ class RuleBuilder extends Component {
           field: '',
           value: ''
         },
-        fieldLink: true,
-        type: 'showHide'
+        fieldLink: false,
+        type: null
       }
     }
 
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
     this.changeRule = this.changeRule.bind(this)
     this.addRule = this.addRule.bind(this)
+    this.isStepReadyToDisplay = this.isStepReadyToDisplay.bind(this)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.filterElementsWithInput()
-  }
 
-  // eslint-disable-next-line no-unused-vars
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (
-      this.props.editingRule !== null &&
-      (prevProps.editingRule === null ||
-        prevProps.editingRule.id !== this.props.editingRule.id)
-    ) {
-      const selectedIfField = this.props.form.props.elements.find(
-        (e) => e.id === parseInt(this.props.editingRule.if.field)
-      )
-      this.setState({
-        currentRule: this.props.editingRule,
-        selectedIfField
+    const { ruleConfig } = this.props
+    const { currentRule } = this.state
+
+    if (ruleConfig !== null) {
+      currentRule.type = ruleConfig.value
+    }
+
+    const { editingRule } = this.props
+
+    if (editingRule !== null) {
+      Object.keys(currentRule).forEach((key) => {
+        if (editingRule[key] !== undefined) {
+          currentRule[key] = editingRule[key]
+        }
+
+        currentRule.id = editingRule.id
       })
     }
+
+    if (ruleConfig.value === 'changeTyPage') {
+      const result = await api({
+        resource: `/api/user/${this.props.generalContext.auth.user_id}/get/thankyou`,
+        method: 'get'
+      })
+
+      const { data } = result
+
+      if (data.length > 0) {
+        this.setState({ userTyPages: data })
+      }
+    }
+
+    this.setState({ currentRule })
   }
 
   addRule() {
@@ -311,7 +538,7 @@ class RuleBuilder extends Component {
     this.setState({
       currentRule: {
         fieldLink: true,
-        type: 'showHide',
+        type: null,
         if: {
           field: '',
           operator: '',
@@ -336,11 +563,13 @@ class RuleBuilder extends Component {
       if (Elements[elem.type].metaData.group === 'inputElement') {
         const inputElement = {
           display: elem.label,
-          value: elem.id
+          value: elem.id,
+          required: elem.required
         }
         inputElements.push(inputElement)
       }
     })
+
     this.setState({ inputElements: inputElements })
   }
 
@@ -360,7 +589,21 @@ class RuleBuilder extends Component {
         currentRule.if.field = value
         break
       case 'ifOperator':
+        // and if the operator is isFilled or isEmpty and the previous value was a non-isFilled or non-isEmpty operator, then we need to reset the rest of the rule
+        // to avoid errors and wrongfully configured rules
+        if (
+          (value === 'isFilled' || value === 'isEmpty') &&
+          currentRule.if.operator !== 'isFilled' &&
+          currentRule.if.operator !== 'isEmpty'
+        ) {
+          currentRule.if.value = ''
+          currentRule.then.command = ''
+          currentRule.then.field = ''
+          currentRule.then.value = ''
+        }
+
         currentRule.if.operator = value
+
         break
       case 'ifValue':
         currentRule.if.value = value
@@ -381,8 +624,59 @@ class RuleBuilder extends Component {
     this.setState({ currentRule, selectedIfField })
   }
 
+  isStepReadyToDisplay(stepName) {
+    // this function is used to hide/show the rule steps based on the user entry
+    // only if the user selected a step, the next step will be shown
+    const { currentRule } = this.state
+    let emptyOrFilledOperator = false
+
+    if (
+      currentRule.if.operator === 'isFilled' ||
+      currentRule.if.operator === 'isEmpty'
+    ) {
+      emptyOrFilledOperator = true
+    }
+
+    switch (stepName) {
+      case 'ifField':
+        return currentRule.type !== null
+      case 'ifOperator':
+        return currentRule.if.field !== ''
+      case 'ifValue':
+        if (currentRule.if.operator === '' || emptyOrFilledOperator === true) {
+          return false
+        } else {
+          return true
+        }
+      case 'thenCommand':
+        // if empty or filled operator is selected, only the step above can be hidden
+        return currentRule.if.value !== '' || emptyOrFilledOperator === true
+      case 'thenField':
+        return currentRule.then.command !== ''
+      case 'thenValue':
+        return currentRule.then.field !== ''
+      case 'saveRule':
+        if (
+          currentRule.if.field === '' ||
+          (currentRule.if.value === '' && emptyOrFilledOperator === false) ||
+          currentRule.if.operator === '' ||
+          currentRule.then.command === '' ||
+          currentRule.then.field === ''
+        ) {
+          return false
+        } else {
+          return true
+        }
+      default:
+        return false
+    }
+  }
+
   render() {
     const { currentRule, selectedIfField } = this.state
+
+    const { ruleConfig } = this.props
+
     const { operator } = currentRule.if
     const elemsThatHasArrayValue = [
       'Checkbox',
@@ -400,40 +694,55 @@ class RuleBuilder extends Component {
       excludedFields.push(selectedIfField.id)
     }
 
-    let thenFields = this.props.form.props.elements
-      .filter((elem) => {
-        if (elem.type === 'PageBreak') {
-          return false
-        }
+    let thenFields
 
+    if (currentRule.type === 'changeTyPage') {
+      thenFields = this.state.userTyPages.map((elem) => {
+        return { display: elem.title, value: elem.id }
+      })
+    } else if (currentRule.type === 'showHide') {
+      thenFields = this.props.form.props.elements
+        .filter((elem) => {
+          if (elem.type === 'PageBreak') {
+            return false
+          }
+
+          if (excludedFields.includes(elem.id)) {
+            return false
+          }
+
+          return true
+        })
+        .map((elem) => {
+          return {
+            display: elem.label || elem.buttonText || elem.type,
+            value: elem.id
+          }
+        })
+    } else if (currentRule.type === 'changeRequiredStatus') {
+      const { then } = currentRule
+      thenFields = this.state.inputElements.filter((elem) => {
         if (excludedFields.includes(elem.id)) {
           return false
         }
 
+        if (then.command === 'setRequired') {
+          return elem.required === false || elem.required === undefined
+        } else if (then.command === 'setNotRequired') {
+          return elem.required === true
+        }
+
         return true
       })
-      .map((elem) => {
-        return {
-          display: elem.label || elem.buttonText || elem.type,
-          value: elem.id
-        }
-      })
-
-    let ruleTypeFormattedText = ''
-    let ruleTypeIcon = faEye // TODO: improve this
-
-    if (currentRule.type === 'showHide') {
-      ruleTypeFormattedText = 'Show / Hide Fields'
-      ruleTypeIcon = faEye
     }
 
     return (
       <div className={'ruleBuilder-wrapper' + this.props.className}>
         <div>
-          <div className="bs-mild">
+          <div className={'bs-mild ruleBuilder-container ' + ruleConfig.value}>
             <div className="ruleBuilder-header">
-              <FontAwesomeIcon icon={ruleTypeIcon} />{' '}
-              {ruleTypeFormattedText || ' Show / Hide Fields'}
+              <FontAwesomeIcon icon={ruleConfig.icon} />{' '}
+              {this.props.ruleConfig.display || 'err'}
             </div>
             <div className="ruleBuilder-content">
               <div className={'ifBlock'}>
@@ -461,38 +770,48 @@ class RuleBuilder extends Component {
                     }}
                   />
                 </div>
-                <div className="input-block">
-                  <div className="input-block-title">STATEMENT</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('ifOperator', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: this.state.operators,
-                            placeholder: 'Select a statement',
-                            value: currentRule.if.operator
-                          }
-                        ]
+                {this.isStepReadyToDisplay('ifOperator') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">STATEMENT</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('ifOperator', e.target.value)
                       }
-                    }}
-                  />
-                </div>
-                {operator === 'isFilled' || operator === 'isEmpty' ? null : (
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: this.state.operators.filter((elem) => {
+                                if (selectedIfField !== undefined) {
+                                  return !!elem.applyTo.includes(
+                                    selectedIfField.type
+                                  )
+                                }
+                                return true
+                              }),
+                              placeholder: 'Select a statement',
+                              value: currentRule.if.operator
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
+
+                {this.isStepReadyToDisplay('ifValue') ? (
                   <div className="input-block">
                     <div className="input-block-title">VALUE</div>
 
                     <div className="fieldLink-row">
                       {arrayValueField === true ? (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -530,7 +849,7 @@ class RuleBuilder extends Component {
                         />
                       ) : currentRule.fieldLink ? (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -559,7 +878,7 @@ class RuleBuilder extends Component {
                         />
                       ) : (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-value"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
@@ -570,7 +889,11 @@ class RuleBuilder extends Component {
                               elements: [
                                 {
                                   id: 1,
-                                  type: 'TextBox',
+                                  type:
+                                    operator === 'isEarlierThan' ||
+                                    operator === 'isLaterThan'
+                                      ? 'DatePicker'
+                                      : 'TextBox',
                                   placeholder: 'Enter a value',
                                   value: currentRule.if.value
                                 }
@@ -582,7 +905,7 @@ class RuleBuilder extends Component {
 
                       {arrayValueField === true ? null : (
                         <Renderer
-                          className="form"
+                          className="form fieldLink-checkbox"
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={() => this.changeRule('fieldLink')}
@@ -602,82 +925,95 @@ class RuleBuilder extends Component {
                       )}
                     </div>
                   </div>
-                )}
+                ) : null}
               </div>
 
               <div className={'thenBlock'}>
-                <div className="input-block">
-                  <div className="input-block-title">THEN</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('thenCommand', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: this.state.commands,
-                            placeholder: 'Select a command',
-                            value: currentRule.then.command
-                          }
-                        ]
+                {this.isStepReadyToDisplay('thenCommand') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">THEN</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('thenCommand', e.target.value)
                       }
-                    }}
-                  />
-                </div>
-                <div className="input-block">
-                  <div className="input-block-title">FIELD</div>
-                  <Renderer
-                    className="form"
-                    theme="infernal"
-                    allowInternal={true}
-                    handleFieldChange={(elem, e) =>
-                      this.changeRule('thenField', e.target.value)
-                    }
-                    form={{
-                      props: {
-                        elements: [
-                          {
-                            id: 1,
-                            type: 'Dropdown',
-                            options: thenFields,
-                            placeholder: 'Select a field',
-                            value: currentRule.then.field
-                          }
-                        ]
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: this.state.commands,
+                              placeholder: 'Select a command',
+                              value: currentRule.then.command
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
+
+                {this.isStepReadyToDisplay('thenField') ? (
+                  <div className="input-block">
+                    <div className="input-block-title">TARGET</div>
+                    <Renderer
+                      className="form"
+                      theme="infernal"
+                      allowInternal={true}
+                      handleFieldChange={(elem, e) =>
+                        this.changeRule('thenField', e.target.value)
                       }
-                    }}
-                  />
-                </div>
+                      form={{
+                        props: {
+                          elements: [
+                            {
+                              id: 1,
+                              type: 'Dropdown',
+                              options: thenFields,
+                              placeholder: 'Select a field',
+                              value: currentRule.then.field
+                            }
+                          ]
+                        }
+                      }}
+                    />
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
-          <Renderer
-            className="form addRule-button"
-            theme="gleam"
-            allowInternal={true}
-            form={{
-              props: {
-                elements: [
-                  {
-                    id: 1,
-                    type: 'Button',
-                    buttonText: 'Save',
-                    onClick: () => this.addRule()
-                  }
-                ]
-              }
-            }}
-          />
+
+          {this.isStepReadyToDisplay('saveRule') ? (
+            <Renderer
+              className="form addRule-button"
+              theme="gleam"
+              allowInternal={true}
+              form={{
+                props: {
+                  elements: [
+                    {
+                      id: 1,
+                      type: 'Button',
+                      buttonText: 'Save',
+                      onClick: () => this.addRule()
+                    }
+                  ]
+                }
+              }}
+            />
+          ) : null}
         </div>
       </div>
     )
   }
 }
+const FormRulesWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <FormRules {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
+)
 
-export default FormRules
+export default FormRulesWrapped

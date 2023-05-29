@@ -1,5 +1,7 @@
 ;(async () => {
-  FORMPRESS.requireds = {}
+  if (FORMPRESS.requireds === undefined) {
+    FORMPRESS.requireds = {}
+  }
 
   const additionalElemEventListeners = {
     Email: ['input'],
@@ -11,19 +13,33 @@
     DatePicker: ['input']
   }
 
-  for (const elem of FORMPRESS.elements) {
-    if (elem.required !== true) {
-      continue
-    }
+  function requiredCheck(id) {
+    const containerElem = document.getElementById(`qc_${id}`)
+    const elem = FORMPRESS.elements.find((elem) => {
+      return elem.id === parseInt(id)
+    })
+    const elemHelpers = window.FP_ELEMENT_HELPERS[elem.type]
 
+    let value = elemHelpers.getElementValue(id)
+    FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
+    let isFilled = elemHelpers.isFilled(value)
+
+    if (isFilled) {
+      FORMPRESS.requireds[id].valid = true
+      containerElem.classList.remove('requiredError')
+    } else {
+      containerElem.classList.add('requiredError')
+      FORMPRESS.requireds[id].valid = false
+    }
+  }
+
+  function setRequired(id) {
+    const containerElem = document.getElementById(`qc_${id}`)
+    const elem = FORMPRESS.elements.find((elem) => {
+      return elem.id === parseInt(id)
+    })
     const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
 
-    if (elemHelpers.isFilled === undefined) {
-      continue
-    }
-
-    const id = elem.id
-    const containerElem = document.getElementById(`qc_${id}`)
     const elementPageNumber = containerElem.parentElement.dataset.fpPagenumber
     let value = elemHelpers.getElementValue(id)
 
@@ -33,37 +49,60 @@
       page: elementPageNumber
     }
 
-    containerElem.addEventListener('change', () => {
-      let value = elemHelpers.getElementValue(id)
-      FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
-      let isFilled = elemHelpers.isFilled(value)
+    const labelElem = containerElem.querySelector(`#label_${id}`)
+    if (labelElem) {
+      labelElem.classList.add('required')
+    }
 
-      if (isFilled) {
-        FORMPRESS.requireds[id].valid = true
-        containerElem.classList.remove('requiredError')
-      } else {
-        containerElem.classList.add('requiredError')
-        FORMPRESS.requireds[id].valid = false
-      }
-    })
+    containerElem.addEventListener('change', () => requiredCheck(id))
 
     if (additionalElemEventListeners[elem.type]) {
       additionalElemEventListeners[elem.type].forEach((eventListener) => {
-        containerElem.addEventListener(eventListener, () => {
-          let value = elemHelpers.getElementValue(id)
-          FORMPRESS.requireds[id].valid = elemHelpers.isFilled(value)
-          let isFilled = elemHelpers.isFilled(value)
-
-          if (isFilled) {
-            FORMPRESS.requireds[id].valid = true
-            containerElem.classList.remove('requiredError')
-          } else {
-            containerElem.classList.add('requiredError')
-            FORMPRESS.requireds[id].valid = false
-          }
-        })
+        containerElem.addEventListener(eventListener, () => requiredCheck(id))
       })
     }
+  }
+
+  function setNotRequired(id) {
+    const containerElem = document.getElementById(`qc_${id}`)
+    const elem = FORMPRESS.elements.find((elem) => {
+      return elem.id === parseInt(id)
+    })
+
+    delete FORMPRESS.requireds[id]
+    containerElem.classList.remove('requiredError')
+
+    const labelElem = containerElem.querySelector(`#label_${id}`)
+    if (labelElem) {
+      labelElem.classList.remove('required')
+    }
+
+    containerElem.removeEventListener('change', () => requiredCheck(id))
+    if (additionalElemEventListeners[elem.type]) {
+      additionalElemEventListeners[elem.type].forEach((eventListener) => {
+        containerElem.removeEventListener(eventListener, () =>
+          requiredCheck(id)
+        )
+      })
+    }
+  }
+
+  for (const elem of FORMPRESS.elements) {
+    if (elem.required !== true) {
+      continue
+    }
+    const elemHelpers = FP_ELEMENT_HELPERS[elem.type]
+
+    if (elemHelpers.isFilled === undefined) {
+      continue
+    }
+
+    setRequired(elem.id)
+  }
+
+  window.FORMPRESS.requiredApi = {
+    setRequired,
+    setNotRequired
   }
 
   const form = document.getElementById(`FORMPRESS_FORM_${FORMPRESS.formId}`)

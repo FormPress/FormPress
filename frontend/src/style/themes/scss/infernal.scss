@@ -187,3 +187,11 @@
 .infernal span.emptySpan[contentEditable='true']:before {
   content: '' !important;
 }
+
+.infernal {
+  .elementDatePicker {
+    input[type='date'] {
+      outline: none;
+    }
+  }
+}

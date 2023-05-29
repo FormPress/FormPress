@@ -255,9 +255,10 @@ export default class DatePicker extends Component {
                 labelKey={`date_${config.id}_date`}
                 handleLabelChange={this.props.handleLabelChange}
                 value={
-                  typeof config.dateSublabelText !== 'undefined'
+                  typeof config.dateSublabelText !== 'undefined' &&
+                  config.dateSublabelText !== ''
                     ? config.dateSublabelText
-                    : 'Date'
+                    : ''
                 }
               />
             </div>

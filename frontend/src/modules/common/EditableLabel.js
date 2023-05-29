@@ -131,6 +131,7 @@ class EditableLabel extends Component {
       <div className={props.className}>
         <span
           onBlur={this.handleOnBlur}
+          id={'label_' + props.labelKey}
           onKeyDown={this.handleOnKeyDown}
           onPaste={this.handleOnPaste}
           dataplaceholder={props.dataPlaceholder}
