@@ -10,6 +10,7 @@ const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
+const { token } = require(path.resolve('helper')).token
 
 const { getPool } = require(path.resolve('./', 'db'))
 
@@ -76,7 +77,7 @@ module.exports = (app) => {
     }
   }
 
-  // resend auth keys in case of changes, but not the token
+  // resend auth keys in case of changes
   app.get(
     '/api/users/:user_id/refresh-auth',
     mustHaveValidToken,
@@ -124,7 +125,9 @@ module.exports = (app) => {
           permission: JSON.parse(user.permission)
         }
 
-        res.json({ status: 'done', auth: jwt_data })
+        const data = await token(jwt_data)
+
+        res.json({ status: 'done', auth: data })
       } else {
         res.json({ status: 'error' })
       }

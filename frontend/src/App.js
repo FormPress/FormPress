@@ -108,6 +108,8 @@ class App extends Component {
 
       if (data.status === 'done') {
         const incomingAuthObject = data.auth
+        setToken(incomingAuthObject.token)
+
         this.handleSetAuth(incomingAuthObject, true)
       }
     }
