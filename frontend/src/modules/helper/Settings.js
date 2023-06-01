@@ -15,6 +15,12 @@ export default class Settings extends Component {
   }
 
   async componentDidMount() {
+    try {
+      await this.props.generalContext.user.refreshAuth()
+    } catch (e) {
+      console.log('error updating auth', e)
+    }
+
     const { data } = await api({
       resource: `/api/app/get/settingsPluginfileslist`
     })
