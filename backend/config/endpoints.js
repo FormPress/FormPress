@@ -252,15 +252,15 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/user/:user_id/get/settings',
+      path: '/api/users/:user_id/get/settings',
       protected: true,
-      exampleRequestPath: '/api/user/1/get/settings'
+      exampleRequestPath: '/api/users/1/get/settings'
     },
     {
       method: 'post',
-      path: '/api/user/:user_id/update/settings',
+      path: '/api/users/:user_id/update/settings',
       protected: false,
-      exampleRequestPath: '/api/user/1/update/settings'
+      exampleRequestPath: '/api/users/1/update/settings'
     },
     {
       method: 'get',
@@ -269,21 +269,21 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/user/:user_id/get/thankyou',
+      path: '/api/users/:user_id/get/thankyou',
       protected: false,
-      exampleRequestPath: '/api/user/1/get/thankyou'
+      exampleRequestPath: '/api/users/1/get/thankyou'
     },
     {
       method: 'post',
-      path: '/api/user/:user_id/update/thankyou',
+      path: '/api/users/:user_id/update/thankyou',
       protected: false,
-      exampleRequestPath: '/api/user/1/update/thankyou'
+      exampleRequestPath: '/api/users/1/update/thankyou'
     },
     {
       method: 'delete',
-      path: '/api/user/:user_id/delete/thankyou/:id',
+      path: '/api/users/:user_id/delete/thankyou/:id',
       protected: false,
-      exampleRequestPath: '/api/user/1/delete/thankyou/1'
+      exampleRequestPath: '/api/users/1/delete/thankyou/1'
     }
   ]
 }

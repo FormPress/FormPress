@@ -1570,7 +1570,7 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/api/user/:user_id/get/settings',
+    '/api/users/:user_id/get/settings',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -1589,7 +1589,7 @@ module.exports = (app) => {
   )
 
   app.post(
-    '/api/user/:user_id/update/settings',
+    '/api/users/:user_id/update/settings',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -1652,7 +1652,7 @@ module.exports = (app) => {
 
   // to get user's custom thank you pages from the database
   app.get(
-    '/api/user/:user_id/get/thankyou',
+    '/api/users/:user_id/get/thankyou',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -1674,7 +1674,7 @@ module.exports = (app) => {
 
   // to edit / create a custom thank you page in the database
   app.post(
-    '/api/user/:user_id/update/thankyou',
+    '/api/users/:user_id/update/thankyou',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -1752,7 +1752,7 @@ module.exports = (app) => {
 
   // to delete a custom thank you page from the database
   app.delete(
-    '/api/user/:user_id/delete/thankyou/:id',
+    '/api/users/:user_id/delete/thankyou/:id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {

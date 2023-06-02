@@ -488,7 +488,7 @@ class RuleBuilder extends Component {
 
     if (ruleConfig.value === 'changeTyPage') {
       const result = await api({
-        resource: `/api/user/${this.props.generalContext.auth.user_id}/get/thankyou`,
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/get/thankyou`,
         method: 'get'
       })
 

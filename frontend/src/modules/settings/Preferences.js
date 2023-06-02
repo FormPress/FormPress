@@ -43,7 +43,7 @@ export default class Preferences extends Component {
     const { user_id } = this.props.generalContext.auth
 
     await api({
-      resource: `/api/user/${user_id}/get/settings`,
+      resource: `/api/users/${user_id}/get/settings`,
       method: 'get'
     }).then((res) => {
       // fill the forms with the user's settings
@@ -131,7 +131,7 @@ export default class Preferences extends Component {
     })
 
     const request = await api({
-      resource: `/api/user/${user_id}/update/settings`,
+      resource: `/api/users/${user_id}/update/settings`,
       method: 'post',
       body: { userSettings: userSettings }
     })
