@@ -281,9 +281,9 @@ module.exports = {
     },
     {
       method: 'delete',
-      path: '/api/users/:user_id/thankyou/:id',
+      path: '/api/users/:user_id/thankyou',
       protected: true,
-      exampleRequestPath: '/api/users/1/thankyou/1'
+      exampleRequestPath: '/api/users/1/thankyou'
     }
   ]
 }
