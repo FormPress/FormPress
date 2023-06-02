@@ -58,7 +58,7 @@ class PostSubmission extends Component {
   async loadPostSubmissionPages(seamless = false, pageId = 1) {
     // pageId is used when we want to load a specific page after the initial load
     const result = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/get/thankyou`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
       method: 'get'
     })
 
@@ -182,7 +182,7 @@ class PostSubmission extends Component {
     }
 
     const saveResult = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/update/thankyou`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
       method: 'post',
       body: data
     })
@@ -235,7 +235,7 @@ class PostSubmission extends Component {
     }
 
     const saveResult = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/update/thankyou`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
       method: 'post',
       body: data
     })
@@ -383,7 +383,7 @@ class PostSubmission extends Component {
     }
 
     const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/delete/thankyou/${selectedPostSubmissionPage.id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou/${selectedPostSubmissionPage.id}`,
       method: 'delete'
     })
 

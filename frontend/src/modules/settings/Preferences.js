@@ -131,7 +131,7 @@ export default class Preferences extends Component {
     })
 
     const request = await api({
-      resource: `/api/users/${user_id}/update/settings`,
+      resource: `/api/users/${user_id}/preferences`,
       method: 'post',
       body: { userSettings: userSettings }
     })
