@@ -252,9 +252,9 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/get/settings',
+      path: '/api/users/:user_id/preferences',
       protected: true,
-      exampleRequestPath: '/api/users/1/get/settings'
+      exampleRequestPath: '/api/users/1/preferences'
     },
     {
       method: 'post',

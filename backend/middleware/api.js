@@ -1570,7 +1570,7 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/api/users/:user_id/get/settings',
+    '/api/users/:user_id/preferences',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -1752,13 +1752,23 @@ module.exports = (app) => {
 
   // to delete a custom thank you page from the database
   app.delete(
-    '/api/users/:user_id/thankyou/:id',
+    '/api/users/:user_id/thankyou',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
-      const id = req.params.id
+
+      let id = req.body.id
+
+      id = parseInt(id)
+
+      if (isNaN(id)) {
+        return res.json({
+          message: 'Invalid id.',
+          success: false
+        })
+      }
 
       if (id === 1 || id === '1') {
         return res.json({

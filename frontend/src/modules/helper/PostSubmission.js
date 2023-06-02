@@ -383,7 +383,10 @@ class PostSubmission extends Component {
     }
 
     const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou/${selectedPostSubmissionPage.id}`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
+      body: {
+        id: selectedPostSubmissionPage.id
+      },
       method: 'delete'
     })
 
