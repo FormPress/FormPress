@@ -19,17 +19,20 @@
   overflow: scroll;
 }
 
+.user-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .user,
 .selecteduser {
   padding: 10px;
   margin: 5px;
   border-radius: 8px;
-  color: #ffffff;
 }
 
 .user {
   background-color: #e2e2e2;
-  color: #333333;
 }
 
 .user:hover {
@@ -39,9 +42,33 @@
 
 .userpands {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 20px;
-  grid-column: span 3;
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+}
+
+.userpands > div {
+  padding: 10px;
+}
+
+.saveuser-button {
+  font-family: Montserrat;
+  font-weight: 700;
+  font-size: 16px;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  width: 200px;
+  color: #1c5c85;
+  background-color: #f5f5f5;
+  border: none;
+  box-shadow: 0px 0px 10px #1c5c85;
+  border-radius: 10px;
+}
+
+.saveuser-button:hover {
+  color: #ffffff;
+  background-color: #8cc63f;
+  border: none;
+  cursor: pointer;
 }
 
 .userforms {
@@ -57,9 +84,37 @@
   grid-column: span 1;
 }
 
-.savedornot {
-  grid-column: span 1;
+.userdetail > label {
+  color: #1c5c85;
+  font-weight: 700;
+  padding: 10px;
+}
+
+.userdetail > select {
+  box-sizing: border-box;
+  width: 150px;
+  padding: 10px;
+  color: #1c5c85;
+  border: 0;
+  border-radius: 10px;
+  outline: 0;
+  background-color: #e2e2e2;
+}
+
+.form-element {
+  padding: 10px;
+  border: 1px solid #1c5c85;
+}
+
+.savedtext {
   padding: 0px 10px;
+  color: #006400;
+}
+
+.notsavedtext {
+  padding: 0px 10px;
+  font-weight: 700;
+  color: #c65c5c;
 }
 
 .message {
@@ -128,4 +183,12 @@
 
 .addToWhitelist:hover {
   background-color: #7188bd;
+}
+
+.greentext {
+  color: #006400;
+}
+
+.browntext {
+  color: #8b4513;
 }

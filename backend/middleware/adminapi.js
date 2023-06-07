@@ -85,18 +85,49 @@ module.exports = (app) => {
       const db = await getPool()
       const result = await db.query(`
         SELECT
-            u.id, u.email, u.emailVerified, u.isActive, u.created_at,
-            ur.role_id AS role_id,
-            r.name AS role_name
-          FROM \`user\` AS u
-            JOIN \`user_role\` AS ur ON u.id = ur.user_id
-            JOIN role AS r ON r.id = ur.\`role_id\` ORDER BY \`created_at\` DESC
+            id, email, created_at, isActive
+          FROM \`user\`  ORDER BY \`created_at\` DESC
       `)
 
       if (result.length > 0) {
         res.json(result)
       } else {
         res.json([])
+      }
+    }
+  )
+
+  app.get(
+    '/api/admin/users/:user_id',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { user_id } = req.params
+      const db = await getPool()
+      const result = await db.query(
+        `
+      SELECT
+          u.id, u.email, u.emailVerified, u.isActive, u.created_at,
+          ur.role_id AS role_id,
+          r.name AS role_name
+        FROM \`user\` AS u
+          JOIN \`user_role\` AS ur ON u.id = ur.user_id
+          JOIN role AS r ON r.id = ur.\`role_id\`
+        WHERE u.id = ?
+    `,
+        [user_id]
+      )
+
+      if (result.length > 0) {
+        const lastFiveForms = await db.query(
+          `SELECT \`uuid\`, \`created_at\` FROM \`form\` WHERE user_id = ? ORDER BY \`created_at\` DESC LIMIT 5`,
+          [user_id]
+        )
+        result[0].forms = lastFiveForms
+
+        res.json(result)
+      } else {
+        res.status(404).json({ message: 'User not found' })
       }
     }
   )
@@ -167,40 +198,7 @@ module.exports = (app) => {
         }
         return res.status(200).json({ message: 'User changed succesfully' })
       } else {
-        return res.status(403).json({ message: 'User not found' })
-      }
-    }
-  )
-
-  app.get(
-    '/api/admin/users/:user_id/forms',
-    mustHaveValidToken,
-    mustBeAdmin,
-    async (req, res) => {
-      const { user_id } = req.params
-      const db = await getPool()
-      let result = null
-
-      if (
-        typeof user_id !== 'undefined' &&
-        user_id !== null &&
-        user_id !== '0'
-      ) {
-        result = await db.query(
-          `
-          SELECT * FROM \`user\` WHERE id = ?
-        `,
-          [user_id]
-        )
-      }
-      if (result.length === 1) {
-        const lastFiveForms = await db.query(
-          `SELECT \`uuid\`, \`created_at\` FROM \`form\` WHERE user_id = ? ORDER BY \`created_at\` DESC LIMIT 5`,
-          [user_id]
-        )
-        return res.json(lastFiveForms).status(200)
-      } else {
-        return res.status(403).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'User not found' })
       }
     }
   )
@@ -248,7 +246,7 @@ module.exports = (app) => {
             .json({ message: 'Password changed succesfully' })
         }
       } else {
-        return res.status(403).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'User not found' })
       }
     }
   )
@@ -302,7 +300,7 @@ module.exports = (app) => {
         const data = await token(jwt_data)
         return res.status(200).json(data)
       } else {
-        return res.status(403).json({ message: 'User not found' })
+        return res.status(404).json({ message: 'User not found' })
       }
     }
   )
