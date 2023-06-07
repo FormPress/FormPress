@@ -284,6 +284,12 @@ module.exports = {
       path: '/api/user/:user_id/delete/thankyou/:id',
       protected: false,
       exampleRequestPath: '/api/user/1/delete/thankyou/1'
+    },
+    {
+      method: 'get',
+      path: '/api/users/:user_id/refresh-auth',
+      protected: false,
+      exampleRequestPath: '/api/user/1/refresh-auth'
     }
   ]
 }
