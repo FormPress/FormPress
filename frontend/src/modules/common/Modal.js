@@ -41,6 +41,7 @@ class Modal extends Component {
                 dialogue.inputOnChange(e)
               }}
               type="text"
+              maxLength={dialogue.inputMaxLength || 250}
               value={dialogue.inputValue()}
             />
           </div>
