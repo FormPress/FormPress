@@ -289,6 +289,7 @@ class PostSubmission extends Component {
     }
 
     modalContent.dialogue = {
+      inputMaxLength: 140,
       abortText: 'Cancel',
       abortClick: this.handleCloseModalClick,
       positiveText: 'Create',
