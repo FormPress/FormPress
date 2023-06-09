@@ -9,8 +9,8 @@
   color: #1c5c85;
   font-weight: bold;
   padding: 16px 8px;
-  background-color: #ffffff;
-  border: 0;
+  border: 1px #b5b2b2 solid;
+  background: #dfdfe8;
   outline: 0;
   margin: 0 5px;
 }
@@ -18,12 +18,15 @@
 .embedCode:focus {
   width: calc(100% - 10px);
   resize: none;
-  border: 0;
-  outline: 0;
+  border: 1px #b5b2b2 solid;
+  background: #dfdfe8;
   margin: 0 5px;
   padding: 10px;
   min-height: 200px;
   word-break: break-all;
+  color: #1c5c85;
+  outline: 0;
+  font-weight: bold;
 }
 .shareFormMessage {
   background-color: #fffcdd;
@@ -101,11 +104,48 @@
 }
 .shareFormFormUrlArea {
 }
+
+.shareFormFormUrlArea .urlAreaControls {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.shareSectionButton {
+  font-family: Montserrat;
+  display: block;
+  font-size: 16px;
+  height: 30px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #719fbd;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 6px;
+}
+.shareSectionButton:hover {
+  background-color: #5682a1;
+}
+
 .shareFormFormUrlAreaTitle,
+.shareFormFormQRAreaTitle,
 .shareFormFormEmbedCodeAreaTitle {
   text-indent: 10px;
   color: #333333;
 }
+
+.shareFormFormQRArea .qrCodeContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.shareFormFormQRArea .qrDownloadOptions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
 .shareFormFooterArea {
   margin-bottom: 30px;
 }
