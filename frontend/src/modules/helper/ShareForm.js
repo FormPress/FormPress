@@ -3,6 +3,7 @@ import CopyToClipboard from '../common/CopyToClipboard'
 import './ShareForm.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import QRCode from 'qrcode.react'
 
 import {
   FacebookIcon,
@@ -24,6 +25,7 @@ class ShareForm extends Component {
     this.onWidgetTitleChange = this.onWidgetTitleChange.bind(this)
     this.onWidgetChange = this.onWidgetChange.bind(this)
     this.onAnsweredOnceChange = this.onAnsweredOnceChange.bind(this)
+    this.downloadQRCode = this.downloadQRCode.bind(this)
 
     this.hostname = window.location.protocol + '//' + window.location.host
     this.formId = this.props.formId
@@ -50,6 +52,34 @@ class ShareForm extends Component {
   async onWidgetTitleChange(e) {
     let title = e.target.value.replace(/[^a-zA-Z ]/g, '')
     this.setState({ title })
+  }
+
+  async downloadQRCode(type = 'png') {
+    let downloadLink = document.createElement('a')
+
+    if (type === 'svg') {
+      const svg = document.getElementById('qrCodeSvg')
+      const clone = svg.cloneNode(true)
+      clone.removeAttribute('style')
+      const svgData = new XMLSerializer().serializeToString(clone)
+      const svgBlob = new Blob([svgData], {
+        type: 'image/svg+xml;charset=utf-8'
+      })
+      const svgUrl = URL.createObjectURL(svgBlob)
+      downloadLink.href = svgUrl
+      downloadLink.download = 'qrCode.svg'
+    } else if (type === 'png') {
+      const canvas = document.getElementById('qrCodeCanvas')
+      const pngUrl = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream')
+      downloadLink.href = pngUrl
+      downloadLink.download = 'qrCode.png'
+    }
+
+    document.body.appendChild(downloadLink)
+    downloadLink.click()
+    document.body.removeChild(downloadLink)
   }
 
   render() {
@@ -120,18 +150,63 @@ class ShareForm extends Component {
           </div>
           <div className="shareFormContent">
             <div className="shareFormFormUrlArea">
-              <h3 className="shareFormFormUrlAreaTitle">URL of your form</h3>
+              <h3 className="shareFormFormUrlAreaTitle">URL</h3>
               <input
                 type="text"
                 value={this.formLink}
                 className="formURL"
                 readOnly
               />
+              <div className="urlAreaControls">
+                <button
+                  onClick={() => {
+                    window.open(this.formLink, '_blank')
+                  }}
+                  className="shareSectionButton">
+                  View Form
+                </button>
+                <CopyToClipboard
+                  clipboardData={this.formLink}
+                  buttonText="Copy URL"
+                />
+              </div>
             </div>
-            <CopyToClipboard
-              clipboardData={this.formLink}
-              buttonText="Copy URL"
-            />
+
+            <div className="shareFormFormQRArea">
+              <h3 className="shareFormFormQRAreaTitle">QR Code</h3>
+              <div className="qrCodeContainer">
+                <QRCode
+                  value={this.formLink}
+                  size={160}
+                  id="qrCodeCanvas"
+                  className="shareFormFormQRCode"
+                  renderAs="canvas"
+                />
+              </div>
+              <QRCode
+                value={this.formLink}
+                size={160}
+                style={{ display: 'none' }}
+                id="qrCodeSvg"
+                renderAs="svg"
+              />
+              <div className="qrDownloadOptions">
+                <button
+                  onClick={() => {
+                    this.downloadQRCode('png')
+                  }}
+                  className="shareSectionButton">
+                  Download PNG
+                </button>
+                <button
+                  onClick={() => {
+                    this.downloadQRCode('svg')
+                  }}
+                  className="shareSectionButton">
+                  Download SVG
+                </button>
+              </div>
+            </div>
             <div className="embedCodeTooltip">
               <span className="popover-container">
                 <FontAwesomeIcon icon={faInfoCircle} />
@@ -142,9 +217,7 @@ class ShareForm extends Component {
             </div>
 
             <div className="shareFormFormEmbedCodeArea">
-              <h3 className="shareFormFormEmbedCodeAreaTitle">
-                Embed Code of your form
-              </h3>
+              <h3 className="shareFormFormEmbedCodeAreaTitle">Embed Code</h3>
               <textarea className="embedCode" value={embedCode} readOnly />
             </div>
             <CopyToClipboard
