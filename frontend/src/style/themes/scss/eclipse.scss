@@ -748,25 +748,6 @@ $color-14: #68942f; /* forest green */
     text-align: center;
   }
 
-  @media screen and (max-width: 992px) {
-    .renderer {
-      width: auto;
-      margin: 0;
-      padding: 10px;
-    }
-  }
-
-  @media screen and (max-width: 590px) {
-    .renderer .elementNetPromoterScore ul {
-      padding: 0 !important;
-    }
-
-    .renderer .elementNetPromoterScore ul li label {
-      width: 30px !important;
-      margin: 0 1px !important;
-    }
-  }
-
   .branding {
     background-color: $color-0;
   }
@@ -1120,5 +1101,24 @@ $color-14: #68942f; /* forest green */
 
   .elementRatingScale .rating-scale-Stars.extends-select {
     color: $secondary-color;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .renderer {
+    width: auto !important;
+    margin: 10px !important;
+    padding: 10px !important;
+  }
+}
+
+@media screen and (max-width: 590px) {
+  .renderer .elementNetPromoterScore ul {
+    padding: 0 !important;
+  }
+
+  .renderer .elementNetPromoterScore ul li label {
+    width: 30px !important;
+    margin: 0 1px !important;
   }
 }
