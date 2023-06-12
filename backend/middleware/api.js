@@ -896,7 +896,7 @@ module.exports = (app) => {
         return submission
       }, {})
 
-      const newCSVData = {}
+      const CSVData = {}
       const submissionsData = {}
 
       for (const submission of submissionsResult) {
@@ -930,10 +930,10 @@ module.exports = (app) => {
           entries[QnA.id.toString()] = QnA.answer
         })
 
-        newCSVData[submission] = entries
+        CSVData[submission] = entries
 
-        newCSVData[submission].createdAt = submissionData.created_at
-        newCSVData[submission].submissionId = submissionData.id
+        CSVData[submission].createdAt = submissionData.created_at
+        CSVData[submission].submissionId = submissionData.id
       })
 
       const createCsvStringifier = require('csv-writer')
@@ -955,7 +955,7 @@ module.exports = (app) => {
       })
       const csv =
         csvStringifier.getHeaderString() +
-        csvStringifier.stringifyRecords(Object.values(newCSVData))
+        csvStringifier.stringifyRecords(Object.values(CSVData))
 
       res.json({
         content: csv,
