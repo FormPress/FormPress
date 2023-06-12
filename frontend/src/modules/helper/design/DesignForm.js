@@ -9,6 +9,9 @@ import './DesignForm.css'
 export default class DesignForm extends Component {
   constructor(props) {
     super(props)
+
+    this.formId = this.props.formId
+
     this.setTheme = this.setTheme.bind(this)
     this.setColorScheme = this.setColorScheme.bind(this)
   }
@@ -61,7 +64,7 @@ export default class DesignForm extends Component {
           <h2 className="shareFormTitle">Design Your Form</h2>
           <div className="designtabs">
             <NavLink
-              to={`/editor/${this.props.form.id}/design/theme`}
+              to={`/editor/${this.formId}/design/theme`}
               activeClassName="selected">
               Theme
             </NavLink>
@@ -72,7 +75,7 @@ export default class DesignForm extends Component {
           Color Scheme
         </NavLink> */}
             <NavLink
-              to={`/editor/${this.props.form.id}/design/customcss`}
+              to={`/editor/${this.formId}/design/customcss`}
               activeClassName="selected">
               Custom CSS
             </NavLink>
@@ -80,7 +83,7 @@ export default class DesignForm extends Component {
           <Switch>
             {/* To make "theme" selected when opening design */}
             <Route exact path="/editor/:formId/design">
-              <Redirect to={`/editor/${this.props.form.id}/design/theme`} />
+              <Redirect to={`/editor/${this.formId}/design/theme`} />
             </Route>
             <Route exact path="/editor/:formId/design/theme">
               <Theme theme={theme} setTheme={this.setTheme} />

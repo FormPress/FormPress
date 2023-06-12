@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { genRandomString, sha512 } = require(path.resolve('helper')).random
+const { sha512 } = require(path.resolve('helper')).random
 const { token } = require(path.resolve('helper')).token
 const { getPool } = require(path.resolve('./', 'db'))
 const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
@@ -20,17 +20,13 @@ module.exports = (app) => {
         FROM \`user\` AS u
           JOIN \`user_role\` AS ur ON u.id = ur.user_id
           JOIN role AS r ON r.id = ur.\`role_id\`
-        WHERE u.email = ? AND u.emailVerified = 1
+        WHERE u.email = ?
       `,
       [email]
     )
 
     if (result.length === 0) {
-      const salt = genRandomString(128)
-      const hash = sha512(password, salt)
-      console.log(`DEBUG INSERT: ${email} `, hash, salt)
-
-      return res.status(403).json({ message: 'Email not verified' })
+      return res.status(403).json({ message: 'Email/Password is not correct' })
     } else {
       const user = result[0]
       const incomingHash = sha512(password, user.salt)
@@ -41,7 +37,10 @@ module.exports = (app) => {
             message:
               'You have been blocked due to not following our TOS. If you think this is an error, contact our support team.'
           })
+        } else if (user.emailVerified === 0) {
+          return res.status(403).json({ message: 'Email not verified' })
         }
+
         let isAdmin = false
         const admin = await db.query(
           `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
@@ -60,10 +59,9 @@ module.exports = (app) => {
           admin: isAdmin,
           permission: JSON.parse(user.permission)
         }
-
         await locationFinder(user.id, req.get('cf-ipcountry'))
-
         const data = await token(jwt_data)
+
         return res.status(200).json(data)
       } else {
         console.log('PWD FALSE')

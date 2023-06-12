@@ -1566,6 +1566,7 @@ export default class Builder extends Component {
         </Route>
         <Route path="/editor/:formId/design">
           <DesignForm
+            formId={formId}
             form={this.state.form}
             uuid={this.state.form.uuid}
             setCSS={this.setCSS}

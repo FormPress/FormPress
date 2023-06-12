@@ -67,7 +67,7 @@ class App extends Component {
     this.state = {
       ...initialAuthObject,
       capabilities: {},
-      user: { getUsages: this.getUsages }
+      user: { getUsages: this.getUsages, refreshAuth: this.refreshAuth }
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
@@ -99,6 +99,22 @@ class App extends Component {
       this.setState({ user })
     }
   }
+
+  refreshAuth = async () => {
+    if (this.state.user_id) {
+      const { data } = await api({
+        resource: `/api/users/${this.state.user_id}/refresh-auth`
+      })
+
+      if (data.status === 'done') {
+        const incomingAuthObject = data.auth
+        setToken(incomingAuthObject.token)
+
+        this.handleSetAuth(incomingAuthObject, true)
+      }
+    }
+  }
+
   //load env vars
   loadEnvVars = async () => {
     try {

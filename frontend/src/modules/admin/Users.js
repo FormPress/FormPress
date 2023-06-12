@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { api, setToken } from '../../helper'
-import Renderer from '../Renderer'
 import moment from 'moment'
 import GeneralContext from '../../general.context'
 
@@ -21,6 +20,9 @@ class Users extends Component {
       roles: [],
       forms: []
     }
+
+    this.handleRole = this.handleRole.bind(this)
+    this.handleSave = this.handleSave.bind(this)
   }
 
   getUserList = async () => {
@@ -43,10 +45,21 @@ class Users extends Component {
   getUserFormList = async (user_id) => {
     let result = []
     const { data } = await api({
-      resource: `/api/admin/users/${user_id}/forms`
+      resource: `/api/admin/users/${user_id}`
     })
 
-    data.forEach((form) => {
+    const user = data[0]
+
+    this.setState({
+      selectedUserId: user_id,
+      roleName: user.role_name,
+      emailVerified: user.emailVerified,
+      isActive: user.isActive,
+      signupDate: user.created_at,
+      saved: true
+    })
+
+    user.forms.forEach((form) => {
       result.push({
         link: `${process.env.FE_BACKEND || global.env.FE_BACKEND}/form/view/${
           form.uuid
@@ -63,17 +76,15 @@ class Users extends Component {
     this.getRoleList()
   }
 
-  handleFieldChange = (elem, e) => {
-    this.setState({ saved: false })
-    if (elem.label === 'Role Name') {
-      this.setState({ roleName: e.target.value })
-    }
-    if (elem.label === 'Is Active' && !isNaN(parseInt(e.target.value))) {
-      this.setState({ isActive: parseInt(e.target.value) })
-    }
+  handleRole(e) {
+    this.setState({
+      roleName: e.target.value,
+      saved: false
+    })
   }
 
   handleSelectUser = (userId, incMessage = '') => {
+    this.setState({ message: 'Loading..' })
     const { data } = this.state
     const user_id = parseInt(userId)
     if (user_id !== 0) {
@@ -126,7 +137,6 @@ class Users extends Component {
       const copyData = [...this.state.data]
       const selectedUser = copyData.find((user) => user.id === selectedUserId)
 
-      selectedUser.role_id = parseInt(roleId)
       selectedUser.isActive = parseInt(isActive)
 
       const updatedData = copyData.map((user) =>
@@ -193,28 +203,24 @@ class Users extends Component {
     }
   }
 
-  render() {
-    const { data, userListIsloaded, forms } = this.state
-    return (
-      <div className="userwrap">
-        <div className="wrap-left">
-          <div className="col-4-16 userlist">
-            {userListIsloaded &&
-              data.map((user) => (
-                <div
-                  className={
-                    this.state.selectedUserId === user.id
-                      ? 'selecteduser'
-                      : 'user'
-                  }
-                  key={user.id}
-                  value={user.id}
-                  onClick={() => this.handleSelectUser(user.id)}>
-                  {user.email}
-                </div>
-              ))}
-          </div>
-          <div className="col-2-16 userpands">
+  renderUser() {
+    const {
+      forms,
+      isActive,
+      saved,
+      roleName,
+      roles,
+      message,
+      selectedUserId,
+      signupDate
+    } = this.state
+
+    if (selectedUserId === 0) {
+      return 'Select User'
+    } else {
+      return (
+        <div className="user-info">
+          <div className="userpands">
             <div className="userdetail">
               <div
                 className="loginAsUser"
@@ -238,70 +244,92 @@ class Users extends Component {
               </div>
             </div>
             <div className="userdetail">
-              <div className="message">
-                User Status:{' '}
-                {this.state.isActive === 1 ? 'Active' : 'Suspended'}
+              <div className={isActive === 1 ? 'greentext' : 'browntext'}>
+                User Status: {isActive === 1 ? 'Active' : 'Suspended'}
               </div>
               <div className="statusUser" onClick={(e) => this.changeStatus(e)}>
                 Change Status
               </div>
             </div>
             <div className="userdetail">
-              <form onSubmit={this.handleSave}>
-                <Renderer
-                  className="form"
-                  theme="infernal"
-                  allowInternal={true}
-                  handleFieldChange={this.handleFieldChange}
-                  form={{
-                    props: {
-                      elements: [
-                        {
-                          id: 1,
-                          type: 'Dropdown',
-                          label: 'Role Name',
-                          options: this.state.roles.map((role) => role.name),
-                          placeholder: this.state.roleName
-                        },
-                        {
-                          id: 3,
-                          type: 'Button',
-                          buttonText: 'SAVE'
-                        }
-                      ]
-                    }
-                  }}
-                />
-              </form>
+              <label htmlFor="roleselect">Role</label>
+              <select
+                value={roleName}
+                onChange={this.handleRole}
+                id="roleselect">
+                {roles.map((role) => (
+                  <option key={role.name} value={role.name}>
+                    {role.name}
+                  </option>
+                ))}
+              </select>
             </div>
-            <div className="savedornot">
-              {this.state.saved ? 'Saved' : 'Changes do not saved'}
+            <div>
+              <button className="saveuser-button" onClick={this.handleSave}>
+                SAVE
+              </button>
             </div>
-            <div className="message">Status: {this.state.message}</div>
+            <div className={saved ? 'savedtext' : 'notsavedtext'}>
+              {saved ? 'Saved' : 'Changes do not saved'}
+            </div>
+            <div className="message">Status: {message}</div>
             <div className="message">
-              Signup Date:{' '}
-              {moment(this.state.signupDate).format('DD.MM.YYYY, hh:mm:ss')}
+              Signup Date: {moment(signupDate).format('DD.MM.YYYY, hh:mm:ss')}
+            </div>
+          </div>
+          <div className="wrap-right">
+            <div className="col-2-16 userforms">
+              <div className="message">
+                Forms:
+                {forms.map((form) => (
+                  <div className="form-element" key={form.link}>
+                    <a
+                      href={form.link}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      {form.link}
+                    </a>
+                    <div>
+                      Created Date:{' '}
+                      {moment(form.created_at).format('DD.MM.YYYY, hh:mm:ss')}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        <div className="wrap-right">
-          <div className="col-2-16 userforms">
-            <div className="message">
-              Forms:
-              {forms.map((form) => (
-                <div key={form.link}>
-                  <a href={form.link} target="_blank" rel="noopener noreferrer">
-                    {form.link}
-                  </a>
-                  <div>
-                    Created Date:{' '}
-                    {moment(form.created_at).format('DD.MM.YYYY, hh:mm:ss')}
+      )
+    }
+  }
+
+  render() {
+    const { data, userListIsloaded } = this.state
+    return (
+      <div className="userwrap">
+        <div className="wrap-left">
+          <div className="col-4-16 userlist">
+            {userListIsloaded &&
+              data.map((user) => (
+                <div
+                  className={user.isActive ? 'greentext' : 'browntext'}
+                  key={user.id}>
+                  <div
+                    className={
+                      this.state.selectedUserId === user.id
+                        ? 'selecteduser'
+                        : 'user'
+                    }
+                    key={user.id}
+                    value={user.id}
+                    onClick={() => this.handleSelectUser(user.id)}>
+                    {user.email}
                   </div>
                 </div>
               ))}
-            </div>
           </div>
         </div>
+        <div>{this.renderUser()}</div>
       </div>
     )
   }
