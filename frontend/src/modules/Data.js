@@ -128,9 +128,9 @@ export default class Data extends Component {
     this.setState({ submissions })
   }
 
-  async updateSubmissionStatistics(form_id, version) {
+  async updateSubmissionStatistics(form_id) {
     const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}/statistics`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/statistics`
     })
 
     this.setState({
