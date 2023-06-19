@@ -623,10 +623,22 @@ module.exports = (app) => {
                         .trim()
                     )
                   } else if (elementTemplate.elementType === 'Radio') {
-                    if (!isNaN(questionStatistics[0].value)) {
-                      elementTemplate.chartItems.push(
-                        element.options[questionStatistics[0].value]
+                    try {
+                      questionStatistics[0].value = JSON.parse(
+                        questionStatistics[0].value
                       )
+                    } catch (e) {
+                      // do nothing
+                    }
+                    if (!isNaN(questionStatistics[0].value)) {
+                      // if value is empty string, `Unanswered` will be pushed
+                      if (questionStatistics[0].value === '') {
+                        elementTemplate.chartItems.push('Unanswered')
+                      } else {
+                        elementTemplate.chartItems.push(
+                          element.options[questionStatistics[0].value]
+                        )
+                      }
                     } else {
                       elementTemplate.chartItems.push(
                         questionStatistics[0].value
@@ -642,7 +654,14 @@ module.exports = (app) => {
                     }
                     if (Array.isArray(questionStatistics[0].value)) {
                       for (let index of questionStatistics[0].value) {
-                        elementTemplate.chartItems.push(element.options[index])
+                        // if value is empty string, `Unanswered` will be pushed
+                        if (index === '') {
+                          elementTemplate.chartItems.push('Unanswered')
+                        } else {
+                          elementTemplate.chartItems.push(
+                            element.options[index]
+                          )
+                        }
                       }
                     } else {
                       elementTemplate.chartItems.push(
