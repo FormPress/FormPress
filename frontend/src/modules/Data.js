@@ -10,7 +10,6 @@ import { api } from '../helper'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
-
 import {
   XAxis,
   YAxis,
@@ -22,6 +21,7 @@ import {
   BarChart,
   Bar
 } from 'recharts'
+
 import './Data.css'
 
 const getStartOfToday = () => {
