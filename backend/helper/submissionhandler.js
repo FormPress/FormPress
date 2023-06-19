@@ -43,7 +43,13 @@ exports.getQuestionsWithRenderedAnswers = (
 ) => {
   let questionData = []
   for (const input of formattedInput) {
-    const question_id = parseInt(input.q_id) || parseInt(input.question_id) // to handle data both from db and from form
+    let question_id = parseInt(input.q_id) //
+
+    // if question_id is NaN, check for input.question_id to handle data both from db and from submission event
+    if (isNaN(question_id) && input.question_id !== undefined) {
+      question_id = parseInt(input.question_id)
+    }
+
     // necessary for FileUpload
     input.submission_id = submission_id
     const element = form.props.elements.find(

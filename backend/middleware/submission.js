@@ -222,7 +222,7 @@ module.exports = (app) => {
       tyPageText = 'Your submission was successful.'
     }
 
-    let sendEmailTo = false
+    let sendEmailTo = []
     let thankYouIntegrationCount_LEGACY = 0
 
     const integrations = form.props.integrations || []
@@ -371,14 +371,12 @@ module.exports = (app) => {
     )
 
     if (emailIntegration.length > 0) {
-      sendEmailTo = emailIntegration[0].to
+      sendEmailTo = emailIntegration[0].to.split(',')
     }
     const FRONTEND =
       FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
     if (
-      sendEmailTo !== false &&
-      sendEmailTo !== undefined &&
-      sendEmailTo !== '' &&
+      sendEmailTo.length !== 0 &&
       isEnvironmentVariableSet.sendgridApiKey !== false
     ) {
       const htmlBody = await ejs
@@ -409,7 +407,7 @@ module.exports = (app) => {
         })
 
       const msg = {
-        to: sendEmailTo,
+        to: sendEmailTo.map((email) => ({ email: email.trim() })),
         from: {
           name: 'FormPress',
           email: `submission-notifications-noreply@api.${process.env.EMAIL_DOMAIN}`
@@ -421,7 +419,7 @@ module.exports = (app) => {
 
       try {
         console.log('sending email')
-        sgMail.send(msg)
+        sgMail.send(msg, sendEmailTo.length > 1) // second argument is for isMultiple
       } catch (e) {
         console.log('Error while sending email ', e)
       }
