@@ -10,6 +10,9 @@ const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
+
+const { submissionhandler } = require(path.resolve('helper'))
+
 const { token } = require(path.resolve('helper')).token
 
 const { getPool } = require(path.resolve('./', 'db'))
@@ -920,27 +923,59 @@ module.exports = (app) => {
       }
 
       const form = formResult
-      const CSVData = {}
-      const submissions = {}
 
-      for (const submission of submissionsResult) {
-        submissions[submission.id] = submission
-      }
+      const idsOfElemsPresent = form.props.elements.map((elem) => elem.id)
 
-      for (const entry of result) {
-        const questionId = entry.question_id
-        const submissionId = entry.submission_id
-        const submission = submissions[submissionId.toString()]
-
-        if (typeof CSVData[submissionId] === 'undefined') {
-          CSVData[submissionId] = {
-            submissionId,
-            createdAt: submission.created_at
-          }
+      // preformatted submissions are grouped by submission id and filtered by ids of elements present in form
+      const preformattedSubmissions = result.reduce((submission, entry) => {
+        if (idsOfElemsPresent.includes(parseInt(entry.question_id))) {
+          submission[entry.submission_id] =
+            submission[entry.submission_id] || []
+          submission[entry.submission_id].push(entry)
         }
 
-        CSVData[submissionId][questionId] = entry.value
+        return submission
+      }, {})
+
+      const CSVData = {}
+      const submissionsData = {}
+
+      for (const submission of submissionsResult) {
+        submissionsData[submission.id] = submission
       }
+
+      Object.keys(preformattedSubmissions).forEach((submission) => {
+        const submissionData = submissionsData[submission]
+
+        const hydratedSubmission = preformattedSubmissions[submission].map(
+          (entry) => {
+            // getQuestionsWithRenderedAnswers only takes hydrated values
+            try {
+              entry.value = JSON.parse(entry.value)
+            } catch (e) {
+              // do nothing
+            }
+            return entry
+          }
+        )
+
+        const questionsWithRenderedAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
+          form,
+          hydratedSubmission,
+          parseInt(submission)
+        )
+
+        const entries = {}
+
+        questionsWithRenderedAnswers.forEach((QnA) => {
+          entries[QnA.id.toString()] = QnA.answer
+        })
+
+        CSVData[submission] = entries
+
+        CSVData[submission].createdAt = submissionData.created_at
+        CSVData[submission].submissionId = submissionData.id
+      })
 
       const createCsvStringifier = require('csv-writer')
         .createObjectCsvStringifier
