@@ -65,9 +65,9 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/forms/:form_id/:version_id/statistics',
+      path: '/api/users/:user_id/forms/:form_id/statistics',
       protected: true,
-      exampleRequestPath: '/api/users/1/forms/1/1/statistics'
+      exampleRequestPath: '/api/users/1/forms/1/statistics'
     },
     {
       method: 'get',

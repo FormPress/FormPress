@@ -505,7 +505,7 @@ module.exports = (app) => {
 
   // return statistics of given form id and version number
   app.get(
-    '/api/users/:user_id/forms/:form_id/:version_id/statistics',
+    '/api/users/:user_id/forms/:form_id/statistics',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     async (req, res) => {
@@ -559,7 +559,13 @@ module.exports = (app) => {
         '#F7FCFD'
       ]
 
-      const { form_id, version_id } = req.params
+      const { form_id } = req.params
+
+      const form = await formModel.get({ form_id })
+
+      const version_id = form.published_version
+
+      // version 0 is preview version, doesn't count
       if (version_id > 0) {
         let statistics = {
           responses: 0,
@@ -568,9 +574,8 @@ module.exports = (app) => {
           elements: []
         }
         const db = await getPool()
-        let query =
-          'SELECT * FROM `submission` WHERE form_id = ? AND version = ?'
-        let submissions = await db.query(query, [form_id, version_id])
+        let query = 'SELECT * FROM `submission` WHERE form_id = ?'
+        let submissions = await db.query(query, [form_id])
 
         let willReturnObject = {},
           willReturnArray = []
@@ -579,21 +584,21 @@ module.exports = (app) => {
           statistics.responses = submissions.length
 
           query =
-            'SELECT AVG(completion_time) AS average_completion_time FROM `submission` WHERE form_id = ? AND version = ?'
-          const a_c_t = await db.query(query, [form_id, version_id])
+            'SELECT AVG(completion_time) AS average_completion_time FROM `submission` WHERE form_id = ?'
+          const a_c_t = await db.query(query, [form_id])
 
           statistics.average_completion_time = Math.round(
             a_c_t[0].average_completion_time
           )
 
-          query =
-            'SELECT * FROM `form_published` WHERE form_id = ? AND version = ?'
+          query = 'SELECT * FROM `form_published` WHERE form_id = ?'
           let result = await db.query(query, [form_id, version_id])
-          result = result[0]
 
-          statistics.title = result.title
+          const latestVersion = result[result.length - 1]
 
-          for (let element of JSON.parse(result.props).elements) {
+          statistics.title = latestVersion.title
+
+          for (let element of JSON.parse(latestVersion.props).elements) {
             let elementTemplate = {
               label: element.label,
               elementType: element.type,
@@ -621,10 +626,46 @@ module.exports = (app) => {
                         .trim()
                     )
                   } else if (elementTemplate.elementType === 'Radio') {
-                    if (!isNaN(questionStatistics[0].value)) {
-                      elementTemplate.chartItems.push(
-                        element.options[questionStatistics[0].value]
+                    try {
+                      questionStatistics[0].value = JSON.parse(
+                        questionStatistics[0].value
                       )
+                    } catch (e) {
+                      // do nothing
+                    }
+                    if (!isNaN(questionStatistics[0].value)) {
+                      // if value is empty string, `Unanswered` will be pushed
+                      if (questionStatistics[0].value === '') {
+                        elementTemplate.chartItems.push('Unanswered')
+                      } else {
+                        elementTemplate.chartItems.push(
+                          element.options[questionStatistics[0].value]
+                        )
+                      }
+                    } else {
+                      elementTemplate.chartItems.push(
+                        questionStatistics[0].value
+                      )
+                    }
+                  } else if (elementTemplate.elementType === 'Checkbox') {
+                    try {
+                      questionStatistics[0].value = JSON.parse(
+                        questionStatistics[0].value
+                      )
+                    } catch (e) {
+                      // do nothing
+                    }
+                    if (Array.isArray(questionStatistics[0].value)) {
+                      for (let index of questionStatistics[0].value) {
+                        // if value is empty string, `Unanswered` will be pushed
+                        if (index === '') {
+                          elementTemplate.chartItems.push('Unanswered')
+                        } else {
+                          elementTemplate.chartItems.push(
+                            element.options[index]
+                          )
+                        }
+                      }
                     } else {
                       elementTemplate.chartItems.push(
                         questionStatistics[0].value
