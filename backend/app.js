@@ -23,11 +23,14 @@ const isEnvironmentVariableSet = {
   fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
 }
 
-let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
-let buff = Buffer.from(tmp, 'base64')
-let finalSecret = buff.toString('ascii')
-process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE = '/gcp-key.json'
-fs.writeFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE, finalSecret)
+//for local environments
+if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+  let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
+  let buff = Buffer.from(tmp, 'base64')
+  let finalSecret = buff.toString('ascii')
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = '/gcp-key.json'
+  fs.writeFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, finalSecret)
+}
 
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)

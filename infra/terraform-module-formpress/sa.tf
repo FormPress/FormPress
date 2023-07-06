@@ -4,11 +4,12 @@ module "service_accounts" {
   version       = "~> 3.0"
   project_id    = var.project
   prefix        = "sa-${each.key}"
-  names         = ["ServiceAccount", each.key]
+  names         = ["ServiceAccount"]
   generate_keys = true
   project_roles = [
     "${var.project}=>roles/cloudsql.client",
     "${var.project}=>roles/storage.objectViewer",
+    "${var.project}=>roles/errorreporting.writer",
   ]
 }
 

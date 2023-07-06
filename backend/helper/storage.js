@@ -4,10 +4,7 @@ const { Duplex, PassThrough } = require('stream')
 const path = require('path')
 const { error } = require(path.resolve('helper'))
 
-const storage = new Storage({
-  keyFilename: process.env.GOOGLE_SERVICE_ACCOUNT_KEYFILE,
-  projectId: 'formpress'
-})
+const storage = new Storage()
 const fileUploadBucket = storage.bucket(process.env.FILE_UPLOAD_BUCKET)
 
 exports.uploadFile = (uploadedFile, submit_id) => {
@@ -71,38 +68,6 @@ exports.uploadFile = (uploadedFile, submit_id) => {
     })
   }
   return JSON.stringify(results)
-}
-
-exports.uploadFileForRte = async (uploadedFile, form_id, question_id) => {
-  let fileExtension = ''
-  if (uploadedFile.file.name.indexOf('.') > -1) {
-    fileExtension = uploadedFile.file.name.match(/\.[^.]+$/)[0]
-  }
-
-  const fileName =
-    'rte/' + form_id + '/' + question_id + '/' + uuidv4() + fileExtension
-
-  let file = fileUploadBucket.file(fileName)
-
-  new Promise((resolve, reject) => {
-    let stream = new Duplex()
-
-    stream.push(uploadedFile.file.data)
-    stream.push(null)
-
-    stream
-      .pipe(file.createWriteStream())
-      .on('error', (error) => {
-        reject(error)
-      })
-      .on('finish', () => {
-        resolve()
-      })
-  })
-
-  return {
-    location: `https://storage.googleapis.com/${fileUploadBucket.name}/${fileName}`
-  }
 }
 
 exports.checkIfFileIsExist = async (uploadName) => {
