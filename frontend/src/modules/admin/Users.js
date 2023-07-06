@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { api, setToken } from '../../helper'
+import { api } from '../../helper'
 import moment from 'moment'
 import GeneralContext from '../../general.context'
 
@@ -160,12 +160,9 @@ class Users extends Component {
       })
 
       if (success === true) {
-        setToken(data.token)
         this.props.generalContext.auth.setAuth({
           email: data.email,
           name: data.name,
-          exp: data.exp,
-          token: data.token,
           impersonate: data.impersonate,
           user_id: data.user_id,
           user_role: data.user_role,
