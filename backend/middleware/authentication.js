@@ -4,15 +4,15 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 module.exports = (app) => {
   app.use((req, res, next) => {
-    const auth = req.get('Authorization')
+    const { auth } = req.cookies
 
-    if (typeof auth !== 'undefined') {
-      jwt.verify(auth.replace('Bearer ', ''), JWT_SECRET, (err, decoded) => {
+    if (auth) {
+      jwt.verify(auth, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
           return next()
         }
 
-        res.locals.auth = decoded
+        req.cookies.auth = decoded
         res.locals.validToken = true
 
         next()

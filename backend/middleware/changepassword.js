@@ -11,7 +11,7 @@ module.exports = (app) => {
     '/api/users/changepassword/',
     mustHaveValidToken,
     async (req, res) => {
-      const { user_id } = res.locals.auth
+      const { user_id } = req.cookies.auth
       const { current_password, new_password } = req.body
       const db = await getPool()
 
