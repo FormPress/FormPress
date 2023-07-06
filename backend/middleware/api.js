@@ -35,9 +35,13 @@ const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const { FP_ENV, FP_HOST } = process.env
 const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
-const { storage, model, error, testStringIsJson } = require(path.resolve(
-  'helper'
-))
+const {
+  storage,
+  model,
+  error,
+  testStringIsJson,
+  publicStorage
+} = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
@@ -1609,7 +1613,7 @@ module.exports = (app) => {
   )
 
   app.post('/api/upload/:form_id/:question_id', async (req, res) => {
-    let value = await storage.uploadFileForRte(
+    let value = await publicStorage.uploadFileForRte(
       req.files,
       req.params.form_id,
       req.params.question_id

@@ -879,6 +879,11 @@ export default class Builder extends Component {
   }
 
   async rteUploadHandler(blobInfo) {
+    //need save to get form id before upload
+    if (this.state.form.id === null) {
+      await this.handleSaveClick()
+    }
+
     return new Promise((resolve, reject) => {
       const image_size = blobInfo.blob().size / 1000,
         max_size = 3000
@@ -927,6 +932,10 @@ export default class Builder extends Component {
   }
 
   async imageUploadHandler(id, file) {
+    //need save to get form id before upload
+    if (this.state.form.id === null) {
+      await this.handleSaveClick()
+    }
     const form = cloneDeep(this.state.form)
 
     let elementToBeChanged = form.props.elements.filter((e) => e.id === id)
@@ -997,7 +1006,7 @@ export default class Builder extends Component {
     }
 
     const { elements } = this.state.form.props
-    let { formId, questionId } = this.props.match.params
+    let { formId } = this.props.match.params
 
     const matchingElements = elements.filter((elem) => elem.id === id)
 
@@ -1007,7 +1016,7 @@ export default class Builder extends Component {
       )
       this.setState({
         dragging: false,
-        selectedFieldId: questionId
+        selectedFieldId: id
       })
     }
   }
