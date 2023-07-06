@@ -11,8 +11,7 @@ exports.token = (jwt_data) => {
   const token = jwt.sign(jwt_data, JWT_SECRET)
 
   if (token) {
-    const data = { ...jwt_data, token, message: 'Login Success' }
-    return data
+    return token
   } else {
     error.errorReport('token sign error')
     return null

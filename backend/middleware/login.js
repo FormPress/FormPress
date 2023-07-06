@@ -62,7 +62,14 @@ module.exports = (app) => {
         await locationFinder(user.id, req.get('cf-ipcountry'))
         const data = await token(jwt_data)
 
-        return res.status(200).json(data)
+        res.cookie('auth', data, {
+          maxAge: 3 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: 'none',
+          httpOnly: true
+        })
+
+        return res.status(200).json(jwt_data)
       } else {
         console.log('PWD FALSE')
         return res
@@ -71,4 +78,6 @@ module.exports = (app) => {
       }
     }
   })
+
+  // logout route
 }

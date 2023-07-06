@@ -10,11 +10,7 @@ const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
-
 const { submissionhandler } = require(path.resolve('helper'))
-
-const { token } = require(path.resolve('helper')).token
-
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -80,63 +76,6 @@ module.exports = (app) => {
     }
   }
 
-  // resend auth keys in case of changes
-  app.get(
-    '/api/users/:user_id/refresh-auth',
-    mustHaveValidToken,
-    paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
-      const db = await getPool()
-
-      const { user_id } = req.params
-
-      const result = await db.query(
-        `
-        SELECT
-          u.*,
-          ur.role_id AS role_id,
-          r.name AS role_name,
-          r.permission AS permission
-        FROM \`user\` AS u
-          JOIN \`user_role\` AS ur ON u.id = ur.user_id
-          JOIN role AS r ON r.id = ur.\`role_id\`
-        WHERE u.id = ? 
-      `,
-        [user_id]
-      )
-
-      if (result.length !== 0) {
-        const user = result[0]
-
-        let isAdmin = false
-
-        const admin = await db.query(
-          `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
-          [user.email]
-        )
-
-        if (admin.length > 0) {
-          isAdmin = true
-        }
-
-        const jwt_data = {
-          user_id: user.id,
-          email: user.email,
-          user_role: user.role_id,
-          role_name: user.role_name,
-          admin: isAdmin,
-          permission: JSON.parse(user.permission)
-        }
-
-        const data = await token(jwt_data)
-
-        res.json({ status: 'done', auth: data })
-      } else {
-        res.json({ status: 'error' })
-      }
-    }
-  )
-
   app.put(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
@@ -201,8 +140,8 @@ module.exports = (app) => {
       const { user_id } = req.params
 
       if (
-        res.locals.auth.permission.admin ||
-        res.locals.auth.permission.formLimit === 0
+        req.cookies.auth.permission.admin ||
+        req.cookies.auth.permission.formLimit === 0
       ) {
         res.status(200).json({ message: 'new' })
       } else {
@@ -212,7 +151,7 @@ module.exports = (app) => {
           [user_id]
         )
 
-        if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+        if (parseInt(req.cookies.auth.permission.formLimit) > result[0].count) {
           res.status(200).json({ message: 'new' })
         } else {
           const lastForm = await db.query(
