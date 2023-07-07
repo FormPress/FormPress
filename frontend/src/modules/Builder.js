@@ -1598,7 +1598,11 @@ export default class Builder extends Component {
           />
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm formId={formId} uuid={this.state.form.uuid} />
+          <ShareForm
+            formId={formId}
+            uuid={this.state.form.uuid}
+            published={this.state.form.published_version > 0}
+          />
         </Route>
         <Route path="/editor/:formId/template">
           <Templates
