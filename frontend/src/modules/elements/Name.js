@@ -204,6 +204,9 @@ export default class Name extends Component {
                 id={`prefix_${config.id}`}
                 name={`q_${config.id}[prefix]`}
                 type="text"
+                placeholder={
+                  config.placeholder !== false ? config.placeholder : ''
+                }
               />
             ) : (
               <select
