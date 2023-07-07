@@ -128,7 +128,8 @@
   width: 60px;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: sticky;
+  top: 185px;
   height: fit-content;
 }
 
@@ -201,13 +202,13 @@
 .builder > .content > .leftMenu {
   min-height: 500px;
   height: calc(100vh - 150px);
-  overflow: auto;
+  overflow: scroll;
   box-shadow: 0px 3px 10px #00000014;
   /*width: 30%;*/
-  /*position: sticky;*/
+  position: sticky;
   /*top: 15%;*/
-  /*top: 126px;*/
-  /*margin-right: 10px;*/
+  top: 185px;
+  margin-bottom: 50px;
 }
 
 .builder > .content > .leftMenu:empty {
