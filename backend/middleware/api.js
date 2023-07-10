@@ -1077,19 +1077,15 @@ module.exports = (app) => {
         return res.status(404).send('token must be sent')
       }
 
-      jwt.verify(
-        req.query.token.replace('Bearer ', ''),
-        JWT_SECRET,
-        (err, decoded) => {
-          if (err !== null) {
-            return res.status(404).send(err)
-          }
-
-          if (decoded.form_id !== form_id) {
-            return res.status(404).send('token is not valid')
-          }
+      jwt.verify(req.cookies.auth, JWT_SECRET, (err, decoded) => {
+        if (err !== null) {
+          return res.status(404).send(err)
         }
-      )
+
+        if (decoded.form_id !== form_id) {
+          return res.status(404).send('token is not valid')
+        }
+      })
     }
 
     let form = result
