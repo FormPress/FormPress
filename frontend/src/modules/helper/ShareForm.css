@@ -36,6 +36,16 @@
   padding: 15px 20px;
 }
 
+.shareFormPublishedWarning {
+  background-color: #fffcdd;
+  color: #646464;
+  font-weight: bolder;
+  font-size: 14px;
+  text-align: center;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+}
+
 .shareFormTabCover .popover-container {
   color: #113952;
 }

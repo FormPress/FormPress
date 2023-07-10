@@ -80,7 +80,7 @@ module.exports = (app) => {
       // New Form
       const result = await formModel.create({ user_id, form })
 
-      res.json({ status: 'done', id: result.insertId })
+      res.json({ status: 'done', id: result.insertId, uuid: result.uuid })
     }
   }
 
@@ -1199,7 +1199,7 @@ module.exports = (app) => {
     }
 
     let form = result
-    if (req.query.preview !== 'true' && form.published_version !== null) {
+    if (req.query.preview !== 'true' && form.published_version !== 0) {
       const publishedResult = await formPublishedModel.get({
         form_id: form.id,
         version_id: form.published_version

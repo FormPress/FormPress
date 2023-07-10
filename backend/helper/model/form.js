@@ -32,15 +32,20 @@ exports.get = async ({ form_id }) => {
 exports.create = async ({ user_id, form }) => {
   const db = await getPool()
   dehydrateForm(form)
-  return await db.query(
+  const uuid = v4()
+  const result = await db.query(
     `
           INSERT INTO \`form\`
             (uuid, user_id, title, props, private, published_version, created_at)
           VALUES
             (?, ?, ?, ?, ?, 0, NOW())
         `,
-    [v4(), user_id, form.title, form.props, form.private]
+    [uuid, user_id, form.title, form.props, form.private]
   )
+
+  result.uuid = uuid
+
+  return result
 }
 
 exports.update = async ({ form }) => {
