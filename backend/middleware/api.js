@@ -80,7 +80,7 @@ module.exports = (app) => {
       // New Form
       const result = await formModel.create({ user_id, form })
 
-      res.json({ status: 'done', id: result.insertId })
+      res.json({ status: 'done', id: result.insertId, uuid: result.uuid })
     }
   }
 

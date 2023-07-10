@@ -1061,7 +1061,8 @@ export default class Builder extends Component {
       this.setState({
         form: {
           ...this.state.form,
-          id: data.id
+          id: data.id,
+          uuid: data.uuid
         }
       })
       window.localStorage.setItem('lastEditedFormId', data.id)
@@ -1137,6 +1138,7 @@ export default class Builder extends Component {
   }
 
   render() {
+    console.log('rendering form builder', this.state.form)
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
 
