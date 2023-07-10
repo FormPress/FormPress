@@ -124,6 +124,7 @@ module.exports = (app) => {
     const data = await token(jwt_data)
 
     res.cookie('auth', data, {
+      domain: process.env.COOKIE_DOMAIN,
       maxAge: 3 * 24 * 60 * 60 * 1000,
       secure: true,
       sameSite: 'none',

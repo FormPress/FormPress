@@ -80,13 +80,11 @@ const { googleSheetsApi } = require(path.resolve(
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
 const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
 
-let cookieDomain
 const corsWhitelist = []
 
 if (FP_ENV === 'development') {
-  cookieDomain = process.env.FE_FRONTEND
-
-  corsWhitelist.push(cookieDomain)
+  let frontend = process.env.FE_FRONTEND
+  corsWhitelist.push(frontend)
 
   app.use(
     cors({
@@ -101,12 +99,10 @@ if (FP_ENV === 'development') {
       credentials: true
     })
   )
-} else {
-  cookieDomain = 'https://' + process.env.FE_FRONTEND
 }
 
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', cookieDomain)
+  res.setHeader('Access-Control-Allow-Origin', process.env.FE_FRONTEND)
   res.setHeader('Access-Control-Allow-Credentials', 'true')
   res.setHeader(
     'Access-Control-Allow-Headers',
