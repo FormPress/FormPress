@@ -14,6 +14,7 @@ exports.pdfPrinter = require(path.resolve('helper', 'pdfPrinter'))
 exports.stringTools = require(path.resolve('helper', 'stringTools'))
 exports.cfLocationFinder = require(path.resolve('helper', 'cfLocationFinder'))
 exports.integrationhelper = require(path.resolve('helper', 'integrationhelper'))
+exports.publicStorage = require(path.resolve('helper', 'publicStorage'))
 exports.storage = ''
 
 if (isEnvironmentVariableSet.fileUploadBucket) {

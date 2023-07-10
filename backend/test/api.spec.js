@@ -14,6 +14,7 @@ sassCompile()
 
 process.env.JWT_SECRET = 'somesecretforunittesting'
 process.env.FILE_UPLOAD_BUCKET = 'someBucketName'
+process.env.PUBLIC_BUCKET = 'somePublicBucketName'
 
 const db = require(path.resolve('./', 'db'))
 const getPoolStub = sinon.stub(db, 'getPool')

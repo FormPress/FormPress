@@ -320,7 +320,8 @@ class Users extends Component {
                     key={user.id}
                     value={user.id}
                     onClick={() => this.handleSelectUser(user.id)}>
-                    {user.email}
+                    <p className="margin_0">Id: {user.id}</p>
+                    <p className="margin_0">{user.email}</p>
                   </div>
                 </div>
               ))}

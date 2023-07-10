@@ -23,6 +23,13 @@ resource "kubernetes_deployment" "sql_proxy" {
       }
     }
 
+    strategy {
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
+
     template {
       metadata {
         labels = {
@@ -107,6 +114,13 @@ resource "kubernetes_deployment" "formpress" {
       }
     }
 
+    strategy {
+      rolling_update {
+        max_surge       = 1
+        max_unavailable = 0
+      }
+    }
+
     template {
       metadata {
         labels = {
@@ -135,18 +149,13 @@ resource "kubernetes_deployment" "formpress" {
           }
 
           env {
-            name = "GOOGLE_SERVICE_ACCOUNT_CREDENTIALS"
-            value_from {
-              secret_key_ref {
-                name = "sa-credentials-${each.key}"
-                key  = "credentialsbase64"
-              }
-            }
+            name  = "JWT_SECRET"
+            value = random_password.jwt_secret[each.key].result
           }
 
           env {
-            name  = "JWT_SECRET"
-            value = random_password.jwt_secret[each.key].result
+            name  = "GOOGLE_APPLICATION_CREDENTIALS"
+            value = "/etc/secrets"
           }
 
           env {
@@ -193,10 +202,24 @@ resource "kubernetes_deployment" "formpress" {
               memory = "1024Mi"
             }
           }
+
+          volume_mount {
+            name       = "credentials-${each.key}"
+            mount_path = "/etc/secrets"
+            sub_path   = "credentials.json"
+            read_only  = true
+          }
         }
 
         node_selector = {
           "cloud.google.com/gke-nodepool" = each.key
+        }
+
+        volume {
+          name = "credentials-${each.key}"
+          secret {
+            secret_name = "sa-credentials-${each.key}"
+          }
         }
       }
     }

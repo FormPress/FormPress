@@ -91,7 +91,7 @@
   display: none !important;
 }
 
-#qc_prefixTypeTextBox.elementHider + #qc_prefixOptions {
+#qc_prefixTypeTextBox.elementHider ~ #qc_prefixOptions {
   display: none !important;
 }
 

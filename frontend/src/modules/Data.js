@@ -10,7 +10,6 @@ import { api } from '../helper'
 import Table from './common/Table'
 import * as Elements from './elements'
 import { createBrowserHistory } from 'history'
-
 import {
   XAxis,
   YAxis,
@@ -22,6 +21,7 @@ import {
   BarChart,
   Bar
 } from 'recharts'
+
 import './Data.css'
 
 const getStartOfToday = () => {
@@ -128,9 +128,9 @@ export default class Data extends Component {
     this.setState({ submissions })
   }
 
-  async updateSubmissionStatistics(form_id, version) {
+  async updateSubmissionStatistics(form_id) {
     const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/${version}/statistics`
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/statistics`
     })
 
     this.setState({
