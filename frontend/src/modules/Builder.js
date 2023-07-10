@@ -1138,7 +1138,6 @@ export default class Builder extends Component {
   }
 
   render() {
-    console.log('rendering form builder', this.state.form)
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
 
