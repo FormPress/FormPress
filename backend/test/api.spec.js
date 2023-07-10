@@ -2,6 +2,7 @@ const path = require('path')
 const assert = require('assert').strict
 const express = require('express')
 const request = require('supertest')
+const cookieParser = require('cookie-parser')
 const sinon = require('sinon')
 const jwt = require('jsonwebtoken')
 const cheerio = require('cheerio')
@@ -48,6 +49,8 @@ app.use(function (req, res, next) {
 
   next()
 })
+
+app.use(cookieParser())
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -136,7 +139,7 @@ describe('Api', () => {
           [endpoint.method](endpoint.exampleRequestPath)
           .set({
             Accept: 'application/json',
-            Authorization: `Bearer ${token}`
+            Cookie: `auth=${token}`
           })
 
         if (typeof endpoint.exampleRequestBody !== 'undefined') {
@@ -158,7 +161,7 @@ describe('Api', () => {
           [endpoint.method](endpoint.exampleRequestPath)
           .set({
             Accept: 'application/json',
-            Authorization: `Bearer ${token_otheruser}`
+            Cookie: `auth=${token_otheruser}`
           })
 
         if (typeof endpoint.exampleRequestBody !== 'undefined') {
