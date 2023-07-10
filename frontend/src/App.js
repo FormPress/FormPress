@@ -39,28 +39,23 @@ class App extends Component {
     super(props)
     this.state = {
       capabilities: {},
-      user: { getUsages: this.getUsages, whoAmI: this.whoAmI }
+      user: { getUsages: this.getUsages, whoAmI: this.whoAmI },
+      loading: true
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
   async componentDidMount() {
+    await this.loadEnvVars()
+    await this.loadCapabilities()
+
     await this.whoAmI()
-
-    const capabilitiesResult = await api({
-      resource: `/api/server/capabilities`,
-      method: 'get',
-      useAuth: false
-    })
-
-    const capabilities = capabilitiesResult.data
-
-    this.setState({ capabilities })
 
     await this.getUsages()
 
-    this.loadEnvVars()
+    // This is to prevent re-rendering of the app component during the calls above.
+    this.setState({ loading: false })
   }
 
   getUsages = async () => {
@@ -103,6 +98,22 @@ class App extends Component {
       }
     } catch (e) {
       console.log('Error loading variables')
+    }
+  }
+
+  loadCapabilities = async () => {
+    try {
+      const capabilitiesResult = await api({
+        resource: `/api/server/capabilities`,
+        method: 'get',
+        useAuth: false
+      })
+
+      const capabilities = capabilitiesResult.data
+
+      this.setState({ capabilities })
+    } catch (e) {
+      console.log('Error loading capabilities')
     }
   }
 
@@ -167,7 +178,7 @@ class App extends Component {
       redirectPage = <Redirect path="*" to="/404" />
     }
 
-    if (this.state.loading || !this.state.meCompleted) {
+    if (this.state.loading) {
       return (
         <div className="loading-logo">
           <FPLoader />
