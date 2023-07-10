@@ -12,7 +12,7 @@ module.exports = (app) => {
           return next()
         }
 
-        req.cookies.auth = decoded
+        req.user = decoded
         res.locals.validToken = true
 
         next()

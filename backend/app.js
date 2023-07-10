@@ -104,7 +104,8 @@ app.use(function (req, res, next) {
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (corsWhitelist.indexOf(origin) !== -1) {
+      // Same origin requests do not have a origin header, they are not CORS requests. So undefined is allowed.
+      if (origin === undefined || corsWhitelist.indexOf(origin) !== -1) {
         callback(null, true)
       } else {
         callback(new Error('Not allowed by CORS'))

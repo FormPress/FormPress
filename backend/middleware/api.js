@@ -139,10 +139,7 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id } = req.params
 
-      if (
-        req.cookies.auth.permission.admin ||
-        req.cookies.auth.permission.formLimit === 0
-      ) {
+      if (req.user.permission.admin || req.user.permission.formLimit === 0) {
         res.status(200).json({ message: 'new' })
       } else {
         const db = await getPool()
@@ -151,7 +148,7 @@ module.exports = (app) => {
           [user_id]
         )
 
-        if (parseInt(req.cookies.auth.permission.formLimit) > result[0].count) {
+        if (parseInt(req.user.permission.formLimit) > result[0].count) {
           res.status(200).json({ message: 'new' })
         } else {
           const lastForm = await db.query(
@@ -1077,7 +1074,7 @@ module.exports = (app) => {
         return res.status(404).send('token must be sent')
       }
 
-      jwt.verify(req.cookies.auth, JWT_SECRET, (err, decoded) => {
+      jwt.verify(req.user, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
           return res.status(404).send(err)
         }

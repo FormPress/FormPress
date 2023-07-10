@@ -24,7 +24,7 @@ module.exports = (app) => {
   app.get('/api/users/me', mustHaveValidToken, async (req, res) => {
     const db = await getPool()
 
-    const { user_id } = req.cookies.auth
+    const { user_id } = req.user
 
     const result = await db.query(
       `

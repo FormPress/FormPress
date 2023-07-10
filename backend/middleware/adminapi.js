@@ -284,7 +284,7 @@ module.exports = (app) => {
         const user = result[0]
         const admin = await db.query(
           `SELECT \`id\` FROM \`user\` WHERE email = ?`,
-          [req.cookies.auth.email]
+          [req.user.email]
         )
 
         const jwt_data = {
@@ -330,7 +330,7 @@ module.exports = (app) => {
           JOIN role AS r ON r.id = ur.\`role_id\`
         WHERE u.id = ? AND u.emailVerified = 1
       `,
-        [req.cookies.auth.impersonate]
+        [req.user.impersonate]
       )
       if (result.length === 1) {
         const user = result[0]
