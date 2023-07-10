@@ -84,10 +84,23 @@ let cookieDomain
 const corsWhitelist = []
 
 if (FP_ENV === 'development') {
-  cookieDomain = 'http://' + process.env.FE_FRONTEND
+  cookieDomain = process.env.FE_FRONTEND
 
-  const backendUrl = process.env.FE_BACKEND
-  corsWhitelist.push(cookieDomain, backendUrl)
+  corsWhitelist.push(cookieDomain)
+
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        // Same origin requests do not have an origin header, they are not CORS requests. So undefined is allowed.
+        if (origin === undefined || corsWhitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
+      credentials: true
+    })
+  )
 } else {
   cookieDomain = 'https://' + process.env.FE_FRONTEND
 }
@@ -103,20 +116,6 @@ app.use(function (req, res, next) {
 
   next()
 })
-
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Same origin requests do not have a origin header, they are not CORS requests. So undefined is allowed.
-      if (origin === undefined || corsWhitelist.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS'))
-      }
-    },
-    credentials: true
-  })
-)
 
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))

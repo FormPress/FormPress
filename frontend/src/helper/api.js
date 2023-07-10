@@ -21,7 +21,7 @@ export const api = ({
       options.credentials = 'include'
     }
 
-    options.credentials = 'include' // TODO: debugging purposes. remove and improve.
+    options.credentials = 'include'
 
     if (typeof body !== 'undefined') {
       options.body = typeof body === 'object' ? JSON.stringify(body) : body

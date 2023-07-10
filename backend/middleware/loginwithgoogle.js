@@ -123,8 +123,6 @@ module.exports = (app) => {
 
     const data = await token(jwt_data)
 
-    // const cookie = JSON.stringify(data)
-
     res.cookie('auth', data, {
       maxAge: 3 * 24 * 60 * 60 * 1000,
       secure: true,
