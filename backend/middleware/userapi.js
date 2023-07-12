@@ -72,7 +72,8 @@ module.exports = (app) => {
 
   // Log out
   app.post('/api/users/logout', async (req, res) => {
-    res.clearCookie('auth')
+    res.clearCookie('auth', { domain: process.env.COOKIE_DOMAIN, path: '/' })
+
     return res.status(200).json({ message: 'Logged out' })
   })
 }
