@@ -51,6 +51,7 @@ const DEFAULT_FORM = {
     elements: [
       {
         id: 1,
+        order: 0,
         type: 'TextBox',
         placeholder: '',
         required: false,
@@ -59,6 +60,7 @@ const DEFAULT_FORM = {
       },
       {
         id: 2,
+        order: 1,
         type: 'Button',
         buttonText: 'Submit'
       }
@@ -139,14 +141,12 @@ export default class Builder extends Component {
         await this.loadForm(formId)
       } else {
         window.scrollTo(0, 0)
-        const { form } = this.state
         this.setIntegration({
           type: 'email',
           to: this.props.generalContext.auth.email
         })
 
-        const savedForm = cloneDeep(form)
-        this.setState({ savedForm, loading: false })
+        this.setState({ loading: false })
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
@@ -448,8 +448,8 @@ export default class Builder extends Component {
       selectedLabelId: false,
       publishedForm: {},
       selectedIntegration: false,
-      form: DEFAULT_FORM,
-      savedForm: DEFAULT_FORM,
+      form: { ...DEFAULT_FORM },
+      savedForm: { ...DEFAULT_FORM },
       autoPBEnabled: false,
       additionalSaveFunction: null
     }
