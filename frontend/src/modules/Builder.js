@@ -1061,7 +1061,8 @@ export default class Builder extends Component {
       this.setState({
         form: {
           ...this.state.form,
-          id: data.id
+          id: data.id,
+          uuid: data.uuid
         }
       })
       window.localStorage.setItem('lastEditedFormId', data.id)
@@ -1598,7 +1599,11 @@ export default class Builder extends Component {
           />
         </Route>
         <Route path="/editor/:formId/share">
-          <ShareForm formId={formId} uuid={this.state.form.uuid} />
+          <ShareForm
+            formId={formId}
+            uuid={this.state.form.uuid}
+            published={this.state.form.published_version > 0}
+          />
         </Route>
         <Route path="/editor/:formId/template">
           <Templates
