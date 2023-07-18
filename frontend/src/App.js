@@ -70,9 +70,15 @@ class App extends Component {
     }
   }
 
-  whoAmI = async () => {
+  whoAmI = async (renewCookie = false) => {
+    let endpoint = `/api/users/me`
+
+    if (renewCookie) {
+      endpoint = `/api/users/me?renewCookie=true`
+    }
+
     const { data } = await api({
-      resource: `/api/users/me`
+      resource: endpoint
     })
 
     if (data.status === 'done') {

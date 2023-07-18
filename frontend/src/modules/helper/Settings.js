@@ -16,7 +16,7 @@ export default class Settings extends Component {
 
   async componentDidMount() {
     try {
-      await this.props.generalContext.user.whoAmI()
+      await this.props.generalContext.user.whoAmI(true)
     } catch (e) {
       console.log('error updating auth', e)
     }

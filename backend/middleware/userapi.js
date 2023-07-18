@@ -1,5 +1,6 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
+const { token } = require(path.resolve('helper')).token
 
 const { mustHaveValidToken } = require(path.resolve(
   'middleware',
@@ -62,6 +63,20 @@ module.exports = (app) => {
         role_name: user.role_name,
         admin: isAdmin,
         permission: JSON.parse(user.permission)
+      }
+
+      const { renewCookie } = req.query
+
+      if (renewCookie) {
+        const data = await token(jwt_data)
+
+        res.cookie('auth', data, {
+          domain: process.env.COOKIE_DOMAIN,
+          maxAge: 3 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: 'none',
+          httpOnly: true
+        })
       }
 
       res.json({ status: 'done', auth: jwt_data })
