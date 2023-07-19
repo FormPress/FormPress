@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { api, setToken } from './helper'
+import { api } from './helper'
 import { ProfileSVG } from './svg'
 import './Profile.css'
 import SettingsSVG from './svg/SettingsSVG'
@@ -10,38 +10,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 const Profile = (props) => {
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault()
-    window.localStorage.removeItem('auth')
-    window.localStorage.removeItem('lastEditedFormId')
+
+    await api({
+      resource: `/api/users/logout`,
+      method: 'post'
+    })
+
     window.location.reload()
   }
 
   const logoutAsUser = async (e) => {
     e.preventDefault()
+
     window.localStorage.removeItem('auth')
     window.localStorage.removeItem('lastEditedFormId')
-    const { success, data } = await api({
+    const { success } = await api({
       resource: `/api/admin/users/logout-as-user/`,
       method: 'post'
     })
 
     if (success === true) {
-      setToken(data.token)
-      window.localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          email: data.email,
-          name: data.name,
-          exp: data.exp,
-          token: data.token,
-          user_id: data.user_id,
-          user_role: data.user_role,
-          permission: data.permission,
-          admin: data.admin,
-          loggedIn: true
-        })
-      )
+      await props.generalContext.user.whoAmI()
       window.location.href = '/admin/users'
     }
   }

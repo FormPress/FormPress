@@ -19,13 +19,13 @@ import ResetPassword from './modules/helper/ResetPassword'
 import Settings from './modules/helper/Settings'
 import AdminPage from './modules/admin/AdminPage'
 import Profile from './Profile'
-// import NotFoundPage from './modules/common/NotFoundPage'
+import NotFoundPage from './modules/common/NotFoundPage'
 import ReadCallback from './modules/common/ReadCallback'
 
 import PrivateRoute from './PrivateRoute'
 import AdminRoute from './AdminRoute'
 
-import { api, setToken } from './helper'
+import { api } from './helper'
 
 import GeneralContext from './general.context'
 
@@ -34,58 +34,28 @@ import { Logo, FPLoader } from './svg'
 import './App.css'
 import './style/themes/scss/index.scss'
 
-const auth = window.localStorage.getItem('auth')
-let initialAuthObject = {
-  token: '',
-  email: '',
-  user_id: 0,
-  user_role: 0,
-  permission: {},
-  impersonate: 0,
-  exp: '',
-  admin: false,
-  loading: true,
-  loggedIn: false
-}
-
-if (auth !== null) {
-  try {
-    const authObject = JSON.parse(auth)
-
-    if (authObject.exp * 1000 > new Date().getTime()) {
-      initialAuthObject = authObject
-      setToken(authObject.token)
-    }
-  } catch (e) {
-    console.error('Error on parsing auth information from localStorage')
-  }
-}
-
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      ...initialAuthObject,
       capabilities: {},
-      user: { getUsages: this.getUsages, refreshAuth: this.refreshAuth }
+      user: { getUsages: this.getUsages, whoAmI: this.whoAmI },
+      loading: true
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
   }
 
   async componentDidMount() {
-    const capabilitiesResult = await api({
-      resource: `/api/server/capabilities`,
-      method: 'get'
-    })
+    await this.loadEnvVars()
+    await this.loadCapabilities()
 
-    const capabilities = capabilitiesResult.data
-
-    this.setState({ capabilities })
+    await this.whoAmI()
 
     await this.getUsages()
 
-    this.loadEnvVars()
+    // This is to prevent re-rendering of the app component during the calls above.
+    this.setState({ loading: false })
   }
 
   getUsages = async () => {
@@ -100,87 +70,87 @@ class App extends Component {
     }
   }
 
-  refreshAuth = async () => {
-    if (this.state.user_id) {
-      const { data } = await api({
-        resource: `/api/users/${this.state.user_id}/refresh-auth`
-      })
+  whoAmI = async (renewCookie = false) => {
+    let endpoint = `/api/users/me`
 
-      if (data.status === 'done') {
-        const incomingAuthObject = data.auth
-        setToken(incomingAuthObject.token)
-
-        this.handleSetAuth(incomingAuthObject, true)
-      }
+    if (renewCookie) {
+      endpoint = `/api/users/me?renewCookie=true`
     }
+
+    const { data } = await api({
+      resource: endpoint
+    })
+
+    if (data.status === 'done') {
+      const incomingAuthObject = data.auth
+
+      incomingAuthObject.loggedIn = true
+
+      this.handleSetAuth(incomingAuthObject)
+    }
+
+    this.setState({ meCompleted: true })
   }
 
   //load env vars
   loadEnvVars = async () => {
     try {
       const response = await api({
-        resource: `/api/loadvariables`
+        resource: `/api/loadvariables`,
+        useAuth: false
       })
       for (const [key, value] of Object.entries(response.data)) {
         global.env[key] = value
       }
-
-      this.setState({ loading: false })
     } catch (e) {
       console.log('Error loading variables')
     }
   }
 
-  handleSetAuth(
-    {
-      email = this.state.email,
-      user_id = this.state.user_id,
-      user_role = this.state.user_role,
-      role_name = this.state.role_name,
-      token = this.state.token,
-      impersonate = this.state.impersonate,
-      admin = this.state.admin,
-      loggedIn = this.state.loggedIn,
-      exp = this.state.exp,
-      permission = this.state.permission
-    },
-    persist = true
-  ) {
-    this.setState({
+  loadCapabilities = async () => {
+    try {
+      const capabilitiesResult = await api({
+        resource: `/api/server/capabilities`,
+        method: 'get',
+        useAuth: false
+      })
+
+      const capabilities = capabilitiesResult.data
+
+      this.setState({ capabilities })
+    } catch (e) {
+      console.log('Error loading capabilities')
+    }
+  }
+
+  handleSetAuth({
+    email = this.state.email,
+    user_id = this.state.user_id,
+    user_role = this.state.user_role,
+    role_name = this.state.role_name,
+    impersonate = this.state.impersonate,
+    admin = this.state.admin,
+    loggedIn = this.state.loggedIn,
+    exp = this.state.exp,
+    permission = this.state.permission
+  }) {
+    const auth = {
       email,
       user_id,
       user_role,
       role_name,
-      token,
       impersonate,
       admin,
       loggedIn,
       exp,
       permission
-    })
-
-    if (persist === true) {
-      window.localStorage.setItem(
-        'auth',
-        JSON.stringify({
-          email,
-          user_id,
-          user_role,
-          role_name,
-          token,
-          impersonate,
-          admin,
-          loggedIn,
-          exp,
-          permission
-        })
-      )
     }
+
+    this.setState(auth)
   }
 
   getAuthContextValue() {
     return {
-      token: this.state.token,
       impersonate: this.state.impersonate,
       email: this.state.email,
       user_id: this.state.user_id,
@@ -210,9 +180,9 @@ class App extends Component {
     let redirectPage = <Redirect to="/login" />
 
     // TODO: fix this, temporarily disabled
-    // if (auth.loggedIn === true) {
-    //   redirectPage = <Redirect path="*" to="/404" />
-    // }
+    if (auth.loggedIn === true) {
+      redirectPage = <Redirect path="*" to="/404" />
+    }
 
     if (this.state.loading) {
       return (
@@ -354,7 +324,7 @@ class App extends Component {
               />
 
               <Route path="/read/development" component={ReadCallback} />
-              {/*<Route path="/404" component={NotFoundPage} />*/}
+              <Route path="/404" component={NotFoundPage} />
               {redirectPage}
             </Switch>
           </div>

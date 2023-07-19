@@ -48,6 +48,7 @@ variable "deployments" {
     public_bucket_name               = string
     google_client_id                 = string
     sendgrid_api_key                 = string
+    cookie_domain                    = string
     env_var                          = map(string)
   }))
 
@@ -70,6 +71,7 @@ variable "deployments" {
       "public_bucket_name"               = "public_bucket",
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",
+      "cookie_domain"                    = "mydomain.com",
       "env_var"                          = {}
     }
   }

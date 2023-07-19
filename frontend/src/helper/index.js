@@ -1,1 +1,1 @@
-export { api, setToken } from './api'
+export { api } from './api'
