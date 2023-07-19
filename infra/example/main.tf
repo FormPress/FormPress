@@ -24,6 +24,7 @@ module "formpress" {
       "database_name"                    = "formpress"
       "hostname"                         = var.host_url,
       "bucket_name"                      = var.upload_bucket,
+      "public_bucket_name"               = var.public_bucket_name
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",
       "env_var" = {

@@ -28,6 +28,10 @@ variable "upload_bucket" {
   description = "Bucket name for file uploads"
 }
 
+variable "public_bucket_name" {
+  description = "Bucket name for public form images"
+}
+
 variable "zones" {
   default     = ["europe-west1-b"]
   description = "For multizone setup use [ europe-west1-b, europe-west1-c ] add quotation marks"

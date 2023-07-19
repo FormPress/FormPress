@@ -183,6 +183,11 @@ resource "kubernetes_deployment" "formpress" {
             value = each.value.sendgrid_api_key
           }
 
+          env {
+            name  = "COOKIE_DOMAIN"
+            value = each.value.cookie_domain
+          }
+
           dynamic "env" {
             for_each = each.value.env_var
 
