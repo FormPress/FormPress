@@ -7,7 +7,7 @@ module.exports = (app) => {
     const { auth } = req.cookies
 
     if (auth) {
-      jwt.verify(auth, JWT_SECRET+'asd', (err, decoded) => {
+      jwt.verify(auth, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
           res.clearCookie('auth', { domain: process.env.COOKIE_DOMAIN, path: '/' })
           return next()
