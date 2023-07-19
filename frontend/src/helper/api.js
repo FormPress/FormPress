@@ -2,12 +2,6 @@
   Generic method handles api requests
 */
 
-let token = ''
-
-export const setToken = (_token) => {
-  token = _token
-}
-
 export const api = ({
   resource,
   method = 'get',
@@ -24,8 +18,10 @@ export const api = ({
     }
 
     if (useAuth === true) {
-      options.headers['Authorization'] = `Bearer ${token}`
+      options.credentials = 'include'
     }
+
+    options.credentials = 'include'
 
     if (typeof body !== 'undefined') {
       options.body = typeof body === 'object' ? JSON.stringify(body) : body

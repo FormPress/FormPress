@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
-import { api, setToken } from '../helper'
+import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import LoginWithGoogle from './helper/LoginWithGoogle'
@@ -120,11 +120,9 @@ class SignUp extends Component {
     })
 
     if (success === true) {
-      setToken(data.token)
       this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,
-        token: data.token,
         user_id: data.user_id,
         user_role: data.user_role,
         role_name: data.role_name,

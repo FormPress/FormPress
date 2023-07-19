@@ -10,21 +10,21 @@ exports.mustHaveValidToken = (req, res, next) => {
 }
 
 exports.paramShouldMatchTokenUserId = (param) => (req, res, next) => {
-  if (parseInt(req.params[param]) === res.locals.auth.user_id) {
+  if (parseInt(req.params[param]) === req.user.user_id) {
     next()
   } else {
-    res.status(403).send({ message: 'Invalid Token' })
+    res.status(403).send({ message: 'Invalid Token User Id' })
   }
 }
 
 exports.mustBeAdmin = async (req, res, next) => {
-  if (res.locals.auth.user_role === 1) {
+  if (req.user.user_role === 1) {
     next()
   } else {
     const db = await getPool()
     const result = await db.query(
       `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
-      [res.locals.auth.email]
+      [req.user.email]
     )
 
     if (result.length > 0) {
@@ -103,14 +103,14 @@ exports.userHavePermission = (req, res, next) => {
   const form = req.body
   const elements = form.props.elements
   let isForbidden = false
-  if (res.locals.auth.permission.admin) {
+  if (req.user.permission.admin) {
     next()
   } else {
     for (let i = 0; i < elements.length; i++) {
       const element = elements[i]
       const elementType = element.type
 
-      if (!res.locals.auth.permission[elementType]) {
+      if (!req.user.permission[elementType]) {
         isForbidden = true
         break
       }
@@ -127,10 +127,7 @@ exports.userHavePermission = (req, res, next) => {
 }
 
 exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
-  if (
-    res.locals.auth.permission.admin ||
-    res.locals.auth.permission.formLimit === 0
-  ) {
+  if (req.user.permission.admin || req.user.permission.formLimit === 0) {
     next()
   } else {
     const db = await getPool()
@@ -139,7 +136,7 @@ exports.userHaveFormLimit = (user_id) => async (req, res, next) => {
       [req.params[user_id]]
     )
 
-    if (parseInt(res.locals.auth.permission.formLimit) > result[0].count) {
+    if (parseInt(req.user.permission.formLimit) > result[0].count) {
       next()
     } else {
       res.status(403).send({ message: 'Form limit reached' })

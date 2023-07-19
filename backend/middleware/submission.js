@@ -482,7 +482,7 @@ module.exports = (app) => {
     let tyPageText =
       'Your submission was successful and the form owner has been notified.'
 
-    res.render('submit-success.tpl.ejs', {
+    res.render('submit-success.tpl-LEGACY.ejs', {
       headerAppend: `<style type='text/css'>${style}</style>`,
       tyTitle: tyPageTitle,
       tyText: tyPageText

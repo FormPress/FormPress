@@ -3,7 +3,7 @@ import { Redirect, Link } from 'react-router-dom'
 
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
-import { api, setToken } from '../helper'
+import { api } from '../helper'
 import GeneralContext from '../general.context'
 import LoginWithGoogle from './helper/LoginWithGoogle'
 
@@ -54,13 +54,10 @@ class Login extends Component {
     this.setState({ state: 'done', message: data.message })
 
     if (success === true) {
-      setToken(data.token)
-
       this.props.generalContext.auth.setAuth({
         email,
         name: data.name,
         exp: data.exp,
-        token: data.token,
         user_id: data.user_id,
         user_role: data.user_role,
         role_name: data.role_name,
@@ -91,7 +88,6 @@ class Login extends Component {
     })
 
     if (success === true) {
-      setToken(data.token)
       this.props.generalContext.auth.setAuth({
         email: data.email,
         exp: data.exp,

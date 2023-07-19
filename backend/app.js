@@ -3,6 +3,8 @@ const path = require('path')
 const fs = require('fs')
 const cors = require('cors')
 
+const cookieParser = require('cookie-parser')
+
 const fileUpload = require('express-fileupload')
 const transform = require(path.resolve('script', 'babel-transform'))
 const sassCompile = require(path.resolve('script', 'sass-compiler'))
@@ -51,12 +53,7 @@ const changePasswordMiddleware = require(path.resolve(
 ))
 
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
-const signupMiddleware = require(path.resolve('middleware', 'signup'))
-const loginMiddleware = require(path.resolve('middleware', 'login'))
-const loginWithGoogleMiddleware = require(path.resolve(
-  'middleware',
-  'loginwithgoogle'
-))
+const userApiMiddleware = require(path.resolve('middleware', 'userapi'))
 const authenticationMiddleware = require(path.resolve(
   'middleware',
   'authentication'
@@ -83,31 +80,50 @@ const { googleSheetsApi } = require(path.resolve(
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
 const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
 
+const corsWhitelist = []
+
+if (FP_ENV === 'development') {
+  let frontend = process.env.FE_FRONTEND
+  corsWhitelist.push(frontend)
+
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        // Same origin requests do not have an origin header, they are not CORS requests. So undefined is allowed.
+        if (origin === undefined || corsWhitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
+      credentials: true
+    })
+  )
+}
+
 app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header(
+  res.setHeader('Access-Control-Allow-Origin', process.env.FE_FRONTEND)
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   )
-  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
 
   next()
 })
 
-app.use(cors())
 app.use(express.json({ limit: '50mb' }))
 app.use(express.urlencoded({ limit: '50mb', extended: true }))
-
+app.use(cookieParser())
 app.use(fileUpload())
 app.set('view engine', 'ejs')
 
 authenticationMiddleware(app)
 pluginMiddleware(app)
-loginWithGoogleMiddleware(app)
 apiMiddleware(app)
+userApiMiddleware(app)
 adminApiMiddleware(app)
-loginMiddleware(app)
-signupMiddleware(app)
 submissionMiddleware(app)
 changePasswordMiddleware(app)
 googleApisMiddleware(app)

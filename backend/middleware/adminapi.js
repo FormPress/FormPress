@@ -284,7 +284,7 @@ module.exports = (app) => {
         const user = result[0]
         const admin = await db.query(
           `SELECT \`id\` FROM \`user\` WHERE email = ?`,
-          [res.locals.auth.email]
+          [req.user.email]
         )
 
         const jwt_data = {
@@ -298,7 +298,15 @@ module.exports = (app) => {
         }
 
         const data = await token(jwt_data)
-        return res.status(200).json(data)
+
+        res.cookie('auth', data, {
+          maxAge: 3 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: 'none',
+          httpOnly: true
+        })
+
+        return res.status(200).json(jwt_data)
       } else {
         return res.status(404).json({ message: 'User not found' })
       }
@@ -322,7 +330,7 @@ module.exports = (app) => {
           JOIN role AS r ON r.id = ur.\`role_id\`
         WHERE u.id = ? AND u.emailVerified = 1
       `,
-        [res.locals.auth.impersonate]
+        [req.user.impersonate]
       )
       if (result.length === 1) {
         const user = result[0]
@@ -336,7 +344,15 @@ module.exports = (app) => {
         }
 
         const data = await token(jwt_data)
-        return res.status(200).json(data)
+
+        res.cookie('auth', data, {
+          maxAge: 3 * 24 * 60 * 60 * 1000,
+          secure: true,
+          sameSite: 'none',
+          httpOnly: true
+        })
+
+        return res.status(200).json({ message: 'Logged out as user' })
       } else {
         return res.status(403).json({ message: 'Invalid Token' })
       }
