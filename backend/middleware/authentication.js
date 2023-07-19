@@ -9,7 +9,10 @@ module.exports = (app) => {
     if (auth) {
       jwt.verify(auth, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
-          res.clearCookie('auth', { domain: process.env.COOKIE_DOMAIN, path: '/' })
+          res.clearCookie('auth', {
+            domain: process.env.COOKIE_DOMAIN,
+            path: '/'
+          })
           return next()
         }
 
