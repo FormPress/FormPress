@@ -44,6 +44,7 @@ module "gke" {
   http_load_balancing        = true
   horizontal_pod_autoscaling = true
   kubernetes_version         = var.control_plane_version
+  release_channel            = "STABLE"
   network_policy             = false
   network                    = "formpress-default"
   subnetwork                 = "formpress-subnet"
