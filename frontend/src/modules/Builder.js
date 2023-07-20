@@ -448,8 +448,8 @@ export default class Builder extends Component {
       selectedLabelId: false,
       publishedForm: {},
       selectedIntegration: false,
-      form: { ...DEFAULT_FORM },
-      savedForm: { ...DEFAULT_FORM },
+      form: cloneDeep(DEFAULT_FORM),
+      savedForm: cloneDeep(DEFAULT_FORM),
       autoPBEnabled: false,
       additionalSaveFunction: null
     }
