@@ -85,6 +85,8 @@ const corsWhitelist = []
 if (FP_ENV === 'development') {
   let frontend = process.env.FE_FRONTEND
   corsWhitelist.push(frontend)
+  let backend = process.env.FE_BACKEND
+  corsWhitelist.push(backend)
 
   app.use(
     cors({
