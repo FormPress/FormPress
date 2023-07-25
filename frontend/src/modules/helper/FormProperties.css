@@ -243,50 +243,6 @@
   left: -130px;
 }
 
-.formProperties .replyToTooltip .popover-container {
-  float: right;
-  position: relative;
-  top: -21px;
-  left: -97px;
-}
-
-.formProperties .replyToTooltip .popover-container:hover > .popoverText {
-  width: 18rem;
-  height: fit-content;
-  top: -55px;
-  left: -86px;
-  width: 12rem;
-  padding: 4px 3px;
-  border-radius: 4px;
-  position: absolute;
-  background-color: #113952;
-  color: #fff;
-  text-align: center;
-  z-index: 9999;
-  font-size: 12px;
-  display: block;
-}
-
-.formProperties .replyToSelectWrap {
-  font-family: 'Montserrat', sans-serif;
-  padding: 10px;
-}
-.formProperties .replyToSelect {
-  width: 100%;
-  padding: 5px;
-  border-radius: 4px;
-  font-family: Montserrat;
-  border: solid 2px #eceaea;
-  background-color: #ffffff;
-  color: #000000;
-  outline: 0;
-  height: 30px;
-}
-.formProperties .replyToSelectLabel {
-  margin-top: 5px !important;
-  margin-bottom: 5px !important;
-  font-weight: 500 !important;
-}
 .formProperties > .adv-settings {
   padding: 20px 10px 10px 10px;
 }

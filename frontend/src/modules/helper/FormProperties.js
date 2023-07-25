@@ -17,11 +17,6 @@ export default class FormProperties extends Component {
     }
 
     this.handleEmailChange = this.handleEmailChange.bind(this)
-    this.handleEmailSubjectChange = this.handleEmailSubjectChange.bind(this)
-    this.handleEmailReplyToChange = this.handleEmailReplyToChange.bind(this)
-    this.handleEmailReplyToCustomChange = this.handleEmailReplyToCustomChange.bind(
-      this
-    )
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleAddTag = this.handleAddTag.bind(this)
@@ -36,27 +31,6 @@ export default class FormProperties extends Component {
     this.props.setIntegration({
       type: 'email',
       to: e.target.value
-    })
-  }
-
-  handleEmailSubjectChange(elem, e) {
-    this.props.setIntegration({
-      type: 'email',
-      subject: e.target.value
-    })
-  }
-
-  handleEmailReplyToChange(elem) {
-    this.props.setIntegration({
-      type: 'email',
-      replyTo: elem.target.value
-    })
-  }
-
-  handleEmailReplyToCustomChange(elem, e) {
-    this.props.setIntegration({
-      type: 'email',
-      replyToCustom: e.target.value
     })
   }
 
@@ -140,43 +114,15 @@ export default class FormProperties extends Component {
 
   render() {
     const { capabilities } = this.props.generalContext
-    const { form } = this.props
     const integrations = this.props.form.props.integrations || []
 
     const matchingIntegration = (type) =>
       integrations.filter((integration) => integration.type === type)
+
     let email = ''
 
     if (matchingIntegration('email').length > 0) {
       email = matchingIntegration('email')[0].to
-    }
-
-    const emailElements = form.props.elements.filter(
-      (element) => element.type === 'Email'
-    )
-
-    let subject = 'New response: {FormTitle}'
-    if (
-      matchingIntegration('email').length > 0 &&
-      matchingIntegration('email')[0].subject !== undefined
-    ) {
-      subject = matchingIntegration('email')[0].subject
-    }
-
-    let replyTo = 'none'
-    if (
-      matchingIntegration('email').length > 0 &&
-      matchingIntegration('email')[0].replyTo !== undefined
-    ) {
-      replyTo = matchingIntegration('email')[0].replyTo
-    }
-
-    let replyToCustom
-    if (
-      matchingIntegration('email').length > 0 &&
-      matchingIntegration('email')[0].replyToCustom !== undefined
-    ) {
-      replyToCustom = matchingIntegration('email')[0].replyToCustom
     }
 
     let privateForm = 0
@@ -217,86 +163,22 @@ export default class FormProperties extends Component {
           Modify the settings of your form
         </div>
         {capabilities.sendgridApiKey ? (
-          <div>
-            <Renderer
-              handleFieldChange={this.handleEmailChange}
-              theme="infernal"
-              form={{
-                props: {
-                  elements: [
-                    {
-                      id: 1,
-                      type: 'TextBox',
-                      label: 'Send submission notifications to',
-                      value: email
-                    }
-                  ]
-                }
-              }}
-            />
-            <Renderer
-              handleFieldChange={this.handleEmailSubjectChange}
-              theme="infernal"
-              form={{
-                props: {
-                  elements: [
-                    {
-                      id: 1,
-                      type: 'TextBox',
-                      label: 'Notification Email Subject',
-                      value: subject
-                    }
-                  ]
-                }
-              }}
-            />
-            <div className="replyToSelectWrap">
-              <div className="replyToSelectLabel">
-                Notification Email Reply to:
-              </div>
-              <div className="replyToTooltip">
-                <span className="popover-container">
-                  <FontAwesomeIcon icon={faInfoCircle} />
-                  <div className="popoverText">
-                    You can also use Email elements in the form for dynamic
-                    Reply to
-                  </div>
-                </span>
-              </div>
-              <select
-                className="replyToSelect"
-                value={replyTo}
-                onChange={this.handleEmailReplyToChange}
-                id="replyToSelect">
-                <option value="none">None</option>
-                {emailElements.map((element) => (
-                  <option key={element.id} value={element.id}>
-                    Form Field: {element.label}
-                  </option>
-                ))}
-
-                <option value="custom">Custom</option>
-              </select>
-            </div>
-            <div className={replyTo === 'custom' ? 'visible' : 'hidden'}>
-              <Renderer
-                handleFieldChange={this.handleEmailReplyToCustomChange}
-                theme="infernal"
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 1,
-                        type: 'TextBox',
-                        label: 'Reply to:',
-                        value: replyToCustom
-                      }
-                    ]
+          <Renderer
+            handleFieldChange={this.handleEmailChange}
+            theme="infernal"
+            form={{
+              props: {
+                elements: [
+                  {
+                    id: 1,
+                    type: 'TextBox',
+                    label: 'Send submission notifications to',
+                    value: email
                   }
-                }}
-              />
-            </div>
-          </div>
+                ]
+              }
+            }}
+          />
         ) : (
           ''
         )}
