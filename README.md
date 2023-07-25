@@ -21,15 +21,13 @@ FormPress is a combination of;
 
 # Installation
 
-`docker compose` intended to be used in local development environment. For production purposes, please refer to the `/infra/example` folder
-
 ## Docker
 
 Deployment of FormPress is fairly easy. So as to create the required images and run the containers:
 
 ```sh
 cd formpress
-docker compose up
+docker-compose up
 ```
 
 And that's it. To verify that the process ran smoothly, in your browser, please navigate to:

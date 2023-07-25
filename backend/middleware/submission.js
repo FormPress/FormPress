@@ -416,47 +416,6 @@ module.exports = (app) => {
         text: textBody,
         html: htmlBody
       }
-      //add custom email subject if written
-      if (
-        emailIntegration[0].subject !== '' &&
-        emailIntegration[0].subject !== undefined
-      ) {
-        msg.subject = emailIntegration[0].subject
-          .split('{FormTitle}')
-          .join(form.title)
-      }
-
-      const validEmail = (email) => {
-        return email.trim().indexOf('@') > -1 && email.length > 3
-      }
-      //custom reply to
-      if (
-        emailIntegration[0].replyTo !== undefined &&
-        emailIntegration[0].replyTo === 'custom'
-      ) {
-        if (
-          emailIntegration[0].replyToCustom &&
-          validEmail(emailIntegration[0].replyToCustom)
-        )
-          msg.replyTo = emailIntegration[0].replyToCustom
-      } else if (
-        emailIntegration[0].replyTo !== undefined &&
-        emailIntegration[0].replyTo !== 'none'
-      ) {
-        //it means dynamic reply to
-        const emailAnswerId = parseInt(emailIntegration[0].replyTo)
-        const emailQuestion = form.props.elements.filter(
-          (element) => element.id === emailAnswerId
-        )
-        if (emailQuestion.length > 0 && emailQuestion[0].type === 'Email') {
-          const emailAnswer = formattedInput.filter(
-            (answer) => answer.q_id === emailAnswerId
-          )
-          if (emailAnswer.length > 0 && validEmail(emailAnswer[0].value)) {
-            msg.replyTo = emailAnswer[0].value
-          }
-        }
-      }
 
       try {
         console.log('sending email')
