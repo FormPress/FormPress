@@ -8,7 +8,7 @@ export default class LoginWithGoogle extends Component {
       <GoogleOAuthProvider
         clientId={global.env.FE_GOOGLE_CREDENTIALS_CLIENT_ID}>
         <GoogleLogin
-          width={'332'}
+          width={332}
           shape={'rectangular'}
           size={'large'}
           logo_alignment={'left'}
