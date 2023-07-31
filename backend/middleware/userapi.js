@@ -1,5 +1,4 @@
 const path = require('path')
-const { getPool } = require(path.resolve('./', 'db'))
 const { token } = require(path.resolve('helper')).token
 
 const { mustHaveValidToken } = require(path.resolve(

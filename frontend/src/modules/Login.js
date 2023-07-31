@@ -215,14 +215,14 @@ class Login extends Component {
                 <div className="for-login">
                   <div className="or-seperator">or</div>
                   <div className="google-sign-in">
-                    {/*<LoginWithGoogle*/}
-                    {/*  context={'signin'}*/}
-                    {/*  disabled={false}*/}
-                    {/*  handleLoginWithGoogleButton={*/}
-                    {/*    this.handleLoginWithGoogleClick*/}
-                    {/*  }*/}
-                    {/*  handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}*/}
-                    {/*/>*/}
+                    <LoginWithGoogle
+                      context={'signin'}
+                      disabled={false}
+                      handleLoginWithGoogleButton={
+                        this.handleLoginWithGoogleClick
+                      }
+                      handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
+                    />
                   </div>
                 </div>
               ) : (
