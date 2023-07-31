@@ -65,6 +65,22 @@ class Login extends Component {
         admin: data.admin,
         loggedIn: true
       })
+
+      const queryParams = new URLSearchParams(this.props.location.search)
+      const encoded = queryParams.get('destination') || '/'
+
+      const destination = decodeURIComponent(encoded)
+
+      if (
+        destination.startsWith('http://') ||
+        destination.startsWith('https://')
+      ) {
+        window.location.href = destination
+      } else {
+        // Handle relative URLs
+        const fullURL = `${window.location.protocol}//${window.location.host}${destination}`
+        window.location.href = fullURL
+      }
     } else {
       this.setState({ state: 'done', message: data.message })
       window.scrollTo({
@@ -199,14 +215,14 @@ class Login extends Component {
                 <div className="for-login">
                   <div className="or-seperator">or</div>
                   <div className="google-sign-in">
-                    <LoginWithGoogle
-                      context={'signin'}
-                      disabled={false}
-                      handleLoginWithGoogleButton={
-                        this.handleLoginWithGoogleClick
-                      }
-                      handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}
-                    />
+                    {/*<LoginWithGoogle*/}
+                    {/*  context={'signin'}*/}
+                    {/*  disabled={false}*/}
+                    {/*  handleLoginWithGoogleButton={*/}
+                    {/*    this.handleLoginWithGoogleClick*/}
+                    {/*  }*/}
+                    {/*  handleLoginWithGoogleFail={this.handleLoginWithGoogleFail}*/}
+                    {/*/>*/}
                   </div>
                 </div>
               ) : (
