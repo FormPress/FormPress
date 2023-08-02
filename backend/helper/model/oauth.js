@@ -12,7 +12,7 @@ exports.storeAuthorizationCode = async ({
 
   try {
     const query =
-      'INSERT INTO oauth_data (id, user_id, client_id, authorization_code, redirect_uri, created_at) VALUES (?, ?, ?, ?, ?, NOW())'
+      'INSERT INTO oauth_data (id, user_id, client_id, authorization_code, redirect_uri) VALUES (?, ?, ?, ?, ?)'
     const values = [
       code_id,
       user.user_id,
@@ -32,7 +32,7 @@ exports.storeAccessToken = async ({ code_id, access_token }) => {
 
   try {
     const query =
-      'UPDATE oauth_data SET access_token = ?, updated_at = NOW() WHERE id = ? AND access_token IS NULL'
+      'UPDATE oauth_data SET access_token = ? WHERE id = ? AND access_token IS NULL'
     const values = [access_token, code_id]
     const result = await db.query(query, values)
 
