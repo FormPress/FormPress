@@ -384,8 +384,7 @@ module.exports = (app) => {
           FRONTEND: FRONTEND,
           FormTitle: form.title,
           QUESTION_AND_ANSWERS: questionsAndAnswers,
-          Submission_id: submission_id,
-          Email: sendEmailTo
+          Submission_id: submission_id
         })
         .catch((err) => {
           console.log('can not render html body', err)
@@ -398,8 +397,7 @@ module.exports = (app) => {
           FormTitle: form.title,
           Form: form,
           FormattedInput: formattedInput,
-          Submission_id: submission_id,
-          Email: sendEmailTo
+          Submission_id: submission_id
         })
         .catch((err) => {
           console.log('can not render text body', err)
