@@ -23,7 +23,7 @@
     const question = data.question.label + '\r\n'
     if (data.type === 'Name') {
       for (const [key, value] of Object.entries(data.answer)) {
-        if (key === 'firstName') { 
+        if (key === 'firstName') {
           answer += 'First Name: '
         } else if (key === 'lastName') {
           answer += 'Last Name: '
@@ -31,7 +31,7 @@
           answer += key + ': '
         }
         if (value === '') {
-          answer += 'N/A\r\n' 
+          answer += 'N/A\r\n'
         } else {
           answer += value + '\r\n'
         }
@@ -61,7 +61,7 @@
           ')\r\n'
         })
       }
-      
+
     } else {
       if (data.answer === '') {
         answer = 'N/A\r\n'
@@ -75,9 +75,7 @@
   const answers = responses.join('\r\n')
 
   const footer =
-    '\r\n\r\n\r\n2023 FORMPRESS This e-mail has been sent to the address ' +
-    Email +
-    ', you can change the address from form properties.'
+    '\r\n\r\n\r\n2023 FORMPRESS '
   textedEmail += formpressText
   textedEmail += helloText
   textedEmail += answers
