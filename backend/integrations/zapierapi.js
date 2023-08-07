@@ -132,10 +132,8 @@ exports.zapierApi = (app) => {
     mustHaveValidToken,
     async (req, res) => {
       let { form_id } = req.params
-      let uuid = null
 
       if (validate(form_id)) {
-        uuid = form_id
         form_id = await formModel.getFormIdFromUUID(form_id)
       } else if (parseInt(form_id) > 1200) {
         return res.status(404).send('Form Not Found')

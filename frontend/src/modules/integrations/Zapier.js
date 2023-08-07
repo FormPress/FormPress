@@ -47,8 +47,8 @@ export default class Zapier extends Component {
             opening up endless possibilities for workflow automation. Zapier
             allows you to effortlessly transmit form submissions to your
             preferred apps, saving time and streamlining your processes. Explore
-            the convenience and efficiency of Zapier's versatile integrations
-            and take your productivity to new heights
+            the convenience and efficiency of Zapier&#39;s versatile
+            integrations and take your productivity to new heights
           </div>
           <div className="activation-button wip">
             <button type="button" onClick={this.handleConfigureWebhook}>
