@@ -1,6 +1,7 @@
 const path = require('path')
 const { model } = require(path.resolve('helper'))
 const formModel = model.form
+const formPublishedModel = model.formpublished
 
 const { mustHaveValidToken } = require(path.resolve(
   'middleware',
@@ -23,6 +24,7 @@ exports.zapierApi = (app) => {
 
       // first, lets see if we have params that we need
       let { form_id, hookUrl, zapId } = options
+      let { user_id } = req.user
 
       if (!form_id || !hookUrl || !zapId) {
         return res.status(400).send('No form_id or hookUrl provided')
@@ -43,6 +45,10 @@ exports.zapierApi = (app) => {
 
       if (form === false) {
         return res.status(400).send('Form not found.')
+      }
+
+      if (user_id !== form.user_id) {
+        return res.status(401).send('Unauthorized')
       }
 
       const integrationList = form.props.integrations
@@ -74,6 +80,9 @@ exports.zapierApi = (app) => {
         return res.status(400).send('Form could not be updated.')
       }
 
+      // publish form
+      await formPublishedModel.create({ user_id, form })
+
       return res.status(201).json({ zapId })
     }
   )
@@ -84,6 +93,7 @@ exports.zapierApi = (app) => {
     async (req, res) => {
       const options = req.body
       let { form_id, zapId } = options
+      let { user_id } = req.user
 
       // same as above but we will delete the integration instead
       if (!form_id || !zapId) {
@@ -100,6 +110,10 @@ exports.zapierApi = (app) => {
 
       if (form === false) {
         return res.status(400).send('Form not found.')
+      }
+
+      if (user_id !== form.user_id) {
+        return res.status(401).send('Unauthorized')
       }
 
       const integrationList = form.props.integrations
@@ -122,6 +136,9 @@ exports.zapierApi = (app) => {
       if (dbRes.affectedRows === 0) {
         return res.status(400).send('Form could not be updated.')
       }
+
+      // publish form
+      await formPublishedModel.create({ user_id, form })
 
       return res.status(201).json({ zapId })
     }
