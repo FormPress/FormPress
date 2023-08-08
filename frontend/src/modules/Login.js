@@ -24,8 +24,27 @@ class Login extends Component {
     this.handleLoginButtonClick = this.handleLoginButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+    this.handleRedirect = this.handleRedirect.bind(this)
 
     this.formRef = React.createRef()
+  }
+
+  handleRedirect() {
+    const queryParams = new URLSearchParams(this.props.location.search)
+    const encoded = queryParams.get('destination') || '/'
+
+    const destination = decodeURIComponent(encoded)
+
+    if (
+      destination.startsWith('http://') ||
+      destination.startsWith('https://')
+    ) {
+      window.location.href = destination
+    } else {
+      // Handle relative URLs
+      const fullURL = `${window.location.protocol}//${window.location.host}${destination}`
+      window.location.href = fullURL
+    }
   }
 
   handleFieldChange(elem, e) {
@@ -65,6 +84,13 @@ class Login extends Component {
         admin: data.admin,
         loggedIn: true
       })
+
+      const queryParams = new URLSearchParams(this.props.location.search)
+      const destination = queryParams.get('destination')
+
+      if (destination) {
+        this.handleRedirect()
+      }
     } else {
       this.setState({ state: 'done', message: data.message })
       window.scrollTo({
@@ -99,6 +125,13 @@ class Login extends Component {
         admin: data.admin,
         loggedIn: true
       })
+
+      const queryParams = new URLSearchParams(this.props.location.search)
+      const destination = queryParams.get('destination')
+
+      if (destination) {
+        this.handleRedirect()
+      }
     } else {
       this.setState({ state: 'done', message: data.message })
     }

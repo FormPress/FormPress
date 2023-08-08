@@ -1,5 +1,31 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
+const { FP_ENV, FE_FRONTEND } = process.env
+
+exports.ensureLoggedIn = (req, res, next) => {
+  if (req.user && res.locals.validToken) {
+    next()
+  } else {
+    if (FP_ENV === 'development') {
+      // in development, full url should consist of protocol, host, port, and path
+      let originalDestination = `${req.protocol}://${req.get('host')}${
+        req.originalUrl
+      }`
+
+      const loginUrl =
+        FE_FRONTEND +
+        '/login?destination=' +
+        encodeURIComponent(originalDestination)
+
+      return res.redirect(loginUrl)
+    } else {
+      const originalDestination = req.originalUrl
+      const loginUrl =
+        '/login?destination=' + encodeURIComponent(originalDestination)
+      return res.redirect(loginUrl)
+    }
+  }
+}
 
 exports.mustHaveValidToken = (req, res, next) => {
   if (res.locals.validToken === true) {

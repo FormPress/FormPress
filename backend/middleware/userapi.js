@@ -1,5 +1,4 @@
 const path = require('path')
-const { getPool } = require(path.resolve('./', 'db'))
 const { token } = require(path.resolve('helper')).token
 
 const { mustHaveValidToken } = require(path.resolve(
@@ -10,6 +9,8 @@ const { mustHaveValidToken } = require(path.resolve(
 const signUp = require(path.resolve('middleware', 'signup'))
 const login = require(path.resolve('middleware', 'login'))
 const loginWithGoogle = require(path.resolve('middleware', 'loginwithgoogle'))
+const { model } = require(path.resolve('helper'))
+const userModel = model.user
 
 module.exports = (app) => {
   // Sign up
@@ -23,52 +24,15 @@ module.exports = (app) => {
 
   // Get user info
   app.get('/api/users/me', mustHaveValidToken, async (req, res) => {
-    const db = await getPool()
-
     const { user_id } = req.user
 
-    const result = await db.query(
-      `
-        SELECT
-          u.*,
-          ur.role_id AS role_id,
-          r.name AS role_name,
-          r.permission AS permission
-        FROM \`user\` AS u
-          JOIN \`user_role\` AS ur ON u.id = ur.user_id
-          JOIN role AS r ON r.id = ur.\`role_id\`
-        WHERE u.id = ? 
-      `,
-      [user_id]
-    )
+    const user = await userModel.get({ user_id })
 
-    if (result.length !== 0) {
-      const user = result[0]
-
-      let isAdmin = false
-
-      const admin = await db.query(
-        `SELECT \`email\` FROM \`admins\` WHERE email = ?`,
-        [user.email]
-      )
-
-      if (admin.length > 0) {
-        isAdmin = true
-      }
-
-      const jwt_data = {
-        user_id: user.id,
-        email: user.email,
-        user_role: user.role_id,
-        role_name: user.role_name,
-        admin: isAdmin,
-        permission: JSON.parse(user.permission)
-      }
-
+    if (user !== false) {
       const { renewCookie } = req.query
 
       if (renewCookie) {
-        const data = await token(jwt_data)
+        const data = await token(user)
 
         res.cookie('auth', data, {
           domain: process.env.COOKIE_DOMAIN,
@@ -79,7 +43,7 @@ module.exports = (app) => {
         })
       }
 
-      res.json({ status: 'done', auth: jwt_data })
+      res.json({ status: 'done', auth: user })
     } else {
       res.json({ status: 'error' })
     }

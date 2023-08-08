@@ -4,8 +4,11 @@ const { error } = require(path.resolve('helper'))
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-exports.token = (jwt_data) => {
-  const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
+exports.token = (jwt_data, exp) => {
+  if (exp === undefined) {
+    exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
+  }
+
   jwt_data = { ...jwt_data, exp }
 
   const token = jwt.sign(jwt_data, JWT_SECRET)

@@ -25,6 +25,8 @@ const isEnvironmentVariableSet = {
   fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
 }
 
+const oauthClientsPresent = process.env.OAUTH_CLIENTS !== ''
+
 //for local environments
 if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
   let tmp = process.env.GOOGLE_SERVICE_ACCOUNT_CREDENTIALS
@@ -61,6 +63,7 @@ const authenticationMiddleware = require(path.resolve(
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
+const oauth = require(path.resolve('middleware', 'oauth'))
 
 const googleApisMiddleware = require(path.resolve(
   'middleware',
@@ -133,6 +136,10 @@ googleDriveApi(app)
 googleSheetsApi(app)
 discordApi(app)
 slackApi(app)
+
+if (oauthClientsPresent) {
+  oauth(app)
+}
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
   verifyEmailMiddleware(app)
