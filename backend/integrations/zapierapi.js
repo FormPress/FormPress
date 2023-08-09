@@ -74,14 +74,14 @@ exports.zapierApi = (app) => {
       }
 
       // update form
-      const dbRes = await formModel.update({ form })
+      const dbRes = await formModel.update({ form: { ...form } })
 
       if (dbRes.affectedRows === 0) {
         return res.status(400).send('Form could not be updated.')
       }
 
       // publish form
-      await formPublishedModel.create({ user_id, form })
+      await formPublishedModel.create({ user_id, form: { ...form } })
 
       return res.status(201).json({ zapId })
     }
@@ -131,14 +131,14 @@ exports.zapierApi = (app) => {
       integrationList.splice(index, 1)
 
       // update form
-      const dbRes = await formModel.update({ form })
+      const dbRes = await formModel.update({ form: { ...form } })
 
       if (dbRes.affectedRows === 0) {
         return res.status(400).send('Form could not be updated.')
       }
 
       // publish form
-      await formPublishedModel.create({ user_id, form })
+      await formPublishedModel.create({ user_id, form: { ...form } })
 
       return res.status(201).json({ zapId })
     }

@@ -49,6 +49,7 @@ variable "deployments" {
     google_client_id                 = string
     sendgrid_api_key                 = string
     cookie_domain                    = string
+    oauth_clients                    = string
     env_var                          = map(string)
   }))
 
@@ -72,6 +73,7 @@ variable "deployments" {
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",
       "cookie_domain"                    = "mydomain.com",
+      "oauth_clients"                    = "",
       "env_var"                          = {}
     }
   }
