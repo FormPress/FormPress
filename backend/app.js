@@ -82,6 +82,7 @@ const { googleSheetsApi } = require(path.resolve(
 
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
 const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
+const { zapierApi } = require(path.resolve('integrations', 'zapierapi.js'))
 
 const corsWhitelist = []
 
@@ -136,6 +137,7 @@ googleDriveApi(app)
 googleSheetsApi(app)
 discordApi(app)
 slackApi(app)
+zapierApi(app)
 
 if (oauthClientsPresent) {
   oauth(app)
