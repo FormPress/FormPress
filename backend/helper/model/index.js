@@ -6,3 +6,5 @@ exports.formpublished = require(path.resolve(
   'model',
   'formpublished'
 ))
+exports.user = require(path.resolve('helper', 'model', 'user'))
+exports.oauth = require(path.resolve('helper', 'model', 'oauth'))

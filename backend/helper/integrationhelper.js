@@ -29,6 +29,11 @@ const { triggerCustomWebhook } = require(path.resolve(
   'customwebhookapi.js'
 ))
 
+const { triggerZapierWebhook } = require(path.resolve(
+  'integrations',
+  'zapierapi.js'
+))
+
 exports.triggerIntegrations = async (
   form,
   questionsAndAnswers,
@@ -141,5 +146,24 @@ exports.triggerIntegrations = async (
       formId: form.id,
       submissionId: submission_id
     })
+  }
+
+  // there may be multiple zapier integrations
+  const zapierIntegrations = integrationList.filter((i) => i.type === 'Zapier')
+  if (zapierIntegrations.length > 0) {
+    for (const zapierIntegration of zapierIntegrations) {
+      if (
+        zapierIntegration.active === true &&
+        zapierIntegration.paused !== true
+      ) {
+        await triggerZapierWebhook({
+          integrationConfig: zapierIntegration,
+          questionsAndAnswers,
+          formTitle: form.title,
+          formId: form.id,
+          submissionId: submission_id
+        })
+      }
+    }
   }
 }

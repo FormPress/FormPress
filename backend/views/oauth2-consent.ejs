@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login with Formpress</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        html {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background-image: url(/bg-pattern.png);
+            background-repeat: repeat;
+        }
+
+        form {
+            margin: auto;
+            width: 500px;
+            background: white;
+            box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
+        }
+
+        fieldset {
+            border: 0;
+        }
+
+        #allow {
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+            overflow: visible;
+            text-transform: none;
+            -webkit-appearance: button;
+            font-family: Montserrat;
+            font-weight: 700;
+            padding-top: 8px !important;
+            padding-bottom: 8px !important;
+            min-width: 80px;
+            margin-right: 10px;
+            cursor: pointer;
+
+            background-color: #8cc63f;
+            border: 1px solid #8cc63f;
+            color: white;
+        }
+
+        #allow:hover {
+            background-color: #6e9f2f;
+            border: 1px solid #6e9f2f;
+        }
+
+        #deny {
+            -webkit-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box;
+            font-size: 100%;
+            line-height: 1.15;
+            margin: 0;
+            overflow: visible;
+            text-transform: none;
+            -webkit-appearance: button;
+            font-family: Montserrat;
+            font-weight: 700;
+            padding-top: 8px !important;
+            padding-bottom: 8px !important;
+            min-width: 80px;
+            margin-right: 10px;
+            background-color: white;
+            border-radius: 3px;
+            cursor: pointer;
+            color: #333;
+            border: 1px solid gray;
+        }
+
+        #deny:hover {
+            border: 1px solid #be0000;
+            color: #be0000;
+        }
+
+
+        .logo-header {
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo-header > svg {
+            height: 70px;
+        }
+
+        .subtext {
+            text-align: center;
+            color: #333;
+        }
+
+        .buttons {
+            width: 200px;
+            margin: auto;
+        }
+
+        .main-text {
+            padding: 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap">
+</head>
+<body>
+<form action="/oauth2/authorize/decision" method="post" class="pure-form pure-form-stacked">
+    <input name="transaction_id" type="hidden" value="<%= transactionID %>">
+    <fieldset>
+        <div class="upper-box">
+            <div>
+                <div class="logo-header">
+                    <%- include ("../svg/formpresslogo.svg") %>
+                </div>
+                <h4 class="subtext">Authorize Application</h4>
+            </div>
+            <div class="main-text">
+                <p>Hi, <%= user.email.match(/[^@]+/) %></p>
+                <b><%= oauthClient.name %></b> is requesting access to your account.
+                <p>
+                    The application will be able to:
+                    <ul>
+                        <%
+                        const scopeTextMap = {
+                          readSubmissions: "Read your submission data",
+                          readForms: "Read your forms"
+                        }
+                        for (var i = 0; i < oauthClient.scope.length; i++) {
+                        %>
+                            <li><%= scopeTextMap[oauthClient.scope[i]] %></li>
+                        <% } %>
+                    </ul>
+                </p>
+                <p>Do you approve?</p>
+            </div>
+        </div>
+        <div class="bottom-box">
+            <div class="buttons">
+                <div>
+                    <input type="submit" value="Deny" name="cancel" id="deny">
+                    <span>&nbsp&nbsp</span>
+                    <input type="submit" value="Accept" id="allow">
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+</body>
+</html>
+
+

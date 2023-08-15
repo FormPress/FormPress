@@ -188,6 +188,11 @@ resource "kubernetes_deployment" "formpress" {
             value = each.value.cookie_domain
           }
 
+          env {
+            name  = "OAUTH_CLIENTS"
+            value = each.value.oauth_clients
+          }
+
           dynamic "env" {
             for_each = each.value.env_var
 

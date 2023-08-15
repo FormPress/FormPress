@@ -27,6 +27,7 @@ module "formpress" {
       "public_bucket_name"               = var.public_bucket_name
       "google_client_id"                 = "",
       "sendgrid_api_key"                 = "",
+      "oauth_clients"                    = "",
       "env_var" = {
         "NODE_ENV"    = "production"
         "FE_BACKEND"  = "https://${var.host_url}"
