@@ -240,6 +240,7 @@ export default class Location extends Component {
                 <input
                   type="text"
                   className="latlong-input"
+                  disabled={true}
                   data-coordinateType="latitude"
                   name={`q_${config.id}[latitude]`}
                   readOnly={mode === 'builder'}
@@ -262,6 +263,7 @@ export default class Location extends Component {
                 <input
                   type="text"
                   className="latlong-input"
+                  disabled={true}
                   data-coordinateType="longitude"
                   name={`q_${config.id}[longitude]`}
                   readOnly={mode === 'builder'}
