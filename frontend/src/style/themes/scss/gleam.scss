@@ -1045,6 +1045,71 @@ $color-14: #68942f; /* forest green */
   .elementRatingScale .rating-scale-Stars.extends-select {
     color: $secondary-color;
   }
+
+  .elementLocation {
+    .latlong-input {
+      box-sizing: border-box;
+      height: 25px;
+      padding: 5px 7px;
+      color: #333333;
+      border: solid 1px #c9c9c9;
+      border-radius: 3px;
+      outline: 0;
+      background-color: #f5f5f5;
+    }
+
+    .latlong-label {
+      width: 100%;
+    }
+
+    .latlong-button {
+      font-size: 14px;
+      font-weight: bold;
+      width: 12rem;
+      min-height: 2.1rem;
+      cursor: pointer;
+      color: #ffffff;
+      border: none;
+      background-color: $accent-main-light;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+      margin: 10px 0 10px 0;
+    }
+
+    .latlong-button:hover {
+      background-color: $accent-main-dark;
+    }
+
+    .location-sublabel {
+      margin-top: 2.5rem;
+    }
+
+    .response-status {
+      padding: 10px 0 10px 5px;
+      margin-top: 1rem;
+      border-radius: 5px;
+      line-height: 0.5 !important;
+    }
+
+    .response-status.success::before {
+      content: '✔ ';
+      font-size: 18px;
+    }
+
+    .response-status.error::before {
+      content: '✖ ';
+      font-size: 18px;
+    }
+
+    .response-status.success {
+      background: #adf0ad;
+      color: green;
+    }
+
+    .response-status.error {
+      background: #f0adad;
+      color: #b74343;
+    }
+  }
 }
 
 @media screen and (max-width: 992px) {
