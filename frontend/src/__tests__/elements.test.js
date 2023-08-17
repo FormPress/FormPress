@@ -45,6 +45,15 @@ for (const key of keys) {
             myTestObject.findAllByProps({ name: 'q_0[time]' })
           )
           expect(multipleNames.length).toBeGreaterThan(1)
+        }else if(key === 'Location'){
+          const myTestObject = component.root
+          const nameAttributes = myTestObject.findAllByProps({
+            name: 'q_0[latitude]'
+          })
+          const multipleNames = nameAttributes.concat(
+            myTestObject.findAllByProps({ name: 'q_0[longitude]' })
+          )
+          expect(multipleNames.length).toBeGreaterThan(1)
         } else {
           const myTestObject = component.root
           //assuming defaultConfig have id:0
