@@ -7,6 +7,15 @@
       `input[data-coordinatetype="longitude"]`
     )
 
+    const mapIframe = questionContainer.querySelector(`iframe`)
+    // apikey is located in iframe data-apiKey attribute
+    const apiKey = mapIframe.getAttribute(`data-apikey`)
+    const mapUrl = `
+    https://www.google.com/maps/embed/v1/place?q=${position.coords.latitude},${position.coords.longitude}&key=${apiKey}
+    `
+
+    mapIframe.setAttribute(`src`, mapUrl)
+
     latInput.value = position.coords.latitude
     longInput.value = position.coords.longitude
 
@@ -14,6 +23,7 @@
     responseDiv.classList.add(`success`)
     responseDiv.innerHTML = `Location successfully filled in.`
     responseDiv.classList.remove(`dn`)
+    mapIframe.classList.remove(`dn`)
   }
 
   function promptOnError(error, questionContainer) {

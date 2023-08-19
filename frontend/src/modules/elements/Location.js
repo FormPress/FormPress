@@ -101,10 +101,20 @@ export default class Location extends Component {
   }
 
   static renderDataValue(entry, question) {
+    const apiKey =
+      process.env.FE_GOOGLE_MAPS_KEY || global.env.FE_GOOGLE_MAPS_KEY
+
     const htmlCollection = []
+
+    let invalidCoordinates = false
+
     Object.entries(entry.value).map((entry) => {
       const key = entry[0]
       const value = entry[1]
+
+      if (value === '') {
+        invalidCoordinates = true
+      }
 
       let defaultSublabel = true
 
@@ -125,7 +135,9 @@ export default class Location extends Component {
     })
 
     // means both latitude and longitude are present
-    if (htmlCollection.length === 2) {
+    if (invalidCoordinates === false) {
+      const { latitude, longitude } = entry.value
+
       htmlCollection.push(
         <div key="map">
           <strong>Map:</strong>
@@ -136,6 +148,15 @@ export default class Location extends Component {
             rel="noopener noreferrer">
             Open in Google Maps
           </a>
+          <br />
+          <iframe
+            title="map"
+            style={{
+              width: '650px',
+              height: '350px',
+              border: 'none'
+            }}
+            src={`https://www.google.com/maps/embed/v1/place?q=${latitude},${longitude}&key=${apiKey}`}></iframe>
         </div>
       )
     }
@@ -178,6 +199,8 @@ export default class Location extends Component {
   render() {
     const { config, mode } = this.props
     const { inputValues, errorMessage } = this.state
+    const apiKey =
+      process.env.FE_GOOGLE_MAPS_KEY || global.env.FE_GOOGLE_MAPS_KEY
 
     const errorPresent = errorMessage !== ''
 
@@ -195,31 +218,44 @@ export default class Location extends Component {
               required={config.required}
             />
           </div>
+          <button
+            type="button"
+            className="latlong-button"
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  // success callback
+                  (position) => {
+                    this.promptOnSuccess(position, inputValues)
+                  },
+                  // error callback
+                  (error) => {
+                    this.promptOnError(error, inputValues)
+                  }
+                )
+              } else {
+                this.setState({
+                  errorMessage: 'Geolocation is not supported by this browser.'
+                })
+              }
+            }}>
+            Fill In Current Location
+          </button>
+          <iframe
+            title="map"
+            style={{
+              width: '500px',
+              height: '250px',
+              border: 'none'
+            }}
+            className="dn"
+            data-apiKey={apiKey}
+            src=""></iframe>
+          <div className={'response-status' + (errorPresent ? '' : ' dn')}>
+            <FontAwesomeIcon icon={faWarning} className="warning-icon" />
+            &nbsp;{errorMessage}
+          </div>
           <div className="input">
-            <button
-              type="button"
-              className="latlong-button"
-              onClick={() => {
-                if (navigator.geolocation) {
-                  navigator.geolocation.getCurrentPosition(
-                    // success callback
-                    (position) => {
-                      this.promptOnSuccess(position, inputValues)
-                    },
-                    // error callback
-                    (error) => {
-                      this.promptOnError(error, inputValues)
-                    }
-                  )
-                } else {
-                  this.setState({
-                    errorMessage:
-                      'Geolocation is not supported by this browser.'
-                  })
-                }
-              }}>
-              Fill In Current Location
-            </button>
             <div
               className={
                 'latlong-fields' + (config.hideManualInputs ? ' dn' : '')
@@ -269,10 +305,6 @@ export default class Location extends Component {
                 />
               </div>
             </div>
-          </div>
-          <div className={'response-status' + (errorPresent ? '' : ' dn')}>
-            <FontAwesomeIcon icon={faWarning} className="warning-icon" />
-            &nbsp;{errorMessage}
           </div>
           <div className="clearfix">
             <EditableLabel
