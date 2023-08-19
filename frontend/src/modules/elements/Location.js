@@ -200,7 +200,8 @@ export default class Location extends Component {
     const { config, mode } = this.props
     const { inputValues, errorMessage } = this.state
     const apiKey =
-      process.env.FE_GOOGLE_MAPS_KEY || global.env.FE_GOOGLE_MAPS_KEY
+      process.env.FE_GOOGLE_MAPS_KEY ||
+      (global.env ? global.env.FE_GOOGLE_MAPS_KEY : undefined)
 
     const errorPresent = errorMessage !== ''
 
