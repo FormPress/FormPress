@@ -4,13 +4,13 @@
     <script src="http://localhost:3001/runtime/embed.js" FP_ID="7"></script>
   </div>
 
-  => 
+  =>
 
   <div>
     <script src="http://localhost:3001/runtime/embed.js" FP_ID="7"></script>
     <iframe src="http://localhost:3001/form/view/7"/>
   </div>
-  
+
   1. DON't depend on BACKEND, parse it from src part of script tags who has FP_ID attribute defined
 
   2. traverse FP_ID defined script tags, and insert iframe form view just as sibling
@@ -110,7 +110,7 @@
             border: none;
           }
         </style>
-        <iframe id="${iframeID}" src="${src}"></iframe>
+        <iframe id="${iframeID}" src="${src}" allow="geolocation *"></iframe>
         <script>
           ${cookieScript}
           iFrameResize({ log: false }, '#${iframeID}')
