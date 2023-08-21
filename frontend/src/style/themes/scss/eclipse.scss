@@ -111,7 +111,9 @@ $color-14: #68942f; /* forest green */
   }
 
   // Location exception
-  &.form > .elementLocation > iframe, .response-status, .latlong-button {
+  &.form > .elementLocation > iframe,
+  .response-status,
+  .latlong-button {
     order: 3;
   }
 
@@ -1144,7 +1146,7 @@ $color-14: #68942f; /* forest green */
       margin-top: 0.5rem;
       width: 500px;
       border-radius: 5px;
-     }
+    }
 
     .response-status.success::before {
       content: '✔ ';
