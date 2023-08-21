@@ -1140,7 +1140,6 @@ $color-14: #68942f; /* forest green */
       margin-top: 0.5rem;
       width: 500px;
       border-radius: 5px;
-      line-height: 0.5 !important;
     }
 
     .response-status.success::before {
@@ -1181,5 +1180,13 @@ $color-14: #68942f; /* forest green */
   .renderer .elementNetPromoterScore ul li label {
     width: 30px !important;
     margin: 0 1px !important;
+  }
+
+  .elementLocation > iframe {
+    width: 100% !important;
+  }
+
+  .elementLocation > .response-status {
+    width: 100% !important;
   }
 }

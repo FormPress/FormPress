@@ -110,6 +110,11 @@ $color-14: #68942f; /* forest green */
     order: 4;
   }
 
+  // Location exception
+  &.form > .elementLocation > iframe, .response-status, .latlong-button {
+    order: 3;
+  }
+
   .bs-mild {
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
   }
@@ -1134,17 +1139,12 @@ $color-14: #68942f; /* forest green */
       background-color: $accent-main-dark;
     }
 
-    .location-sublabel {
-      margin-top: 2.5rem;
-    }
-
     .response-status {
       padding: 10px 0 10px 5px;
       margin-top: 0.5rem;
       width: 500px;
       border-radius: 5px;
-      line-height: 0.5 !important;
-    }
+     }
 
     .response-status.success::before {
       content: '✔ ';
@@ -1184,5 +1184,13 @@ $color-14: #68942f; /* forest green */
   .renderer .elementNetPromoterScore ul li label {
     width: 30px !important;
     margin: 0 1px !important;
+  }
+
+  .elementLocation > iframe {
+    width: 100% !important;
+  }
+
+  .elementLocation > .response-status {
+    width: 100% !important;
   }
 }
