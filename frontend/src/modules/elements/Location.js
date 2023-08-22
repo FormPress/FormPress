@@ -50,7 +50,6 @@ export default class Location extends Component {
 
   static submissionHandler = {
     findQuestionValue: (inputs, qid) => {
-      console.log(inputs, qid)
       let valueObject = {}
       for (const elem of inputs) {
         if (elem.q_id === qid) {
@@ -63,6 +62,7 @@ export default class Location extends Component {
 
   static helpers = {
     getElementValue: (id) => {
+      console.log('called getElementValue', id)
       const locationElem = document.getElementById(`qc_${id}`)
       const locationInputs = locationElem.querySelectorAll('input[type="text"]')
 
@@ -78,13 +78,14 @@ export default class Location extends Component {
       return values
     },
     isFilled: (values) => {
+      console.log('called isFilled', values)
       let filled = 0
       for (const value of values) {
         if (value.value !== '') {
           filled++
         }
       }
-      return filled >= 2
+      return filled === 2
     }
   }
 

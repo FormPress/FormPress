@@ -47,6 +47,7 @@ class PreviewForm extends Component {
           <iframe
             src={`${BACKEND}/form/view/${uuid}?preview=true`}
             title={`FP_FORM_${formID}`}
+            allow="geolocation *"
           />
         </div>
       </div>

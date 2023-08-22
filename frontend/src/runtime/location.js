@@ -1,4 +1,7 @@
 ;(async () => {
+  // we will have to trigger change event on main div to cause validation
+  const changeEvent = new Event(`change`)
+
   function promptOnSuccess(position, questionContainer) {
     const latInput = questionContainer.querySelector(
       `input[data-coordinatetype="latitude"]`
@@ -24,6 +27,8 @@
     responseDiv.innerHTML = `Location successfully filled in.`
     responseDiv.classList.remove(`dn`)
     mapIframe.classList.remove(`dn`)
+
+    questionContainer.dispatchEvent(changeEvent)
   }
 
   function promptOnError(error, questionContainer) {
@@ -48,6 +53,8 @@
     responseDiv.classList.add(`error`)
     responseDiv.innerHTML = errorMessage
     responseDiv.classList.remove(`dn`)
+
+    questionContainer.dispatchEvent(changeEvent)
   }
 
   function onLocationButtonClick(event) {
@@ -72,6 +79,7 @@
       responseDiv.classList.add(`error`)
       responseDiv.innerHTML = `Geolocation is not supported by this browser.`
       responseDiv.classList.remove(`dn`)
+      locationElement.dispatchEvent(changeEvent)
     }
   }
 
