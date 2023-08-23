@@ -119,7 +119,7 @@ server.exchange(
       )
     }
 
-    return done(null, access_token, null, { user_id })
+    return done(null, access_token, null, { ...user })
   })
 )
 
