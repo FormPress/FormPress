@@ -10,7 +10,8 @@
     TextBox: ['input'],
     Address: ['input'],
     Phone: ['input'],
-    DatePicker: ['input']
+    DatePicker: ['input'],
+    Location: ['input']
   }
 
   function requiredCheck(id) {

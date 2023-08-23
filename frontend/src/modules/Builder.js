@@ -714,6 +714,8 @@ export default class Builder extends Component {
         question[`${itemID}ButtonText`] = value
       } else if (id.split('_')[0] === 'radio') {
         question[`${itemID}Text`] = value
+      } else if (id.split('_')[0] === 'location') {
+        question[`${itemID}SublabelText`] = value
       } else if (id.split('_')[0] === 'date' || id.split('_')[0] === 'time') {
         question[`${itemID}SublabelText`] = value
       } else {

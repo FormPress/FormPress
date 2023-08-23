@@ -35,6 +35,10 @@
     {
       name: 'conditional',
       check: () => formHasConditionalLogic === true
+    },
+    {
+      name: 'location',
+      check: (element) => element.type === 'Location'
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>

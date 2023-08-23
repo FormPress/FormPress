@@ -1,44 +1,44 @@
-/*
-  Embed should work by this
-  <div>
-    <script src="http://localhost:3001/runtime/embed.js" FP_ID="7"></script>
-  </div>
-
-  => 
-
-  <div>
-    <script src="http://localhost:3001/runtime/embed.js" FP_ID="7"></script>
-    <iframe src="http://localhost:3001/form/view/7"/>
-  </div>
-  
-  1. DON't depend on BACKEND, parse it from src part of script tags who has FP_ID attribute defined
-
-  2. traverse FP_ID defined script tags, and insert iframe form view just as sibling
-
-
-*/
-
 ;(async () => {
-  const scriptUrl = document.querySelectorAll('[fp_id]')[0].src
+  const scriptsWithDataAttribute = document.querySelectorAll('[data-fp-id]')
+  const scriptsWithOldAttribute = document.querySelectorAll('[fp_id]')
+
+  const allScripts = Array.from(scriptsWithDataAttribute).concat(
+    Array.from(scriptsWithOldAttribute)
+  )
+
+  if (!allScripts.length) {
+    return // No scripts with data-fp-id or fp_id attribute found
+  }
+
+  const scriptUrl = allScripts[0].src
   const arr = scriptUrl.split('/')
   const BACKEND = arr[0] + '//' + arr[2]
 
-  const loadScript = (name) =>
-    new Promise((resolve, reject) => {
+  const loadScript = async (name) => {
+    return new Promise((resolve, reject) => {
       const script = document.createElement('script')
 
       script.onload = resolve
       script.src = `${BACKEND}/runtime/${name}.js`
       document.head.appendChild(script)
     })
+  }
 
-  await loadScript('3rdparty/jquery.3.4.1.min')
   await loadScript('3rdparty/iframeResizer.min')
 
-  // add iframe after script tag, adding after not fp_style to ignore multiple embed
-  $('script[fp_id]').each(function (index, elem) {
-    const formID = $(this).attr('fp_id')
-    const token = $(this).attr('fp_token')
+  allScripts.forEach((script, index) => {
+    const formID =
+      script.getAttribute('data-fp-id') || script.getAttribute('fp_id')
+    const token =
+      script.getAttribute('data-fp-token') || script.getAttribute('fp_token')
+    const widgetTitle =
+      script.getAttribute('data-fp-widget-title') ||
+      script.getAttribute('fp_widget_title')
+    const widgetCookie =
+      script.getAttribute('data-fp-widget-cookie') ||
+      script.getAttribute('fp_widget_cookie')
+    const widget =
+      script.getAttribute('data-fp-widget') || script.getAttribute('fp_widget')
 
     let src = `${BACKEND}/form/view/${formID}?embed=true`
 
@@ -46,47 +46,56 @@
       src += `&token=${token}`
     }
 
-    const fpTitle =
-      $(this).attr('fp_widget_title') !== undefined
-        ? `<h3>${$(this).attr('fp_widget_title')}</h3>`
-        : ''
     const iframeID = 'fp_' + formID
 
-    let iframeElem = `<iframe id="${iframeID}" src="${src}"></iframe>`
+    let iframeElem = `<iframe id="${iframeID}" src="${src}" allow="geolocation *"></iframe>`
 
-    if ($(this).attr('fp_widget') !== undefined) {
+    let cookieScript = ''
+
+    let iframeStyle = `
+      iframe {
+        width: 1px;
+        min-width: 100%;
+        border: none;
+      }
+    `
+
+    if (widget !== null) {
       src += `&widget=true`
 
+      const fpTitle = widgetTitle !== null ? `<h3>${widgetTitle}</h3>` : ''
+
       iframeElem = `
-      <div style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
-        <div class="message-container hidden">
-          ${fpTitle}
-          <div class="iframe-content">
-            <iframe id="${iframeID}" src="${src}" crossorigin="anonymous"></iframe>
+        <div style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
+          <div class="message-container hidden">
+            ${fpTitle}
+            <div class="iframe-content">
+              <iframe id="${iframeID}" src="${src}" allow="geolocation *"></iframe>
+            </div>
+          </div>
+          <div class="button-container">
+            <img src="https://static.formpress.org/images/embed-chat.svg" class="icon chat" onClick="toggleOpen(true)">
+            <img src="https://static.formpress.org/images/embed-cross.svg" class="icon cross hidden" onClick="toggleOpen(false)">
           </div>
         </div>
-        <div class="button-container">
-          <img src="https://static.formpress.org/images/embed-chat.svg" class="icon chat" onClick="toggleOpen(true)">
-          <img src="https://static.formpress.org/images/embed-cross.svg" class="icon cross hidden" onClick="toggleOpen(false)">
-        </div>
-      </div>
       `
-    }
 
-    if (!$(this).next().attr('fp_style')) {
-      let cookieScript = ``
-      if ($(this).attr('fp_widget_cookie') !== undefined) {
-        cookieScript = `
-          var loaded = 0
+      cookieScript = `
+          var loaded${index} = 0
+          
+          var iframe${index} = document.getElementById('${iframeID}')
+          
           if(getCookie('fp_widget_cookie') === "${formID}"){
-            $('#${iframeID}').attr('src', "${BACKEND}/thank-you")
+            iframe${index}.setAttribute('src', "${BACKEND}/thank-you")
           }
-          $("#${iframeID}").on('load', function() {
-            loaded += 1
-            if(loaded === 2){
+          
+          iframe${index}.addEventListener('load', function() {
+            loaded${index} += 1
+            if(loaded${index} === 2){
               document.cookie = "fp_widget_cookie = ${formID}; max-age = "+ 60*60*24*2;
             }
           });
+                
           function getCookie(cname) {
             let name = cname + "=";
             let ca = document.cookie.split(';');
@@ -100,28 +109,24 @@
               }
             }
             return "";
-          }`
-      }
-      if ($(this).attr('fp_widget') === undefined) {
-        $(`<style fp_style="true">
-          iframe {
-            width: 1px;
-            min-width: 100%;
-            border: none;
           }
-        </style>
-        <iframe id="${iframeID}" src="${src}"></iframe>
-        <script>
-          ${cookieScript}
-          iFrameResize({ log: false }, '#${iframeID}')
-        </script>`).insertAfter(this)
-      } else {
-        $(`<style fp_style="true">
-        iframe {
-          width: 1px;
-          min-width: 100%;
-          border: none;}
-        .icon {
+        
+        function toggleOpen(open) {
+          if (open) {
+            document.querySelector('.chat').classList.add('hidden')
+            document.querySelector('.cross').classList.remove('hidden')
+            document.querySelector('.message-container').classList.remove('hidden')         
+          } else {
+            document.querySelector('.chat').classList.remove('hidden')
+            document.querySelector('.cross').classList.add('hidden')
+            document.querySelector('.message-container').classList.add('hidden')
+          }
+        }       
+    `
+
+      // append style for widget
+      iframeStyle += `
+         .icon {
           cursor: pointer;
           width: 70%;
           position: absolute;
@@ -187,25 +192,34 @@
         }
         .message-container form button:hover {
           background-color: #16632f;
-        }
-      </style>
-      ${iframeElem}
-      <script>
-        ${cookieScript}
-        var open = true
-        function toggleOpen(open) {
-          if (open) {
-            $('.chat').addClass('hidden');
-            $('.cross').removeClass('hidden');
-            $('.message-container').removeClass('hidden');
-          } else {
-            $('.chat').removeClass('hidden');
-            $('.cross').addClass('hidden');
-            $('.message-container').addClass('hidden');
-          }
-        }
-        iFrameResize({ log: false }, '#${iframeID}')
-      </script>`).insertAfter(this)
+        }   
+      `
+    }
+
+    const iframeContainer = document.createElement('div')
+
+    const iframeScript = document.createElement('script')
+    iframeScript.innerHTML = cookieScript
+
+    const style = document.createElement('style')
+    style.innerHTML = iframeStyle
+
+    iframeContainer.innerHTML = iframeElem
+    iframeContainer.appendChild(style)
+    iframeContainer.appendChild(iframeScript)
+
+    // add processed attribute to iframe container
+    iframeContainer.setAttribute('data-fp_processed', 'true')
+
+    //  prevent script from running again
+    if (
+      !script.nextElementSibling ||
+      !script.nextElementSibling.hasAttribute('data-fp_processed')
+    ) {
+      script.insertAdjacentElement('afterend', iframeContainer)
+
+      if (window.iFrameResize !== undefined) {
+        window.iFrameResize({ log: false }, `#${iframeID}`)
       }
     }
   })

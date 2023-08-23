@@ -88,10 +88,16 @@ class ShareForm extends Component {
     const embedCode = ` 
       <script 
         src="${this.hostname}/runtime/embed.js"
-        fp_id="${this.uuid}"
-        ${this.state.widget ? ' fp_widget="true"' : ''} 
-        ${this.state.answered_once ? `fp_widget_cookie="${this.formId}"` : ''} 
-        ${this.state.title ? ` fp_widget_title="${this.state.title}"` : ''}>
+        data-fp-id="${this.uuid}"
+        ${this.state.widget ? ' data-fp-widget="true"' : ''} 
+        ${
+          this.state.answered_once
+            ? ` data-fp-widget-cookie="${this.formId}"`
+            : ''
+        } 
+        ${
+          this.state.title ? ` data-fp-widget-title="${this.state.title}"` : ''
+        }>
       </script>
         `.replace(/\s+/g, ' ')
 

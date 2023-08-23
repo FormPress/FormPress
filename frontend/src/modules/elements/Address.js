@@ -191,29 +191,48 @@ export default class Address extends Component {
   }
 
   static renderDataValue(entry, question) {
-    return (
-      Object.entries(entry.value).map((entry) => {
-        const key = entry[0]
-        const value = entry[1]
+    const htmlCollection = []
+    Object.entries(entry.value).map((entry) => {
+      const key = entry[0]
+      const value = entry[1]
 
-        let defaultSublabel = true
+      let defaultSublabel = true
 
-        if (question[`${key}SublabelText`]) {
-          defaultSublabel = false
-        }
+      if (question[`${key}SublabelText`]) {
+        defaultSublabel = false
+      }
 
-        return (
-          <div key={key}>
-            <strong
-              style={defaultSublabel ? { textTransform: 'capitalize' } : null}>
-              {defaultSublabel ? key : question[`${key}SublabelText`]}:
-            </strong>
-            {value}
-            <br />
-          </div>
-        )
-      }) || '-'
-    )
+      htmlCollection.push(
+        <div key={key}>
+          <strong
+            style={defaultSublabel ? { textTransform: 'capitalize' } : null}>
+            {defaultSublabel ? key : question[`${key}SublabelText`]}:
+          </strong>
+          &nbsp; {value}
+          <br />
+        </div>
+      )
+    })
+
+    // means we hava a queriable address
+    if (htmlCollection.length > 0) {
+      const query = this.getPlainStringValue(entry)
+
+      htmlCollection.push(
+        <div key="map">
+          <strong>Map:</strong>
+          &nbsp;
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${query}`}
+            target="_blank"
+            rel="noopener noreferrer">
+            Open in Google Maps
+          </a>
+        </div>
+      )
+    }
+
+    return htmlCollection || '-'
   }
 
   render() {
