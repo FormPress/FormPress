@@ -253,7 +253,7 @@ exports.triggerZapierWebhook = async ({
 
   const organizedSubmission = {
     id: submissionId,
-    createdAt: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss') + ' UTC',
+    createdAt: new Date().toISOString(),
     entries: entries
   }
 
