@@ -38,22 +38,12 @@ export default class Zapier extends Component {
       // DESCRIPTION
       display = (
         <>
-          <div className="integration-motto">
-            Get instant updates on your form submissions with Zapier!
-          </div>
-          <div className="integration-text">
-            Enhance your form builder app with the power of Zapier integration!
-            Seamlessly connect your forms to a vast array of applications,
-            opening up endless possibilities for workflow automation. Zapier
-            allows you to effortlessly transmit form submissions to your
-            preferred apps, saving time and streamlining your processes. Explore
-            the convenience and efficiency of Zapier&#39;s versatile
-            integrations and take your productivity to new heights
-          </div>
-          <div className="activation-button wip">
-            <button type="button" onClick={this.handleConfigureWebhook}>
-              Coming Soon...
-            </button>
+          <div>
+            <zapier-full-experience
+              client-id="ErISwlFUiGdIii8d6My1VqbEPyA4Ssx2jIHmu8IT"
+              theme="light"
+              app-search-bar-display="show"
+            />
           </div>
         </>
       )
