@@ -53,7 +53,7 @@ export default class Zapier extends Component {
 
     let display
 
-    const clientID = global.env ? global.env.FE_ZAPIER_APP_CLIENT_ID : undefined
+    const clientID = global.env.FE_ZAPIER_APP_CLIENT_ID
 
     display = (
       <>
