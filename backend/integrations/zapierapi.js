@@ -13,7 +13,6 @@ const { validate } = require('uuid')
 const fetch = require('node-fetch')
 
 const { error } = require('../helper')
-const moment = require('moment')
 
 exports.zapierApi = (app) => {
   app.post(
