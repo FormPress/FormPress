@@ -53,11 +53,13 @@ export default class Zapier extends Component {
 
     let display
 
+    const clientID = global.env ? global.env.FE_ZAPIER_APP_CLIENT_ID : undefined
+
     display = (
       <>
         <div>
           <zapier-full-experience
-            client-id="ErISwlFUiGdIii8d6My1VqbEPyA4Ssx2jIHmu8IT"
+            client-id={clientID}
             theme="light"
             app-search-bar-display="show"
           />
