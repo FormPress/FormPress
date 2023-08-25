@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import './Zapier.css'
+import { FPLoader } from '../../svg'
 
 export default class Zapier extends Component {
   static metaData = {
@@ -12,45 +13,58 @@ export default class Zapier extends Component {
     super(props)
     this.state = {
       display: this.props.activeStatus ? 'active' : 'description',
-      tempIntegrationObject: { ...this.props.integrationObject }
+      tempIntegrationObject: { ...this.props.integrationObject },
+      loading: true
     }
   }
 
+  componentDidMount() {
+    const script = document.createElement('script')
+    script.id = 'zapier-script'
+    script.type = 'module'
+    script.src =
+      'https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.esm.js'
+    script.addEventListener('load', () => {
+      this.setState({ loading: false })
+    })
+
+    const link = document.createElement('link')
+    link.id = 'zapier-style'
+    link.rel = 'stylesheet'
+    link.href =
+      'https://cdn.zapier.com/packages/partner-sdk/v0/zapier-elements/zapier-elements.css'
+
+    document.body.appendChild(script)
+    document.body.appendChild(link)
+  }
+
+  componentWillUnmount() {
+    // remove script and style
+    const script = document.getElementById('zapier-script')
+    const link = document.getElementById('zapier-style')
+    script.remove()
+    link.remove()
+  }
+
   render() {
-    let display
-    let paused
-    if (this.props.tempIntegrationObject?.paused !== undefined) {
-      paused = this.props.tempIntegrationObject.paused
-    } else {
-      paused = this.state.tempIntegrationObject.paused
+    if (this.state.loading) {
+      return <FPLoader />
     }
 
-    if (
-      paused ||
-      (this.props.activeStatus && this.state.display === 'active')
-    ) {
-      // INTEGRATION ACTIVE PAGE
-      display = <></>
-    } else if (
-      this.props.activeStatus === false &&
-      this.state.display === 'description'
-    ) {
-      // DESCRIPTION
-      display = (
-        <>
-          <div>
-            <zapier-full-experience
-              client-id="ErISwlFUiGdIii8d6My1VqbEPyA4Ssx2jIHmu8IT"
-              theme="light"
-              app-search-bar-display="show"
-            />
-          </div>
-        </>
-      )
-    } else if (this.state.display === 'configuration') {
-      // CONFIGURATION
-      display = <></>
-    }
+    let display
+
+    display = (
+      <>
+        <div>
+          <zapier-full-experience
+            client-id="ErISwlFUiGdIii8d6My1VqbEPyA4Ssx2jIHmu8IT"
+            theme="light"
+            app-search-bar-display="show"
+          />
+        </div>
+      </>
+    )
+
     return (
       <div className="integration-wrapper ">
         <div className="close-button">
