@@ -13,7 +13,6 @@ const { validate } = require('uuid')
 const fetch = require('node-fetch')
 
 const { error } = require('../helper')
-const moment = require('moment')
 
 exports.zapierApi = (app) => {
   app.post(
@@ -253,7 +252,7 @@ exports.triggerZapierWebhook = async ({
 
   const organizedSubmission = {
     id: submissionId,
-    createdAt: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss') + ' UTC',
+    createdAt: new Date().toISOString(),
     entries: entries
   }
 
