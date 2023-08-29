@@ -67,7 +67,7 @@ const policy = {
     },
     configurableSettings: {
       default: 'countries',
-      isVisible: (config, form) => {
+      isVisible: (config) => {
         return config.hasDataset === true
       },
       formProps: {
