@@ -1024,7 +1024,7 @@ module.exports = (app) => {
     }
   )
 
-  //download uploaded file
+  //download uploaded file remain here for legacy support
   app.get(
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
     mustHaveValidToken,

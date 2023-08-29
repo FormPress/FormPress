@@ -193,7 +193,11 @@ module.exports = (app) => {
         const uploadName = parsedValue[0].uploadName
         const user_id = user_idData[0].user_id
         const entry_id = entry_idData[0].id
-
+        formattedInput.forEach((element) => {
+          if (element.q_id === question_id) {
+            element.entry_id = entry_id
+          }
+        })
         await db.query(
           `INSERT INTO \`storage_usage\`
             (user_id, form_id, submission_id, entry_id, upload_name, size, created_at)

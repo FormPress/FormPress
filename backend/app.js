@@ -63,6 +63,7 @@ const authenticationMiddleware = require(path.resolve(
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
 const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
+const downloadApiMiddleware = require(path.resolve('middleware', 'downloadapi'))
 const oauth = require(path.resolve('middleware', 'oauth'))
 
 const googleApisMiddleware = require(path.resolve(
@@ -130,6 +131,7 @@ pluginMiddleware(app)
 apiMiddleware(app)
 userApiMiddleware(app)
 adminApiMiddleware(app)
+downloadApiMiddleware(app)
 submissionMiddleware(app)
 changePasswordMiddleware(app)
 googleApisMiddleware(app)
