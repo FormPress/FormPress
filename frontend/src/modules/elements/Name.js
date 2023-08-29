@@ -46,6 +46,9 @@ export default class Name extends Component {
     },
     prefixTypeTextBox: {
       default: false,
+      isVisible: (config) => {
+        return config.prefix === true
+      },
       formProps: {
         type: 'Checkbox',
         label: '',
@@ -62,6 +65,9 @@ export default class Name extends Component {
     },
     prefixOptions: {
       default: ['Mr.', 'Mrs.'],
+      isVisible: (config) => {
+        return config.prefix === true && config.prefixTypeTextBox === false
+      },
       formProps: {
         type: 'List',
         options: ['Mr.', 'Mrs.'],

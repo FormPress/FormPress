@@ -83,6 +83,9 @@ export default class Dropdown extends Component {
   static configurableSettings = {
     dropdownOptions: {
       default: ['Option 1', 'Option 2'],
+      isVisible: (config) => {
+        return config.hasDataset === false
+      },
       formProps: {
         type: 'List',
         label: 'Drop-down Options',

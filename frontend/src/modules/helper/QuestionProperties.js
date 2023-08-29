@@ -52,6 +52,15 @@ export default class QuestionProperties extends Component {
     for (const key of keys) {
       const question = configurableSettings[key]
 
+      if (
+        question.isVisible !== undefined &&
+        typeof question.isVisible === 'function'
+      ) {
+        if (question.isVisible(config, this.props.form) === false) {
+          continue
+        }
+      }
+
       if (config[key] === undefined) {
         config[key] = question.default
       }

@@ -184,37 +184,6 @@ export default class Renderer extends Component {
               extraProps.className = 'selected'
             }
 
-            // conditionally hide elements for QuestionProperties page
-            if (elem.id === 'required') {
-              if (elem.value === false) {
-                extraProps.className = 'elementHider'
-              }
-            }
-
-            if (elem.id === 'hasDataset') {
-              if (elem.value === false) extraProps.className = 'elementHider'
-            }
-
-            if (elem.id === 'prefix') {
-              if (elem.value.default === false)
-                extraProps.className = 'elementHider'
-              if (elem.value === false) extraProps.className = 'elementHider'
-            }
-
-            if (elem.id === 'prefixTypeTextBox') {
-              if (elem.value === true) extraProps.className = 'elementHider'
-            }
-
-            if (elem.id === 'isUnselectable') {
-              if (elem.value === false) extraProps.className = 'elementHider'
-            }
-
-            if (elem.id === 'countriesType') {
-              if (elem.value === 'US') {
-                extraProps.className = 'elementHider'
-              }
-            }
-
             if (elem.type === 'PageBreak') {
               if (elem.empty === true) {
                 extraProps.className = 'emptyPage'

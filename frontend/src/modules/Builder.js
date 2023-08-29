@@ -1469,6 +1469,7 @@ export default class Builder extends Component {
           <Route path="/editor/:formId/builder/question/:questionId/properties">
             {questionPropertiesReady === true ? (
               <QuestionProperties
+                form={form}
                 rteUploadHandler={this.rteUploadHandler}
                 selectedField={selectedField}
                 configureQuestion={this.configureQuestion}

@@ -15,8 +15,7 @@ export default class Radio extends Component {
     id: 0,
     type: 'Radio',
     label: 'Single Choice',
-    options: ['New Radio'],
-    unselectButtonText: 'Clear Selection'
+    options: ['New Radio']
   }
 
   static metaData = {
@@ -139,8 +138,32 @@ export default class Radio extends Component {
         options: ['Add a button to clear selection']
       }
     },
+    unselectButtonText: {
+      default: 'Clear Selection',
+      isVisible: (config) => {
+        return config.isUnselectable === true
+      },
+      formProps: {
+        type: 'TextBox',
+        label: 'Unselect Button Text',
+        placeholder: 'Clear Selection'
+      }
+    },
     expectedAnswer: {
       default: '',
+      isVisible: (config, form) => {
+        let isFormInExamMode = false
+
+        const foundSubmitBehaviour = form.props.integrations.find(
+          (integration) => integration.type === 'submitBehaviour'
+        )
+
+        if (foundSubmitBehaviour) {
+          isFormInExamMode = foundSubmitBehaviour.value === 'Evaluate Form'
+        }
+
+        return isFormInExamMode
+      },
       formProps: {
         type: 'Dropdown',
         options: [{ value: 0, display: 'New Radio' }],
@@ -150,6 +173,19 @@ export default class Radio extends Component {
     },
     answerExplanation: {
       default: '',
+      isVisible: (config, form) => {
+        let isFormInExamMode = false
+
+        const foundSubmitBehaviour = form.props.integrations.find(
+          (integration) => integration.type === 'submitBehaviour'
+        )
+
+        if (foundSubmitBehaviour) {
+          isFormInExamMode = foundSubmitBehaviour.value === 'Evaluate Form'
+        }
+
+        return isFormInExamMode
+      },
       formProps: {
         type: 'TextArea',
         editor: true,
