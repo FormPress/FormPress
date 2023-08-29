@@ -13,7 +13,8 @@ export default class FileUpload extends Component {
     id: 0,
     type: 'FileUpload',
     label: 'File Upload',
-    requiredText: 'Please fill this field.'
+    requiredText: 'Please fill this field.',
+    publicEnabled: false
   }
 
   static metaData = {
@@ -34,20 +35,28 @@ export default class FileUpload extends Component {
     }
   }
 
-  static getPlainStringValue(entry, question) {
+  static configurableSettings = {
+    publicEnabled: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Make file public']
+      }
+    }
+  }
+
+  static getPlainStringValue(entry) {
     let plainString
 
     if (entry.value !== '') {
       const files = JSON.parse(entry.value)
 
       plainString = ''
-
       files.forEach((file, index) => {
         plainString += `${
-          process.env.FE_FRONTEND || global.env.FE_FRONTEND
-        }/download/${question.form_id}/${entry.submission_id}/${
-          question.id
-        }/${encodeURI(file.fileName)}`
+          process.env.FE_BACKEND || global.env.FE_BACKEND
+        }/api/downloads/entry/${entry.entry_id}/${encodeURI(file.uploadName)}`
 
         if (index > 0) {
           plainString += ', '
@@ -60,20 +69,9 @@ export default class FileUpload extends Component {
     return plainString
   }
 
-  static renderDataValue(entry, question) {
+  static renderDataValue(entry) {
     if (entry.value !== '') {
       let files
-      let imgExtensionArray = [
-        'png',
-        'jpg',
-        'jpeg',
-        'gif',
-        'ico',
-        'apng',
-        'svg',
-        'webp',
-        'bmp'
-      ]
 
       if (typeof entry.value === 'string') {
         files = JSON.parse(entry.value)
@@ -82,31 +80,12 @@ export default class FileUpload extends Component {
       }
       return files.map((file, index) => (
         <>
-          {imgExtensionArray.includes(file.uploadName.split('.').pop()) ? (
-            <img
-              id={`q${question.id}-file-${index}`}
-              alt={`File: ${file.fileName}`}
-              className="fileUpload-image"
-              src={
-                'https://storage.googleapis.com/' +
-                process.env.FILE_UPLOAD_BUCKET +
-                '/' +
-                file.uploadName
-              }
-              style={{ maxWidth: '700px' }}
-              onError={() => {
-                document.getElementById(
-                  `q${question.id}-file-${index}`
-                ).style.display = 'none'
-              }}
-            />
-          ) : null}
           <a
             href={`${
-              process.env.FE_FRONTEND || global.env.FE_FRONTEND
-            }/download/${question.form_id}/${entry.submission_id}/${
-              question.id
-            }/${encodeURI(file.fileName)}`}
+              process.env.FE_BACKEND || global.env.FE_BACKEND
+            }/api/downloads/entry/${entry.id || entry.entry_id}/${encodeURI(
+              file.uploadName
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             key={index}
