@@ -737,7 +737,10 @@
   border-radius: 6px;
 }
 
-.builderStage .form > .elementRadio > .metadata.answerExplanationContainer {
+.builderStage
+  .form.exam-mode
+  > .elementRadio
+  > .metadata.answerExplanationContainer {
   background: repeating-linear-gradient(
     45deg,
     #e5e7ec,
@@ -746,6 +749,10 @@
     #e6e6e6 20px
   );
   border-radius: 0.5rem;
+  display: block;
+}
+.builderStage .form > .elementRadio > .metadata.answerExplanationContainer {
+  display: none;
 }
 
 .builderStage

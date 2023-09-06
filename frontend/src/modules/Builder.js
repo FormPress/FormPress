@@ -1632,6 +1632,16 @@ export default class Builder extends Component {
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
+    let examMode = false
+    if (form.props.integrations) {
+      const foundSubmitBehaviour = form.props.integrations.find(
+        (integration) => integration.type === 'submitBehaviour'
+      )
+      if (foundSubmitBehaviour) {
+        examMode = foundSubmitBehaviour.value === 'Evaluate Form'
+      }
+    }
+
     // backward compatibility for old forms without design
     const theme =
       this.state.form.props.design === undefined
@@ -1657,7 +1667,7 @@ export default class Builder extends Component {
           'Loading...'
         ) : (
           <Renderer
-            className={`fl form`}
+            className={`fl form` + (examMode ? ' exam-mode' : '')}
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
