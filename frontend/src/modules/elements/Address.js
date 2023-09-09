@@ -77,6 +77,9 @@ export default class Address extends Component {
     },
     defaultCountry: {
       default: 'United States',
+      isVisible: (config) => {
+        return config.countriesType === 'International'
+      },
       formProps: {
         type: 'Dropdown',
         label: 'Default country',

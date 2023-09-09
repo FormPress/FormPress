@@ -91,42 +91,6 @@
   display: none !important;
 }
 
-#qc_prefixTypeTextBox.elementHider ~ #qc_prefixOptions {
-  display: none !important;
-}
-
-#qc_prefix.elementHider ~ #qc_prefixOptions {
-  display: none !important;
-}
-
-#qc_prefix.elementHider ~ #qc_placeholder {
-  display: none !important;
-}
-
-#qc_prefix.elementHider + #qc_prefixTypeTextBox {
-  display: none !important;
-}
-
-#qc_required.elementHider + #qc_requiredText.elementTextBox {
-  display: none !important;
-}
-
-#qc_hasDataset + #qc_dropdownOptions.elementTextArea {
-  display: none !important;
-}
-
-#qc_hasDataset.elementHider + #qc_dataset.elementDropdown {
-  display: none !important;
-}
-
-#qc_countriesType.elementHider + #qc_defaultCountry.elementDropdown {
-  display: none !important;
-}
-
 #qc_defaultCountry {
   margin-top: -20px;
-}
-
-#qc_isUnselectable.elementHider + #qc_unselectButtonText.elementTextBox {
-  display: none !important;
 }

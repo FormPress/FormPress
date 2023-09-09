@@ -22,6 +22,9 @@ const policy = {
     },
     configurableSettings: {
       default: 'Required field',
+      isVisible: (config) => {
+        return config.required === true
+      },
       formProps: {
         type: 'TextBox',
         label: 'Error message when this field is left empty.',
@@ -64,6 +67,9 @@ const policy = {
     },
     configurableSettings: {
       default: 'countries',
+      isVisible: (config) => {
+        return config.hasDataset === true
+      },
       formProps: {
         type: 'Dropdown',
         label: 'Choose a data set',
