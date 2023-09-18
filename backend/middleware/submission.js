@@ -2,8 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
-const { FP_ENV, FP_HOST } = process.env
-const devPort = 3000
+const BACKEND = process.env.FE_BACKEND
 const { getPool } = require(path.resolve('./', 'db'))
 const {
   storage,
@@ -15,7 +14,7 @@ const {
 const formModel = model.form
 const formPublishedModel = model.formpublished
 
-const { validate } = require('uuid')
+const { validate: isStringUUID } = require('uuid')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const isEnvironmentVariableSet = {
@@ -36,10 +35,11 @@ module.exports = (app) => {
   // Handle form submission
   app.post('/form/submit/:id/:version?', async (req, res) => {
     let form_id = req.params.id
-
+    let uuid
     let overrideTyPageId = req.query.tyPageId || false
 
-    if (validate(form_id)) {
+    if (isStringUUID(form_id) === true) {
+      uuid = form_id
       form_id = await formModel.getFormIdFromUUID(form_id)
     } else if (parseInt(form_id) > 1200) {
       return res.status(404).send('Form Not Found')
@@ -208,52 +208,12 @@ module.exports = (app) => {
       }
     }
 
-    let style = fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/normalize.css')
-    )
-
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/thankyou.css')
-    )
-
-    let tyPageTitle = 'Thank you!'
-
-    let tyPageText = ''
-    if (isEnvironmentVariableSet.sendgridApiKey) {
-      tyPageText =
-        'Your submission was successful and the form owner has been notified.'
-    } else {
-      tyPageText = 'Your submission was successful.'
-    }
-
     let sendEmailTo = []
-    let thankYouIntegrationCount_LEGACY = 0
 
     const integrations = form.props.integrations || []
     const emailIntegration = integrations.filter(
       (integration) => integration.type === 'email'
     )
-
-    const tyTitleIntegration = integrations.filter(
-      (integration) => integration.type === 'tyPageTitle'
-    )
-
-    if (
-      tyTitleIntegration.length > 0 &&
-      tyTitleIntegration[0].value.length > 0
-    ) {
-      tyPageTitle = tyTitleIntegration[0].value
-      thankYouIntegrationCount_LEGACY++
-    }
-
-    const tyTextIntegration = integrations.filter(
-      (integration) => integration.type === 'tyPageText'
-    )
-
-    if (tyTextIntegration.length > 0 && tyTextIntegration[0].value.length > 0) {
-      tyPageText = tyTextIntegration[0].value
-      thankYouIntegrationCount_LEGACY++
-    }
 
     let submitBehaviour
 
@@ -265,10 +225,8 @@ module.exports = (app) => {
     } else {
       submitBehaviour = 'Show Thank You Page'
     }
-
-    const tyPageIdIntegration = form.props.integrations.find(
-      (integration) => integration.type === 'tyPageId'
-    )
+    //send override thank you page id with query if it exists
+    let otpQuery = overrideTyPageId ? `?otp=${overrideTyPageId}` : ''
 
     switch (submitBehaviour) {
       case 'Evaluate Form':
@@ -277,80 +235,10 @@ module.exports = (app) => {
         )
         break
       case 'Show Thank You Page':
-        if (
-          thankYouIntegrationCount_LEGACY > 0 &&
-          tyPageIdIntegration === undefined
-        ) {
-          // support for legacy thank you page integration
-          res.render('submit-success.tpl-LEGACY.ejs', {
-            headerAppend: `<style type='text/css'>${style}</style>`,
-            tyTitle: tyPageTitle,
-            tyText: tyPageText
-          })
-        } else {
-          let tyPageId
-
-          if (tyPageIdIntegration !== undefined) {
-            tyPageId = tyPageIdIntegration.value
-          } else {
-            tyPageId = 1
-          }
-
-          if (overrideTyPageId !== false) {
-            tyPageId = parseInt(overrideTyPageId)
-          }
-
-          const dbResult = await db.query(
-            `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR user_id = 0`,
-            [form.user_id, tyPageId]
-          )
-
-          if (dbResult.length > 0) {
-            const customThankYou = dbResult[1]
-            const defaultThankYou = dbResult[0]
-
-            let html
-            if (customThankYou) {
-              html = customThankYou.html
-            } else {
-              html = defaultThankYou.html
-            }
-
-            if (html === undefined || html === null) {
-              console.error(
-                'Html is undefined or null',
-                `User ID: ${form.user_id}`,
-                `Form ID: ${form_id}`,
-                `Submission ID: ${submission_id}`
-              )
-              html = ''
-            }
-
-            const userRoleResult = await db.query(
-              `SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?`,
-              [form.user_id]
-            )
-
-            let showBranding = false
-
-            if (userRoleResult[0].role_id === 2) {
-              showBranding = true
-            }
-
-            res.render('submit-success.tpl.ejs', {
-              headerAppend: `<style type='text/css'>${style}</style>`,
-              htmlContent: html,
-              showBranding: showBranding
-            })
-          }
-        }
+        res.redirect(`/form/submit/${uuid}${otpQuery}`)
         break
       default:
-        res.render('submit-success.tpl-LEGACY.ejs', {
-          headerAppend: `<style type='text/css'>${style}</style>`,
-          tyTitle: tyPageTitle,
-          tyText: tyPageText
-        })
+        res.redirect(`/form/submit/${uuid}${otpQuery}`)
         break
     }
 
@@ -377,8 +265,7 @@ module.exports = (app) => {
     if (emailIntegration.length > 0) {
       sendEmailTo = emailIntegration[0].to.split(',')
     }
-    const FRONTEND =
-      FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
+    const FRONTEND = process.env.FE_FRONTEND
     if (
       sendEmailTo.length !== 0 &&
       isEnvironmentVariableSet.sendgridApiKey !== false
@@ -510,6 +397,161 @@ module.exports = (app) => {
       questionsAndAnswers,
       submission_id
     )
+  })
+
+  app.get('/form/submit/:uuid', async (req, res) => {
+    let uuid = req.params.uuid
+    let form_id = await formModel.getFormIdFromUUID(uuid)
+    let overrideTyPageId = req.query.otp || false
+
+    const db = await getPool()
+
+    const regularForm = await formModel.get({ form_id })
+    let version = regularForm.published_version || 0
+
+    //read out form
+    let publishedForm
+    if (version === 0) {
+      publishedForm = regularForm
+    } else {
+      publishedForm = await formPublishedModel.get({
+        form_id,
+        version_id: version
+      })
+    }
+
+    if (publishedForm === false) {
+      return res.status(404).send('Error: form not found')
+    }
+
+    const form = publishedForm
+    //preview mode form id = form.id VS published mode form id = form.form_id
+
+    const userResult = await db.query(
+      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
+      [form.user_id]
+    )
+
+    if (userResult[0].isActive === 0) {
+      return res.status(404).send('Error: Form not found')
+    }
+
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/thankyou.css')
+    )
+
+    let tyPageTitle = 'Thank you!'
+
+    let tyPageText = ''
+    if (isEnvironmentVariableSet.sendgridApiKey) {
+      tyPageText =
+        'Your submission was successful and the form owner has been notified.'
+    } else {
+      tyPageText = 'Your submission was successful.'
+    }
+
+    let thankYouIntegrationCount_LEGACY = 0
+
+    const integrations = form.props.integrations || []
+    const tyTitleIntegration = integrations.filter(
+      (integration) => integration.type === 'tyPageTitle'
+    )
+
+    if (
+      tyTitleIntegration.length > 0 &&
+      tyTitleIntegration[0].value.length > 0
+    ) {
+      tyPageTitle = tyTitleIntegration[0].value
+      thankYouIntegrationCount_LEGACY++
+    }
+
+    const tyTextIntegration = integrations.filter(
+      (integration) => integration.type === 'tyPageText'
+    )
+
+    if (tyTextIntegration.length > 0 && tyTextIntegration[0].value.length > 0) {
+      tyPageText = tyTextIntegration[0].value
+      thankYouIntegrationCount_LEGACY++
+    }
+
+    const tyPageIdIntegration = form.props.integrations.find(
+      (integration) => integration.type === 'tyPageId'
+    )
+
+    if (
+      thankYouIntegrationCount_LEGACY > 0 &&
+      tyPageIdIntegration === undefined
+    ) {
+      // support for legacy thank you page integration
+      return res.render('submit-success.tpl-LEGACY.ejs', {
+        headerAppend: `<style type='text/css'>${style}</style>`,
+        tyTitle: tyPageTitle,
+        tyText: tyPageText,
+        BACKEND,
+        UUID: uuid
+      })
+    } else {
+      let tyPageId
+
+      if (tyPageIdIntegration !== undefined) {
+        tyPageId = tyPageIdIntegration.value
+      } else {
+        tyPageId = 1
+      }
+
+      if (overrideTyPageId !== false) {
+        tyPageId = parseInt(overrideTyPageId)
+      }
+
+      const dbResult = await db.query(
+        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR user_id = 0`,
+        [form.user_id, tyPageId]
+      )
+
+      if (dbResult.length > 0) {
+        const customThankYou = dbResult[1]
+        const defaultThankYou = dbResult[0]
+
+        let html
+        if (customThankYou) {
+          html = customThankYou.html
+        } else {
+          html = defaultThankYou.html
+        }
+
+        if (html === undefined || html === null) {
+          console.error(
+            'Html is undefined or null',
+            `User ID: ${form.user_id}`,
+            `Form ID: ${form_id}`
+          )
+          html = ''
+        }
+
+        const userRoleResult = await db.query(
+          `SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?`,
+          [form.user_id]
+        )
+
+        let showBranding = false
+
+        if (userRoleResult[0].role_id === 2) {
+          showBranding = true
+        }
+
+        return res.render('submit-success.tpl.ejs', {
+          headerAppend: `<style type='text/css'>${style}</style>`,
+          htmlContent: html,
+          showBranding: showBranding,
+          BACKEND,
+          UUID: uuid
+        })
+      }
+    }
   })
 
   app.post('/templates/submit/:id', async (req, res) => {

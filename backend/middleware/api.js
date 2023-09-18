@@ -28,9 +28,8 @@ const reactDOMServer = require('react-dom/server')
 const React = require('react')
 const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
   .default
-const port = parseInt(process.env.SERVER_PORT || 3000)
-const { FP_ENV, FP_HOST } = process.env
-const BACKEND = FP_ENV === 'development' ? `${FP_HOST}:${port}` : FP_HOST
+const { FP_ENV } = process.env
+const BACKEND = process.env.FE_BACKEND
 const {
   storage,
   model,
@@ -1411,26 +1410,6 @@ module.exports = (app) => {
       await archive.finalize()
     }
   )
-
-  app.get('/thank-you', async (req, res) => {
-    let style = fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/normalize.css')
-    )
-
-    style += fs.readFileSync(
-      path.resolve('../', 'frontend/src/style/thankyou.css')
-    )
-
-    let tyPageTitle = 'Thank you!'
-    let tyPageText =
-      'Your submission was successful and the form owner has been notified.'
-
-    res.render('submit-success.tpl.ejs', {
-      headerAppend: `<style type='text/css'>${style}</style>`,
-      tyTitle: tyPageTitle,
-      tyText: tyPageText
-    })
-  })
 
   // return api key
   app.get(

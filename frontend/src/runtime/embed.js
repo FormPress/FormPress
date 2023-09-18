@@ -86,7 +86,8 @@
           var iframe${index} = document.getElementById('${iframeID}')
           
           if(getCookie('fp_widget_cookie') === "${formID}"){
-            iframe${index}.setAttribute('src', "${BACKEND}/thank-you")
+            iframe${index}.setAttribute('src', "${BACKEND}/form/submit/${formID}")
+            iframe${index}.classList.add('fixed-height')
           }
           
           iframe${index}.addEventListener('load', function() {
@@ -193,6 +194,9 @@
         .message-container form button:hover {
           background-color: #16632f;
         }   
+        .fixed-height {
+            height: 400px !important;
+        }
       `
     }
 
