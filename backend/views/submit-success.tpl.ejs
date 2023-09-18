@@ -16,4 +16,16 @@
             <%- include ("branding.tpl.ejs") %>
         <%} else {null} %>
     </body>
+    <script>
+        var UUID = "<%= UUID %>"
+        var BACKEND = "<%= BACKEND %>"
+    </script>
+    <script>
+        window.onbeforeunload = function() {
+            window.setTimeout(function () {
+                window.location = `${BACKEND}/form/view/${UUID}`;
+            }, 0);
+            window.onbeforeunload = null;
+        }
+    </script>
 </html>

@@ -205,11 +205,6 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/thank-you',
-      protected: false
-    },
-    {
-      method: 'get',
       path:
         '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
       exampleRequestPath: '/api/users/1/forms/1/submissions/1/evaluate',
