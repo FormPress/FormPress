@@ -43,7 +43,7 @@ export default class Location extends Component {
       formProps: {
         type: 'Checkbox',
         label: '',
-        options: ['Hide coordinate input fields']
+        options: ['Hide latitude and longitude']
       }
     }
   }

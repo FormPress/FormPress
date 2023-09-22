@@ -30,7 +30,9 @@
   margin: 5px;
   border-radius: 8px;
 }
-
+.country-span {
+  margin-left: 30px;
+}
 .user {
   background-color: #e2e2e2;
 }

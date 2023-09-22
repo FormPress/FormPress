@@ -18,7 +18,8 @@ class Users extends Component {
       emailVerified: 0,
       message: '',
       roles: [],
-      forms: []
+      forms: [],
+      userLocation: ''
     }
 
     this.handleRole = this.handleRole.bind(this)
@@ -67,8 +68,11 @@ class Users extends Component {
         created_at: form.created_at
       })
     })
-
-    this.setState({ forms: result })
+    let userLastLocation = 'N/A'
+    if (user.lastLocation.length > 0) {
+      userLastLocation = user.lastLocation[0].value
+    }
+    this.setState({ forms: result, userLocation: userLastLocation })
   }
 
   componentDidMount() {
@@ -83,13 +87,15 @@ class Users extends Component {
     })
   }
 
-  handleSelectUser = (userId, incMessage = '') => {
+  handleSelectUser = async (userId, incMessage = '') => {
     this.setState({ message: 'Loading..' })
     const { data } = this.state
     const user_id = parseInt(userId)
     if (user_id !== 0) {
       const user = data.filter((user) => user.id === user_id)[0]
-      this.getUserFormList(user_id)
+      await this.getUserFormList(user_id)
+
+      user.country = this.state.userLocation
 
       this.setState({
         selectedUserId: user_id,
@@ -320,7 +326,12 @@ class Users extends Component {
                     key={user.id}
                     value={user.id}
                     onClick={() => this.handleSelectUser(user.id)}>
-                    <p className="margin_0">Id: {user.id}</p>
+                    <p className="margin_0">
+                      Id: {user.id}{' '}
+                      <span className="country-span">
+                        Country: {user.country ? user.country : ''}
+                      </span>
+                    </p>
                     <p className="margin_0">{user.email}</p>
                   </div>
                 </div>

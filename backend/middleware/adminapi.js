@@ -124,7 +124,11 @@ module.exports = (app) => {
           [user_id]
         )
         result[0].forms = lastFiveForms
-
+        const lastLocation = await db.query(
+          `SELECT \`value\` FROM \`user_settings\` WHERE user_id = ? AND \`key\` = ?`,
+          [user_id, 'location.last']
+        )
+        result[0].lastLocation = lastLocation
         res.json(result)
       } else {
         res.status(404).json({ message: 'User not found' })
