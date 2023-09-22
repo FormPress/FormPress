@@ -31,11 +31,11 @@
 }
 
 .forms table.fp_table > thead > tr > th.name {
-  width: 700px;
+  width: 680px;
 }
 
 .forms table.fp_table > thead > tr > th.responses {
-  width: 140px;
+  width: 100px;
 }
 
 .forms table.fp_table > thead > tr > th.createdAt {
@@ -60,6 +60,16 @@
 }
 
 .forms table.fp_table > tbody > tr > td.name > a {
+  color: #333333;
+  text-decoration: none;
+  display: block;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.forms table.fp_table > tbody > tr > td.name > span {
   color: #333333;
   text-decoration: none;
   display: block;
@@ -240,6 +250,19 @@
   font-size: 12px;
 }
 
+.sharedWithMe {
+  padding: 10px;
+  text-align: center;
+  color: #113952;
+  font-size: large;
+}
+
+.shared > table > thead {
+  height: 0px;
+  line-height: 0px;
+  visibility: hidden;
+}
+
 @media only screen and (max-width: 767px) {
   .nav_add_new_form_link {
     left: 70%;
@@ -283,4 +306,29 @@
 .disabledNewForm:hover > .popoverText,
 .disabledNewForm:focus > .popoverText {
   opacity: 1;
+}
+
+.upgrade-container {
+  display: inline-flex;
+  position: relative;
+}
+
+.upgrade-container:hover > .popoverText {
+  display: block;
+  width: 160px;
+  margin: 0 0 3px;
+  padding: 2px 4px 3px 3px;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #113952;
+  color: #fff;
+  text-align: center;
+  left: -130px;
+  line-height: normal;
+  top: 25px;
+}
+.upgrade-container:hover > .popoverText > a {
+  text-decoration: underline;
+  color: white;
+  font-weight: bold;
 }

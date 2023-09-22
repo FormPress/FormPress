@@ -76,18 +76,35 @@ module.exports = (app) => {
           }
         } else {
           //Ensure form owner
+          const userId = parseInt(req.user.user_id)
           const result = await db.query(
             `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
             [form_id]
           )
           if (result.length > 0) {
-            if (parseInt(req.user.user_id) !== result[0].user_id) {
+            if (userId !== result[0].user_id) {
               return res.status(403).send('File not Found E017D04')
             } else {
               downloadGranted = true
             }
           } else {
-            return res.status(404).send('File not Found E017D05')
+            //check if form shared
+            const sharedResult = await db.query(
+              `
+                SELECT \`permissions\` FROM \`form_permission\` WHERE form_id = ? AND target_user_id = ?
+              `,
+              [form_id, userId]
+            )
+            if (sharedResult.length > 0) {
+              const permissions = JSON.parse(sharedResult[0].permissions)
+              if (permissions.data !== true) {
+                return res.status(403).send('File not Found E017D07')
+              } else {
+                downloadGranted = true
+              }
+            } else {
+              return res.status(403).send('File not Found E017D05')
+            }
           }
         }
       } else {

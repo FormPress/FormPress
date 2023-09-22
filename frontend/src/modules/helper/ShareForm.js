@@ -40,18 +40,24 @@ class ShareForm extends Component {
   }
 
   async onWidgetChange() {
-    let widget = !this.state.widget
-    this.setState({ widget })
+    if (this.props.canEdit) {
+      let widget = !this.state.widget
+      this.setState({ widget })
+    }
   }
 
   async onAnsweredOnceChange() {
-    let answered_once = !this.state.answered_once
-    this.setState({ answered_once })
+    if (this.props.canEdit) {
+      let answered_once = !this.state.answered_once
+      this.setState({ answered_once })
+    }
   }
 
   async onWidgetTitleChange(e) {
-    let title = e.target.value.replace(/[^a-zA-Z ]/g, '')
-    this.setState({ title })
+    if (this.props.canEdit) {
+      let title = e.target.value.replace(/[^a-zA-Z ]/g, '')
+      this.setState({ title })
+    }
   }
 
   async downloadQRCode(type = 'png') {
@@ -124,7 +130,7 @@ class ShareForm extends Component {
                   id="widget"
                   type="checkbox"
                   name="widget"
-                  value={widget}
+                  checked={widget}
                   className="shareFormSettingsInput"
                   onChange={this.onWidgetChange}
                 />
@@ -154,7 +160,7 @@ class ShareForm extends Component {
                     id="widget_once"
                     type="checkbox"
                     name="widget_once"
-                    value={answered_once}
+                    checked={answered_once}
                     className="shareFormSettingsInput"
                     onChange={this.onAnsweredOnceChange}
                   />

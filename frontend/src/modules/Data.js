@@ -71,9 +71,16 @@ export default class Data extends Component {
     const { data } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
-
-    const forms = data
-
+    const formsWithShared = data.filter((form) => {
+      if (form.permissions === undefined) {
+        return true
+      } else if (form.permissions.data) {
+        return true
+      } else {
+        return false
+      }
+    })
+    const forms = formsWithShared
     this.setLoadingState('forms', false)
     this.setState({ forms }, this.componenDidMountWorker)
   }
@@ -474,7 +481,16 @@ export default class Data extends Component {
 
     if (selectedFormId !== null && forms.length > 0) {
       const formSelector = forms.find((form) => form.id === selectedFormId)
-      formSelectorText = formSelector.title
+      if (formSelector.permissions === undefined) {
+        formSelectorText = formSelector.title
+      } else {
+        formSelectorText = (
+          <>
+            {formSelector.title}{' '}
+            <span className="sharedform"> (shared with me) </span>
+          </>
+        )
+      }
     }
 
     let tabs = [
@@ -541,7 +557,16 @@ export default class Data extends Component {
                   <li
                     key={index}
                     onClick={this.handleFormClick.bind(this, form)}>
-                    {form.title}
+                    <>
+                      {form.permissions === undefined ? (
+                        form.title
+                      ) : (
+                        <>
+                          {form.title}{' '}
+                          <span className="sharedform"> (shared with me) </span>
+                        </>
+                      )}
+                    </>
                   </li>
                 ))}
               </ul>

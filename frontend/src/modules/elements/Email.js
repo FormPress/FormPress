@@ -73,6 +73,10 @@ export default class Email extends Component {
       inputProps.placeholder = config.placeholder
     }
 
+    if (typeof config.disabled !== 'undefined') {
+      inputProps.disabled = config.disabled
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <div className="elemLabelTitle">

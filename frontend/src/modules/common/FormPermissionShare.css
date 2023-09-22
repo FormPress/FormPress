@@ -1,0 +1,53 @@
+.formPermissionShare .permissionRow {
+  margin: 10px;
+  border-bottom: 1px dotted black;
+}
+
+.formPermissionShare th {
+  padding: 15px;
+}
+
+.formPermissionShare .perm {
+  width: 50px;
+  text-align: center;
+}
+
+.formPermissionShare td.perm {
+  color: #ccc;
+}
+
+.formPermissionShare table {
+  padding: 20px;
+  width: 750px;
+}
+
+.invite-status {
+  text-align: center;
+}
+
+.formPermissionShare .perm.active {
+  color: green;
+}
+
+.formPermissionShare .actions {
+  text-align: center;
+}
+
+.confirmDeletePerm {
+  margin: 20px;
+}
+
+.formPermissionShare .actions span {
+  color: rgb(225, 225, 225);
+  margin-right: 5px;
+  padding: 10px;
+}
+
+.formPermissionShare .actions span:hover {
+  color: rgb(48, 93, 134);
+  cursor: pointer;
+}
+
+.formPermissionShare {
+  padding: 20px;
+}

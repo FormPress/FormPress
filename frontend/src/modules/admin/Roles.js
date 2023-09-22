@@ -44,6 +44,8 @@ export default class Roles extends Component {
     for (const key in Elements) {
       newPermissions[key] = false
     }
+    //add form sharing to permissions
+    newPermissions.canShare = false
 
     this.setState({ loaded: true, data, permissions: newPermissions })
   }
@@ -89,9 +91,14 @@ export default class Roles extends Component {
     if (elem.type === 'Checkbox') {
       const newPermissions = { ...this.state.permissions }
       const elementText = elem.options[0]
-      const elementType = Object.keys(elementMeta).find(
-        (searchedElem) => elementMeta[searchedElem] === elementText
-      )
+      let elementType = ''
+      if (elementText === 'Can Share') {
+        elementType = 'canShare'
+      } else {
+        elementType = Object.keys(elementMeta).find(
+          (searchedElem) => elementMeta[searchedElem] === elementText
+        )
+      }
       newPermissions[elementType] = !newPermissions[elementType]
       this.setState({ permissions: newPermissions })
     } else if (elem.type === 'TextBox') {
@@ -174,6 +181,14 @@ export default class Roles extends Component {
           sublabelText: '(0 for unlimited)',
           min: 0,
           max: 99999999
+        }
+      } else if (key === 'canShare') {
+        return {
+          id: id,
+          type: 'Checkbox',
+          label: '',
+          options: ['Can Share'],
+          value: this.state.permissions.canShare
         }
       } else {
         const elemText = elementMeta[key]

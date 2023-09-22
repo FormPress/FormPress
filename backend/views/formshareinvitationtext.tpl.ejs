@@ -1,0 +1,15 @@
+<%
+const textTemplate = `
+Form Shared for Collaboration
+
+You have received an invitation from ${sourceUserEmail} to collaborate on a form titled "${formTitle}" with the following permissions: ${permissions.join(', ')}.
+To accept the invitation, simply click the link below. If you wish to decline, you may disregard this email.
+
+FormShare Invitation Link:
+${FRONTEND}/settings/formShareInvitation/${form_id}/${id}
+
+© 2023 FORMPRESS.ORG
+`;
+%>
+
+<%- textTemplate %>

@@ -2,6 +2,7 @@ require('ignore-styles')
 const babel = require('@babel/core')
 const fs = require('fs')
 const path = require('path')
+const crypto = require('crypto')
 
 const options = {
   plugins: [
@@ -18,8 +19,32 @@ const frontendRuntimeTarget = path.resolve(
 )
 const frontend3rdpartyTarget = path.resolve(frontendRuntimeTarget, '3rdparty')
 
+const transformCached = (input, filename) => {
+  const shasum = crypto.createHash('sha1')
+  shasum.update(input)
+  const sha1 = shasum.digest('hex')
+  const checkFile = path.resolve(
+    './',
+    'script',
+    'transformed',
+    '__cache__',
+    sha1
+  )
+
+  if (fs.existsSync(checkFile) === true) {
+    console.log(`Returning file(${filename}) from cache`)
+    return fs.readFileSync(checkFile)
+  } else {
+    const out = babel.transformSync(input, options)
+    fs.writeFileSync(checkFile, out.code)
+
+    return out.code
+  }
+}
+
 const createDirs = [
   path.resolve(path.resolve('./', 'script', 'transformed')),
+  path.resolve(path.resolve('./', 'script', 'transformed', '__cache__')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'modules')),
   path.resolve(path.resolve('./', 'script', 'transformed', 'common')),
   frontendRuntimeTarget,
@@ -171,6 +196,8 @@ const transformMap = [
 ]
 
 const transformFrontend = () => {
+  const ping = new Date().getTime()
+
   for (const transform of transformMap) {
     const { type, source, target } = transform
     let input, result, files
@@ -179,8 +206,9 @@ const transformFrontend = () => {
       case 'file':
         input = fs.readFileSync(source)
         console.log(`Transpiling ${source}`)
-        result = babel.transformSync(input, options)
-        fs.writeFileSync(target, result.code)
+        //result = babel.transformSync(input, options)
+        result = transformCached(input, source)
+        fs.writeFileSync(target, result)
         break
       case 'folder':
         //create target folder if does not exists
@@ -199,9 +227,8 @@ const transformFrontend = () => {
             fs.writeFileSync(path.resolve(target, file), '')
           } else {
             const input = fs.readFileSync(path.resolve(source, file))
-            const result = babel.transformSync(input, options)
-
-            fs.writeFileSync(path.resolve(target, file), result.code)
+            const result = transformCached(input, file)
+            fs.writeFileSync(path.resolve(target, file), result)
           }
         }
         break
@@ -229,6 +256,10 @@ const transformFrontend = () => {
         break
     }
   }
+
+  console.log(
+    `Transforming files took ${(new Date().getTime() - ping) / 1000} seconds`
+  )
 }
 
 module.exports = transformFrontend

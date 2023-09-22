@@ -83,6 +83,9 @@ class EditableLabel extends Component {
       extraProps.contentEditable = true
     }
 
+    if (props.canEdit !== undefined) {
+      extraProps.contentEditable = props.canEdit
+    }
     if (props.required === true) {
       extraProps.className = 'required'
     }

@@ -70,10 +70,11 @@ class PostSubmission extends Component {
       })
 
       if (seamless === false) {
-        const selectedPostSubmissionPage = data.find(
-          (page) => page.id === pageId
-        )
-
+        let selectedPostSubmissionPage = data.find((page) => page.id === pageId)
+        //fall back to default page if its shared
+        if (selectedPostSubmissionPage === undefined) {
+          selectedPostSubmissionPage = data.find((page) => page.id === 1)
+        }
         if (selectedPostSubmissionPage) {
           this.setState({
             selectedPostSubmissionPage
@@ -142,26 +143,28 @@ class PostSubmission extends Component {
   }
 
   async handleSetTyPage(e) {
-    const { selectedPostSubmissionPage } = this.state
+    if (this.props.canEdit) {
+      const { selectedPostSubmissionPage } = this.state
 
-    let unselecting = false
+      let unselecting = false
 
-    if (e.target.checked === false) {
-      unselecting = true
-    }
+      if (e.target.checked === false) {
+        unselecting = true
+      }
 
-    if (unselecting === true) {
+      if (unselecting === true) {
+        this.props.setIntegration({
+          type: 'tyPageId',
+          value: 1
+        })
+        return
+      }
+
       this.props.setIntegration({
         type: 'tyPageId',
-        value: 1
+        value: selectedPostSubmissionPage.id
       })
-      return
     }
-
-    this.props.setIntegration({
-      type: 'tyPageId',
-      value: selectedPostSubmissionPage.id
-    })
   }
 
   componentWillUnmount() {
@@ -169,100 +172,104 @@ class PostSubmission extends Component {
   }
 
   async handleOnCreate() {
-    const { newPageTitle, postSubmissionPages } = this.state
+    if (this.props.canEdit) {
+      const { newPageTitle, postSubmissionPages } = this.state
 
-    const data = {
-      title: newPageTitle,
-      id: null,
-      html: postSubmissionPages[0].html
-    }
+      const data = {
+        title: newPageTitle,
+        id: null,
+        html: postSubmissionPages[0].html
+      }
 
-    if (data.title === '') {
-      data.title = 'Untitled'
-    }
+      if (data.title === '') {
+        data.title = 'Untitled'
+      }
 
-    const saveResult = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
-      method: 'post',
-      body: data
-    })
-
-    await this.loadPostSubmissionPages(false, saveResult.data.tyPageId || 1)
-
-    const taskFeedback = {}
-
-    if (saveResult.data.tyPageId !== undefined) {
-      taskFeedback.message = 'Page created successfully.'
-    } else {
-      taskFeedback.message = 'There has been an error creating the page.'
-    }
-
-    taskFeedback.success = saveResult.success
-
-    this.setState({
-      isModalOpen: false,
-      modalContent: {},
-      newPageTitle: '',
-      taskFeedback
-    })
-
-    setTimeout(() => {
-      this.setState({
-        taskFeedback: {}
+      const saveResult = await api({
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
+        method: 'post',
+        body: data
       })
-    }, 2000)
+
+      await this.loadPostSubmissionPages(false, saveResult.data.tyPageId || 1)
+
+      const taskFeedback = {}
+
+      if (saveResult.data.tyPageId !== undefined) {
+        taskFeedback.message = 'Page created successfully.'
+      } else {
+        taskFeedback.message = 'There has been an error creating the page.'
+      }
+
+      taskFeedback.success = saveResult.success
+
+      this.setState({
+        isModalOpen: false,
+        modalContent: {},
+        newPageTitle: '',
+        taskFeedback
+      })
+
+      setTimeout(() => {
+        this.setState({
+          taskFeedback: {}
+        })
+      }, 2000)
+    }
   }
 
   async handleOnSave() {
-    const { selectedPostSubmissionPage } = this.state
+    if (this.props.canEdit) {
+      const { selectedPostSubmissionPage } = this.state
 
-    let id = selectedPostSubmissionPage.id
+      let id = selectedPostSubmissionPage.id
 
-    if (id <= 1) {
-      return
-    }
+      if (id <= 1) {
+        return
+      }
 
-    const html = this.editor.current.innerHTML
+      const html = this.editor.current.innerHTML
 
-    const data = {
-      title: selectedPostSubmissionPage.title,
-      html,
-      id
-    }
+      const data = {
+        title: selectedPostSubmissionPage.title,
+        html,
+        id
+      }
 
-    if (data.title === '') {
-      data.title = 'Untitled'
-    }
+      if (data.title === '') {
+        data.title = 'Untitled'
+      }
 
-    const saveResult = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
-      method: 'post',
-      body: data
-    })
-
-    const taskFeedback = {}
-
-    if (saveResult.data.tyPageId !== undefined) {
-      taskFeedback.message = 'Page saved successfully.'
-    } else {
-      taskFeedback.message = 'There has been an error saving the page.'
-    }
-
-    await this.loadPostSubmissionPages(true)
-
-    taskFeedback.success = saveResult.success
-
-    this.setState({
-      isModalOpen: false,
-      modalContent: {},
-      taskFeedback
-    })
-
-    setTimeout(() => {
-      this.setState({
-        taskFeedback: {}
+      const saveResult = await api({
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
+        method: 'post',
+        body: data
       })
-    }, 2000)
+
+      const taskFeedback = {}
+
+      if (saveResult.data.tyPageId !== undefined) {
+        taskFeedback.message = 'Page saved successfully.'
+      } else {
+        taskFeedback.message = 'There has been an error saving the page.'
+      }
+
+      await this.loadPostSubmissionPages(true)
+
+      taskFeedback.success = saveResult.success
+
+      this.setState({
+        isModalOpen: false,
+        modalContent: {},
+        taskFeedback
+      })
+
+      setTimeout(() => {
+        this.setState({
+          taskFeedback: {}
+        })
+      }, 2000)
+    }
   }
 
   getCurrentIntegration() {
@@ -283,35 +290,38 @@ class PostSubmission extends Component {
   }
 
   handleOnCreateNewPageClick() {
-    const modalContent = {
-      header: 'Create new thank you page',
-      status: 'information'
+    if (this.props.canEdit) {
+      const modalContent = {
+        header: 'Create new thank you page',
+        status: 'information'
+      }
+
+      modalContent.dialogue = {
+        inputMaxLength: 128,
+        abortText: 'Cancel',
+        abortClick: this.handleCloseModalClick,
+        positiveText: 'Create',
+        positiveClick: () => this.handleOnCreate(),
+        inputValue: () => {
+          return this.state.newPageTitle
+        },
+        inputOnChange: (e) =>
+          this.handleTyPageTitleChange(undefined, undefined, e)
+      }
+
+      modalContent.content = <div>Please specify a name for the new page</div>
+
+      this.setState({ modalContent, isModalOpen: true })
     }
-
-    modalContent.dialogue = {
-      inputMaxLength: 128,
-      abortText: 'Cancel',
-      abortClick: this.handleCloseModalClick,
-      positiveText: 'Create',
-      positiveClick: () => this.handleOnCreate(),
-      inputValue: () => {
-        return this.state.newPageTitle
-      },
-      inputOnChange: (e) =>
-        this.handleTyPageTitleChange(undefined, undefined, e)
-    }
-
-    modalContent.content = <div>Please specify a name for the new page</div>
-
-    this.setState({ modalContent, isModalOpen: true })
   }
 
   handleOnHTMLEditorPaste(e) {
     e.preventDefault()
+    if (this.props.canEdit) {
+      const text = e.clipboardData.getData('text/plain')
 
-    const text = e.clipboardData.getData('text/plain')
-
-    document.execCommand('insertHTML', false, text)
+      document.execCommand('insertHTML', false, text)
+    }
   }
 
   handleOnHTMLEditorKeyDown(e) {
@@ -431,14 +441,16 @@ class PostSubmission extends Component {
   }
 
   handleChoosePostSubmissionPage(elem, e) {
-    const { postSubmissionPages } = this.state
+    if (this.props.canEdit) {
+      const { postSubmissionPages } = this.state
 
-    const selectedPostSubmissionPage = postSubmissionPages.filter(
-      (page) => page.id === parseInt(e.target.value)
-    )[0]
+      const selectedPostSubmissionPage = postSubmissionPages.filter(
+        (page) => page.id === parseInt(e.target.value)
+      )[0]
 
-    this.setState({ selectedPostSubmissionPage })
-    this.editor.current.innerHTML = selectedPostSubmissionPage.html
+      this.setState({ selectedPostSubmissionPage })
+      this.editor.current.innerHTML = selectedPostSubmissionPage.html
+    }
   }
 
   handleOnKeyDown(e) {
@@ -455,30 +467,36 @@ class PostSubmission extends Component {
   }
 
   handleTyPageTitleChange(id, value, e) {
-    // e is only passed when the function is called from the modal
-    if (e) {
-      const newTitle = e.target.value
-      this.setState({ newPageTitle: newTitle })
-    } else {
-      const { selectedPostSubmissionPage } = this.state
-      selectedPostSubmissionPage.title = value
+    if (this.props.canEdit) {
+      // e is only passed when the function is called from the modal
+      if (e) {
+        const newTitle = e.target.value
+        this.setState({ newPageTitle: newTitle })
+      } else {
+        const { selectedPostSubmissionPage } = this.state
+        selectedPostSubmissionPage.title = value
 
-      this.setState({ selectedPostSubmissionPage })
+        this.setState({ selectedPostSubmissionPage })
+      }
     }
   }
 
   handleTyPageTextChange(e) {
-    this.props.setIntegration({
-      type: 'tyPageText',
-      value: e.target.innerText
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'tyPageText',
+        value: e.target.innerText
+      })
+    }
   }
 
   handleEvaluationTextChange(e, property) {
-    const text = e.target.innerText
-    const integration = { type: 'evaluationPageLabels' }
-    integration[property] = text
-    this.props.setIntegration(integration)
+    if (this.props.canEdit) {
+      const text = e.target.innerText
+      const integration = { type: 'evaluationPageLabels' }
+      integration[property] = text
+      this.props.setIntegration(integration)
+    }
   }
 
   handleInputLimit(e, limit = 128) {
@@ -549,6 +567,7 @@ class PostSubmission extends Component {
           <div className="pageIdentifier">
             <div className="custom-page-title">
               <EditableLabel
+                canEdit={this.props.canEdit}
                 className="label"
                 mode={defaultPage ? 'view' : 'builder'}
                 dataPlaceholder="Click to edit page title"

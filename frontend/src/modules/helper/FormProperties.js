@@ -33,109 +33,123 @@ export default class FormProperties extends Component {
   }
 
   handleEmailChange(elem, e) {
-    this.props.setIntegration({
-      type: 'email',
-      to: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'email',
+        to: e.target.value
+      })
+    }
   }
 
   handleEmailSubjectChange(elem, e) {
-    this.props.setIntegration({
-      type: 'email',
-      subject: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'email',
+        subject: e.target.value
+      })
+    }
   }
 
   handleEmailReplyToChange(elem) {
-    this.props.setIntegration({
-      type: 'email',
-      replyTo: elem.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'email',
+        replyTo: elem.target.value
+      })
+    }
   }
 
   handleEmailReplyToCustomChange(elem, e) {
-    this.props.setIntegration({
-      type: 'email',
-      replyToCustom: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'email',
+        replyToCustom: e.target.value
+      })
+    }
   }
 
   handleTyPageTitleChange(elem, e) {
-    this.props.setIntegration({
-      type: 'tyPageTitle',
-      value: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'tyPageTitle',
+        value: e.target.value
+      })
+    }
   }
 
   handleTyPageTextChange(elem, e) {
-    this.props.setIntegration({
-      type: 'tyPageText',
-      value: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'tyPageText',
+        value: e.target.value
+      })
+    }
   }
 
   handleSubmitBehaviourChange(elem, e) {
-    this.props.setIntegration({
-      type: 'submitBehaviour',
-      value: e.target.value
-    })
+    if (this.props.canEdit) {
+      this.props.setIntegration({
+        type: 'submitBehaviour',
+        value: e.target.value
+      })
+    }
   }
 
   handleElemPerPageChange(elem, e) {
-    if (elem.type === 'Checkbox') {
-      this.props.setAutoPageBreak('active', e.target.checked)
-    }
-
-    if (elem.type === 'NumberE') {
-      if (!isNaN(e.target.value)) {
-        this.props.setAutoPageBreak('elemPerPage', e.target.value)
+    if (this.props.canEdit) {
+      if (elem.type === 'Checkbox') {
+        this.props.setAutoPageBreak('active', e.target.checked)
+      } else if (elem.type === 'NumberE') {
+        if (!isNaN(e.target.value)) {
+          this.props.setAutoPageBreak('elemPerPage', e.target.value)
+        }
+      } else if (elem.label === 'Previous Button Text') {
+        this.props.setAutoPageBreak('prevButtonText', e.target.value)
+      } else if (elem.label === 'Next Button Text') {
+        this.props.setAutoPageBreak('nextButtonText', e.target.value)
+      } else if (elem.label === 'Submit Button Text') {
+        this.props.setAutoPageBreak('submitButtonText', e.target.value)
       }
-    }
-
-    if (elem.label === 'Previous Button Text') {
-      this.props.setAutoPageBreak('prevButtonText', e.target.value)
-    }
-
-    if (elem.label === 'Next Button Text') {
-      this.props.setAutoPageBreak('nextButtonText', e.target.value)
-    }
-
-    if (elem.label === 'Submit Button Text') {
-      this.props.setAutoPageBreak('submitButtonText', e.target.value)
     }
   }
 
   handleAddTag(e) {
     e.preventDefault()
-    let tagsArray = []
+    if (this.props.canEdit) {
+      let tagsArray = []
 
-    if (this.props.form.props.tags !== undefined) {
-      const { tags } = this.props.form.props
-      tagsArray = [...tags]
+      if (this.props.form.props.tags !== undefined) {
+        const { tags } = this.props.form.props
+        tagsArray = [...tags]
+      }
+      let tag = ''
+      const regexp = /^([\w-]+)/g
+
+      const filteredTag = e.target[0].value.match(regexp)
+
+      if (filteredTag !== null) {
+        tag = filteredTag[0]
+        tagsArray.push(tag)
+      }
+
+      this.props.setFormTags(tagsArray)
+
+      e.target[0].value = ''
     }
-    let tag = ''
-    const regexp = /^([\w-]+)/g
-
-    const filteredTag = e.target[0].value.match(regexp)
-
-    if (filteredTag !== null) {
-      tag = filteredTag[0]
-      tagsArray.push(tag)
-    }
-
-    this.props.setFormTags(tagsArray)
-
-    e.target[0].value = ''
   }
 
   handleRemoveTag(i) {
-    const tagsArray = [...this.props.form.props.tags]
-    tagsArray.splice(i, 1)
-    this.props.setFormTags(tagsArray)
+    if (this.props.canEdit) {
+      const tagsArray = [...this.props.form.props.tags]
+      tagsArray.splice(i, 1)
+      this.props.setFormTags(tagsArray)
+    }
   }
 
   handleFormPrivateChange(elem, e) {
-    this.props.setFormAsPrivate(e.target.checked)
+    if (this.props.canEdit) {
+      this.props.setFormAsPrivate(e.target.checked)
+    }
   }
 
   render() {

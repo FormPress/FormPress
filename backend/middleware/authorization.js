@@ -101,16 +101,78 @@ exports.userShouldOwnSubmission = (user_id, submission_id) => async (
   }
 }
 
-exports.userShouldOwnForm = (user_id, form_id) => async (req, res, next) => {
+/*
+  If param sharedPermissions is given, upon detecting form does not belong to user
+  we should check if form is shared with user with exact given permissions
+
+  if not given, then form must be shared with all 3 permissions, read, edit and data
+
+  matchType determines type of match, possible values, strict or loose
+    - *strict* means form must be shared with all specified values
+    - *loose* means, form must be shared at least 1 of specified permissions
+
+  Examples:
+
+  {read:true, matchType: 'strict'}
+    => Returns true only if read permission is given, other 2 permissions does not matter
+
+*/
+exports.userShouldOwnForm = (
+  user_id_arg,
+  form_id_arg,
+  sharedPermissions = {
+    matchType: 'strict',
+    read: true,
+    edit: true,
+    data: true
+  }
+) => async (req, res, next) => {
+  const form_id =
+    typeof form_id_arg === 'function'
+      ? form_id_arg(req)
+      : req.params[form_id_arg]
+  const user_id = req.params[user_id_arg]
+
   const db = await getPool()
   const result = await db.query(
     `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
-    [req.params[form_id]]
+    [form_id]
   )
   if (result.length > 0) {
-    if (parseInt(req.params[user_id]) === result[0].user_id) {
-      next()
+    if (parseInt(user_id) === result[0].user_id) {
+      return next()
     } else {
+      // Check if shared
+      const sharedResult = await db.query(
+        `SELECT * FROM \`form_permission\` WHERE target_user_id = ? AND form_id = ?`,
+        [user_id, form_id]
+      )
+
+      if (sharedResult.length > 0) {
+        const permissions = JSON.parse(sharedResult[0].permissions)
+        let matchCount = 0
+
+        for (const key of Object.keys(sharedPermissions)) {
+          if (
+            key !== 'matchType' &&
+            permissions[key] === sharedPermissions[key]
+          ) {
+            matchCount++
+          }
+        }
+
+        if (
+          (sharedPermissions.matchType === 'loose' && matchCount > 0) ||
+          (sharedPermissions.matchType === 'strict' &&
+            matchCount === Object.keys(sharedPermissions).length - 1)
+        ) {
+          res.locals.sharedUserId = sharedResult[0].user_id
+          res.locals.sharedPermissions = permissions
+
+          return next()
+        }
+      }
+
       res.status(403).send({ message: 'That form is not yours' })
     }
   } else {
