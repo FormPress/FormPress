@@ -11,27 +11,29 @@ export default class QuestionProperties extends Component {
   }
 
   handleFieldChange(elem, e) {
-    const value =
-      typeof e === 'string'
-        ? e
-        : e.target.id === 'q_required' && e.target.value === true
-        ? elem.value
-        : e.target.type === 'checkbox'
-        ? e.target.checked
-        : e.target.value
-    const elemId =
-      typeof e === 'string'
-        ? elem.id
-        : e.target.id === 'q_required' && value === true
-        ? elem.id.split('_')[1]
-        : elem.id
+    if (this.props.canEdit) {
+      const value =
+        typeof e === 'string'
+          ? e
+          : e.target.id === 'q_required' && e.target.value === true
+          ? elem.value
+          : e.target.type === 'checkbox'
+          ? e.target.checked
+          : e.target.value
+      const elemId =
+        typeof e === 'string'
+          ? elem.id
+          : e.target.id === 'q_required' && value === true
+          ? elem.id.split('_')[1]
+          : elem.id
 
-    this.props.configureQuestion({
-      id: this.props.selectedField.config.id,
-      newState: {
-        [elemId]: value
-      }
-    })
+      this.props.configureQuestion({
+        id: this.props.selectedField.config.id,
+        newState: {
+          [elemId]: value
+        }
+      })
+    }
   }
 
   render() {

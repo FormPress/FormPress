@@ -6,13 +6,16 @@ import {
   faTrash,
   faPen,
   faPlusCircle,
-  faClone
+  faClone,
+  faUserLock,
+  faLink
 } from '@fortawesome/free-solid-svg-icons'
 import Moment from 'react-moment'
 
 import { api } from '../helper'
 import Table from './common/Table'
 import Modal from './common/Modal'
+import FormPermissionShare from './common/FormPermissionShare'
 
 import './Forms.css'
 
@@ -57,6 +60,9 @@ export default class Forms extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloneFormTitleChange = this.handleCloneFormTitleChange.bind(this)
     this.handleCountSubmissions = this.handleCountSubmissions.bind(this)
+    this.handleFormSharePermissionsClick = this.handleFormSharePermissionsClick.bind(
+      this
+    )
   }
 
   handleFormCloneClick(form, e) {
@@ -132,6 +138,29 @@ export default class Forms extends Component {
         will be deleted <strong>permanently.</strong> Are you sure you want to
         proceed?
       </div>
+    )
+
+    this.setState({ modalContent, isModalOpen: true })
+  }
+
+  handleFormSharePermissionsClick(form, e) {
+    e.preventDefault()
+
+    const modalContent = {
+      header: 'Share Form with others',
+      status: 'information'
+    }
+
+    modalContent.dialogue = {
+      abortText: 'Done',
+      abortClick: this.handleCloseModalClick
+    }
+
+    modalContent.content = (
+      <FormPermissionShare
+        form={form}
+        generalContext={this.props.generalContext}
+      />
     )
 
     this.setState({ modalContent, isModalOpen: true })
@@ -273,6 +302,27 @@ export default class Forms extends Component {
       roleLimit = parseInt(this.props.generalContext.auth.permission.formLimit)
     }
 
+    let canShare = false
+
+    if (
+      this.props.generalContext.auth.permission.canShare ||
+      this.props.generalContext.auth.permission.admin
+    ) {
+      canShare = true
+    }
+
+    const formsAndShares = forms.reduce(
+      (ctx, el) => {
+        if (el.permissions === undefined) {
+          ctx.owned.push(el)
+        } else {
+          ctx.shared.push(el)
+        }
+        return ctx
+      },
+      { owned: [], shared: [] }
+    )
+
     return (
       <div>
         <div className="forms">
@@ -283,7 +333,7 @@ export default class Forms extends Component {
               closeModal={this.handleCloseModalClick}
             />
           ) : null}
-          {roleLimit === 0 || roleLimit > forms.length ? (
+          {roleLimit === 0 || roleLimit > formsAndShares.owned.length ? (
             <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
                 <div className="popover-container circle-plus-container">
@@ -375,6 +425,32 @@ export default class Forms extends Component {
                         }>
                         <FontAwesomeIcon icon={faEye} />
                       </span>
+                      {canShare ? (
+                        <span
+                          title="Share Form"
+                          onClick={this.handleFormSharePermissionsClick.bind(
+                            this,
+                            form
+                          )}>
+                          <FontAwesomeIcon icon={faUserLock} />
+                        </span>
+                      ) : (
+                        <span
+                          className="upgrade-container"
+                          title="Upgrade your plan to share with others">
+                          <FontAwesomeIcon icon={faUserLock} />
+                          <div className="popoverText">
+                            <a
+                              href={global.env.FE_UPGRADE_LINK}
+                              target="_blank"
+                              rel="noopener noreferrer">
+                              {' '}
+                              Upgrade your plan
+                            </a>{' '}
+                            to share with others.
+                          </div>
+                        </span>
+                      )}
                       <span
                         title="Delete Form"
                         onClick={this.handleFormDeleteClick.bind(this, form)}>
@@ -383,7 +459,8 @@ export default class Forms extends Component {
                       <Link to={`/editor/${form.id}/builder`} title="Edit Form">
                         <FontAwesomeIcon icon={faPen} />
                       </Link>
-                      {roleLimit === 0 || roleLimit > forms.length ? (
+                      {roleLimit === 0 ||
+                      roleLimit > formsAndShares.owned.length ? (
                         <span
                           title="Clone Form"
                           onClick={this.handleFormCloneClick.bind(this, form)}>
@@ -400,11 +477,153 @@ export default class Forms extends Component {
                   )
                 }
               ]}
-              data={forms}
+              data={formsAndShares.owned}
             />
           </div>
+          {formsAndShares.shared.length > 0 ? (
+            <div className="formsContent shared">
+              <div className="sharedWithMe">
+                Shared With Me{' '}
+                <FontAwesomeIcon icon={faLink} className="clipboardIcon" />
+              </div>
+              <Table
+                columns={[
+                  {
+                    label: <span> </span>,
+                    content: () => <span> </span>,
+                    className: 'mw'
+                  },
+                  {
+                    label: 'Name',
+                    content: (form) => (
+                      <>
+                        {form.permissions.edit || form.permissions.read ? (
+                          <Link
+                            to={`/editor/${form.id}/builder`}
+                            title="Go To Form">
+                            {form.title}
+                          </Link>
+                        ) : (
+                          <span>{form.title}</span>
+                        )}
+                      </>
+                    ),
+                    className: 'name',
+                    title: ' '
+                  },
+                  {
+                    label: 'Submissions',
+                    content: (form) => (
+                      <div className="responsesContainer">
+                        {form.permissions.data ? (
+                          <>
+                            <Link
+                              to={{
+                                pathname: '/data',
+                                state: {
+                                  form_id: form.id,
+                                  submissionFilterSelectors: {
+                                    showUnread: false
+                                  }
+                                }
+                              }}
+                              className={`responseCount${
+                                form.responseCount === 0 ? ' zero' : ''
+                              }`}
+                              title="View the submissions to this form.">
+                              {this.handleCountSubmissions(form.responseCount)}
+                            </Link>
+                            {form.unreadCount > 0 ? (
+                              <span
+                                className="unreadBadge"
+                                title="Unread submissions">
+                                {form.unreadCount > 99
+                                  ? '99'
+                                  : form.unreadCount}
+                              </span>
+                            ) : null}
+                          </>
+                        ) : (
+                          <div className="responseCount">-</div>
+                        )}
+                      </div>
+                    ),
+                    className: 'responses'
+                  },
+                  {
+                    label: 'Created',
+                    content: (form) => [
+                      <Moment fromNow ago date={form.created_at} key="1" />,
+                      <span key="2">{' ago'}</span>
+                    ],
+                    className: 'createdAt'
+                  },
+                  {
+                    label: 'Actions',
+                    content: (form) => (
+                      <div className="actions">
+                        <span
+                          className={`${
+                            form.published_version ? 'view' : 'inactive_view'
+                          }`}
+                          title={
+                            form.published_version
+                              ? 'View Form'
+                              : 'Form must be published before it can be viewed'
+                          }
+                          onClick={
+                            form.published_version
+                              ? this.handlePreviewClick.bind(this, form)
+                              : undefined
+                          }>
+                          <FontAwesomeIcon icon={faEye} />
+                        </span>
+                        <>
+                          {form.permissions.edit || form.permissions.read ? (
+                            <Link
+                              to={`/editor/${form.id}/builder`}
+                              title="Edit Form">
+                              <FontAwesomeIcon icon={faPen} />
+                            </Link>
+                          ) : (
+                            ''
+                          )}
+                        </>
+                        <>
+                          {form.permissions.edit || form.permissions.read ? (
+                            roleLimit === 0 ||
+                            roleLimit > formsAndShares.owned.length ? (
+                              <span
+                                title="Clone Form"
+                                onClick={this.handleFormCloneClick.bind(
+                                  this,
+                                  form
+                                )}>
+                                <FontAwesomeIcon icon={faClone} />
+                              </span>
+                            ) : (
+                              <span
+                                className="inactive_clone"
+                                title="Form limit reached">
+                                <FontAwesomeIcon icon={faClone} />
+                              </span>
+                            )
+                          ) : (
+                            ''
+                          )}
+                        </>
+                      </div>
+                    )
+                  }
+                ]}
+                data={formsAndShares.shared}
+              />
+            </div>
+          ) : (
+            ''
+          )}
           <div className="newButtonContainer">
-            {roleLimit === 0 || roleLimit > forms.length ? (
+            {roleLimit === 0 || roleLimit > formsAndShares.owned.length ? (
               <Link to="/editor/new">Create a new form</Link>
             ) : (
               <span
@@ -429,7 +648,7 @@ export default class Forms extends Component {
                 <div id="createNewForm-popover" className="popoverText">
                   Form limit reached.
                   <a
-                    href="https://formpress.org/pricing"
+                    href={global.env.FE_UPGRADE_LINK}
                     target="_blank"
                     rel="noopener noreferrer">
                     {' '}

@@ -30,7 +30,9 @@ export default class CustomCSS extends Component {
           <strong>not render correctly</strong>. Please use with caution.
         </div>
         <Renderer
-          handleFieldChange={this.handleCustomCSSTextChange}
+          handleFieldChange={
+            this.props.canEdit ? this.handleCustomCSSTextChange : ''
+          }
           theme="infernal"
           form={{
             props: {

@@ -900,3 +900,8 @@ text[type='category'] tspan {
   .rating-scale-Stars.extends-select {
   color: #1c5c85;
 }
+
+.sharedform {
+  color: #1c5c85;
+  font-style: italic;
+}

@@ -23,10 +23,12 @@ export default class FormIntegrations extends Component {
   }
 
   handleOpenIntegrationClick(item) {
-    const integrationName = item.displayText.replaceAll(' ', '')
-    this.setState({
-      selectedIntegration: integrationName
-    })
+    if (this.props.canEdit) {
+      const integrationName = item.displayText.replaceAll(' ', '')
+      this.setState({
+        selectedIntegration: integrationName
+      })
+    }
   }
 
   handleCloseIntegrationClick() {
@@ -85,7 +87,6 @@ export default class FormIntegrations extends Component {
   render() {
     const integrationList = this.getIntegrationMetaData()
     const { selectedIntegration } = this.state
-
     return (
       <div
         className={

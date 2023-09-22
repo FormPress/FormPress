@@ -86,7 +86,11 @@ export default class DesignForm extends Component {
               <Redirect to={`/editor/${this.formId}/design/theme`} />
             </Route>
             <Route exact path="/editor/:formId/design/theme">
-              <Theme theme={theme} setTheme={this.setTheme} />
+              <Theme
+                theme={theme}
+                setTheme={this.setTheme}
+                canEdit={this.props.canEdit}
+              />
             </Route>
             <Route exact path="/editor/:formId/design/colorscheme">
               <ColorScheme
@@ -95,7 +99,11 @@ export default class DesignForm extends Component {
               />
             </Route>
             <Route exact path="/editor/:formId/design/customcss">
-              <CustomCSS form={this.props.form} setCSS={this.props.setCSS} />
+              <CustomCSS
+                form={this.props.form}
+                setCSS={this.props.setCSS}
+                canEdit={this.props.canEdit}
+              />
             </Route>
           </Switch>
           <div></div>

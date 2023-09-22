@@ -79,14 +79,20 @@ module.exports = (app) => {
     }
   }
 
+  // Update form
   app.put(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
     userHavePermission,
+    userShouldOwnForm('user_id', (req) => req.body.id, {
+      edit: true,
+      matchType: 'strict' // Only allow if user has edit rights to form
+    }),
     handleCreateForm
   )
 
+  // Create form
   app.post(
     '/api/users/:user_id/forms',
     mustHaveValidToken,
@@ -104,15 +110,55 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
-      const formResults = await db.query(
-        `SELECT *, CASE WHEN (SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL THEN 0 ELSE id END AS published_id, ( SELECT COUNT(*) FROM submission WHERE form_id = f.id AND version != 0 ) as responseCount, ( SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 AND version != 0) as unreadCount FROM form AS f WHERE f.user_id = ? AND deleted_at IS NULL`,
-        [user_id]
-      )
 
+      const formIds = (
+        await db.query(
+          `SELECT id FROM form WHERE user_id = ? AND deleted_at IS NULL`,
+          [user_id]
+        )
+      ).map((form) => form.id)
+      const sharedIdsAndPerms = await formModel.getFormsAndPermsSharedWithUser(
+        user_id,
+        {
+          matchType: 'loose',
+          read: true,
+          edit: true,
+          data: true
+        }
+      )
+      const sharedIds = sharedIdsAndPerms.map((idAndPerm) => idAndPerm.form_id)
+      const ids = [...formIds, ...sharedIds]
+
+      // I think this little hack is acceptable
+      if (ids.length === 0) {
+        ids.push(-999)
+      }
+
+      const formResults = await db.query(
+        `SELECT
+            *, 
+            CASE WHEN (
+              SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL
+            THEN 0 ELSE
+            id END AS published_id,
+            (SELECT COUNT(*) FROM submission WHERE form_id = f.id AND version != 0 ) as responseCount,
+            (SELECT COUNT(*) FROM submission as S WHERE form_id = f.id AND S.read = 0 AND version != 0) as unreadCount
+          FROM form AS f
+          WHERE f.id IN (${ids.map(() => '?').join(',')})`,
+        [...ids]
+      )
       if (formResults.length === 0) {
         res.json([])
       } else {
-        return res.json(formResults.map(hydrateForm))
+        const response = formResults.map(hydrateForm)
+        sharedIdsAndPerms.forEach((idAndPerm) => {
+          response.forEach((formResult) => {
+            if (formResult.id === idAndPerm.form_id) {
+              formResult.permissions = idAndPerm.permissions
+            }
+          })
+        })
+        return res.json(response)
       }
     }
   )
@@ -122,14 +168,25 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
-    userShouldOwnForm('user_id', 'form_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      read: true,
+      edit: true,
+      data: true,
+      matchType: 'loose' // if form is shared with any of permission types
+    }),
     async (req, res) => {
       const { form_id } = req.params
 
       if (req.query.published === 'true') {
         res.json((await formPublishedModel.get({ form_id })) || {})
       } else {
-        res.json((await formModel.get({ form_id })) || {})
+        const form = await formModel.get({ form_id })
+        //if shared owner info and permissions
+        if (res.locals.sharedUserId !== undefined) {
+          form.sharedUserId = res.locals.sharedUserId
+          form.permissions = res.locals.sharedPermissions
+        }
+        res.json(form)
       }
     }
   )
@@ -375,6 +432,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/publish',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      edit: true,
+      matchType: 'strict' // if form is shared with any of permission types
+    }),
     async (req, res) => {
       const { user_id, form_id } = req.params
 
@@ -400,6 +461,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      owner: true,
+      matchType: 'strict'
+    }),
     async (req, res) => {
       const { form_id } = req.params
 
@@ -414,6 +479,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/submissions',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { form_id } = req.params
       const { orderBy, desc } = req.query
@@ -447,6 +516,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/statistics',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const elementCharts = {
         TextBox: 'lastFive',
@@ -776,6 +849,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/:version_id/submissions',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { form_id, version_id } = req.params
       const { orderBy, desc } = req.query
@@ -809,6 +886,12 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/:version_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      read: true,
+      edit: true,
+      matchType: 'loose' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { form_id, version_id } = req.params
       const result = await formPublishedModel.get({ form_id, version_id })
@@ -826,6 +909,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/CSVExport',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { form_id } = req.params
       const ids = req.body.submissionIds
@@ -949,6 +1036,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/deleteSubmission',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      owner: true,
+      matchType: 'strict'
+    }),
     async (req, res) => {
       const { form_id, user_id } = req.params
       const ids = req.body.submissionIds
@@ -1005,6 +1096,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { submission_id } = req.params
       const db = await getPool()
@@ -1028,7 +1123,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
-    userShouldOwnSubmission('user_id', 'submission_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { submission_id, question_id, file_name } = req.params
       const db = await getPool()
@@ -1072,6 +1170,10 @@ module.exports = (app) => {
     '/api/users/:user_id/forms/:form_id/submissions/:submission_id',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     async (req, res) => {
       const { submission_id } = req.params
       const db = await getPool()
@@ -1490,7 +1592,10 @@ module.exports = (app) => {
     '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
     mustHaveValidToken,
     paramShouldMatchTokenUserId('user_id'),
-    userShouldOwnForm('user_id', 'form_id'),
+    userShouldOwnForm('user_id', 'form_id', {
+      data: true,
+      matchType: 'strict' // Only allow if user has data rights to form
+    }),
     userShouldOwnSubmission('user_id', 'submission_id'),
     async (req, res) => {
       const db = await getPool()
@@ -1560,7 +1665,7 @@ module.exports = (app) => {
       }
     }
   )
-
+  // TODO: review below part
   app.get(
     '/api/users/:user_id/talkyard-sso',
     mustHaveValidToken,

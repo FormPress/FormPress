@@ -60,7 +60,7 @@ export default class Usages extends Component {
           <div className="needMore">
             Need more?{' '}
             <a
-              href="https://formpress.org/pricing"
+              href={global.env.FE_UPGRADE_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="nav-pricing">

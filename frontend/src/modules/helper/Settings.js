@@ -43,15 +43,18 @@ export default class Settings extends Component {
           return
         }
 
-        navLinks.push(
-          <NavLink
-            key={module.default.menuText}
-            exact
-            to={module.default.path}
-            activeClassName="selected">
-            {module.default.menuText}
-          </NavLink>
-        )
+        if (module.default.menuText !== '__HIDDEN__') {
+          navLinks.push(
+            <NavLink
+              key={module.default.menuText}
+              exact
+              to={module.default.path}
+              activeClassName="selected">
+              {module.default.menuText}
+            </NavLink>
+          )
+        }
+
         routes.push(
           <PrivateRoute
             exact

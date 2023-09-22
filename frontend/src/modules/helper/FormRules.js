@@ -212,27 +212,33 @@ class FormRules extends Component {
   }
 
   deleteRule(rule) {
-    rule.delete = true
-    this.props.setFormRule(rule)
+    if (this.props.canEdit) {
+      rule.delete = true
+      this.props.setFormRule(rule)
+    }
   }
 
   editRule(rule) {
-    const ruleConfig = rulesWithMetadata.find(
-      (item) => item.value === rule.type
-    )
-    if (!ruleConfig) {
-      console.error('Rule config not found')
-      return
+    if (this.props.canEdit) {
+      const ruleConfig = rulesWithMetadata.find(
+        (item) => item.value === rule.type
+      )
+      if (!ruleConfig) {
+        console.error('Rule config not found')
+        return
+      }
+      this.setState({ mode: 'build', editingRule: rule, ruleConfig })
     }
-    this.setState({ mode: 'build', editingRule: rule, ruleConfig })
   }
 
   handleToggleRuleBuilder() {
     // will replace build with typeSelect
-    if (this.state.mode === 'view') {
-      this.setState({ mode: 'typeSelect', editingRule: null })
-    } else {
-      this.setState({ mode: 'view', editingRule: null, ruleConfig: null })
+    if (this.props.canEdit) {
+      if (this.state.mode === 'view') {
+        this.setState({ mode: 'typeSelect', editingRule: null })
+      } else {
+        this.setState({ mode: 'view', editingRule: null, ruleConfig: null })
+      }
     }
   }
 

@@ -12,15 +12,28 @@
       </span>
     </div>
     <div style="color:#0c2738; font-size: 18px; padding: 40px 40px 10px 40px;">
-      FORMPRESS - Reset Password
+      Form Shared for Collaboration
     </div>
     <div style="font-size: 16px; padding: 10px 40px 10px 40px;">
-      You have requested to reset your password. You can create a new password by following the link below.
+      You have received an invitation from <%= sourceUserEmail %> to collaborate on a form titled "<%= formTitle %>" with the following permissions:
+      <br/>
+      <%
+      const permissionsTextMap = {
+        read: 'View form in Builder',
+        edit: 'Edit form in Builder',
+        data: 'View submissions in Data',
+      }
+      for (var i = 0; i < permissions.length; i++) {
+      %>
+      <li><%= permissionsTextMap[permissions[i]] %></li>
+      <% }
+      %>
+      To accept the invitation, simply click the link below. If you wish to decline, you may disregard this email.
     </div>
     <div style="font-size: 16px; padding: 10px 40px 30px 40px;">
-      <% const resetPasswordLink=`${FRONTEND}/resetpassword/${USERID}/${PASSWORDRESETCODE}` %>
-        <a href="<%= resetPasswordLink %>">
-          <%= resetPasswordLink %>
+      <% const formShareInvitationLink=`${FRONTEND}/settings/formShareInvitation/${form_id}/${id}` %>
+        <a href="<%= formShareInvitationLink %>">
+          <%= formShareInvitationLink %>
         </a>
     </div>
     <div style=" font-size: 12px;   text-align: center; color: #646569;">

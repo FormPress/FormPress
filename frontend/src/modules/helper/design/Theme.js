@@ -24,7 +24,9 @@ export default class Theme extends Component {
               this.props.theme === item.name ? 'selectedTheme' : ''
             }`}
             key={index}
-            onClick={() => this.props.setTheme(item.name)}>
+            onClick={() =>
+              this.props.canEdit ? this.props.setTheme(item.name) : ''
+            }>
             {item.displayText}
           </div>
         ))}

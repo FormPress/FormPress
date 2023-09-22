@@ -1157,6 +1157,10 @@ export default class Builder extends Component {
         />
       )
     }
+    let canEdit = true
+    if (this.state.form.permissions !== undefined) {
+      canEdit = this.state.form.permissions.edit
+    }
     const { params } = this.props.match
     const { formId, questionId } = params
 
@@ -1230,6 +1234,7 @@ export default class Builder extends Component {
                 <EditableLabel
                   className="label"
                   mode="builder"
+                  canEdit={canEdit}
                   dataPlaceholder="Click to edit form title"
                   labelKey="title"
                   handleLabelChange={this.handleTitleChange}
@@ -1239,9 +1244,13 @@ export default class Builder extends Component {
               ) : null}
             </div>
             <div className="col-4-16 formControls">
-              <button onClick={this.handleSaveClick} {...saveButtonProps}>
-                {saving === true ? 'Saving...' : 'Save'}
-              </button>
+              {canEdit ? (
+                <button onClick={this.handleSaveClick} {...saveButtonProps}>
+                  {saving === true ? 'Saving...' : 'Save'}
+                </button>
+              ) : (
+                <button title="Don't have permission">Disabled</button>
+              )}
               {typeof this.state.form.id === 'number' ? (
                 <NavLink to={`/editor/${params.formId}/preview`}>
                   <button>Preview</button>
@@ -1256,12 +1265,16 @@ export default class Builder extends Component {
                 </span>
               )}
               {typeof this.state.form.id === 'number' ? (
-                <button className="publish" onClick={this.handlePublishClick}>
-                  {publishing === true ? 'Publishing...' : 'Publish'}
-                  {isPublishRequired === true ? (
-                    <div className="publishRequired"></div>
-                  ) : null}
-                </button>
+                canEdit ? (
+                  <button className="publish" onClick={this.handlePublishClick}>
+                    {publishing === true ? 'Publishing...' : 'Publish'}
+                    {isPublishRequired === true ? (
+                      <div className="publishRequired"></div>
+                    ) : null}
+                  </button>
+                ) : (
+                  <button title="Don't have permission">Disabled</button>
+                )
               ) : (
                 <button
                   className="publish-disabled-button"
@@ -1340,6 +1353,10 @@ export default class Builder extends Component {
     const selectedField = {}
     const { questionId } = params
 
+    let canEdit = true
+    if (this.state.form.permissions !== undefined) {
+      canEdit = this.state.form.permissions.edit
+    }
     if (permission.admin) {
       pickerElements.forEach((elem) => {
         permission[elem.type] = true
@@ -1376,7 +1393,7 @@ export default class Builder extends Component {
                 {pickerElements
                   .filter((elem) => this.removeUnavailableElems(elem))
                   .map((elem) =>
-                    permission[elem.type] ? (
+                    permission[elem.type] && canEdit ? (
                       elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
                         <div
                           className="element disabled-element"
@@ -1438,17 +1455,25 @@ export default class Builder extends Component {
                         </span>
                         <span className="planover-container">
                           <FontAwesomeIcon icon={faQuestionCircle} />
-                          <a
-                            href="/pricing"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="upgrade_button">
-                            UPGRADE
-                          </a>
-                          <div className="popoverText">
-                            Your plan does not include this element. Click here
-                            to upgrade your plan!
-                          </div>
+                          {canEdit ? (
+                            <>
+                              <a
+                                href={global.env.FE_UPGRADE_LINK}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="upgrade_button">
+                                UPGRADE
+                              </a>
+                              <div className="popoverText">
+                                Your plan does not include this element. Click
+                                here to upgrade your plan!
+                              </div>
+                            </>
+                          ) : (
+                            <div className="popoverText">
+                              You don&#39;t have necessary permissions
+                            </div>
+                          )}
                         </span>
                       </div>
                     )
@@ -1459,6 +1484,7 @@ export default class Builder extends Component {
           <Route path="/editor/:formId/builder/properties">
             <FormProperties
               form={form}
+              canEdit={canEdit}
               generalContext={this.props.generalContext}
               setIntegration={this.setIntegration}
               setFormTags={this.setFormTags}
@@ -1482,6 +1508,7 @@ export default class Builder extends Component {
                 handleLabelChange={this.handleLabelChange}
                 handleLabelClick={this.handleLabelClick}
                 selectedLabelId={this.state.selectedLabelId}
+                canEdit={canEdit}
               />
             ) : null}
           </Route>
@@ -1560,6 +1587,10 @@ export default class Builder extends Component {
 
     const { form } = this.state
 
+    let canEdit = true
+    if (this.state.form.permissions !== undefined) {
+      canEdit = this.state.form.permissions.edit
+    }
     if (this.state.loading === true) {
       return null
     }
@@ -1575,6 +1606,7 @@ export default class Builder extends Component {
             setIntegration={this.setIntegration}
             handleSaveClick={this.handleSaveClick}
             form={form}
+            canEdit={canEdit}
           />
         </Route>
         <Route path="/editor/:formId/design">
@@ -1584,6 +1616,7 @@ export default class Builder extends Component {
             uuid={this.state.form.uuid}
             setCSS={this.setCSS}
             setFormDesign={this.setFormDesign}
+            canEdit={canEdit}
           />
         </Route>
         <Route path="/editor/:formId/rules">
@@ -1592,6 +1625,7 @@ export default class Builder extends Component {
             form={this.state.form}
             uuid={this.state.form.uuid}
             setFormRule={this.setFormRule}
+            canEdit={canEdit}
           />
         </Route>
         <Route path="/editor/:formId/postsubmission">
@@ -1599,6 +1633,7 @@ export default class Builder extends Component {
             form={this.state.form}
             setAdditionalSaveFunction={this.setAdditionalSaveFunction}
             setIntegration={this.setIntegration}
+            canEdit={canEdit}
           />
         </Route>
         <Route path="/editor/:formId/share">
@@ -1606,6 +1641,7 @@ export default class Builder extends Component {
             formId={formId}
             uuid={this.state.form.uuid}
             published={this.state.form.published_version > 0}
+            canEdit={canEdit}
           />
         </Route>
         <Route path="/editor/:formId/template">
@@ -1632,6 +1668,10 @@ export default class Builder extends Component {
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
+    let canEdit = true
+    if (this.state.form.permissions !== undefined) {
+      canEdit = this.state.form.permissions.edit
+    }
     let examMode = false
     if (form.props.integrations) {
       const foundSubmitBehaviour = form.props.integrations.find(
@@ -1667,7 +1707,11 @@ export default class Builder extends Component {
           'Loading...'
         ) : (
           <Renderer
-            className={`fl form` + (examMode ? ' exam-mode' : '')}
+            className={
+              `fl form` +
+              (canEdit ? '' : ' renderer') +
+              (examMode ? ' exam-mode' : '')
+            }
             builderHandlers={{
               onDrop: this.handleDrop,
               onDragOver: this.handleDragOver,
@@ -1693,7 +1737,7 @@ export default class Builder extends Component {
             form={form}
             selectedField={selectedFieldId}
             selectedLabelId={this.state.selectedLabelId}
-            mode="builder"
+            mode={canEdit ? 'builder' : 'viewer'}
             theme={theme}
           />
         )}
@@ -1704,7 +1748,8 @@ export default class Builder extends Component {
             Click here to add a new page.
           </div>
         ) : null}
-        {this.props.generalContext.auth.user_role === 2 ? (
+        {this.props.generalContext.auth.user_role === 2 &&
+        form.sharedUserId === undefined ? (
           <span
             className="branding-container"
             onMouseEnter={(e) => {
@@ -1741,7 +1786,7 @@ export default class Builder extends Component {
             <div id="branding-popover" className="popoverText">
               Want to remove branding?{' '}
               <a
-                href="https://formpress.org/pricing"
+                href={global.env.FE_UPGRADE_LINK}
                 target="_blank"
                 rel="noopener noreferrer">
                 Upgrade your plan.
