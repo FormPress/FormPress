@@ -9,7 +9,8 @@ const {
   submissionhandler,
   error,
   model,
-  integrationhelper
+  integrationhelper,
+  recaptcha
 } = require(path.resolve('helper'))
 const formModel = model.form
 const formPublishedModel = model.formpublished
@@ -84,6 +85,20 @@ module.exports = (app) => {
       return res.status(404).send('Error: Form not found')
     }
 
+    //check if captcha is enabled in form
+    const captcha = form.props.elements.find(
+      (element) => element.type === 'CAPTCHA'
+    )
+
+    if (captcha !== undefined) {
+      const token = req.body['g-recaptcha-response']
+      const captchaResult = await recaptcha.verifyToken(token)
+
+      if (captchaResult === false) {
+        return res.status(403).send('Error: Invalid CAPTCHA')
+      }
+    }
+
     //create submission and get id
     const result = await db.query(
       `INSERT INTO \`submission\`
@@ -101,6 +116,9 @@ module.exports = (app) => {
     const preformatInputs = []
 
     let keys = [...Object.keys(req.body)]
+
+    // remove captcha response from keys
+    keys = keys.filter((key) => key !== 'g-recaptcha-response')
 
     if (req.files !== null) {
       keys = [...keys, ...Object.keys(req.files)]

@@ -34,10 +34,6 @@ export default function ElementContainer(props) {
 
   classNames.push(`element${type}`)
 
-  if (isNaN(config.id) === false) {
-    config.form_id = props.form_id
-  }
-
   if (config.id === selectedFieldId) {
     classNames.push('selected')
   }

@@ -15,6 +15,7 @@ exports.stringTools = require(path.resolve('helper', 'stringTools'))
 exports.cfLocationFinder = require(path.resolve('helper', 'cfLocationFinder'))
 exports.integrationhelper = require(path.resolve('helper', 'integrationhelper'))
 exports.publicStorage = require(path.resolve('helper', 'publicStorage'))
+exports.recaptcha = require(path.resolve('helper', 'recaptcha'))
 exports.storage = ''
 
 if (isEnvironmentVariableSet.fileUploadBucket) {
