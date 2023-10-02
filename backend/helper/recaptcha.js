@@ -33,8 +33,6 @@ async function verifyToken(token) {
       }
     })
 
-    console.log('assessment', assessments)
-
     if (assessments[0].tokenProperties.valid) {
       return true
     } else {
