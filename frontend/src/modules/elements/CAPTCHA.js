@@ -1,21 +1,23 @@
 import React, { Component } from 'react'
 
 import ElementContainer from '../common/ElementContainer'
-import { faMinus } from '@fortawesome/free-solid-svg-icons' // TODO: replace with CAPTCHA icon
+import { faRefresh } from '@fortawesome/free-solid-svg-icons'
 
 import './CAPTCHA.css'
+import EditableLabel from '../common/EditableLabel'
 
 export default class CAPTCHA extends Component {
-  static weight = 17
+  static weight = 12
 
   static defaultConfig = {
     id: 0,
     type: 'CAPTCHA',
+    label: 'CAPTCHA',
     provider: 'reCAPTCHA'
   }
 
   static metaData = {
-    icon: faMinus,
+    icon: faRefresh,
     displayText: 'CAPTCHA',
     group: 'inputElement'
   }
@@ -25,7 +27,28 @@ export default class CAPTCHA extends Component {
 
     let display
     if (mode === 'builder') {
-      display = [<div key={1}> CAPTCHA Static Image mode </div>]
+      display = [
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            key={1}
+            className="fl label"
+            dataPlaceholder="Type a question"
+            mode={mode}
+            labelKey={config.id}
+            handleLabelChange={this.props.handleLabelChange}
+            value={config.label}
+            required={config.required}
+          />
+        </div>,
+        <div key={1}>
+          {' '}
+          <img
+            src="https://developers.google.com/static/recaptcha/images/newCaptchaAnchor.gif"
+            alt="reCAPTCHA"
+            style={{ width: '302px', height: '76px' }}
+          />
+        </div>
+      ]
     } else {
       const siteKey = process.env?.RECAPTCHA_SITE_KEY
       display = [

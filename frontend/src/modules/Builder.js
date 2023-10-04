@@ -487,6 +487,7 @@ export default class Builder extends Component {
     this.setFormRule = this.setFormRule.bind(this)
     this.setFormDesign = this.setFormDesign.bind(this)
     this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
+    this.renderLeftElements = this.renderLeftElements.bind(this)
   }
 
   setAdditionalSaveFunction(func) {
@@ -1345,6 +1346,136 @@ export default class Builder extends Component {
       </Modal>
     )
   }
+  renderLeftElements(elems) {
+    let elements = elems.filter((elem) => this.removeUnavailableElems(elem))
+
+    let canEdit = true
+    if (this.state.form.permissions !== undefined) {
+      canEdit = this.state.form.permissions.edit
+    }
+
+    const { permission } = this.props.generalContext.auth
+
+    if (permission.admin) {
+      elements.forEach((elem) => {
+        permission[elem.type] = true
+      })
+    }
+
+    const renderedElems = elements.map((elem) => {
+      if (permission[elem.type] && canEdit) {
+        // Only one captcha element is allowed
+        if (elem.type === 'CAPTCHA') {
+          const captchaElements = this.state.form.props.elements.filter(
+            (element) => element.type === 'CAPTCHA'
+          )
+          if (captchaElements.length > 0) {
+            return (
+              <div className="element disabled-element" key={elem.type}>
+                <span className="element-picker-icon-wrapper">
+                  <FontAwesomeIcon
+                    icon={elem.icon}
+                    className="element-picker-icon"
+                  />
+                </span>
+                <span className="element-picker-text">{elem.displayText}</span>
+                <span className="planover-container">
+                  <FontAwesomeIcon icon={faQuestionCircle} />
+                  <div className="popoverText">
+                    CAPTCHA element is already present in the form.
+                  </div>
+                </span>
+              </div>
+            )
+          }
+        }
+
+        // Auto Page Break is enabled, which means that manual page breaks are not allowed
+        if (elem.type === 'PageBreak' && this.state.autoPBEnabled) {
+          return (
+            <div className="element disabled-element" key={elem.type}>
+              <span className="element-picker-icon-wrapper">
+                <FontAwesomeIcon
+                  icon={elem.icon}
+                  className="element-picker-icon"
+                />
+              </span>
+              <span className="element-picker-text">{elem.displayText}</span>
+              <span className="planover-container">
+                <FontAwesomeIcon icon={faQuestionCircle} />
+                <div className="popoverText">
+                  Auto Page Break is enabled. Please disable it in form
+                  properties to add manual page breaks.
+                </div>
+              </span>
+            </div>
+          )
+        } else {
+          // Render the element
+          return (
+            <div
+              className="element"
+              draggable
+              onDragStart={this.handleDragStart.bind(this, elem)}
+              onDragEnd={this.handleDragEnd}
+              key={elem.type}>
+              <span className="element-picker-icon-wrapper">
+                <FontAwesomeIcon
+                  icon={elem.icon}
+                  className="element-picker-icon"
+                />
+              </span>
+              <span className="element-picker-text">{elem.displayText}</span>
+              <span className="add-element-button">
+                <FontAwesomeIcon
+                  icon={faPlusCircle}
+                  title="Add Field"
+                  onClick={() => this.handleAddFormElementClick(elem.type)}
+                />
+              </span>
+            </div>
+          )
+        }
+      } else {
+        return (
+          <div className="element disabled-element" key={elem.type}>
+            <span className="element-picker-icon-wrapper">
+              <FontAwesomeIcon
+                icon={elem.icon}
+                className="element-picker-icon"
+              />
+            </span>
+            <span className="element-picker-text">{elem.displayText}</span>
+            <span className="planover-container">
+              <FontAwesomeIcon icon={faQuestionCircle} />
+              {canEdit ? (
+                <>
+                  <a
+                    href={global.env.FE_UPGRADE_LINK}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="upgrade_button">
+                    UPGRADE
+                  </a>
+                  <div className="popoverText">
+                    Your plan does not include this element. Click here to
+                    upgrade your plan!
+                  </div>
+                </>
+              ) : (
+                <div className="popoverText">
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
+                  You don't have necessary permissions
+                </div>
+              )}
+            </span>
+          </div>
+        )
+      }
+    })
+
+    return renderedElems
+  }
 
   renderLeftMenuContents() {
     const { form } = this.state
@@ -1390,94 +1521,7 @@ export default class Builder extends Component {
                 that&apos;s next to the elements
               </div>
               <div className="elementList">
-                {pickerElements
-                  .filter((elem) => this.removeUnavailableElems(elem))
-                  .map((elem) =>
-                    permission[elem.type] && canEdit ? (
-                      elem.type === 'PageBreak' && this.state.autoPBEnabled ? (
-                        <div
-                          className="element disabled-element"
-                          key={elem.type}>
-                          <span className="element-picker-icon-wrapper">
-                            <FontAwesomeIcon
-                              icon={elem.icon}
-                              className="element-picker-icon"
-                            />
-                          </span>
-                          <span className="element-picker-text">
-                            {elem.displayText}
-                          </span>
-                          <span className="planover-container">
-                            <FontAwesomeIcon icon={faQuestionCircle} />
-                            <div className="popoverText">
-                              Auto Page Break is enabled. Please disable it in
-                              form properties to add manual page breaks.
-                            </div>
-                          </span>
-                        </div>
-                      ) : (
-                        <div
-                          className="element"
-                          draggable
-                          onDragStart={this.handleDragStart.bind(this, elem)}
-                          onDragEnd={this.handleDragEnd}
-                          key={elem.type}>
-                          <span className="element-picker-icon-wrapper">
-                            <FontAwesomeIcon
-                              icon={elem.icon}
-                              className="element-picker-icon"
-                            />
-                          </span>
-                          <span className="element-picker-text">
-                            {elem.displayText}
-                          </span>
-                          <span className="add-element-button">
-                            <FontAwesomeIcon
-                              icon={faPlusCircle}
-                              title="Add Field"
-                              onClick={() =>
-                                this.handleAddFormElementClick(elem.type)
-                              }
-                            />
-                          </span>
-                        </div>
-                      )
-                    ) : (
-                      <div className="element disabled-element" key={elem.type}>
-                        <span className="element-picker-icon-wrapper">
-                          <FontAwesomeIcon
-                            icon={elem.icon}
-                            className="element-picker-icon"
-                          />
-                        </span>
-                        <span className="element-picker-text">
-                          {elem.displayText}
-                        </span>
-                        <span className="planover-container">
-                          <FontAwesomeIcon icon={faQuestionCircle} />
-                          {canEdit ? (
-                            <>
-                              <a
-                                href={global.env.FE_UPGRADE_LINK}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="upgrade_button">
-                                UPGRADE
-                              </a>
-                              <div className="popoverText">
-                                Your plan does not include this element. Click
-                                here to upgrade your plan!
-                              </div>
-                            </>
-                          ) : (
-                            <div className="popoverText">
-                              You don&#39;t have necessary permissions
-                            </div>
-                          )}
-                        </span>
-                      </div>
-                    )
-                  )}
+                {this.renderLeftElements(pickerElements)}
               </div>
             </div>
           </Route>

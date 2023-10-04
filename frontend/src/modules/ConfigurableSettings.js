@@ -4,7 +4,14 @@ const policy = {
   required: {
     rule: {
       type: 'exceptAll',
-      exceptions: ['Button', 'Header', 'Separator', 'PageBreak', 'Image']
+      exceptions: [
+        'Button',
+        'Header',
+        'Separator',
+        'PageBreak',
+        'Image',
+        'CAPTCHA'
+      ]
     },
     configurableSettings: {
       default: false,

@@ -48,6 +48,32 @@ module.exports = (app) => {
       form_id = parseInt(form_id)
     }
 
+    // Before even going further, check if honey pot is filled
+    if (
+      req.body.email ||
+      req.body.website ||
+      req.body.phone ||
+      req.body.name ||
+      req.body.company
+    ) {
+      // log the honey pot filled
+      console.log(
+        `Honey pot filled. IP: ${
+          req.headers['x-forwarded-for'] || req.connection.remoteAddress
+        }`
+      )
+      let otpQuery = `?otp=${1}`
+
+      return res.redirect(`/form/submit/${uuid}${otpQuery}`)
+    } else {
+      // clear these from the request body
+      delete req.body.email
+      delete req.body.website
+      delete req.body.phone
+      delete req.body.name
+      delete req.body.company
+    }
+
     const regularForm = await formModel.get({ form_id })
     form_id = regularForm.id
 

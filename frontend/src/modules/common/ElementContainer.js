@@ -42,6 +42,10 @@ export default function ElementContainer(props) {
     classNames.push(className.trim())
   }
 
+  const unCloneableTypes = ['PageBreak', 'CAPTCHA']
+
+  const isCloneable = !unCloneableTypes.includes(type)
+
   return (
     <div
       className={classNames.join(' ')}
@@ -92,21 +96,23 @@ export default function ElementContainer(props) {
             />
             <div className="popoverText">Move Up</div>
           </div>
-          <div className="popover-container action-clone">
-            <FontAwesomeIcon
-              icon={faClone}
-              onClick={handleFormItemMovement.bind(
-                this,
-                {
-                  mode: 'sort',
-                  ref: myRef,
-                  ...config
-                },
-                'clone'
-              )}
-            />
-            <div className="popoverText">Clone</div>
-          </div>
+          {isCloneable ? (
+            <div className="popover-container action-clone">
+              <FontAwesomeIcon
+                icon={faClone}
+                onClick={handleFormItemMovement.bind(
+                  this,
+                  {
+                    mode: 'sort',
+                    ref: myRef,
+                    ...config
+                  },
+                  'clone'
+                )}
+              />
+              <div className="popoverText">Clone</div>
+            </div>
+          ) : null}
           <div className="popover-container action-delete">
             <FontAwesomeIcon
               icon={faTrash}
