@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import * as StandartElements from './elements'
 import * as InternalElements from './internal'
+import HoneyPot from './common/HoneyPot'
 
 export default class Renderer extends Component {
   render() {
@@ -161,6 +162,7 @@ export default class Renderer extends Component {
           }
           data-fp-pagenumber={index + 1}
           {...builderHandlers}>
+          <HoneyPot />
           {page.map((elem) => {
             const Component = Elements[elem.type]
             const extraProps = { mode: this.props.mode }
