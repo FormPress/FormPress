@@ -2,7 +2,15 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 
-const excludedKeys = ['Button', 'Header', 'Separator', 'Address', 'PageBreak', 'Image']
+const excludedKeys = [
+  'Button',
+  'Header',
+  'Separator',
+  'Address',
+  'PageBreak',
+  'Image',
+  'CAPTCHA'
+]
 const keys = Object.keys(Elements)
 process.env.FE_BACKEND = 'backendUrlForTests'
 
@@ -36,7 +44,7 @@ for (const key of keys) {
             myTestObject.findAllByProps({ name: 'q_0[lastName]' })
           )
           expect(multipleNames.length).toBeGreaterThan(1)
-        }else if(key === 'DatePicker'){
+        } else if (key === 'DatePicker') {
           const myTestObject = component.root
           const nameAttributes = myTestObject.findAllByProps({
             name: 'q_0[date]'
@@ -45,7 +53,7 @@ for (const key of keys) {
             myTestObject.findAllByProps({ name: 'q_0[time]' })
           )
           expect(multipleNames.length).toBeGreaterThan(1)
-        }else if(key === 'Location'){
+        } else if (key === 'Location') {
           const myTestObject = component.root
           const nameAttributes = myTestObject.findAllByProps({
             name: 'q_0[latitude]'
