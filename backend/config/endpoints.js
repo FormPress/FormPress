@@ -94,15 +94,6 @@ module.exports = {
       exampleRequestPath: '/api/users/1/forms/1/submissions'
     },
     {
-      method: 'post',
-      path: '/api/users/:user_id/forms/:form_id/CSVExport',
-      protected: true,
-      exampleRequestPath: '/api/users/1/forms/1/CSVExport',
-      exampleRequestBody: {
-        submissionIds: [1]
-      }
-    },
-    {
       method: 'delete',
       path: '/api/users/:user_id/forms/:form_id/deleteSubmission',
       protected: true,
