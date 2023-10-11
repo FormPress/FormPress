@@ -505,7 +505,11 @@ class RuleBuilder extends Component {
       }
     }
 
-    this.setState({ currentRule })
+    const selectedIfField = this.props.form.props.elements.find(
+      (e) => e.id === parseInt(currentRule.if.field)
+    )
+
+    this.setState({ currentRule, selectedIfField })
   }
 
   addRule() {
@@ -570,7 +574,8 @@ class RuleBuilder extends Component {
         const inputElement = {
           display: elem.label,
           value: elem.id,
-          required: elem.required
+          required: elem.required,
+          type: elem.type
         }
         inputElements.push(inputElement)
       }
@@ -579,8 +584,10 @@ class RuleBuilder extends Component {
     this.setState({ inputElements: inputElements })
   }
 
-  changeRule(key, value) {
+  changeRule(key, htmlElem) {
     const { currentRule } = this.state
+    const { value } = htmlElem
+
     let { selectedIfField } = this.state
 
     switch (key) {
@@ -612,7 +619,25 @@ class RuleBuilder extends Component {
 
         break
       case 'ifValue':
-        currentRule.if.value = value
+        if (
+          selectedIfField.type === 'DatePicker' &&
+          selectedIfField.timePicker === true
+        ) {
+          // we may have to get two values one being the date and the other being the time. so we have to combine them
+          const valueIncludesTime = currentRule.if.value.split(' ').length === 2
+          if (htmlElem.type === 'date') {
+            currentRule.if.value = value + ' ' + '00:00'
+          } else if (htmlElem.type === 'time') {
+            if (valueIncludesTime === false) {
+              currentRule.if.value = currentRule.if.value + ' ' + value
+            } else {
+              currentRule.if.value =
+                currentRule.if.value.split(' ')[0] + ' ' + value
+            }
+          }
+        } else {
+          currentRule.if.value = value
+        }
         break
       case 'thenCommand':
         currentRule.then.command = value
@@ -634,6 +659,7 @@ class RuleBuilder extends Component {
     // this function is used to hide/show the rule steps based on the user entry
     // only if the user selected a step, the next step will be shown
     const { currentRule } = this.state
+    let { selectedIfField } = this.state
     let emptyOrFilledOperator = false
 
     if (
@@ -656,6 +682,19 @@ class RuleBuilder extends Component {
         }
       case 'thenCommand':
         // if empty or filled operator is selected, only the step above can be hidden
+        if (
+          selectedIfField?.type === 'DatePicker' &&
+          selectedIfField?.timePicker === true
+        ) {
+          // if not divisible by an empty space, then it's not a date and time value, yet.
+          // so we can't show the next step
+          if (currentRule.if.value.split(' ').length !== 2) {
+            return false
+          } else {
+            return true
+          }
+        }
+
         return currentRule.if.value !== '' || emptyOrFilledOperator === true
       case 'thenField':
         return currentRule.then.command !== ''
@@ -759,7 +798,7 @@ class RuleBuilder extends Component {
                     theme="infernal"
                     allowInternal={true}
                     handleFieldChange={(elem, e) =>
-                      this.changeRule('ifField', e.target.value)
+                      this.changeRule('ifField', e.target)
                     }
                     form={{
                       props: {
@@ -784,7 +823,7 @@ class RuleBuilder extends Component {
                       theme="infernal"
                       allowInternal={true}
                       handleFieldChange={(elem, e) =>
-                        this.changeRule('ifOperator', e.target.value)
+                        this.changeRule('ifOperator', e.target)
                       }
                       form={{
                         props: {
@@ -821,7 +860,7 @@ class RuleBuilder extends Component {
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
-                            this.changeRule('ifValue', e.target.value)
+                            this.changeRule('ifValue', e.target)
                           }
                           form={{
                             props: {
@@ -859,7 +898,7 @@ class RuleBuilder extends Component {
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
-                            this.changeRule('ifValue', e.target.value)
+                            this.changeRule('ifValue', e.target)
                           }
                           form={{
                             props: {
@@ -869,6 +908,16 @@ class RuleBuilder extends Component {
                                   type: 'Dropdown',
                                   options: this.state.inputElements.filter(
                                     (elem) => {
+                                      // a date will only be compared to another date
+                                      if (
+                                        selectedIfField.type === 'DatePicker'
+                                      ) {
+                                        return (
+                                          elem.type === 'DatePicker' &&
+                                          elem.value !== selectedIfField.id
+                                        )
+                                      }
+
                                       return (
                                         elem.value !==
                                         parseInt(currentRule.if.field)
@@ -888,7 +937,7 @@ class RuleBuilder extends Component {
                           theme="infernal"
                           allowInternal={true}
                           handleFieldChange={(elem, e) =>
-                            this.changeRule('ifValue', e.target.value)
+                            this.changeRule('ifValue', e.target)
                           }
                           form={{
                             props: {
@@ -901,7 +950,8 @@ class RuleBuilder extends Component {
                                       ? 'DatePicker'
                                       : 'TextBox',
                                   placeholder: 'Enter a value',
-                                  value: currentRule.if.value
+                                  value: currentRule.if.value,
+                                  timePicker: selectedIfField.timePicker
                                 }
                               ]
                             }
@@ -943,7 +993,7 @@ class RuleBuilder extends Component {
                       theme="infernal"
                       allowInternal={true}
                       handleFieldChange={(elem, e) =>
-                        this.changeRule('thenCommand', e.target.value)
+                        this.changeRule('thenCommand', e.target)
                       }
                       form={{
                         props: {
@@ -970,7 +1020,7 @@ class RuleBuilder extends Component {
                       theme="infernal"
                       allowInternal={true}
                       handleFieldChange={(elem, e) =>
-                        this.changeRule('thenField', e.target.value)
+                        this.changeRule('thenField', e.target)
                       }
                       form={{
                         props: {

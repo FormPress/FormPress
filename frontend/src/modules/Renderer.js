@@ -108,7 +108,7 @@ export default class Renderer extends Component {
     let emptyPage = true
     formElements.forEach((element, index) => {
       if (this.props.mode === 'builder') {
-        element.order = index
+        element.order = index + 1
       }
       // push copied page break to page
       if (element.type !== 'PageBreak') {
@@ -182,6 +182,10 @@ export default class Renderer extends Component {
 
             if (elem.id === selectedField) {
               extraProps.className = 'selected'
+            }
+
+            if (elem.hidden === true) {
+              extraProps.className = 'dn'
             }
 
             if (elem.type === 'PageBreak') {

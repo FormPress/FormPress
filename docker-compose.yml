@@ -72,6 +72,9 @@ services:
     container_name: formpress-frontend
     command: 'yarn start-compose'
     working_dir: /src
+    environment:
+      - REACT_APP_FE_BACKEND=${FE_BACKEND}
+      - REACT_APP_FE_FRONTEND=${FE_FRONTEND}
     volumes:
       - ./frontend:/src
     ports:

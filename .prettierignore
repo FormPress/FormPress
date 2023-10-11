@@ -5,3 +5,4 @@ frontend/src/__tests__
 frontend/src/runtime/3rdparty/
 frontend/public/
 *.test.js
+/src/style/themes/*.css

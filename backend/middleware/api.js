@@ -632,11 +632,15 @@ module.exports = (app) => {
                     elementTemplate.elementType === 'Name' ||
                     elementTemplate.elementType === 'DatePicker'
                   ) {
-                    elementTemplate.chartItems.push(
-                      Object.values(JSON.parse(questionStatistics[0].value))
-                        .join(' ')
-                        .trim()
-                    )
+                    if (questionStatistics[0].value === '') {
+                      elementTemplate.chartItems.push('Unanswered')
+                    } else {
+                      elementTemplate.chartItems.push(
+                        Object.values(JSON.parse(questionStatistics[0].value))
+                          .join(' ')
+                          .trim()
+                      )
+                    }
                   } else if (elementTemplate.elementType === 'Radio') {
                     try {
                       questionStatistics[0].value = JSON.parse(
@@ -1442,7 +1446,8 @@ module.exports = (app) => {
       sendgridApiKey: process.env.SENDGRID_API_KEY !== '',
       googleCredentialsClientID:
         process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
-      fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== ''
+      fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== '',
+      zapierClientID: process.env.FE_ZAPIER_APP_CLIENT_ID !== ''
     }
     res.json(isEnvironmentVariableSet)
   })
