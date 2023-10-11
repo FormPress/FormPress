@@ -9,6 +9,7 @@ import Modal from './common/Modal'
 import { api } from '../helper'
 import Table from './common/Table'
 import * as Elements from './elements'
+import Renderer from './Renderer'
 import { createBrowserHistory } from 'history'
 import {
   XAxis,
@@ -85,54 +86,60 @@ export default class Data extends Component {
     this.setState({ forms }, this.componenDidMountWorker)
   }
 
-  async updateSubmissions(form_id) {
+  async updateSubmissions(form_id, initLoad = false, endOfList = false) {
     this.setLoadingState('submissions', true)
-    this.setState({
-      submissions: [],
+    await this.setState({
       selectedFormId: form_id,
       selectedSubmissionId: null,
       entries: []
     })
 
-    let submissions = []
+    const { cursor, fetchNext, showUnread, submissionsPerPage } = this.state
 
-    const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions?orderBy=created_at&desc=true`
-    })
-
-    let reducedData = data.filter(function (item) {
-      return item.version !== 0
-    })
-
-    submissions = reducedData
-
-    const { submissionFilterSelectors } = this.state
-    const filterActive = !Object.values(submissionFilterSelectors).every(
-      (selector) => selector === false
-    )
-
-    if (filterActive) {
-      let submissionFilterParams = {}
-
-      if (submissionFilterSelectors.showUnread) {
-        submissionFilterParams.read = 0
-      }
-      submissions = submissions.filter((submission) => {
-        let result = true
-        Object.keys(submissionFilterParams).forEach((key) => {
-          if (submissionFilterParams[key] !== undefined) {
-            if (submission[key] !== submissionFilterParams[key]) {
-              result = false
-            }
-          }
-        })
-
-        return result
-      })
+    let submissionCursor = cursor.next
+    if (!fetchNext) {
+      submissionCursor = cursor.prev
     }
 
-    this.setLoadingState('submissions', false)
-    this.setState({ submissions })
+    //Extract number submissionPerPage (25) from string 'Show 25 submissions'
+    const words = submissionsPerPage.split(' ')
+    const perPage = parseInt(words[1])
+
+    let resource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions`
+    resource += `?orderBy=created_at&limit=${perPage}`
+    if (!fetchNext) {
+      resource += `&prevPage=true`
+    }
+    if (submissionCursor) {
+      resource += `&cursor=${submissionCursor}`
+    }
+    if (showUnread) {
+      resource += '&read=0'
+    }
+    const { data } = await api({ resource })
+
+    await this.setLoadingState('submissions', false)
+    if (data.submissions.length === 0) {
+      if (fetchNext) {
+        await this.setState({
+          cursor: { ...this.state.cursor, next: null }
+        })
+      } else {
+        await this.setState({
+          cursor: { ...this.state.cursor, prev: null }
+        })
+      }
+    } else {
+      this.setState({
+        submissions: data.submissions,
+        cursor: {
+          prev: initLoad ? null : data.prevCursor,
+          next: endOfList ? null : data.nextCursor
+        },
+        todaySubmissionCount: data.todaySubmissionCount,
+        totalSubmissionCount: data.submissionCount
+      })
+    }
   }
 
   async updateSubmissionStatistics(form_id) {
@@ -161,7 +168,7 @@ export default class Data extends Component {
       this.props.location.state !== null &&
       this.props.location.state?.form_id
     ) {
-      const { form_id, submissionFilterSelectors } = this.props.location.state
+      const { form_id } = this.props.location.state
 
       let selectedFormId,
         selectedFormPublishedId,
@@ -177,7 +184,6 @@ export default class Data extends Component {
 
       this.setState({
         selectedFormId,
-        submissionFilterSelectors,
         selectedFormPublishedId,
         selectedFormPublishedVersion: selectedFormSelectedPublishedVersion,
         selectedFormSelectedPublishedVersion
@@ -187,7 +193,7 @@ export default class Data extends Component {
         form_id,
         selectedFormSelectedPublishedVersion
       )
-      this.updateSubmissions(form_id)
+      this.updateSubmissions(form_id, true)
     }
   }
 
@@ -195,7 +201,6 @@ export default class Data extends Component {
     super(props)
     this.state = {
       formSelectorOpen: false,
-      submissionFilterSelectors: { showUnread: false },
       forms: [],
       selectedFormId: null,
       selectedFormPublishedId: null,
@@ -207,6 +212,18 @@ export default class Data extends Component {
       selectedSubmissionIds: [],
       statistics: {},
       submissions: [],
+      cursor: { prev: null, next: null },
+      submissionsPerPage: 'Show 10 submissions',
+      submissionsPerPageOptions: [
+        'Show 10 submissions',
+        'Show 25 submissions',
+        'Show 50 submissions',
+        'Show 100 submissions'
+      ],
+      showUnread: false,
+      fetchNext: true,
+      totalSubmissionCount: 0,
+      todaySubmissionCount: 0,
       entries: [],
       loading: {
         forms: false,
@@ -221,22 +238,32 @@ export default class Data extends Component {
     this.handleFormClick = this.handleFormClick.bind(this)
     this.handleSubmissionClick = this.handleSubmissionClick.bind(this)
     this.handleCSVExportClick = this.handleCSVExportClick.bind(this)
+    this.handleCSVExportAllClick = this.handleCSVExportAllClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleUnreadFilterToggle = this.handleUnreadFilterToggle.bind(this)
     this.componenDidMountWorker = this.componenDidMountWorker.bind(this)
+    this.handleNextClick = this.handleNextClick.bind(this)
+    this.handlePrevClick = this.handlePrevClick.bind(this)
+    this.handleSubmissionsPerPageChange = this.handleSubmissionsPerPageChange.bind(
+      this
+    )
   }
 
   async handleFormClick(form) {
-    this.setState({
+    await this.setState({
       formSelectorOpen: false,
       selectedFormId: form.id,
       selectedFormPublishedId: form.published_id,
       selectedFormPublishedVersion: form.published_version,
       selectedFormSelectedPublishedVersion: form.published_version,
-      selectedSubmissionIds: []
+      selectedSubmissionIds: [],
+      cursor: { prev: null, next: null },
+      fetchNext: true,
+      showUnread: false,
+      submissionsPerPage: 'Show 10 submissions'
     })
     this.updateSubmissionStatistics(form.id, form.published_version)
-    this.updateSubmissions(form.id)
+    this.updateSubmissions(form.id, true)
   }
 
   toggleSubmission(submission_id) {
@@ -256,7 +283,7 @@ export default class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
-    const { submissionFilterSelectors, submissions } = this.state
+    const { showUnread, submissions } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
 
@@ -300,12 +327,8 @@ export default class Data extends Component {
       })
     })
 
-    const filterActive = !Object.values(submissionFilterSelectors).every(
-      (selector) => selector === false
-    )
-
     // If filter is active, send request to backend but do not update state
-    if (filterActive) {
+    if (showUnread) {
       document.querySelector(`.s_${id}`).classList.add('read')
     } else {
       submissions.find((submission) => submission.id === id).read = 1
@@ -313,19 +336,22 @@ export default class Data extends Component {
       this.setState({ submissions })
     }
   }
-
-  async handleCSVExportClick() {
+  async handleCSVExportClick(submissionIds) {
     const form_id = this.state.selectedFormId
     const { data } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/CSVExport`,
       method: 'post',
       body: {
-        submissionIds: this.state.selectedSubmissionIds
+        submissionIds: submissionIds
       }
     })
 
     download(data.filename, data.content)
     this.setState({ selectedSubmissionIds: [] })
+  }
+
+  async handleCSVExportAllClick() {
+    await this.handleCSVExportClick([])
   }
 
   handleDeleteSubmissionClick(e) {
@@ -375,14 +401,15 @@ export default class Data extends Component {
       selectedFormId,
       submissions,
       selectedSubmissionIds,
-      entries
+      entries,
+      cursor
     } = this.state
 
     const { data } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedFormId}/deleteSubmission`,
       method: 'delete',
       body: {
-        submissionIds: this.state.selectedSubmissionIds
+        submissionIds: selectedSubmissionIds
       }
     })
 
@@ -395,16 +422,57 @@ export default class Data extends Component {
       }
       this.setState({ modalContent })
 
-      this.setState({
+      //Calculate how many of the deleted submissions were submitted today
+      const numberOfSubmissionsToday = getNumberOfSubmissionsToday(
+        submissions.filter((submission) =>
+          selectedSubmissionIds.includes(submission.id)
+        )
+      )
+
+      await this.setState({
         submissions: submissions.filter(
           (submission) => selectedSubmissionIds.includes(submission.id) !== true
-        )
+        ),
+        totalSubmissionCount:
+          this.state.totalSubmissionCount - selectedSubmissionIds.length,
+        todaySubmissionCount:
+          this.state.todaySubmissionCount - numberOfSubmissionsToday
       })
 
-      if (selectedSubmissionIds.includes(entries[0].submission_id)) {
+      if (
+        entries.length > 0 &&
+        selectedSubmissionIds.includes(entries[0].submission_id)
+      ) {
         this.setState({ entries: [] })
       }
 
+      if (this.state.submissions.length === 0) {
+        if (cursor.prev === null) {
+          this.setState(
+            {
+              cursor: { prev: null, next: null },
+              fetchNext: true
+            },
+            () => {
+              this.updateSubmissions(selectedFormId, true)
+            }
+          )
+        } else if (cursor.next === null) {
+          this.setState(
+            {
+              fetchNext: false
+            },
+            () => this.updateSubmissions(selectedFormId, false, true)
+          )
+        } else {
+          this.setState(
+            {
+              fetchNext: false
+            },
+            () => this.updateSubmissions(selectedFormId)
+          )
+        }
+      }
       this.setState({ selectedSubmissionIds: [] })
     } else {
       modalContent = {
@@ -426,12 +494,46 @@ export default class Data extends Component {
     })
   }
 
-  handleUnreadFilterToggle(e) {
-    const { submissionFilterSelectors, selectedFormId } = this.state
-    e.value = !e.value
-    submissionFilterSelectors.showUnread = e.value
-    this.setState({ submissionFilterSelectors })
-    this.updateSubmissions(selectedFormId)
+  handleUnreadFilterToggle() {
+    let { showUnread, selectedFormId } = this.state
+
+    this.setState(
+      {
+        selectedSubmissionIds: [],
+        showUnread: !showUnread,
+        cursor: { prev: null, next: null },
+        fetchNext: true
+      },
+      () => {
+        this.updateSubmissions(selectedFormId, true)
+      }
+    )
+  }
+
+  handleNextClick() {
+    this.setState({ fetchNext: true }, () => {
+      this.updateSubmissions(this.state.selectedFormId)
+    })
+  }
+
+  handlePrevClick() {
+    this.setState({ fetchNext: false }, () => {
+      this.updateSubmissions(this.state.selectedFormId)
+    })
+  }
+
+  handleSubmissionsPerPageChange(elem, e) {
+    const perPage = e.target.value
+    this.setState(
+      {
+        submissionsPerPage: perPage,
+        cursor: { prev: null, next: null },
+        fetchNext: true
+      },
+      () => {
+        this.updateSubmissions(this.state.selectedFormId, true)
+      }
+    )
   }
 
   CustomTooltipForPieChart = ({ active, payload, label }) => {
@@ -799,11 +901,13 @@ export default class Data extends Component {
       selectedSubmissionId,
       selectedSubmissionIds,
       selectedFormId,
-      submissionFilterSelectors,
-      loading
+      loading,
+      cursor,
+      showUnread,
+      totalSubmissionCount,
+      todaySubmissionCount
     } = this.state
     let checkAllProps = { checked: true }
-
     let options = Array.from(
       Array(this.state.selectedFormPublishedVersion).keys(),
       (x) => x + 1
@@ -839,28 +943,43 @@ export default class Data extends Component {
     }
 
     return [
-      <div className="submissionActions grid" key="actions">
-        <div className="col-6-16">
-          {submissions.length} total submission(s). <br />
-          {getNumberOfSubmissionsToday(submissions)} submission(s) today.
+      <div className="submissionActions" key="actions">
+        <div className="submissionInfo">
+          {totalSubmissionCount || '0'}
+          {totalSubmissionCount > 1
+            ? ' total submissions'
+            : ' total submission'}
+          . <br />
+          {todaySubmissionCount || '0'}
+          {todaySubmissionCount > 1 ? ' submissions' : ' submission'} today.
         </div>
-        <div className="col-5-16 buttonContainer">
-          <button
-            className={deleteSubmissionButtonClassNames.join(' ')}
-            {...(selectedSubmissionIds.length !== 0 && {
-              onClick: this.handleDeleteSubmissionClick.bind(this)
-            })}>
-            {deleteSubmissionButtonText}
-          </button>
-        </div>
-        <div className="col-5-16 buttonContainer">
-          <button
-            className={csvExportClassNames.join(' ')}
-            {...(selectedSubmissionIds.length !== 0 && {
-              onClick: this.handleCSVExportClick
-            })}>
-            {csvExportButtonText}
-          </button>
+        <div className="submissionControlButtons">
+          <div className="buttonContainer">
+            <button
+              className={deleteSubmissionButtonClassNames.join(' ')}
+              {...(selectedSubmissionIds.length !== 0 && {
+                onClick: this.handleDeleteSubmissionClick.bind(this)
+              })}>
+              {deleteSubmissionButtonText}
+            </button>
+          </div>
+          <div className="buttonContainer">
+            <button
+              className={csvExportClassNames.join(' ')}
+              {...(selectedSubmissionIds.length !== 0 && {
+                onClick: () =>
+                  this.handleCSVExportClick(this.state.selectedSubmissionIds)
+              })}>
+              {csvExportButtonText}
+            </button>
+          </div>
+          <div className="buttonContainer">
+            <button
+              className="csvExportButton"
+              onClick={this.handleCSVExportAllClick}>
+              Export All CSV
+            </button>
+          </div>
         </div>
       </div>,
       <div key="unreadSwitchContainer" className="unreadSwitchContainer">
@@ -869,7 +988,7 @@ export default class Data extends Component {
             <input
               type="checkbox"
               name="unreadSwitch"
-              checked={submissionFilterSelectors.showUnread}
+              checked={showUnread}
               value="unread"
               onChange={this.handleUnreadFilterToggle}
             />
@@ -877,12 +996,42 @@ export default class Data extends Component {
           </label>
           <label
             key="unreadSwitchLabel"
-            className={`unreadSwitchLabel ${
-              submissionFilterSelectors.showUnread ? ' active' : ''
-            } `}>
+            className={`unreadSwitchLabel ${showUnread ? ' active' : ''} `}>
             Show unread only
           </label>
         </article>
+      </div>,
+      <div key="pagination-controls" className="pagination-controls">
+        <div className="navigation">
+          <span
+            className={`prev ${cursor.prev === null ? 'disabled' : ''}`}
+            onClick={cursor.prev === null ? undefined : this.handlePrevClick}>
+            Prev
+          </span>
+          <span
+            className={`next ${cursor.next === null ? 'disabled' : ''}`}
+            onClick={cursor.next === null ? undefined : this.handleNextClick}>
+            Next
+          </span>
+        </div>
+        <Renderer
+          className="pagination-item-per-page"
+          theme="infernal"
+          handleFieldChange={this.handleSubmissionsPerPageChange}
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 1,
+                  type: 'Dropdown',
+                  options: this.state.submissionsPerPageOptions,
+                  value: this.state.submissionsPerPage,
+                  placeholder: false
+                }
+              ]
+            }
+          }}
+        />
       </div>,
       loading.submissions === false && submissions.length > 0 ? (
         <Table
@@ -907,15 +1056,26 @@ export default class Data extends Component {
                   type="checkbox"
                   onChange={(e) => {
                     if (e.target.checked === true) {
-                      this.setState({
-                        selectedSubmissionIds: submissions.map(
-                          (submission) => submission.id
-                        )
-                      })
+                      this.setState((prevState) => ({
+                        selectedSubmissionIds: [
+                          ...prevState.selectedSubmissionIds,
+                          ...submissions
+                            .map((submission) => submission.id)
+                            .filter(
+                              (id) =>
+                                !prevState.selectedSubmissionIds.includes(id)
+                            )
+                        ]
+                      }))
                     } else {
-                      this.setState({
-                        selectedSubmissionIds: []
-                      })
+                      const submissionIdsToRemove = submissions.map(
+                        (submission) => submission.id
+                      )
+                      this.setState((prevState) => ({
+                        selectedSubmissionIds: prevState.selectedSubmissionIds.filter(
+                          (id) => !submissionIdsToRemove.includes(id)
+                        )
+                      }))
                     }
                   }}
                   {...checkAllProps}
