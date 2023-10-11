@@ -195,7 +195,7 @@ export default class Address extends Component {
 
   static renderDataValue(entry, question) {
     const htmlCollection = []
-    Object.entries(entry.value).map((entry) => {
+    Object.entries(entry.value).forEach((entry) => {
       const key = entry[0]
       const value = entry[1]
 
@@ -447,6 +447,9 @@ export default class Address extends Component {
               </span>
             ) : null}
           </div>
+        </div>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
         </div>
       </ElementContainer>
     )

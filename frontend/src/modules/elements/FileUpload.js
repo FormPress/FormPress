@@ -13,7 +13,7 @@ export default class FileUpload extends Component {
     id: 0,
     type: 'FileUpload',
     label: 'File Upload',
-    requiredText: 'Please fill this field.',
+    requiredText: 'Required field',
     publicEnabled: false
   }
 

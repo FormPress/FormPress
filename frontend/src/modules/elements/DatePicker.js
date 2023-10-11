@@ -179,6 +179,16 @@ export default class DatePicker extends Component {
     })
   }
 
+  findRelevantValue = (type, allValue) => {
+    // it will either be a date, or a date and time divided by a space
+
+    if (type === 'date') {
+      return allValue.split(' ')[0]
+    } else {
+      return allValue.split(' ')[1] || ''
+    }
+  }
+
   render() {
     const { config, mode } = this.props
     const {
@@ -190,10 +200,6 @@ export default class DatePicker extends Component {
 
     const inputProps = {}
     let Flatpickr = null
-
-    if (typeof config.value !== 'undefined') {
-      inputProps.value = config.value
-    }
 
     if (typeof this.props.onChange !== 'undefined') {
       inputProps.onChange = this.props.onChange
@@ -227,6 +233,11 @@ export default class DatePicker extends Component {
                 id={`date_${config.id}`}
                 name={`q_${config.id}[date]`}
                 type={'date'}
+                value={
+                  config.value
+                    ? this.findRelevantValue('date', config.value)
+                    : ''
+                }
                 {...inputProps}
               />
             ) : mode === 'builder' ? (
@@ -275,6 +286,12 @@ export default class DatePicker extends Component {
                 id={`time_${config.id}`}
                 name={`q_${config.id}[time]`}
                 type={isDateSupported ? 'time' : 'text'}
+                value={
+                  config.value
+                    ? this.findRelevantValue('time', config.value)
+                    : ''
+                }
+                pattern={isDateSupported ? '[Hh]{2}:[Mm]{2}' : undefined}
                 className={!isDateSupported ? 'flatpickr-time-needed' : ''}
                 {...inputProps}
               />

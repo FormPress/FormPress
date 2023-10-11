@@ -5,8 +5,9 @@ import { faCheckCircle, faPauseCircle } from '@fortawesome/free-solid-svg-icons'
 
 import './FormIntegrations.css'
 import * as Integrations from '../integrations'
+import GeneralContext from '../../general.context'
 
-export default class FormIntegrations extends Component {
+class FormIntegrations extends Component {
   constructor(props) {
     super(props)
 
@@ -56,6 +57,21 @@ export default class FormIntegrations extends Component {
     return list
   }
 
+  removeUnavailableIntegrations = (integration) => {
+    const { capabilities } = this.props.generalContext
+    const integrationsToRemove = []
+
+    if (capabilities.googleCredentialsClientID === false) {
+      integrationsToRemove.push('GoogleDrive')
+      integrationsToRemove.push('GoogleSheets')
+    }
+    if (capabilities.zapierClientID === false) {
+      integrationsToRemove.push('Zapier')
+    }
+
+    return !integrationsToRemove.includes(integration.name)
+  }
+
   setRenderedIntegration() {
     const { form } = this.props
     const { selectedIntegration } = this.state
@@ -96,31 +112,35 @@ export default class FormIntegrations extends Component {
           Integrate your form with other services
         </div>
         <div className="integrationsList">
-          {integrationList.map((item, key) => (
-            <div
-              className={
-                selectedIntegration === item.displayText.replaceAll(' ', '')
-                  ? 'integration active'
-                  : 'integration'
-              }
-              key={key}
-              onClick={() => this.handleOpenIntegrationClick(item)}>
-              <img alt="logo" src={item.icon} className="logo" />
-              <div className="title">{item.displayText}</div>
-              {item.activeStatus === true && item.paused === false ? (
-                <FontAwesomeIcon
-                  icon={faCheckCircle}
-                  className="activeStatus"
-                />
-              ) : null}
-              {item.activeStatus === true && item.paused === true ? (
-                <FontAwesomeIcon
-                  icon={faPauseCircle}
-                  className="activeStatus"
-                />
-              ) : null}
-            </div>
-          ))}
+          {integrationList
+            .filter((integration) =>
+              this.removeUnavailableIntegrations(integration)
+            )
+            .map((item, key) => (
+              <div
+                className={
+                  selectedIntegration === item.displayText.replaceAll(' ', '')
+                    ? 'integration active'
+                    : 'integration'
+                }
+                key={key}
+                onClick={() => this.handleOpenIntegrationClick(item)}>
+                <img alt="logo" src={item.icon} className="logo" />
+                <div className="title">{item.displayText}</div>
+                {item.activeStatus === true && item.paused === false ? (
+                  <FontAwesomeIcon
+                    icon={faCheckCircle}
+                    className="activeStatus"
+                  />
+                ) : null}
+                {item.activeStatus === true && item.paused === true ? (
+                  <FontAwesomeIcon
+                    icon={faPauseCircle}
+                    className="activeStatus"
+                  />
+                ) : null}
+              </div>
+            ))}
         </div>
         <div className="integration-display-right">
           {this.state.selectedIntegration
@@ -131,3 +151,11 @@ export default class FormIntegrations extends Component {
     )
   }
 }
+
+const FormIntegrationsWrapped = (props) => (
+  <GeneralContext.Consumer>
+    {(value) => <FormIntegrations {...props} generalContext={value} />}
+  </GeneralContext.Consumer>
+)
+
+export default FormIntegrationsWrapped

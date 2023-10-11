@@ -136,15 +136,18 @@ adminApiMiddleware(app)
 downloadApiMiddleware(app)
 submissionMiddleware(app)
 changePasswordMiddleware(app)
-googleApisMiddleware(app)
-googleDriveApi(app)
-googleSheetsApi(app)
 discordApi(app)
 slackApi(app)
 zapierApi(app)
 
 if (oauthClientsPresent) {
   oauth(app)
+}
+
+if (isEnvironmentVariableSet.googleCredentialsClientID) {
+  googleApisMiddleware(app)
+  googleDriveApi(app)
+  googleSheetsApi(app)
 }
 
 if (isEnvironmentVariableSet.sendgridApiKey) {
