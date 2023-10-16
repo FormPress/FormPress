@@ -13,13 +13,25 @@ export default class CAPTCHA extends Component {
     id: 0,
     type: 'CAPTCHA',
     label: 'CAPTCHA',
-    provider: 'reCAPTCHA'
+    provider: 'reCAPTCHA',
+    required: true
   }
 
   static metaData = {
     icon: faRefresh,
     displayText: 'CAPTCHA',
     group: 'inputElement'
+  }
+
+  static helpers = {
+    getElementValue: () => {
+      const captchaStatus = document.getElementById('recaptcha-status')?.value
+
+      return captchaStatus === 'true' ? 'true' : 'false'
+    },
+    isFilled: (value) => {
+      return value === 'true'
+    }
   }
 
   render() {
@@ -52,16 +64,41 @@ export default class CAPTCHA extends Component {
     } else {
       const siteKey = process.env?.RECAPTCHA_SITE_KEY
       display = [
+        <div className="elemLabelTitle" key={0}>
+          <EditableLabel
+            className="fl label"
+            dataPlaceholder="Type a question"
+            mode={mode}
+            labelKey={config.id}
+            value={config.label}
+            required={config.required}
+          />
+        </div>,
+        <input id="recaptcha-filled" type="hidden" key={1} value="false" />,
         <div
-          key={1}
+          key={2}
           className="g-recaptcha"
           data-sitekey={siteKey}
-          data-action="submission"></div>,
+          data-action="submission"
+          data-callback="captchaSubmit"></div>,
         <script
-          key={2}
+          key={3}
           src="https://www.google.com/recaptcha/enterprise.js"
           async
-          defer></script>
+          defer></script>,
+        <script
+          key={4}
+          dangerouslySetInnerHTML={{
+            __html: `
+            function captchaSubmit() {
+              document.getElementById("recaptcha-filled").value = "true";
+             
+              var event = new Event('change');
+              document.getElementById("qc_${config.id}").dispatchEvent(event);
+            }
+          
+          `
+          }}></script>
       ]
     }
 
