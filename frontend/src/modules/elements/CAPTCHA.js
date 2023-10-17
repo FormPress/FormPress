@@ -25,7 +25,7 @@ export default class CAPTCHA extends Component {
 
   static helpers = {
     getElementValue: () => {
-      const captchaStatus = document.getElementById('recaptcha-status')?.value
+      const captchaStatus = document.getElementById('recaptcha-filled')?.value
 
       return captchaStatus === 'true' ? 'true' : 'false'
     },
