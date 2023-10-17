@@ -60,7 +60,6 @@ export default class Radio extends Component {
             id={'q_required_' + index}
             value={entry.value}
             defaultChecked={parseInt(entry.value) === index}
-            disabled
             readOnly
           />
           <label

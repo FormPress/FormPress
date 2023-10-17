@@ -396,6 +396,14 @@ $color-14: #68942f; /* forest green */
     margin: unset !important;
   }
 
+  .elementRadio img {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    max-width: 592px;
+    height: auto;
+  }
+
   .elementName {
     background-color: transparent;
   }
@@ -790,7 +798,7 @@ $color-14: #68942f; /* forest green */
 
   .elementNetPromoterScore ul {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     padding: 0 30px;
     list-style: none;
   }
@@ -1124,16 +1132,29 @@ $color-14: #68942f; /* forest green */
   }
 }
 
-@media screen and (max-width: 590px) {
+@media screen and (max-width: 680px) {
+  img {
+    max-width: 100% !important;
+    height: auto;
+  }
+
   .renderer .elementNetPromoterScore ul {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(40px, 1fr));
+    gap: 4px;
+    margin: 0 1px !important;
     padding: 0 !important;
   }
 
-  .renderer .elementNetPromoterScore ul li label {
-    width: 30px !important;
-    margin: 0 1px !important;
+  .elementRatingScale ul {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(40px, 1fr));
+    gap: 4px;
+    padding: 0 !important;
   }
+}
 
+@media screen and (max-width: 590px) {
   .elementLocation > iframe {
     width: 100% !important;
   }

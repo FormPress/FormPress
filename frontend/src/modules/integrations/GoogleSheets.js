@@ -274,8 +274,15 @@ export default class GoogleSheets extends Component {
           placeholder: `{${elem.type}_${elem.id}}`
         }
 
-        if (elem.type === 'Radio') {
-          inputElement.editor = elem.editor
+        // If the element is a radio with editor enabled, label might contain html
+        if (elem.type === 'Radio' && elem.editor === true) {
+          let customLabel = elem.label.replace(/(<([^>]+)>)/gi, '')
+
+          if (customLabel === '') {
+            customLabel = '[Multiple Choice] ' + elem.id
+          }
+
+          inputElement.label = customLabel
         }
 
         all.push(inputElement)
@@ -723,10 +730,6 @@ export default class GoogleSheets extends Component {
         <optgroup label="Elements">
           {this.state.inputElements.all.map((elem, index) => {
             let label = elem.label
-
-            if (elem.type === 'Radio' && elem.editor === true) {
-              label = elem.label.replace(/(<([^>]+)>)/gi, '')
-            }
 
             if (elem.label.length > 45) {
               label = label.substring(0, 45) + '...'

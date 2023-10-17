@@ -54,7 +54,7 @@
   float: right;
   position: relative;
   top: 3px;
-  left: -135px;
+  left: -160px;
 }
 
 .shareFormTabCover
@@ -83,7 +83,7 @@
   float: right;
   position: relative;
   top: 22px;
-  left: -80px;
+  left: -220px;
 }
 
 .shareFormTabCover .embedCodeTooltip .popover-container:hover > .popoverText {

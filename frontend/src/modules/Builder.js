@@ -56,7 +56,7 @@ const DEFAULT_FORM = {
         placeholder: '',
         required: false,
         label: 'Short Text',
-        requiredText: 'Please fill this field.'
+        requiredText: 'Required field'
       },
       {
         id: 2,
@@ -592,6 +592,14 @@ export default class Builder extends Component {
         )
       }
 
+      // hide last elem if it is a button
+      if (item.type === 'PageBreak') {
+        const lastElement = newElements[newElements.length - 1]
+        if (lastElement.type === 'Button') {
+          lastElement.hidden = true
+        }
+      }
+
       this.setState({
         dragMode: 'insert',
         sortItem: false,
@@ -622,6 +630,7 @@ export default class Builder extends Component {
       lastElement = elements.pop()
       item.id = maxId + 1
       if (lastElement.type === 'Button') {
+        lastElement.hidden = item.type === 'PageBreak'
         newElements = elements.concat(item, lastElement)
       } else {
         newElements = elements.concat(lastElement, item)
@@ -1028,7 +1037,23 @@ export default class Builder extends Component {
     const form = { ...this.state.form }
     const { params } = this.props.match
 
-    form.props.elements = form.props.elements.filter((elem) => elem.id !== id)
+    const elemToDelete = form.props.elements.find((elem) => elem.id === id)
+
+    if (elemToDelete === undefined) {
+      return
+    }
+
+    if (elemToDelete.type === 'PageBreak') {
+      const lastElem = form.props.elements[form.props.elements.length - 1]
+
+      if (lastElem.type === 'Button') {
+        lastElem.hidden = false
+      }
+    }
+
+    form.props.elements = form.props.elements.filter(
+      (elem) => elem.id !== elemToDelete.id
+    )
 
     this.setState({
       form
@@ -1135,6 +1160,10 @@ export default class Builder extends Component {
       capabilities.googleServiceAccountCredentials === false
     ) {
       elementsToRemove.push('FileUpload')
+    }
+
+    if (capabilities.googleCredentialsClientID === false) {
+      elementsToRemove.push('Image')
     }
 
     return !elementsToRemove.includes(elem.type)

@@ -109,7 +109,7 @@ export default class Location extends Component {
 
     let invalidCoordinates = false
 
-    Object.entries(entry.value).map((entry) => {
+    Object.entries(entry.value).forEach((entry) => {
       const key = entry[0]
       const value = entry[1]
 
@@ -192,6 +192,8 @@ export default class Location extends Component {
       case error.UNKNOWN_ERROR:
         errorMessage = 'An unknown error occurred.'
         break
+      default:
+        errorMessage = 'An unknown error occurred.'
     }
 
     this.setState({ errorMessage })
@@ -200,9 +202,7 @@ export default class Location extends Component {
   render() {
     const { config, mode } = this.props
     const { inputValues, errorMessage } = this.state
-    const apiKey =
-      process.env.FE_GOOGLE_MAPS_KEY ||
-      (global.env ? global.env.FE_GOOGLE_MAPS_KEY : undefined)
+    const apiKey = global.env?.FE_GOOGLE_MAPS_KEY
 
     const errorPresent = errorMessage !== ''
 
@@ -324,6 +324,9 @@ export default class Location extends Component {
             />
           </div>
         </>
+        <div className="fl metadata">
+          <div className="requiredErrorText">{config.requiredText}</div>
+        </div>
       </ElementContainer>
     )
   }

@@ -104,7 +104,6 @@ export default class Checkbox extends Component {
             className={question.toggle === true ? 'toggle-checkbox' : ''}
             value={index}
             checked={checkedAnswers.includes(index.toString())}
-            disabled
             readOnly
           />
           {question.toggle === true ? <span className="slider"></span> : null}

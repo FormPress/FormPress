@@ -298,68 +298,79 @@ text[type='category'] tspan {
 }
 
 .data > .dataContent > .submissionSelector > .submissionActions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #e2e2e2;
 }
 
 .data > .dataContent > .submissionSelector > .submissionActions > * {
-  padding: 16px;
+  padding: 6px;
   color: #646464;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .data
   > .dataContent
   > .submissionSelector
   > .submissionActions
+  > .submissionControlButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .submissionActions
+  > .submissionControlButtons
   > .buttonContainer
   > button {
-  font-size: 13px;
+  font-size: 10px;
   width: 100px;
-  height: 40px;
+  height: 35px;
 }
 
 .data
   > .dataContent
   > .submissionSelector
   > .submissionActions
+  > .submissionControlButtons
   .csvExportButton {
   border: none;
-  background-color: #8cc63f;
+  background-color: #1c5c85;
   color: white;
   font-size: 9px;
   font-weight: bold;
   text-align: center;
-  border-radius: 10px;
   padding: 8px 12px;
   cursor: pointer;
   width: 92px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .data
   > .dataContent
   > .submissionSelector
   > .submissionActions
+  > .submissionControlButtons
   .deleteSubmissionButton {
   border: none;
-  background-color: #113952;
+  background-color: #1c5c85;
   color: white;
   font-size: 9px;
   font-weight: bold;
   text-align: center;
-  border-radius: 10px;
   padding: 8px 12px;
   cursor: pointer;
   width: 92px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 .data
   > .dataContent
   > .submissionSelector
   > .submissionActions
+  > .submissionControlButtons
   .csvExportButton.disabled {
   cursor: not-allowed;
   background-color: #ccc;
@@ -369,6 +380,7 @@ text[type='category'] tspan {
   > .dataContent
   > .submissionSelector
   > .submissionActions
+  > .submissionControlButtons
   .deleteSubmissionButton.disabled {
   cursor: not-allowed;
   background-color: #ccc;
@@ -714,6 +726,10 @@ text[type='category'] tspan {
   margin-right: 5px;
 }
 
+.dataContent > .submissionSelector > .unreadSwitchContainer article {
+  margin-left: 10px;
+}
+
 .dataContent > .submissionSelector > .unreadSwitchContainer .unreadSwitchLabel {
   color: #646464;
   vertical-align: sub;
@@ -899,6 +915,72 @@ text[type='category'] tspan {
   .value
   .rating-scale-Stars.extends-select {
   color: #1c5c85;
+}
+
+.data > .dataContent > .submissionSelector > .pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .pagination-controls
+  > .pagination-item-per-page {
+  text-align: right;
+  margin-right: 10px;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .pagination-controls
+  > .pagination-item-per-page
+  select {
+  height: 40px;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .pagination-controls
+  > .navigation {
+  flex: 1;
+  text-align: center;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .pagination-controls
+  > .navigation
+  .prev,
+.next {
+  background-color: #1c5c85;
+  color: #ffffff;
+  padding: 8px 12px;
+  border: 1px solid #ffffff;
+  text-decoration: none;
+  float: none;
+  display: inline-block;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.16);
+}
+
+.data > .dataContent > .submissionSelector > .pagination-controls .prev:hover,
+.next:hover {
+  cursor: pointer;
+}
+
+.data
+  > .dataContent
+  > .submissionSelector
+  > .pagination-controls
+  .prev.disabled,
+.next.disabled {
+  background-color: #fff;
+  color: #1c5c85;
+  cursor: not-allowed;
 }
 
 .sharedform {

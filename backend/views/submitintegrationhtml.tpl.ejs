@@ -241,7 +241,7 @@
     <div class="answers">
         <%
         QUESTION_AND_ANSWERS.forEach (function (QnA) {%>
-            <div class="QnA">
+            <div class="QnA <%= QnA.type %>">
                 <div class="question-name">
                     <%- QnA.question%>
                 </div>
