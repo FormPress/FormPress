@@ -14,6 +14,10 @@ export default class Theme extends Component {
       {
         name: 'eclipse',
         displayText: 'Eclipse'
+      },
+      {
+        name: 'nocturne',
+        displayText: 'Nocturne'
       }
     ]
     return (
