@@ -86,7 +86,7 @@ module.exports = (app) => {
       const result = await db.query(`
         SELECT
             id, email, created_at, isActive
-          FROM \`user\`  ORDER BY \`created_at\` DESC
+          FROM \`user\` WHERE emailVerified = 1 ORDER BY \`created_at\` DESC
       `)
 
       if (result.length > 0) {
