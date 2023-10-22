@@ -624,13 +624,13 @@ $color-16: #060d20; /* nocturne background dark blueish black */
 
   .elementCheckbox .toggle .input .slider:before {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 22px;
-    height: 22px;
+    bottom: 3px;
+    left: 3px;
+    width: 13px;
+    height: 13px;
     content: '';
     transition: 0.4s;
-    border-radius: 12px;
+    border-radius: 50%;
     background-color: $color-15;
   }
 
