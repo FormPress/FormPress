@@ -398,7 +398,6 @@ $color-16: #060d20; /* blueish black */
   }
 
   .elementRadio .unselect-button:hover {
-    color: $secondary-color;
     background-color: $bg-form;
   }
 
@@ -622,7 +621,7 @@ $color-16: #060d20; /* blueish black */
 
   .elementCheckbox .toggle .input .slider {
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 0;
     bottom: 0;
     left: 0;
@@ -1091,11 +1090,11 @@ $color-16: #060d20; /* blueish black */
       box-sizing: border-box;
       height: 25px;
       padding: 5px 7px;
-      color: #333333;
+      color: $text-color-user-input;
       border: solid 1px $color-15;
       border-radius: 3px;
       outline: 0;
-      background-color: #f5f5f5;
+      background-color: $bg-input-field;
     }
 
     .latlong-fields > div {
@@ -1112,15 +1111,15 @@ $color-16: #060d20; /* blueish black */
       width: 12rem;
       min-height: 2.1rem;
       cursor: pointer;
-      color: #ffffff;
-      border: none;
+      color: $bg-form;
       background-color: $accent-main-light;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
       margin: 10px 0 10px 0;
+      border: 1px solid $color-15;
     }
 
     .latlong-button:hover {
-      background-color: $accent-main-dark;
+      background-color: $bg-form;
+      color: $accent-main-light;
     }
 
     .location-sublabel {
@@ -1153,6 +1152,23 @@ $color-16: #060d20; /* blueish black */
       background: #f0adad;
       color: #b74343;
     }
+  }
+
+  .elementRadio .addNewRadio {
+    color: $color-15;
+  }
+  .elementCheckbox .addNewCheckbox {
+    color: $color-15;
+  }
+  .elementCheckbox .addNewToggle {
+    color: $color-15;
+  }
+
+  .addNewToggle:hover,
+  .addNewCheckbox:hover,
+  .addNewRadio:hover {
+    border-color: $accent-main-dark;
+    color: $accent-main-dark;
   }
 }
 
