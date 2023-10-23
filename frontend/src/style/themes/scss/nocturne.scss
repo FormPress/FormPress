@@ -21,6 +21,7 @@ $text-color-user-input: #4a7795; /* user input during form filling */
 $text-color-labels-entries: #4a7795; /* radio checkbox entries etc, form bound text */
 $text-color-branding: #719fbd; /* branding text */
 $text-color-date-picker: #060d20;
+$text-color-file-upload: #0f6361;
 
 /* below are the colors that are used once or twice */
 $color-0: #ffffff; /* common white */
@@ -439,6 +440,7 @@ $color-16: #060d20; /* blueish black */
 
   .elementFileUpload > .inputContainer > .fileDisplay {
     word-break: break-all;
+    color: $text-color-file-upload;
   }
 
   .elementButton button,
@@ -721,7 +723,8 @@ $color-16: #060d20; /* blueish black */
     width: 90px;
     padding: 6px 12px;
     cursor: pointer;
-    border: 1px solid $color-13;
+    border: 1px solid $text-color-file-upload;
+    color: $text-color-file-upload;
   }
 
   .inputContainer > span {
