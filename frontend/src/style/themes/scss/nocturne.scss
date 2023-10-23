@@ -238,6 +238,23 @@ $color-16: #060d20; /* blueish black */
       display: inline-block;
       max-width: 620px;
     }
+
+    .image_container_before_upload {
+      border: 1px solid $color-15;
+      color: $color-15;
+    }
+
+    .crop-button {
+      margin-bottom: 5px;
+      color: $bg-form;
+      background-color: $color-15;
+      border: 1px solid $color-15;
+    }
+
+    .crop-button:hover {
+      color: $color-15;
+      background-color: $bg-form;
+    }
   }
 
   .elementTextBox .label {
@@ -881,6 +898,9 @@ $color-16: #060d20; /* blueish black */
   .currentPageSelector > .currentPageSelector-select {
     width: min-content !important;
     text-align: right;
+    background-color: $color-15;
+    border: 0;
+    border-radius: 15%;
   }
 
   .pagebreak-button.pb-previous {
