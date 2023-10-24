@@ -34,10 +34,6 @@ export default function ElementContainer(props) {
 
   classNames.push(`element${type}`)
 
-  if (isNaN(config.id) === false) {
-    config.form_id = props.form_id
-  }
-
   if (config.id === selectedFieldId) {
     classNames.push('selected')
   }
@@ -45,6 +41,10 @@ export default function ElementContainer(props) {
   if (typeof className !== 'undefined') {
     classNames.push(className.trim())
   }
+
+  const unCloneableTypes = ['PageBreak', 'CAPTCHA']
+
+  const isCloneable = !unCloneableTypes.includes(type)
 
   return (
     <div
@@ -96,21 +96,23 @@ export default function ElementContainer(props) {
             />
             <div className="popoverText">Move Up</div>
           </div>
-          <div className="popover-container action-clone">
-            <FontAwesomeIcon
-              icon={faClone}
-              onClick={handleFormItemMovement.bind(
-                this,
-                {
-                  mode: 'sort',
-                  ref: myRef,
-                  ...config
-                },
-                'clone'
-              )}
-            />
-            <div className="popoverText">Clone</div>
-          </div>
+          {isCloneable ? (
+            <div className="popover-container action-clone">
+              <FontAwesomeIcon
+                icon={faClone}
+                onClick={handleFormItemMovement.bind(
+                  this,
+                  {
+                    mode: 'sort',
+                    ref: myRef,
+                    ...config
+                  },
+                  'clone'
+                )}
+              />
+              <div className="popoverText">Clone</div>
+            </div>
+          ) : null}
           <div className="popover-container action-delete">
             <FontAwesomeIcon
               icon={faTrash}
