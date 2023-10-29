@@ -5,8 +5,7 @@ $bg-input-field: #060d20; /* input field background */
 $bg-separator-lines: #0f6361; /* separator lines */
 $bg-branding: #ffffff; /* branding background */
 
-$primary-color: #0c2738; /* not used */
-$secondary-color: #1c5c85; /* COMMON ACCENT DARK */
+$primary-color: #0f6361; /* NOCTURNE PRIMARY COLOR */
 
 $font-form: 'Montserrat', sans-serif; /* form font */
 
@@ -26,13 +25,7 @@ $text-color-file-upload: #0f6361;
 /* below are the colors that are used once or twice */
 $color-0: #ffffff; /* common white */
 $color-4: #646464; /* slate grey */
-$color-6: #c9c9c9; /* silver */
-$color-11: #d9dedc; /* pale grey */
-$color-12: #bec6c4; /* bluish grey */
-$color-13: #cccccc; /* light grey */
 $color-14: #68942f; /* forest green */
-$color-15: #0f6361; /* dark green */
-$color-16: #060d20; /* blueish black */
 
 .static-markup-body {
   background-color: $bg-static-markup-body;
@@ -240,19 +233,19 @@ $color-16: #060d20; /* blueish black */
     }
 
     .image_container_before_upload {
-      border: 1px solid $color-15;
-      color: $color-15;
+      border: 1px solid $primary-color;
+      color: $primary-color;
     }
 
     .crop-button {
       margin-bottom: 5px;
       color: $bg-form;
-      background-color: $color-15;
-      border: 1px solid $color-15;
+      background-color: $primary-color;
+      border: 1px solid $primary-color;
     }
 
     .crop-button:hover {
-      color: $color-15;
+      color: $primary-color;
       background-color: $bg-form;
     }
   }
@@ -273,7 +266,7 @@ $color-16: #060d20; /* blueish black */
     height: 42px;
     padding: 5px 16px;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     background-color: $bg-input-field;
@@ -292,7 +285,7 @@ $color-16: #060d20; /* blueish black */
     padding: 5px 16px;
     resize: none;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     outline: 0;
     background-color: $bg-input-field;
   }
@@ -314,7 +307,7 @@ $color-16: #060d20; /* blueish black */
     width: 200px;
     padding: 5px;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     outline: 0;
     background-color: $bg-input-field;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
@@ -387,10 +380,10 @@ $color-16: #060d20; /* blueish black */
     padding: 0.25rem;
     cursor: pointer;
     word-wrap: break-word;
-    border: 1px solid $color-15;
+    border: 1px solid $primary-color;
     border-radius: 0;
     outline: 0;
-    background-color: $color-15;
+    background-color: $primary-color;
   }
 
   .elementRadio .radioList.dirty + .unselect-button {
@@ -402,7 +395,7 @@ $color-16: #060d20; /* blueish black */
   }
 
   .elementRadio .unselect-button:hover > .unselect-label > span {
-    color: $color-15 !important;
+    color: $primary-color !important;
   }
 
   .elementRadio .unselect-button > .unselect-label > span {
@@ -425,7 +418,7 @@ $color-16: #060d20; /* blueish black */
   .elementName > .nameContainer > * > input,
   .elementName > .nameContainer > * > select {
     height: 32px;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     color: $text-color-user-input;
@@ -434,7 +427,7 @@ $color-16: #060d20; /* blueish black */
 
   .elementDatePicker > .datePickerContainer > * > input {
     height: 32px;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     background-color: $bg-separator-lines;
@@ -549,7 +542,7 @@ $color-16: #060d20; /* blueish black */
     margin-right: 5px;
     cursor: pointer;
     vertical-align: top;
-    border: 1px solid $color-15;
+    border: 1px solid $primary-color;
     border-radius: 4px;
     outline: none;
     -webkit-appearance: none;
@@ -559,7 +552,7 @@ $color-16: #060d20; /* blueish black */
   }
 
   .elementCheckbox .input > input[type='checkbox']:checked {
-    border: 1px solid $color-15;
+    border: 1px solid $primary-color;
     background-color: transparent;
   }
 
@@ -580,11 +573,11 @@ $color-16: #060d20; /* blueish black */
     display: block;
     content: '\2713';
     text-align: center;
-    color: $color-15;
+    color: $primary-color;
   }
 
   .elementCheckbox .input > input[type='checkbox']:active {
-    border: 1px solid $color-15;
+    border: 1px solid $primary-color;
   }
 
   .elementCheckbox .toggle {
@@ -606,7 +599,7 @@ $color-16: #060d20; /* blueish black */
     padding: 5px 16px;
     resize: none;
     color: $text-color-user-input;
-    border: 1px solid $color-15;
+    border: 1px solid $primary-color;
     outline: 0;
     background-color: $bg-input-field;
   }
@@ -631,7 +624,7 @@ $color-16: #060d20; /* blueish black */
     transition: 0.4s;
     border-radius: 16px;
     background-color: $bg-form;
-    border: 2px solid $color-15;
+    border: 2px solid $primary-color;
   }
 
   .elementCheckbox .toggle .input .slider:before {
@@ -643,7 +636,7 @@ $color-16: #060d20; /* blueish black */
     content: '';
     transition: 0.4s;
     border-radius: 50%;
-    background-color: $color-15;
+    background-color: $primary-color;
   }
 
   .elementCheckbox .toggle .input input:checked + .slider {
@@ -652,14 +645,14 @@ $color-16: #060d20; /* blueish black */
   }
 
   .elementCheckbox .toggle .input input:focus + .slider {
-    box-shadow: 0 0 1px $color-15;
+    box-shadow: 0 0 1px $primary-color;
   }
 
   .elementCheckbox .toggle .input input:checked + .slider:before {
     -webkit-transform: translateX(18px);
     -ms-transform: translateX(18px);
     transform: translateX(18px);
-    background-color: $color-15;
+    background-color: $primary-color;
   }
 
   .nameContainer,
@@ -751,7 +744,7 @@ $color-16: #060d20; /* blueish black */
   .address-section > select {
     height: 2.3rem;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     background-color: $bg-input-field;
@@ -779,7 +772,7 @@ $color-16: #060d20; /* blueish black */
   .address-section > input {
     height: 2.3rem;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     background-color: $bg-input-field;
   }
@@ -840,8 +833,8 @@ $color-16: #060d20; /* blueish black */
     margin: 0 5px;
     user-select: none;
     text-align: center;
-    color: $color-15;
-    border: 2px solid $color-15;
+    color: $primary-color;
+    border: 2px solid $primary-color;
     background-color: $bg-input-field;
     border-radius: 6px;
     cursor: pointer;
@@ -849,14 +842,14 @@ $color-16: #060d20; /* blueish black */
 
   .elementNetPromoterScore .net-promoter-score-label:hover {
     color: $color-0;
-    border: 1px solid $color-15;
-    background-color: $color-15;
+    border: 1px solid $primary-color;
+    background-color: $primary-color;
   }
 
   .elementNetPromoterScore input[type='radio']:checked + label {
     color: $color-0;
-    border: 1px solid $color-15;
-    background-color: $color-15;
+    border: 1px solid $primary-color;
+    background-color: $primary-color;
   }
 
   .form-hidden {
@@ -897,7 +890,7 @@ $color-16: #060d20; /* blueish black */
   .currentPageSelector > .currentPageSelector-select {
     width: min-content !important;
     text-align: right;
-    background-color: $color-15;
+    background-color: $primary-color;
     border: 0;
     border-radius: 15%;
   }
@@ -966,7 +959,7 @@ $color-16: #060d20; /* blueish black */
     width: 3.1rem;
     opacity: 1;
     color: $text-color-user-input;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     background-color: $bg-input-field;
@@ -985,7 +978,7 @@ $color-16: #060d20; /* blueish black */
     color: $text-color-user-input;
     margin-left: 5px;
     padding: 5px 16px;
-    border: solid 1px $color-15;
+    border: solid 1px $primary-color;
     border-radius: 3px;
     outline: 0;
     background-color: $bg-input-field;
@@ -1029,8 +1022,8 @@ $color-16: #060d20; /* blueish black */
     margin: 0 5px;
     user-select: none;
     text-align: center;
-    color: $color-15;
-    border: 2px solid $color-15;
+    color: $primary-color;
+    border: 2px solid $primary-color;
     background-color: $bg-input-field;
     border-radius: 6px;
     cursor: pointer;
@@ -1038,7 +1031,7 @@ $color-16: #060d20; /* blueish black */
 
   .elementRatingScale .rating-scale-Numbers:hover {
     color: $color-0;
-    background-color: $color-15;
+    background-color: $primary-color;
   }
 
   .elementRatingScale .rating-scale-Stars {
@@ -1060,29 +1053,29 @@ $color-16: #060d20; /* blueish black */
     margin: 0 5px;
     user-select: none;
     text-align: center;
-    color: $color-15;
-    border: 1px solid $color-15;
+    color: $primary-color;
+    border: 1px solid $primary-color;
     background-color: $color-0;
   }
 
   .elementRatingScale .rating-scale-label:hover {
     color: $color-0;
-    border: 1px solid $color-15;
-    background-color: $color-15;
+    border: 1px solid $primary-color;
+    background-color: $primary-color;
   }
 
   .elementRatingScale input[type='radio']:checked + label.rating-scale-Numbers {
     color: $color-0;
-    border: 1px solid $color-15;
-    background-color: $color-15;
+    border: 1px solid $primary-color;
+    background-color: $primary-color;
   }
 
   .elementRatingScale input[type='radio']:checked + label.rating-scale-Stars {
-    color: $color-15;
+    color: $primary-color;
   }
 
   .elementRatingScale .rating-scale-Stars.extends-select {
-    color: $color-15;
+    color: $primary-color;
   }
 
   .elementLocation {
@@ -1091,7 +1084,7 @@ $color-16: #060d20; /* blueish black */
       height: 25px;
       padding: 5px 7px;
       color: $text-color-user-input;
-      border: solid 1px $color-15;
+      border: solid 1px $primary-color;
       border-radius: 3px;
       outline: 0;
       background-color: $bg-input-field;
@@ -1114,7 +1107,7 @@ $color-16: #060d20; /* blueish black */
       color: $bg-form;
       background-color: $accent-main-light;
       margin: 10px 0 10px 0;
-      border: 1px solid $color-15;
+      border: 1px solid $primary-color;
     }
 
     .latlong-button:hover {
@@ -1155,13 +1148,13 @@ $color-16: #060d20; /* blueish black */
   }
 
   .elementRadio .addNewRadio {
-    color: $color-15;
+    color: $primary-color;
   }
   .elementCheckbox .addNewCheckbox {
-    color: $color-15;
+    color: $primary-color;
   }
   .elementCheckbox .addNewToggle {
-    color: $color-15;
+    color: $primary-color;
   }
 
   .addNewToggle:hover,
