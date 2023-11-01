@@ -334,9 +334,7 @@ export default class Forms extends Component {
             />
           ) : null}
           {roleLimit === 0 || roleLimit > formsAndShares.owned.length ? (
-            <div
-              className="nav_add_new_form_container"
-              style={{ display: 'none' }}>
+            <div className="nav_add_new_form_container">
               <Link to="/editor/new" className="nav_add_new_form_link">
                 <div className="popover-container circle-plus-container">
                   <FontAwesomeIcon

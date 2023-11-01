@@ -193,33 +193,8 @@
 }
 @media only screen and (max-width: 767px) {
   .loginForm {
-    margin: 0 auto;
-    width: 90%;
-    display: contents;
+    width: 100%;
   }
-
-  .infernal.element {
-    padding: 15px !important;
-  }
-
-  .loginForm .infernal > .element > .elemLabelTitle {
-    text-shadow: 2px 7px 5px rgba(0, 0, 0, 0.3),
-      0px -4px 10px rgba(255, 255, 255, 0.3);
-    color: #113952;
-    font-weight: 600 !important;
-  }
-
-  .loginForm .infernal > .elementButton button {
-    color: #ffffff;
-    background-color: #8cc63f;
-    border: none;
-    cursor: pointer;
-  }
-
-  .or-seperator {
-    margin-top: 0px;
-  }
-
   .login-wrapper > .footer .col-8-16 {
     text-align: center;
     width: 100%;

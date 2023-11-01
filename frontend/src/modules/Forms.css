@@ -45,7 +45,7 @@
 .forms table.fp_table > thead {
   position: sticky;
   position: -webkit-sticky;
-  top: 70px;
+  top: 86px;
   z-index: 10;
 }
 
