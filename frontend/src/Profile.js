@@ -7,7 +7,7 @@ import './Profile.css'
 import SettingsSVG from './svg/SettingsSVG'
 import LogoutSVG from './svg/LogoutSVG'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGears, faQuestion } from '@fortawesome/free-solid-svg-icons'
+import { faQuestion } from '@fortawesome/free-solid-svg-icons'
 
 const Profile = (props) => {
   const logout = async (e) => {
