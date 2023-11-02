@@ -33,6 +33,8 @@ import { Logo, FPLoader } from './svg'
 
 import './App.css'
 import './style/themes/scss/index.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 class App extends Component {
   constructor(props) {
@@ -277,7 +279,23 @@ class App extends Component {
               </div>
             </div>
           </header>
+
           <div className="content">
+            <div
+              id="mobile-warning"
+              onClick={(e) => {
+                // Hide self
+                e.target.style.display = 'none'
+              }}>
+              <p>
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  className="fa-question"
+                />{' '}
+                FormPress currently offers the best experience on desktop
+                devices. Tap here to dismiss this message.
+              </p>
+            </div>
             <Switch>
               <PrivateRoute exact path="/">
                 <Redirect to="/forms" />

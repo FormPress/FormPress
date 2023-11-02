@@ -303,6 +303,29 @@ header.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
   }
 }
 
+#mobile-warning {
+  display: none;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  background-color: #fffcdd;
+  color: #000;
+  text-align: center;
+  z-index: 1000;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#mobile-warning > p {
+  margin: 10px 0;
+}
+
+@media only screen and (max-width: 600px) {
+  #mobile-warning {
+    display: block;
+  }
+}
+
 ::-webkit-scrollbar {
   height: 5px;
   width: 5px;
