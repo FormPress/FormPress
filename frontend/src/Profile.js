@@ -50,7 +50,7 @@ const Profile = (props) => {
 
   if (compact) {
     return [
-      <li key="5">
+      <li key="5" className="profile-entries">
         <NavLink
           to="/settings"
           activeClassName="selected"
@@ -59,16 +59,16 @@ const Profile = (props) => {
         </NavLink>
       </li>,
       auth.impersonate ? (
-        <li key="6">
+        <li key="6" className="profile-entries">
           <span onClick={logoutAsUser}>Logout as User</span>
         </li>
       ) : (
         ''
       ),
-      <li key="7">
+      <li key="7" className="profile-entries">
         <span onClick={redirectToTalkyard}>Help</span>
       </li>,
-      <li key="8">
+      <li key="8" className="profile-entries">
         <span onClick={logout}>Logout</span>
       </li>
     ]

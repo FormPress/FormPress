@@ -1,6 +1,5 @@
 .profileMenuContainer {
   position: relative;
-  width: 260px;
   height: 60px;
 }
 
@@ -97,4 +96,31 @@
   margin-top: 5px;
   margin-right: 1px;
   float: right;
+}
+
+@media (max-width: 910px) {
+  .header-center > .profile_container > .profile .wrapper-welcome {
+    width: 70px;
+    float: right;
+  }
+
+  .profileMenuContainer .profileMenuContent {
+    width: 100px;
+  }
+
+  .header-center
+    > .profile_container
+    > .profile
+    .wrapper-welcome
+    > .profileSVG {
+    transform: translateX(-50%);
+  }
+
+  .header-center
+    > .profile_container
+    > .profile
+    .wrapper-welcome
+    > .welcome-user {
+    display: none;
+  }
 }
