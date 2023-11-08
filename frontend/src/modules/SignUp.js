@@ -272,7 +272,7 @@ class SignUp extends Component {
                     </label>
                     <a
                       target="_blank"
-                      href="https://formpress.org/tos.html"
+                      href="https://formpress.org/tos"
                       rel="noopener noreferrer">
                       Terms of Use
                     </a>

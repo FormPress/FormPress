@@ -90,6 +90,10 @@ header.header {
   padding-bottom: 0.3rem;
 }
 
+header.header.loggedIn {
+  box-shadow: unset !important;
+}
+
 header .header-center ul {
   margin: 0;
   padding: 0;
@@ -198,7 +202,7 @@ header.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
 }
 
 /* FULL CASE */
-@media (min-width: 48em) {
+@media (min-width: 768px) {
   header.header li.profile-entries {
     display: none;
   }
@@ -218,7 +222,6 @@ header.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
   }
 
   header.header li a.selected {
-    /*pointer-events: none;*/
     background-color: #113952;
     color: #fff;
   }
@@ -234,7 +237,7 @@ header.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
 }
 
 /* MOBILE CASE */
-@media (max-width: 48em) {
+@media (max-width: 767px) {
   header.header {
     padding-left: 0.75rem;
     padding-right: 0.75rem;

@@ -25,7 +25,6 @@
 
 .login-mainContent {
   padding-top: 15px;
-  /*padding-bottom: 15px;*/
 }
 
 .content {
@@ -43,6 +42,7 @@
   margin-left: auto;
   margin-right: auto;
 }
+
 .form-header {
   font-family: Montserrat;
   font-weight: 600;
@@ -153,23 +153,8 @@
   color: #a0a0a0;
 }
 
-/*.for-login .or-seperator {*/
-/*  margin-top: -20px;*/
-/*}*/
-
-/*.for-sign-up .or-seperator {*/
-/*  padding: 6px;*/
-/*}*/
-
-/*.for-login + .do-not-have {*/
-/*  margin-top: 70px;*/
-/*}*/
-
-/*.for-sign-up ~ .have-account {*/
-/*  margin-bottom: 20px;*/
-/*}*/
-
 .google-sign-in {
+  width: 90%;
   display: flex;
   justify-content: center;
   margin: 10px auto;
