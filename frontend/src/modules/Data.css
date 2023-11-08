@@ -3,7 +3,7 @@
 }
 
 .data > .formSelectorContainer {
-  top: 116px;
+  top: 115px;
   max-height: 55px;
   width: fit-content;
   width: -moz-fit-content;
@@ -96,7 +96,7 @@ text[type='category'] tspan {
 
 .data > .dataContent,
 .data > .dataStatistics {
-  margin-top: 60px;
+  margin-top: 160px;
   background-color: white;
   box-shadow: 0 4px 1px 0 rgba(69, 121, 154, 0.2);
 }

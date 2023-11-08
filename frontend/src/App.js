@@ -33,6 +33,8 @@ import { Logo, FPLoader } from './svg'
 
 import './App.css'
 import './style/themes/scss/index.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 class App extends Component {
   constructor(props) {
@@ -40,7 +42,8 @@ class App extends Component {
     this.state = {
       capabilities: {},
       user: { getUsages: this.getUsages, whoAmI: this.whoAmI },
-      loading: true
+      loading: true,
+      hMenuOpen: false
     }
 
     this.handleSetAuth = this.handleSetAuth.bind(this)
@@ -163,6 +166,10 @@ class App extends Component {
     }
   }
 
+  toggleHMenu = () => {
+    this.setState({ hMenuOpen: !this.state.hMenuOpen })
+  }
+
   render() {
     const auth = this.getAuthContextValue()
 
@@ -195,64 +202,102 @@ class App extends Component {
     return (
       <Router>
         <GeneralContext.Provider value={generalContext}>
-          <div className="headerContainer">
-            <div className="grid cw center">
-              <div className="grid header">
-                <div className="col-1-16 logo">
-                  <NavLink exact to="/">
-                    <Logo />
-                  </NavLink>
-                </div>
-                <div className="col-10-16 menu">
-                  <nav className="nav">
-                    <ul className="menu fl">
-                      <li key="1">
-                        {homeUrl !== undefined ? (
-                          <a href={homeUrl}>Home</a>
-                        ) : (
-                          ''
-                        )}
+          <header
+            className={'header' + (auth.loggedIn === true ? ' loggedIn' : '')}>
+            <div className="header-center">
+              <NavLink exact to="/" className={'logo'}>
+                <Logo />
+              </NavLink>
+              <input
+                className="menu-btn"
+                type="checkbox"
+                id="menu-btn"
+                checked={this.state.hMenuOpen}
+                onClick={this.toggleHMenu}
+              />
+              <label className="menu-icon" htmlFor="menu-btn">
+                <span className="navicon"></span>
+              </label>
+              <ul className={'menu' + (auth.loggedIn === true ? ' rich' : '')}>
+                <li key="1">
+                  {homeUrl !== undefined ? <a href={homeUrl}>Home</a> : ''}
+                </li>
+                {auth.loggedIn === true
+                  ? [
+                      <li key="2">
+                        <NavLink
+                          to="/forms"
+                          activeClassName="selected"
+                          onClick={this.toggleHMenu}>
+                          Forms
+                        </NavLink>
+                      </li>,
+                      <li key="3" onClick={this.toggleHMenu}>
+                        <NavLink
+                          to="/editor"
+                          activeClassName="selected"
+                          onClick={this.toggleHMenu}>
+                          Editor
+                        </NavLink>
+                      </li>,
+                      <li key="4">
+                        <NavLink
+                          to="/data"
+                          activeClassName="selected"
+                          onClick={this.toggleHMenu}>
+                          Data
+                        </NavLink>
+                      </li>,
+                      <>
+                        <Profile
+                          generalContext={generalContext}
+                          compact={true}
+                          toggleHMenu={this.toggleHMenu}
+                        />
+                      </>
+                    ]
+                  : [
+                      <li key="2">
+                        <NavLink
+                          to="/login"
+                          activeClassName="selected"
+                          onClick={this.toggleHMenu}>
+                          Login
+                        </NavLink>
+                      </li>,
+                      <li key="3">
+                        <NavLink
+                          to="/signup"
+                          activeClassName="selected"
+                          onClick={this.toggleHMenu}>
+                          Sign Up
+                        </NavLink>
                       </li>
-                      {auth.loggedIn === true
-                        ? [
-                            <li key="2">
-                              <NavLink to="/forms" activeClassName="selected">
-                                Forms
-                              </NavLink>
-                            </li>,
-                            <li key="3">
-                              <NavLink to="/editor" activeClassName="selected">
-                                Editor
-                              </NavLink>
-                            </li>,
-                            <li key="4">
-                              <NavLink to="/data" activeClassName="selected">
-                                Data
-                              </NavLink>
-                            </li>
-                          ]
-                        : [
-                            <li key="2">
-                              <NavLink to="/login" activeClassName="selected">
-                                Login
-                              </NavLink>
-                            </li>,
-                            <li key="3">
-                              <NavLink to="/signup" activeClassName="selected">
-                                Sign Up
-                              </NavLink>
-                            </li>
-                          ]}
-                    </ul>
-                  </nav>
-                </div>
-                <div className="col-5-16 profile_container">
-                  <Profile generalContext={generalContext} />
-                </div>
+                    ]}
+              </ul>
+              <div className="profile_container">
+                <Profile generalContext={generalContext} />
               </div>
             </div>
-          </div>
-          <div className="content">
+          </header>
+
+          <div
+            className={'content' + (auth.loggedIn === true ? ' loggedIn' : '')}>
+            <div
+              id="mobile-warning"
+              onClick={(e) => {
+                // Hide self
+                e.target.style.display = 'none'
+              }}>
+              <p>
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  className="fa-question"
+                />{' '}
+                FormPress currently offers the best experience on desktop
+                devices. Tap here to dismiss this message.
+              </p>
+            </div>
             <Switch>
               <PrivateRoute exact path="/">
                 <Redirect to="/forms" />

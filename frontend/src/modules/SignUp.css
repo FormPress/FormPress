@@ -26,8 +26,11 @@
 .tosContainer {
   user-select: none;
   width: 332px;
-  margin: -95px auto 70px;
+  position: relative;
+  top: -100px;
+  margin: auto;
   font-family: 'Montserrat', sans-serif;
+  height: 0;
 }
 
 .tosContainer > a {

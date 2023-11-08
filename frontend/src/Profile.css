@@ -1,6 +1,5 @@
 .profileMenuContainer {
   position: relative;
-  width: 260px;
   height: 60px;
 }
 
@@ -54,7 +53,12 @@
   text-decoration: underline;
 }
 
-.header > .profile_container > .profile .wrapper-welcome {
+.header-center > .profile_container {
+  float: right;
+  margin-right: 2rem;
+}
+
+.header-center > .profile_container > .profile .wrapper-welcome {
   display: inline-block;
   width: 255px;
   margin-top: 9px;
@@ -64,7 +68,11 @@
   padding: 5px;
 }
 
-.header > .profile_container > .profile .wrapper-welcome > .welcome-user {
+.header-center
+  > .profile_container
+  > .profile
+  .wrapper-welcome
+  > .welcome-user {
   margin-left: 3px;
   width: 210px;
   font-size: 16px;
@@ -83,9 +91,36 @@
   height: 16px;
 }
 
-.header > .profile_container > .profile .wrapper-welcome > .profileSVG {
+.header-center > .profile_container > .profile .wrapper-welcome > .profileSVG {
   cursor: pointer;
   margin-top: 5px;
   margin-right: 1px;
   float: right;
+}
+
+@media (max-width: 910px) {
+  .header-center > .profile_container > .profile .wrapper-welcome {
+    width: 70px;
+    float: right;
+  }
+
+  .profileMenuContainer .profileMenuContent {
+    width: 100px;
+  }
+
+  .header-center
+    > .profile_container
+    > .profile
+    .wrapper-welcome
+    > .profileSVG {
+    transform: translateX(-50%);
+  }
+
+  .header-center
+    > .profile_container
+    > .profile
+    .wrapper-welcome
+    > .welcome-user {
+    display: none;
+  }
 }
