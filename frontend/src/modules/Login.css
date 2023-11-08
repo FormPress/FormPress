@@ -153,21 +153,21 @@
   color: #a0a0a0;
 }
 
-.for-login .or-seperator {
-  margin-top: -20px;
-}
+/*.for-login .or-seperator {*/
+/*  margin-top: -20px;*/
+/*}*/
 
-.for-sign-up .or-seperator {
-  padding: 6px;
-}
+/*.for-sign-up .or-seperator {*/
+/*  padding: 6px;*/
+/*}*/
 
-.for-login + .do-not-have {
-  margin-top: 70px;
-}
+/*.for-login + .do-not-have {*/
+/*  margin-top: 70px;*/
+/*}*/
 
-.for-sign-up ~ .have-account {
-  margin-bottom: 20px;
-}
+/*.for-sign-up ~ .have-account {*/
+/*  margin-bottom: 20px;*/
+/*}*/
 
 .google-sign-in {
   display: flex;

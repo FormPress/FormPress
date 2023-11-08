@@ -202,7 +202,8 @@ class App extends Component {
     return (
       <Router>
         <GeneralContext.Provider value={generalContext}>
-          <header className="header">
+          <header
+            className={'header' + (auth.loggedIn === true ? ' loggedIn' : '')}>
             <div className="header-center">
               <NavLink exact to="/" className={'logo'}>
                 <Logo />
@@ -280,7 +281,8 @@ class App extends Component {
             </div>
           </header>
 
-          <div className="content">
+          <div
+            className={'content' + (auth.loggedIn === true ? ' loggedIn' : '')}>
             <div
               id="mobile-warning"
               onClick={(e) => {

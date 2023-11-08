@@ -81,7 +81,7 @@ header.header {
   width: 100%;
   background-color: #f5f5f5;
   border-top: 6px solid #8cc63f;
-  z-index: 999;
+  z-index: 100;
   top: 0;
 
   padding-left: 5rem;
@@ -321,7 +321,7 @@ header.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
 }
 
 @media only screen and (max-width: 600px) {
-  #mobile-warning {
+  .content.loggedIn > #mobile-warning {
     display: block;
   }
 }
