@@ -2,7 +2,14 @@ import React from 'react'
 import { create } from 'react-test-renderer'
 import * as Elements from '../modules/elements'
 import { getConfigurableSettings } from '../modules/ConfigurableSettings'
-const excludedKeys = ['Button', 'Header', 'Separator', 'PageBreak', 'Image']
+const excludedKeys = [
+  'Button',
+  'Header',
+  'Separator',
+  'PageBreak',
+  'Image',
+  'CAPTCHA'
+]
 
 const keys = Object.keys(Elements)
 for (const key of keys) {

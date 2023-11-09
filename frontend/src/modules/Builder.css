@@ -1,12 +1,13 @@
 .content > .builder {
-  margin-top: 86px;
+  position: relative;
+  top: 160px;
 }
 
 .builder > .headerContainer,
 .forms > .headerContainer,
 .data > .headerContainer {
   height: 30px;
-  top: 86px;
+  top: 70px;
   width: 100%;
   position: fixed;
   background-color: #e2e2e2;
@@ -104,7 +105,7 @@
 }
 
 .builder > .content {
-  padding-top: 100px;
+  /*padding-top: 100px;*/
   width: 1200px;
   margin: 0 auto;
   /*display: flex;*/
@@ -129,7 +130,7 @@
   display: flex;
   flex-direction: column;
   position: sticky;
-  top: 185px;
+  top: 160px;
   height: fit-content;
 }
 
@@ -201,14 +202,11 @@
 
 .builder > .content > .leftMenu {
   min-height: 500px;
-  height: calc(100vh - 150px);
-  overflow: scroll;
+  height: calc(100vh - 19vh);
+  overflow-y: scroll;
   box-shadow: 0px 3px 10px #00000014;
-  /*width: 30%;*/
   position: sticky;
-  /*top: 15%;*/
-  top: 185px;
-  margin-bottom: 50px;
+  top: 160px;
 }
 
 .builder > .content > .leftMenu:empty {
@@ -217,6 +215,10 @@
 
 .leftMenuContents .elementTextArea .fl.input {
   width: 100%;
+}
+.leftMenuContents > .elements {
+  background-color: #eaeaea;
+  padding: 0.2rem 0;
 }
 
 .elements > .elementsMessage {

@@ -46,6 +46,33 @@ const Profile = (props) => {
   }
 
   const { auth } = props.generalContext
+  const { compact } = props
+
+  if (compact) {
+    return [
+      <li key="5" className="profile-entries">
+        <NavLink
+          to="/settings"
+          activeClassName="selected"
+          onClick={props.toggleHMenu}>
+          Settings
+        </NavLink>
+      </li>,
+      auth.impersonate ? (
+        <li key="6" className="profile-entries">
+          <span onClick={logoutAsUser}>Logout as User</span>
+        </li>
+      ) : (
+        ''
+      ),
+      <li key="7" className="profile-entries">
+        <span onClick={redirectToTalkyard}>Help</span>
+      </li>,
+      <li key="8" className="profile-entries">
+        <span onClick={logout}>Logout</span>
+      </li>
+    ]
+  }
 
   return auth.loggedIn ? (
     <div className="profile">
@@ -59,15 +86,13 @@ const Profile = (props) => {
           <div className="profileMenuContent">
             <div className="profileMenuEntry">
               <NavLink to="/settings" activeClassName="selected">
-                <SettingsSVG />
-                Settings
+                <SettingsSVG width={16} heigth={16} /> Settings
               </NavLink>
             </div>
             {auth.impersonate ? (
               <div className="profileMenuEntry">
                 <span onClick={logoutAsUser}>
-                  <LogoutSVG width={16} heigth={16} />
-                  Logout as User
+                  <LogoutSVG width={16} heigth={16} /> Logout as User
                 </span>
               </div>
             ) : (
@@ -75,7 +100,7 @@ const Profile = (props) => {
             )}
             <div className="profileMenuEntry">
               <span onClick={redirectToTalkyard}>
-                <FontAwesomeIcon icon={faQuestion} className="fa-question" />
+                <FontAwesomeIcon icon={faQuestion} className="fa-question" />{' '}
                 Help
               </span>
             </div>

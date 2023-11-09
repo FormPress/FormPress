@@ -164,6 +164,17 @@ const transformMap = [
     )
   },
   {
+    type: 'file',
+    source: path.resolve(
+      '../',
+      'frontend',
+      'src',
+      'modules/common',
+      'HoneyPot.js'
+    ),
+    target: path.resolve('./', 'script', 'transformed/common', 'HoneyPot.js')
+  },
+  {
     type: 'folder',
     extension: '.js',
     source: path.resolve('../', 'frontend', 'src', 'modules', 'elements'),
