@@ -43,6 +43,9 @@ module.exports = (app) => {
       // check if public upload from last published form
       let publicAccess = false
       const publishedForm = await model.formpublished.get({ form_id })
+      if (publishedForm === false) {
+        return res.status(404).send('File not Found E017D07')
+      }
       const fileUploadProps = publishedForm.props.elements.filter(
         (element) => element.id === parseInt(question_id)
       )
