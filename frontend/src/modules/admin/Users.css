@@ -7,7 +7,7 @@
   display: flex;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 20px;
-  padding: 50px;
+  padding: 30px;
   background-color: #f5f5f5;
 }
 
