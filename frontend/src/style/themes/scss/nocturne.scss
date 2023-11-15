@@ -164,6 +164,7 @@ $color-14: #68942f; /* forest green */
   &.form .header.label {
     position: relative;
     max-width: 728px;
+    color: $primary-color;
   }
 
   &.form .header.label.alignLeft {
@@ -198,6 +199,7 @@ $color-14: #68942f; /* forest green */
   &.form .header.sublabel {
     position: relative;
     max-width: 728px;
+    color: $primary-color;
   }
 
   &.form .header.sublabel.alignLeft {
