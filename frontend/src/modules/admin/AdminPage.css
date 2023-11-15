@@ -7,6 +7,10 @@
   text-decoration: none;
 }
 
+.adminpage {
+  margin-top: 80px;
+}
+
 .header > .mainTabs > a:hover {
   background-color: #719fbd;
 }
