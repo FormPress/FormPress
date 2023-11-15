@@ -1165,6 +1165,11 @@ $color-14: #68942f; /* forest green */
     border-color: $accent-main-dark;
     color: $accent-main-dark;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition: background-color 0s 600000s, color 0s 600000s;
+  }
 }
 
 @media screen and (max-width: 992px) {
