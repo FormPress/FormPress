@@ -67,6 +67,10 @@
   scale: 3;
 }
 
+header + .content {
+  margin-top: 70px;
+}
+
 /* header */
 
 .header-center {
