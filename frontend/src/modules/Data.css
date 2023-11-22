@@ -96,7 +96,7 @@ text[type='category'] tspan {
 
 .data > .dataContent,
 .data > .dataStatistics {
-  margin-top: 160px;
+  margin-top: 90px;
   background-color: white;
   box-shadow: 0 4px 1px 0 rgba(69, 121, 154, 0.2);
 }
