@@ -36,7 +36,7 @@ export default class Download extends Component {
 
     const { status, data } = await api({
       resource: resource,
-      useBlob: true
+      responseType: 'blob'
     })
     if (status !== 200) {
       this.setState({ message: data.message })
