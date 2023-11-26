@@ -427,4 +427,185 @@ module.exports = (app) => {
       }
     }
   )
+
+  app.get(
+    '/api/admin/evaluate/forms',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT *
+        FROM \`form_published\`
+        WHERE evaluated = 0 ORDER BY \`id\` DESC LIMIT 10
+      `)
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  app.get(
+    '/api/admin/evaluate/forms/:form_published_id',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { form_published_id } = req.params
+      const db = await getPool()
+      const result = await db.query(
+        `
+        SELECT p.*, f.uuid
+        FROM \`form_published\` p
+        LEFT JOIN \`form\` f
+        ON p.form_id = f.id
+        WHERE p.id = ?
+        `,
+        [form_published_id]
+      )
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  app.post(
+    '/api/admin/evaluate/forms/:form_published_id',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { form_published_id } = req.params
+      const form = req.body.form
+      const { user_id } = req.user
+      const db = await getPool()
+      await db.query(
+        `
+      UPDATE \`form_published\` SET \`evaluated\` = 1 WHERE id = ?
+      `,
+        [form_published_id]
+      )
+      await db.query(
+        `
+        INSERT INTO \`form_evaluation\`
+         (form_id, form_published_id, evaluator_id, type)
+        VALUES
+          (?, ?, ?, ?)
+        `,
+        [form.form_id, form.id, user_id, req.body.type]
+      )
+
+      return res.status(200).send({
+        message: 'Evaluated successfully'
+      })
+    }
+  )
+
+  app.get(
+    '/api/admin/evaluate/evaluations',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const db = await getPool()
+      const result = await db.query(`
+        SELECT *
+        FROM \`form_evaluation\`
+        `)
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  app.get(
+    '/api/admin/evaluate/evaluations/:evaluationId',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { evaluationId } = req.params
+      const db = await getPool()
+      const result = await db.query(
+        `
+      SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props
+      FROM \`form_evaluation\` e
+      LEFT JOIN \`user\` u
+      ON e.evaluator_id = u.id
+      LEFT JOIN \`user\` u2
+      ON e.approver_id = u2.id
+      LEFT JOIN \`form_published\` p
+      ON e.form_published_id = p.id
+      WHERE e.id = ?
+      `,
+        [evaluationId]
+      )
+
+      if (result.length > 0) {
+        res.json(result)
+      } else {
+        res.json([])
+      }
+    }
+  )
+
+  app.get(
+    '/api/admin/evaluate/approve/:evaluationId',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { evaluationId } = req.params
+      const { user_id } = req.user
+      const db = await getPool()
+      const eligible = await db.query(
+        `
+      SELECT \`evaluator_id\` FROM \`form_evaluation\` WHERE id = ?
+      `,
+        [evaluationId]
+      )
+      if (eligible.length > 0) {
+        if (eligible[0].evaluator_id === user_id) {
+          return res
+            .status(403)
+            .send({ message: 'You can not approve your own evaluation' })
+        }
+      } else {
+        return res.status(404).send({ message: 'Evaluation not found' })
+      }
+      await db.query(
+        `
+      UPDATE \`form_evaluation\` SET \`approver_id\` = ?, \`approved_at\` = CURRENT_TIMESTAMP WHERE id = ?
+      `,
+        [user_id, evaluationId]
+      )
+
+      return res.send({ message: 'Approved' })
+    }
+  )
+
+  app.get(
+    '/api/admin/evaluate/:evaluationId/vote/:vote',
+    mustHaveValidToken,
+    mustBeAdmin,
+    async (req, res) => {
+      const { evaluationId, vote } = req.params
+      const db = await getPool()
+      let operation = '+'
+      if (vote === 'down') {
+        operation = '-'
+      }
+      await db.query(
+        `
+      UPDATE \`form_evaluation\` SET \`vote\` = \`vote\` ${operation} 1 WHERE id = ?
+      `,
+        [evaluationId]
+      )
+
+      return res.send({ message: 'voted' })
+    }
+  )
 }
