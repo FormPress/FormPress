@@ -41,7 +41,11 @@ class App extends Component {
     super(props)
     this.state = {
       capabilities: {},
-      user: { getUsages: this.getUsages, whoAmI: this.whoAmI },
+      user: {
+        getUsages: this.getUsages,
+        whoAmI: this.whoAmI,
+        isInDemoMode: this.isInDemoMode
+      },
       loading: true,
       hMenuOpen: false
     }
@@ -59,6 +63,16 @@ class App extends Component {
 
     // This is to prevent re-rendering of the app component during the calls above.
     this.setState({ loading: false })
+  }
+
+  isInDemoMode = () => {
+    const { user_id } = this.state
+
+    if (user_id === 0) {
+      return true
+    }
+
+    return false
   }
 
   getUsages = async () => {
@@ -87,7 +101,10 @@ class App extends Component {
     if (data.status === 'done') {
       const incomingAuthObject = data.auth
 
-      incomingAuthObject.loggedIn = true
+      // Demo case
+      if (incomingAuthObject.user_id !== 0) {
+        incomingAuthObject.loggedIn = true
+      }
 
       this.handleSetAuth(incomingAuthObject)
     }
@@ -271,6 +288,19 @@ class App extends Component {
                           activeClassName="selected"
                           onClick={this.toggleHMenu}>
                           Sign Up
+                        </NavLink>
+                      </li>,
+                      <li key="4">
+                        <NavLink
+                          to="/editor/demo/builder"
+                          activeClassName="selected"
+                          isActive={(match) => {
+                            if (match.params?.formId === 'demo') {
+                              return true
+                            }
+                            return false
+                          }}>
+                          Demo
                         </NavLink>
                       </li>
                     ]}
