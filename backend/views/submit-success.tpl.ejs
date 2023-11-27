@@ -17,15 +17,17 @@
         <%} else {null} %>
     </body>
     <script>
-        var UUID = "<%= UUID %>"
-        var BACKEND = "<%= BACKEND %>"
+      var UUID = "<%= typeof UUID !== 'undefined' ? UUID : undefined %>"
+      var BACKEND = "<%= typeof BACKEND !== 'undefined' ? BACKEND : undefined %>"
     </script>
     <script>
+      if (UUID !== undefined && BACKEND !== undefined) {
         window.onbeforeunload = function() {
-            window.setTimeout(function () {
-                window.location = `${BACKEND}/form/view/${UUID}`;
-            }, 0);
-            window.onbeforeunload = null;
+          window.setTimeout(function () {
+            window.location = `${BACKEND}/form/view/${UUID}`;
+          }, 0);
+          window.onbeforeunload = null;
         }
+      }
     </script>
 </html>
