@@ -49,3 +49,48 @@
 .loginForm a:hover {
   color: #1c5c85;
 }
+
+.viContainer {
+  font-family: 'Montserrat', sans-serif;
+  margin: auto;
+}
+
+.viCharacter {
+  color: #333;
+  border: 2px solid #1c5c85;
+  border-radius: 3px;
+}
+
+.viCharacter--inactive {
+  color: gainsboro;
+  border-color: grey;
+  background: white;
+}
+.resend-verification {
+  padding: 15px 40px;
+  width: 100%;
+  font-size: medium;
+  color: #4a4747;
+  font-family: 'Montserrat';
+  margin: 0 0 50px 0;
+}
+
+.resend-button {
+  float: right;
+  border: none;
+  background: none;
+  text-decoration: underline;
+  color: #08089f;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.viContainer--loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+button.resend-button:disabled {
+  color: #4a4747;
+  cursor: not-allowed;
+}

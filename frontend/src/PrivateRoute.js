@@ -12,7 +12,7 @@ const PrivateRoute = ({ children, component, ...rest }) => {
           render={(props) => {
             const Component = component
             const demoModeOverride =
-              value.auth.user_id === 0 && props.match.params?.formId === 'demo'
+              value.auth.user_id === 0 && props.match?.params?.formId === 'demo'
 
             return value.auth.loggedIn === true || demoModeOverride === true ? (
               component !== undefined ? (
