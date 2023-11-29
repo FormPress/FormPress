@@ -12,7 +12,7 @@ const loginWithGoogle = require(path.resolve('middleware', 'loginwithgoogle'))
 const { model } = require(path.resolve('helper'))
 const userModel = model.user
 
-const demoAuthentication = async (req, res, next) => {
+const demoAuthentication = async (req, res) => {
   const demoUser = {
     user_id: 0,
     email: 'demo@formpress.org',
