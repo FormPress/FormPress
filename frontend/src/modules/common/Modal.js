@@ -86,7 +86,8 @@ class Modal extends Component {
             <div
               onClick={(e) => {
                 e.stopPropagation()
-              }}>
+              }}
+              className="modal-children">
               {this.props.children}
             </div>
           ) : (

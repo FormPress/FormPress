@@ -10,6 +10,14 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
+.modal-children {
+  left: 50%;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+}
+
 .modal-wrapper {
   left: 50%;
   position: absolute;
