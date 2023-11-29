@@ -289,7 +289,12 @@ class PostSubmission extends Component {
     })
   }
 
-  handleOnCreateNewPageClick() {
+  async handleOnCreateNewPageClick() {
+    const saveSuccess = await this.props.handleSaveClick()
+    if (saveSuccess === false) {
+      return
+    }
+
     if (this.props.canEdit) {
       const modalContent = {
         header: 'Create new thank you page',
