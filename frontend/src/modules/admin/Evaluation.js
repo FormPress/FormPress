@@ -7,12 +7,22 @@ export default class Evaluation extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      selectedOption: 'notapproved',
       page: 'evaluate',
       forms: [],
       loading: false,
       selectedForm: '',
       message: ''
     }
+
+    this.handleSelectClick = this.handleSelectClick.bind(this)
+    this.getFormsToEvaluate = this.getFormsToEvaluate.bind(this)
+    this.getEvaluationsToReview = this.getEvaluationsToReview.bind(this)
+    this.selectForm = this.selectForm.bind(this)
+    this.evaluateForm = this.evaluateForm.bind(this)
+    this.approveEvaluation = this.approveEvaluation.bind(this)
+    this.voteEvaluation = this.voteEvaluation.bind(this)
+    this.deleteEvaluation = this.deleteEvaluation.bind(this)
   }
 
   async getFormsToEvaluate() {
@@ -23,29 +33,26 @@ export default class Evaluation extends Component {
     this.setState({ forms: data })
   }
 
-  async getEvaluationsToReview() {
+  async getEvaluationsToReview(evalType) {
+    let type = ''
+    if (evalType === undefined) {
+      type = this.state.selectedOption
+    } else {
+      type = evalType
+    }
     const { data } = await api({
-      resource: `/api/admin/evaluate/evaluations`
+      resource: `/api/admin/evaluate/evaluations/${type}`
     })
 
     this.setState({ forms: data })
   }
 
-  async getForm(publishId) {
-    const { data } = await api({
-      resource: `/api/admin/evaluate/forms/${publishId}`
-    })
+  selectForm(id) {
+    const selectedForm = this.state.forms.filter((form) => form.id === id)
 
-    this.setState({ selectedForm: data[0] })
+    this.setState({ selectedForm: selectedForm[0] })
   }
 
-  async getEvaluation(evaluationId) {
-    const { data } = await api({
-      resource: `/api/admin/evaluate/evaluations/${evaluationId}`
-    })
-
-    this.setState({ selectedForm: data[0] })
-  }
   async evaluateForm(type) {
     await api({
       resource: `/api/admin/evaluate/forms/${this.state.selectedForm.id}`,
@@ -61,17 +68,35 @@ export default class Evaluation extends Component {
   }
 
   async approveEvaluation() {
-    const data = await api({
+    await api({
       resource: `/api/admin/evaluate/approve/${this.state.selectedForm.id}`
     })
 
-    this.getEvaluationsToReview()
+    const forms = [...this.state.forms]
+    const updatedForms = forms.filter(
+      (form) => form.id !== this.state.selectedForm.id
+    )
+    this.setState({ selectedForm: '', forms: updatedForms })
+  }
+
+  async deleteEvaluation() {
+    const { selectedForm } = this.state
+    await api({
+      resource: `/api/admin/evaluate/delete/${selectedForm.id}/${selectedForm.form_published_id}`
+    })
+
+    const forms = [...this.state.forms]
+    const updatedForms = forms.filter(
+      (form) => form.id !== this.state.selectedForm.id
+    )
+
+    this.setState({ selectedForm: '', forms: updatedForms })
   }
 
   async voteEvaluation(vote) {
     const { selectedForm, forms } = this.state
 
-    const data = await api({
+    await api({
       resource: `/api/admin/evaluate/${selectedForm.id}/vote/${vote}`
     })
 
@@ -91,11 +116,36 @@ export default class Evaluation extends Component {
     this.setState({ forms: updatedForms })
   }
 
+  async handleSelectClick(event) {
+    const selectedOption = event.target.value
+
+    this.setState({ selectedOption: selectedOption, selectedForm: '' })
+    this.getEvaluationsToReview(selectedOption)
+  }
+
   renderReviewEvaluations() {
-    const { forms } = this.state
+    const { forms, selectedOption } = this.state
+    const options = [
+      { value: 'notapproved', label: 'Not Approved' },
+      { value: 'good', label: 'Good' },
+      { value: 'bad', label: 'Bad' },
+      { value: 'approved', label: 'Approved' }
+    ]
     return (
       <div>
         <div>Review Evaluations</div>
+        <select
+          value={this.state.selectedOption}
+          onChange={this.handleSelectClick}>
+          <option value="" disabled>
+            Select an option
+          </option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         <div
           className="load-forms"
           onClick={() => this.getEvaluationsToReview()}>
@@ -104,15 +154,21 @@ export default class Evaluation extends Component {
         <div className="eval-list">
           {forms.map((form) => (
             <div key={form.id}>
-              <div onClick={() => this.getEvaluation(form.id)}>
+              <div onClick={() => this.selectForm(form.id)}>
                 <span>Id: {form.id} </span>
                 <span>Form Id: {form.form_id}</span>
                 <span>Form Published Id: {form.form_published_id}</span>
                 <span>Type : {form.type}</span>
-                <span>Evaluator Id: {form.evaluator_id}</span>
-                <span>Approver Id: {form.approver_id}</span>
+                <span>Evaluator: {form.evaluator}</span>
                 <span>Evaluated At: {form.evaluated_at}</span>
-                <span>Approved At: {form.approved_at}</span>
+                {selectedOption === 'approved' ? (
+                  <>
+                    <span>Approver: {form.approver}</span>
+                    <span>Approved At: {form.approved_at}</span>
+                  </>
+                ) : (
+                  ''
+                )}
                 <span>Vote: {form.vote}</span>
               </div>
             </div>
@@ -125,6 +181,7 @@ export default class Evaluation extends Component {
 
   renderEvaluateForms() {
     const { forms } = this.state
+    const link = `${process.env.FE_BACKEND || global.env.FE_BACKEND}/form/view/`
     return (
       <div>
         <div>Evaluate Forms</div>
@@ -134,9 +191,14 @@ export default class Evaluation extends Component {
         <div className="eval-list">
           {forms.map((form) => (
             <div key={form.id}>
-              <div onClick={() => this.getForm(form.id)}>
+              <div onClick={() => this.selectForm(form.id)}>
                 <span>Id: {form.id} </span>
-                <span>{form.title}</span>
+                <span>User: {form.email}</span>
+                <span>
+                  <a href={link + form.uuid} target="blank">
+                    Link
+                  </a>
+                </span>
               </div>
             </div>
           ))}
@@ -158,15 +220,13 @@ export default class Evaluation extends Component {
         return (
           <div className="selected-form">
             <div>Form Id: {selectedForm.id}</div>
-            <div>Form title: {selectedForm.title}</div>
+            <div>User: {selectedForm.email}</div>
             <div>Form Uuid: {selectedForm.uuid}</div>
             <div>
               Form link:{' '}
               <a href={link} target="blank">
-                {selectedForm.title}
+                Link
               </a>
-              It will be the last published form. Refer to props for correct
-              values
             </div>
             <div>Form Props: {selectedForm.props}</div>
             <div>Evaluate</div>
@@ -192,9 +252,8 @@ export default class Evaluation extends Component {
             <div>Type : {selectedForm.type}</div>
             <div>Evaluated By: {selectedForm.evaluator}</div>
             <div>Evaluated At: {selectedForm.evaluated_at}</div>
-            <div>Approved By: {selectedForm.approver}</div>
-            <div>Approved At: {selectedForm.approved_at}</div>
             <div>Vote : {selectedForm.vote}</div>
+            <div onClick={() => this.deleteEvaluation()}>DELETE EVALUATION</div>
             {selectedForm.approver_id === null ? (
               <div
                 className="eval-button"
@@ -202,7 +261,10 @@ export default class Evaluation extends Component {
                 Approve
               </div>
             ) : (
-              ''
+              <>
+                <div>Approved By: {selectedForm.approver}</div>
+                <div>Approved At: {selectedForm.approved_at}</div>
+              </>
             )}
             <div
               className="eval-button"

@@ -1162,6 +1162,16 @@ module.exports = (app) => {
     }
 
     let form = result
+
+    const userResult = await db.query(
+      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
+      [form.user_id]
+    )
+
+    if (userResult[0].isActive === 0) {
+      return res.status(404).send('Error: Form not found')
+    }
+
     if (req.query.preview !== 'true' && form.published_version !== 0) {
       const publishedResult = await formPublishedModel.get({
         form_id: form.id,

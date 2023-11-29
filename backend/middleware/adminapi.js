@@ -434,12 +434,19 @@ module.exports = (app) => {
     mustBeAdmin,
     async (req, res) => {
       const db = await getPool()
-      const result = await db.query(`
-        SELECT *
-        FROM \`form_published\`
-        WHERE evaluated = 0 ORDER BY \`id\` DESC LIMIT 10
-      `)
+      const limitPerRun = 10
+      let query = `
+        SELECT fp.id, fp.form_id, fp.props, u.id as uid, u.email as email, f.uuid
+        FROM form_published fp, user u, form f
+        WHERE fp.user_id = u.id AND fp.form_id = f.id AND u.\`isActive\` = 1 AND fp.\`version\` = f.\`published_version\` AND fp.evaluated = 0
+        ORDER BY fp.id ASC LIMIT ${limitPerRun}
+      `
+      const result = await db.query(query)
       if (result.length > 0) {
+        result.forEach((form) => {
+          const props = JSON.parse(form.props)
+          form.props = JSON.stringify(props.elements)
+        })
         res.json(result)
       } else {
         res.json([])
@@ -505,17 +512,64 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/api/admin/evaluate/evaluations',
+    '/api/admin/evaluate/evaluations/:specs',
     mustHaveValidToken,
     mustBeAdmin,
     async (req, res) => {
       const db = await getPool()
-      const result = await db.query(`
-        SELECT *
-        FROM \`form_evaluation\`
-        `)
+      const limitPerRun = 10
+      const { specs } = req.params
+      let query = ''
+      if (specs === 'approved') {
+        query = `
+          SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props
+          FROM \`form_evaluation\` e
+          LEFT JOIN \`user\` u
+          ON e.evaluator_id = u.id
+          LEFT JOIN \`user\` u2
+          ON e.approver_id = u2.id
+          LEFT JOIN \`form_published\` p
+          ON e.form_published_id = p.id
+          WHERE e.approver_id IS NOT NULL ORDER BY id ASC
+        `
+      } else if (specs === 'notapproved') {
+        query = `
+          SELECT e.*, u.email AS evaluator, p.props
+          FROM \`form_evaluation\` e
+          LEFT JOIN \`user\` u
+          ON e.evaluator_id = u.id
+          LEFT JOIN \`form_published\` p
+          ON e.form_published_id = p.id
+          WHERE e.approver_id IS NULL ORDER BY e.id ASC LIMIT ${limitPerRun}
+        `
+      } else if (specs === 'good') {
+        query = `
+          SELECT e.*, u.email AS evaluator, p.props
+          FROM \`form_evaluation\` e
+          LEFT JOIN \`user\` u
+          ON e.evaluator_id = u.id
+          LEFT JOIN \`form_published\` p
+          ON e.form_published_id = p.id
+          WHERE e.approver_id IS NULL AND e.type = 'good' ORDER BY e.id ASC LIMIT ${limitPerRun}
+        `
+      } else if (specs === 'bad') {
+        query = `
+          SELECT e.*, u.email AS evaluator, p.props
+          FROM \`form_evaluation\` e
+          LEFT JOIN \`user\` u
+          ON e.evaluator_id = u.id
+          LEFT JOIN \`form_published\` p
+          ON e.form_published_id = p.id
+          WHERE e.approver_id IS NULL AND e.type = 'bad' ORDER BY id ASC LIMIT ${limitPerRun}
+        `
+      }
+      const result = await db.query(query)
 
       if (result.length > 0) {
+        result.forEach((form) => {
+          const props = JSON.parse(form.props)
+          form.props = JSON.stringify(props.elements)
+        })
         res.json(result)
       } else {
         res.json([])
@@ -524,32 +578,29 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/api/admin/evaluate/evaluations/:evaluationId',
+    '/api/admin/evaluate/delete/:evaluationId/:form_published_id',
     mustHaveValidToken,
     mustBeAdmin,
     async (req, res) => {
-      const { evaluationId } = req.params
+      const { evaluationId, form_published_id } = req.params
       const db = await getPool()
-      const result = await db.query(
+
+      await db.query(
         `
-      SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props
-      FROM \`form_evaluation\` e
-      LEFT JOIN \`user\` u
-      ON e.evaluator_id = u.id
-      LEFT JOIN \`user\` u2
-      ON e.approver_id = u2.id
-      LEFT JOIN \`form_published\` p
-      ON e.form_published_id = p.id
-      WHERE e.id = ?
+        DELETE FROM \`form_evaluation\`
+        WHERE \`id\` = ?
       `,
         [evaluationId]
       )
-
-      if (result.length > 0) {
-        res.json(result)
-      } else {
-        res.json([])
-      }
+      await db.query(
+        `
+        UPDATE \`form_published\` SET \`evaluated\` = 0 WHERE id = ?
+      `,
+        [form_published_id]
+      )
+      return res.status(200).send({
+        message: 'Deleted evaluation successfully'
+      })
     }
   )
 
@@ -561,21 +612,7 @@ module.exports = (app) => {
       const { evaluationId } = req.params
       const { user_id } = req.user
       const db = await getPool()
-      const eligible = await db.query(
-        `
-      SELECT \`evaluator_id\` FROM \`form_evaluation\` WHERE id = ?
-      `,
-        [evaluationId]
-      )
-      if (eligible.length > 0) {
-        if (eligible[0].evaluator_id === user_id) {
-          return res
-            .status(403)
-            .send({ message: 'You can not approve your own evaluation' })
-        }
-      } else {
-        return res.status(404).send({ message: 'Evaluation not found' })
-      }
+
       await db.query(
         `
       UPDATE \`form_evaluation\` SET \`approver_id\` = ?, \`approved_at\` = CURRENT_TIMESTAMP WHERE id = ?
