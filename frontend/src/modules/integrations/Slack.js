@@ -145,7 +145,11 @@ export default class Slack extends Component {
       })
 
       this.props.setIntegration(tempIntegrationObject)
-      await this.props.handleSaveClick()
+
+      const saveSuccess = await this.props.handleSaveClick()
+      if (saveSuccess === false) {
+        return
+      }
     } else {
       //IF THE URL IS INVALID
       this.setState({
