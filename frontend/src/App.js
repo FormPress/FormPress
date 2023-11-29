@@ -46,7 +46,10 @@ class App extends Component {
         whoAmI: this.whoAmI,
         isInDemoMode: this.isInDemoMode
       },
-      loading: true,
+      appStateHandlers: {
+        setLoadingState: this.setLoadingState
+      },
+      loading: 'hard',
       hMenuOpen: false
     }
 
@@ -62,7 +65,7 @@ class App extends Component {
     await this.getUsages()
 
     // This is to prevent re-rendering of the app component during the calls above.
-    this.setState({ loading: false })
+    this.setLoadingState(false)
   }
 
   isInDemoMode = () => {
@@ -108,8 +111,6 @@ class App extends Component {
 
       this.handleSetAuth(incomingAuthObject)
     }
-
-    this.setState({ meCompleted: true })
   }
 
   //load env vars
@@ -187,13 +188,22 @@ class App extends Component {
     this.setState({ hMenuOpen: !this.state.hMenuOpen })
   }
 
+  setLoadingState = (state) => {
+    if (state === 'hard' || state === 'soft') {
+      this.setState({ loading: state })
+    } else {
+      this.setState({ loading: false })
+    }
+  }
+
   render() {
     const auth = this.getAuthContextValue()
 
     const generalContext = {
       auth,
       capabilities: this.state.capabilities,
-      user: this.state.user
+      user: this.state.user,
+      appStateHandlers: this.state.appStateHandlers
     }
 
     let homeUrl = undefined
@@ -208,7 +218,7 @@ class App extends Component {
       redirectPage = <Redirect path="*" to="/404" />
     }
 
-    if (this.state.loading) {
+    if (this.state.loading === 'hard') {
       return (
         <div className="loading-logo">
           <FPLoader />
@@ -219,6 +229,13 @@ class App extends Component {
     return (
       <Router>
         <GeneralContext.Provider value={generalContext}>
+          {this.state.loading === 'soft' ? (
+            <div className="loading-logo">
+              <FPLoader />
+            </div>
+          ) : (
+            ''
+          )}
           <header
             className={'header' + (auth.loggedIn === true ? ' loggedIn' : '')}>
             <div className="header-center">
@@ -294,12 +311,9 @@ class App extends Component {
                         <NavLink
                           to="/editor/demo/builder"
                           activeClassName="selected"
-                          isActive={(match) => {
-                            if (match.params?.formId === 'demo') {
-                              return true
-                            }
-                            return false
-                          }}>
+                          isActive={(match, location) =>
+                            location.pathname.startsWith('/editor/demo')
+                          }>
                           Demo
                         </NavLink>
                       </li>
