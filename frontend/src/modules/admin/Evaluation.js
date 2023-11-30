@@ -132,49 +132,71 @@ export default class Evaluation extends Component {
       { value: 'approved', label: 'Approved' }
     ]
     return (
-      <div>
-        <div>Review Evaluations</div>
-        <select
-          value={this.state.selectedOption}
-          onChange={this.handleSelectClick}>
-          <option value="" disabled>
-            Select an option
-          </option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <div
-          className="load-forms"
-          onClick={() => this.getEvaluationsToReview()}>
-          Load Evaluations
+      <div className="eval-wrapper">
+        <div className="eval-header">
+          <div className="eval-title">Review Evaluations</div>
+
+          <div className="load-reviews">
+            <select
+              value={this.state.selectedOption}
+              onChange={this.handleSelectClick}>
+              <option value="" disabled>
+                Select an option
+              </option>
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span onClick={() => this.getEvaluationsToReview()}>
+              Load Evaluations
+            </span>
+          </div>
         </div>
-        <div className="eval-list">
-          {forms.map((form) => (
-            <div key={form.id}>
-              <div onClick={() => this.selectForm(form.id)}>
-                <span>Id: {form.id} </span>
-                <span>Form Id: {form.form_id}</span>
-                <span>Form Published Id: {form.form_published_id}</span>
-                <span>Type : {form.type}</span>
-                <span>Evaluator: {form.evaluator}</span>
-                <span>Evaluated At: {form.evaluated_at}</span>
-                {selectedOption === 'approved' ? (
+        <div className="eval-content">
+          <div className="review-eval-list">
+            {this.state.forms.length !== 0 && (
+              <div className="header-row-eval">
+                <span>ID</span>
+                <span>Form ID</span>
+                <span>Form Published ID</span>
+                <span>Type</span>
+                <span>Evaluator</span>
+                <span>Evaluated At</span>
+                {selectedOption === 'approved' && (
                   <>
-                    <span>Approver: {form.approver}</span>
-                    <span>Approved At: {form.approved_at}</span>
+                    <span>Approver</span>
+                    <span>Approved At</span>
                   </>
-                ) : (
-                  ''
                 )}
-                <span>Vote: {form.vote}</span>
+                <span>Vote</span>
               </div>
-            </div>
-          ))}
+            )}
+
+            {forms.map((form) => (
+              <div
+                key={form.id}
+                onClick={() => this.selectForm(form.id)}
+                className="data-row-eval">
+                <span>{form.id}</span>
+                <span>{form.form_id}</span>
+                <span>{form.form_published_id}</span>
+                <span>{form.type}</span>
+                <span>{form.evaluator}</span>
+                <span>{form.evaluated_at}</span>
+                {selectedOption === 'approved' && (
+                  <>
+                    <span>{form.approver}</span>
+                    <span>{form.approved_at}</span>
+                  </>
+                )}
+                <span>{form.vote}</span>
+              </div>
+            ))}
+          </div>
+          {this.renderForm()}
         </div>
-        {this.renderForm()}
       </div>
     )
   }
@@ -183,27 +205,43 @@ export default class Evaluation extends Component {
     const { forms } = this.state
     const link = `${process.env.FE_BACKEND || global.env.FE_BACKEND}/form/view/`
     return (
-      <div>
-        <div>Evaluate Forms</div>
-        <div className="load-forms" onClick={() => this.getFormsToEvaluate()}>
-          Load Forms
+      <div className="eval-wrapper">
+        <div className="eval-header">
+          <div className="eval-title">Evaluate Forms</div>
+          <div className="load-forms" onClick={() => this.getFormsToEvaluate()}>
+            Load Forms
+          </div>
         </div>
-        <div className="eval-list">
-          {forms.map((form) => (
-            <div key={form.id}>
-              <div onClick={() => this.selectForm(form.id)}>
-                <span>Id: {form.id} </span>
-                <span>User: {form.email}</span>
+        <div className="eval-content">
+          <div className="eval-list">
+            {this.state.forms.length !== 0 && (
+              <div className="header-row-form">
+                <span>ID</span>
+                <span>User</span>
+                <span>Link</span>
+              </div>
+            )}
+
+            {forms.map((form) => (
+              <div
+                key={form.id}
+                onClick={() => this.selectForm(form.id)}
+                className="data-row-form">
+                <span>{form.id}</span>
+                <span>{form.email}</span>
                 <span>
-                  <a href={link + form.uuid} target="blank">
+                  <a
+                    href={link + form.uuid}
+                    target="_blank"
+                    rel="noopener noreferrer">
                     Link
                   </a>
                 </span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          {this.renderForm()}
         </div>
-        {this.renderForm()}
       </div>
     )
   }
@@ -211,7 +249,7 @@ export default class Evaluation extends Component {
   renderForm() {
     const { selectedForm, page } = this.state
     if (selectedForm === '') {
-      return 'Select Form'
+      return ''
     } else {
       if (page === 'evaluate') {
         const link = `${
@@ -219,62 +257,81 @@ export default class Evaluation extends Component {
         }/form/view/${selectedForm.uuid}`
         return (
           <div className="selected-form">
-            <div>Form Id: {selectedForm.id}</div>
-            <div>User: {selectedForm.email}</div>
-            <div>Form Uuid: {selectedForm.uuid}</div>
-            <div>
-              Form link:{' '}
-              <a href={link} target="blank">
-                Link
-              </a>
+            <div className="form-info">
+              <div>
+                <b>Form Id</b>: {selectedForm.id}
+              </div>
+              <div>
+                <b>User:</b> {selectedForm.email}
+              </div>
+              <div>
+                <b>Form Uuid:</b> {selectedForm.uuid}
+              </div>
+              <div>
+                <b>Link:</b>{' '}
+                <a href={link} target="_blank" rel="noopener noreferrer">
+                  Link
+                </a>
+              </div>
+              <div>
+                <b>Form Props:</b> {selectedForm.props}
+              </div>
             </div>
-            <div>Form Props: {selectedForm.props}</div>
-            <div>Evaluate</div>
-            <div
-              className="eval-button"
-              onClick={() => this.evaluateForm('good')}>
-              Good
-            </div>
-            <div
-              className="eval-button"
-              onClick={() => this.evaluateForm('bad')}>
-              Bad
+            <div className="eval-controls">
+              <div
+                className="eval-button"
+                onClick={() => this.evaluateForm('good')}>
+                Good
+              </div>
+              <div
+                className="eval-button"
+                onClick={() => this.evaluateForm('bad')}>
+                Bad
+              </div>
             </div>
           </div>
         )
       } else if (page === 'review') {
         return (
-          <div className="selected-form">
-            <div>Evaluation Id: {selectedForm.id}</div>
-            <div>Form Id: {selectedForm.form_id}</div>
-            <div>Published Id: {selectedForm.form_published_id}</div>
-            <div>Form Props: {selectedForm.props}</div>
-            <div>Type : {selectedForm.type}</div>
-            <div>Evaluated By: {selectedForm.evaluator}</div>
-            <div>Evaluated At: {selectedForm.evaluated_at}</div>
-            <div>Vote : {selectedForm.vote}</div>
-            <div onClick={() => this.deleteEvaluation()}>DELETE EVALUATION</div>
-            {selectedForm.approver_id === null ? (
+          <div className="selected-eval-form">
+            <div className="form-info">
+              <div>Evaluation Id: {selectedForm.id}</div>
+              <div>Form Id: {selectedForm.form_id}</div>
+              <div>Published Id: {selectedForm.form_published_id}</div>
+              <div>Form Props: {selectedForm.props}</div>
+              <div>Type : {selectedForm.type}</div>
+              <div>Evaluated By: {selectedForm.evaluator}</div>
+              <div>Evaluated At: {selectedForm.evaluated_at}</div>
+              <div>Vote : {selectedForm.vote}</div>
+              {selectedForm.approver_id === null ? (
+                <div
+                  className="eval-button"
+                  onClick={() => this.approveEvaluation()}>
+                  Approve
+                </div>
+              ) : (
+                <>
+                  <div>Approved By: {selectedForm.approver}</div>
+                  <div>Approved At: {selectedForm.approved_at}</div>
+                </>
+              )}
+            </div>
+            <div className="eval-controls">
               <div
                 className="eval-button"
-                onClick={() => this.approveEvaluation()}>
-                Approve
+                onClick={() => this.voteEvaluation('up')}>
+                Vote Up
               </div>
-            ) : (
-              <>
-                <div>Approved By: {selectedForm.approver}</div>
-                <div>Approved At: {selectedForm.approved_at}</div>
-              </>
-            )}
-            <div
-              className="eval-button"
-              onClick={() => this.voteEvaluation('up')}>
-              Vote Up
-            </div>
-            <div
-              className="eval-button"
-              onClick={() => this.voteEvaluation('down')}>
-              Vote Down
+              <div
+                className="eval-button"
+                onClick={() => this.voteEvaluation('down')}>
+                Vote Down
+              </div>
+              <div
+                className="eval-button"
+                onClick={() => this.deleteEvaluation()}>
+                Delete
+              </div>
             </div>
           </div>
         )
@@ -295,18 +352,18 @@ export default class Evaluation extends Component {
     return (
       <div className="evaluation">
         <div className="eval-nav">
-          <span
+          <div
             onClick={() =>
               this.setState({ page: 'evaluate', selectedForm: '', forms: [] })
             }>
             Evaluate Forms
-          </span>
-          <span
+          </div>
+          <div
             onClick={() =>
               this.setState({ page: 'review', selectedForm: '', forms: [] })
             }>
             Review Evaluations
-          </span>
+          </div>
         </div>
         {this.renderEvaluationPage()}
       </div>
