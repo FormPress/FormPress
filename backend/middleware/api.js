@@ -1342,8 +1342,8 @@ module.exports = (app) => {
       title: form.title,
       form: str,
       postTarget,
-      rules: form.props.rules,
-      elements: form.props.elements,
+      rules: form.props.rules || [],
+      elements: form.props.elements || [],
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
       BACKEND,
       FORMID: id
@@ -1415,7 +1415,9 @@ module.exports = (app) => {
       title: form.title,
       form: str,
       postTarget: `${BACKEND}/templates/submit/${form_id}`,
-      elements: form.props.elements,
+      rules: form.props.rules || [],
+      elements: form.props.elements || [],
+      showBranding: false,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
       BACKEND,
       FORMID: form_id
