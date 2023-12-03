@@ -57,6 +57,10 @@
   min-width: 50%;
   margin: 10px;
 }
+.review-eval-list.approved {
+  min-width: 65%;
+  margin: 10px;
+}
 .eval-list > div {
   padding: 10px;
   border: 1px solid #719fbd;
@@ -65,6 +69,9 @@
   background-color: #719fbd;
 }
 .eval-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   padding: 10px;
   background: #e2e2e2;
@@ -82,62 +89,60 @@
   word-wrap: break-word;
 }
 .selected-eval-form {
-  min-width: 40%;
+  min-width: 30%;
   margin: 10px;
   word-wrap: break-word;
 }
-.eval-list > .header-row-form {
+.eval-list > .header-row {
   font-weight: bold;
   background-color: #719fbd;
   display: flex;
+  align-items: center;
   padding: 8px;
 }
-.eval-list > .header-row-form span:nth-child(1) {
+.header-row > span {
+  text-align: center;
+}
+.data-row > span {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.eval-list > .data-row span:nth-child(1),
+.eval-list > .header-row span:nth-child(1) {
   flex: 1;
 }
-.eval-list > .header-row-form span:nth-child(2) {
+.eval-list > .data-row span:nth-child(2),
+.eval-list > .header-row span:nth-child(2) {
   flex: 7;
 }
-.eval-list > .header-row-form span:nth-child(3) {
+.eval-list > .data-row span:nth-child(3),
+.eval-list > .header-row span:nth-child(3) {
   flex: 2;
 }
-.eval-list > .data-row-form {
+.eval-list > .data-row {
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  padding: 8px;
 }
-.eval-list > .data-row-eval {
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  padding: 8px;
+.data-row.selected {
+  background-color: #719fbd;
 }
-.eval-list > .data-row-form:hover {
-  background-color: #f9f9f9;
+.eval-list > .data-row:hover {
+  background-color: #719fbd;
 }
-.eval-list > .data-row-form span {
+.eval-list > .data-row span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.eval-list > .data-row-form span:nth-child(1) {
-  flex: 1;
-}
-.eval-list > .data-row-form span:nth-child(2) {
-  flex: 7;
-}
-.eval-list > .data-row-form span:nth-child(3) {
-  flex: 2;
-}
 .eval-list span {
   text-align: center;
 }
-.eval-list > .data-row-form a {
+.eval-list > .data-row a {
   text-decoration: none;
   color: #007bff;
 }
-.eval-list > .data-row-form a:hover {
+.eval-list > .data-row a:hover {
   text-decoration: underline;
 }
 .eval-content {
@@ -154,75 +159,88 @@
   border: 1px solid #719fbd;
   word-wrap: break-word;
 }
-.review-eval-list > .header-row-eval {
+.review-eval-list > .header-row {
   font-weight: bold;
   background-color: #719fbd;
   display: flex;
+  align-items: center;
   padding: 8px;
 }
-.review-eval-list > .header-row-eval span:nth-child(1) {
-  flex: 1;
-}
-.review-eval-list > .header-row-eval span:nth-child(2) {
-  flex: 1;
-}
-.review-eval-list > .header-row-eval span:nth-child(3) {
-  flex: 2;
-}
-.review-eval-list > .header-row-eval span:nth-child(4) {
-  flex: 1;
-}
-.review-eval-list > .header-row-eval span:nth-child(5) {
-  flex: 5;
-}
-.review-eval-list > .header-row-eval span:nth-child(6) {
-  flex: 5;
-}
-.review-eval-list > .header-row-eval span:nth-child(7) {
-  flex: 1;
-}
-
-.review-eval-list > .data-row-eval {
+.review-eval-list > .data-row {
   display: flex;
-  justify-content: space-between;
   padding: 8px;
 }
-.review-eval-list > .data-row-eval:hover {
-  background-color: #f9f9f9;
+.review-eval-list > .data-row:hover {
+  background-color: #719fbd;
 }
-.review-eval-list > .data-row-eval span {
-  overflow: hidden;
+.review-eval-list > .data-row span {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.review-eval-list > .data-row-eval span:nth-child(1) {
-  flex: 1;
-}
-.review-eval-list > .data-row-eval span:nth-child(2) {
-  flex: 1;
-}
-.review-eval-list > .data-row-eval span:nth-child(3) {
-  flex: 2;
-}
-.review-eval-list > .data-row-eval span:nth-child(4) {
-  flex: 1;
-}
-.review-eval-list > .data-row-eval span:nth-child(5) {
-  flex: 5;
-}
-.review-eval-list > .data-row-eval span:nth-child(6) {
-  flex: 5;
-}
-.review-eval-list > .data-row-eval span:nth-child(7) {
-  flex: 1;
-}
-.review-eval-list > .data-row-eval a {
-  text-decoration: none;
-  color: #007bff;
-}
-.review-eval-list > .data-row-eval a:hover {
-  text-decoration: underline;
-}
 .review-eval-list div {
   border: 1px solid #719fbd;
+}
+.review-eval-list > .data-row span:nth-child(1),
+.review-eval-list > .header-row span:nth-child(1) {
+  flex: 1;
+}
+.review-eval-list > .data-row span:nth-child(2),
+.review-eval-list > .header-row span:nth-child(2) {
+  flex: 1;
+}
+.review-eval-list > .data-row span:nth-child(3),
+.review-eval-list > .header-row span:nth-child(3) {
+  flex: 1;
+}
+.review-eval-list > .data-row span:nth-child(4),
+.review-eval-list > .header-row span:nth-child(4) {
+  flex: 1;
+}
+.review-eval-list > .data-row span:nth-child(5),
+.review-eval-list > .header-row span:nth-child(5) {
+  flex: 5;
+}
+.review-eval-list > .data-row span:nth-child(6),
+.review-eval-list > .header-row span:nth-child(6) {
+  flex: 5;
+}
+.review-eval-list > .data-row span:nth-child(7),
+.review-eval-list > .header-row span:nth-child(7) {
+  flex: 1;
+}
+.review-eval-list.approved > .data-row span:nth-child(1),
+.review-eval-list.approved > .header-row span:nth-child(1) {
+  flex: 1;
+}
+.review-eval-list.approved > .data-row span:nth-child(2),
+.review-eval-list.approved > .header-row span:nth-child(2) {
+  flex: 1;
+}
+.review-eval-list.approved > .data-row span:nth-child(3),
+.review-eval-list.approved > .header-row span:nth-child(3) {
+  flex: 2;
+}
+.review-eval-list.approved > .data-row span:nth-child(4),
+.review-eval-list.approved > .header-row span:nth-child(4) {
+  flex: 2;
+}
+.review-eval-list.approved > .data-row span:nth-child(5),
+.review-eval-list.approved > .header-row span:nth-child(5) {
+  flex: 8;
+}
+.review-eval-list.approved > .data-row span:nth-child(6),
+.review-eval-list.approved > .header-row span:nth-child(6) {
+  flex: 5;
+}
+.review-eval-list.approved > .data-row span:nth-child(7),
+.review-eval-list.approved > .header-row span:nth-child(7) {
+  flex: 8;
+}
+.review-eval-list.approved > .data-row span:nth-child(8),
+.review-eval-list.approved > .header-row span:nth-child(8) {
+  flex: 5;
+}
+.review-eval-list.approved > .data-row span:nth-child(9),
+.review-eval-list.approved > .header-row span:nth-child(9) {
+  flex: 1;
 }

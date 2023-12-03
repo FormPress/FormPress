@@ -124,7 +124,7 @@ export default class Evaluation extends Component {
   }
 
   renderReviewEvaluations() {
-    const { forms, selectedOption } = this.state
+    const { forms, selectedOption, selectedForm } = this.state
     const options = [
       { value: 'notapproved', label: 'Not Approved' },
       { value: 'good', label: 'Good' },
@@ -155,12 +155,16 @@ export default class Evaluation extends Component {
           </div>
         </div>
         <div className="eval-content">
-          <div className="review-eval-list">
+          <div
+            className={
+              'review-eval-list' +
+              (selectedOption === 'approved' ? ' approved' : '')
+            }>
             {this.state.forms.length !== 0 && (
-              <div className="header-row-eval">
+              <div className="header-row">
                 <span>ID</span>
                 <span>Form ID</span>
-                <span>Form Published ID</span>
+                <span>Form P. ID</span>
                 <span>Type</span>
                 <span>Evaluator</span>
                 <span>Evaluated At</span>
@@ -178,17 +182,31 @@ export default class Evaluation extends Component {
               <div
                 key={form.id}
                 onClick={() => this.selectForm(form.id)}
-                className="data-row-eval">
+                className={
+                  'data-row' +
+                  (form.id === selectedForm.id ? ' selected' : '') +
+                  (selectedOption === 'approved' ? ' approved' : '')
+                }>
                 <span>{form.id}</span>
                 <span>{form.form_id}</span>
                 <span>{form.form_published_id}</span>
                 <span>{form.type}</span>
                 <span>{form.evaluator}</span>
-                <span>{form.evaluated_at}</span>
+                <span>
+                  {new Date(form.evaluated_at)
+                    .toISOString()
+                    .slice(0, 16)
+                    .replace('T', ' ')}
+                </span>{' '}
                 {selectedOption === 'approved' && (
                   <>
                     <span>{form.approver}</span>
-                    <span>{form.approved_at}</span>
+                    <span>
+                      {new Date(form.approved_at)
+                        .toISOString()
+                        .slice(0, 16)
+                        .replace('T', ' ')}
+                    </span>
                   </>
                 )}
                 <span>{form.vote}</span>
@@ -202,7 +220,7 @@ export default class Evaluation extends Component {
   }
 
   renderEvaluateForms() {
-    const { forms } = this.state
+    const { forms, selectedForm } = this.state
     const link = `${process.env.FE_BACKEND || global.env.FE_BACKEND}/form/view/`
     return (
       <div className="eval-wrapper">
@@ -215,7 +233,7 @@ export default class Evaluation extends Component {
         <div className="eval-content">
           <div className="eval-list">
             {this.state.forms.length !== 0 && (
-              <div className="header-row-form">
+              <div className="header-row">
                 <span>ID</span>
                 <span>User</span>
                 <span>Link</span>
@@ -226,7 +244,9 @@ export default class Evaluation extends Component {
               <div
                 key={form.id}
                 onClick={() => this.selectForm(form.id)}
-                className="data-row-form">
+                className={
+                  'data-row' + (form.id === selectedForm.id ? ' selected' : '')
+                }>
                 <span>{form.id}</span>
                 <span>{form.email}</span>
                 <span>
@@ -303,20 +323,23 @@ export default class Evaluation extends Component {
               <div>Evaluated By: {selectedForm.evaluator}</div>
               <div>Evaluated At: {selectedForm.evaluated_at}</div>
               <div>Vote : {selectedForm.vote}</div>
-              {selectedForm.approver_id === null ? (
+              {selectedForm.approver_id !== null ? (
+                <>
+                  <div>Approved By: {selectedForm.approver}</div>
+                  <div>Approved At: {selectedForm.approved_at}</div>
+                </>
+              ) : (
+                ''
+              )}
+            </div>
+            <div className="eval-controls">
+              {selectedForm.approver_id === null && (
                 <div
                   className="eval-button"
                   onClick={() => this.approveEvaluation()}>
                   Approve
                 </div>
-              ) : (
-                <>
-                  <div>Approved By: {selectedForm.approver}</div>
-                  <div>Approved At: {selectedForm.approved_at}</div>
-                </>
               )}
-            </div>
-            <div className="eval-controls">
               <div
                 className="eval-button"
                 onClick={() => this.voteEvaluation('up')}>
