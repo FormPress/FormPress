@@ -1229,8 +1229,7 @@ export default class Builder extends Component {
     // Step 4: save user's newly created form
     const saveSuccess = await this.handleSaveClick()
 
-    if (saveSuccess === false) {
-      this.props.history.push(`/editor/${this.state.form.id}/builder`)
+    if (saveSuccess !== false) {
       this.setIntegration({
         type: 'email',
         to: auth.email
@@ -1466,7 +1465,7 @@ export default class Builder extends Component {
         modalContent={modalContent}
         closeModal={closeModal}>
         <SignUp
-          demoToUserTransition={this.demoToUserTransition.bind(this)}
+          demoToUserTransition={this.demoToUserTransition}
           history={this.props.history}
           compact={true}
           isCodeBasedSignUp={true}
