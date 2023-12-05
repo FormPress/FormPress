@@ -312,6 +312,9 @@ class SignUp extends Component {
 
     const code = value.toLowerCase()
 
+    // wait for 1,5 seconds to make sure the user sees the loading message
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
     const { success } = await api({
       resource: `/api/users/${this.state.createdUser.user_id}/verify/${code}?codeBasedSignUp=1`,
       method: 'get'

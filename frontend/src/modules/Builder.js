@@ -1215,7 +1215,6 @@ export default class Builder extends Component {
   async demoToUserTransition() {
     const { whoAmI } = this.props.generalContext.user
     const { setLoadingState } = this.props.generalContext.appStateHandlers
-    const { auth } = this.props.generalContext
 
     // Step 1: discombobulate
     setLoadingState('soft')
@@ -1230,6 +1229,8 @@ export default class Builder extends Component {
     const saveSuccess = await this.handleSaveClick()
 
     if (saveSuccess !== false) {
+      const { auth } = this.props.generalContext
+
       this.setIntegration({
         type: 'email',
         to: auth.email
