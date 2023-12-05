@@ -12,7 +12,8 @@ export default class Evaluation extends Component {
       forms: [],
       loading: false,
       selectedForm: '',
-      message: ''
+      cursor: 0,
+      reachedEnd: false
     }
 
     this.handleSelectClick = this.handleSelectClick.bind(this)
@@ -34,19 +35,36 @@ export default class Evaluation extends Component {
   }
 
   async getEvaluationsToReview(evalType) {
+    let { cursor } = this.state
     let type = ''
     if (evalType === undefined) {
       type = this.state.selectedOption
     } else {
       type = evalType
     }
+
+    if (type === 'approved') {
+      if (cursor === 0) {
+        this.setState({ forms: [], cursor: 0, reachedEnd: false })
+      }
+      const { data } = await api({
+        resource: `/api/admin/evaluate/evaluations/${type}?cursor=${cursor}`
+      })
+      if (data.length > 0) {
+        const updatedForms = [...this.state.forms, ...data]
+        this.setState({ forms: updatedForms, cursor: data[data.length - 1].id })
+      } else {
+        this.setState({ reachedEnd: true })
+      }
+      return
+    }
+
     const { data } = await api({
       resource: `/api/admin/evaluate/evaluations/${type}`
     })
 
     this.setState({ forms: data })
   }
-
   selectForm(id) {
     const selectedForm = this.state.forms.filter((form) => form.id === id)
 
@@ -100,31 +118,33 @@ export default class Evaluation extends Component {
       resource: `/api/admin/evaluate/${selectedForm.id}/vote/${vote}`
     })
 
-    let rating = 1
-    if (vote === 'down') {
-      rating = -1
-    }
-
     const updatedForms = [...forms]
 
     const votedForm = updatedForms.find((form) => form.id === selectedForm.id)
 
-    votedForm.vote = votedForm.vote + rating
-
-    selectedForm.vote = selectedForm.vote + rating
+    votedForm.vote = votedForm.vote + (vote === 'down' ? -1 : 1)
 
     this.setState({ forms: updatedForms })
   }
 
   async handleSelectClick(event) {
     const selectedOption = event.target.value
+    if (selectedOption !== 'approved') {
+      this.setState({ cursor: 0, reachedEnd: false })
+    }
 
     this.setState({ selectedOption: selectedOption, selectedForm: '' })
-    this.getEvaluationsToReview(selectedOption)
+    await this.getEvaluationsToReview(selectedOption)
   }
 
   renderReviewEvaluations() {
-    const { forms, selectedOption, selectedForm } = this.state
+    const {
+      forms,
+      selectedOption,
+      selectedForm,
+      reachedEnd,
+      cursor
+    } = this.state
     const options = [
       { value: 'notapproved', label: 'Not Approved' },
       { value: 'good', label: 'Good' },
@@ -149,8 +169,14 @@ export default class Evaluation extends Component {
                 </option>
               ))}
             </select>
-            <span onClick={() => this.getEvaluationsToReview()}>
-              Load Evaluations
+            <span
+              onClick={() => this.getEvaluationsToReview()}
+              className={reachedEnd ? 'end' : ''}>
+              {selectedOption === 'approved'
+                ? cursor !== 0
+                  ? 'Load More'
+                  : 'Load Evaluations'
+                : 'Load Evaluations'}
             </span>
           </div>
         </div>
@@ -236,7 +262,7 @@ export default class Evaluation extends Component {
               <div className="header-row">
                 <span>ID</span>
                 <span>User</span>
-                <span>Link</span>
+                <span></span>
               </div>
             )}
 
@@ -254,7 +280,7 @@ export default class Evaluation extends Component {
                     href={link + form.uuid}
                     target="_blank"
                     rel="noopener noreferrer">
-                    Link
+                    Go to Form
                   </a>
                 </span>
               </div>
@@ -279,32 +305,28 @@ export default class Evaluation extends Component {
           <div className="selected-form">
             <div className="form-info">
               <div>
-                <b>Form Id</b>: {selectedForm.id}
+                <a href={link} target="_blank" rel="noopener noreferrer">
+                  Go to Form
+                </a>
+              </div>
+              <div>
+                <b>ID</b>: {selectedForm.id} <b>Uuid:</b> {selectedForm.uuid}
               </div>
               <div>
                 <b>User:</b> {selectedForm.email}
               </div>
               <div>
-                <b>Form Uuid:</b> {selectedForm.uuid}
-              </div>
-              <div>
-                <b>Link:</b>{' '}
-                <a href={link} target="_blank" rel="noopener noreferrer">
-                  Link
-                </a>
-              </div>
-              <div>
                 <b>Form Props:</b> {selectedForm.props}
               </div>
             </div>
-            <div className="eval-controls">
+            <div className="eval-controls vertical">
               <div
-                className="eval-button"
+                className="eval-button good"
                 onClick={() => this.evaluateForm('good')}>
                 Good
               </div>
               <div
-                className="eval-button"
+                className="eval-button bad"
                 onClick={() => this.evaluateForm('bad')}>
                 Bad
               </div>
@@ -340,15 +362,17 @@ export default class Evaluation extends Component {
                   Approve
                 </div>
               )}
-              <div
-                className="eval-button"
-                onClick={() => this.voteEvaluation('up')}>
-                Vote Up
-              </div>
-              <div
-                className="eval-button"
-                onClick={() => this.voteEvaluation('down')}>
-                Vote Down
+              <div className="eval-controls vertical">
+                <div
+                  className="eval-button good"
+                  onClick={() => this.voteEvaluation('up')}>
+                  Vote Up
+                </div>
+                <div
+                  className="eval-button bad"
+                  onClick={() => this.voteEvaluation('down')}>
+                  Vote Down
+                </div>
               </div>
               <div
                 className="eval-button"
@@ -377,13 +401,25 @@ export default class Evaluation extends Component {
         <div className="eval-nav">
           <div
             onClick={() =>
-              this.setState({ page: 'evaluate', selectedForm: '', forms: [] })
+              this.setState({
+                page: 'evaluate',
+                selectedForm: '',
+                forms: [],
+                cursor: 0,
+                reachedEnd: false
+              })
             }>
             Evaluate Forms
           </div>
           <div
             onClick={() =>
-              this.setState({ page: 'review', selectedForm: '', forms: [] })
+              this.setState({
+                page: 'review',
+                selectedForm: '',
+                forms: [],
+                cursor: 0,
+                reachedEnd: false
+              })
             }>
             Review Evaluations
           </div>

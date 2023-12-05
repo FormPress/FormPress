@@ -519,6 +519,7 @@ module.exports = (app) => {
       const db = await getPool()
       const limitPerRun = 10
       const { specs } = req.params
+      const { cursor } = req.query
       let query = ''
       if (specs === 'approved') {
         query = `
@@ -530,7 +531,9 @@ module.exports = (app) => {
           ON e.approver_id = u2.id
           LEFT JOIN \`form_published\` p
           ON e.form_published_id = p.id
-          WHERE e.approver_id IS NOT NULL ORDER BY id ASC
+          WHERE e.approver_id IS NOT NULL 
+          AND e.id > ${cursor}
+          ORDER BY id ASC LIMIT ${limitPerRun};
         `
       } else if (specs === 'notapproved') {
         query = `

@@ -73,16 +73,24 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  padding: 10px;
-  background: #e2e2e2;
-  width: 80px;
   text-align: center;
   margin: 10px;
-  color: #1c5c85;
+  color: white;
+  border: none;
+  background-color: #1c5c85;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 8px 12px;
+  width: 92px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.16);
 }
-.eval-button:hover {
-  background-color: #719fbd;
+.eval-button.good {
+  background-color: #8bc34a;
 }
+.eval-button.bad {
+  background-color: #e57373;
+}
+
 .selected-form {
   min-width: 60%;
   margin: 10px;
@@ -107,6 +115,9 @@
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.load-reviews > .end {
+  cursor: not-allowed;
 }
 .eval-list > .data-row span:nth-child(1),
 .eval-list > .header-row span:nth-child(1) {
@@ -153,11 +164,22 @@
   display: flex;
   justify-content: center;
   margin-top: 10px;
+  align-items: center;
+}
+.eval-controls.vertical {
+  flex-direction: column;
 }
 .form-info {
   padding: 10px;
   border: 1px solid #719fbd;
   word-wrap: break-word;
+}
+.form-info div {
+  padding: 5px;
+}
+.form-info div b,
+.form-info div a {
+  font-size: 18px;
 }
 .review-eval-list > .header-row {
   font-weight: bold;
@@ -180,6 +202,8 @@
 .review-eval-list div {
   border: 1px solid #719fbd;
 }
+.review-eval-list.approved > .data-row span:nth-child(1),
+.review-eval-list.approved > .header-row span:nth-child(1),
 .review-eval-list > .data-row span:nth-child(1),
 .review-eval-list > .header-row span:nth-child(1) {
   flex: 1;
@@ -206,10 +230,6 @@
 }
 .review-eval-list > .data-row span:nth-child(7),
 .review-eval-list > .header-row span:nth-child(7) {
-  flex: 1;
-}
-.review-eval-list.approved > .data-row span:nth-child(1),
-.review-eval-list.approved > .header-row span:nth-child(1) {
   flex: 1;
 }
 .review-eval-list.approved > .data-row span:nth-child(2),
