@@ -46,6 +46,20 @@ const policy = {
       }
     }
   },
+  hidden: {
+    rule: {
+      type: 'only',
+      exceptions: ['TextBox', 'TextArea', 'Email']
+    },
+    configurableSettings: {
+      default: false,
+      formProps: {
+        type: 'Checkbox',
+        label: '',
+        options: ['Hide this field']
+      }
+    }
+  },
   placeholder: {
     rule: {
       type: 'only',
