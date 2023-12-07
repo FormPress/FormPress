@@ -1,3 +1,6 @@
+.eval-wrapper {
+  margin-top: 10px;
+}
 .eval-nav {
   display: flex;
   justify-content: center;
@@ -7,9 +10,12 @@
   cursor: pointer;
   color: #1c5c85;
   padding: 10px;
-  margin: 10px;
+  margin-top: 10px;
   width: 200px;
   text-align: center;
+}
+.eval-nav > div.selected {
+  background-color: #719fbd;
 }
 .eval-nav > div:hover {
   background-color: #719fbd;
@@ -23,17 +29,19 @@
   font-weight: 700;
 }
 .load-forms {
-  padding: 10px;
   background-color: #e2e2e2;
   cursor: pointer;
   color: #1c5c85;
-  width: 200px;
+  width: 150px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
-  margin: 0 auto;
+  margin-top: 28px;
 }
 .load-reviews {
   display: flex;
   justify-content: center;
+  margin-top: 30px;
 }
 .load-reviews > span {
   padding: 10px;
@@ -65,9 +73,6 @@
   padding: 10px;
   border: 1px solid #719fbd;
 }
-.eval-list > div:hover {
-  background-color: #719fbd;
-}
 .eval-button {
   display: flex;
   justify-content: center;
@@ -90,16 +95,35 @@
 .eval-button.bad {
   background-color: #e57373;
 }
-
-.selected-form {
+.eval-content > .selected-form {
   min-width: 60%;
   margin: 10px;
   word-wrap: break-word;
+}
+.eval-content > .selected-form a {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 15px;
+  text-decoration: none;
+  background-color: #1c5c85;
+  color: #ffffff;
+  margin: 0px 5px 5px 0px;
 }
 .selected-eval-form {
   min-width: 30%;
   margin: 10px;
   word-wrap: break-word;
+}
+.selected-eval-form a {
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 15px;
+  text-decoration: none;
+  background-color: #1c5c85;
+  color: #ffffff;
+  margin: 0px 5px 5px 0px;
 }
 .eval-list > .header-row {
   font-weight: bold;
@@ -263,4 +287,37 @@
 .review-eval-list.approved > .data-row span:nth-child(9),
 .review-eval-list.approved > .header-row span:nth-child(9) {
   flex: 1;
+}
+.eval-header > .load-forms-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.eval-header > .load-forms-container > .form-search {
+  width: 400px;
+}
+
+.eval-header > .load-forms-container > .form-search label {
+  text-align: center;
+}
+.eval-content > .selected-eval-form > .form-tabs,
+.eval-content > .selected-form > .form-tabs {
+  display: flex;
+}
+.eval-content > .selected-eval-form > .form-tabs > .form-tab,
+.eval-content > .selected-form > .form-tabs > .form-tab {
+  color: #1c5c85;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+.eval-content > .selected-eval-form > .form-tabs > .form-tab:hover,
+.eval-content > .selected-form > .form-tabs > .form-tab:hover {
+  background-color: #719fbd;
+}
+.eval-content > .selected-eval-form > .form-tabs > .form-tab.selected,
+.eval-content > .selected-form > .form-tabs > .form-tab.selected {
+  background-color: #719fbd;
+  color: #ffffff;
 }

@@ -435,12 +435,20 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const limitPerRun = 10
-      let query = `
-        SELECT fp.id, fp.form_id, fp.props, u.id as uid, u.email as email, f.uuid
-        FROM form_published fp, user u, form f
-        WHERE fp.user_id = u.id AND fp.form_id = f.id AND u.\`isActive\` = 1 AND fp.\`version\` = f.\`published_version\` AND fp.evaluated = 0
-        ORDER BY fp.id ASC LIMIT ${limitPerRun}
+      const { search } = req.query
+
+      let whereClause = `
+      u.\`isActive\` = 1 AND fp.\`version\` = f.\`published_version\` AND fp.evaluated = 0 AND f.deleted_at IS NULL
       `
+      if (search) {
+        whereClause += ` AND f.uuid = '${search}'`
+      }
+      let query = `
+      SELECT fp.id, fp.form_id, fp.props, u.id as uid, u.email as email, f.uuid, fp.title
+      FROM form_published fp, user u, form f
+      WHERE fp.user_id = u.id AND fp.form_id = f.id AND ${whereClause}
+      ORDER BY fp.id ASC LIMIT ${limitPerRun}
+    `
       const result = await db.query(query)
       if (result.length > 0) {
         result.forEach((form) => {
@@ -518,12 +526,13 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const limitPerRun = 10
+      const approvedLimit = 100
       const { specs } = req.params
       const { cursor } = req.query
       let query = ''
       if (specs === 'approved') {
         query = `
-          SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props
+          SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props, p.title, f.uuid
           FROM \`form_evaluation\` e
           LEFT JOIN \`user\` u
           ON e.evaluator_id = u.id
@@ -531,38 +540,46 @@ module.exports = (app) => {
           ON e.approver_id = u2.id
           LEFT JOIN \`form_published\` p
           ON e.form_published_id = p.id
+          LEFT JOIN \`form\` f
+          ON e.form_id = f.id
           WHERE e.approver_id IS NOT NULL 
           AND e.id > ${cursor}
-          ORDER BY id ASC LIMIT ${limitPerRun};
+          ORDER BY id ASC LIMIT ${approvedLimit};
         `
       } else if (specs === 'notapproved') {
         query = `
-          SELECT e.*, u.email AS evaluator, p.props
+          SELECT e.*, u.email AS evaluator, p.props, p.title, f.uuid
           FROM \`form_evaluation\` e
           LEFT JOIN \`user\` u
           ON e.evaluator_id = u.id
           LEFT JOIN \`form_published\` p
           ON e.form_published_id = p.id
+          LEFT JOIN \`form\` f
+          ON e.form_id = f.id
           WHERE e.approver_id IS NULL ORDER BY e.id ASC LIMIT ${limitPerRun}
         `
       } else if (specs === 'good') {
         query = `
-          SELECT e.*, u.email AS evaluator, p.props
+          SELECT e.*, u.email AS evaluator, p.props, p.title, f.uuid
           FROM \`form_evaluation\` e
           LEFT JOIN \`user\` u
           ON e.evaluator_id = u.id
           LEFT JOIN \`form_published\` p
           ON e.form_published_id = p.id
+          LEFT JOIN \`form\` f
+            ON e.form_id = f.id
           WHERE e.approver_id IS NULL AND e.type = 'good' ORDER BY e.id ASC LIMIT ${limitPerRun}
         `
       } else if (specs === 'bad') {
         query = `
-          SELECT e.*, u.email AS evaluator, p.props
+          SELECT e.*, u.email AS evaluator, p.props, p.title, f.uuid
           FROM \`form_evaluation\` e
           LEFT JOIN \`user\` u
           ON e.evaluator_id = u.id
           LEFT JOIN \`form_published\` p
           ON e.form_published_id = p.id
+          LEFT JOIN \`form\` f
+          ON e.form_id = f.id
           WHERE e.approver_id IS NULL AND e.type = 'bad' ORDER BY id ASC LIMIT ${limitPerRun}
         `
       }
