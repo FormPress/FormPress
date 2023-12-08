@@ -4,6 +4,7 @@ import Roles from './Roles'
 import Users from './Users'
 import Status from './Status'
 import Whitelist from './Whitelist'
+import Evaluation from './Evaluation'
 
 import './AdminPage.css'
 
@@ -25,6 +26,9 @@ export default class AdminPage extends Component {
         </Route>
         <Route exact path="/admin/whitelist">
           <Whitelist />
+        </Route>
+        <Route exact path="/admin/evaluation">
+          <Evaluation />
         </Route>
         <Redirect path="*" to="/404" />
       </Switch>
@@ -51,6 +55,11 @@ export default class AdminPage extends Component {
         name: 'status',
         text: 'Status',
         path: '/admin/status'
+      },
+      {
+        name: 'evaluation',
+        text: 'Evaluation',
+        path: '/admin/evaluation'
       }
     ]
     return (
