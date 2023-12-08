@@ -13,7 +13,7 @@ export default class Evaluation extends Component {
       tab: 'details',
       forms: [],
       selectedForm: '',
-      cursor: 0,
+      cursor: Infinity,
       reachedEnd: false,
       searchValue: '',
       loading: {
@@ -87,8 +87,8 @@ export default class Evaluation extends Component {
 
     this.setLoadingState('evaluations', true)
     if (type === 'approved') {
-      if (cursor === 0) {
-        this.setState({ forms: [], cursor: 0, reachedEnd: false })
+      if (cursor === Infinity) {
+        this.setState({ forms: [], reachedEnd: false })
       }
       const { data } = await api({
         resource: `/api/admin/evaluate/evaluations/${type}?cursor=${cursor}`
@@ -176,7 +176,7 @@ export default class Evaluation extends Component {
   async handleSelectClick(event) {
     const selectedOption = event.target.value
     if (selectedOption !== 'approved') {
-      this.setState({ cursor: 0, reachedEnd: false })
+      this.setState({ cursor: Infinity, reachedEnd: false })
     }
 
     this.setState({ selectedOption: selectedOption, selectedForm: '' })
@@ -225,7 +225,7 @@ export default class Evaluation extends Component {
               }
               className={reachedEnd ? 'end' : ''}>
               {selectedOption === 'approved'
-                ? cursor !== 0
+                ? cursor !== Infinity
                   ? 'Load More'
                   : 'Load Evaluations'
                 : 'Load Evaluations'}
@@ -585,7 +585,7 @@ export default class Evaluation extends Component {
                 page: 'evaluate',
                 selectedForm: '',
                 forms: [],
-                cursor: 0,
+                cursor: Infinity,
                 reachedEnd: false,
                 tab: 'details'
               })
@@ -599,7 +599,7 @@ export default class Evaluation extends Component {
                 page: 'review',
                 selectedForm: '',
                 forms: [],
-                cursor: 0,
+                cursor: Infinity,
                 reachedEnd: false,
                 tab: 'details'
               })
