@@ -447,7 +447,7 @@ module.exports = (app) => {
       SELECT fp.id, fp.form_id, fp.props, u.id as uid, u.email as email, f.uuid, fp.title
       FROM form_published fp, user u, form f
       WHERE fp.user_id = u.id AND fp.form_id = f.id AND ${whereClause}
-      ORDER BY fp.id ASC LIMIT ${limitPerRun}
+      ORDER BY fp.id DESC LIMIT ${limitPerRun}
     `
       const result = await db.query(query)
       if (result.length > 0) {
@@ -531,6 +531,13 @@ module.exports = (app) => {
       const { cursor } = req.query
       let query = ''
       if (specs === 'approved') {
+        const cursorValue =
+          cursor && !isNaN(parseInt(cursor, 10))
+            ? parseInt(cursor, 10)
+            : Infinity
+
+        const cursorClause =
+          cursorValue === Infinity ? 'AND 1=1' : `AND e.id < ${cursorValue}`
         query = `
           SELECT e.*, u.email AS evaluator, u2.email AS approver, p.props, p.title, f.uuid
           FROM \`form_evaluation\` e
@@ -543,8 +550,8 @@ module.exports = (app) => {
           LEFT JOIN \`form\` f
           ON e.form_id = f.id
           WHERE e.approver_id IS NOT NULL 
-          AND e.id > ${cursor}
-          ORDER BY id ASC LIMIT ${approvedLimit};
+          ${cursorClause}
+          ORDER BY id DESC LIMIT ${approvedLimit};
         `
       } else if (specs === 'notapproved') {
         query = `
@@ -556,7 +563,7 @@ module.exports = (app) => {
           ON e.form_published_id = p.id
           LEFT JOIN \`form\` f
           ON e.form_id = f.id
-          WHERE e.approver_id IS NULL ORDER BY e.id ASC LIMIT ${limitPerRun}
+          WHERE e.approver_id IS NULL ORDER BY e.id DESC LIMIT ${limitPerRun}
         `
       } else if (specs === 'good') {
         query = `
@@ -568,7 +575,7 @@ module.exports = (app) => {
           ON e.form_published_id = p.id
           LEFT JOIN \`form\` f
             ON e.form_id = f.id
-          WHERE e.approver_id IS NULL AND e.type = 'good' ORDER BY e.id ASC LIMIT ${limitPerRun}
+          WHERE e.approver_id IS NULL AND e.type = 'good' ORDER BY e.id DESC LIMIT ${limitPerRun}
         `
       } else if (specs === 'bad') {
         query = `
@@ -580,7 +587,7 @@ module.exports = (app) => {
           ON e.form_published_id = p.id
           LEFT JOIN \`form\` f
           ON e.form_id = f.id
-          WHERE e.approver_id IS NULL AND e.type = 'bad' ORDER BY id ASC LIMIT ${limitPerRun}
+          WHERE e.approver_id IS NULL AND e.type = 'bad' ORDER BY id DESC LIMIT ${limitPerRun}
         `
       }
       const result = await db.query(query)
