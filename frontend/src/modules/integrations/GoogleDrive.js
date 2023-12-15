@@ -261,7 +261,11 @@ export default class GoogleDrive extends Component {
   }
 
   async handleStartAuthentication() {
-    await this.props.handleSaveClick()
+    const saveSuccess = await this.props.handleSaveClick()
+    if (saveSuccess === false) {
+      return
+    }
+
     let { success, data } = await api({
       resource: `/api/services/google/generateAuthURL`,
       body: {

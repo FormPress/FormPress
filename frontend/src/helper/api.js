@@ -7,7 +7,7 @@ export const api = ({
   method = 'get',
   body,
   useAuth = true,
-  useBlob = false
+  responseType = 'json'
 }) =>
   new Promise((resolve, reject) => {
     const options = {
@@ -35,10 +35,14 @@ export const api = ({
         success = response.ok
         status = response.status
 
-        if (useBlob && success) {
-          return response.blob()
-        } else {
-          return response.json()
+        switch (responseType) {
+          case 'blob':
+            return response.blob()
+          case 'text':
+            return response.text()
+          case 'json':
+          default:
+            return response.json()
         }
       })
       .then((data) => {

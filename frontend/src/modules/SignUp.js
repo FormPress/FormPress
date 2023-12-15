@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { api } from '../helper'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import LoginWithGoogle from './helper/LoginWithGoogle'
+import VerificationInput from 'react-verification-input'
+
 import GeneralContext from '../general.context'
 import './SignUp.css'
 
@@ -18,6 +20,11 @@ class SignUp extends Component {
       message: '',
       success: false,
       tosClicked: false,
+      createdUser: null,
+      timerDuration: 60,
+      timerValue: 60,
+      isTimerRunning: false,
+      isResendDisabled: true,
       state: 'initial' // one of, initial, loading, done
     }
 
@@ -26,7 +33,52 @@ class SignUp extends Component {
     this.handleSignUpButtonClick = this.handleSignUpButtonClick.bind(this)
     this.handleLoginWithGoogleClick = this.handleLoginWithGoogleClick.bind(this)
     this.handleLoginWithGoogleFail = this.handleLoginWithGoogleFail.bind(this)
+    this.renderSuccessFeedback = this.renderSuccessFeedback.bind(this)
+    this.evaluateVerificationCode = this.evaluateVerificationCode.bind(this)
+    this.startTimer = this.startTimer.bind(this)
+    this.stopTimer = this.stopTimer.bind(this)
+    this.handleResendClick = this.handleResendClick.bind(this)
     this.formRef = React.createRef()
+  }
+
+  startTimer() {
+    this.setState({ isTimerRunning: true })
+    this.timerInterval = setInterval(
+      function () {
+        const { timerValue } = this.state
+        if (timerValue > 0) {
+          this.setState((prevState) => ({
+            timerValue: prevState.timerValue - 1
+          }))
+        } else {
+          this.stopTimer()
+        }
+      }.bind(this),
+      1000
+    )
+  }
+
+  stopTimer() {
+    clearInterval(this.timerInterval)
+    this.setState({
+      isTimerRunning: false,
+      timerValue: this.state.timerDuration,
+      isResendDisabled: false
+    })
+  }
+
+  async handleResendClick() {
+    this.setState({ isResendDisabled: true })
+    this.startTimer()
+
+    const { success } = await api({
+      resource: `/api/users/${this.state.createdUser.user_id}/resendVerificationCode`,
+      method: 'get'
+    })
+
+    if (success) {
+      this.setState({ message: 'Verification code sent!' })
+    }
   }
 
   handleFieldChange(elem, e) {
@@ -56,6 +108,12 @@ class SignUp extends Component {
     this.setState({ state: 'signup' })
 
     const { email, password } = this.state
+    const { isCodeBasedSignUp } = this.props
+
+    if (isCodeBasedSignUp) {
+      this.startTimer()
+    }
+
     let pattern = /^.{8,}$/,
       signupErrorHandler = 0
 
@@ -85,15 +143,25 @@ class SignUp extends Component {
       return
     }
 
-    this.setState({ state: 'loading', message: 'Processing' })
+    this.setState({
+      state: 'loading',
+      message: isCodeBasedSignUp ? '' : 'Signing up...'
+    })
     const { success, data } = await api({
       resource: `/api/users/signup`,
       method: 'post',
-      body: { email, password }
+      body: { email, password, isCodeBasedSignUp }
     })
 
     if (success) {
-      this.setState({ success: true, state: 'done', message: data.message })
+      const { user } = data
+
+      this.setState({
+        success: true,
+        state: 'done',
+        message: isCodeBasedSignUp ? '' : data.message,
+        createdUser: user
+      })
     } else {
       this.setState({ state: 'done', message: data.message })
       window.scrollTo({
@@ -104,6 +172,8 @@ class SignUp extends Component {
   }
 
   async handleLoginWithGoogleClick(response) {
+    const { whoAmI } = this.props.generalContext.user
+    const { compact } = this.props
     this.setState({ state: 'loading' })
 
     const profile = JSON.parse(atob(response.credential.split('.')[1]))
@@ -120,15 +190,8 @@ class SignUp extends Component {
     })
 
     if (success === true) {
-      this.props.generalContext.auth.setAuth({
-        email: data.email,
-        exp: data.exp,
-        user_id: data.user_id,
-        user_role: data.user_role,
-        role_name: data.role_name,
-        permission: data.permission,
-        loggedIn: true
-      })
+      // Compact mode is used for demo purposes, so we don't want to redirect the user to the dashboard
+      compact === true ? this.props.demoToUserTransition() : whoAmI()
     } else {
       this.setState({ state: 'done', message: data.message })
       window.scrollTo({
@@ -150,64 +213,136 @@ class SignUp extends Component {
     }
   }
 
-  render() {
-    const { message, success, email } = this.state
-    if (this.props.generalContext.auth.loggedIn) {
-      let pathName = this.props.location.state
-        ? this.props.location.state.from.pathname
-        : '/forms'
-      //can't allow to return editor, when changing accounts old accounts form can be redirected
-      if (pathName.indexOf('editor') >= 0) {
-        pathName = '/forms'
-      }
+  renderSuccessFeedback() {
+    const {
+      email,
+      isResendDisabled,
+      timerValue,
+      isTimerRunning,
+      loading,
+      message
+    } = this.state
+    const { isCodeBasedSignUp } = this.props
+    const { capabilities } = this.props.generalContext
 
+    if (capabilities.sendgridApiKey !== true) {
+      // Email capabilities are not enabled, so we can't send a verification email.
       return (
-        <Redirect
-          to={{
-            pathname: pathName,
-            state: { from: this.props.location }
-          }}
-        />
+        <div>
+          <div className="form-header">SIGN-UP SUCCESS!</div>
+          <div className="sign-up-success">
+            <div className="signup-email">
+              <i>{email}</i>
+            </div>
+            <p>Sign-up successful! You can now log in to your account.</p>
+          </div>
+        </div>
       )
     }
-    const { capabilities } = this.props.generalContext
-    const signUpSuccess = capabilities.sendgridApiKey ? (
-      <div>
-        <div className="form-header">SIGN-UP SUCCESS!</div>
-        <div className="sign-up-success">
-          <p>
-            We have sent a verification e-mail to the address{' '}
-            <span className="signup-email">
-              <i>{email}</i>
-            </span>{' '}
-            .
-          </p>
-          <p>
-            Please activate your account to begin your journey with FormPress.
-            (If you didn&apos;t receive the e-mail, please check your spam
-            folder)
-          </p>
-        </div>
-      </div>
-    ) : (
-      <div>
-        <div className="form-header">SIGN-UP SUCCESS!</div>
-        <div className="sign-up-success">
-          <div className="signup-email">
-            <i>{email}</i>
+
+    if (isCodeBasedSignUp === true) {
+      return (
+        <div>
+          <div className="form-header">SIGN-UP SUCCESS!</div>
+          <div className="sign-up-success">
+            <p>
+              We have sent a verification code to the address{' '}
+              <span className="signup-email">
+                <i>{email}</i>
+              </span>{' '}
+              .
+            </p>
+            <VerificationInput
+              length={6}
+              placeholder={'·'}
+              onComplete={(value) => {
+                this.evaluateVerificationCode(value)
+              }}
+              classNames={{
+                container: loading ? 'viContainer--loading' : 'viContainer',
+                character: 'viCharacter',
+                characterInactive: 'viCharacter--inactive',
+                characterSelected: 'viCharacter--selected'
+              }}></VerificationInput>
+            <div className="resend-verification">
+              <span className="did-not-receive"> Did not receive?</span>
+              <button
+                className="resend-button"
+                onClick={this.handleResendClick}
+                disabled={isResendDisabled}>
+                {isTimerRunning
+                  ? `Resend in ${timerValue} seconds`
+                  : 'Resend Verification Code'}
+              </button>
+              <p
+                className={`message-back ${
+                  message === '' ? 'empty' : 'isFilled'
+                }`}>
+                {message}
+              </p>
+            </div>
           </div>
-          <p>Sign-up successful! You can now log in to your account.</p>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div>
+          <div className="form-header">SIGN-UP SUCCESS!</div>
+          <div className="sign-up-success">
+            <p>
+              We have sent a verification e-mail to the address{' '}
+              <span className="signup-email">
+                <i>{email}</i>
+              </span>{' '}
+              .
+            </p>
+            <p>
+              Please activate your account to begin your journey with FormPress.
+              (If you didn&apos;t receive the e-mail, please check your spam
+              folder)
+            </p>
+          </div>
+        </div>
+      )
+    }
+  }
+
+  async evaluateVerificationCode(value) {
+    this.setState({ state: 'loading', message: 'Validating...' })
+
+    const code = value.toLowerCase()
+
+    // wait for 1,5 seconds to make sure the user sees the loading message
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+
+    const { success } = await api({
+      resource: `/api/users/${this.state.createdUser.user_id}/verify/${code}?codeBasedSignUp=1`,
+      method: 'get'
+    })
+
+    if (success) {
+      this.props.demoToUserTransition()
+    } else {
+      this.setState({ state: 'done', message: 'Invalid verification code' })
+    }
+  }
+
+  render() {
+    const { message, success } = this.state
+    const { compact } = this.props
+    const { capabilities } = this.props.generalContext
 
     return (
       <>
-        <link
-          href="/customPublicStyling.css"
-          rel="stylesheet"
-          crossOrigin="anonymous"
-        />
+        {compact ? (
+          ''
+        ) : (
+          <link
+            href="/customPublicStyling.css"
+            rel="stylesheet"
+            crossOrigin="anonymous"
+          />
+        )}
         <div className="login-wrapper">
           <div className="loginForm signupForm bs-mild">
             <div className="picture-bg">
@@ -217,7 +352,7 @@ class SignUp extends Component {
             </div>
             <div className="signup-mainContent">
               {success ? (
-                signUpSuccess
+                this.renderSuccessFeedback()
               ) : (
                 <div>
                   <div className="form-header">Sign up</div>
@@ -318,14 +453,19 @@ class SignUp extends Component {
               </div>
             </div>
           </div>
-          <div className="footer cw center grid">
-            <div className="col-8-16">Copyright © 2023 formpress.org</div>
-            <div className="col-8-16 tr">
-              <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
-                Contact
-              </a>
+
+          {compact ? (
+            ''
+          ) : (
+            <div className="footer cw center grid">
+              <div className="col-8-16">Copyright © 2023 formpress.org</div>
+              <div className="col-8-16 tr">
+                <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
+                  Contact
+                </a>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </>
     )

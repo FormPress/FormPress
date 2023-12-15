@@ -306,7 +306,7 @@ module.exports = (app) => {
       pdfRequest
     )
 
-    if (emailIntegration.length > 0 && emailIntegration[0].to !== '') {
+    if (emailIntegration.length > 0 && emailIntegration[0].to) {
       sendEmailTo = emailIntegration[0].to.split(',')
     }
     const FRONTEND = process.env.FE_FRONTEND

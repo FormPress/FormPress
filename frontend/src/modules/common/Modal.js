@@ -83,7 +83,13 @@ class Modal extends Component {
       return ReactDOM.createPortal(
         <div className="modal-overlay" onClick={this.props.closeModal}>
           {customContentPresent ? (
-            this.props.children
+            <div
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
+              className="modal-children">
+              {this.props.children}
+            </div>
           ) : (
             <div
               className={

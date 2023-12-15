@@ -21,6 +21,7 @@
     "react-scripts": "3.4.4",
     "react-share": "4.4.0",
     "react-spinner-overlay": "^0.1.33",
+    "react-verification-input": "^4.0.0",
     "recharts": "2.1.9",
     "sass": "^1.60.0"
   },

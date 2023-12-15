@@ -3,11 +3,58 @@ import React, { Component } from 'react'
 import './PreviewForm.css'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { api } from '../../helper'
 
 class PreviewForm extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+    this.state = {}
+
+    this.iframeRef = React.createRef()
+    this.loadRenderedForm = this.loadRenderedForm.bind(this)
+  }
+
+  async loadRenderedForm() {
+    const iframe = this.iframeRef.current
+    const form = Object.assign({}, this.props.form)
+    const data = {
+      form: form
+    }
+
+    api({
+      resource: '/form/view/demo',
+      method: 'post',
+      body: data,
+      responseType: 'text'
+    })
+      .then((response) => {
+        const html = response.data
+        iframe.contentWindow.document.open()
+        iframe.contentWindow.document.write(html)
+        iframe.contentWindow.document.close()
+      })
+      .catch((error) => {
+        console.trace(error)
+      })
+  }
+
+  componentDidMount() {
     const BACKEND = global.env.FE_BACKEND
-    const { formID, uuid } = this.props
+    const { uuid } = this.props
+
+    const isInDemoMode = this.props.generalContext.user.isInDemoMode()
+
+    if (isInDemoMode) {
+      this.loadRenderedForm()
+    } else {
+      // change src of iframe
+      const iframe = this.iframeRef.current
+      iframe.src = `${BACKEND}/form/view/${uuid}?preview=true`
+    }
+  }
+
+  render() {
+    const { formID } = this.props
 
     return (
       <div className="preview-form-wrapper">
@@ -45,7 +92,8 @@ class PreviewForm extends Component {
         </div>
         <div className="iframe-wrapper">
           <iframe
-            src={`${BACKEND}/form/view/${uuid}?preview=true`}
+            name="preview-form-iframe"
+            ref={this.iframeRef}
             title={`FP_FORM_${formID}`}
             allow="geolocation *"
           />
