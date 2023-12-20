@@ -17,15 +17,29 @@
     const questionName = key
     const questionID = key.split('_')[1]
 
-    const fpElement = FORMPRESS.elements.find((element) => {
-      return element.id === parseInt(questionID)
-    })
+    let hasCustomFieldId = false
 
-    const questionValue = value
+    if (isNaN(questionID)) {
+      hasCustomFieldId = true
+    }
+
+    let fpElement
+
+    if (hasCustomFieldId) {
+      fpElement = FORMPRESS.elements.find((element) => {
+        return element.customFieldId === questionID
+      })
+    } else {
+      fpElement = FORMPRESS.elements.find((element) => {
+        return element.id === parseInt(questionID)
+      })
+    }
 
     if (fpElement === undefined) {
       return
     }
+
+    const questionValue = value
 
     const fpElementType = fpElement.type
 
@@ -34,14 +48,26 @@
       case 'TextArea':
       case 'Email':
       case 'Phone': {
-        const htmlElement = document.getElementsByName(questionName)[0]
-        htmlElement.value = questionValue
+        try {
+          let htmlElement, htmlElementContainer
 
-        const event = new Event('change')
+          if (hasCustomFieldId) {
+            htmlElement = document.querySelector(
+              `[data-fp-custom-field-id="q_${questionID}"]`
+            )
+            htmlElementContainer = document.querySelector(
+              `[data-fp-custom-field-id="qc_${questionID}"]`
+            )
+          } else {
+            htmlElement = document.getElementsByName(questionName)[0]
+            htmlElementContainer = document.getElementById(`qc_${questionID}`)
+          }
 
-        const htmlElementContainer = document.getElementById(`qc_${questionID}`)
-
-        htmlElementContainer.dispatchEvent(event)
+          htmlElement.value = questionValue
+          htmlElementContainer.dispatchEvent(new Event('change'))
+        } catch (e) {
+          console.log('Error prepopulating. Duplicate question id?')
+        }
         break
       }
       default:

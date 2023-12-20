@@ -49,7 +49,13 @@ export default function ElementContainer(props) {
   return (
     <div
       className={classNames.join(' ')}
-      {...{ id: `qc_${config.id}`, ...builderHandlers }}
+      {...{
+        id: `qc_${config.id}`,
+        'data-fp-custom-field-id': config.customFieldId
+          ? `qc_${config.customFieldId}`
+          : null,
+        ...builderHandlers
+      }}
       ref={myRef}>
       {props.children}
       {mode === 'builder' ? (

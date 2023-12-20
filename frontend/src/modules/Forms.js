@@ -306,7 +306,7 @@ export default class Forms extends Component {
     let prePopulateQueryParams = ''
 
     if (user) {
-      prePopulateQueryParams = `&q_5=${user.email}`
+      prePopulateQueryParams = `&q_email=${user.email}`
     }
 
     let iframeSrc =

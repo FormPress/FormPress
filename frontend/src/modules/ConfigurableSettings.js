@@ -1,6 +1,20 @@
 import datasets from '../datasets'
 
 const policy = {
+  customFieldId: {
+    rule: {
+      type: 'all'
+    },
+    configurableSettings: {
+      default: '',
+      formProps: {
+        type: 'TextBox',
+        label: 'Custom Field ID',
+        placeholder: 'Enter a custom field ID',
+        maxLength: 20
+      }
+    }
+  },
   required: {
     rule: {
       type: 'exceptAll',
