@@ -39,11 +39,20 @@
       script.getAttribute('fp_widget_cookie')
     const widget =
       script.getAttribute('data-fp-widget') || script.getAttribute('fp_widget')
+    const prePopulate = script.getAttribute('data-fp-prepopulate')
 
     let src = `${BACKEND}/form/view/${formID}?embed=true`
 
     if (token) {
       src += `&token=${token}`
+    }
+
+    if (prePopulate) {
+      const prepopulateParams = prePopulate.split('|') // NOT SURE ABOUT THE SEPARATOR (|)
+      const prePopulateArrayFormatted = prepopulateParams.filter((item) =>
+        item.startsWith('q_')
+      )
+      src += `&${prePopulateArrayFormatted.join('&')}`
     }
 
     const iframeID = 'fp_' + formID
