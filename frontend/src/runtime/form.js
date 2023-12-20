@@ -97,6 +97,22 @@
     return alert('Error while loading questions.')
   }
 
+  let rules
+
+  if (document.body.attributes.rules !== undefined) {
+    rules = JSON.parse(document.body.attributes.rules.value)
+    document.body.removeAttribute('rules')
+  } else {
+    const rulesQuery = await api({
+      resource: `/api/users/${USERID}/forms/${FORMID}/rules`
+    })
+    rules = rulesQuery.data
+  }
+
+  if (!Array.isArray(rules)) {
+    return alert('Error while loading rules.')
+  }
+
   window.userAgent = navigator.userAgent.toLowerCase()
 
   // set global FORMPRESS object
@@ -106,19 +122,10 @@
     userId: USERID,
     BACKEND,
     elements,
+    rules,
     requiredGoodToGo: true,
     validateGoodToGo: true
   }
-
-  const rulesQuery = await api({
-    resource: `/api/users/${USERID}/forms/${FORMID}/rules`
-  })
-
-  if (rulesQuery.success === false) {
-    return alert('Error while loading form rules.')
-  }
-
-  window.FORMPRESS.rules = rulesQuery.data || []
 
   const formHasConditionalLogic = window.FORMPRESS.rules.length > 0
 

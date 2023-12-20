@@ -12,6 +12,52 @@ const loginWithGoogle = require(path.resolve('middleware', 'loginwithgoogle'))
 const { model } = require(path.resolve('helper'))
 const userModel = model.user
 
+const demoAuthentication = async (req, res) => {
+  const demoUser = {
+    user_id: 0,
+    email: 'demo@formpress.org',
+    user_role: 2,
+    role_name: 'Default Free',
+    admin: false,
+    permission: {
+      formLimit: '5',
+      submissionLimit: '100',
+      uploadLimit: '120',
+      Button: true,
+      Checkbox: true,
+      TextBox: true,
+      TextArea: true,
+      Dropdown: true,
+      Radio: true,
+      Name: true,
+      Email: true,
+      Header: true,
+      FileUpload: true,
+      Separator: true,
+      PageBreak: true,
+      Address: true,
+      NetPromoterScore: true,
+      Phone: true,
+      Image: true,
+      RatingScale: true,
+      DatePicker: true
+    }
+  }
+
+  const data = await token(demoUser)
+
+  // renew auth cookie
+  res.cookie('auth', data, {
+    domain: process.env.COOKIE_DOMAIN,
+    maxAge: 3 * 24 * 60 * 60 * 1000,
+    secure: true,
+    sameSite: 'none',
+    httpOnly: true
+  })
+
+  res.json({ status: 'done', auth: demoUser })
+}
+
 module.exports = (app) => {
   // Sign up
   signUp(app)
@@ -22,13 +68,25 @@ module.exports = (app) => {
   // Sign in & Log in with Google
   loginWithGoogle(app)
 
-  // Get user info
-  app.get('/api/users/me', mustHaveValidToken, async (req, res) => {
-    const { user_id } = req.user
+  // Return user info
+  app.get(
+    '/api/users/me',
+    async (req, res, next) => {
+      mustHaveValidToken(req, res, next, demoAuthentication)
+    },
+    async (req, res) => {
+      const { user_id } = req.user
 
-    const user = await userModel.get({ user_id })
+      if (user_id === 0) {
+        return demoAuthentication(req, res)
+      }
 
-    if (user !== false) {
+      const user = await userModel.get({ user_id })
+
+      if (user === false) {
+        return res.json({ status: 'error' })
+      }
+
       const { renewCookie } = req.query
 
       if (renewCookie) {
@@ -43,11 +101,9 @@ module.exports = (app) => {
         })
       }
 
-      res.json({ status: 'done', auth: user })
-    } else {
-      res.json({ status: 'error' })
+      return res.json({ status: 'done', auth: user })
     }
-  })
+  )
 
   // Log out
   app.post('/api/users/logout', async (req, res) => {

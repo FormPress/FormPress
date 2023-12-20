@@ -30,6 +30,8 @@ import Modal from './common/Modal'
 import Templates from './Templates'
 import FormIntegrations from './helper/FormIntegrations'
 import PostSubmission from './helper/PostSubmission'
+import SignUp from './SignUp'
+
 import { api } from '../helper'
 import { getConfigurableSettings } from './ConfigurableSettings'
 import { TemplateOptionSVG } from '../svg'
@@ -137,9 +139,7 @@ export default class Builder extends Component {
         this.setState({ isTemplateModalOpen: true })
       }
 
-      if (formId !== 'new') {
-        await this.loadForm(formId)
-      } else {
+      if (formId === 'new') {
         window.scrollTo(0, 0)
         this.setIntegration({
           type: 'email',
@@ -147,6 +147,11 @@ export default class Builder extends Component {
         })
 
         this.setState({ loading: false })
+      } else if (formId === 'demo') {
+        this.setState({ loading: false })
+      } else {
+        // Not a new form or demo form, load form using formId
+        await this.loadForm(formId)
       }
     } else {
       const lastEditedFormId = window.localStorage.getItem('lastEditedFormId')
@@ -167,7 +172,7 @@ export default class Builder extends Component {
       }
     }
 
-    this.shouldBlockNavigation = this.props.history.block(this.blockReactRoutes)
+    this.shouldBlockNavigation = this.props.history.block(this.allowReactRoutes)
 
     const isWindows = navigator.platform.indexOf('Win') > -1
     this.setState({ isWindows })
@@ -177,7 +182,13 @@ export default class Builder extends Component {
     this.shouldBlockNavigation()
   }
 
-  blockReactRoutes = (location) => {
+  allowReactRoutes = (location) => {
+    const { formId } = this.props.match.params
+    // Demo override
+    if (formId === 'demo') {
+      return true
+    }
+
     this.ignoreFormDifference = () => {
       this.props.history.push(location.pathname)
     } // if user still wants to proceed without saving
@@ -208,7 +219,11 @@ export default class Builder extends Component {
       return false
     }
 
-    return isFormChanged === false
+    if (isFormChanged === false) {
+      return true
+    } else {
+      return false
+    }
   }
 
   handleCloseModalClick() {
@@ -438,6 +453,8 @@ export default class Builder extends Component {
       saving: false,
       loading: true,
       modalContent: {},
+      isTemplateModalOpen: false,
+      isDemoSignupModalOpen: false,
       dragging: false,
       dragIndex: false,
       draggingItemType: '',
@@ -488,6 +505,7 @@ export default class Builder extends Component {
     this.setFormDesign = this.setFormDesign.bind(this)
     this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
     this.renderLeftElements = this.renderLeftElements.bind(this)
+    this.demoToUserTransition = this.demoToUserTransition.bind(this)
   }
 
   setAdditionalSaveFunction(func) {
@@ -905,7 +923,10 @@ export default class Builder extends Component {
   async rteUploadHandler(blobInfo) {
     //need save to get form id before upload
     if (this.state.form.id === null) {
-      await this.handleSaveClick()
+      const saveSuccess = await this.handleSaveClick()
+      if (saveSuccess === false) {
+        return
+      }
     }
 
     return new Promise((resolve, reject) => {
@@ -958,7 +979,10 @@ export default class Builder extends Component {
   async imageUploadHandler(id, file) {
     //need save to get form id before upload
     if (this.state.form.id === null) {
-      await this.handleSaveClick()
+      const saveSuccess = await this.handleSaveClick()
+      if (saveSuccess === false) {
+        return
+      }
     }
     const form = cloneDeep(this.state.form)
 
@@ -1081,6 +1105,15 @@ export default class Builder extends Component {
   }
 
   async handleSaveClick() {
+    const { isInDemoMode } = this.props.generalContext.user
+
+    if (isInDemoMode() === true) {
+      // open modal for sign up if user is demo mode
+      this.setState({ isDemoSignupModalOpen: true })
+
+      return false
+    }
+
     const { form, additionalSaveFunction } = this.state
 
     this.setState({ saving: true })
@@ -1093,9 +1126,13 @@ export default class Builder extends Component {
 
     this.setState({ saving: false })
 
+    // New form created, save is successful
     if (form.id === null && typeof data.id !== 'undefined') {
       const currentPath = this.props.history.location.pathname
-      const newPath = currentPath.replace(/new/, `${data.id}`)
+      const stringToReplace = ['new', 'demo'] // Array containing strings to be replaced
+      const regexPattern = new RegExp(`(${stringToReplace.join('|')})`)
+
+      const newPath = currentPath.replace(regexPattern, `${data.id}`)
 
       this.props.history.replace(newPath)
       this.setState({
@@ -1124,6 +1161,7 @@ export default class Builder extends Component {
     if (additionalSaveFunction !== null) {
       additionalSaveFunction()
     }
+    return true
   }
 
   async handlePublishClick() {
@@ -1135,7 +1173,12 @@ export default class Builder extends Component {
 
     this.setState({ publishing: true })
 
-    await this.handleSaveClick()
+    const saveSuccessful = await this.handleSaveClick()
+
+    if (saveSuccessful === false) {
+      this.setState({ publishing: false })
+      return false
+    }
 
     if (typeof form.id !== 'undefined' && form.id !== null) {
       await api({
@@ -1181,6 +1224,37 @@ export default class Builder extends Component {
     return !elementsToRemove.includes(elem.type)
   }
 
+  async demoToUserTransition() {
+    const { whoAmI } = this.props.generalContext.user
+    const { setLoadingState } = this.props.generalContext.appStateHandlers
+
+    // Step 1: discombobulate
+    setLoadingState('soft')
+
+    // Step 2: dismiss modal
+    this.setState({ isDemoSignupModalOpen: false })
+
+    // Step 3: lets be safe and make sure we have the latest user data
+    await whoAmI()
+
+    // Step 4: save user's newly created form
+    const saveSuccess = await this.handleSaveClick()
+
+    if (saveSuccess !== false) {
+      const { auth } = this.props.generalContext
+
+      this.setIntegration({
+        type: 'email',
+        to: auth.email
+      })
+    }
+
+    // Step 5: recombobulate
+    setTimeout(() => {
+      setLoadingState(false)
+    }, 3000)
+  }
+
   render() {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
@@ -1188,6 +1262,8 @@ export default class Builder extends Component {
     const noComponentPresent = this.props.history.location.pathname.endsWith(
       '/new'
     )
+
+    const { generalContext } = this.props
 
     if (this.state.redirect) {
       return (
@@ -1251,6 +1327,7 @@ export default class Builder extends Component {
           />
         ) : null}
         {this.state.isTemplateModalOpen ? this.renderTemplateModal() : null}
+        {this.state.isDemoSignupModalOpen ? this.renderDemoSignupModal() : null}
         <div className="headerContainer">
           <div
             className={`header grid center ${
@@ -1300,7 +1377,8 @@ export default class Builder extends Component {
               ) : (
                 <button title="Don't have permission">Disabled</button>
               )}
-              {typeof this.state.form.id === 'number' ? (
+              {typeof this.state.form.id === 'number' ||
+              generalContext.user.isInDemoMode() === true ? (
                 <NavLink to={`/editor/${params.formId}/preview`}>
                   <button>Preview</button>
                 </NavLink>
@@ -1391,6 +1469,28 @@ export default class Builder extends Component {
             </NavLink>
           </div>
         </div>
+      </Modal>
+    )
+  }
+
+  renderDemoSignupModal() {
+    let modalContent = {}
+    const closeModal = () => {
+      this.setState({ isDemoSignupModalOpen: false })
+    }
+
+    return (
+      <Modal
+        isOpen={this.state.isDemoSignupModalOpen}
+        modalContent={modalContent}
+        closeModal={closeModal}>
+        <SignUp
+          demoToUserTransition={this.demoToUserTransition}
+          history={this.props.history}
+          compact={true}
+          isCodeBasedSignUp={true}
+          closeModal={closeModal}
+        />
       </Modal>
     )
   }
@@ -1723,6 +1823,7 @@ export default class Builder extends Component {
         <Route path="/editor/:formId/postsubmission">
           <PostSubmission
             form={this.state.form}
+            handleSaveClick={this.handleSaveClick}
             setAdditionalSaveFunction={this.setAdditionalSaveFunction}
             setIntegration={this.setIntegration}
             canEdit={canEdit}
@@ -1746,6 +1847,8 @@ export default class Builder extends Component {
         </Route>
         <Route path="/editor/:formId/preview">
           <PreviewForm
+            generalContext={this.props.generalContext}
+            form={this.state.form}
             formID={formId}
             uuid={this.state.form.uuid}
             history={this.props.history}

@@ -166,6 +166,11 @@ module.exports = {
       protected: false
     },
     {
+      method: 'post',
+      path: '/form/view/demo',
+      protected: false
+    },
+    {
       method: 'get',
       path: '/api/get/templates',
       protected: false

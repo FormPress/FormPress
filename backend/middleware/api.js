@@ -1162,6 +1162,17 @@ module.exports = (app) => {
     }
 
     let form = result
+
+    const db = await getPool()
+    const userResult = await db.query(
+      `SELECT \`isActive\` FROM \`user\` WHERE \`id\` = ?`,
+      [form.user_id]
+    )
+
+    if (userResult[0].isActive === 0) {
+      return res.status(404).send('Error: Form not found')
+    }
+
     if (req.query.preview !== 'true' && form.published_version !== 0) {
       const publishedResult = await formPublishedModel.get({
         form_id: form.id,
@@ -1182,7 +1193,6 @@ module.exports = (app) => {
 
     form.props = updateFormPropsWithNewlyAddedProps(form.props)
 
-    const db = await getPool()
     const userRoleResult = await db.query(
       `
     SELECT \`role_id\` FROM \`user_role\` WHERE \`user_id\` = ?
@@ -1275,6 +1285,81 @@ module.exports = (app) => {
     })
   })
 
+  app.post('/form/view/demo', mustHaveValidToken, async (req, res) => {
+    let { form } = req.body
+
+    if (form === undefined) {
+      return res.send('Form not found')
+    }
+
+    let showBranding = true
+
+    let style = fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/normalize.css')
+    )
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/style/common.css')
+    )
+    //fall back to default theme
+    let designTheme = 'gleam'
+    if (form.props.design !== undefined) {
+      designTheme = form.props.design.theme
+    }
+
+    let themePath = path.resolve(
+      '../',
+      `frontend/src/style/themes/scss/${designTheme}.scss`
+    )
+
+    if (FP_ENV !== 'development') {
+      themePath = path.resolve(
+        '../',
+        `frontend/src/style/themes/${designTheme}.css`
+      )
+      style += fs.readFileSync(themePath)
+    } else {
+      try {
+        const result = await sass.renderSync({
+          file: themePath
+        })
+        const css = result.css.toString('utf8').trim()
+        style += css
+      } catch (e) {
+        console.log('Error loading theme:  \n ', e)
+      }
+    }
+
+    style += fs.readFileSync(
+      path.resolve('../', 'frontend/src/modules/elements/index.css')
+    )
+
+    const str = reactDOMServer.renderToStaticMarkup(
+      React.createElement(Renderer, {
+        className: 'form',
+        form,
+        mode: 'renderer',
+        theme: designTheme
+      })
+    )
+
+    const id = 0
+    const postTarget = `${BACKEND}/templates/submit/${id}`
+
+    res.render('template.tpl.ejs', {
+      headerAppend: `<style type='text/css'>${style}</style>`,
+      showBranding,
+      title: form.title,
+      form: str,
+      postTarget,
+      rules: form.props.rules || [],
+      elements: form.props.elements || [],
+      RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
+      BACKEND,
+      FORMID: id
+    })
+  })
+
   app.get('/templates/view/:id', async (req, res) => {
     const form_id = req.params.id
 
@@ -1340,7 +1425,9 @@ module.exports = (app) => {
       title: form.title,
       form: str,
       postTarget: `${BACKEND}/templates/submit/${form_id}`,
-      elements: form.props.elements,
+      rules: form.props.rules || [],
+      elements: form.props.elements || [],
+      showBranding: false,
       RUNTIMEJSURL: `${BACKEND}/runtime/form.js`,
       BACKEND,
       FORMID: form_id
