@@ -99,7 +99,14 @@ export default class QuestionProperties extends Component {
                       .trim()
                   : ''
               }}></div>
-            <div className="qtype">{selectedField.config.type}</div>
+            <div className="question_meta">
+              <div className="qtype">
+                Type: <span>{selectedField.config.type}</span>
+              </div>
+              <div className="qfieldid">
+                Field ID: <span>{`q_` + selectedField.config.id}</span>
+              </div>
+            </div>
           </div>
 
           <Renderer

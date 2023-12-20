@@ -332,3 +332,25 @@
   color: white;
   font-weight: bold;
 }
+
+.feedbackFormContainer {
+  background: #fdfdfd;
+  display: block;
+  margin: auto;
+  max-width: 700px;
+}
+
+.no_forms_container {
+  height: 270px;
+  width: 100%;
+  color: #777474;
+  background: #eaeaea;
+  border: 2px dashed gainsboro;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  display: flex;
+  margin-top: 104px;
+  font-size: 18pt;
+  justify-content: center;
+  align-items: center;
+}

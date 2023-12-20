@@ -12,7 +12,8 @@
 }
 
 .question-info {
-  display: flow-root;
+  display: flex;
+  flex-direction: column;
 }
 
 .question-info > .qlabel {
@@ -29,11 +30,20 @@
   color: #113952;
   white-space: nowrap;
 }
+.question-info > .question_meta {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
 
-.question-info > .qtype {
-  color: gray;
-  float: right;
-  margin: 10px 20px;
+.question-info > .question_meta > div {
+  color: grey;
+  font-weight: bold;
+  margin: 0.1rem 0;
+}
+
+.question-info > .question_meta > div > span {
+  font-weight: normal;
 }
 
 .questionPropertiesForm {
