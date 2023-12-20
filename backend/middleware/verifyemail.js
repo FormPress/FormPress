@@ -5,7 +5,6 @@ const { token } = require(path.resolve('helper')).token
 
 const { model } = require(path.resolve('helper'))
 const userModel = model.user
-const FRONTEND = process.env.FE_FRONTEND
 
 module.exports = (app) => {
   app.get('/api/users/:user_id/verify/:verification_code', async (req, res) => {
