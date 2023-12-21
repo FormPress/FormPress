@@ -25,7 +25,7 @@ module.exports = (app) => {
       `
         SELECT *
         FROM \`user\`
-        WHERE email = ? AND emailVerified = 0
+        WHERE email = ?
       `,
       [email.toLowerCase()]
     )
