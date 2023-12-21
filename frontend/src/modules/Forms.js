@@ -17,6 +17,7 @@ import Modal from './common/Modal'
 import FormPermissionShare from './common/FormPermissionShare'
 
 import './Forms.css'
+import { DotLoader } from 'react-spinner-overlay'
 
 export default class Forms extends Component {
   setLoadingState(key, value) {
@@ -29,15 +30,16 @@ export default class Forms extends Component {
   }
 
   async updateForms() {
-    this.setLoadingState('forms', true)
-
     const { data } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
     const forms = data
 
-    this.setLoadingState('forms', false)
     this.setState({ forms })
+
+    setTimeout(() => {
+      this.setLoadingState('forms', false)
+    }, 1000)
   }
 
   componentDidMount() {
@@ -53,7 +55,7 @@ export default class Forms extends Component {
       modalContent: {},
       forms: [],
       loading: {
-        forms: false,
+        forms: true,
         deletingId: false
       }
     }
@@ -333,7 +335,7 @@ export default class Forms extends Component {
   }
 
   render() {
-    const { forms } = this.state
+    const { forms, loading } = this.state
     let roleLimit = 5
     if (this.props.generalContext.auth.permission.admin) {
       roleLimit = 0
@@ -377,7 +379,11 @@ export default class Forms extends Component {
           ) : null}
           <div className="headerContainer"></div>
           <div className="formsContent">
-            {formsAndShares.owned.length > 0 ? (
+            {loading.forms ? (
+              <div className="forms_loader">
+                <DotLoader color={'#9ee048'} loading={true} size={12} />
+              </div>
+            ) : formsAndShares.owned.length > 0 ? (
               <Table
                 columns={[
                   {
