@@ -526,9 +526,6 @@ export default class Evaluation extends Component {
                 View
               </div>
             </div>
-            {tab === 'details'
-              ? this.renderReviewFormDetails(selectedForm)
-              : this.renderFormView(selectedForm)}
             <div className="eval-controls">
               {selectedForm.approver_id === null && (
                 <div
@@ -555,6 +552,9 @@ export default class Evaluation extends Component {
                 Delete
               </div>
             </div>
+            {tab === 'details'
+              ? this.renderReviewFormDetails(selectedForm)
+              : this.renderFormView(selectedForm)}
           </div>
         )
       }
