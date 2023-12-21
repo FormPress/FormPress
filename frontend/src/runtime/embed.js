@@ -39,7 +39,6 @@
       script.getAttribute('fp_widget_cookie')
     const widget =
       script.getAttribute('data-fp-widget') || script.getAttribute('fp_widget')
-    const prePopulate = script.getAttribute('data-fp-prepopulate')
 
     let src = `${BACKEND}/form/view/${formID}?embed=true`
 
@@ -47,12 +46,25 @@
       src += `&token=${token}`
     }
 
-    if (prePopulate) {
-      const prepopulateParams = prePopulate.split('|') // NOT SURE ABOUT THE SEPARATOR (|)
-      const prePopulateArrayFormatted = prepopulateParams.filter((item) =>
-        item.startsWith('q_')
-      )
-      src += `&${prePopulateArrayFormatted.join('&')}`
+    const prepopulateParams = Array.from(script.attributes).filter(
+      (attribute) => {
+        return attribute.name.startsWith('data-fp-prepopulate-')
+      }
+    )
+
+    // ex: "q_1=answer&q_2=answer"
+    const prepopulateParamsString = prepopulateParams
+      .map((attribute) => {
+        return (
+          attribute.name.replace('data-fp-prepopulate-', '') +
+          '=' +
+          encodeURIComponent(attribute.value)
+        )
+      })
+      .join('&')
+
+    if (prepopulateParamsString.length > 0) {
+      src += `&${prepopulateParamsString}`
     }
 
     const iframeID = 'fp_' + formID
