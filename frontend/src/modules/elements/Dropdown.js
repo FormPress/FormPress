@@ -131,8 +131,8 @@ export default class Dropdown extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    if (typeof config.hasDataset !== 'undefined') {
-      inputProps['data-fp-list'] = config.hasDataset
+    if (config.hasDataset === true) {
+      inputProps['data-fp-list'] = config.dataset
     }
 
     if (
