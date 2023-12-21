@@ -299,7 +299,6 @@ export default class Forms extends Component {
     const { isGettingStartedModalOpen } = this.state
     const { auth } = this.props.generalContext
     const { user } = auth
-    const feedBackFormContainerRef = React.createRef()
 
     const handleCloseModalCLick = () => {
       this.setState({ isGettingStartedModalOpen: false })
@@ -320,7 +319,34 @@ export default class Forms extends Component {
         isOpen={isGettingStartedModalOpen}
         modalContent={{}}
         closeModal={handleCloseModalCLick}>
-        <div className="feedbackFormContainer" ref={feedBackFormContainerRef}>
+        <div
+          className={'modal-wrapper feedbackFormContainer'}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className={`wrapper-header`}>
+            Welcome to FormPress!
+            <span className="close-modal" onClick={handleCloseModalCLick}>
+              x
+            </span>
+          </div>
+          <p className="getting_started_greetings">
+            We are excited to have you here! FormPress is an open-source form
+            builder and we are working hard to make it the best on the market.
+            We would love to hear your feedback and suggestions. Please let us
+            know about your use case and why you chose FormPress.
+          </p>
+          <p className="getting_started_greetings">
+            To speed things up, you can check out our blog post on getting
+            started with FormPress{' '}
+            <a
+              href="https://formpress.org/blog-details/027-getting-started"
+              target="_blank"
+              rel="noopener noreferrer">
+              here
+            </a>
+            .
+          </p>
           <iframe
             title="Feedback Form"
             style={{

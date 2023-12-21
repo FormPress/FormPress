@@ -1304,12 +1304,6 @@ export default class Builder extends Component {
     }
     const { form, publishedForm, loading, saving, publishing } = this.state
 
-    console.log('form nextUniqueId', form.props.nextUniqueId)
-    console.log(
-      'form element ids',
-      form.props.elements.map((e) => e.id)
-    )
-
     const isPublishRequired = form.updated_at !== publishedForm.created_at
     const saveButtonProps = {}
 
