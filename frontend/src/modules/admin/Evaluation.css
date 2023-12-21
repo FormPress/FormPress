@@ -111,9 +111,12 @@
   margin: 0px 5px 5px 0px;
 }
 .selected-eval-form {
-  min-width: 30%;
+  min-width: 40%;
   margin: 10px;
   word-wrap: break-word;
+}
+.selected-eval-form > .iframe-wrapper {
+  height: 3000px;
 }
 .selected-eval-form a {
   display: inline-block;
