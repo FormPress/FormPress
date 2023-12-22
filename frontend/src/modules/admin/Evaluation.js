@@ -491,9 +491,6 @@ export default class Evaluation extends Component {
                 View
               </div>
             </div>
-            {tab === 'details'
-              ? this.renderFormDetails(selectedForm)
-              : this.renderFormView(selectedForm)}
             <div className="eval-controls vertical">
               <div
                 className="eval-button good"
@@ -506,6 +503,9 @@ export default class Evaluation extends Component {
                 Bad
               </div>
             </div>
+            {tab === 'details'
+              ? this.renderFormDetails(selectedForm)
+              : this.renderFormView(selectedForm)}
           </div>
         )
       } else if (page === 'review') {
