@@ -74,6 +74,10 @@ export default class QuestionProperties extends Component {
         }
       }
 
+      if (config[key] === undefined) {
+        config[key] = question.default
+      }
+
       if (advancedSettingsList.includes(key)) {
         advancedSettingsForm.props.elements.push(
           Object.assign({ id: key }, question.formProps, {
@@ -83,9 +87,6 @@ export default class QuestionProperties extends Component {
         continue
       }
 
-      if (config[key] === undefined) {
-        config[key] = question.default
-      }
       if (key === 'answerExplanation') {
         question.formProps.form_id = config.id
         form.props.elements.push(
