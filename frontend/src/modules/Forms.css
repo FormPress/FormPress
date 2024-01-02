@@ -338,11 +338,11 @@
 }
 
 .feedbackFormContainer .getting_started_greetings {
-  padding: 20px;
+  padding: 10px 20px;
   line-height: 1.5;
   font-family: 'Montserrat', sans-serif;
   font-weight: 500;
-  margin: 0;
+  margin: 1px 1px;
 }
 
 .no_forms_container {

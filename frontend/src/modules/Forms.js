@@ -302,6 +302,12 @@ export default class Forms extends Component {
 
     const handleCloseModalCLick = () => {
       this.setState({ isGettingStartedModalOpen: false })
+      this.props.history.replace({
+        pathname: '/forms',
+        state: {
+          gettingStarted: false
+        }
+      })
     }
 
     let prePopulateQueryParams = ''
@@ -310,11 +316,8 @@ export default class Forms extends Component {
       prePopulateQueryParams = `&q_email=${user.email}`
     }
 
-    // let iframeSrc =
-    //   `https://app.formpress.org/form/view/ae925fea-48b7-4907-b2c4-90abfc849e3b?embed=true` +
-    //   prePopulateQueryParams
     let iframeSrc =
-      `https://app-stage.formpress.org/form/view/9d61c1dc-474f-467b-835f-455ca73c7f9b?embed=true` +
+      `https://app.formpress.org/form/view/ae925fea-48b7-4907-b2c4-90abfc849e3b?embed=true` +
       prePopulateQueryParams
 
     return (
@@ -354,7 +357,7 @@ export default class Forms extends Component {
             title="Feedback Form"
             style={{
               width: '700px',
-              height: '630px'
+              height: '600px'
             }}
             scrolling={'no'}
             src={iframeSrc}></iframe>
