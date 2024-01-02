@@ -298,7 +298,6 @@ export default class Forms extends Component {
   renderGettingStartedModal() {
     const { isGettingStartedModalOpen } = this.state
     const { auth } = this.props.generalContext
-    const { user } = auth
 
     const handleCloseModalCLick = () => {
       this.setState({ isGettingStartedModalOpen: false })
@@ -312,8 +311,8 @@ export default class Forms extends Component {
 
     let prePopulateQueryParams = ''
 
-    if (user) {
-      prePopulateQueryParams = `&q_email=${user.email}`
+    if (auth && auth.email) {
+      prePopulateQueryParams = `&q_email=${auth.email}`
     }
 
     let iframeSrc =
