@@ -33,9 +33,16 @@ exports.mustHaveValidToken = (req, res, next, cb = null) => {
   } else {
     if (cb !== null) {
       return cb(req, res, next)
-    } else {
-      return res.status(403).send({ message: 'Invalid Token' })
     }
+
+    if (res.locals.badAuthCookie === true) {
+      res.clearCookie('auth', {
+        domain: process.env.COOKIE_DOMAIN,
+        path: '/'
+      })
+    }
+
+    return res.status(403).send({ message: 'Invalid Token' })
   }
 }
 

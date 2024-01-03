@@ -77,6 +77,13 @@ export default class Email extends Component {
       inputProps.disabled = config.disabled
     }
 
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     return (
       <ElementContainer type={config.type} {...this.props}>
         <div className="elemLabelTitle">

@@ -5,7 +5,6 @@ import {
   faEye,
   faTrash,
   faPen,
-  faPlusCircle,
   faClone,
   faUserLock,
   faLink
@@ -18,6 +17,7 @@ import Modal from './common/Modal'
 import FormPermissionShare from './common/FormPermissionShare'
 
 import './Forms.css'
+import { DotLoader } from 'react-spinner-overlay'
 
 export default class Forms extends Component {
   setLoadingState(key, value) {
@@ -30,15 +30,16 @@ export default class Forms extends Component {
   }
 
   async updateForms() {
-    this.setLoadingState('forms', true)
-
     const { data } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`
     })
     const forms = data
 
-    this.setLoadingState('forms', false)
     this.setState({ forms })
+
+    setTimeout(() => {
+      this.setLoadingState('forms', false)
+    }, 1000)
   }
 
   componentDidMount() {
@@ -49,11 +50,12 @@ export default class Forms extends Component {
     super(props)
     this.state = {
       isModalOpen: false,
+      isGettingStartedModalOpen: props.gettingStarted,
       cloneFormName: '',
       modalContent: {},
       forms: [],
       loading: {
-        forms: false,
+        forms: true,
         deletingId: false
       }
     }
@@ -293,8 +295,79 @@ export default class Forms extends Component {
     return newValue
   }
 
+  renderGettingStartedModal() {
+    const { isGettingStartedModalOpen } = this.state
+    const { auth } = this.props.generalContext
+    const { user } = auth
+
+    const handleCloseModalCLick = () => {
+      this.setState({ isGettingStartedModalOpen: false })
+      this.props.history.replace({
+        pathname: '/forms',
+        state: {
+          gettingStarted: false
+        }
+      })
+    }
+
+    let prePopulateQueryParams = ''
+
+    if (user) {
+      prePopulateQueryParams = `&q_email=${user.email}`
+    }
+
+    let iframeSrc =
+      `https://app.formpress.org/form/view/ae925fea-48b7-4907-b2c4-90abfc849e3b?embed=true` +
+      prePopulateQueryParams
+
+    return (
+      <Modal
+        isOpen={isGettingStartedModalOpen}
+        modalContent={{}}
+        closeModal={handleCloseModalCLick}>
+        <div
+          className={'modal-wrapper feedbackFormContainer'}
+          onClick={(e) => {
+            e.stopPropagation()
+          }}>
+          <div className={`wrapper-header`}>
+            Welcome to FormPress!
+            <span className="close-modal" onClick={handleCloseModalCLick}>
+              x
+            </span>
+          </div>
+          <p className="getting_started_greetings">
+            We are excited to have you here! FormPress is an open-source form
+            builder and we are working hard to make it the best on the market.
+            We would love to hear your feedback and suggestions. Please let us
+            know about your use case and why you chose FormPress.
+          </p>
+          <p className="getting_started_greetings">
+            To speed things up, you can check out our blog post on getting
+            started with FormPress{' '}
+            <a
+              href="https://formpress.org/blog-details/027-getting-started"
+              target="_blank"
+              rel="noopener noreferrer">
+              here
+            </a>
+            .
+          </p>
+          <iframe
+            title="Feedback Form"
+            style={{
+              width: '700px',
+              height: '600px'
+            }}
+            scrolling={'no'}
+            src={iframeSrc}></iframe>
+        </div>
+      </Modal>
+    )
+  }
+
   render() {
-    const { forms } = this.state
+    const { forms, loading } = this.state
     let roleLimit = 5
     if (this.props.generalContext.auth.permission.admin) {
       roleLimit = 0
@@ -326,6 +399,9 @@ export default class Forms extends Component {
     return (
       <div>
         <div className="forms">
+          {this.state.isGettingStartedModalOpen === true
+            ? this.renderGettingStartedModal()
+            : null}
           {this.state.isModalOpen ? (
             <Modal
               isOpen={this.state.isModalOpen}
@@ -333,154 +409,156 @@ export default class Forms extends Component {
               closeModal={this.handleCloseModalClick}
             />
           ) : null}
-          {roleLimit === 0 || roleLimit > formsAndShares.owned.length ? (
-            <div
-              className="nav_add_new_form_container"
-              style={{ display: 'none' }}>
-              <Link to="/editor/new" className="nav_add_new_form_link">
-                <div className="popover-container circle-plus-container">
-                  <FontAwesomeIcon
-                    icon={faPlusCircle}
-                    title="Add New Form"
-                    className="nav_add_new_form_logo"
-                  />
-                  <div className="popoverText">Create a new form</div>
-                </div>
-              </Link>
-            </div>
-          ) : (
-            ''
-          )}
           <div className="headerContainer"></div>
           <div className="formsContent">
-            <Table
-              columns={[
-                {
-                  label: <span> </span>,
-                  content: () => <span> </span>,
-                  className: 'mw'
-                },
-                {
-                  label: 'Name',
-                  content: (form) => (
-                    <Link to={`/editor/${form.id}/builder`} title="Go To Form">
-                      {form.title}
-                    </Link>
-                  ),
-                  className: 'name',
-                  title: ' '
-                },
-                {
-                  label: 'Submissions',
-                  content: (form) => (
-                    <div className="responsesContainer">
+            {loading.forms ? (
+              <div className="forms_loader">
+                <DotLoader color={'#9ee048'} loading={true} size={12} />
+              </div>
+            ) : formsAndShares.owned.length > 0 ? (
+              <Table
+                columns={[
+                  {
+                    label: <span> </span>,
+                    content: () => <span> </span>,
+                    className: 'mw'
+                  },
+                  {
+                    label: 'Name',
+                    content: (form) => (
                       <Link
-                        to={{
-                          pathname: '/data',
-                          state: {
-                            form_id: form.id,
-                            submissionFilterSelectors: { showUnread: false }
+                        to={`/editor/${form.id}/builder`}
+                        title="Go To Form">
+                        {form.title}
+                      </Link>
+                    ),
+                    className: 'name',
+                    title: ' '
+                  },
+                  {
+                    label: 'Submissions',
+                    content: (form) => (
+                      <div className="responsesContainer">
+                        <Link
+                          to={{
+                            pathname: '/data',
+                            state: {
+                              form_id: form.id,
+                              submissionFilterSelectors: { showUnread: false }
+                            }
+                          }}
+                          className={`responseCount${
+                            form.responseCount === 0 ? ' zero' : ''
+                          }`}
+                          title="View the submissions to this form.">
+                          {this.handleCountSubmissions(form.responseCount)}
+                        </Link>
+                        {form.unreadCount > 0 ? (
+                          <span
+                            className="unreadBadge"
+                            title="Unread submissions">
+                            {form.unreadCount > 99 ? '99' : form.unreadCount}
+                          </span>
+                        ) : null}
+                      </div>
+                    ),
+                    className: 'responses'
+                  },
+                  {
+                    label: 'Created',
+                    content: (form) => [
+                      <Moment fromNow ago date={form.created_at} key="1" />,
+                      <span key="2">{' ago'}</span>
+                    ],
+                    className: 'createdAt'
+                  },
+                  {
+                    label: 'Actions',
+                    content: (form) => (
+                      <div className="actions">
+                        <span
+                          className={`${
+                            form.published_version ? 'view' : 'inactive_view'
+                          }`}
+                          title={
+                            form.published_version
+                              ? 'View Form'
+                              : 'Form must be published before it can be viewed'
                           }
-                        }}
-                        className={`responseCount${
-                          form.responseCount === 0 ? ' zero' : ''
-                        }`}
-                        title="View the submissions to this form.">
-                        {this.handleCountSubmissions(form.responseCount)}
-                      </Link>
-                      {form.unreadCount > 0 ? (
-                        <span
-                          className="unreadBadge"
-                          title="Unread submissions">
-                          {form.unreadCount > 99 ? '99' : form.unreadCount}
+                          onClick={
+                            form.published_version
+                              ? this.handlePreviewClick.bind(this, form)
+                              : undefined
+                          }>
+                          <FontAwesomeIcon icon={faEye} />
                         </span>
-                      ) : null}
-                    </div>
-                  ),
-                  className: 'responses'
-                },
-                {
-                  label: 'Created',
-                  content: (form) => [
-                    <Moment fromNow ago date={form.created_at} key="1" />,
-                    <span key="2">{' ago'}</span>
-                  ],
-                  className: 'createdAt'
-                },
-                {
-                  label: 'Actions',
-                  content: (form) => (
-                    <div className="actions">
-                      <span
-                        className={`${
-                          form.published_version ? 'view' : 'inactive_view'
-                        }`}
-                        title={
-                          form.published_version
-                            ? 'View Form'
-                            : 'Form must be published before it can be viewed'
-                        }
-                        onClick={
-                          form.published_version
-                            ? this.handlePreviewClick.bind(this, form)
-                            : undefined
-                        }>
-                        <FontAwesomeIcon icon={faEye} />
-                      </span>
-                      {canShare ? (
+                        {canShare ? (
+                          <span
+                            title="Share Form"
+                            onClick={this.handleFormSharePermissionsClick.bind(
+                              this,
+                              form
+                            )}>
+                            <FontAwesomeIcon icon={faUserLock} />
+                          </span>
+                        ) : (
+                          <span
+                            className="upgrade-container"
+                            title="Upgrade your plan to share with others">
+                            <FontAwesomeIcon icon={faUserLock} />
+                            <div className="popoverText">
+                              <a
+                                href={global.env.FE_UPGRADE_LINK}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {' '}
+                                Upgrade your plan
+                              </a>{' '}
+                              to share with others.
+                            </div>
+                          </span>
+                        )}
                         <span
-                          title="Share Form"
-                          onClick={this.handleFormSharePermissionsClick.bind(
-                            this,
-                            form
-                          )}>
-                          <FontAwesomeIcon icon={faUserLock} />
+                          title="Delete Form"
+                          onClick={this.handleFormDeleteClick.bind(this, form)}>
+                          <FontAwesomeIcon icon={faTrash} />
                         </span>
-                      ) : (
-                        <span
-                          className="upgrade-container"
-                          title="Upgrade your plan to share with others">
-                          <FontAwesomeIcon icon={faUserLock} />
-                          <div className="popoverText">
-                            <a
-                              href={global.env.FE_UPGRADE_LINK}
-                              target="_blank"
-                              rel="noopener noreferrer">
-                              {' '}
-                              Upgrade your plan
-                            </a>{' '}
-                            to share with others.
-                          </div>
-                        </span>
-                      )}
-                      <span
-                        title="Delete Form"
-                        onClick={this.handleFormDeleteClick.bind(this, form)}>
-                        <FontAwesomeIcon icon={faTrash} />
-                      </span>
-                      <Link to={`/editor/${form.id}/builder`} title="Edit Form">
-                        <FontAwesomeIcon icon={faPen} />
-                      </Link>
-                      {roleLimit === 0 ||
-                      roleLimit > formsAndShares.owned.length ? (
-                        <span
-                          title="Clone Form"
-                          onClick={this.handleFormCloneClick.bind(this, form)}>
-                          <FontAwesomeIcon icon={faClone} />
-                        </span>
-                      ) : (
-                        <span
-                          className="inactive_clone"
-                          title="Form limit reached">
-                          <FontAwesomeIcon icon={faClone} />
-                        </span>
-                      )}
-                    </div>
-                  )
-                }
-              ]}
-              data={formsAndShares.owned}
-            />
+                        <Link
+                          to={`/editor/${form.id}/builder`}
+                          title="Edit Form">
+                          <FontAwesomeIcon icon={faPen} />
+                        </Link>
+                        {roleLimit === 0 ||
+                        roleLimit > formsAndShares.owned.length ? (
+                          <span
+                            title="Clone Form"
+                            onClick={this.handleFormCloneClick.bind(
+                              this,
+                              form
+                            )}>
+                            <FontAwesomeIcon icon={faClone} />
+                          </span>
+                        ) : (
+                          <span
+                            className="inactive_clone"
+                            title="Form limit reached">
+                            <FontAwesomeIcon icon={faClone} />
+                          </span>
+                        )}
+                      </div>
+                    )
+                  }
+                ]}
+                data={formsAndShares.owned}
+              />
+            ) : (
+              <div className="no_forms_container">
+                <p>
+                  Oops! It looks like you don&apos;t have any forms yet. Click
+                  the button below to create your first form!
+                </p>
+              </div>
+            )}
           </div>
           {formsAndShares.shared.length > 0 ? (
             <div className="formsContent shared">

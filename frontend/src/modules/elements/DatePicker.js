@@ -209,6 +209,13 @@ export default class DatePicker extends Component {
       inputProps.placeholder = config.placeholder
     }
 
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     if (!isDateSupported) {
       Flatpickr = flatpickrModule
     }

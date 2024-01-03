@@ -239,6 +239,13 @@ export default class Radio extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     var display
 
     if (mode === 'builder') {
@@ -408,8 +415,8 @@ export default class Radio extends Component {
                     id={`q_${config.id}_${key}`}
                     name={`q_${config.id}`}
                     value={mode === 'renderer' ? key : item}
-                    onChange={inputProps.onChange}
-                    checked={config.value === item}></input>
+                    checked={config.value === item}
+                    {...inputProps}></input>
                   <label
                     className="radio-label"
                     htmlFor={`q_${config.id}_${key}`}

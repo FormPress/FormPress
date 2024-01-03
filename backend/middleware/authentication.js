@@ -9,15 +9,19 @@ module.exports = (app) => {
     if (auth) {
       jwt.verify(auth, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
-          res.clearCookie('auth', {
-            domain: process.env.COOKIE_DOMAIN,
-            path: '/'
-          })
+          res.locals.badAuthCookie = true
           return next()
         }
 
         req.user = decoded
-        res.locals.validToken = true
+
+        let isValid = true
+
+        if (req.user.user_id === 0) {
+          // Demo user
+          isValid = false
+        }
+        res.locals.validToken = isValid
 
         next()
       })

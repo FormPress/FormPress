@@ -12,7 +12,8 @@
 }
 
 .question-info {
-  display: flow-root;
+  display: flex;
+  flex-direction: column;
 }
 
 .question-info > .qlabel {
@@ -29,11 +30,21 @@
   color: #113952;
   white-space: nowrap;
 }
+.question-info > .question_meta {
+  display: flex;
+  padding: 0px 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
 
-.question-info > .qtype {
-  color: gray;
-  float: right;
-  margin: 10px 20px;
+.question-info > .question_meta > div {
+  color: grey;
+  font-weight: bold;
+  margin: 0.3rem 0;
+}
+
+.question-info > .question_meta > div > span {
+  font-weight: normal;
 }
 
 .questionPropertiesForm {
@@ -93,4 +104,39 @@
 
 #qc_defaultCountry {
   margin-top: -20px;
+}
+
+.questionProperties .adv-settings {
+  padding: 20px 10px 10px 10px;
+}
+.questionProperties .adv-settings > .adv-settings-summary {
+  cursor: pointer;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0.5rem;
+  box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.13);
+}
+
+.questionProperties .adv-settings > .adv-settings-summary > .adv-settings-icon {
+  color: #1c5c85;
+}
+
+.questionProperties
+  > .adv-settings
+  > .adv-settings-summary::-webkit-details-marker {
+  display: none;
+  color: transparent;
+  font-size: 0;
+}
+.questionProperties .adv-settings > .adv-settings-summary::marker {
+  display: none;
+  color: transparent;
+  font-size: 0;
+}
+
+.questionProperties .adv-settings > .adv-settings-row {
+  background: #f0f0f0;
+  display: flex;
+  border: 1px solid gainsboro;
 }
