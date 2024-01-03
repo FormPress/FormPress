@@ -77,12 +77,6 @@ export default class Renderer extends Component {
             return
           }
 
-          // if element is a hidden element, push it to current page without counting
-          if (element.hidden === true && element.type !== 'Button') {
-            formElements.push(element)
-            return
-          }
-
           if (elemCounter === formElementsPerPage) {
             pageBreakId++
             formElements.push({
@@ -193,13 +187,7 @@ export default class Renderer extends Component {
             }
 
             if (elem.hidden === true) {
-              if (this.props.mode === 'builder') {
-                elem.type === 'Button'
-                  ? (extraProps.className += ' dn') // button gets hidden in builder anyway
-                  : (extraProps.className += ' builder_elementHidden')
-              } else {
-                extraProps.className = 'dn'
-              }
+              extraProps.className = 'dn'
             }
 
             if (elem.type === 'PageBreak') {

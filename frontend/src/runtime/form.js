@@ -39,14 +39,6 @@
     {
       name: 'location',
       check: (element) => element.type === 'Location'
-    },
-    {
-      name: 'prepopulate',
-      check: () => {
-        const params = new URLSearchParams(window.location.search)
-        const paramKeys = Array.from(params.keys())
-        return paramKeys.some((key) => key.startsWith('q_'))
-      }
     }
   ]
   const api = ({ resource, method = 'get', body, useAuth = false }) =>

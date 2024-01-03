@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 
 import GeneralContext from './general.context'
 
-const PrivateRoute = ({ children, component, props: routeProps, ...rest }) => {
+const PrivateRoute = ({ children, component, ...rest }) => {
   return (
     <GeneralContext.Consumer>
       {(value) => (
@@ -13,8 +13,6 @@ const PrivateRoute = ({ children, component, props: routeProps, ...rest }) => {
             const Component = component
             const demoModeOverride =
               value.auth.user_id === 0 && props.match?.params?.formId === 'demo'
-
-            props = Object.assign({}, props, routeProps)
 
             return value.auth.loggedIn === true || demoModeOverride === true ? (
               component !== undefined ? (

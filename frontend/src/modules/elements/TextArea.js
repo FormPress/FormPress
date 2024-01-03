@@ -79,13 +79,6 @@ export default class TextArea extends Component {
       inputProps.maxLength = config.maxLength
     }
 
-    if (
-      typeof config.customFieldId !== 'undefined' &&
-      config.customFieldId !== ''
-    ) {
-      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
-    }
-
     return (
       <ElementContainer type={config.type} {...this.props}>
         <div className="elemLabelTitle">
