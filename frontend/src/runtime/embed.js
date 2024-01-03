@@ -46,27 +46,6 @@
       src += `&token=${token}`
     }
 
-    const prepopulateParams = Array.from(script.attributes).filter(
-      (attribute) => {
-        return attribute.name.startsWith('data-fp-prepopulate-')
-      }
-    )
-
-    // ex: "q_1=answer&q_2=answer"
-    const prepopulateParamsString = prepopulateParams
-      .map((attribute) => {
-        return (
-          attribute.name.replace('data-fp-prepopulate-', '') +
-          '=' +
-          encodeURIComponent(attribute.value)
-        )
-      })
-      .join('&')
-
-    if (prepopulateParamsString.length > 0) {
-      src += `&${prepopulateParamsString}`
-    }
-
     const iframeID = 'fp_' + formID
 
     let iframeElem = `<iframe id="${iframeID}" src="${src}" allow="geolocation *"></iframe>`

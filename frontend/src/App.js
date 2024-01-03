@@ -350,13 +350,6 @@ class App extends Component {
               <PrivateRoute exact strict path="/forms" component={Forms} />
               <PrivateRoute
                 exact
-                strict
-                path="/forms/gettingstarted"
-                props={{ gettingStarted: true }}
-                component={Forms}
-              />
-              <PrivateRoute
-                exact
                 path="/editor/:formId/builder/question/:questionId/properties"
                 component={Builder}
               />

@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import Renderer from '../Renderer'
 
 import './QuestionProperties.css'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCode } from '@fortawesome/free-solid-svg-icons'
 
 export default class QuestionProperties extends Component {
   constructor(props) {
@@ -41,8 +39,6 @@ export default class QuestionProperties extends Component {
   render() {
     const { selectedField } = this.props
 
-    const advancedSettingsList = ['customFieldId']
-
     if (typeof selectedField === 'undefined') {
       return null
     }
@@ -53,13 +49,6 @@ export default class QuestionProperties extends Component {
         elements: []
       }
     }
-
-    const advancedSettingsForm = {
-      props: {
-        elements: []
-      }
-    }
-
     const keys = Object.keys(configurableSettings)
 
     for (const key of keys) {
@@ -77,16 +66,6 @@ export default class QuestionProperties extends Component {
       if (config[key] === undefined) {
         config[key] = question.default
       }
-
-      if (advancedSettingsList.includes(key)) {
-        advancedSettingsForm.props.elements.push(
-          Object.assign({ id: key }, question.formProps, {
-            value: config[key]
-          })
-        )
-        continue
-      }
-
       if (key === 'answerExplanation') {
         question.formProps.form_id = config.id
         form.props.elements.push(
@@ -120,23 +99,7 @@ export default class QuestionProperties extends Component {
                       .trim()
                   : ''
               }}></div>
-            <div className="question_meta">
-              <div className="qtype">
-                Type: <span>{selectedField.config.type}</span>
-              </div>
-              <div className="qfieldid">
-                Field ID: <span>{`q_` + selectedField.config.id}</span>
-              </div>
-              {selectedField.config?.customFieldId !== '' &&
-              selectedField.config?.customFieldId !== undefined ? (
-                <div className="qcustomfieldid">
-                  Custom Field ID:{' '}
-                  <span>q_{selectedField.config.customFieldId}</span>
-                </div>
-              ) : (
-                ''
-              )}
-            </div>
+            <div className="qtype">{selectedField.config.type}</div>
           </div>
 
           <Renderer
@@ -155,37 +118,6 @@ export default class QuestionProperties extends Component {
             configureQuestion={this.props.configureQuestion}
             selectedLabelId={this.props.selectedLabelId}
           />
-
-          {advancedSettingsForm.props.elements.length > 0 ? (
-            <details
-              className="adv-settings element"
-              title="This part contains advanced settings. Some settings may cause your form to stop working properly.">
-              <summary className="adv-settings-summary">
-                <FontAwesomeIcon className="adv-settings-icon" icon={faCode} />
-                &nbsp; Advanced settings
-              </summary>
-              <div className="adv-settings-row">
-                <Renderer
-                  theme="infernal"
-                  className="questionPropertiesAdvancedForm"
-                  selectedField={selectedField}
-                  rteUploadHandler={this.props.rteUploadHandler}
-                  handleFieldChange={this.handleFieldChange}
-                  handleAddingItem={this.handleAddingItem}
-                  handleDeletingItem={this.handleDeletingItem}
-                  form={advancedSettingsForm}
-                  allowInternal={true}
-                  customBuilderHandlers={this.props.customBuilderHandlers}
-                  handleLabelChange={this.props.handleLabelChange}
-                  handleLabelClick={this.props.handleLabelClick}
-                  configureQuestion={this.props.configureQuestion}
-                  selectedLabelId={this.props.selectedLabelId}
-                />
-              </div>
-            </details>
-          ) : (
-            ''
-          )}
         </div>
       </div>
     )

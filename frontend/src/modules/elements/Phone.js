@@ -112,13 +112,6 @@ export default class Phone extends Component {
       inputProps.maxLength = config.maxLength
     }
 
-    if (
-      typeof config.customFieldId !== 'undefined' &&
-      config.customFieldId !== ''
-    ) {
-      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
-    }
-
     let display
 
     display = [

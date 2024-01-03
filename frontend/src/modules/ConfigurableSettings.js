@@ -1,20 +1,6 @@
 import datasets from '../datasets'
 
 const policy = {
-  customFieldId: {
-    rule: {
-      type: 'all'
-    },
-    configurableSettings: {
-      default: '',
-      formProps: {
-        type: 'TextBox',
-        label: 'Custom Field ID',
-        placeholder: 'Enter a custom field ID',
-        maxLength: 20
-      }
-    }
-  },
   required: {
     rule: {
       type: 'exceptAll',
@@ -57,20 +43,6 @@ const policy = {
         type: 'TextBox',
         label: 'Error message when this field is left empty.',
         placeholder: 'Required field'
-      }
-    }
-  },
-  hidden: {
-    rule: {
-      type: 'only',
-      exceptions: ['TextBox', 'TextArea', 'Email']
-    },
-    configurableSettings: {
-      default: false,
-      formProps: {
-        type: 'Checkbox',
-        label: '',
-        options: ['Hide this field']
       }
     }
   },

@@ -976,20 +976,3 @@
   white-space: break-spaces;
   word-break: break-all;
 }
-
-.builderStage .hiddenElement {
-  font-size: 10pt;
-  display: flex;
-  border: 2px solid #bdba98;
-  border-radius: 6px;
-  padding: 10px;
-  background: #fffcdd;
-  margin: 0 0 20px 0;
-  font-family: 'Montserrat', sans-serif;
-  line-height: 1;
-}
-
-.builderStage .hiddenElement svg {
-  color: #8c6c0e;
-  margin: 0 10px 0 0;
-}
