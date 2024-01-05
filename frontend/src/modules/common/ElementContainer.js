@@ -5,7 +5,8 @@ import {
   faTrash,
   faAngleDown,
   faAngleUp,
-  faClone
+  faClone,
+  faEyeSlash
 } from '@fortawesome/free-solid-svg-icons'
 
 export default function ElementContainer(props) {
@@ -49,8 +50,24 @@ export default function ElementContainer(props) {
   return (
     <div
       className={classNames.join(' ')}
-      {...{ id: `qc_${config.id}`, ...builderHandlers }}
+      {...{
+        id: `qc_${config.id}`,
+        'data-fp-custom-field-id': config.customFieldId
+          ? `qc_${config.customFieldId}`
+          : null,
+        ...builderHandlers
+      }}
       ref={myRef}>
+      {mode === 'builder' && config.hidden === true ? (
+        <div className="hiddenElement">
+          <FontAwesomeIcon icon={faEyeSlash} />
+          <div className="hiddenElementText">
+            {' '}
+            This element is hidden, which means it will not be visible to users
+            who fill out your form.
+          </div>
+        </div>
+      ) : null}
       {props.children}
       {mode === 'builder' ? (
         <div

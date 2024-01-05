@@ -178,6 +178,13 @@ export default class Checkbox extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     const options =
       Array.isArray(config.options) === true ||
       typeof config.options !== 'undefined'
