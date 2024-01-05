@@ -12,8 +12,12 @@ class VerifyEMail extends Component {
       message: 'Loading',
       email: '',
       situation: 'init',
-      success: false
+      success: false,
+      timerValue: 5,
+      isTimerRunning: false
     }
+
+    this.startRedirectTimer = this.startRedirectTimer.bind(this)
   }
 
   async componentDidMount() {
@@ -21,6 +25,9 @@ class VerifyEMail extends Component {
     const { status, data } = await api({
       resource: resource
     })
+
+    const { generalContext } = this.props
+    const { whoAmI } = generalContext.user
 
     if (status !== 200) {
       this.setState({ situation: 'fail', message: data.message })
@@ -30,7 +37,25 @@ class VerifyEMail extends Component {
         message: 'E-mail verified!',
         success: true
       })
+      await whoAmI()
+      this.startRedirectTimer()
     }
+  }
+
+  startRedirectTimer() {
+    this.timerInterval = setInterval(
+      function () {
+        const { timerValue } = this.state
+        if (timerValue > 0) {
+          this.setState((prevState) => ({
+            timerValue: prevState.timerValue - 1
+          }))
+        } else {
+          this.props.history.push('/forms/gettingstarted')
+        }
+      }.bind(this),
+      1000
+    )
   }
 
   render() {
@@ -51,18 +76,20 @@ class VerifyEMail extends Component {
     const verificationSuccess = (
       <div className="verification_back">
         <div>
-          Your account has been verified. You can now
-          <Link to="/login">
-            &nbsp;<i>log in</i>
-          </Link>{' '}
-          with your e-mail.
+          Your account has been verified. You will be redirected in{' '}
+          <span className="timer">{this.state.timerValue}</span> seconds.
         </div>
       </div>
     )
 
     return (
       <div className="login-wrapper">
-        <div className="loginForm">
+        <link
+          href="/customPublicStyling.css"
+          rel="stylesheet"
+          crossOrigin="anonymous"
+        />
+        <div className="loginForm bs-mild">
           <div className="picture-bg">
             <div className="login-picture">
               <LoginPicture />

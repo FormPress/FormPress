@@ -332,3 +332,40 @@
   color: white;
   font-weight: bold;
 }
+
+.feedbackFormContainer {
+  background: white;
+}
+
+.feedbackFormContainer .getting_started_greetings {
+  padding: 10px 20px;
+  line-height: 1.5;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  margin: 1px 1px;
+}
+
+.no_forms_container {
+  height: 270px;
+  width: 100%;
+  color: #777474;
+  background: #eaeaea;
+  border: 2px dashed gainsboro;
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  display: flex;
+  margin-top: 104px;
+  font-size: 18pt;
+  justify-content: center;
+  align-items: center;
+}
+
+.forms_loader {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 100px;
+  height: 250px;
+  align-items: center;
+  background: white;
+}
