@@ -9,6 +9,7 @@ const userModel = model.user
 module.exports = (app) => {
   app.get('/api/users/:user_id/verify/:verification_code', async (req, res) => {
     const { user_id, verification_code } = req.params
+    const isCodeBasedSignUp = req.query.codeBasedSignUp === '1'
     const db = await getPool()
 
     const result = await db.query(
@@ -27,16 +28,19 @@ module.exports = (app) => {
           [user_id]
         )
 
-        const user = await userModel.get({ user_id })
-        const data = await token(user)
+        // Code based sign up requires a token to be generated and sent back to the client
+        if (isCodeBasedSignUp) {
+          const user = await userModel.get({ user_id })
+          const data = await token(user)
 
-        res.cookie('auth', data, {
-          domain: process.env.COOKIE_DOMAIN,
-          maxAge: 3 * 24 * 60 * 60 * 1000,
-          secure: true,
-          sameSite: 'none',
-          httpOnly: true
-        })
+          res.cookie('auth', data, {
+            domain: process.env.COOKIE_DOMAIN,
+            maxAge: 3 * 24 * 60 * 60 * 1000,
+            secure: true,
+            sameSite: 'none',
+            httpOnly: true
+          })
+        }
 
         return res.status(200).json({ message: 'E-mail verified' })
       } else {

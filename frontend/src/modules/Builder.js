@@ -565,12 +565,12 @@ export default class Builder extends Component {
         let maxId = Math.max(
           ...form.props.elements.map((element) => element.id)
         )
-
-        if (form.props.nextUniqueId === undefined) {
-          form.props.nextUniqueId = maxId === -Infinity ? 0 : maxId + 1
+        //if no elements, Math.max returns -Infinity
+        if (maxId === -Infinity) {
+          maxId = -1
         }
 
-        item.id = form.props.nextUniqueId
+        item.id = maxId + 1
       } else {
         item = sortItem
         //mark sorted element to be deleted
@@ -627,10 +627,6 @@ export default class Builder extends Component {
           ...form,
           props: {
             ...form.props,
-            nextUniqueId:
-              dragMode === 'insert'
-                ? form.props.nextUniqueId + 1
-                : form.props.nextUniqueId,
             elements: newElements
           }
         }
@@ -645,18 +641,12 @@ export default class Builder extends Component {
     let maxId = Math.max(...form.props.elements.map((element) => element.id))
     let newElements, lastElement
     //if no elements, Math.max returns -Infinity
-
-    // backwards compatibility
-    if (form.props.nextUniqueId === undefined) {
-      form.props.nextUniqueId = maxId === -Infinity ? 0 : maxId + 1
-    }
-
-    item.id = form.props.nextUniqueId
-
     if (maxId === -Infinity) {
+      item.id = 0
       newElements = elements.concat(item)
     } else {
       lastElement = elements.pop()
+      item.id = maxId + 1
       if (lastElement.type === 'Button') {
         lastElement.hidden = item.type === 'PageBreak'
         newElements = elements.concat(item, lastElement)
@@ -664,8 +654,6 @@ export default class Builder extends Component {
         newElements = elements.concat(lastElement, item)
       }
     }
-
-    form.props.nextUniqueId++
 
     this.setState({
       form: {
@@ -1303,7 +1291,6 @@ export default class Builder extends Component {
       })
     }
     const { form, publishedForm, loading, saving, publishing } = this.state
-
     const isPublishRequired = form.updated_at !== publishedForm.created_at
     const saveButtonProps = {}
 

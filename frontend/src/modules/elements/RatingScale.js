@@ -151,15 +151,6 @@ export default class RatingScale extends Component {
       inputProps.onChange = this.props.onChange
     }
 
-    inputProps.onClick = this.ratingScaleOnChange
-
-    if (
-      typeof config.customFieldId !== 'undefined' &&
-      config.customFieldId !== ''
-    ) {
-      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
-    }
-
     let script = ''
 
     if (mode === 'renderer') {
@@ -212,7 +203,8 @@ export default class RatingScale extends Component {
                   id={`q_${config.id}_${i}`}
                   name={`q_${config.id}`}
                   value={i + 1}
-                  {...inputProps}
+                  onClick={this.ratingScaleOnChange}
+                  onChange={inputProps.onChange}
                 />
                 <label
                   className={`rating-scale-${

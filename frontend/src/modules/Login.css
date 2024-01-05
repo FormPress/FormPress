@@ -33,11 +33,8 @@
 .pale-border {
   border: solid 1px #e2e2e2;
   background-color: white;
-  padding: 20px;
-}
-
-.verification_back {
-  padding: 10px 0;
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 
 .login-picture {
