@@ -131,6 +131,17 @@ export default class Dropdown extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    if (config.hasDataset === true) {
+      inputProps['data-fp-list'] = config.dataset
+    }
+
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     let options =
       Array.isArray(config.options) === true ||
       typeof config.options !== 'undefined'
@@ -169,9 +180,7 @@ export default class Dropdown extends Component {
               id={`q_${config.id}`}
               name={`q_${config.id}`}
               value={mode === 'viewer' ? config.value : undefined}
-              onChange={inputProps.onChange}
-              defaultValue={inputProps.defaultValue}
-              data-fp-list={config.hasDataset ? config.dataset : ''}>
+              {...inputProps}>
               {config.placeholder !== false ? (
                 <option
                   disabled={config.id !== 'expectedAnswer'}
@@ -252,8 +261,7 @@ export default class Dropdown extends Component {
             id={`q_${config.id}`}
             name={`q_${config.id}`}
             defaultValue={config.value ? config.value : ''}
-            onChange={inputProps.onChange}
-            data-fp-list={config.hasDataset ? config.dataset : null}>
+            {...inputProps}>
             {config.placeholder !== false ? (
               <option disabled value="">
                 {config.placeholder}
