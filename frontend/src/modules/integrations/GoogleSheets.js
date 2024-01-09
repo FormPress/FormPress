@@ -927,24 +927,17 @@ export default class GoogleSheets extends Component {
                     <FontAwesomeIcon icon={faFolder} />
                   </button>
                 </div>
-                <Renderer
-                  className="advanced-configuration-toggle"
-                  theme="gleam"
-                  handleFieldChange={this.handleAdvancedConfigEnabledChange}
-                  form={{
-                    props: {
-                      elements: [
-                        {
-                          id: 18,
-                          type: 'Checkbox',
-                          options: ['Advanced Configuration'],
-                          toggle: true,
-                          value: this.state.advancedConfigEnabled
-                        }
-                      ]
-                    }
-                  }}
-                />
+
+                <div className="advanced-configuration-toggle">
+                  <input
+                    type="checkbox"
+                    id="switch"
+                    value={this.state.advancedConfigEnabled}
+                    onChange={this.handleAdvancedConfigEnabledChange}
+                  />
+                  <label htmlFor="switch"></label>{' '}
+                  <span>Advanced Configuration</span>
+                </div>
               </div>
               <Renderer
                 handleFieldChange={this.handleSheetSelectorChange}

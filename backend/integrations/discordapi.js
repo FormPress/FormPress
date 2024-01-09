@@ -89,13 +89,17 @@ exports.triggerDiscordWebhook = async ({
   const url = integrationConfig.value
   const chosenInputElems = integrationConfig.chosenInputs
 
-  const selectedQnA = []
-  chosenInputElems.forEach((elem) => {
-    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
-    if (foundQnA !== undefined) {
-      selectedQnA.push(foundQnA)
-    }
-  })
+  let selectedQnA = []
+  if (chosenInputElems === 'all') {
+    selectedQnA = [...questionsAndAnswers]
+  } else {
+    chosenInputElems.forEach((elem) => {
+      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+      if (foundQnA !== undefined) {
+        selectedQnA.push(foundQnA)
+      }
+    })
+  }
 
   const embeds = embedBuilder(selectedQnA, formTitle)
 

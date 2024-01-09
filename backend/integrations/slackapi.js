@@ -185,13 +185,17 @@ exports.triggerSlackWebhook = async ({
 }) => {
   const url = integrationConfig.value
   const chosenInputElems = integrationConfig.chosenInputs
-  const selectedQnA = []
-  chosenInputElems.forEach((elem) => {
-    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
-    if (foundQnA !== undefined) {
-      selectedQnA.push(foundQnA)
-    }
-  })
+  let selectedQnA = []
+  if (chosenInputElems === 'all') {
+    selectedQnA = [...questionsAndAnswers]
+  } else {
+    chosenInputElems.forEach((elem) => {
+      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+      if (foundQnA !== undefined) {
+        selectedQnA.push(foundQnA)
+      }
+    })
+  }
 
   //Group Question and Answer data so that message blocks won't exceed item limit.
   const dataGroups = []

@@ -17,6 +17,10 @@ export default class CustomWebhook extends Component {
     super(props)
     this.state = {
       display: this.props.activeStatus ? 'active' : 'description',
+      customizeInputs:
+        (this.props.integrationObject &&
+          this.props.integrationObject.customizeInputs) ??
+        false,
       inputElements: [],
       isModalOpen: false,
       modalContent: {},
@@ -46,6 +50,10 @@ export default class CustomWebhook extends Component {
     this.handleEditClick = this.handleEditClick.bind(this)
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
+    this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
+    this.renderInputElementSelection = this.renderInputElementSelection.bind(
+      this
+    )
   }
 
   componentDidMount() {
@@ -82,6 +90,12 @@ export default class CustomWebhook extends Component {
     }
 
     this.setState({ inputElements: { all, chosen } })
+  }
+
+  toggleCustomizeInputs() {
+    this.setState((prevState) => ({
+      customizeInputs: !prevState.customizeInputs
+    }))
   }
 
   handleChooseInputElements(e, elem) {
@@ -121,11 +135,16 @@ export default class CustomWebhook extends Component {
   }
 
   async handleActivateWebhook() {
-    const { webhookUrl, inputElements } = this.state
+    const { webhookUrl, inputElements, customizeInputs } = this.state
 
-    const chosenInputs = this.state.inputElements.chosen.map((elem) => {
-      return this.state.inputElements.all[elem]
-    })
+    let chosenInputs
+    if (customizeInputs) {
+      chosenInputs = this.state.inputElements.chosen.map((elem) => {
+        return this.state.inputElements.all[elem]
+      })
+    } else {
+      chosenInputs = 'all'
+    }
     const urlRegex = /^(https?|http):\/\//i
 
     if (urlRegex.test(webhookUrl)) {
@@ -134,7 +153,9 @@ export default class CustomWebhook extends Component {
         active: true,
         value: webhookUrl,
         chosenInputs,
-        inputElements
+        inputElements,
+        customizeInputs,
+        paused: false
       }
       this.setState({
         tempIntegrationObject,
@@ -175,15 +196,27 @@ export default class CustomWebhook extends Component {
   }
 
   async removeIntegration() {
-    this.props.setIntegration({
-      type: CustomWebhook.metaData.name,
+    const { all } = this.state.inputElements
+
+    const tempIntegrationObject = {
+      type: CustomWebhook.name,
       active: false,
-      value: ''
-    })
+      value: '',
+      paused: false,
+      customizeInputs: false,
+      chosenInputs: [],
+      inputElements: { all, chosen: [] }
+    }
+    this.props.setIntegration(tempIntegrationObject)
+
     this.setState({
-      display: 'description'
+      display: 'description',
+      inputElements: { all, chosen: [] },
+      webhookUrl: '',
+      isModalOpen: false,
+      customizeInputs: false,
+      tempIntegrationObject
     })
-    this.setState({ isModalOpen: false })
   }
 
   handleEditClick() {
@@ -224,8 +257,43 @@ export default class CustomWebhook extends Component {
 
     await this.props.handleSaveClick()
   }
+  renderInputElementSelection() {
+    let { inputElements } = this.state
+
+    return (
+      <>
+        <Renderer
+          handleFieldChange={this.handleChooseInputElements}
+          theme="infernal"
+          allowInternal={true}
+          className="input-elems"
+          form={{
+            props: {
+              elements: [
+                {
+                  id: 21,
+                  type: 'Checkbox',
+                  options: ['Select All'],
+                  value:
+                    inputElements.chosen.length === inputElements.all.length
+                },
+                {
+                  id: 22,
+                  type: 'Checkbox',
+                  options: this.state.inputElements.all.map((elem) => {
+                    return elem.label
+                  }),
+                  value: this.state.inputElements.chosen
+                }
+              ]
+            }
+          }}
+        />
+      </>
+    )
+  }
   render() {
-    let { inputElements, webhookUrl } = this.state
+    let { webhookUrl } = this.state
     let display
     let paused
     if (this.props.tempIntegrationObject?.paused !== undefined) {
@@ -235,42 +303,6 @@ export default class CustomWebhook extends Component {
     }
 
     if (
-      paused ||
-      (this.props.activeStatus && this.state.display === 'active')
-    ) {
-      display = (
-        <>
-          <div className="integration-active">
-            You have successfully integrated your form with your webhook!
-          </div>
-          <div className="integration-controls">
-            {paused ? (
-              <div className="resume-integration">
-                <button type="button" onClick={this.handleResumeClick}>
-                  RESUME
-                </button>
-              </div>
-            ) : (
-              <div className="pause-integration">
-                <button type="button" onClick={this.handlePauseClick}>
-                  PAUSE
-                </button>
-              </div>
-            )}
-            <div className="edit-integration">
-              <button type="button" onClick={this.handleEditClick}>
-                EDIT
-              </button>
-            </div>
-            <div className="remove-integration">
-              <button type="button" onClick={this.handleRemoveClick}>
-                REMOVE
-              </button>
-            </div>
-          </div>
-        </>
-      )
-    } else if (
       this.props.activeStatus === false &&
       this.state.display === 'description'
     ) {
@@ -324,43 +356,24 @@ export default class CustomWebhook extends Component {
                         id: 1,
                         type: 'TextBox',
                         placeholder: 'https://www.example.com/webhook',
-
-                        label: 'Please enter webhook url',
+                        label: 'Webhook URL',
                         value: webhookUrl
                       }
                     ]
                   }
                 }}
               />
-              <div className="string-vars-label">Choose elements</div>
-              <Renderer
-                handleFieldChange={this.handleChooseInputElements}
-                theme="infernal"
-                allowInternal={true}
-                className="input-elems"
-                form={{
-                  props: {
-                    elements: [
-                      {
-                        id: 21,
-                        type: 'Checkbox',
-                        options: ['Select All'],
-                        value:
-                          inputElements.chosen.length ===
-                          inputElements.all.length
-                      },
-                      {
-                        id: 22,
-                        type: 'Checkbox',
-                        options: this.state.inputElements.all.map((elem) => {
-                          return elem.label
-                        }),
-                        value: this.state.inputElements.chosen
-                      }
-                    ]
-                  }
-                }}
-              />
+              <div className="custom-input-toggle">
+                <input
+                  type="checkbox"
+                  id="switch"
+                  checked={this.state.customizeInputs}
+                  onChange={this.toggleCustomizeInputs}
+                />
+                <label htmlFor="switch"></label>{' '}
+                <span>Pick questions manually</span>
+              </div>
+              {this.state.customizeInputs && this.renderInputElementSelection()}
             </div>
           </div>
           <button
@@ -369,6 +382,42 @@ export default class CustomWebhook extends Component {
             onClick={() => this.handleActivateWebhook()}>
             Activate Webhook
           </button>
+        </>
+      )
+    } else if (
+      paused ||
+      (this.props.activeStatus && this.state.display === 'active')
+    ) {
+      display = (
+        <>
+          <div className="integration-active">
+            You have successfully integrated your form with your webhook!
+          </div>
+          <div className="integration-controls">
+            {paused ? (
+              <div className="resume-integration">
+                <button type="button" onClick={this.handleResumeClick}>
+                  RESUME
+                </button>
+              </div>
+            ) : (
+              <div className="pause-integration">
+                <button type="button" onClick={this.handlePauseClick}>
+                  PAUSE
+                </button>
+              </div>
+            )}
+            <div className="edit-integration">
+              <button type="button" onClick={this.handleEditClick}>
+                EDIT
+              </button>
+            </div>
+            <div className="remove-integration">
+              <button type="button" onClick={this.handleRemoveClick}>
+                REMOVE
+              </button>
+            </div>
+          </div>
         </>
       )
     }

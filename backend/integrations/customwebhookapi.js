@@ -11,13 +11,17 @@ exports.triggerCustomWebhook = async ({
 }) => {
   const chosenInputElems = integrationConfig.chosenInputs
 
-  const selectedQnA = []
-  chosenInputElems.forEach((elem) => {
-    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
-    if (foundQnA !== undefined) {
-      selectedQnA.push(foundQnA)
-    }
-  })
+  let selectedQnA = []
+  if (chosenInputElems === 'all') {
+    selectedQnA = [...questionsAndAnswers]
+  } else {
+    chosenInputElems.forEach((elem) => {
+      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+      if (foundQnA !== undefined) {
+        selectedQnA.push(foundQnA)
+      }
+    })
+  }
 
   //Puts questions in order, without this function selecting and deselecting items breaks the question order.
   selectedQnA.sort((a, b) => {
