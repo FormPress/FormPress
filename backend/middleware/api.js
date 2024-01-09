@@ -1251,7 +1251,7 @@ module.exports = (app) => {
         ' body {background: none !important; margin: 3px; padding-bottom: 3px; } '
     }
 
-    if (form.private) {
+    if (form.private || showBranding === false) {
       // remove the part that says 'Never Submit Passwords'
       style += ' .renderer::after {content: none !important; }'
     }
