@@ -8,6 +8,7 @@ import VerificationInput from 'react-verification-input'
 
 import GeneralContext from '../general.context'
 import './SignUp.css'
+import Footer from './helper/Footer'
 
 class SignUp extends Component {
   constructor(props) {
@@ -454,18 +455,7 @@ class SignUp extends Component {
             </div>
           </div>
 
-          {compact ? (
-            ''
-          ) : (
-            <div className="footer cw center grid">
-              <div className="col-8-16">Copyright © 2023 formpress.org</div>
-              <div className="col-8-16 tr">
-                <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
-                  Contact
-                </a>
-              </div>
-            </div>
-          )}
+          {compact ? '' : <Footer />}
         </div>
       </>
     )
