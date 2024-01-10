@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import * as StandartElements from './elements'
 import * as InternalElements from './internal'
 import HoneyPot from './common/HoneyPot'
+import { Buffer } from 'buffer'
 
 export default class Renderer extends Component {
   render() {
