@@ -1,6 +1,7 @@
 const { IncomingWebhook } = require('@slack/webhook')
 
 const { error } = require('../helper')
+const YEAR = new Date().getFullYear()
 
 const blockGenerator = (QnA, title, index, length) => {
   if (title.length > 130) {
@@ -57,7 +58,7 @@ const blockGenerator = (QnA, title, index, length) => {
           },
           {
             type: 'mrkdwn',
-            text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
+            text: `${index + 1}/${length} Copyright © ${YEAR} *FormPress*`
           }
         ]
       },
@@ -116,7 +117,7 @@ const blockGenerator = (QnA, title, index, length) => {
             },
             {
               type: 'mrkdwn',
-              text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
+              text: `${index + 1}/${length} Copyright © ${YEAR} *FormPress*`
             }
           ]
         },
@@ -164,7 +165,7 @@ const blockGenerator = (QnA, title, index, length) => {
             },
             {
               type: 'mrkdwn',
-              text: `${index + 1}/${length} Copyright © 2023 *FormPress*`
+              text: `${index + 1}/${length} Copyright © ${YEAR} *FormPress*`
             }
           ]
         },
@@ -250,7 +251,7 @@ exports.slackApi = (app) => {
           },
           {
             type: 'mrkdwn',
-            text: 'Copyright © 2023 *FormPress*'
+            text: `Copyright © ${YEAR} *FormPress*`
           }
         ]
       },

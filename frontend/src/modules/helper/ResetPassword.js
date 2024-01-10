@@ -4,6 +4,7 @@ import { LoginPicture } from '../../svg'
 import { Link } from 'react-router-dom'
 import Renderer from '../Renderer'
 import GeneralContext from '../../general.context'
+import Footer from './Footer'
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -134,14 +135,7 @@ class ResetPassword extends Component {
               </div>
             </div>
           </div>
-          <div className="footer cw center grid">
-            <div className="col-8-16">Copyright © 2023 formpress.org</div>
-            <div className="col-8-16 tr">
-              <a href={`mailto:support@${global.env.FE_EMAIL_DOMAIN}`}>
-                Contact
-              </a>
-            </div>
-          </div>
+          <Footer />
         </div>
       </>
     )

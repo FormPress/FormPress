@@ -74,12 +74,10 @@
   })
   const answers = responses.join('\r\n')
 
-  const footer =
-    '\r\n\r\n\r\n2023 FORMPRESS '
   textedEmail += formpressText
   textedEmail += helloText
   textedEmail += answers
-  textedEmail += footer
 
 %>
 <%- textedEmail %>
+<%- include ("footerText.ejs") %>

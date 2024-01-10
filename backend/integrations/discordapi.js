@@ -4,6 +4,7 @@ const icon =
   'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png'
 const discordFieldValueCharacterLimit = 1000
 const discordFieldNameCharacterLimit = 250
+const YEAR = new Date().getFullYear()
 const embedBuilder = (QnA, title) => {
   let embeds = []
   let currentEmbed = []
@@ -36,7 +37,7 @@ const embedBuilder = (QnA, title) => {
         text:
           `${index + 1}/${embeds.length}` +
           ' '.repeat(50) +
-          'Copyright © 2023 FormPress',
+          `Copyright © ${YEAR} FormPress`,
         iconURL: icon
       })
     if (index === 0) {
