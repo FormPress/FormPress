@@ -95,6 +95,13 @@ export default class NetPromoterScore extends Component {
       inputProps.onChange = this.props.onChange
     }
 
+    if (
+      typeof config.customFieldId !== 'undefined' &&
+      config.customFieldId !== ''
+    ) {
+      inputProps['data-fp-custom-field-id'] = 'q_' + config.customFieldId
+    }
+
     var display = [
       <div className="elemLabelTitle" key={0}>
         <EditableLabel
@@ -118,8 +125,8 @@ export default class NetPromoterScore extends Component {
                   id={`q_${config.id}_${key}`}
                   name={`q_${config.id}`}
                   value={item}
-                  onChange={inputProps.onChange}
-                  defaultChecked={config.value === item}></input>
+                  defaultChecked={config.value === item}
+                  {...inputProps}></input>
                 <label
                   className="net-promoter-score-label"
                   htmlFor={`q_${config.id}_${key}`}>

@@ -317,6 +317,7 @@
 }
 
 .formProperties > .adv-settings > .adv-settings-row {
-  background: #fbfbfb;
+  background: #f0f0f0;
   display: flex;
+  border: 1px solid gainsboro;
 }
