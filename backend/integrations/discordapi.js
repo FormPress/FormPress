@@ -1,7 +1,6 @@
 const { EmbedBuilder, WebhookClient } = require('discord.js')
 const { error } = require('../helper')
-const icon =
-  'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png'
+const icon = 'https://static.formpress.org/images/logo-whiteBG-512x512.png'
 const discordFieldValueCharacterLimit = 1000
 const discordFieldNameCharacterLimit = 250
 const YEAR = new Date().getFullYear()

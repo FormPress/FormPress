@@ -53,7 +53,7 @@ const blockGenerator = (QnA, title, index, length) => {
           {
             type: 'image',
             image_url:
-              'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              'https://static.formpress.org/images/logo-whiteBG-512x512.png',
             alt_text: 'formpress logo'
           },
           {
@@ -112,7 +112,7 @@ const blockGenerator = (QnA, title, index, length) => {
             {
               type: 'image',
               image_url:
-                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+                'https://static.formpress.org/images/logo-whiteBG-512x512.png',
               alt_text: 'formpress logo'
             },
             {
@@ -160,7 +160,7 @@ const blockGenerator = (QnA, title, index, length) => {
             {
               type: 'image',
               image_url:
-                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+                'https://static.formpress.org/images/logo-whiteBG-512x512.png',
               alt_text: 'formpress logo'
             },
             {
@@ -246,7 +246,7 @@ exports.slackApi = (app) => {
           {
             type: 'image',
             image_url:
-              'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              'https://static.formpress.org/images/logo-whiteBG-512x512.png',
             alt_text: 'formpress logo'
           },
           {
