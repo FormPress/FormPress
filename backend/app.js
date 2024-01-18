@@ -85,7 +85,7 @@ const { googleSheetsApi } = require(path.resolve(
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
 const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
 
-const { apiKeys } = require(path.resolve('integrations', 'apikeys.js'))
+const { apiKeys } = require(path.resolve('middleware', 'apikeys.js'))
 
 const csvExportApi = require(path.resolve('middleware', 'exportcsv'))
 const { formWebhooksApi } = require(path.resolve(
