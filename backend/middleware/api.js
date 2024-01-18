@@ -6,7 +6,6 @@ const sanitizeHtml = require('sanitize-html')
 const sass = require('sass')
 
 const moment = require('moment')
-const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
@@ -1528,42 +1527,6 @@ module.exports = (app) => {
 
       archive.pipe(res)
       await archive.finalize()
-    }
-  )
-
-  // return api key
-  app.get(
-    '/api/users/:user_id/api-key',
-    mustHaveValidToken,
-    paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
-      const db = await getPool()
-      const user_id = req.params.user_id
-      const result = await db.query(
-        `SELECT * FROM \`api_key\` WHERE user_id = ?`,
-        [user_id]
-      )
-
-      if (result.length > 0) {
-        return res.json(result)
-      } else {
-        const api_key = await uuidAPIKey.create().apiKey
-        const data = await db.query(
-          `
-                INSERT INTO \`api_key\`
-                  (user_id, api_key, created_at)
-                VALUES
-                  (?, ?, NOW())
-              `,
-          [user_id, api_key]
-        )
-
-        const result = await db.query(
-          `SELECT * FROM \`api_key\` WHERE id = ?`,
-          [data.insertId]
-        )
-        return res.json(result)
-      }
     }
   )
 

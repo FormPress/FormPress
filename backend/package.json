@@ -51,6 +51,7 @@
     "react-router-dom": "^5.3.0",
     "sanitize-html": "^2.10.0",
     "sass": "^1.60.0",
+    "short-unique-id": "^5.0.3",
     "uuid": "^8.3.1",
     "uuid-apikey": "^1.5.3"
   },

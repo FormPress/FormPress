@@ -105,7 +105,11 @@ server.exchange(
       return done(new Error('User not found'))
     }
 
-    const access_token = token(user)
+    const tokenData = {
+      ...user
+    }
+
+    const access_token = token(tokenData)
 
     const dbResponse = oauthModel.storeAccessToken({
       code_id,

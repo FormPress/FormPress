@@ -11,36 +11,38 @@ const { getPool } = require(path.resolve('./', 'db'))
 const { submissionhandler } = require(path.resolve('helper'))
 const { validate } = require('uuid')
 const fetch = require('node-fetch')
+const ShortUniqueId = require('short-unique-id')
+const uid = new ShortUniqueId({ length: 10 })
 
 const { error } = require('../helper')
+const moment = require('moment')
+const knownPlatforms = ['Zapier', 'Pipedream']
 
-exports.zapierApi = (app) => {
+exports.formWebhooksApi = (app) => {
   app.post(
-    `/zapier/webhook/subscribe`,
+    `/api/forms/:formId/webhooks/subscribe`,
     mustHaveValidToken,
     async (req, res) => {
-      const options = req.body
+      let { webhookUrl } = req.body
 
-      // first, lets see if we have params that we need
-      let { form_id, hookUrl, zapId } = options
+      let { formId } = req.params
       let { user_id } = req.user
+      const platform = req.query.platform
 
-      if (!form_id || !hookUrl || !zapId) {
-        return res.status(400).send('No form_id or hookUrl provided')
+      if (!formId || !webhookUrl) {
+        return res.status(400).send('No formId or webhookUrl provided')
       }
 
-      zapId = parseInt(zapId)
-
       // let's be safe
-      if (typeof hookUrl !== 'string' || hookUrl.length > 200) {
+      if (typeof webhookUrl !== 'string' || webhookUrl.length > 200) {
         return res.status(400).send('Hook url is invalid.')
       }
 
-      if (validate(form_id)) {
-        form_id = await formModel.getFormIdFromUUID(form_id)
+      if (validate(formId)) {
+        formId = await formModel.getFormIdFromUUID(formId)
       }
 
-      const form = await formModel.get({ form_id })
+      const form = await formModel.get({ form_id: formId })
 
       if (form === false) {
         return res.status(400).send('Form not found.')
@@ -50,27 +52,32 @@ exports.zapierApi = (app) => {
         return res.status(401).send('Unauthorized')
       }
 
+      const isKnownPlatform = knownPlatforms.includes(platform)
+
       const integrationList = form.props.integrations
 
-      const newZapIntegration = {
-        type: 'Zapier',
-        active: true,
-        paused: false,
-        value: hookUrl,
-        zapId
-      }
-
-      const zapier = integrationList.find(
-        (i) => i.type === 'Zapier' && i.zapId === zapId
+      const existingWebhookIntegrationWithGivenURL = integrationList.find(
+        (i) => i.webhookUrl === webhookUrl
       )
 
-      // in case zapier integration already exists, we update it, if not we add it
-      if (zapier !== undefined) {
-        const index = integrationList.indexOf(zapier)
-        integrationList[index] = newZapIntegration
-      } else {
-        integrationList.push(newZapIntegration)
+      if (existingWebhookIntegrationWithGivenURL !== undefined) {
+        return res
+          .status(400)
+          .send('Webhook integration with this URL already exists.')
       }
+
+      const newWebhookIntegration = {
+        type: 'Webhook',
+        createdBy: isKnownPlatform ? platform : 'unknown',
+        active: true,
+        paused: false,
+        value: webhookUrl,
+        webhookId: uid.rnd()
+      }
+
+      const { webhookId } = newWebhookIntegration
+
+      integrationList.push(newWebhookIntegration)
 
       // update form
       const dbRes = await formModel.update({ form: { ...form } })
@@ -82,30 +89,27 @@ exports.zapierApi = (app) => {
       // publish form
       await formPublishedModel.create({ user_id, form: { ...form } })
 
-      return res.status(201).json({ zapId })
+      return res.status(201).json({ webhookId })
     }
   )
 
   app.delete(
-    `/zapier/webhook/unsubscribe`,
+    `/api/forms/:formId/webhooks/unsubscribe`,
     mustHaveValidToken,
     async (req, res) => {
-      const options = req.body
-      let { form_id, zapId } = options
+      let { formId } = req.params
+      let { webhookId } = req.body
       let { user_id } = req.user
 
-      // same as above but we will delete the integration instead
-      if (!form_id || !zapId) {
-        return res.status(400).send('No form_id or zapId provided')
+      if (!formId || !webhookId) {
+        return res.status(400).send('No formId or webhookId provided')
       }
 
-      zapId = parseInt(zapId)
-
-      if (validate(form_id)) {
-        form_id = await formModel.getFormIdFromUUID(form_id)
+      if (validate(formId)) {
+        formId = await formModel.getFormIdFromUUID(formId)
       }
 
-      const form = await formModel.get({ form_id })
+      const form = await formModel.get({ form_id: formId })
 
       if (form === false) {
         return res.status(400).send('Form not found.')
@@ -117,16 +121,16 @@ exports.zapierApi = (app) => {
 
       const integrationList = form.props.integrations
 
-      const zapier = integrationList.find(
-        (i) => i.type === 'Zapier' && i.zapId === zapId
+      const existingWebhookIntegration = integrationList.find(
+        (i) => i.webhookId === webhookId || i.zapId === webhookId // zapId is for backwards compatibility
       )
 
-      if (zapier === undefined) {
-        return res.status(400).send('Zapier integration not found.')
+      if (existingWebhookIntegration === undefined) {
+        return res.status(400).send('Webhook integration not found.')
       }
 
       // delete integration
-      const index = integrationList.indexOf(zapier)
+      const index = integrationList.indexOf(existingWebhookIntegration)
       integrationList.splice(index, 1)
 
       // update form
@@ -139,36 +143,40 @@ exports.zapierApi = (app) => {
       // publish form
       await formPublishedModel.create({ user_id, form: { ...form } })
 
-      return res.status(201).json({ zapId })
+      return res.status(201).json({ webhookId })
     }
   )
 
   app.get(
-    `/zapier/sample/submissions/:form_id`,
+    `/api/forms/:formId/submissions/sample`,
     mustHaveValidToken,
     async (req, res) => {
-      let { form_id } = req.params
+      let { formId } = req.params
 
-      if (validate(form_id)) {
-        form_id = await formModel.getFormIdFromUUID(form_id)
-      } else if (parseInt(form_id) > 1200) {
+      if (validate(formId)) {
+        formId = await formModel.getFormIdFromUUID(formId)
+      } else if (parseInt(formId) > 1200) {
         return res.status(404).send('Form Not Found')
       }
 
       const db = await getPool()
 
-      const result = await db.query(
-        `SELECT * FROM \`entry\` WHERE form_id = ?`,
-        [form_id]
-      )
       const submissionsResult = await db.query(
         `
         SELECT * FROM \`submission\`
-          WHERE form_id = ?
+          WHERE form_id = ? LIMIT 3
       `,
-        [form_id]
+        [formId]
       )
-      const formResult = await formModel.get({ form_id })
+
+      const submissionIds = submissionsResult.map((row) => row.id)
+
+      const result = await db.query(
+        `SELECT * FROM \`entry\` WHERE form_id = ? AND submission_id IN (?)`,
+        [formId, submissionIds]
+      )
+
+      const formResult = await formModel.get({ form_id: formId })
 
       if (formResult === false) {
         //form not found
@@ -219,56 +227,27 @@ exports.zapierApi = (app) => {
           parseInt(submission)
         )
 
-        const entries = {}
-
-        questionsWithRenderedAnswers.forEach((QnA) => {
-          entries[QnA.question] = QnA.answer
+        const entries = questionsWithRenderedAnswers.map((QnA) => {
+          const entry = {}
+          entry.question = QnA.question
+          entry.answer = QnA.answer
+          return entry
         })
 
         const organizedSubmission = {
-          id: submissionData.id,
-          createdAt: submissionData.created_at,
-          entries: entries
+          metadata: {
+            formId: formId,
+            submissionId: submissionData.id,
+            formTitle: form.title,
+            submissionDate: submissionData.created_at
+          },
+          entries
         }
 
         finalSubmissionsArray.push(organizedSubmission)
       })
 
-      res.json(finalSubmissionsArray)
+      return res.json(finalSubmissionsArray)
     }
   )
-}
-
-exports.triggerZapierWebhook = async ({
-  integrationConfig,
-  questionsAndAnswers,
-  submissionId
-}) => {
-  const entries = {}
-
-  questionsAndAnswers.forEach((QnA) => {
-    entries[QnA.question] = QnA.answer
-  })
-
-  const organizedSubmission = {
-    id: submissionId,
-    createdAt: new Date().toISOString(),
-    entries: entries
-  }
-
-  const webhookUrl = integrationConfig.value
-  const payload = organizedSubmission
-
-  try {
-    await fetch(webhookUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-  } catch (err) {
-    console.log('Could not send Zapier webhook', err)
-    error.errorReport(err)
-  }
 }
