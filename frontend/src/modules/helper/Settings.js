@@ -24,11 +24,8 @@ export default class Settings extends Component {
     const { data } = await api({
       resource: `/api/app/get/settingsPluginfileslist`
     })
-    const key = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/api-key`
-    })
 
-    this.setState({ userListIsloaded: true, key: key.data[0].api_key, data })
+    this.setState({ userListIsloaded: true, data })
 
     const navLinks = [],
       routes = [

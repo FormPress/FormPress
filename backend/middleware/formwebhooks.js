@@ -10,12 +10,9 @@ const { mustHaveValidToken } = require(path.resolve(
 const { getPool } = require(path.resolve('./', 'db'))
 const { submissionhandler } = require(path.resolve('helper'))
 const { validate } = require('uuid')
-const fetch = require('node-fetch')
 const ShortUniqueId = require('short-unique-id')
 const uid = new ShortUniqueId({ length: 10 })
 
-const { error } = require('../helper')
-const moment = require('moment')
 const knownPlatforms = ['Zapier', 'Pipedream']
 
 exports.formWebhooksApi = (app) => {

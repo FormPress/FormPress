@@ -1,0 +1,47 @@
+.apikeys-wrapper .fp_table {
+}
+
+.apikeys-wrapper table.fp_table th.apiKeyIndex,
+.apikeys-wrapper table.fp_table td.apiKeyIndex {
+  text-align: center;
+  padding: 3px;
+}
+
+.apikeys-wrapper table.fp_table tr .actions {
+  visibility: hidden;
+}
+
+.apikeys-wrapper table.fp_table tr:hover .actions {
+  visibility: visible;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > .inactive_view:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > .inactive_clone:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > * {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  line-height: 40px;
+  text-align: center;
+  color: rgb(225, 225, 225);
+}
+
+.apikeys-wrapper table.fp_table .actions > *:hover {
+  background-color: rgb(245, 245, 245);
+  color: rgb(48, 93, 134);
+  border-radius: 40px;
+  cursor: pointer;
+}
+
+.apikeys-wrapper table.fp_table .actions svg {
+  font-size: 18px;
+}
