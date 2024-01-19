@@ -35,7 +35,27 @@ exports.apiKeys = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
 
-      const name = req.body.name
+      const count = await db.query(
+        `
+        SELECT COUNT(*) AS count FROM \`api_key\` WHERE user_id = ?
+      `,
+        [user_id]
+      )
+
+      if (count[0].count >= 5) {
+        return res
+          .status(400)
+          .json({ message: 'You have reached the maximum number of API keys.' })
+      }
+
+      let name = req.body.name
+
+      if (!name) {
+        name = 'New API Key'
+      } else if (name.length > 50) {
+        // truncate the name to 50 characters
+        name = name.substring(0, 50)
+      }
 
       const api_key = uuidAPIKey.create().apiKey
 
@@ -57,7 +77,9 @@ exports.apiKeys = (app) => {
           id: result.insertId
         })
       } else {
-        return res.status(500).json({ message: 'Error creating API key' })
+        return res
+          .status(500)
+          .json({ message: 'An error ocurred while creating API key.' })
       }
     }
   )

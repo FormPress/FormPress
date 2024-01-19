@@ -8,7 +8,12 @@
 }
 
 .apikeys-wrapper table.fp_table tr .actions {
+  text-align: center;
   visibility: hidden;
+}
+
+.apikeys-wrapper table.fp_table th.actionsTh {
+  text-align: center;
 }
 
 .apikeys-wrapper table.fp_table tr:hover .actions {
@@ -36,12 +41,17 @@
 }
 
 .apikeys-wrapper table.fp_table .actions > *:hover {
-  background-color: rgb(245, 245, 245);
   color: rgb(48, 93, 134);
-  border-radius: 40px;
   cursor: pointer;
 }
 
 .apikeys-wrapper table.fp_table .actions svg {
   font-size: 18px;
+}
+
+.apikeys-wrapper table.fp_table tbody tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+.apikeys-wrapper table.fp_table tbody tr:nth-child(odd) {
+  background-color: white;
 }

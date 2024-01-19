@@ -5,6 +5,11 @@ import Table from '../common/Table'
 import Moment from 'react-moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClone, faTrash } from '@fortawesome/free-solid-svg-icons'
+import Modal from '../common/Modal'
+
+// TODO: Add a button to copy the API key to clipboard
+// TODO: Style the buttons
+// TODO: Style the table head
 
 export default class APIKeys extends Component {
   static componentName = 'APIKeys'
@@ -15,16 +20,25 @@ export default class APIKeys extends Component {
     super(props)
     this.state = {
       apiKeys: [],
+      newApiKeyName: 'New API Key',
       modalContent: {},
       isModalOpen: false
     }
 
+    this.fetchApiKeys = this.fetchApiKeys.bind(this)
+    this.handleApiKeyCreateClick = this.handleApiKeyCreateClick.bind(this)
     this.handleApiKeyDeleteClick = this.handleApiKeyDeleteClick.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.deleteApiKey = this.deleteApiKey.bind(this)
+    this.createApiKey = this.createApiKey.bind(this)
+    this.handleNewApiKeyNameChange = this.handleNewApiKeyNameChange.bind(this)
   }
 
   async componentDidMount() {
+    await this.fetchApiKeys()
+  }
+
+  async fetchApiKeys() {
     const { data: apiKeys } = await api({
       resource: `/api/users/${this.props.generalContext.auth.user_id}/api-key`
     })
@@ -36,12 +50,43 @@ export default class APIKeys extends Component {
     this.setState({ isModalOpen: false, modalContent: {} })
   }
 
-  handleApiKeyCreateClick(apiKey, e) {
+  handleApiKeyCreateClick(e) {
     e.preventDefault()
-    // TODO: implement
+    const modalContent = {
+      header: 'Create API Key',
+      status: 'information'
+    }
+
+    modalContent.dialogue = {
+      abortText: 'Cancel',
+      abortClick: this.handleCloseModalClick,
+      positiveText: 'Create',
+      positiveClick: () => this.createApiKey(),
+      inputValue: () => {
+        return this.state.newApiKeyName
+      },
+      inputOnChange: (e) => this.handleNewApiKeyNameChange(e)
+    }
+
+    modalContent.content = <div>Please specify a name for the new API key.</div>
+
+    this.setState({ modalContent, isModalOpen: true })
   }
 
-  handleApiKeyDeleteClick(apiKey, e) {
+  handleNewApiKeyNameChange(e) {
+    let name = e.target.value
+    let limit = 50
+    if (name.length >= limit) {
+      name = name.substr(0, limit)
+      name
+        .replace(/<span(.*?)>(.*?)<\/span>/, '')
+        .replace(/(<([^>]+)>)/gi, '')
+        .trim()
+    }
+    this.setState({ newApiKeyName: name })
+  }
+
+  handleApiKeyDeleteClick(e, apiKey) {
     e.preventDefault()
     const modalContent = {
       header: 'Delete API Key?',
@@ -50,7 +95,7 @@ export default class APIKeys extends Component {
 
     modalContent.dialogue = {
       negativeText: 'Delete',
-      negativeClick: this.deleteApiKey(apiKey),
+      negativeClick: () => this.deleteApiKey(apiKey),
       abortText: 'Cancel',
       abortClick: this.handleCloseModalClick
     }
@@ -87,64 +132,110 @@ export default class APIKeys extends Component {
       })
     }
 
-    setTimeout(() => {
-      this.handleCloseModalClick()
-    }, 1500)
+    await this.fetchApiKeys()
+
+    this.handleCloseModalClick()
+  }
+
+  async createApiKey() {
+    const { auth } = this.props.generalContext
+
+    const { newApiKeyName } = this.state
+
+    const result = await api({
+      resource: `/api/users/${auth.user_id}/api-key`,
+      method: 'POST',
+      useAuth: true,
+      body: {
+        name: newApiKeyName
+      }
+    })
+
+    if (result.status !== 200) {
+      this.setState({
+        modalContent: {
+          header: 'Error',
+          status: 'error',
+          content: <div>{result.data.message}</div>
+        }
+      })
+    }
+
+    await this.fetchApiKeys()
+
+    this.handleCloseModalClick()
   }
 
   render() {
     const { apiKeys } = this.state
 
     return (
-      <div className="apikeys-wrapper">
-        <Table
-          columns={[
-            {
-              label: '#',
-              content: (entry, index) => <span key="1">{index + 1}</span>,
-              className: 'apiKeyIndex'
-            },
-            {
-              label: 'Name',
-              content: (entry) => entry.name,
-              className: 'name',
-              title: ' '
-            },
-            {
-              label: 'API Key',
-              content: (entry) => entry.api_key,
-              className: 'name',
-              title: ' '
-            },
-            {
-              label: 'Created',
-              content: (entry) => [
-                <Moment fromNow ago date={entry.created_at} key="1" />,
-                <span key="2">{' ago'}</span>
-              ],
-              className: 'createdAt'
-            },
-            {
-              label: 'Actions',
-              content: (form) => (
-                <div className="actions">
-                  <span
-                    title="Copy Key"
-                    onClick={() => console.log('copy key')}>
-                    <FontAwesomeIcon icon={faClone} />
-                  </span>
-                  <span
-                    title="Delete Key"
-                    onClick={() => console.log('deleteclick')}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </span>
-                </div>
-              )
-            }
-          ]}
-          data={apiKeys}
+      <>
+        <Modal
+          isOpen={this.state.isModalOpen}
+          modalContent={this.state.modalContent}
+          closeModal={this.handleCloseModalClick}
         />
-      </div>
+        <div className="apikeys-wrapper">
+          <div className="settings_header">API Keys</div>
+          <Table
+            columns={[
+              {
+                label: '#',
+                content: (entry, index) => <span key="1">{index + 1}</span>,
+                className: 'apiKeyIndex'
+              },
+              {
+                label: 'Name',
+                content: (entry) => entry.name,
+                className: 'name',
+                title: ' '
+              },
+              {
+                label: 'API Key',
+                content: (entry) => entry.api_key,
+                className: 'name',
+                title: ' '
+              },
+              {
+                label: 'Created',
+                content: (entry) => [
+                  <Moment fromNow ago date={entry.created_at} key="1" />,
+                  <span key="2">{' ago'}</span>
+                ],
+                className: 'createdAt'
+              },
+              {
+                label: 'Actions',
+                className: 'actionsTh',
+                content: (apiKey) => (
+                  <div className="actions">
+                    <span
+                      title="Copy Key"
+                      onClick={() => console.log('copy key')}>
+                      <FontAwesomeIcon icon={faClone} />
+                    </span>
+                    <span
+                      title="Delete Key"
+                      onClick={(e) => this.handleApiKeyDeleteClick(e, apiKey)}>
+                      <FontAwesomeIcon icon={faTrash} />
+                    </span>
+                  </div>
+                )
+              }
+            ]}
+            data={apiKeys}
+          />
+          <div>
+            <button
+              type={'button'}
+              onClick={(e) => this.handleApiKeyCreateClick(e)}>
+              {' '}
+              Create API Key{' '}
+            </button>
+          </div>
+        </div>
+      </>
     )
   }
 }
