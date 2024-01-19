@@ -59,7 +59,11 @@ module.exports = (app) => {
         ('${user_id}', '2')
       `)
 
-      await locationFinder(user_id, req.get('cf-ipcountry'))
+      await locationFinder(
+        user_id,
+        req.get('cf-ipcountry'),
+        req.cookies['fp_utm_source']
+      )
 
       if (isEnvironmentVariableSet.sendgridApiKey == false) {
         await db.query(

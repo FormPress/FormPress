@@ -1,7 +1,7 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
 
-exports.locationFinder = async (user_id, cf_ipcountry) => {
+exports.locationFinder = async (user_id, cf_ipcountry, utm_source = false) => {
   const db = await getPool()
 
   if (![undefined, 'undefined', 'XX', 'xx', ''].includes(cf_ipcountry)) {
@@ -35,6 +35,20 @@ exports.locationFinder = async (user_id, cf_ipcountry) => {
           [cf_ipcountry, user_id, 'location.last']
         )
       }
+    }
+  }
+
+  if (utm_source) {
+    const searchUTMSource = await db.query(
+      `SELECT * FROM \`user_settings\` WHERE user_id = ? AND \`key\` = ? AND \`value\` IS NOT NULL`,
+      [user_id, 'utm_source']
+    )
+
+    if (searchUTMSource === false || searchUTMSource.length === 0) {
+      await db.query(
+        `INSERT INTO \`user_settings\` (user_id, \`key\`, \`value\`, \`created_at\`) VALUES (?, ?, ?, NOW())`,
+        [user_id, 'utm_source', utm_source]
+      )
     }
   }
 }
