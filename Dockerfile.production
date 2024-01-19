@@ -1,4 +1,4 @@
-FROM node:16.13.0-alpine3.14 as base
+FROM node:20.10.0-alpine3.19 as base
 
 RUN apk update && apk add curl bash chromium
 
