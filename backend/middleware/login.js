@@ -59,7 +59,11 @@ module.exports = (app) => {
           admin: isAdmin,
           permission: JSON.parse(user.permission)
         }
-        await locationFinder(user.id, req.get('cf-ipcountry'))
+        await locationFinder(
+          user.id,
+          req.get('cf-ipcountry'),
+          req.cookies['fp_utm_source']
+        )
         const data = await token(jwt_data)
 
         res.cookie('auth', data, {
