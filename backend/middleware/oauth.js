@@ -106,7 +106,8 @@ server.exchange(
     }
 
     const tokenData = {
-      ...user
+      ...user,
+      accessType: '3rdParty'
     }
 
     const access_token = token(tokenData)

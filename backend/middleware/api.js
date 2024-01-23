@@ -35,8 +35,8 @@ const {
   testStringIsJson,
   publicStorage
 } = require(path.resolve('helper'))
-const formModel = model.form
-const formPublishedModel = model.formpublished
+const { FormModel, FormPublishedModel } = model
+
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   './',
   'helper',
@@ -49,6 +49,8 @@ module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
     const { user_id } = req.params
+
+    const formModel = new FormModel(req.user)
 
     if (!form.private) {
       form.private = 0
@@ -108,6 +110,8 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
+
+      const formModel = new FormModel(req.user)
 
       const formIds = (
         await db.query(
@@ -175,6 +179,9 @@ module.exports = (app) => {
     async (req, res) => {
       const { form_id } = req.params
 
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
+
       if (req.query.published === 'true') {
         res.json((await formPublishedModel.get({ form_id })) || {})
       } else {
@@ -225,6 +232,8 @@ module.exports = (app) => {
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     let { form_id } = req.params
 
+    const formModel = new FormModel(req.user)
+
     const elems = (await formModel.get({ form_id })).props.elements
 
     // remove the keys that are named 'expectedAnswer' out of the elements
@@ -239,6 +248,8 @@ module.exports = (app) => {
 
   app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
     let { form_id } = req.params
+
+    const formModel = new FormModel(req.user)
 
     const form = await formModel.get({ form_id })
 
@@ -257,6 +268,9 @@ module.exports = (app) => {
       const { submission_id, form_id } = req.params
       // TODO: currently user_id is not used in the query but will be used in the future for security reasons
       // TODO: a check to make sure the viewer is the owner of the submission should be added
+
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
 
       const Renderer = require(path.resolve(
         'script',
@@ -437,6 +451,9 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id, form_id } = req.params
 
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
+
       const form = await formModel.get({ form_id })
 
       if (form !== false) {
@@ -465,6 +482,8 @@ module.exports = (app) => {
     }),
     async (req, res) => {
       const { form_id } = req.params
+
+      const formModel = new FormModel(req.user)
 
       await formModel.delete({ form_id })
 
@@ -573,6 +592,8 @@ module.exports = (app) => {
       matchType: 'strict' // Only allow if user has data rights to form
     }),
     async (req, res) => {
+      const formModel = new FormModel(req.user)
+
       const elementCharts = {
         TextBox: 'lastFive',
         TextArea: 'lastFive',
@@ -950,6 +971,9 @@ module.exports = (app) => {
     }),
     async (req, res) => {
       const { form_id, version_id } = req.params
+
+      const formPublishedModel = new FormPublishedModel(req.user)
+
       const result = await formPublishedModel.get({ form_id, version_id })
 
       if (result !== false) {
@@ -1127,6 +1151,9 @@ module.exports = (app) => {
   app.get('/form/view/:id', async (req, res) => {
     let form_id = req.params.id
     let uuid = null
+
+    const formModel = new FormModel(req.user)
+    const formPublishedModel = new FormPublishedModel(req.user)
 
     if (validate(form_id)) {
       uuid = form_id
@@ -1514,6 +1541,9 @@ module.exports = (app) => {
     mustBeAdmin,
     async (req, res) => {
       const user_id = req.params.user_id
+
+      const formModel = new FormModel(req.user)
+
       const formsArray = (await formModel.list({ user_id })) || []
       const archive = archiver('zip')
 
@@ -1533,6 +1563,9 @@ module.exports = (app) => {
   // create a token with API key for private form view
   app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
     const { form_id, exp } = req.body
+
+    // TODO: hard refactor needed here
+    const formModel = new FormModel(req.user)
 
     if (!form_id || !exp) {
       return res.status(404).json({ message: 'form_id and exp must be sent' })
@@ -1893,6 +1926,8 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
+
+      const formModel = new FormModel(req.user)
 
       let id = req.body.id
 

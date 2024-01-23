@@ -1,7 +1,6 @@
 const path = require('path')
 const { model } = require(path.resolve('helper'))
-const formModel = model.form
-const formPublishedModel = model.formpublished
+const { FormModel, FormPublishedModel } = model
 
 const { mustHaveValidToken } = require(path.resolve(
   'middleware',
@@ -21,6 +20,9 @@ exports.formWebhooksApi = (app) => {
     mustHaveValidToken,
     async (req, res) => {
       let { webhookUrl } = req.body
+
+      const formModel = new FormModel()
+      const formPublishedModel = new FormPublishedModel()
 
       let { formId } = req.params
       let { user_id } = req.user
@@ -98,6 +100,9 @@ exports.formWebhooksApi = (app) => {
       let { webhookId } = req.body
       let { user_id } = req.user
 
+      const formModel = new FormModel()
+      const formPublishedModel = new FormPublishedModel()
+
       if (!formId || !webhookId) {
         return res.status(400).send('No formId or webhookId provided')
       }
@@ -150,6 +155,9 @@ exports.formWebhooksApi = (app) => {
     async (req, res) => {
       let { formId } = req.params
 
+      const formModel = new FormModel()
+      // const formPublishedModel = new FormPublishedModel()
+
       if (validate(formId)) {
         formId = await formModel.getFormIdFromUUID(formId)
       } else if (parseInt(formId) > 1200) {
@@ -167,6 +175,10 @@ exports.formWebhooksApi = (app) => {
       )
 
       const submissionIds = submissionsResult.map((row) => row.id)
+
+      if (submissionIds.length === 0) {
+        return res.json([])
+      }
 
       const result = await db.query(
         `SELECT * FROM \`entry\` WHERE form_id = ? AND submission_id IN (?)`,
