@@ -300,7 +300,6 @@ export default class Forms extends Component {
     const { auth } = this.props.generalContext
 
     const handleCloseModalCLick = () => {
-      this.setState({ isGettingStartedModalOpen: false })
       this.props.history.replace({
         pathname: '/forms',
         state: {
