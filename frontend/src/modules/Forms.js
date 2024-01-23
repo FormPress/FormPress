@@ -306,6 +306,7 @@ export default class Forms extends Component {
           gettingStarted: false
         }
       })
+      this.setState({ isGettingStartedModalOpen: false })
     }
 
     let prePopulateQueryParams = ''
