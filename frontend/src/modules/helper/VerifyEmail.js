@@ -52,6 +52,7 @@ class VerifyEMail extends Component {
             timerValue: prevState.timerValue - 1
           }))
         } else {
+          clearInterval(this.timerInterval)
           this.props.history.push('/forms/gettingstarted')
         }
       }.bind(this),
