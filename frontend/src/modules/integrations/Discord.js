@@ -18,10 +18,6 @@ export default class Discord extends Component {
     super(props)
     this.state = {
       display: this.props.activeStatus ? 'active' : 'description',
-      customizeInputs:
-        (this.props.integrationObject &&
-          this.props.integrationObject.customizeInputs) ??
-        false,
       inputElements: [],
       isModalOpen: false,
       modalContent: {},
@@ -42,10 +38,6 @@ export default class Discord extends Component {
     this.handleEditClick = this.handleEditClick.bind(this)
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
-    this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
   }
 
   componentDidMount() {
@@ -83,12 +75,6 @@ export default class Discord extends Component {
     }
 
     this.setState({ inputElements: { all, chosen } })
-  }
-
-  toggleCustomizeInputs() {
-    this.setState((prevState) => ({
-      customizeInputs: !prevState.customizeInputs
-    }))
   }
 
   handleChooseInputElements(e, elem) {
@@ -130,7 +116,7 @@ export default class Discord extends Component {
   }
 
   async handleActivateWebhook() {
-    const { webhookUrl, inputElements, customizeInputs } = this.state
+    const { webhookUrl, inputElements } = this.state
     const errorDialog = document.querySelector('.field-limit-reached-message')
 
     if (inputElements.chosen.length > 250) {
@@ -157,23 +143,16 @@ export default class Discord extends Component {
       })
 
       if (success) {
-        let chosenInputs
-        if (customizeInputs) {
-          chosenInputs = this.state.inputElements.chosen.map((elem) => {
-            return this.state.inputElements.all[elem]
-          })
-        } else {
-          chosenInputs = 'all'
-        }
+        const chosenInputs = this.state.inputElements.chosen.map((elem) => {
+          return this.state.inputElements.all[elem]
+        })
 
         const tempIntegrationObject = {
           type: Discord.metaData.name,
           active: true,
           value: webhookUrl,
           chosenInputs,
-          inputElements,
-          customizeInputs,
-          paused: false
+          inputElements
         }
         this.setState({
           tempIntegrationObject,
@@ -226,25 +205,21 @@ export default class Discord extends Component {
   }
   async removeIntegration() {
     const { all } = this.state.inputElements
+    const chosen = all.map((elem, index) => {
+      return index
+    })
 
-    const tempIntegrationObject = {
+    this.props.setIntegration({
       type: Discord.metaData.name,
       active: false,
-      value: '',
-      paused: false,
-      customizeInputs: false,
-      chosenInputs: [],
-      inputElements: { all, chosen: [] }
-    }
-    this.props.setIntegration(tempIntegrationObject)
+      value: ''
+    })
 
     this.setState({
       display: 'description',
-      inputElements: { all, chosen: [] },
+      inputElements: { all, chosen },
       webhookUrl: '',
-      isModalOpen: false,
-      customizeInputs: false,
-      tempIntegrationObject
+      isModalOpen: false
     })
   }
 
@@ -286,48 +261,8 @@ export default class Discord extends Component {
 
     await this.props.handleSaveClick()
   }
-  renderInputElementSelection() {
-    let { inputElements } = this.state
-
-    return (
-      <>
-        <Renderer
-          handleFieldChange={this.handleChooseInputElements}
-          theme="infernal"
-          allowInternal={true}
-          className={
-            this.state.fieldLimitReached
-              ? 'field-limit-reached input-elems'
-              : 'input-elems'
-          }
-          form={{
-            props: {
-              elements: [
-                {
-                  id: 21,
-                  type: 'Checkbox',
-                  options: ['Questions'],
-                  value:
-                    inputElements.chosen.length === inputElements.all.length
-                },
-                {
-                  id: 22,
-                  type: 'Checkbox',
-                  options: this.state.inputElements.all.map((elem) => {
-                    return elem.label
-                  }),
-                  value: this.state.inputElements.chosen
-                }
-              ]
-            }
-          }}
-        />
-      </>
-    )
-  }
-
   render() {
-    let { webhookUrl } = this.state
+    let { inputElements, webhookUrl } = this.state
 
     let display
     let paused
@@ -338,6 +273,43 @@ export default class Discord extends Component {
     }
 
     if (
+      paused ||
+      (this.props.activeStatus && this.state.display === 'active')
+    ) {
+      display = (
+        <>
+          <div className="integration-active">
+            You have successfully integrated your form with your discord
+            channel!
+          </div>
+          <div className="integration-controls">
+            {paused ? (
+              <div className="resume-integration">
+                <button type="button" onClick={this.handleResumeClick}>
+                  RESUME
+                </button>
+              </div>
+            ) : (
+              <div className="pause-integration">
+                <button type="button" onClick={this.handlePauseClick}>
+                  PAUSE
+                </button>
+              </div>
+            )}
+            <div className="edit-integration">
+              <button type="button" onClick={this.handleEditClick}>
+                EDIT
+              </button>
+            </div>
+            <div className="remove-integration">
+              <button type="button" onClick={this.handleRemoveClick}>
+                REMOVE
+              </button>
+            </div>
+          </div>
+        </>
+      )
+    } else if (
       this.props.activeStatus === false &&
       this.state.display === 'description'
     ) {
@@ -385,25 +357,46 @@ export default class Discord extends Component {
                         placeholder:
                           'https://discord.com/api/webhooks/id/token',
 
-                        label: 'Webhook URL',
+                        label: 'Please enter webhook url',
                         value: webhookUrl
                       }
                     ]
                   }
                 }}
               />
-              <div className="custom-input-toggle">
-                <input
-                  type="checkbox"
-                  id="switch"
-                  checked={this.state.customizeInputs}
-                  onChange={this.toggleCustomizeInputs}
-                />
-                <label htmlFor="switch"></label>{' '}
-                <span>Pick questions manually</span>
-              </div>
-
-              {this.state.customizeInputs && this.renderInputElementSelection()}
+              <div className="string-vars-label">Choose elements</div>
+              <Renderer
+                handleFieldChange={this.handleChooseInputElements}
+                theme="infernal"
+                allowInternal={true}
+                className={
+                  this.state.fieldLimitReached
+                    ? 'field-limit-reached input-elems'
+                    : 'input-elems'
+                }
+                form={{
+                  props: {
+                    elements: [
+                      {
+                        id: 21,
+                        type: 'Checkbox',
+                        options: ['Select All'],
+                        value:
+                          inputElements.chosen.length ===
+                          inputElements.all.length
+                      },
+                      {
+                        id: 22,
+                        type: 'Checkbox',
+                        options: this.state.inputElements.all.map((elem) => {
+                          return elem.label
+                        }),
+                        value: this.state.inputElements.chosen
+                      }
+                    ]
+                  }
+                }}
+              />
               <div className="field-limit-reached-message dn">
                 You can select maximum 250 fields.
               </div>
@@ -415,43 +408,6 @@ export default class Discord extends Component {
             onClick={() => this.handleActivateWebhook()}>
             Activate Webhook
           </button>
-        </>
-      )
-    } else if (
-      paused ||
-      (this.props.activeStatus && this.state.display === 'active')
-    ) {
-      display = (
-        <>
-          <div className="integration-active">
-            You have successfully integrated your form with your discord
-            channel!
-          </div>
-          <div className="integration-controls">
-            {paused ? (
-              <div className="resume-integration">
-                <button type="button" onClick={this.handleResumeClick}>
-                  RESUME
-                </button>
-              </div>
-            ) : (
-              <div className="pause-integration">
-                <button type="button" onClick={this.handlePauseClick}>
-                  PAUSE
-                </button>
-              </div>
-            )}
-            <div className="edit-integration">
-              <button type="button" onClick={this.handleEditClick}>
-                EDIT
-              </button>
-            </div>
-            <div className="remove-integration">
-              <button type="button" onClick={this.handleRemoveClick}>
-                REMOVE
-              </button>
-            </div>
-          </div>
         </>
       )
     }
