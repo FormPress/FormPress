@@ -109,8 +109,9 @@ exports.triggerDiscordWebhook = async ({
     }
   })
 
+  const embeds = embedBuilder(selectedQnA, formTitle)
+
   try {
-    const embeds = embedBuilder(selectedQnA, formTitle)
     const webhookClient = new WebhookClient({ url })
     await webhookClient.send({
       username: 'FormPress',
