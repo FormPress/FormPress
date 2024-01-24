@@ -7,7 +7,8 @@ import Renderer from '../Renderer'
 
 export default class CustomWebhook extends Component {
   static metaData = {
-    icon: 'https://static.formpress.org/images/webhooks-logo.svg',
+    icon:
+      'https://storage.googleapis.com/static.formpress.org/images/webhooks-logo.svg',
     displayText: 'Custom Webhook',
     name: 'CustomWebhook'
   }
