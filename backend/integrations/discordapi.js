@@ -102,13 +102,6 @@ exports.triggerDiscordWebhook = async ({
     })
   }
 
-  //discord.js does not support empty strings on question names
-  selectedQnA.forEach((qna) => {
-    if (qna.question === '') {
-      qna.question = '-'
-    }
-  })
-
   const embeds = embedBuilder(selectedQnA, formTitle)
 
   try {
