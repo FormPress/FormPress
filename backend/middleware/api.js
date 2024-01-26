@@ -1571,7 +1571,7 @@ module.exports = (app) => {
   )
 
   // create a token with API key for private form view
-  app.get('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
+  app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
     const { exp } = req.body
 
     const keyData = res.locals.key

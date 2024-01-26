@@ -40,12 +40,6 @@ exports.hydrateForm = (form, shouldSanitize) => {
 exports.dehydrateForm = (form) => {
   form.props.customCSS = encodeCustomCSS(form.props.customCSS)
 
-  form.props.integrations.forEach((i) => {
-    if (typeof i === 'string') {
-      throw new Error('Integration is not an object')
-    }
-  })
-
   form.props = JSON.stringify(form.props)
 
   return form
