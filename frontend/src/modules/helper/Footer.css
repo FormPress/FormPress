@@ -1,0 +1,28 @@
+footer.footer .col-8-16 {
+  text-align: center;
+}
+
+footer.footer {
+  color: #1c5c85;
+  font-size: 18px;
+  margin-top: 50px;
+  padding-bottom: 40px;
+  width: 100%;
+}
+
+footer.footer a {
+  text-decoration: none;
+  color: inherit;
+}
+
+@media only screen and (max-width: 767px) {
+  footer.footer .col-8-16 {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  footer.footer {
+    margin-top: 25px;
+    padding-bottom: 0px;
+  }
+}

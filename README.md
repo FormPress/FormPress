@@ -113,7 +113,7 @@ ADMINPASSWORD=somepassword
 
 ## License
 
-FormPress is licensed under [GPLv3](LICENSE)
+FormPress is licensed under [MIT](LICENSE)
 
 [//]: # 'Links'
 [react]: http://reactjs.org
