@@ -20,7 +20,7 @@ export default class CAPTCHA extends Component {
   static metaData = {
     icon: faRefresh,
     displayText: 'CAPTCHA',
-    group: 'inputElement'
+    group: 'pageElement'
   }
 
   static helpers = {

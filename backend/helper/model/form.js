@@ -7,9 +7,11 @@ class FormModel {
   constructor(user) {
     this.user = user
 
-    // TODO: uncomment
-    // this.shouldSanitize =
-    //   user === undefined || (user && user.accessType === '3rdParty')
+    this.shouldSanitizeSensitiveData = false
+
+    if (user && user.accessType === '3rdParty') {
+      this.shouldSanitizeSensitiveData = true
+    }
 
     // bind methods
     this.delete = this.delete.bind(this)
@@ -46,7 +48,7 @@ class FormModel {
       return false
     }
 
-    return hydrateForm(result[0])
+    return hydrateForm(result[0], this.shouldSanitizeSensitiveData)
   }
 
   async create({ user_id, form }) {
@@ -133,7 +135,9 @@ class FormModel {
     if (result.length === 0) {
       return false
     }
-    return result.map(hydrateForm)
+    return result.map((row) =>
+      hydrateForm(row, this.shouldSanitizeSensitiveData)
+    )
   }
 
   async getFormIdFromUUID(uuid) {

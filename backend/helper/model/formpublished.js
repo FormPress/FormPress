@@ -6,9 +6,11 @@ class FormPublishedModel {
   constructor(user) {
     this.user = user
 
-    // TODO: uncomment
-    // this.shouldSanitize =
-    //   user === undefined || (user && user.accessType === '3rdParty')
+    this.shouldSanitizeSensitiveData = false
+
+    if (user && user.accessType === '3rdParty') {
+      this.shouldSanitizeSensitiveData = true
+    }
 
     // bind methods
     this.get = this.get.bind(this)
@@ -36,7 +38,7 @@ class FormPublishedModel {
     if (result.length === 0) {
       return false
     }
-    return hydrateForm(result[0])
+    return hydrateForm(result[0], this.shouldSanitizeSensitiveData)
   }
 
   async create({ user_id, form }) {
@@ -62,6 +64,27 @@ class FormPublishedModel {
     WHERE id = ?
   `,
       [nextVersion, form.id]
+    )
+  }
+
+  async update({ form }) {
+    const db = await getPool()
+    dehydrateForm(form)
+
+    const version = parseInt(form.published_version || 0)
+
+    if (version === 0) {
+      return false
+    }
+
+    await db.query(
+      `
+    UPDATE \`form_published\`
+      SET \`title\` = ?, \`props\` = ?
+    WHERE
+      form_id = ? AND version = ?
+  `,
+      [form.title, form.props, form.id, version]
     )
   }
 }

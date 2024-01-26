@@ -2,6 +2,8 @@ const path = require('path')
 const { model } = require(path.resolve('helper'))
 const { FormModel, FormPublishedModel } = model
 
+const Elements = require('../script/transformed/elements/')
+
 const { mustHaveValidToken } = require(path.resolve(
   'middleware',
   'authorization'
@@ -86,7 +88,11 @@ exports.formWebhooksApi = (app) => {
       }
 
       // publish form
-      await formPublishedModel.create({ user_id, form: { ...form } })
+      const version = parseInt(form.published_version || 0)
+
+      if (version > 0) {
+        await formPublishedModel.update({ form: { ...form } })
+      }
 
       return res.status(201).json({ webhookId })
     }
@@ -143,7 +149,11 @@ exports.formWebhooksApi = (app) => {
       }
 
       // publish form
-      await formPublishedModel.create({ user_id, form: { ...form } })
+      const version = parseInt(form.published_version || 0)
+
+      if (version > 0) {
+        await formPublishedModel.update({ form: { ...form } })
+      }
 
       return res.status(201).json({ webhookId })
     }
@@ -166,6 +176,15 @@ exports.formWebhooksApi = (app) => {
 
       const db = await getPool()
 
+      const formResult = await formModel.get({ form_id: formId })
+
+      if (formResult === false) {
+        //form not found
+        return res.status(200).json({ message: 'Form not found' })
+      }
+
+      const form = formResult
+
       const submissionsResult = await db.query(
         `
         SELECT * FROM \`submission\`
@@ -176,23 +195,44 @@ exports.formWebhooksApi = (app) => {
 
       const submissionIds = submissionsResult.map((row) => row.id)
 
+      // No submissions found. We will send users a sample submission with example answers.
       if (submissionIds.length === 0) {
-        return res.json([])
+        // get all form elems
+        const allFormElems = form.props.elements
+
+        // filter out elems that are hidden, and not an input element Elements[e.type].metaData.group === 'inputElement' might help
+        const inputElems = allFormElems.filter((elem) => {
+          if (elem.hidden === true) {
+            return false
+          }
+          return Elements[elem.type].metaData.group === 'inputElement'
+        })
+
+        // now the labels of the input elements are the questions and answers can be "Example answer here."
+        const entries = inputElems.map((elem) => {
+          const entry = {}
+          entry.question = elem.label
+          entry.answer = 'Example answer here.'
+          return entry
+        })
+
+        const organizedSubmission = {
+          metadata: {
+            formId: formId,
+            submissionId: 1,
+            formTitle: form.title,
+            submissionDate: new Date()
+          },
+          entries
+        }
+
+        return res.json([organizedSubmission])
       }
 
       const result = await db.query(
         `SELECT * FROM \`entry\` WHERE form_id = ? AND submission_id IN (?)`,
         [formId, submissionIds]
       )
-
-      const formResult = await formModel.get({ form_id: formId })
-
-      if (formResult === false) {
-        //form not found
-        return res.status(200).json({ message: 'Form not found' })
-      }
-
-      const form = formResult
 
       const idsOfElemsPresent = form.props.elements.map((elem) => elem.id)
 
