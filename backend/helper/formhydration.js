@@ -4,12 +4,10 @@ const encodeCustomCSS = (customCSS) => {
     const buff = Buffer.from(decodedCSS, 'utf8')
     const encodedCSS = buff.toString('base64')
 
-    const customCSS = {
+    return {
       value: encodedCSS,
       isEncoded: true
     }
-
-    return customCSS
   }
 }
 
@@ -19,12 +17,10 @@ const decodeCustomCSS = (customCSS) => {
     const buff = Buffer.from(encodedCSS, 'base64')
     const decodedCSS = buff.toString('utf8')
 
-    const customCSS = {
+    return {
       value: decodedCSS,
       isEncoded: false
     }
-
-    return customCSS
   }
 }
 

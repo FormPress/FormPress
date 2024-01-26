@@ -35,13 +35,14 @@ const {
   testStringIsJson,
   publicStorage
 } = require(path.resolve('helper'))
-const { FormModel, FormPublishedModel } = model
+const { FormModel, FormPublishedModel, user: UserModel } = model
 
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   './',
   'helper',
   'oldformpropshandler.js'
 ))
+const { token } = require(path.resolve('helper')).token
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -111,7 +112,15 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
 
-      const formModel = new FormModel(req.user)
+      const { user } = req
+
+      const formModel = new FormModel(user)
+
+      let shouldSanitizeSensitiveData = false
+
+      if (user && user.accessType === '3rdParty') {
+        shouldSanitizeSensitiveData = true
+      }
 
       const formIds = (
         await db.query(
@@ -152,7 +161,9 @@ module.exports = (app) => {
       if (formResults.length === 0) {
         res.json([])
       } else {
-        const response = formResults.map(hydrateForm)
+        const response = formResults.map((form) =>
+          hydrateForm(form, shouldSanitizeSensitiveData)
+        )
         sharedIdsAndPerms.forEach((idAndPerm) => {
           response.forEach((formResult) => {
             if (formResult.id === idAndPerm.form_id) {
@@ -1163,31 +1174,30 @@ module.exports = (app) => {
     }
 
     const result = await formModel.get({ form_id })
+
     if (result === false) {
       return res.status(404).send('Form not found')
     }
 
-    if (
-      result.private &&
-      req.query.preview !== 'true' &&
-      req.get('host') !== 'localhost:3001'
-    ) {
+    let form = result
+
+    if (result.private && req.query.preview !== 'true') {
       if (!req.query.token) {
         return res.status(404).send('token must be sent')
       }
 
-      jwt.verify(req.user, JWT_SECRET, (err, decoded) => {
+      const token = req.query.token
+
+      jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
           return res.status(404).send(err)
         }
 
-        if (decoded.form_id !== form_id) {
+        if (decoded.user_id !== form.user_id) {
           return res.status(404).send('token is not valid')
         }
       })
     }
-
-    let form = result
 
     const db = await getPool()
     const userResult = await db.query(
@@ -1561,45 +1571,51 @@ module.exports = (app) => {
   )
 
   // create a token with API key for private form view
-  app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
-    const { form_id, exp } = req.body
+  app.get('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
+    const { exp } = req.body
 
-    // TODO: hard refactor needed here
-    const formModel = new FormModel(req.user)
+    const keyData = res.locals.key
 
-    if (!form_id || !exp) {
-      return res.status(404).json({ message: 'form_id and exp must be sent' })
+    if (keyData === undefined) {
+      return res.status(500).json({ message: 'API key not found' })
     }
 
-    if (typeof form_id !== 'string') {
-      return res.status(404).json({ message: 'form_id format must be uuid' })
-    }
+    const userId = keyData.user_id
 
-    const result = await formModel.get({ form_id })
-    if (result === false) {
-      return res.status(404).json({ message: 'Form not found' })
-    }
+    // 5 minutes, default
+    const defaultExp = Math.floor(Date.now() / 1000) + 60 * 5
 
-    if (result.user_id !== res.locals.key.user_id) {
-      return res.status(404).json({ message: 'Form not found' })
-    }
+    // 24 hours, max
+    const maxExp = Math.floor(Date.now() / 1000) + 60 * 60 * 24
 
-    const jwt_data = { form_id, action: 'view', exp }
+    let finalExp
 
-    jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
-      if (err) {
-        console.log('token sign error ', err)
-        error.errorReport(err)
+    if (exp) {
+      const expTimestamp = parseInt(exp)
+
+      if (!isNaN(expTimestamp) && expTimestamp > maxExp) {
+        finalExp = maxExp
+      } else {
+        finalExp = expTimestamp
       }
+    } else {
+      finalExp = defaultExp
+    }
 
-      return res.status(200).json({
-        message: 'Create a new token',
-        token,
-        form_id,
-        action: 'view',
-        exp
-      })
-    })
+    const user = await UserModel.get({ user_id: userId })
+
+    if (user === false) {
+      return res.status(500).json({ message: 'User not found' })
+    }
+
+    const tokenData = {
+      ...user,
+      accessType: '3rdParty'
+    }
+
+    const jwt = await token(tokenData, finalExp)
+
+    return res.json({ token: jwt, user_id: userId })
   })
 
   app.get(
