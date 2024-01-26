@@ -85,10 +85,8 @@ $color-14: #68942f; /* forest green */
   }
 
   .label span.required:after {
-    font-size: 20px;
-    position: absolute;
-    left: 0;
-    content: '*';
+    font-size: 17px;
+    content: ' *';
     color: $accent-required;
   }
 
