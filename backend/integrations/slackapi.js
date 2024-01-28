@@ -190,8 +190,8 @@ exports.triggerSlackWebhook = async ({
   if (chosenInputElems === 'all') {
     selectedQnA = [...questionsAndAnswers]
   } else {
-    chosenInputElems.forEach((elem) => {
-      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+    chosenInputElems.forEach((elemId) => {
+      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elemId)
       if (foundQnA !== undefined) {
         selectedQnA.push(foundQnA)
       }

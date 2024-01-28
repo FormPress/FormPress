@@ -59,14 +59,8 @@ export default class CustomWebhook extends Component {
     this.filterElementsWithInput()
   }
 
-  async componentDidUpdate(prevProps) {
-    if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handleSaveClick()
-    }
-  }
-
   filterElementsWithInput() {
-    const elements = this.props.form.props.elements
+    const elements = this.props.savedForm.props.elements
     const all = []
     let chosen = []
 
@@ -74,18 +68,16 @@ export default class CustomWebhook extends Component {
       .filter((e) => {
         return Elements[e.type].metaData.group === 'inputElement'
       })
-      .forEach((elem, index) => {
+      .forEach((elem) => {
         const inputElement = {
           label: elem.label,
           id: elem.id,
           type: elem.type
         }
         all.push(inputElement)
-        chosen.push(index)
       })
     if (this.props.integrationObject) {
-      chosen = []
-      chosen = this.props.integrationObject.inputElements.chosen
+      chosen = this.props.integrationObject.chosenInputs
     }
 
     this.setState({ inputElements: { all, chosen } })
@@ -95,15 +87,18 @@ export default class CustomWebhook extends Component {
     this.setState((prevState) => ({
       customizeInputs: !prevState.customizeInputs
     }))
+    document.querySelector('.complete-authentication').scrollIntoView({
+      behavior: 'smooth'
+    })
   }
 
-  handleChooseInputElements(e, elem) {
+  handleChooseInputElements(elem) {
     const { inputElements } = this.state
 
-    if (e.id === 21) {
+    if (elem.id === 'select all') {
       // this is the 'Select All' option
-      if (e.value === false) {
-        inputElements.chosen = inputElements.all.map((elem, index) => index)
+      if (elem.value === false) {
+        inputElements.chosen = inputElements.all.map((elem) => elem.id)
         this.setState({ inputElements })
         return
       } else {
@@ -113,12 +108,20 @@ export default class CustomWebhook extends Component {
       }
     }
 
-    const clickedIndex = parseInt(elem.target.value)
+    const clickedBoundElemId = elem.boundElemId
+    const alreadyChosen = inputElements.chosen.includes(clickedBoundElemId)
 
-    if (inputElements.chosen.includes(clickedIndex)) {
-      inputElements.chosen.splice(inputElements.chosen.indexOf(clickedIndex), 1)
+    if (alreadyChosen) {
+      inputElements.chosen.splice(
+        inputElements.chosen.indexOf(clickedBoundElemId),
+        1
+      )
     } else {
-      inputElements.chosen.push(clickedIndex)
+      if (inputElements.chosen === 'all') {
+        inputElements.chosen = []
+      }
+
+      inputElements.chosen.push(clickedBoundElemId)
     }
 
     this.setState({ inputElements })
@@ -134,12 +137,17 @@ export default class CustomWebhook extends Component {
   }
 
   async handleActivateWebhook() {
-    const { webhookUrl, inputElements, customizeInputs } = this.state
+    const { webhookUrl, customizeInputs } = this.state
 
-    let chosenInputs
+    let chosenInputs = []
     if (customizeInputs) {
-      chosenInputs = this.state.inputElements.chosen.map((elem) => {
-        return this.state.inputElements.all[elem]
+      this.state.inputElements.chosen.forEach((elemId) => {
+        const matchedElem = this.state.inputElements.all.find((elem) => {
+          return elem.id === elemId
+        })
+        if (matchedElem !== undefined) {
+          chosenInputs.push(matchedElem.id)
+        }
       })
     } else {
       chosenInputs = 'all'
@@ -152,7 +160,6 @@ export default class CustomWebhook extends Component {
         active: true,
         value: webhookUrl,
         chosenInputs,
-        inputElements,
         customizeInputs,
         paused: false
       }
@@ -163,7 +170,7 @@ export default class CustomWebhook extends Component {
       })
 
       this.props.setIntegration(tempIntegrationObject)
-      await this.props.handleSaveClick()
+      this.props.updateDbFormIntegrations(CustomWebhook.metaData.name)
     } else {
       this.setState({ invalidUrl: true, webhookUrl: '' })
       document.querySelector('.integration-header').scrollIntoView({
@@ -207,6 +214,7 @@ export default class CustomWebhook extends Component {
       inputElements: { all, chosen: [] }
     }
     this.props.setIntegration(tempIntegrationObject)
+    this.props.updateDbFormIntegrations(CustomWebhook.metaData.name)
 
     this.setState({
       display: 'description',
@@ -220,7 +228,7 @@ export default class CustomWebhook extends Component {
 
   handleEditClick() {
     let { inputElements } = this.state
-    inputElements.chosen = this.props.integrationObject.inputElements.chosen
+    inputElements.chosen = this.props.integrationObject.chosenInputs
     this.setState({
       inputElements,
       display: 'configuration',
@@ -239,7 +247,7 @@ export default class CustomWebhook extends Component {
       type: CustomWebhook.metaData.name,
       paused: true
     })
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(CustomWebhook.metaData.name)
   }
 
   async handleResumeClick() {
@@ -254,11 +262,20 @@ export default class CustomWebhook extends Component {
       paused: false
     })
 
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(CustomWebhook.metaData.name)
   }
   renderInputElementSelection() {
     let { inputElements } = this.state
 
+    const questions = inputElements.all.map((elem, index) => {
+      return {
+        id: index,
+        type: 'Checkbox',
+        boundElemId: elem.id,
+        options: [elem.label],
+        value: inputElements.chosen.includes(elem.id)
+      }
+    })
     return (
       <>
         <Renderer
@@ -270,20 +287,13 @@ export default class CustomWebhook extends Component {
             props: {
               elements: [
                 {
-                  id: 21,
+                  id: 'select all',
                   type: 'Checkbox',
-                  options: ['Select All'],
+                  options: ['Questions'],
                   value:
                     inputElements.chosen.length === inputElements.all.length
                 },
-                {
-                  id: 22,
-                  type: 'Checkbox',
-                  options: this.state.inputElements.all.map((elem) => {
-                    return elem.label
-                  }),
-                  value: this.state.inputElements.chosen
-                }
+                ...questions
               ]
             }
           }}
@@ -370,7 +380,7 @@ export default class CustomWebhook extends Component {
                   onChange={this.toggleCustomizeInputs}
                 />
                 <label htmlFor="switch"></label>{' '}
-                <span>Pick questions manually</span>
+                <span>Advanced Configuration</span>
               </div>
               {this.state.customizeInputs && this.renderInputElementSelection()}
             </div>

@@ -100,11 +100,12 @@
   margin-left: 0;
 }
 
-.input-elems > :nth-child(odd):not(:first-child) {
+.input-elems > div:first-of-type {
   background-color: #d4d6d9 !important;
 }
-.input-elems > :nth-child(even):not(:first-child) {
+.input-elems > div:not(:first-of-type) {
   margin-left: 20px;
+  padding: 2px 10px;
 }
 
 .input-elems > .elementCheckbox {
