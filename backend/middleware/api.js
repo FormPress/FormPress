@@ -124,7 +124,6 @@ module.exports = (app) => {
       try {
         await formModel.update({ form: { ...form } })
         if (form.published_version !== 0) {
-          // await formPublishedModel.create({ user_id, form: { ...form } })
           let latestPublishedForm = await formPublishedModel.get({
             form_id,
             version_id: form.published_version
