@@ -19,14 +19,17 @@ export default class Slack extends Component {
     this.state = {
       display: this.props.activeStatus ? 'active' : 'description',
       customizeInputs:
-        (this.props.integrationObject &&
-          this.props.integrationObject.customizeInputs) ??
-        false,
+        this.props.integrationObject === null
+          ? false
+          : this.props.integrationObject.customizeInputs,
       inputElements: [],
       isModalOpen: false,
       modalContent: {},
       tempIntegrationObject: { ...this.props.integrationObject },
-      webhookUrl: '',
+      webhookUrl:
+        this.props.integrationObject === null
+          ? ''
+          : this.props.integrationObject.value,
       invalidUrl: false
     }
 
@@ -69,7 +72,7 @@ export default class Slack extends Component {
         all.push(inputElement)
       })
     if (this.props.integrationObject) {
-      chosen = this.props.integrationObject.chosenInputs
+      chosen = this.props.integrationObject.chosenInputs.map((elem) => elem.id)
     }
 
     this.setState({ inputElements: { all, chosen } })
@@ -109,9 +112,6 @@ export default class Slack extends Component {
         1
       )
     } else {
-      if (inputElements.chosen === 'all') {
-        inputElements.chosen = []
-      }
       inputElements.chosen.push(clickedBoundElemId)
     }
 
@@ -146,11 +146,9 @@ export default class Slack extends Component {
             return elem.id === elemId
           })
           if (matchedElem !== undefined) {
-            chosenInputs.push(matchedElem.id)
+            chosenInputs.push(matchedElem)
           }
         })
-      } else {
-        chosenInputs = 'all'
       }
 
       const tempIntegrationObject = {
@@ -236,15 +234,10 @@ export default class Slack extends Component {
   }
 
   handleEditClick() {
-    let { inputElements } = this.state
-    inputElements.chosen = this.props.integrationObject.chosenInputs
     this.setState({
-      inputElements,
-      display: 'configuration',
-      webhookUrl: this.state.tempIntegrationObject.value
+      display: 'configuration'
     })
   }
-
   async handlePauseClick() {
     this.setState({
       tempIntegrationObject: {

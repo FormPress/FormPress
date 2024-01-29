@@ -102,12 +102,6 @@ export default class GoogleDrive extends Component {
     }
   }
 
-  async componentDidUpdate(prevProps) {
-    if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handleSaveClick()
-    }
-  }
-
   showPicker(access_token) {
     const google = window.google
 
@@ -261,9 +255,9 @@ export default class GoogleDrive extends Component {
   }
 
   async handleStartAuthentication() {
-    const saveSuccess = await this.props.handleSaveClick()
-    if (saveSuccess === false) {
-      return
+    const { form } = this.props
+    if (form.id === null) {
+      await this.props.handleSaveClick()
     }
 
     let { success, data } = await api({
