@@ -1285,7 +1285,7 @@ module.exports = (app) => {
     })
   })
 
-  app.post('/form/view/demo', mustHaveValidToken, async (req, res) => {
+  app.post('/form/view/demo', async (req, res) => {
     let { form } = req.body
 
     if (form === undefined) {

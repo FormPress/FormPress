@@ -97,17 +97,52 @@ class App extends Component {
       endpoint = `/api/users/me?renewCookie=true`
     }
 
-    const { data } = await api({
+    const response = await api({
       resource: endpoint
     })
 
+    if (response.success === false) {
+      const demoUser = {
+        user_id: 0,
+        email: 'demo@formpress.org',
+        user_role: 2,
+        role_name: 'Default Free',
+        admin: false,
+        permission: {
+          formLimit: '5',
+          submissionLimit: '100',
+          uploadLimit: '120',
+          Button: true,
+          Checkbox: true,
+          TextBox: true,
+          TextArea: true,
+          Dropdown: true,
+          Radio: true,
+          Name: true,
+          Email: true,
+          Header: true,
+          FileUpload: true,
+          Separator: true,
+          PageBreak: true,
+          Address: true,
+          NetPromoterScore: true,
+          Phone: true,
+          Image: true,
+          RatingScale: true,
+          DatePicker: true
+        }
+      }
+
+      demoUser.loggedIn = false
+      this.handleSetAuth(demoUser)
+      return
+    }
+
+    const data = response.data
     if (data.status === 'done') {
       const incomingAuthObject = data.auth
 
-      // Demo case
-      if (incomingAuthObject.user_id !== 0) {
-        incomingAuthObject.loggedIn = true
-      }
+      incomingAuthObject.loggedIn = true
 
       this.handleSetAuth(incomingAuthObject)
     }
