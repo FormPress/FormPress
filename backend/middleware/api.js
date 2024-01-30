@@ -111,6 +111,10 @@ module.exports = (app) => {
       const db = await getPool()
       const form = await formModel.get({ form_id })
 
+      if (form === false) {
+        return res.status(404).json({ message: 'Form not found' })
+      }
+
       let index = form.props.integrations.findIndex(
         (integration) => integration.type === integrationObject.type
       )

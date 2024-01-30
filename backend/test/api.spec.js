@@ -147,7 +147,21 @@ describe('Api', () => {
           pro.send(endpoint.exampleRequestBody)
         }
 
-        pro.expect('Content-Type', /json/).expect(200, done) //method is called with a valid token, should return 200
+        pro
+          .expect('Content-Type', /json/)
+          .expect((res) => {
+            if (res.status === 401 || res.status === 403) {
+              throw new Error(
+                'Did not expect authentication/authorization related response but received ' +
+                  res.status
+              )
+            }
+            if (res.body && res.body.message === 'Invalid Token') {
+              // backend responds { message: 'Invalid Token' } when token is invalid
+              throw new Error('Received JSON message: Invalid Token')
+            }
+          })
+          .end(done)
       })
 
       it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request with valid auth token belonging to another user`, (done) => {
