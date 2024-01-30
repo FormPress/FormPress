@@ -1583,7 +1583,7 @@ module.exports = (app) => {
     const userId = keyData.user_id
 
     // 5 minutes, default
-    const defaultExp = Math.floor(Date.now() / 1000) + 60 * 5
+    const defaultExp = Math.floor(Date.now() / 1000) + 60 * 60
 
     // 24 hours, max
     const maxExp = Math.floor(Date.now() / 1000) + 60 * 60 * 24
@@ -1695,7 +1695,7 @@ module.exports = (app) => {
       }
     }
   )
-  // TODO: review below part
+
   app.get(
     '/api/users/:user_id/talkyard-sso',
     mustHaveValidToken,
