@@ -399,7 +399,7 @@ module.exports = (app) => {
 
       try {
         console.log('sending email')
-        await sgMail.send(msg, sendEmailTo.length > 1) // second argument is for isMultiple
+        sgMail.send(msg, sendEmailTo.length > 1) // second argument is for isMultiple
       } catch (e) {
         console.log('Error while sending email ', e)
       }
@@ -558,7 +558,7 @@ module.exports = (app) => {
       }
 
       const dbResult = await db.query(
-        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND (id = ? OR id = 1)`,
+        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR id = 1`,
         [form.user_id, tyPageId]
       )
 
