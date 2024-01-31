@@ -399,7 +399,7 @@ module.exports = (app) => {
 
       try {
         console.log('sending email')
-        sgMail.send(msg, sendEmailTo.length > 1) // second argument is for isMultiple
+        await sgMail.send(msg, sendEmailTo.length > 1) // second argument is for isMultiple
       } catch (e) {
         console.log('Error while sending email ', e)
       }
