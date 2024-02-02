@@ -208,7 +208,9 @@ export default class APIKeys extends Component {
                 content: (apiKey) => (
                   <div className="actions">
                     <CopyToClipboard clipboardData={apiKey.api_key}>
-                      <FontAwesomeIcon icon={faClone} />
+                      <span title="Copy to clipboard">
+                        <FontAwesomeIcon icon={faClone} />
+                      </span>
                     </CopyToClipboard>
                     <span
                       title="Delete Key"
