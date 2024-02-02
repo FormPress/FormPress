@@ -23,7 +23,7 @@
   margin: 0 5px;
   padding: 10px;
   min-height: 200px;
-  word-break: break-all;
+  word-break: break-word;
   color: #1c5c85;
   outline: 0;
   font-weight: bold;
@@ -180,6 +180,11 @@
   opacity: 0.8;
   filter: blur(1px);
 }
+
+.shareFormEmbedTypeDropdown .clearfix {
+  display: none;
+}
+
 .shareFormSettings {
   padding: 10px;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, Route, Switch } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import moment from 'moment'
@@ -24,6 +24,7 @@ import {
 } from 'recharts'
 
 import './Data.css'
+import { DotLoader } from 'react-spinner-overlay'
 
 const getStartOfToday = () => {
   const start = new Date()
@@ -105,51 +106,65 @@ export default class Data extends Component {
     const words = submissionsPerPage.split(' ')
     const perPage = parseInt(words[1])
 
-    let resource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions`
-    resource += `?orderBy=created_at&limit=${perPage}`
+    // Submissions
+    let submissionQueryResource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/submissions`
+    submissionQueryResource += `?orderBy=created_at&limit=${perPage}`
     if (!fetchNext) {
-      resource += `&prevPage=true`
+      submissionQueryResource += `&prevPage=true`
     }
     if (submissionCursor) {
-      resource += `&cursor=${submissionCursor}`
+      submissionQueryResource += `&cursor=${submissionCursor}`
     }
     if (showUnread) {
-      resource += '&read=0'
+      submissionQueryResource += '&read=0'
     }
-    const { data } = await api({ resource })
+    const { data: submissionResponse } = await api({
+      resource: submissionQueryResource
+    })
 
-    await this.setLoadingState('submissions', false)
-    if (data.submissions.length === 0) {
+    // Statistics
+    let statisticsQueryResource = `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/statistics`
+
+    const { data: statisticsResponse } = await api({
+      resource: statisticsQueryResource
+    })
+
+    if (submissionResponse.submissions.length === 0) {
       if (fetchNext) {
         await this.setState({
-          cursor: { ...this.state.cursor, next: null }
+          cursor: { ...this.state.cursor, next: null },
+          statistics: statisticsResponse
         })
       } else {
         await this.setState({
-          cursor: { ...this.state.cursor, prev: null }
+          cursor: { ...this.state.cursor, prev: null },
+          statistics: statisticsResponse
         })
       }
     } else {
       this.setState({
-        submissions: data.submissions,
+        submissions: submissionResponse.submissions,
+        statistics: statisticsResponse,
         cursor: {
-          prev: initLoad ? null : data.prevCursor,
-          next: endOfList ? null : data.nextCursor
+          prev: initLoad ? null : submissionResponse.prevCursor,
+          next: endOfList ? null : submissionResponse.nextCursor
         },
-        todaySubmissionCount: data.todaySubmissionCount,
-        totalSubmissionCount: data.submissionCount
+        todaySubmissionCount: submissionResponse.todaySubmissionCount,
+        totalSubmissionCount: submissionResponse.submissionCount
       })
     }
-  }
 
-  async updateSubmissionStatistics(form_id) {
-    const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${form_id}/statistics`
-    })
+    let waitDuration = 0
 
-    this.setState({
-      statistics: data
-    })
+    if (submissionResponse.submissions.length > 0) {
+      waitDuration = 1000
+    } else {
+      waitDuration = 0
+    }
+
+    setTimeout(() => {
+      this.setLoadingState('submissions', false)
+    }, waitDuration)
   }
 
   componentDidMount() {
@@ -189,10 +204,6 @@ export default class Data extends Component {
         selectedFormSelectedPublishedVersion
       })
 
-      this.updateSubmissionStatistics(
-        form_id,
-        selectedFormSelectedPublishedVersion
-      )
       this.updateSubmissions(form_id, true)
     }
   }
@@ -262,7 +273,6 @@ export default class Data extends Component {
       showUnread: false,
       submissionsPerPage: 'Show 10 submissions'
     })
-    this.updateSubmissionStatistics(form.id, form.published_version)
     this.updateSubmissions(form.id, true)
   }
 
@@ -283,6 +293,8 @@ export default class Data extends Component {
   }
 
   async handleSubmissionClick(submission) {
+    this.setLoadingState('entries', true)
+
     const { showUnread, submissions } = this.state
     const { id, form_id, version } = submission
     let selectedSubmissionForm
@@ -299,7 +311,6 @@ export default class Data extends Component {
       selectedSubmissionForm = selectedSubmissionForm.data
     }
 
-    this.setLoadingState('entries', true)
     this.setState({
       entries: [],
       selectedSubmissionId: id,
@@ -310,12 +321,21 @@ export default class Data extends Component {
       resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${selectedSubmissionForm.form_id}/submissions/${id}/entries`
     })
 
-    this.setLoadingState('entries', false)
     this.setState({ entries: data })
+
+    let waitDuration
+
+    if (data.length > 0) {
+      waitDuration = 700
+    } else {
+      waitDuration = 0
+    }
 
     // Do not update and refetch submissions as it is already read!
     if (submission.read === 1) {
-      return
+      return setTimeout(() => {
+        this.setLoadingState('entries', false)
+      }, waitDuration)
     }
 
     await api({
@@ -335,6 +355,10 @@ export default class Data extends Component {
 
       this.setState({ submissions })
     }
+
+    setTimeout(() => {
+      this.setLoadingState('entries', false)
+    }, waitDuration)
   }
   async handleCSVExportClick(submissionIds) {
     const form_id = this.state.selectedFormId
@@ -577,8 +601,7 @@ export default class Data extends Component {
   render() {
     const { forms, formSelectorOpen, loading, selectedFormId } = this.state
     const submissions = this.renderSubmissions()
-    const entries =
-      loading.entries === true ? 'Loading...' : this.renderEntries()
+    const entries = this.renderEntries()
     let formSelectorText = 'Please select form'
 
     if (selectedFormId !== null && forms.length > 0) {
@@ -675,222 +698,245 @@ export default class Data extends Component {
             </div>
           </div>
         </div>
-        {this.props.history.location.pathname.endsWith('/data') ? (
-          <div className="cw center grid dataContent">
-            <div className="submissionSelector col-5-16">{submissions}</div>
-            <div className="entriesViewer col-11-16">{entries}</div>
-          </div>
-        ) : (
-          <div className="cw center grid dataStatistics">
-            <div className="selectedSubmissionStatistics col-16-16">
-              {_.isEmpty(this.state.statistics) === false ? (
-                <div className="submissionResponsesContainer">
-                  <div className="submissionResponsesDetails">
-                    <div>
-                      <div className="detailLabel">
-                        {this.state.statistics.responses}
-                      </div>
-                      <div className="detailSublabel">Submission(s)</div>
-                    </div>
-                    <div>
-                      <div className="detailLabel">
-                        {moment()
-                          .startOf('day')
-                          .seconds(
-                            this.state.statistics.average_completion_time
-                          )
-                          .format('mm:ss')}
-                      </div>
-                      <div className="detailSublabel">
-                        Average completion time
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="detailLabel">Active</div>
-                      <div className="detailSublabel">Status</div>
-                    </div>
-                  </div>
+        <Switch>
+          <Route exact path="/data">
+            <div className="cw center grid dataContent">
+              <div className="submissionSelector col-5-16">{submissions}</div>
+              <div className="entriesViewer col-11-16">{entries}</div>
+            </div>
+          </Route>
+          <Route path="/data/statistics">
+            <div className="cw center grid dataStatistics">
+              {loading.submissions === true ? (
+                <div className="statistics_loader">
+                  <DotLoader color={'#9ee048'} loading={true} size={12} />
                 </div>
               ) : (
-                <div className="noData">No submission(s)</div>
-              )}
-              {_.isEmpty(this.state.statistics) === false ? (
-                <div className="statisticsContainer">
-                  {this.state.statistics.elements.map((question, i) => {
-                    if (question.chartType === 'lastFive') {
-                      return (
-                        <div className="questionContainer" key={i}>
-                          <div className="question">{question.label}</div>
-                          <div className="response_container">
-                            <div className="response_count_container">
-                              <div className="response_count_title">
-                                {question.responseCount}
-                              </div>
-                              <div className="response_count">
-                                Submission(s)
-                              </div>
-                            </div>
-                            <div className="last_responses_container">
-                              <div className="last_responses_title">
-                                Last Submission(s)
-                              </div>
-                              <div className="last_responses">
-                                {question.chartItems.map((response, index) => {
-                                  return (
-                                    <div key={index} title={response}>
-                                      &quot;{response}&quot;
-                                    </div>
-                                  )
-                                })}
-                              </div>
-                            </div>
+                <div className="selectedSubmissionStatistics col-16-16">
+                  {_.isEmpty(this.state.statistics) === false ? (
+                    <div className="submissionResponsesContainer">
+                      <div className="submissionResponsesDetails">
+                        <div>
+                          <div className="detailLabel">
+                            {this.state.statistics.responses}
+                          </div>
+                          <div className="detailSublabel">Submission(s)</div>
+                        </div>
+                        <div>
+                          <div className="detailLabel">
+                            {moment()
+                              .startOf('day')
+                              .seconds(
+                                this.state.statistics.average_completion_time
+                              )
+                              .format('mm:ss')}
+                          </div>
+                          <div className="detailSublabel">
+                            Average completion time
                           </div>
                         </div>
-                      )
-                    } else if (question.chartType === 'pieChart') {
-                      question.label = question.label
-                        .replace(/<span(.*?)>(.*?)<\/span>/, '')
-                        .replace(/&nbsp;/g, ' ')
-                        .replace(/&amp;/g, ' ')
-                        .replace(/(<([^>]+)>)/gi, '')
-                        .trim()
-                      question.chartItems.filter((chartItem) => {
-                        return (chartItem.name = chartItem.name
-                          .replace(/<span(.*?)>(.*?)<\/span>/, '')
-                          .replace(/&nbsp;/g, ' ')
-                          .replace(/&amp;/g, ' ')
-                          .replace(/(<([^>]+)>)/gi, '')
-                          .trim())
-                      })
-                      return (
-                        <div className="questionContainer" key={i}>
-                          <div
-                            className="question"
-                            dangerouslySetInnerHTML={{
-                              __html: question.label
-                            }}></div>
-                          <PieChart width={730} height={300}>
-                            <Pie
-                              data={question.chartItems}
-                              color="#000000"
-                              dataKey="value"
-                              nameKey="name"
-                              cx="50%"
-                              cy="50%"
-                              outerRadius={120}
-                              fill="#8884d8">
-                              {question.chartItems.map((chartItem, index) => (
-                                <Cell
-                                  key={`cell-${index}`}
-                                  fill={chartItem.color}
+
+                        <div>
+                          <div className="detailLabel">Active</div>
+                          <div className="detailSublabel">Status</div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="noData">No submission(s)</div>
+                  )}
+                  {_.isEmpty(this.state.statistics) === false ? (
+                    <div className="statisticsContainer">
+                      {this.state.statistics.elements.map((question, i) => {
+                        if (question.chartType === 'lastFive') {
+                          return (
+                            <div className="questionContainer" key={i}>
+                              <div className="question">{question.label}</div>
+                              <div className="response_container">
+                                <div className="response_count_container">
+                                  <div className="response_count_title">
+                                    {question.responseCount}
+                                  </div>
+                                  <div className="response_count">
+                                    Submission(s)
+                                  </div>
+                                </div>
+                                <div className="last_responses_container">
+                                  <div className="last_responses_title">
+                                    Last Submission(s)
+                                  </div>
+                                  <div className="last_responses">
+                                    {question.chartItems.map(
+                                      (response, index) => {
+                                        return (
+                                          <div key={index} title={response}>
+                                            &quot;{response}&quot;
+                                          </div>
+                                        )
+                                      }
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        } else if (question.chartType === 'pieChart') {
+                          question.label = question.label
+                            .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/&amp;/g, ' ')
+                            .replace(/(<([^>]+)>)/gi, '')
+                            .trim()
+                          question.chartItems.filter((chartItem) => {
+                            return (chartItem.name = chartItem.name
+                              .replace(/<span(.*?)>(.*?)<\/span>/, '')
+                              .replace(/&nbsp;/g, ' ')
+                              .replace(/&amp;/g, ' ')
+                              .replace(/(<([^>]+)>)/gi, '')
+                              .trim())
+                          })
+                          return (
+                            <div className="questionContainer" key={i}>
+                              <div
+                                className="question"
+                                dangerouslySetInnerHTML={{
+                                  __html: question.label
+                                }}></div>
+                              <PieChart width={730} height={300}>
+                                <Pie
+                                  data={question.chartItems}
+                                  color="#000000"
+                                  dataKey="value"
+                                  nameKey="name"
+                                  cx="50%"
+                                  cy="50%"
+                                  outerRadius={120}
+                                  fill="#8884d8">
+                                  {question.chartItems.map(
+                                    (chartItem, index) => (
+                                      <Cell
+                                        key={`cell-${index}`}
+                                        fill={chartItem.color}
+                                      />
+                                    )
+                                  )}
+                                </Pie>
+                                <Tooltip
+                                  content={<this.CustomTooltipForPieChart />}
                                 />
-                              ))}
-                            </Pie>
-                            <Tooltip
-                              content={<this.CustomTooltipForPieChart />}
-                            />
-                            <Legend
-                              layout="vertical"
-                              verticalAlign="text-bottom"
-                              align="left"
-                            />
-                          </PieChart>
-                        </div>
-                      )
-                    } else if (question.chartType === 'barChart') {
-                      return (
-                        <div className="questionContainer" key={i}>
-                          <div className="question">{question.label}</div>
-                          <BarChart
-                            width={730}
-                            height={300}
-                            data={question.chartItems}
-                            barCategoryGap={5}>
-                            <XAxis
-                              type="category"
-                              stroke="#000000"
-                              dataKey="nameForXaxis"
-                            />
-                            <YAxis
-                              type="number"
-                              stroke="#000000"
-                              dataKey="value"
-                            />
-                            <Tooltip
-                              content={<this.CustomTooltipForBarChart />}
-                            />
-                            <Bar
-                              dataKey="value"
-                              fill="#00a0fc"
-                              stroke="#000000"
-                              strokeWidth={1}
-                              barSize={20}>
-                              {question.chartItems.map((chartItem, index) => (
-                                <Cell key={index} fill={chartItem.color} />
-                              ))}
-                            </Bar>
-                          </BarChart>
-                        </div>
-                      )
-                    } else if (question.chartType === 'netPromoterScore') {
-                      return (
-                        <div className="questionContainer" key={i}>
-                          <div className="question">{question.label}</div>
-                          <div className="response_container">
-                            <div className="response_count_container">
-                              <div className="response_count_title">
-                                {question.responseCount}
-                              </div>
-                              <div className="response_count">Response(s)</div>
+                                <Legend
+                                  layout="vertical"
+                                  verticalAlign="text-bottom"
+                                  align="left"
+                                />
+                              </PieChart>
                             </div>
-                            <div className="last_responses_container">
-                              <div className="last_responses_title">
-                                Net Promoter Score
-                              </div>
-                              <div className="last_responses">
-                                <div title={question.netPromoterScore}>
-                                  &quot;{question.netPromoterScore.toFixed(2)}
-                                  &quot;
+                          )
+                        } else if (question.chartType === 'barChart') {
+                          return (
+                            <div className="questionContainer" key={i}>
+                              <div className="question">{question.label}</div>
+                              <BarChart
+                                width={730}
+                                height={300}
+                                data={question.chartItems}
+                                barCategoryGap={5}>
+                                <XAxis
+                                  type="category"
+                                  stroke="#000000"
+                                  dataKey="nameForXaxis"
+                                />
+                                <YAxis
+                                  type="number"
+                                  stroke="#000000"
+                                  dataKey="value"
+                                />
+                                <Tooltip
+                                  content={<this.CustomTooltipForBarChart />}
+                                />
+                                <Bar
+                                  dataKey="value"
+                                  fill="#00a0fc"
+                                  stroke="#000000"
+                                  strokeWidth={1}
+                                  barSize={20}>
+                                  {question.chartItems.map(
+                                    (chartItem, index) => (
+                                      <Cell
+                                        key={index}
+                                        fill={chartItem.color}
+                                      />
+                                    )
+                                  )}
+                                </Bar>
+                              </BarChart>
+                            </div>
+                          )
+                        } else if (question.chartType === 'netPromoterScore') {
+                          return (
+                            <div className="questionContainer" key={i}>
+                              <div className="question">{question.label}</div>
+                              <div className="response_container">
+                                <div className="response_count_container">
+                                  <div className="response_count_title">
+                                    {question.responseCount}
+                                  </div>
+                                  <div className="response_count">
+                                    Response(s)
+                                  </div>
+                                </div>
+                                <div className="last_responses_container">
+                                  <div className="last_responses_title">
+                                    Net Promoter Score
+                                  </div>
+                                  <div className="last_responses">
+                                    <div title={question.netPromoterScore}>
+                                      &quot;
+                                      {question.netPromoterScore.toFixed(2)}
+                                      &quot;
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      )
-                    } else if (question.chartType === 'average') {
-                      return (
-                        <div className="questionContainer" key={i}>
-                          <div className="question">{question.label}</div>
-                          <div className="response_container">
-                            <div className="response_count_container">
-                              <div className="response_count_title">
-                                {question.responseCount}
-                              </div>
-                              <div className="response_count">Response(s)</div>
-                            </div>
-                            <div className="last_responses_container">
-                              <div className="last_responses_title">
-                                Average
-                              </div>
-                              <div className="last_responses">
-                                <div title={question.average}>
-                                  &quot;{question.average.toFixed(2)}
-                                  &quot;
+                          )
+                        } else if (question.chartType === 'average') {
+                          return (
+                            <div className="questionContainer" key={i}>
+                              <div className="question">{question.label}</div>
+                              <div className="response_container">
+                                <div className="response_count_container">
+                                  <div className="response_count_title">
+                                    {question.responseCount}
+                                  </div>
+                                  <div className="response_count">
+                                    Response(s)
+                                  </div>
+                                </div>
+                                <div className="last_responses_container">
+                                  <div className="last_responses_title">
+                                    Average
+                                  </div>
+                                  <div className="last_responses">
+                                    <div title={question.average}>
+                                      &quot;{question.average.toFixed(2)}
+                                      &quot;
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      )
-                    }
-                    return null
-                  })}
+                          )
+                        }
+                        return null
+                      })}
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
+              )}
             </div>
-          </div>
-        )}
+          </Route>
+        </Switch>
       </div>
     )
   }
@@ -1117,7 +1163,9 @@ export default class Data extends Component {
           data={submissions}
         />
       ) : loading.submissions === true ? (
-        'Loading...'
+        <div className="submissions_loader">
+          <DotLoader color={'#9ee048'} loading={true} size={12} />
+        </div>
       ) : (
         'No submissions'
       )
@@ -1145,7 +1193,15 @@ export default class Data extends Component {
   }
 
   renderEntries() {
-    const { entries, selectedSubmissionForm, parseError } = this.state
+    const { entries, selectedSubmissionForm, parseError, loading } = this.state
+
+    if (loading.entries === true) {
+      return (
+        <div className="entries_loader">
+          <DotLoader color={'#9ee048'} loading={true} size={12} />
+        </div>
+      )
+    }
 
     if (parseError === false) {
       if (entries.length === 0) {

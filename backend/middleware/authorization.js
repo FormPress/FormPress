@@ -27,15 +27,11 @@ exports.ensureLoggedIn = (req, res, next) => {
   }
 }
 
-exports.mustHaveValidToken = (req, res, next, cb = null) => {
+exports.mustHaveValidToken = (req, res, next) => {
   if (res.locals.validToken === true) {
     next()
   } else {
-    if (cb !== null) {
-      return cb(req, res, next)
-    } else {
-      return res.status(403).send({ message: 'Invalid Token' })
-    }
+    return res.status(403).send({ message: 'Invalid Token' })
   }
 }
 
