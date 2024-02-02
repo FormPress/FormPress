@@ -6,10 +6,7 @@ import Moment from 'react-moment'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClone, faTrash } from '@fortawesome/free-solid-svg-icons'
 import Modal from '../common/Modal'
-
-// TODO: Add a button to copy the API key to clipboard
-// TODO: Style the buttons
-// TODO: Style the table head
+import CopyToClipboard from '../common/CopyToClipboard'
 
 export default class APIKeys extends Component {
   static componentName = 'APIKeys'
@@ -210,11 +207,9 @@ export default class APIKeys extends Component {
                 className: 'actionsTh',
                 content: (apiKey) => (
                   <div className="actions">
-                    <span
-                      title="Copy Key"
-                      onClick={() => console.log('copy key')}>
+                    <CopyToClipboard clipboardData={apiKey.api_key}>
                       <FontAwesomeIcon icon={faClone} />
-                    </span>
+                    </CopyToClipboard>
                     <span
                       title="Delete Key"
                       onClick={(e) => this.handleApiKeyDeleteClick(e, apiKey)}>
@@ -228,6 +223,7 @@ export default class APIKeys extends Component {
           />
           <div>
             <button
+              className="createApiKeyButton"
               type={'button'}
               onClick={(e) => this.handleApiKeyCreateClick(e)}>
               {' '}

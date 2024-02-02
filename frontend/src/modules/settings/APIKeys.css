@@ -55,3 +55,17 @@
 .apikeys-wrapper table.fp_table tbody tr:nth-child(odd) {
   background-color: white;
 }
+
+.apikeys-wrapper .createApiKeyButton {
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  width: 12rem;
+  min-height: 2.1rem;
+  cursor: pointer;
+  color: #ffffff;
+  border: none;
+  background-color: #9ee048ff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  margin: 10px 0 10px 0;
+}
