@@ -1,7 +1,7 @@
 const path = require('path')
 
-exports.form = require(path.resolve('helper', 'model', 'form'))
-exports.formpublished = require(path.resolve(
+exports.FormModel = require(path.resolve('helper', 'model', 'form'))
+exports.FormPublishedModel = require(path.resolve(
   'helper',
   'model',
   'formpublished'

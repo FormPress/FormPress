@@ -12,8 +12,8 @@ const {
   integrationhelper,
   recaptcha
 } = require(path.resolve('helper'))
-const formModel = model.form
-const formPublishedModel = model.formpublished
+
+const { FormModel, FormPublishedModel } = model
 
 const { validate: isStringUUID } = require('uuid')
 
@@ -38,6 +38,9 @@ module.exports = (app) => {
     let form_id = req.params.id
     let uuid
     let overrideTyPageId = req.query.tyPageId || false
+
+    const formModel = new FormModel()
+    const formPublishedModel = new FormPublishedModel()
 
     if (isStringUUID(form_id) === true) {
       uuid = form_id
@@ -451,6 +454,10 @@ module.exports = (app) => {
 
   app.get('/form/submit/:uuid', async (req, res) => {
     let uuid = req.params.uuid
+
+    const formModel = new FormModel()
+    const formPublishedModel = new FormPublishedModel()
+
     let form_id = await formModel.getFormIdFromUUID(uuid)
     let overrideTyPageId = req.query.otp || false
 

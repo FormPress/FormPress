@@ -105,7 +105,12 @@ server.exchange(
       return done(new Error('User not found'))
     }
 
-    const access_token = token(user)
+    const tokenData = {
+      ...user,
+      accessType: '3rdParty'
+    }
+
+    const access_token = token(tokenData)
 
     const dbResponse = oauthModel.storeAccessToken({
       code_id,

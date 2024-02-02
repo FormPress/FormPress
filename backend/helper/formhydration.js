@@ -1,34 +1,45 @@
-const encodeCustomCSS = (form) => {
-  if (form.props.customCSS !== undefined) {
-    const decodedCSS = form.props.customCSS.value
+const encodeCustomCSS = (customCSS) => {
+  if (customCSS !== undefined) {
+    const decodedCSS = customCSS.value
     const buff = Buffer.from(decodedCSS, 'utf8')
     const encodedCSS = buff.toString('base64')
 
-    form.props.customCSS.value = encodedCSS
-    form.props.customCSS.isEncoded = true
+    return {
+      value: encodedCSS,
+      isEncoded: true
+    }
   }
 }
 
-const decodeCustomCSS = (form) => {
-  if (form.props.customCSS !== undefined) {
-    const encodedCSS = form.props.customCSS.value
+const decodeCustomCSS = (customCSS) => {
+  if (customCSS !== undefined) {
+    const encodedCSS = customCSS.value
     const buff = Buffer.from(encodedCSS, 'base64')
     const decodedCSS = buff.toString('utf8')
 
-    form.props.customCSS.value = decodedCSS
-    form.props.customCSS.isEncoded = false
+    return {
+      value: decodedCSS,
+      isEncoded: false
+    }
   }
 }
 
-exports.hydrateForm = (form) => {
+exports.hydrateForm = (form, shouldSanitize) => {
   form.props = JSON.parse(form.props)
-  decodeCustomCSS(form)
+  form.props.customCSS = decodeCustomCSS(form.props.customCSS)
+
+  if (shouldSanitize === true) {
+    form.props.integrations = form.props.integrations.map(
+      (i) => `${i.type} integration`
+    )
+  }
 
   return form
 }
 
 exports.dehydrateForm = (form) => {
-  encodeCustomCSS(form)
+  form.props.customCSS = encodeCustomCSS(form.props.customCSS)
+
   form.props = JSON.stringify(form.props)
 
   return form

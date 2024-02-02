@@ -5,7 +5,14 @@ import { faLink } from '@fortawesome/free-solid-svg-icons'
 
 class CopyToClipboard extends Component {
   copyURL(e) {
-    const copyDiv = e.target.nextElementSibling
+    let copyDiv
+
+    if (this.props.children !== undefined) {
+      copyDiv = e.target.closest('div.clipboardButton_custom')
+        .nextElementSibling
+    } else {
+      copyDiv = e.target.nextElementSibling
+    }
     if (copyDiv) {
       copyDiv.classList.add('animate')
       copyDiv.addEventListener('animationend', () =>
@@ -15,6 +22,19 @@ class CopyToClipboard extends Component {
     }
   }
   render() {
+    if (this.props.children !== undefined) {
+      return (
+        <div className="copyToClipboardArea_custom">
+          <div
+            className="clipboardButton_custom"
+            onClick={(e) => this.copyURL(e)}>
+            {this.props.children}
+          </div>
+          <span className="copyAlert">Copied!</span>
+        </div>
+      )
+    }
+
     return (
       <div className="copyToClipboardArea">
         <div className="copyToClipBoardCover">
