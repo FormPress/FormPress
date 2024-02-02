@@ -206,11 +206,6 @@ class App extends Component {
       appStateHandlers: this.state.appStateHandlers
     }
 
-    let homeUrl = undefined
-    if (global.env.FE_HOMEURL !== '' || global.env.FE_HOMEURL !== undefined) {
-      homeUrl = global.env.FE_HOMEURL
-    }
-
     let redirectPage = <Redirect to="/login" />
 
     // TODO: fix this, temporarily disabled
@@ -253,9 +248,6 @@ class App extends Component {
                 <span className="navicon"></span>
               </label>
               <ul className={'menu' + (auth.loggedIn === true ? ' rich' : '')}>
-                <li key="1">
-                  {homeUrl !== undefined ? <a href={homeUrl}>Home</a> : ''}
-                </li>
                 {auth.loggedIn === true
                   ? [
                       <li key="2">
