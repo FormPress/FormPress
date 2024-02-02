@@ -25,10 +25,11 @@ FormPress is a combination of;
 
 ## Docker
 
-Deployment of FormPress is fairly easy. So as to create the required images and run the containers:
+Deployment of FormPress for development purposes is fairly easy. So as to create the required images and run the containers:
 
 ```sh
-cd formpress
+cd FormPress
+cp .env.example .env
 docker compose up
 ```
 
@@ -37,6 +38,15 @@ And that's it. To verify that the process ran smoothly, in your browser, please 
 ```sh
 http://localhost:3000
 ```
+
+Use following default credentials for logging in
+
+```
+username: admin@example.com
+password: CHANGEME
+```
+
+Initial credentials can be updated by changing relevant env variables.
 
 ## Environment Variables
 
@@ -105,6 +115,8 @@ Features disabled if this variable is unset:
 #### **6. Admin Account Credentials**
 
 These are the environment variables for admin account as the name suggests.
+Note, these will only take effect on first run, as initial admin credentials will be created
+by a migration.
 
 ```sh
 ADMINEMAIL=someEmail

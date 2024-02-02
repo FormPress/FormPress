@@ -3,7 +3,7 @@
 }
 
 .data > .formSelectorContainer {
-  top: 115px;
+  top: 100px;
   max-height: 55px;
   width: fit-content;
   width: -moz-fit-content;
@@ -12,7 +12,7 @@
 }
 
 .data > .formSelectorContainer.open {
-  top: 126px;
+  top: 110px;
   z-index: 110;
 }
 
@@ -96,9 +96,39 @@ text[type='category'] tspan {
 
 .data > .dataContent,
 .data > .dataStatistics {
-  margin-top: 90px;
+  margin-top: 60px;
   background-color: white;
   box-shadow: 0 4px 1px 0 rgba(69, 121, 154, 0.2);
+}
+
+.data .submissions_loader {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 50px;
+  height: 250px;
+  align-items: center;
+  background: white;
+}
+
+.data .entries_loader {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 100px;
+  height: 250px;
+  align-items: center;
+  background: white;
+}
+
+.data .statistics_loader {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 60px;
+  height: 250px;
+  align-items: center;
+  background: white;
 }
 
 .data > .dataStatistics > .selectedSubmissionStatistics {

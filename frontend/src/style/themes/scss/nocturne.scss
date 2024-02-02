@@ -85,10 +85,8 @@ $color-14: #68942f; /* forest green */
   }
 
   .label span.required:after {
-    font-size: 20px;
-    position: absolute;
-    left: 0;
-    content: '*';
+    font-size: 17px;
+    content: ' *';
     color: $accent-required;
   }
 
@@ -452,29 +450,6 @@ $color-14: #68942f; /* forest green */
   .elementFileUpload > .inputContainer > .fileDisplay {
     word-break: break-all;
     color: $text-color-file-upload;
-  }
-
-  .elementButton button,
-  .elementButton button:focus,
-  .elementButton button,
-  .elementButton button:focus {
-    font-size: 16px;
-    font-weight: bolder;
-    float: right;
-    width: 7rem;
-    min-height: 2.6rem;
-    padding: 5px 10px;
-    cursor: pointer;
-    color: $color-0;
-    border: 1px solid $accent-main-light;
-    outline: none;
-    background-color: $accent-main-light;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-    overflow-wrap: anywhere;
-  }
-
-  .elementButton button:hover {
-    cursor: pointer;
   }
 
   .elementCheckbox .input,
@@ -858,97 +833,6 @@ $color-14: #68942f; /* forest green */
     display: none;
   }
 
-  .pagebreak-separator {
-    width: 100%;
-    color: $bg-separator-lines;
-  }
-
-  .pagebreak-button {
-    display: inline-block;
-  }
-
-  .pagebreak-button > button {
-    font-size: 16px;
-    font-weight: bolder;
-    width: 7rem;
-    min-height: 2.6rem;
-    cursor: pointer;
-    color: $color-0;
-    border: none;
-    background-color: $accent-main-light;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .pagebreak-navControls {
-    padding-top: 10px;
-  }
-
-  .pagebreak-pageCount {
-    color: $text-color-labels-entries;
-    margin-top: 1rem;
-    text-align: center;
-  }
-
-  .currentPageSelector > .currentPageSelector-select {
-    width: min-content !important;
-    text-align: right;
-    background-color: $primary-color;
-    border: 0;
-    border-radius: 15%;
-  }
-
-  .pagebreak-button.pb-previous {
-    float: left;
-  }
-
-  .pagebreak-button.pb-next,
-  .pagebreak-button.pb-submit {
-    float: right;
-  }
-
-  .pagebreak-navControls > .pagebreak-button > button > div,
-  .nocturne
-    .pagebreak-navControls
-    > .pagebreak-button
-    > input[type='button']
-    > div,
-  .nocturne
-    .pagebreak-navControls
-    > .pagebreak-button
-    > input[type='submit']
-    > div {
-    padding: 0.3rem;
-  }
-
-  .pagebreak-button > button > * {
-    pointer-events: none;
-  }
-
-  .nocturne .pagebreak-navControls > .pagebreak-button > button > div > span,
-  .nocturne
-    .pagebreak-navControls
-    > .pagebreak-button
-    > input[type='button']
-    > div
-    > span,
-  .nocturne
-    .pagebreak-navControls
-    > .pagebreak-button
-    > input[type='submit']
-    > div
-    > span {
-    display: block;
-    width: 5.7rem;
-    border: $accent-main-light solid 1px;
-    overflow-wrap: break-word;
-  }
-
-  .pagebreak-button.pb-previous > button > div,
-  .pagebreak-button.pb-next > button > div,
-  .pagebreak-button.pb-submit > button > div {
-    float: none;
-  }
-
   .elementPhone > .input {
     display: flex;
     width: 100%;
@@ -1146,6 +1030,98 @@ $color-14: #68942f; /* forest green */
     .response-status.error {
       background: #f0adad;
       color: #b74343;
+    }
+  }
+
+  .elementButton {
+    button,
+    button:focus {
+      font-size: 16px;
+      font-weight: bolder;
+      float: right;
+      min-width: 8rem;
+      max-width: 18rem;
+      min-height: 2.6rem;
+      padding: 5px 10px;
+      cursor: pointer;
+      color: $color-0;
+      border: 1px solid $accent-main-light;
+      outline: none;
+      background-color: $accent-main-light;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+      overflow-wrap: anywhere;
+    }
+
+    button div {
+      float: none !important;
+      margin: auto;
+      color: #ffffff;
+    }
+
+    button:hover {
+      cursor: pointer;
+    }
+
+    button .emptySpan::before {
+      color: $color-0;
+    }
+  }
+
+  .elementPageBreak {
+    .pagebreak-separator {
+      width: 100%;
+      color: $bg-separator-lines;
+    }
+
+    .pagebreak-button {
+      display: inline-block;
+    }
+
+    .pagebreak-button > button {
+      padding: 5px 10px;
+      border: 1px solid $accent-main-light;
+      outline: none;
+      overflow-wrap: anywhere;
+      font-size: 16px;
+      font-weight: bolder;
+      min-width: 8rem;
+      max-width: 18rem;
+      min-height: 2.6rem;
+      cursor: pointer;
+      color: $color-0;
+      border: none;
+      background-color: $accent-main-light;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    button div {
+      float: none !important;
+      margin: auto;
+      color: #ffffff;
+    }
+
+    .pagebreak-navControls {
+      padding-top: 10px;
+    }
+
+    .pagebreak-button.pb-previous {
+      float: left;
+    }
+
+    .pagebreak-button.pb-next,
+    .pagebreak-button.pb-submit {
+      float: right;
+    }
+
+    .currentPageSelector > .currentPageSelector-select {
+      width: min-content !important;
+      text-align: right;
+    }
+
+    .pagebreak-pageCount {
+      color: $text-color-labels-entries;
+      margin-top: 1rem;
+      text-align: center;
     }
   }
 
