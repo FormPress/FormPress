@@ -56,7 +56,41 @@
   background-color: white;
 }
 
+.apikeys-wrapper table.fp_table {
+  table-layout: fixed;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.name,
+.apikeys-wrapper table.fp_table tbody > tr > td.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 20%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.apiKeyIndex,
+.apikeys-wrapper table.fp_table tbody > tr > td.apiKeyIndex {
+  width: 5%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.createdAt,
+.apikeys-wrapper table.fp_table tbody > tr > td.createdAt {
+  width: 15%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.actionsTh,
+.apikeys-wrapper table.fp_table tbody > tr > td.actionsTh {
+  width: 15%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.apiKey,
+.apikeys-wrapper table.fp_table tbody > tr > td.apiKey {
+  width: 40%;
+  padding-left: 15px;
+}
+
 .apikeys-wrapper .createApiKeyButton {
+  float: right;
   font-size: 14px;
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;

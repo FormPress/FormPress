@@ -127,6 +127,8 @@ export default class APIKeys extends Component {
           content: <div>{result.data.message}</div>
         }
       })
+
+      return
     }
 
     await this.fetchApiKeys()
@@ -156,6 +158,8 @@ export default class APIKeys extends Component {
           content: <div>{result.data.message}</div>
         }
       })
+
+      return
     }
 
     await this.fetchApiKeys()
@@ -191,7 +195,7 @@ export default class APIKeys extends Component {
               {
                 label: 'API Key',
                 content: (entry) => entry.api_key,
-                className: 'name',
+                className: 'apiKey',
                 title: ' '
               },
               {
