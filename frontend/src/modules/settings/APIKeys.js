@@ -188,7 +188,11 @@ export default class APIKeys extends Component {
               },
               {
                 label: 'Name',
-                content: (entry) => entry.name,
+                content: (entry) => (
+                  <span key="2" title={entry.name}>
+                    {entry.name}
+                  </span>
+                ),
                 className: 'name',
                 title: ' '
               },
