@@ -2,6 +2,7 @@ const path = require('path')
 const { storage } = require(path.resolve('helper'))
 const { getPool } = require(path.resolve('./', 'db'))
 const { model } = require(path.resolve('helper'))
+const { FormPublishedModel } = model
 
 module.exports = (app) => {
   //download directly from link
@@ -12,6 +13,7 @@ module.exports = (app) => {
       const { entry_id, submission_id, upload_name } = req.params
       const uploadNameFromUrl = submission_id + '/' + upload_name
       const db = await getPool()
+      const formPublishedModel = new FormPublishedModel()
 
       //check upload_name
       const uploadNameToCheck = await db.query(
@@ -42,7 +44,7 @@ module.exports = (app) => {
 
       // check if public upload from last published form
       let publicAccess = false
-      const publishedForm = await model.formpublished.get({ form_id })
+      const publishedForm = await formPublishedModel.get({ form_id })
       if (publishedForm === false) {
         return res.status(404).send('File not Found E017D07')
       }
