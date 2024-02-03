@@ -2,8 +2,7 @@ const path = require('path')
 const { storage } = require(path.resolve('helper'))
 const { getPool } = require(path.resolve('./', 'db'))
 const { model } = require(path.resolve('helper'))
-const { FormModel, FormPublishedModel } = model
-
+const { FormPublishedModel } = model
 
 module.exports = (app) => {
   //download directly from link
@@ -14,8 +13,8 @@ module.exports = (app) => {
       const { entry_id, submission_id, upload_name } = req.params
       const uploadNameFromUrl = submission_id + '/' + upload_name
       const db = await getPool()
-      const formPublishedModel = new FormPublishedModel(req.user)
-
+      const formPublishedModel = new FormPublishedModel()
+      
       //check upload_name
       const uploadNameToCheck = await db.query(
         `
