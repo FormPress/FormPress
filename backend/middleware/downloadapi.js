@@ -14,7 +14,7 @@ module.exports = (app) => {
       const uploadNameFromUrl = submission_id + '/' + upload_name
       const db = await getPool()
       const formPublishedModel = new FormPublishedModel()
-      
+
       //check upload_name
       const uploadNameToCheck = await db.query(
         `
