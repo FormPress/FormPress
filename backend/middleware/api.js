@@ -152,10 +152,12 @@ module.exports = (app) => {
           )
         }
 
-        res.status(200).json({ message: 'Integration saved & published' })
+        return res
+          .status(200)
+          .json({ message: 'Integration saved & published' })
       } catch (e) {
         console.log(e)
-        res
+        return res
           .status(500)
           .json({ message: 'Failed to save & publish integration' })
       }
