@@ -436,7 +436,7 @@ $color-14: #68942f; /* forest green */
     position: relative;
     width: 100%;
     margin-bottom: 10px;
-    padding: 6px;
+    padding: 6px 0;
     border-radius: 5px;
   }
 
@@ -445,7 +445,7 @@ $color-14: #68942f; /* forest green */
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 6px;
+    padding: 6px 0;
   }
 
   &.form .elementRadio .input .radio-label {
@@ -754,7 +754,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .adr-street > input {
-    width: 99%;
+    width: 100%;
   }
 
   .adr-state,
