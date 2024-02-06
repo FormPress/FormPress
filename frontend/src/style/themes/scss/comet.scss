@@ -449,6 +449,7 @@ $color-14: #68942f; /* forest green */
   }
 
   &.form .elementRadio .input .radio-label {
+    word-wrap: anywhere;
     display: inline-block;
     overflow: hidden;
     min-width: 115px;
@@ -456,7 +457,6 @@ $color-14: #68942f; /* forest green */
     -webkit-user-select: none;
     user-select: none;
     vertical-align: bottom;
-    white-space: nowrap;
     color: $text-color-labels-entries;
     margin-top: 0px;
     word-break: break-word;
@@ -544,18 +544,8 @@ $color-14: #68942f; /* forest green */
     word-break: break-word;
   }
 
-  // .elementCheckbox .input > input[type='checkbox']:active {
-  //   border: 1px solid $color-4;
-  // }
-
-  // .elementCheckbox .toggle {
-  //   position: relative;
-  //   display: block;
-  //   width: auto;
-  //   height: auto;
-  // }
-
   .checkboxCover {
+    padding: unset;
     display: inline-grid;
     width: 100%;
     background-color: #edf5f7;
