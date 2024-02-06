@@ -103,6 +103,62 @@ module.exports = (app) => {
     handleCreateForm
   )
 
+  // Clone form
+  app.post(
+    '/api/users/:user_id/forms/clone',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userHaveFormLimit('user_id'),
+    userShouldOwnForm('user_id', (req) => req.body.formId, {
+      read: true,
+      edit: true,
+      matchType: 'strict' // Only allow if user has edit rights to form
+    }),
+    async (req, res) => {
+      const { formId, formTitle } = req.body
+
+      const formModel = new FormModel(req.user)
+
+      if (formId === undefined || formTitle === undefined) {
+        return res
+          .status(400)
+          .json({ message: 'formId and formTitle are required' })
+      }
+
+      const form = await formModel.get({ form_id: formId })
+
+      if (form === false) {
+        return res.status(404).json({ message: 'Form not found' })
+      }
+
+      const formattedTitle = formTitle.substring(0, 256)
+
+      form.title = formattedTitle
+      form.id = null
+      form.uuid = null
+
+      // filter out all integrations that is not email
+      form.props.integrations = form.props.integrations.filter(
+        (integration) => integration.type === 'email'
+      )
+
+      const result = await formModel.create({
+        user_id: req.params.user_id,
+        form
+      })
+
+      if (result.affectedRows === 0 && result.insertId === 0) {
+        return res.status(500).json({ message: 'Failed to clone form' })
+      } else {
+        return res.json({
+          status: 'done',
+          id: result.insertId,
+          uuid: result.uuid
+        })
+      }
+    }
+  )
+
   // return forms of given user id
   app.get(
     '/api/users/:user_id/forms',
@@ -147,7 +203,7 @@ module.exports = (app) => {
 
       const formResults = await db.query(
         `SELECT
-            *, 
+            id, title, uuid, created_at, updated_at, published_version, private, 
             CASE WHEN (
               SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL
             THEN 0 ELSE
@@ -161,9 +217,8 @@ module.exports = (app) => {
       if (formResults.length === 0) {
         res.json([])
       } else {
-        const response = formResults.map((form) =>
-          hydrateForm(form, shouldSanitizeSensitiveData)
-        )
+        const response = formResults
+
         sharedIdsAndPerms.forEach((idAndPerm) => {
           response.forEach((formResult) => {
             if (formResult.id === idAndPerm.form_id) {

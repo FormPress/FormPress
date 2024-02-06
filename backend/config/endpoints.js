@@ -35,6 +35,16 @@ module.exports = {
       }
     },
     {
+      method: 'post',
+      path: '/api/users/:user_id/forms/clone',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/clone',
+      exampleRequestBody: {
+        formId: 1,
+        formTitle: 'Form Title'
+      }
+    },
+    {
       method: 'put',
       path: '/api/users/:user_id/forms',
       protected: true,
