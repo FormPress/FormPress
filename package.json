@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Form Builder and stuff",
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "6.15.0",
-    "eslint-plugin-react": "7.21.5",
-    "prettier": "2.1.2"
+    "@babel/core": "^7.23.9",
+    "@babel/eslint-parser": "^7.23.10",
+    "@babel/preset-react": "7.23.3",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-react": "7.33.2",
+    "prettier": "3.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

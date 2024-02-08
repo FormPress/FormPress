@@ -8,7 +8,6 @@ const sass = require('sass')
 const moment = require('moment')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
-const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -24,24 +23,20 @@ const {
 
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
-  .default
+const Renderer = require(
+  path.resolve('script', 'transformed', 'Renderer')
+).default
+
 const { FP_ENV } = process.env
 const BACKEND = process.env.FE_BACKEND
-const {
-  storage,
-  model,
-  error,
-  testStringIsJson,
-  publicStorage
-} = require(path.resolve('helper'))
+const { storage, model, error, testStringIsJson, publicStorage } = require(
+  path.resolve('helper')
+)
 const { FormModel, FormPublishedModel, user: UserModel } = model
 
-const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
-  './',
-  'helper',
-  'oldformpropshandler.js'
-))
+const { updateFormPropsWithNewlyAddedProps } = require(
+  path.resolve('./', 'helper', 'oldformpropshandler.js')
+)
 const { token } = require(path.resolve('helper')).token
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -171,12 +166,6 @@ module.exports = (app) => {
       const { user } = req
 
       const formModel = new FormModel(user)
-
-      let shouldSanitizeSensitiveData = false
-
-      if (user && user.accessType === '3rdParty') {
-        shouldSanitizeSensitiveData = true
-      }
 
       const formIds = (
         await db.query(
@@ -338,11 +327,9 @@ module.exports = (app) => {
       const formModel = new FormModel(req.user)
       const formPublishedModel = new FormPublishedModel(req.user)
 
-      const Renderer = require(path.resolve(
-        'script',
-        'transformed',
-        'Renderer'
-      )).default
+      const Renderer = require(
+        path.resolve('script', 'transformed', 'Renderer')
+      ).default
 
       let form
       const regularForm = await formModel.get({ form_id })
@@ -478,12 +465,9 @@ module.exports = (app) => {
     const elementValidators = {}
 
     elementQuery.forEach((element) => {
-      const elemClass = require(path.resolve(
-        'script',
-        'transformed',
-        'elements',
-        `${element}`
-      ))
+      const elemClass = require(
+        path.resolve('script', 'transformed', 'elements', `${element}`)
+      )
 
       if (elemClass.default !== undefined) {
         elementValidators[element] = elemClass.default?.helpers || 'unset'
@@ -841,9 +825,8 @@ module.exports = (app) => {
                   case 'lastFive':
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
-                    elementTemplate.chartItems = elementTemplate.chartItems.slice(
-                      -5
-                    )
+                    elementTemplate.chartItems =
+                      elementTemplate.chartItems.slice(-5)
                     statistics.elements.push(elementTemplate)
 
                     break
@@ -1583,12 +1566,9 @@ module.exports = (app) => {
     try {
       datasetQuery.forEach((dataset) => {
         jsonpResponse[dataset] =
-          require(path.resolve(
-            'script',
-            'transformed',
-            'datasets',
-            `${dataset}.json`
-          )) || {}
+          require(
+            path.resolve('script', 'transformed', 'datasets', `${dataset}.json`)
+          ) || {}
       })
       res.jsonp(jsonpResponse)
     } catch (err) {

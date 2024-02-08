@@ -255,9 +255,8 @@ export default class Data extends Component {
     this.componenDidMountWorker = this.componenDidMountWorker.bind(this)
     this.handleNextClick = this.handleNextClick.bind(this)
     this.handlePrevClick = this.handlePrevClick.bind(this)
-    this.handleSubmissionsPerPageChange = this.handleSubmissionsPerPageChange.bind(
-      this
-    )
+    this.handleSubmissionsPerPageChange =
+      this.handleSubmissionsPerPageChange.bind(this)
   }
 
   async handleFormClick(form) {
@@ -560,7 +559,7 @@ export default class Data extends Component {
     )
   }
 
-  CustomTooltipForPieChart = ({ active, payload, label }) => {
+  CustomTooltipForPieChart = ({ active, payload }) => {
     if (active) {
       return (
         <div
@@ -580,7 +579,7 @@ export default class Data extends Component {
     return null
   }
 
-  CustomTooltipForBarChart = ({ active, payload, label }) => {
+  CustomTooltipForBarChart = ({ active, payload }) => {
     if (active) {
       return (
         <div
@@ -1118,9 +1117,10 @@ export default class Data extends Component {
                         (submission) => submission.id
                       )
                       this.setState((prevState) => ({
-                        selectedSubmissionIds: prevState.selectedSubmissionIds.filter(
-                          (id) => !submissionIdsToRemove.includes(id)
-                        )
+                        selectedSubmissionIds:
+                          prevState.selectedSubmissionIds.filter(
+                            (id) => !submissionIdsToRemove.includes(id)
+                          )
                       }))
                     }
                   }}
