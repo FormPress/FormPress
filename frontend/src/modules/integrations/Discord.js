@@ -45,9 +45,8 @@ export default class Discord extends Component {
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
     this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
+    this.renderInputElementSelection =
+      this.renderInputElementSelection.bind(this)
   }
 
   componentDidMount() {
@@ -400,8 +399,7 @@ export default class Discord extends Component {
                   checked={this.state.customizeInputs}
                   onChange={this.toggleCustomizeInputs}
                 />
-                <label htmlFor="switch"></label>{' '}
-                <span>Advanced Configuration</span>
+                <label htmlFor="switch"> Advanced Configuration</label>
               </div>
 
               {this.state.customizeInputs && this.renderInputElementSelection()}

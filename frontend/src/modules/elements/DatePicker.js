@@ -116,6 +116,10 @@ export default class DatePicker extends Component {
         const key = entry[0]
         const value = entry[1]
 
+        if (key === 'time' && !question.timePicker) {
+          return
+        }
+
         let defaultSublabel = true
 
         if (question[`${key}SublabelText`]) {
@@ -131,7 +135,7 @@ export default class DatePicker extends Component {
                 : question[`${key}SublabelText`]}
               :
             </strong>
-            {value}
+            {' ' + value}
             <br />
           </div>
         )

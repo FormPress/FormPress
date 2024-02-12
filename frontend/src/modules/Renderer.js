@@ -171,7 +171,6 @@ export default class Renderer extends Component {
           }
           data-fp-pagenumber={index + 1}
           {...builderHandlers}>
-          {this.props.mode === 'builder' ? null : <HoneyPot />}
           {page.map((elem) => {
             const Component = Elements[elem.type]
             const extraProps = { mode: this.props.mode }
@@ -268,7 +267,12 @@ export default class Renderer extends Component {
     if (output.length === 0) {
       return <div key={1} className={className} {...builderHandlers}></div>
     }
-    return output
+    return (
+      <>
+        {this.props.mode === 'renderer' ? <HoneyPot /> : null}
+        {output}
+      </>
+    )
   }
 }
 

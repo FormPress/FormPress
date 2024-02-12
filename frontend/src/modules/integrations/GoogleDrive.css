@@ -325,9 +325,8 @@
 
 .integration-input.folderName {
   display: flex;
-  align-items: flex-end;
+  align-items: last baseline;
   flex-direction: row;
-  /*justify-content: space-between;*/
 }
 
 .integration-input.folderName > .folder {
