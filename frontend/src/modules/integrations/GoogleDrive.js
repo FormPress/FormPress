@@ -102,12 +102,6 @@ export default class GoogleDrive extends Component {
     }
   }
 
-  async componentDidUpdate(prevProps) {
-    if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handleSaveClick()
-    }
-  }
-
   showPicker(access_token) {
     const google = window.google
 
@@ -257,13 +251,13 @@ export default class GoogleDrive extends Component {
     } else {
       this.setState({ display: 'configuration' })
     }
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleDrive.metaData.name)
   }
 
   async handleStartAuthentication() {
-    const saveSuccess = await this.props.handleSaveClick()
-    if (saveSuccess === false) {
-      return
+    const { form } = this.props
+    if (form.id === null) {
+      await this.props.handleSaveClick()
     }
 
     let { success, data } = await api({
@@ -320,7 +314,7 @@ export default class GoogleDrive extends Component {
 
     this.props.setIntegration(integrationObject)
 
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleDrive.metaData.name)
 
     this.setState({
       display: 'active'
@@ -338,7 +332,7 @@ export default class GoogleDrive extends Component {
       type: GoogleDrive.metaData.name,
       paused: true
     })
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleDrive.metaData.name)
   }
 
   async handleResumeClick() {
@@ -354,7 +348,7 @@ export default class GoogleDrive extends Component {
       paused: false
     })
 
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleDrive.metaData.name)
   }
 
   handleCloseModalClick() {
@@ -394,9 +388,10 @@ export default class GoogleDrive extends Component {
       submissionIdentifier: ''
     })
     this.setState({
-      display: 'description'
+      display: 'description',
+      isModalOpen: false
     })
-    this.setState({ isModalOpen: false })
+    this.props.updateDbFormIntegrations(GoogleDrive.metaData.name)
   }
 
   handleEditClick() {

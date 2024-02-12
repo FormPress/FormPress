@@ -92,17 +92,20 @@
 }
 
 .input-elems {
-  border-radius: 3px;
-  border: solid 1px #c9c9c8;
   padding: 0.2rem 1rem 0.2rem 1rem;
   margin-bottom: 20px;
+  width: 100%;
 }
 .input-elems > .elementCheckbox:first-child {
   margin-left: 0;
 }
 
-.input-elems > :nth-child(odd):not(:first-child) {
+.input-elems > div:first-of-type {
   background-color: #d4d6d9 !important;
+}
+.input-elems > div:not(:first-of-type) {
+  margin-left: 20px;
+  padding: 2px 10px;
 }
 
 .input-elems > .elementCheckbox {
@@ -206,4 +209,51 @@ select.advanced-config-values:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.advanced-configuration-toggle {
+  display: flex;
+  align-items: center;
+  margin: 2px 10px 10px 10px;
+}
+.advanced-configuration-toggle span {
+  margin-left: 10px;
+}
+
+.advanced-configuration-toggle input[type='checkbox'] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+.advanced-configuration-toggle label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 48px;
+  height: 32px;
+  background: grey;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+.advanced-configuration-toggle label:after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+.advanced-configuration-toggle input:checked + label {
+  background: #8cc63f;
+}
+
+.advanced-configuration-toggle input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
 }

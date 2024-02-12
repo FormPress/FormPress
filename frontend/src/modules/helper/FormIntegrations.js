@@ -73,7 +73,7 @@ class FormIntegrations extends Component {
   }
 
   setRenderedIntegration() {
-    const { form } = this.props
+    const { form, savedForm } = this.props
     const { selectedIntegration } = this.state
 
     const Integration = Object.values(Integrations).find(
@@ -85,13 +85,14 @@ class FormIntegrations extends Component {
       ) || null
     const integrationValue = integrationObject ? integrationObject.value : false
     const activeStatus = integrationObject ? integrationObject.active : false
-
     return (
       <Integration
         className="integration-wrapper"
         handleCloseIntegrationClick={this.handleCloseIntegrationClick}
         setIntegration={this.props.setIntegration}
         handleSaveClick={this.props.handleSaveClick}
+        updateDbFormIntegrations={this.props.updateDbFormIntegrations}
+        savedForm={savedForm}
         form={form}
         integrationValue={integrationValue}
         activeStatus={activeStatus}

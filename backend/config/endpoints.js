@@ -269,6 +269,20 @@ module.exports = {
       path: '/api/users/:user_id/thankyou',
       protected: true,
       exampleRequestPath: '/api/users/1/thankyou'
+    },
+    {
+      method: 'post',
+      path: '/api/users/:user_id/forms/:form_id/integrations',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/1/integrations',
+      exampleRequestBody: {
+        type: 'CustomWebhook',
+        active: true,
+        value: 'https://example.com',
+        chosenInputs: [],
+        customizeInputs: false,
+        paused: false
+      }
     }
   ]
 }
