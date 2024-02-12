@@ -111,6 +111,9 @@ module.exports = (app) => {
       const { form_id } = req.params
       const { integrationObject } = req.body
       const db = await getPool()
+
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
       const form = await formModel.get({ form_id })
 
       if (form === false) {
