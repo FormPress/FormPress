@@ -27,15 +27,11 @@ exports.ensureLoggedIn = (req, res, next) => {
   }
 }
 
-exports.mustHaveValidToken = (req, res, next, cb = null) => {
+exports.mustHaveValidToken = (req, res, next) => {
   if (res.locals.validToken === true) {
     next()
   } else {
-    if (cb !== null) {
-      return cb(req, res, next)
-    } else {
-      return res.status(403).send({ message: 'Invalid Token' })
-    }
+    return res.status(403).send({ message: 'Invalid Token' })
   }
 }
 
@@ -240,7 +236,7 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
   const key = req.body.APIKey
 
   if (typeof key === 'undefined') {
-    res.status(403).send({ message: 'Invalid API key' })
+    return res.status(403).send({ message: 'Invalid API key' })
   }
 
   const db = await getPool()
@@ -250,8 +246,8 @@ exports.mustHaveValidAPIKey = async (req, res, next) => {
 
   if (result.length > 0) {
     res.locals.key = result[0]
-    next()
+    return next()
   } else {
-    res.status(403).send({ message: 'Invalid API key' })
+    return res.status(403).send({ message: 'Invalid API key' })
   }
 }

@@ -6,7 +6,6 @@ const sanitizeHtml = require('sanitize-html')
 const sass = require('sass')
 
 const moment = require('moment')
-const uuidAPIKey = require('uuid-apikey')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
 const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
@@ -36,13 +35,14 @@ const {
   testStringIsJson,
   publicStorage
 } = require(path.resolve('helper'))
-const formModel = model.form
-const formPublishedModel = model.formpublished
+const { FormModel, FormPublishedModel, user: UserModel } = model
+
 const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
   './',
   'helper',
   'oldformpropshandler.js'
 ))
+const { token } = require(path.resolve('helper')).token
 
 const JWT_SECRET = process.env.JWT_SECRET
 
@@ -50,6 +50,8 @@ module.exports = (app) => {
   const handleCreateForm = async (req, res) => {
     const form = req.body
     const { user_id } = req.params
+
+    const formModel = new FormModel(req.user)
 
     if (!form.private) {
       form.private = 0
@@ -173,6 +175,16 @@ module.exports = (app) => {
       const db = await getPool()
       const user_id = req.params.user_id
 
+      const { user } = req
+
+      const formModel = new FormModel(user)
+
+      let shouldSanitizeSensitiveData = false
+
+      if (user && user.accessType === '3rdParty') {
+        shouldSanitizeSensitiveData = true
+      }
+
       const formIds = (
         await db.query(
           `SELECT id FROM form WHERE user_id = ? AND deleted_at IS NULL`,
@@ -212,7 +224,9 @@ module.exports = (app) => {
       if (formResults.length === 0) {
         res.json([])
       } else {
-        const response = formResults.map(hydrateForm)
+        const response = formResults.map((form) =>
+          hydrateForm(form, shouldSanitizeSensitiveData)
+        )
         sharedIdsAndPerms.forEach((idAndPerm) => {
           response.forEach((formResult) => {
             if (formResult.id === idAndPerm.form_id) {
@@ -238,6 +252,9 @@ module.exports = (app) => {
     }),
     async (req, res) => {
       const { form_id } = req.params
+
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
 
       if (req.query.published === 'true') {
         res.json((await formPublishedModel.get({ form_id })) || {})
@@ -289,6 +306,8 @@ module.exports = (app) => {
   app.get('/api/users/:user_id/forms/:form_id/elements', async (req, res) => {
     let { form_id } = req.params
 
+    const formModel = new FormModel(req.user)
+
     const elems = (await formModel.get({ form_id })).props.elements
 
     // remove the keys that are named 'expectedAnswer' out of the elements
@@ -303,6 +322,8 @@ module.exports = (app) => {
 
   app.get('/api/users/:user_id/forms/:form_id/rules', async (req, res) => {
     let { form_id } = req.params
+
+    const formModel = new FormModel(req.user)
 
     const form = await formModel.get({ form_id })
 
@@ -321,6 +342,9 @@ module.exports = (app) => {
       const { submission_id, form_id } = req.params
       // TODO: currently user_id is not used in the query but will be used in the future for security reasons
       // TODO: a check to make sure the viewer is the owner of the submission should be added
+
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
 
       const Renderer = require(path.resolve(
         'script',
@@ -501,6 +525,9 @@ module.exports = (app) => {
     async (req, res) => {
       const { user_id, form_id } = req.params
 
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
+
       const form = await formModel.get({ form_id })
 
       if (form !== false) {
@@ -529,6 +556,8 @@ module.exports = (app) => {
     }),
     async (req, res) => {
       const { form_id } = req.params
+
+      const formModel = new FormModel(req.user)
 
       await formModel.delete({ form_id })
 
@@ -637,6 +666,8 @@ module.exports = (app) => {
       matchType: 'strict' // Only allow if user has data rights to form
     }),
     async (req, res) => {
+      const formModel = new FormModel(req.user)
+
       const elementCharts = {
         TextBox: 'lastFive',
         TextArea: 'lastFive',
@@ -1014,6 +1045,9 @@ module.exports = (app) => {
     }),
     async (req, res) => {
       const { form_id, version_id } = req.params
+
+      const formPublishedModel = new FormPublishedModel(req.user)
+
       const result = await formPublishedModel.get({ form_id, version_id })
 
       if (result !== false) {
@@ -1192,6 +1226,9 @@ module.exports = (app) => {
     let form_id = req.params.id
     let uuid = null
 
+    const formModel = new FormModel(req.user)
+    const formPublishedModel = new FormPublishedModel(req.user)
+
     if (validate(form_id)) {
       uuid = form_id
       form_id = await formModel.getFormIdFromUUID(form_id)
@@ -1200,31 +1237,30 @@ module.exports = (app) => {
     }
 
     const result = await formModel.get({ form_id })
+
     if (result === false) {
       return res.status(404).send('Form not found')
     }
 
-    if (
-      result.private &&
-      req.query.preview !== 'true' &&
-      req.get('host') !== 'localhost:3001'
-    ) {
+    let form = result
+
+    if (result.private && req.query.preview !== 'true') {
       if (!req.query.token) {
         return res.status(404).send('token must be sent')
       }
 
-      jwt.verify(req.user, JWT_SECRET, (err, decoded) => {
+      const token = req.query.token
+
+      jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
           return res.status(404).send(err)
         }
 
-        if (decoded.form_id !== form_id) {
+        if (decoded.user_id !== form.user_id) {
           return res.status(404).send('token is not valid')
         }
       })
     }
-
-    let form = result
 
     const db = await getPool()
     const userResult = await db.query(
@@ -1314,7 +1350,7 @@ module.exports = (app) => {
         ' body {background: none !important; margin: 3px; padding-bottom: 3px; } '
     }
 
-    if (form.private) {
+    if (form.private || showBranding === false) {
       // remove the part that says 'Never Submit Passwords'
       style += ' .renderer::after {content: none !important; }'
     }
@@ -1348,7 +1384,7 @@ module.exports = (app) => {
     })
   })
 
-  app.post('/form/view/demo', mustHaveValidToken, async (req, res) => {
+  app.post('/form/view/demo', async (req, res) => {
     let { form } = req.body
 
     if (form === undefined) {
@@ -1578,6 +1614,9 @@ module.exports = (app) => {
     mustBeAdmin,
     async (req, res) => {
       const user_id = req.params.user_id
+
+      const formModel = new FormModel(req.user)
+
       const formsArray = (await formModel.list({ user_id })) || []
       const archive = archiver('zip')
 
@@ -1594,79 +1633,52 @@ module.exports = (app) => {
     }
   )
 
-  // return api key
-  app.get(
-    '/api/users/:user_id/api-key',
-    mustHaveValidToken,
-    paramShouldMatchTokenUserId('user_id'),
-    async (req, res) => {
-      const db = await getPool()
-      const user_id = req.params.user_id
-      const result = await db.query(
-        `SELECT * FROM \`api_key\` WHERE user_id = ?`,
-        [user_id]
-      )
-
-      if (result.length > 0) {
-        return res.json(result)
-      } else {
-        const api_key = await uuidAPIKey.create().apiKey
-        const data = await db.query(
-          `
-                INSERT INTO \`api_key\`
-                  (user_id, api_key, created_at)
-                VALUES
-                  (?, ?, NOW())
-              `,
-          [user_id, api_key]
-        )
-
-        const result = await db.query(
-          `SELECT * FROM \`api_key\` WHERE id = ?`,
-          [data.insertId]
-        )
-        return res.json(result)
-      }
-    }
-  )
-
   // create a token with API key for private form view
   app.post('/api/create-token', mustHaveValidAPIKey, async (req, res) => {
-    const { form_id, exp } = req.body
+    const { exp } = req.body
 
-    if (!form_id || !exp) {
-      return res.status(404).json({ message: 'form_id and exp must be sent' })
+    const keyData = res.locals.key
+
+    if (keyData === undefined) {
+      return res.status(500).json({ message: 'API key not found' })
     }
 
-    if (typeof form_id !== 'string') {
-      return res.status(404).json({ message: 'form_id format must be uuid' })
-    }
+    const userId = keyData.user_id
 
-    const result = await formModel.get({ form_id })
-    if (result === false) {
-      return res.status(404).json({ message: 'Form not found' })
-    }
+    // 5 minutes, default
+    const defaultExp = Math.floor(Date.now() / 1000) + 60 * 60
 
-    if (result.user_id !== res.locals.key.user_id) {
-      return res.status(404).json({ message: 'Form not found' })
-    }
+    // 24 hours, max
+    const maxExp = Math.floor(Date.now() / 1000) + 60 * 60 * 24
 
-    const jwt_data = { form_id, action: 'view', exp }
+    let finalExp
 
-    jwt.sign(jwt_data, JWT_SECRET, (err, token) => {
-      if (err) {
-        console.log('token sign error ', err)
-        error.errorReport(err)
+    if (exp) {
+      const expTimestamp = parseInt(exp)
+
+      if (!isNaN(expTimestamp) && expTimestamp > maxExp) {
+        finalExp = maxExp
+      } else {
+        finalExp = expTimestamp
       }
+    } else {
+      finalExp = defaultExp
+    }
 
-      return res.status(200).json({
-        message: 'Create a new token',
-        token,
-        form_id,
-        action: 'view',
-        exp
-      })
-    })
+    const user = await UserModel.get({ user_id: userId })
+
+    if (user === false) {
+      return res.status(500).json({ message: 'User not found' })
+    }
+
+    const tokenData = {
+      ...user,
+      accessType: '3rdParty'
+    }
+
+    const jwt = await token(tokenData, finalExp)
+
+    return res.json({ token: jwt, user_id: userId })
   })
 
   app.get(
@@ -1746,7 +1758,7 @@ module.exports = (app) => {
       }
     }
   )
-  // TODO: review below part
+
   app.get(
     '/api/users/:user_id/talkyard-sso',
     mustHaveValidToken,
@@ -1993,6 +2005,8 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
+
+      const formModel = new FormModel(req.user)
 
       let id = req.body.id
 

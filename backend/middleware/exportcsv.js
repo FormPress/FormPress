@@ -6,7 +6,7 @@ const {
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
 const { model } = require(path.resolve('helper'))
-const formModel = model.form
+const { FormModel } = model
 const { submissionhandler } = require(path.resolve('helper'))
 const { userShouldOwnForm } = require(path.resolve(
   'middleware',
@@ -51,6 +51,9 @@ module.exports = (app) => {
       `,
         [form_id, ...ids]
       )
+
+      const formModel = new FormModel()
+
       const formResult = await formModel.get({ form_id })
 
       /*

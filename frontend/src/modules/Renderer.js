@@ -121,7 +121,9 @@ export default class Renderer extends Component {
       // push copied page break to page
       if (element.type !== 'PageBreak') {
         page.push(element)
-        emptyPage = false
+        if (element.hidden !== true) {
+          emptyPage = false
+        }
       } else {
         element.pageNumber = pageNumber
         element.empty = emptyPage
@@ -169,7 +171,7 @@ export default class Renderer extends Component {
           }
           data-fp-pagenumber={index + 1}
           {...builderHandlers}>
-          <HoneyPot />
+          {this.props.mode === 'builder' ? null : <HoneyPot />}
           {page.map((elem) => {
             const Component = Elements[elem.type]
             const extraProps = { mode: this.props.mode }
@@ -205,7 +207,7 @@ export default class Renderer extends Component {
 
             if (elem.type === 'PageBreak') {
               if (elem.empty === true) {
-                extraProps.className = 'emptyPage'
+                extraProps.className += ' emptyPage'
               }
               if (elem.reflection === true) {
                 extraProps.className += ' reflection'

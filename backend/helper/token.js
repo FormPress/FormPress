@@ -9,6 +9,10 @@ exports.token = (jwt_data, exp) => {
     exp = Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7
   }
 
+  if (jwt_data && jwt_data.accessType === undefined) {
+    jwt_data.accessType = 'internal'
+  }
+
   jwt_data = { ...jwt_data, exp }
 
   const token = jwt.sign(jwt_data, JWT_SECRET)

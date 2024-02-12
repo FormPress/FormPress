@@ -66,7 +66,7 @@ export default class Table extends Component {
 
             return (
               <td key={keyColumn} {...props}>
-                {column.content(row)}
+                {column.content(row, rowKey)}
               </td>
             )
           })}

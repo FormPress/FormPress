@@ -31,10 +31,10 @@
   color: #1c5c85;
 }
 .animate {
-  animation: disappear 0.8s linear;
+  animation: disappear 1s linear;
 }
 
-.copyAlert {
+.copyToClipboardArea .copyAlert {
   font-size: 12px;
   opacity: 0;
   position: absolute;
@@ -42,11 +42,23 @@
   right: 20px;
 }
 
+.copyToClipboardArea_custom {
+  position: relative;
+}
+
+.copyToClipboardArea_custom .copyAlert {
+  font-size: 12px;
+  opacity: 0;
+  position: absolute;
+  top: 30px;
+  left: 10px;
+}
+
 @keyframes disappear {
-  30% {
-    opacity: 0;
+  0% {
+    opacity: 1;
   }
-  60% {
+  90% {
     opacity: 1;
   }
   100% {

@@ -1,0 +1,105 @@
+.apikeys-wrapper .fp_table {
+}
+
+.apikeys-wrapper table.fp_table th.apiKeyIndex,
+.apikeys-wrapper table.fp_table td.apiKeyIndex {
+  text-align: center;
+  padding: 3px;
+}
+
+.apikeys-wrapper table.fp_table tr .actions {
+  text-align: center;
+  visibility: hidden;
+}
+
+.apikeys-wrapper table.fp_table th.actionsTh {
+  text-align: center;
+}
+
+.apikeys-wrapper table.fp_table tr:hover .actions {
+  visibility: visible;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > .inactive_view:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > .inactive_clone:hover {
+  color: rgb(225, 225, 225);
+  background-color: #ffff;
+}
+
+.apikeys-wrapper table.fp_table tr .actions > * {
+  margin-right: 10px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  line-height: 40px;
+  text-align: center;
+  color: rgb(225, 225, 225);
+}
+
+.apikeys-wrapper table.fp_table .actions > *:hover {
+  color: rgb(48, 93, 134);
+  cursor: pointer;
+}
+
+.apikeys-wrapper table.fp_table .actions svg {
+  font-size: 18px;
+}
+
+.apikeys-wrapper table.fp_table tbody tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+.apikeys-wrapper table.fp_table tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+.apikeys-wrapper table.fp_table {
+  table-layout: fixed;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.name,
+.apikeys-wrapper table.fp_table tbody > tr > td.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 20%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.apiKeyIndex,
+.apikeys-wrapper table.fp_table tbody > tr > td.apiKeyIndex {
+  width: 5%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.createdAt,
+.apikeys-wrapper table.fp_table tbody > tr > td.createdAt {
+  width: 15%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.actionsTh,
+.apikeys-wrapper table.fp_table tbody > tr > td.actionsTh {
+  width: 15%;
+}
+
+.apikeys-wrapper table.fp_table thead > tr > th.apiKey,
+.apikeys-wrapper table.fp_table tbody > tr > td.apiKey {
+  width: 40%;
+  padding-left: 15px;
+}
+
+.apikeys-wrapper .createApiKeyButton {
+  float: right;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  width: 12rem;
+  min-height: 2.1rem;
+  cursor: pointer;
+  color: #ffffff;
+  border: none;
+  background-color: #9ee048ff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  margin: 10px 0 10px 0;
+}

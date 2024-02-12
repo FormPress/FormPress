@@ -4,15 +4,14 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 module.exports = (app) => {
   app.use((req, res, next) => {
-    const { auth } = req.cookies
+    const bearerAuth = req.get('Authorization')?.split(' ')[1]
+    const cookieAuth = req.cookies.auth
+
+    const auth = bearerAuth || cookieAuth
 
     if (auth) {
       jwt.verify(auth, JWT_SECRET, (err, decoded) => {
         if (err !== null) {
-          res.clearCookie('auth', {
-            domain: process.env.COOKIE_DOMAIN,
-            path: '/'
-          })
           return next()
         }
 

@@ -12,8 +12,8 @@ const {
   integrationhelper,
   recaptcha
 } = require(path.resolve('helper'))
-const formModel = model.form
-const formPublishedModel = model.formpublished
+
+const { FormModel, FormPublishedModel } = model
 
 const { validate: isStringUUID } = require('uuid')
 
@@ -38,6 +38,9 @@ module.exports = (app) => {
     let form_id = req.params.id
     let uuid
     let overrideTyPageId = req.query.tyPageId || false
+
+    const formModel = new FormModel()
+    const formPublishedModel = new FormPublishedModel()
 
     if (isStringUUID(form_id) === true) {
       uuid = form_id
@@ -82,6 +85,12 @@ module.exports = (app) => {
     //if preview mode
     if (isNaN(version)) {
       version = 0
+    }
+
+    // preview form gets a short circuit
+    if (version === 0) {
+      let otpQuery = overrideTyPageId ? `?otp=${overrideTyPageId}` : ''
+      return res.redirect(`/form/submit/${uuid}${otpQuery}`)
     }
 
     //read out form
@@ -445,6 +454,10 @@ module.exports = (app) => {
 
   app.get('/form/submit/:uuid', async (req, res) => {
     let uuid = req.params.uuid
+
+    const formModel = new FormModel()
+    const formPublishedModel = new FormPublishedModel()
+
     let form_id = await formModel.getFormIdFromUUID(uuid)
     let overrideTyPageId = req.query.otp || false
 
@@ -552,13 +565,13 @@ module.exports = (app) => {
       }
 
       const dbResult = await db.query(
-        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR user_id = 0`,
+        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? AND id = ? OR id = 1`,
         [form.user_id, tyPageId]
       )
 
       if (dbResult.length > 0) {
-        const customThankYou = dbResult[1]
-        const defaultThankYou = dbResult[0]
+        const customThankYou = dbResult.find((item) => item.id === tyPageId)
+        const defaultThankYou = dbResult.find((item) => item.id === 1)
 
         let html
         if (customThankYou) {

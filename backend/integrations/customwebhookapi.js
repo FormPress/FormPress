@@ -28,11 +28,11 @@ exports.triggerCustomWebhook = async ({
     return a.id - b.id
   })
 
-  const submissions = selectedQnA.map((QnA) => {
-    const submission = {}
-    submission.question = QnA.question
-    submission.answer = QnA.answer
-    return submission
+  const entries = selectedQnA.map((QnA) => {
+    const entry = {}
+    entry.question = QnA.question
+    entry.answer = QnA.answer
+    return entry
   })
 
   const webhookUrl = integrationConfig.value
@@ -45,7 +45,7 @@ exports.triggerCustomWebhook = async ({
       formTitle,
       submissionDate
     },
-    submissions
+    entries
   }
 
   try {

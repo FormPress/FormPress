@@ -29,11 +29,6 @@ const { triggerCustomWebhook } = require(path.resolve(
   'customwebhookapi.js'
 ))
 
-const { triggerZapierWebhook } = require(path.resolve(
-  'integrations',
-  'zapierapi.js'
-))
-
 exports.triggerIntegrations = async (
   form,
   questionsAndAnswers,
@@ -133,31 +128,20 @@ exports.triggerIntegrations = async (
     })
   }
 
-  const customWebhook = integrationList.find((i) => i.type === 'CustomWebhook')
-  if (
-    customWebhook !== undefined &&
-    customWebhook.active === true &&
-    customWebhook.paused !== true
-  ) {
-    await triggerCustomWebhook({
-      integrationConfig: customWebhook,
-      questionsAndAnswers,
-      formTitle: form.title,
-      formId: form.id,
-      submissionId: submission_id
-    })
-  }
-
-  // there may be multiple zapier integrations
-  const zapierIntegrations = integrationList.filter((i) => i.type === 'Zapier')
-  if (zapierIntegrations.length > 0) {
-    for (const zapierIntegration of zapierIntegrations) {
+  // As of January 2024, all webhooks created by Form Webhooks API (including Zapier) are now "Webhook" which have the same structure as CustomWebhooks.
+  const customWebhooks = integrationList.filter(
+    (i) =>
+      i.type === 'Webhook' || i.type === 'CustomWebhook' || i.type === 'Zapier' // Zapier is for backwards compatibility
+  )
+  if (customWebhooks.length > 0) {
+    for (const webhook of customWebhooks) {
       if (
-        zapierIntegration.active === true &&
-        zapierIntegration.paused !== true
+        webhook !== undefined &&
+        webhook.active === true &&
+        webhook.paused !== true
       ) {
-        await triggerZapierWebhook({
-          integrationConfig: zapierIntegration,
+        await triggerCustomWebhook({
+          integrationConfig: webhook,
           questionsAndAnswers,
           formTitle: form.title,
           formId: form.id,

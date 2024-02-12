@@ -208,12 +208,6 @@ module.exports = {
     },
     {
       method: 'get',
-      path: '/api/users/:user_id/api-key',
-      protected: false,
-      exampleRequestPath: '/api/users/1/api-key'
-    },
-    {
-      method: 'get',
       path: '/api/users/:user_id/usages',
       protected: false,
       exampleRequestPath: '/api/users/1/usages'
