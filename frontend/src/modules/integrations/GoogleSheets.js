@@ -118,12 +118,6 @@ export default class GoogleSheets extends Component {
     }
   }
 
-  async componentDidUpdate(prevProps) {
-    if (this.props.activeStatus !== prevProps.activeStatus) {
-      await this.props.handleSaveClick()
-    }
-  }
-
   showPicker(access_token) {
     const google = window.google
 
@@ -300,14 +294,15 @@ export default class GoogleSheets extends Component {
     } else {
       this.setState({ display: 'configuration' })
     }
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleSheets.metaData.name)
   }
 
   async handleStartAuthentication() {
-    const saveSuccess = await this.props.handleSaveClick()
-    if (saveSuccess === false) {
-      return
+    const { form } = this.props
+    if (form.id === null) {
+      await this.props.handleSaveClick()
     }
+
     let { success, data } = await api({
       resource: `/api/services/google/generateAuthURL`,
       body: {
@@ -446,7 +441,7 @@ export default class GoogleSheets extends Component {
 
     await this.props.setIntegration(integrationObject)
 
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleSheets.metaData.name)
 
     this.setState({
       tempIntegrationObject: integrationObject,
@@ -466,7 +461,7 @@ export default class GoogleSheets extends Component {
       type: GoogleSheets.metaData.name,
       paused: true
     })
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleSheets.metaData.name)
   }
 
   async handleResumeClick() {
@@ -482,7 +477,7 @@ export default class GoogleSheets extends Component {
       paused: false
     })
 
-    await this.props.handleSaveClick()
+    this.props.updateDbFormIntegrations(GoogleSheets.metaData.name)
   }
 
   handleCloseModalClick() {
@@ -521,10 +516,12 @@ export default class GoogleSheets extends Component {
       value: {},
       submissionIdentifier: ''
     })
+    this.props.updateDbFormIntegrations(GoogleSheets.metaData.name)
+
     this.setState({
-      display: 'description'
+      display: 'description',
+      isModalOpen: false
     })
-    this.setState({ isModalOpen: false })
   }
 
   async handleEditClick() {

@@ -97,6 +97,72 @@ module.exports = (app) => {
     userHaveFormLimit('user_id'),
     handleCreateForm
   )
+  // updates the integration of a form
+  app.post(
+    '/api/users/:user_id/forms/:form_id/integrations',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    async (req, res) => {
+      const { form_id } = req.params
+      const { integrationObject } = req.body
+      const db = await getPool()
+
+      const formModel = new FormModel(req.user)
+      const formPublishedModel = new FormPublishedModel(req.user)
+      const form = await formModel.get({ form_id })
+
+      if (form === false) {
+        return res.status(404).json({ message: 'Form not found' })
+      }
+
+      let index = form.props.integrations.findIndex(
+        (integration) => integration.type === integrationObject.type
+      )
+
+      if (index !== -1) {
+        form.props.integrations[index] = integrationObject
+      } else {
+        form.props.integrations.push(integrationObject)
+      }
+
+      try {
+        await formModel.update({ form: { ...form } })
+        if (form.published_version !== 0) {
+          let latestPublishedForm = await formPublishedModel.get({
+            form_id,
+            version_id: form.published_version
+          })
+          let index = latestPublishedForm.props.integrations.findIndex(
+            (integration) => integration.type === integrationObject.type
+          )
+
+          if (index !== -1) {
+            latestPublishedForm.props.integrations[index] = integrationObject
+          } else {
+            latestPublishedForm.props.integrations.push(integrationObject)
+          }
+
+          await db.query(
+            `UPDATE \`form_published\` SET props = ? WHERE form_id = ? AND version = ?`,
+            [
+              JSON.stringify(latestPublishedForm.props),
+              form_id,
+              form.published_version
+            ]
+          )
+        }
+
+        return res
+          .status(200)
+          .json({ message: 'Integration saved & published' })
+      } catch (e) {
+        console.log(e)
+        return res
+          .status(500)
+          .json({ message: 'Failed to save & publish integration' })
+      }
+    }
+  )
 
   // Clone form
   app.post(

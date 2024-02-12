@@ -53,7 +53,7 @@ const blockGenerator = (QnA, title, index, length) => {
           {
             type: 'image',
             image_url:
-              'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              'https://static.formpress.org/images/logo-whiteBG-512x512.png',
             alt_text: 'formpress logo'
           },
           {
@@ -112,7 +112,7 @@ const blockGenerator = (QnA, title, index, length) => {
             {
               type: 'image',
               image_url:
-                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+                'https://static.formpress.org/images/logo-whiteBG-512x512.png',
               alt_text: 'formpress logo'
             },
             {
@@ -160,7 +160,7 @@ const blockGenerator = (QnA, title, index, length) => {
             {
               type: 'image',
               image_url:
-                'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+                'https://static.formpress.org/images/logo-whiteBG-512x512.png',
               alt_text: 'formpress logo'
             },
             {
@@ -186,13 +186,17 @@ exports.triggerSlackWebhook = async ({
 }) => {
   const url = integrationConfig.value
   const chosenInputElems = integrationConfig.chosenInputs
-  const selectedQnA = []
-  chosenInputElems.forEach((elem) => {
-    const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
-    if (foundQnA !== undefined) {
-      selectedQnA.push(foundQnA)
-    }
-  })
+  let selectedQnA = []
+  if (integrationConfig.customizeInputs === false) {
+    selectedQnA = [...questionsAndAnswers]
+  } else {
+    chosenInputElems.forEach((elem) => {
+      const foundQnA = questionsAndAnswers.find((QnA) => QnA.id === elem.id)
+      if (foundQnA !== undefined) {
+        selectedQnA.push(foundQnA)
+      }
+    })
+  }
 
   //Group Question and Answer data so that message blocks won't exceed item limit.
   const dataGroups = []
@@ -242,7 +246,7 @@ exports.slackApi = (app) => {
           {
             type: 'image',
             image_url:
-              'https://storage.googleapis.com/static.formpress.org/images/logo-whiteBG-512x512.png',
+              'https://static.formpress.org/images/logo-whiteBG-512x512.png',
             alt_text: 'formpress logo'
           },
           {

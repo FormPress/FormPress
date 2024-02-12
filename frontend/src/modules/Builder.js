@@ -73,7 +73,7 @@ const DEFAULT_FORM = {
     },
     customCSS: {
       value: '',
-      isEncoded: false
+      isEncoded: true
     },
     tags: []
   }
@@ -346,6 +346,27 @@ export default class Builder extends Component {
     this.setState({ form })
   }
 
+  //Updates form.props.integrations with the new integration in the db and does so for published version if there is one
+  async updateDbFormIntegrations(integrationName) {
+    const form = { ...this.state.form }
+    const integrationObject =
+      form.props.integrations.find((i) => i.type === integrationName) || null
+
+    this.setState({ saving: true })
+
+    if (form.id === null) {
+      await this.handleSaveClick()
+    }
+
+    await api({
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/${this.state.form.id}/integrations`,
+      method: 'post',
+      body: { integrationObject }
+    })
+
+    this.setState({ saving: false })
+  }
+
   setFormRule(_rule) {
     const form = { ...this.state.form }
 
@@ -504,6 +525,7 @@ export default class Builder extends Component {
     this.setAdditionalSaveFunction = this.setAdditionalSaveFunction.bind(this)
     this.renderLeftElements = this.renderLeftElements.bind(this)
     this.demoToUserTransition = this.demoToUserTransition.bind(this)
+    this.updateDbFormIntegrations = this.updateDbFormIntegrations.bind(this)
   }
 
   setAdditionalSaveFunction(func) {
@@ -1768,7 +1790,7 @@ export default class Builder extends Component {
   renderMainContent() {
     const { formId } = this.props.match.params
 
-    const { form } = this.state
+    const { form, savedForm } = this.state
 
     let canEdit = true
     if (this.state.form.permissions !== undefined) {
@@ -1789,6 +1811,8 @@ export default class Builder extends Component {
             setIntegration={this.setIntegration}
             handleSaveClick={this.handleSaveClick}
             form={form}
+            updateDbFormIntegrations={this.updateDbFormIntegrations}
+            savedForm={savedForm}
             canEdit={canEdit}
           />
         </Route>
