@@ -12,7 +12,7 @@ exports.triggerCustomWebhook = async ({
   const chosenInputElems = integrationConfig.chosenInputs
 
   let selectedQnA = []
-  if (integrationConfig.customizeInputs === false) {
+  if (integrationConfig.customizeInputs !== false) {
     selectedQnA = [...questionsAndAnswers]
   } else {
     chosenInputElems.forEach((elem) => {

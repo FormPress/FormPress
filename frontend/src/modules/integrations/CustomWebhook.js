@@ -30,11 +30,13 @@ export default class CustomWebhook extends Component {
           : this.props.integrationObject.value,
       invalidUrl: false,
       examplePayload: {
-        formId: 7,
-        submissionId: 28,
-        formTitle: 'Untitled Form',
-        submissionDate: '2023-02-27 12:34:56 UTC',
-        submissions: [
+        metadata: {
+          formId: 7,
+          submissionId: 28,
+          formTitle: 'Untitled Form',
+          submissionDate: '2023-02-27 12:34:56 UTC'
+        },
+        entries: [
           { question: 'question', answer: 'answer' },
           { question: 'What is your name', answer: 'John Doe' }
         ]
@@ -53,9 +55,8 @@ export default class CustomWebhook extends Component {
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
     this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
+    this.renderInputElementSelection =
+      this.renderInputElementSelection.bind(this)
   }
 
   componentDidMount() {
