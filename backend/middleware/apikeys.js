@@ -3,10 +3,9 @@ const path = require('path')
 const uuidAPIKey = require('uuid-apikey')
 const { getPool } = require(path.resolve('./', 'db'))
 
-const {
-  mustHaveValidToken,
-  paramShouldMatchTokenUserId
-} = require(path.resolve('middleware', 'authorization'))
+const { mustHaveValidToken, paramShouldMatchTokenUserId } = require(
+  path.resolve('middleware', 'authorization')
+)
 
 exports.apiKeys = (app) => {
   // return api keys

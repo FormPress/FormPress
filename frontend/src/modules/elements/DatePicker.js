@@ -191,12 +191,8 @@ export default class DatePicker extends Component {
 
   render() {
     const { config, mode } = this.props
-    const {
-      isDateSupported,
-      flatpickrModule,
-      flatpickrOptions,
-      key
-    } = this.state
+    const { isDateSupported, flatpickrModule, flatpickrOptions, key } =
+      this.state
 
     const inputProps = {}
     let Flatpickr = null

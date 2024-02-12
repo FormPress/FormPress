@@ -13,8 +13,7 @@ import { DotLoader } from 'react-spinner-overlay'
 
 export default class GoogleDrive extends Component {
   static metaData = {
-    icon:
-      'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg',
     displayText: 'Google Drive',
     name: 'GoogleDrive'
   }
@@ -42,9 +41,8 @@ export default class GoogleDrive extends Component {
 
     this.removeIntegration = this.removeIntegration.bind(this)
 
-    this.handleSubmissionIdentifierChange = this.handleSubmissionIdentifierChange.bind(
-      this
-    )
+    this.handleSubmissionIdentifierChange =
+      this.handleSubmissionIdentifierChange.bind(this)
 
     this.handleFolderNameChange = this.handleFolderNameChange.bind(this)
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
@@ -436,10 +434,8 @@ export default class GoogleDrive extends Component {
 
   render() {
     let display
-    let {
-      targetFolder,
-      submissionIdentifier
-    } = this.state.tempIntegrationObject
+    let { targetFolder, submissionIdentifier } =
+      this.state.tempIntegrationObject
 
     let paused
     if (this.props.tempIntegrationObject?.paused !== undefined) {

@@ -1,10 +1,9 @@
 const path = require('path')
 const { getPool } = require(path.resolve('./', 'db'))
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
-const { mustHaveValidToken } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { mustHaveValidToken } = require(
+  path.resolve('middleware', 'authorization')
+)
 
 module.exports = (app) => {
   app.post(

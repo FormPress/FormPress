@@ -132,8 +132,8 @@ export default class Renderer extends Component {
           pageNumber === formPagesCount
             ? 'end'
             : 1 < pageNumber && pageNumber < formPagesCount
-            ? 'between'
-            : 'start'
+              ? 'between'
+              : 'start'
         copiedPageBreak = Object.assign({}, element)
         page.push(element)
         pages.push(page)

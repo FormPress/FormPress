@@ -331,11 +331,18 @@ $color-14: #68942f; /* forest green */
     margin-top: 8px;
     margin-right: 5px;
     cursor: pointer;
-    -webkit-transition: outline-color 0.3s ease-out,
+    -webkit-transition:
+      outline-color 0.3s ease-out,
       background-color 0.3s ease-out;
-    -moz-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
-    -o-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
-    transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
+    -moz-transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
+    -o-transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
+    transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
     vertical-align: top;
     border-radius: 50%;
     border: 3px solid $bg-form;
@@ -1133,7 +1140,9 @@ $color-14: #68942f; /* forest green */
 
   input:-webkit-autofill,
   input:-webkit-autofill:focus {
-    transition: background-color 0s 600000s, color 0s 600000s;
+    transition:
+      background-color 0s 600000s,
+      color 0s 600000s;
   }
 }
 

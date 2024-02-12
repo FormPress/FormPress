@@ -107,8 +107,8 @@ export default class Usages extends Component {
                           (percentage === 100
                             ? 'full'
                             : percentage >= 80
-                            ? 'alert'
-                            : '')
+                              ? 'alert'
+                              : '')
                         }
                         style={{ width: percentage + '%' }}></div>
                       <span

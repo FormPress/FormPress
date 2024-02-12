@@ -8,8 +8,9 @@ class CopyToClipboard extends Component {
     let copyDiv
 
     if (this.props.children !== undefined) {
-      copyDiv = e.target.closest('div.clipboardButton_custom')
-        .nextElementSibling
+      copyDiv = e.target.closest(
+        'div.clipboardButton_custom'
+      ).nextElementSibling
     } else {
       copyDiv = e.target.nextElementSibling
     }

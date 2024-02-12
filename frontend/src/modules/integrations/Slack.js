@@ -8,8 +8,7 @@ import { api } from '../../helper'
 
 export default class Slack extends Component {
   static metaData = {
-    icon:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg',
     displayText: 'Slack',
     name: 'Slack'
   }

@@ -482,9 +482,8 @@ export default class Builder extends Component {
     this.handleTitleChange = this.handleTitleChange.bind(this)
     this.setFormAsPrivate = this.setFormAsPrivate.bind(this)
     this.handleFormElementClick = this.handleFormElementClick.bind(this)
-    this.handleFormElementDeleteClick = this.handleFormElementDeleteClick.bind(
-      this
-    )
+    this.handleFormElementDeleteClick =
+      this.handleFormElementDeleteClick.bind(this)
     this.handleAddFormElementClick = this.handleAddFormElementClick.bind(this)
     this.setIntegration = this.setIntegration.bind(this)
     this.configureQuestion = this.configureQuestion.bind(this)
@@ -492,9 +491,8 @@ export default class Builder extends Component {
     this.setFormTags = this.setFormTags.bind(this)
     this.setAutoPageBreak = this.setAutoPageBreak.bind(this)
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
-    this.handleCloseTemplateModalClick = this.handleCloseTemplateModalClick.bind(
-      this
-    )
+    this.handleCloseTemplateModalClick =
+      this.handleCloseTemplateModalClick.bind(this)
     this.handleDiscardChangesClick = this.handleDiscardChangesClick.bind(this)
     this.cloneTemplate = this.cloneTemplate.bind(this)
     this.handleAddNewPage = this.handleAddNewPage.bind(this)
@@ -1259,9 +1257,8 @@ export default class Builder extends Component {
     const isInTemplates =
       this.props.history.location.pathname.indexOf('/template') !== -1
 
-    const noComponentPresent = this.props.history.location.pathname.endsWith(
-      '/new'
-    )
+    const noComponentPresent =
+      this.props.history.location.pathname.endsWith('/new')
 
     const { generalContext } = this.props
 

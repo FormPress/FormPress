@@ -1,10 +1,9 @@
 const path = require('path')
 const { token } = require(path.resolve('helper')).token
 
-const { mustHaveValidToken } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { mustHaveValidToken } = require(
+  path.resolve('middleware', 'authorization')
+)
 
 const signUp = require(path.resolve('middleware', 'signup'))
 const login = require(path.resolve('middleware', 'login'))

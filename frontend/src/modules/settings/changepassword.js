@@ -25,10 +25,10 @@ export default class ChangePassword extends Component {
       elem.id === 1
         ? 'current_password'
         : elem.id === 2
-        ? 'new_password'
-        : elem.id === 3
-        ? 'new_password_again'
-        : null
+          ? 'new_password'
+          : elem.id === 3
+            ? 'new_password_again'
+            : null
 
     if (stateKey === null) {
       return

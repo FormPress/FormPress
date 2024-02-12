@@ -19,15 +19,13 @@ export default class FormProperties extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this)
     this.handleEmailSubjectChange = this.handleEmailSubjectChange.bind(this)
     this.handleEmailReplyToChange = this.handleEmailReplyToChange.bind(this)
-    this.handleEmailReplyToCustomChange = this.handleEmailReplyToCustomChange.bind(
-      this
-    )
+    this.handleEmailReplyToCustomChange =
+      this.handleEmailReplyToCustomChange.bind(this)
     this.handleTyPageTitleChange = this.handleTyPageTitleChange.bind(this)
     this.handleTyPageTextChange = this.handleTyPageTextChange.bind(this)
     this.handleAddTag = this.handleAddTag.bind(this)
-    this.handleSubmitBehaviourChange = this.handleSubmitBehaviourChange.bind(
-      this
-    )
+    this.handleSubmitBehaviourChange =
+      this.handleSubmitBehaviourChange.bind(this)
     this.handleElemPerPageChange = this.handleElemPerPageChange.bind(this)
     this.handleFormPrivateChange = this.handleFormPrivateChange.bind(this)
   }

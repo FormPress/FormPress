@@ -39,27 +39,23 @@ if (!fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
 const app = express()
 const port = parseInt(process.env.SERVER_PORT || 3000)
 const verifyEmailMiddleware = require(path.resolve('middleware', 'verifyemail'))
-const forgotPasswordMiddleware = require(path.resolve(
-  'middleware',
-  'forgotpassword'
-))
+const forgotPasswordMiddleware = require(
+  path.resolve('middleware', 'forgotpassword')
+)
 
-const resetPasswordMiddleware = require(path.resolve(
-  'middleware',
-  'resetpassword'
-))
+const resetPasswordMiddleware = require(
+  path.resolve('middleware', 'resetpassword')
+)
 
-const changePasswordMiddleware = require(path.resolve(
-  'middleware',
-  'changepassword'
-))
+const changePasswordMiddleware = require(
+  path.resolve('middleware', 'changepassword')
+)
 
 const submissionMiddleware = require(path.resolve('middleware', 'submission'))
 const userApiMiddleware = require(path.resolve('middleware', 'userapi'))
-const authenticationMiddleware = require(path.resolve(
-  'middleware',
-  'authentication'
-))
+const authenticationMiddleware = require(
+  path.resolve('middleware', 'authentication')
+)
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const apiFormsMiddleware = require(path.resolve('middleware', 'api-forms'))
 const pluginMiddleware = require(path.resolve('middleware', 'plugin'))
@@ -67,20 +63,17 @@ const adminApiMiddleware = require(path.resolve('middleware', 'adminapi'))
 const downloadApiMiddleware = require(path.resolve('middleware', 'downloadapi'))
 const oauth = require(path.resolve('middleware', 'oauth'))
 
-const googleApisMiddleware = require(path.resolve(
-  'middleware',
-  'googleApisAuth'
-))
+const googleApisMiddleware = require(
+  path.resolve('middleware', 'googleApisAuth')
+)
 
-const { googleDriveApi } = require(path.resolve(
-  'integrations',
-  'googledriveapi.js'
-))
+const { googleDriveApi } = require(
+  path.resolve('integrations', 'googledriveapi.js')
+)
 
-const { googleSheetsApi } = require(path.resolve(
-  'integrations',
-  'googlesheetsapi.js'
-))
+const { googleSheetsApi } = require(
+  path.resolve('integrations', 'googlesheetsapi.js')
+)
 
 const { discordApi } = require(path.resolve('integrations', 'discordapi.js'))
 const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
@@ -88,10 +81,9 @@ const { slackApi } = require(path.resolve('integrations', 'slackapi.js'))
 const { apiKeys } = require(path.resolve('middleware', 'apikeys.js'))
 
 const csvExportApi = require(path.resolve('middleware', 'exportcsv'))
-const { formWebhooksApi } = require(path.resolve(
-  'middleware',
-  'formwebhooks.js'
-))
+const { formWebhooksApi } = require(
+  path.resolve('middleware', 'formwebhooks.js')
+)
 
 const corsWhitelist = []
 

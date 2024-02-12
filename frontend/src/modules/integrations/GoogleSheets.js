@@ -13,8 +13,7 @@ import { FPLoader } from '../../svg'
 
 export default class GoogleSheets extends Component {
   static metaData = {
-    icon:
-      'https://upload.wikimedia.org/wikipedia/commons/a/ae/Google_Sheets_2020_Logo.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/a/ae/Google_Sheets_2020_Logo.svg',
     displayText: 'Google Sheets',
     name: 'GoogleSheets'
   }
@@ -58,9 +57,8 @@ export default class GoogleSheets extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.removeIntegration = this.removeIntegration.bind(this)
     this.handleSheetNameChange = this.handleSheetNameChange.bind(this)
-    this.handleSpreadsheetNameChange = this.handleSpreadsheetNameChange.bind(
-      this
-    )
+    this.handleSpreadsheetNameChange =
+      this.handleSpreadsheetNameChange.bind(this)
     this.filterElementsWithInput = this.filterElementsWithInput.bind(this)
     this.createPicker = this.createPicker.bind(this)
     this.gisLoaded = this.gisLoaded.bind(this)
@@ -70,9 +68,8 @@ export default class GoogleSheets extends Component {
     this.handleGoogleAuth = this.handleGoogleAuth.bind(this)
     this.tokenMessageListener = this.tokenMessageListener.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
-    this.handleAdvancedConfigEnabledChange = this.handleAdvancedConfigEnabledChange.bind(
-      this
-    )
+    this.handleAdvancedConfigEnabledChange =
+      this.handleAdvancedConfigEnabledChange.bind(this)
     this.handleSheetSelectorChange = this.handleSheetSelectorChange.bind(this)
     this.handleChooseMetadata = this.handleChooseMetadata.bind(this)
   }

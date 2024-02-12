@@ -308,12 +308,13 @@ module.exports = (app) => {
       }
     }
 
-    const questionsAndAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
-      form,
-      formattedInput,
-      submission_id,
-      pdfRequest
-    )
+    const questionsAndAnswers =
+      submissionhandler.getQuestionsWithRenderedAnswers(
+        form,
+        formattedInput,
+        submission_id,
+        pdfRequest
+      )
 
     if (emailIntegration.length > 0 && emailIntegration[0].to) {
       sendEmailTo = emailIntegration[0].to.split(',')

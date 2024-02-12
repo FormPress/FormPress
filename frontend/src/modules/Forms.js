@@ -62,9 +62,8 @@ export default class Forms extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloneFormTitleChange = this.handleCloneFormTitleChange.bind(this)
     this.handleCountSubmissions = this.handleCountSubmissions.bind(this)
-    this.handleFormSharePermissionsClick = this.handleFormSharePermissionsClick.bind(
-      this
-    )
+    this.handleFormSharePermissionsClick =
+      this.handleFormSharePermissionsClick.bind(this)
   }
 
   handleFormCloneClick(form, e) {

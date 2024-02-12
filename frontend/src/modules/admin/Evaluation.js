@@ -50,9 +50,10 @@ export default class Evaluation extends Component {
     let queryString = ''
 
     // Check if searchValue is a valid UUID
-    const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
-      searchValue
-    )
+    const isUuid =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+        searchValue
+      )
     if (isUuid) {
       // If searchValue is a valid UUID, use it directly
       queryString += `?search=${searchValue}`
@@ -60,9 +61,10 @@ export default class Evaluation extends Component {
       // If searchValue is a form link, extract the UUID
       const match = searchValue.match(/\/([^/]+)\/?$/)
       if (match && match[1]) {
-        const isUuid = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
-          match[1]
-        )
+        const isUuid =
+          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+            match[1]
+          )
         if (isUuid) {
           queryString += `?search=${match[1]}`
         }
@@ -190,13 +192,8 @@ export default class Evaluation extends Component {
     })
   }
   renderReviewEvaluations() {
-    const {
-      forms,
-      selectedOption,
-      selectedForm,
-      reachedEnd,
-      cursor
-    } = this.state
+    const { forms, selectedOption, selectedForm, reachedEnd, cursor } =
+      this.state
     const options = [
       { value: 'notapproved', label: 'Not Approved' },
       { value: 'good', label: 'Good' },
