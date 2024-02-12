@@ -6,7 +6,7 @@
   "scripts": {
     "test": " mocha ./test/**/*.spec.js",
     "migrate": "node script/migrate.js",
-    "start-dev": "yarn migrate && node app.js --trace-warnings",
+    "start-dev": "yarn migrate && nodemon app.js --ignore script/transformed --ignore /frontend",
     "start": "yarn migrate && node app.js"
   },
   "author": "kemal@formpress.org",

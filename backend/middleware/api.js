@@ -1600,7 +1600,10 @@ module.exports = (app) => {
       googleCredentialsClientID:
         process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
       fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== '',
-      zapierClientID: process.env.FE_ZAPIER_APP_CLIENT_ID !== ''
+      zapierClientID: process.env.FE_ZAPIER_APP_CLIENT_ID !== '',
+      reCaptchaCredentials:
+        process.env.GCP_PROJECT_ID !== '' &&
+        process.env.RECAPTCHA_SITE_KEY !== ''
     }
     res.json(isEnvironmentVariableSet)
   })

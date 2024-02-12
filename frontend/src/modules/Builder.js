@@ -1241,6 +1241,10 @@ export default class Builder extends Component {
       elementsToRemove.push('Image')
     }
 
+    if (capabilities.reCaptchaCredentials === false) {
+      elementsToRemove.push('CAPTCHA')
+    }
+
     return !elementsToRemove.includes(elem.type)
   }
 
