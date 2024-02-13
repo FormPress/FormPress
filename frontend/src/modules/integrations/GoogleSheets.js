@@ -192,7 +192,9 @@ export default class GoogleSheets extends Component {
         }
       })
 
-      const mappings = mappingRequest.data
+      const mappings = mappingRequest.data.map((sheet) => {
+        return { display: sheet.title, value: sheet.title }
+      })
 
       selectedSpreadsheet.mappings = mappings
 
@@ -924,24 +926,15 @@ export default class GoogleSheets extends Component {
                     <FontAwesomeIcon icon={faFolder} />
                   </button>
                 </div>
-                <Renderer
-                  className="advanced-configuration-toggle"
-                  theme="gleam"
-                  handleFieldChange={this.handleAdvancedConfigEnabledChange}
-                  form={{
-                    props: {
-                      elements: [
-                        {
-                          id: 18,
-                          type: 'Checkbox',
-                          options: ['Advanced Configuration'],
-                          toggle: true,
-                          value: this.state.advancedConfigEnabled
-                        }
-                      ]
-                    }
-                  }}
-                />
+                <div className="custom-input-toggle">
+                  <input
+                    type="checkbox"
+                    id="switch"
+                    checked={this.state.advancedConfigEnabled}
+                    onChange={this.handleAdvancedConfigEnabledChange}
+                  />
+                  <label htmlFor="switch"> Advanced Configuration</label>
+                </div>
               </div>
               <Renderer
                 handleFieldChange={this.handleSheetSelectorChange}
