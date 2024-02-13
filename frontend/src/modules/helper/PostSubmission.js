@@ -288,8 +288,9 @@ class PostSubmission extends Component {
   }
 
   async handleOnCreateNewPageClick() {
-    const saveSuccess = await this.props.handleSaveClick()
-    if (saveSuccess === false) {
+    const savedFormExists = this.props.form.id !== null
+
+    if (savedFormExists === false) {
       return
     }
 
