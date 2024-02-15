@@ -626,7 +626,7 @@ class RuleBuilder extends Component {
           // we may have to get two values one being the date and the other being the time. so we have to combine them
           const valueIncludesTime = currentRule.if.value.split(' ').length === 2
           if (htmlElem.type === 'date') {
-            currentRule.if.value = value + ' ' + '00:00'
+            currentRule.if.value = value + ' 00:00'
           } else if (htmlElem.type === 'time') {
             if (valueIncludesTime === false) {
               currentRule.if.value = currentRule.if.value + ' ' + value

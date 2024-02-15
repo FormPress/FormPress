@@ -117,7 +117,7 @@ export default class DatePicker extends Component {
         const value = entry[1]
 
         if (key === 'time' && !question.timePicker) {
-          return
+          return null
         }
 
         let defaultSublabel = true
@@ -245,6 +245,7 @@ export default class DatePicker extends Component {
                     ? this.findRelevantValue('date', config.value)
                     : ''
                 }
+                readOnly={mode !== 'renderer'}
                 {...inputProps}
               />
             ) : mode === 'builder' ? (
@@ -298,6 +299,7 @@ export default class DatePicker extends Component {
                     ? this.findRelevantValue('time', config.value)
                     : ''
                 }
+                readOnly={mode !== 'renderer'}
                 pattern={isDateSupported ? '[Hh]{2}:[Mm]{2}' : undefined}
                 className={!isDateSupported ? 'flatpickr-time-needed' : ''}
                 {...inputProps}

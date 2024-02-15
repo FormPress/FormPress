@@ -4,19 +4,17 @@
   "description": "Form Builder and stuff",
   "main": "index.js",
   "devDependencies": {
-    "@babel/core": "^7.23.9",
-    "@babel/eslint-parser": "^7.23.10",
-    "@babel/preset-react": "7.23.3",
-    "eslint": "^8.56.0",
+    "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-react": "7.33.2",
     "prettier": "3.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pretty-check": "prettier --check .",
     "prettier": "prettier --write .",
-    "lint": "eslint ."
+    "lint:backend": "eslint -c ./backend/.eslintrc.json ./backend",
+    "lint:frontend": "cd ./frontend && yarn run lint",
+    "lint": "yarn run lint:backend & yarn run lint:frontend"
   },
   "repository": {
     "type": "git",

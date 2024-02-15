@@ -252,7 +252,7 @@ export default class Location extends Component {
               border: 'none'
             }}
             className="dn"
-            data-apiKey={apiKey}
+            data-apikey={apiKey}
             src=""></iframe>
           <div className={'response-status' + (errorPresent ? '' : ' dn')}>
             <FontAwesomeIcon icon={faWarning} className="warning-icon" />
@@ -280,7 +280,7 @@ export default class Location extends Component {
                   type="text"
                   className="latlong-input"
                   readOnly={true}
-                  data-coordinateType="latitude"
+                  data-coordinatetype="latitude"
                   name={`q_${config.id}[latitude]`}
                   value={inputValues.latitude}
                 />
@@ -302,7 +302,7 @@ export default class Location extends Component {
                   type="text"
                   className="latlong-input"
                   readOnly={true}
-                  data-coordinateType="longitude"
+                  data-coordinatetype="longitude"
                   name={`q_${config.id}[longitude]`}
                   value={inputValues.longitude}
                 />

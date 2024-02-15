@@ -277,6 +277,7 @@ class App extends Component {
                 type="checkbox"
                 id="menu-btn"
                 checked={this.state.hMenuOpen}
+                readOnly={true}
                 onClick={this.toggleHMenu}
               />
               <label className="menu-icon" htmlFor="menu-btn">
@@ -309,13 +310,13 @@ class App extends Component {
                           Data
                         </NavLink>
                       </li>,
-                      <>
+                      <div key="5">
                         <Profile
                           generalContext={generalContext}
                           compact={true}
                           toggleHMenu={this.toggleHMenu}
                         />
-                      </>
+                      </div>
                     ]
                   : [
                       <li key="2">

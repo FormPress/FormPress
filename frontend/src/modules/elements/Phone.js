@@ -138,7 +138,9 @@ export default class Phone extends Component {
         <select
           className="dialCode"
           id={`phone-dialCode_${config.id}`}
-          value={config.defaultDialCode ? config.defaultDialCode : '+1 (US)'}
+          defaultValue={
+            config.defaultDialCode ? config.defaultDialCode : '+1 (US)'
+          }
           data-fp-list={'countriesDialCodes'}
           data-fp-defaultvalue={config.defaultDialCode}
           disabled={mode !== 'renderer'}>
@@ -166,7 +168,7 @@ export default class Phone extends Component {
               : // to remove the part with the country code
                 ''
           }
-          readOnly={mode === 'builder'}
+          readOnly={mode !== 'renderer'}
           {...inputProps}
         />
       </div>,
@@ -190,7 +192,7 @@ export default class Phone extends Component {
       </div>
     ]
 
-    if (mode !== 'builder') {
+    if (mode === 'renderer') {
       let scriptInnerHtml = `
       document.getElementById('phone-dialCode_${config.id}').addEventListener('change', function () {
         var dialCode = this.value

@@ -8,17 +8,21 @@
     "@fortawesome/free-solid-svg-icons": "6.5.1",
     "@fortawesome/react-fontawesome": "0.2.0",
     "@react-oauth/google": "^0.12.1",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
     "@tinymce/tinymce-react": "4.3.2",
     "buffer": "^6.0.3",
     "file-saver": "2.0.5",
     "moment": "2.30.1",
     "qrcode.react": "^3.1.0",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-cropper": "^2.1.8",
-    "react-dom": "18.2.0",
+    "react-dom": "^18.2.0",
     "react-flatpickr": "^3.10.13",
     "react-moment": "1.1.3",
-    "react-router-dom": "5.1.2",
+    "react-router-dom": "5.3.4",
+    "react-scripts": "5.0.1",
     "react-share": "5.0.3",
     "react-spinner-overlay": "^0.1.33",
     "react-verification-input": "^4.0.0",
@@ -31,8 +35,25 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "rebuild-frontend": "docker-compose stop frontend && docker-compose rm -f frontend && docker-compose build frontend && docker-compose create frontend && docker-compose start frontend"
+    "rebuild-frontend": "docker-compose stop frontend && docker-compose rm -f frontend && docker-compose build frontend && docker-compose create frontend && docker-compose start frontend",
+    "lint": "eslint ."
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ],
+    "rules": {
+      "testing-library/no-node-access": "off"
+    }
+  },
+  "eslintIgnore": [
+    "node_modules",
+    "build",
+    "public",
+    "src/runtime",
+    "*.plugin.js"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -45,9 +66,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "react-scripts": "5.0.1",
-    "react-test-renderer": "18.2.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
-  }
+  "devDependencies": {}
 }

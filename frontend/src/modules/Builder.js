@@ -179,7 +179,9 @@ export default class Builder extends Component {
   }
 
   componentWillUnmount() {
-    this.shouldBlockNavigation()
+    if (typeof this.shouldBlockNavigation === 'function') {
+      this.shouldBlockNavigation()
+    }
   }
 
   allowReactRoutes = (location) => {

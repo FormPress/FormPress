@@ -416,6 +416,7 @@ export default class Radio extends Component {
                     name={`q_${config.id}`}
                     value={mode === 'renderer' ? key : item}
                     checked={config.value === item}
+                    readOnly={mode !== 'renderer'}
                     {...inputProps}></input>
                   <label
                     className="radio-label"
