@@ -13,7 +13,7 @@
   margin: 0 0 10px 0;
 }
 
-.elementAddress {
+.form.platform-win .elementAddress {
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 

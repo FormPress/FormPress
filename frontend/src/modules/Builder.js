@@ -1880,7 +1880,8 @@ export default class Builder extends Component {
   }
 
   renderBuilder() {
-    const { dragging, form, dragMode, sortItem, loading } = this.state
+    const { dragging, form, dragMode, sortItem, loading, isWindows } =
+      this.state
     const { params } = this.props.match
     let selectedFieldId = parseInt(params.questionId)
 
@@ -1906,25 +1907,13 @@ export default class Builder extends Component {
 
     return (
       <div className="builderStage">
-        {this.state.isWindows ? (
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `
-          @font-face {
-            font-family: "Twemoji Country Flags";
-            unicode-range: U+1F1E6-1F1FF, U+1F3F4, U+E0062-E0063, U+E0065, U+E0067,
-            U+E006C, U+E006E, U+E0073-E0074, U+E0077, U+E007F;
-            src: url('https://cdn.jsdelivr.net/npm/country-flag-emoji-polyfill@0.1/dist/TwemojiCountryFlags.woff2') format('woff2');
-          }`
-            }}
-          />
-        ) : null}
         {loading === true ? (
           'Loading...'
         ) : (
           <Renderer
             className={
               `fl form` +
+              (isWindows ? ' platform-win' : '') +
               (canEdit ? '' : ' renderer') +
               (examMode ? ' exam-mode' : '')
             }

@@ -172,7 +172,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
 }
 
 .ruleBuilder-content .fieldLink-row > div:first-of-type {

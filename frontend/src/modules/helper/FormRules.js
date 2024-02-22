@@ -951,7 +951,7 @@ class RuleBuilder extends Component {
                                       : 'TextBox',
                                   placeholder: 'Enter a value',
                                   value: currentRule.if.value,
-                                  timePicker: selectedIfField.timePicker
+                                  timePicker: selectedIfField?.timePicker
                                 }
                               ]
                             }
@@ -964,7 +964,9 @@ class RuleBuilder extends Component {
                           className="form fieldLink-checkbox"
                           theme="infernal"
                           allowInternal={true}
-                          handleFieldChange={() => this.changeRule('fieldLink')}
+                          handleFieldChange={(elem, e) =>
+                            this.changeRule('fieldLink', e.target)
+                          }
                           form={{
                             props: {
                               elements: [
