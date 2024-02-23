@@ -1,4 +1,4 @@
-.content > .builder {
+.content > .builder:not(.templates) {
   position: relative;
   top: 90px;
 }
