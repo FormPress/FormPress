@@ -278,11 +278,14 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  height: 40px;
+  margin-bottom: -30px;
 }
 
 .custom-pages-selector > .pagesSelector-dropdown {
-  width: 83%;
+  width: 80%;
+}
+.custom-pages-selector .elementDropdown {
+  padding: unset !important;
 }
 
 .custom-pages-selector select {
@@ -290,10 +293,12 @@
 }
 
 .custom-pages-selector select {
+  width: 100%;
   height: 35px;
 }
 .custom-pages-selector button {
-  height: 35px;
+  width: 18%;
+  height: 33px;
   padding-top: unset !important;
   padding-bottom: unset !important;
 }
@@ -356,7 +361,6 @@
   padding-top: 8px !important;
   padding-bottom: 8px !important;
   min-width: 80px;
-  margin-right: 10px;
   background-color: white;
   border-radius: 3px;
   cursor: pointer;
@@ -389,7 +393,7 @@
 }
 
 .postSubmission-wrapper .task-feedback {
-  float: right;
+  float: left;
   color: #2e7d32;
 
   animation: feedback-fadeOut 1s 1;
