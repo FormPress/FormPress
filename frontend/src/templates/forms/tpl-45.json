@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Internet Speed Survey",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -48,7 +53,10 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 2,
         "required": false,
         "requiredText": "Required field",
@@ -79,10 +87,18 @@
         "id": 24,
         "type": "Dropdown",
         "label": "You're connected to internet via",
-        "options": ["LAN", "Wireless", "USB Cable", "Other"],
+        "options": [
+          "LAN",
+          "Wireless",
+          "USB Cable",
+          "Other"
+        ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 5,
         "required": false,
         "requiredText": "Required field",
@@ -102,7 +118,10 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 6,
         "required": false,
         "requiredText": "Required field",
@@ -117,7 +136,13 @@
         "form_id": 664
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Survey"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Survey"
+    ]
+  },
+  "url_title": "internet-speed-survey"
 }

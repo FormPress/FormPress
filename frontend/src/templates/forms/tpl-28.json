@@ -3,16 +3,27 @@
   "user_id": 46,
   "title": "Membership Dues",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 0,
@@ -61,7 +72,11 @@
         "id": 4,
         "type": "Radio",
         "label": "Please choose the membership level you wish to purchase.",
-        "options": ["Bronze - $25.00", "Silver - $50.00", "Gold - $75.00"],
+        "options": [
+          "Bronze - $25.00",
+          "Silver - $50.00",
+          "Gold - $75.00"
+        ],
         "editor": false,
         "editorForOptions": false,
         "expectedAnswer": "",
@@ -82,7 +97,13 @@
         "placeholder": ""
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Registration"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Registration"
+    ]
+  },
+  "url_title": "membership-dues"
 }

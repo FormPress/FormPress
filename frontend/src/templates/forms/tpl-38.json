@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Volunteer Signup",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -19,11 +24,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 655,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -73,10 +84,16 @@
         "id": 12,
         "type": "Dropdown",
         "label": "Preference 1",
-        "options": ["Option 1", "Option 2"],
+        "options": [
+          "Option 1",
+          "Option 2"
+        ],
         "placeholder": "Choose an option",
         "form_id": 655,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 5,
         "required": false,
         "requiredText": "Required field",
@@ -87,10 +104,16 @@
         "id": 13,
         "type": "Dropdown",
         "label": "Preference 2",
-        "options": ["Option 1", "Option 2"],
+        "options": [
+          "Option 1",
+          "Option 2"
+        ],
         "placeholder": "Choose an option",
         "form_id": 655,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 6,
         "required": false,
         "requiredText": "Required field",
@@ -123,7 +146,13 @@
         "form_id": 655
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Signup"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Signup"
+    ]
+  },
+  "url_title": "volunteer-signup"
 }

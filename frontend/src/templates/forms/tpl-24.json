@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Job Application",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -19,11 +24,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 613,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": true,
         "suffix": false,
         "order": 1,
@@ -78,10 +89,17 @@
         "id": 11,
         "type": "Dropdown",
         "label": "Which position are you applying for?",
-        "options": ["Position 1", "Position 2", "Position 3"],
+        "options": [
+          "Position 1",
+          "Position 2",
+          "Position 3"
+        ],
         "placeholder": "Choose an option",
         "form_id": 613,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 5,
         "required": false,
         "requiredText": "Required field",
@@ -92,10 +110,18 @@
         "id": 12,
         "type": "Dropdown",
         "label": "What is your current employment status?",
-        "options": ["Employed", "Self-Employed", "Unemployed", "Student"],
+        "options": [
+          "Employed",
+          "Self-Employed",
+          "Unemployed",
+          "Student"
+        ],
         "placeholder": "Choose an option",
         "form_id": 613,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 6,
         "required": false,
         "requiredText": "Required field",
@@ -130,7 +156,13 @@
         "form_id": 613
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Application"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Application"
+    ]
+  },
+  "url_title": "job-application"
 }

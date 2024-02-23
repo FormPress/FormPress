@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Settlement Agreement",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -70,11 +75,17 @@
         "id": 11,
         "type": "Name",
         "label": "Husband",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 629,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 4
@@ -83,11 +94,17 @@
         "id": 12,
         "type": "Name",
         "label": "Wife",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 629,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 5,
@@ -108,10 +125,15 @@
         "id": 14,
         "type": "Dropdown",
         "label": "Terms",
-        "options": ["I agree to the terms given."],
+        "options": [
+          "I agree to the terms given."
+        ],
         "placeholder": "Choose an option",
         "form_id": 629,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 7,
         "required": false,
         "requiredText": "Required field",
@@ -126,7 +148,13 @@
         "form_id": 629
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Agreement"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Agreement"
+    ]
+  },
+  "url_title": "settlement-agreement"
 }

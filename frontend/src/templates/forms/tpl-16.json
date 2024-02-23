@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Concert Ticket Registration",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -20,11 +25,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 604,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -54,7 +65,11 @@
         "id": 7,
         "type": "Radio",
         "label": "Seating options",
-        "options": [" Front stage ", " Middle ", " Balcony "],
+        "options": [
+          " Front stage ",
+          " Middle ",
+          " Balcony "
+        ],
         "form_id": 604,
         "editor": false,
         "editorForOptions": false,
@@ -92,7 +107,13 @@
         "form_id": 604
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Registration"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Registration"
+    ]
+  },
+  "url_title": "concert-ticket-registration"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Online Donation",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -20,11 +25,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 602,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -81,7 +92,11 @@
         "id": 10,
         "type": "Radio",
         "label": "Payment Methods",
-        "options": ["Debit or Credit Card", "PayPal", "Other"],
+        "options": [
+          "Debit or Credit Card",
+          "PayPal",
+          "Other"
+        ],
         "editor": false,
         "editorForOptions": false,
         "expectedAnswer": "",
@@ -109,7 +124,13 @@
         "form_id": 602
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Donation"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Donation"
+    ]
+  },
+  "url_title": "online-donation"
 }

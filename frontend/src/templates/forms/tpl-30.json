@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Prenuptial Agreement",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -106,10 +111,15 @@
         "id": 11,
         "type": "Dropdown",
         "label": "All the property, real and personal, now owned by the future wife shall remain to be her own exclusive and separate property",
-        "options": ["I agree to these terms."],
+        "options": [
+          "I agree to these terms."
+        ],
         "placeholder": "Choose an option",
         "form_id": 628,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 8,
         "required": true,
         "requiredText": "Required field",
@@ -120,10 +130,15 @@
         "id": 12,
         "type": "Dropdown",
         "label": "All the property, real and personal, now owned by the future husband shall remain to be his own exclusive and separate property",
-        "options": ["I agree to these terms."],
+        "options": [
+          "I agree to these terms."
+        ],
         "placeholder": "Choose an option",
         "form_id": 628,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 9,
         "required": true,
         "requiredText": "Required field",
@@ -138,7 +153,13 @@
         "form_id": 628
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Agreement"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Agreement"
+    ]
+  },
+  "url_title": "prenuptial-agreement"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Free Marriage Certificate",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -34,11 +39,17 @@
         "id": 4,
         "type": "Name",
         "label": "Name of the Husband",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 605,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": true,
         "suffix": true,
         "order": 2,
@@ -49,11 +60,17 @@
         "id": 5,
         "type": "Name",
         "label": "Name of the Wife",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 605,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": true,
         "suffix": true,
         "order": 3,
@@ -108,7 +125,13 @@
         "form_id": 605
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Application"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Application"
+    ]
+  },
+  "url_title": "free-marriage-certificate"
 }

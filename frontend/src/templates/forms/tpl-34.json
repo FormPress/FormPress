@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Teacher Appointment",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -19,11 +24,17 @@
         "id": 7,
         "type": "Name",
         "label": "Parent Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 638,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -49,16 +60,27 @@
         "defaultDialCode": "+1 (US)",
         "order": 3
       },
-      { "id": 11, "type": "Separator", "form_id": 638, "order": 4 },
+      {
+        "id": 11,
+        "type": "Separator",
+        "form_id": 638,
+        "order": 4
+      },
       {
         "id": 10,
         "type": "Name",
         "label": "Student Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 638,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 5
@@ -97,7 +119,13 @@
         "order": 8
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Registration"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Registration"
+    ]
+  },
+  "url_title": "teacher-appointment"
 }

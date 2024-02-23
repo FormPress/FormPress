@@ -3,16 +3,27 @@
   "user_id": 46,
   "title": "Product Order",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
         "type": "Name",
         "label": "Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 0,
@@ -67,7 +78,11 @@
         "id": 4,
         "type": "Checkbox",
         "label": "Which product() would you like to order?",
-        "options": ["product 1 ", "product 2", "product 3"],
+        "options": [
+          "product 1 ",
+          "product 2",
+          "product 3"
+        ],
         "toggle": false,
         "order": 4,
         "form_id": 619,
@@ -102,7 +117,13 @@
         "form_id": 619
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Order"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Order"
+    ]
+  },
+  "url_title": "product-order"
 }

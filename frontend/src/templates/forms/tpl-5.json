@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Newsletter Signup",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 6,
@@ -18,13 +23,18 @@
         "id": 3,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": {
           "default": false,
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Allow users to enter a title before their names."]
+            "options": [
+              "Allow users to enter a title before their names."
+            ]
           }
         },
         "prefixTypeTextBox": {
@@ -32,19 +42,29 @@
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Change the type of title field to TextBox."]
+            "options": [
+              "Change the type of title field to TextBox."
+            ]
           }
         },
         "prefixOptions": {
-          "default": ["Mr.", "Mrs."],
-          "formProps": { "type": "TextArea", "label": "Preset Title Options" }
+          "default": [
+            "Mr.",
+            "Mrs."
+          ],
+          "formProps": {
+            "type": "TextArea",
+            "label": "Preset Title Options"
+          }
         },
         "middleName": {
           "default": false,
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Allow users to enter a middle name."]
+            "options": [
+              "Allow users to enter a middle name."
+            ]
           }
         },
         "suffix": {
@@ -52,7 +72,9 @@
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Allow users to enter a title after their names."]
+            "options": [
+              "Allow users to enter a title after their names."
+            ]
           }
         },
         "required": false,
@@ -78,7 +100,13 @@
         "form_id": 310
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Signup"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Signup"
+    ]
+  },
+  "url_title": "newsletter-signup"
 }

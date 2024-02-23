@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Service Quality Feedback",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 4,
@@ -19,10 +24,16 @@
         "id": 0,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -32,7 +43,12 @@
         "id": 5,
         "type": "Radio",
         "label": "How would you rate the quality of our service",
-        "options": ["Low", "Mediocre", "Good", "Top-Notch"],
+        "options": [
+          "Low",
+          "Mediocre",
+          "Good",
+          "Top-Notch"
+        ],
         "form_id": 621,
         "editor": false,
         "editorForOptions": false,
@@ -60,7 +76,13 @@
         "form_id": 621
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Feedback"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Feedback"
+    ]
+  },
+  "url_title": "service-quality-feedback"
 }

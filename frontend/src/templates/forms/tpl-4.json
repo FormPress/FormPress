@@ -21,11 +21,17 @@
         "id": 3,
         "type": "Name",
         "label": "Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": false,
         "prefixOptions": {
-          "default": ["Mr.", "Mrs."],
+          "default": [
+            "Mr.",
+            "Mrs."
+          ],
           "formProps": {
             "type": "TextArea",
             "label": "Enter Prefix Options"
@@ -36,7 +42,9 @@
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Allow users to enter a middle name."]
+            "options": [
+              "Allow users to enter a middle name."
+            ]
           }
         },
         "suffix": {
@@ -44,7 +52,9 @@
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Allow users to enter a title after their names."]
+            "options": [
+              "Allow users to enter a title after their names."
+            ]
           }
         },
         "required": true
@@ -84,6 +94,9 @@
       "value": "",
       "isEncoded": false
     },
-    "tags": ["contact"]
-  }
+    "tags": [
+      "contact"
+    ]
+  },
+  "url_title": "support-request"
 }

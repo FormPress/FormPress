@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Basic Feedback Report",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -17,10 +22,16 @@
         "id": 6,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "required": true,
@@ -40,7 +51,12 @@
         "id": 4,
         "type": "Checkbox",
         "label": "Feedback Content",
-        "options": ["Comments", "Problems", "Questions", "Suggestions"],
+        "options": [
+          "Comments",
+          "Problems",
+          "Questions",
+          "Suggestions"
+        ],
         "toggle": false,
         "required": true,
         "requiredText": "Required field"
@@ -53,9 +69,19 @@
         "requiredText": "Required field",
         "placeholder": ""
       },
-      { "id": 2, "type": "Button", "buttonText": "Submit" }
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit"
+      }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Feedback"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Feedback"
+    ]
+  },
+  "url_title": "basic-feedback-report"
 }

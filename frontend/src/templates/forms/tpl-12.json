@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Student Registration",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -20,11 +25,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 600,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -45,10 +56,17 @@
         "id": 6,
         "type": "Dropdown",
         "label": "Gender",
-        "options": ["Male", "Female", "Other"],
+        "options": [
+          "Male",
+          "Female",
+          "Other"
+        ],
         "placeholder": "Choose an option",
         "form_id": 600,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 3,
         "required": false,
         "requiredText": "Required field",
@@ -131,7 +149,10 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 600,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 9,
         "required": false,
         "requiredText": "Required field",
@@ -157,7 +178,13 @@
         "form_id": 600
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Registration"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Registration"
+    ]
+  },
+  "url_title": "student-registration"
 }

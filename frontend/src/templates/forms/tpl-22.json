@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Charity Dinner Party",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 10,
@@ -30,11 +35,17 @@
         "id": 4,
         "type": "Name",
         "label": "Contact name:",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 611,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": true,
         "suffix": false,
         "order": 2,
@@ -64,10 +75,16 @@
         "id": 7,
         "type": "Dropdown",
         "label": "Will you attend?",
-        "options": ["Yes", "No"],
+        "options": [
+          "Yes",
+          "No"
+        ],
         "placeholder": "Choose an option",
         "form_id": 611,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 5,
         "required": true,
         "requiredText": "Required field",
@@ -102,7 +119,13 @@
         "form_id": 611
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
-    "tags": ["Registration"]
-  }
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
+    "tags": [
+      "Registration"
+    ]
+  },
+  "url_title": "charity-dinner-party"
 }

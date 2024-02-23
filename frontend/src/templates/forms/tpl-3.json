@@ -21,18 +21,26 @@
         "id": 4,
         "type": "Name",
         "label": "Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "prefix": false,
         "prefixTypeTextBox": {
           "default": false,
           "formProps": {
             "type": "Checkbox",
             "label": "",
-            "options": ["Change the type of prefix field to TextBox."]
+            "options": [
+              "Change the type of prefix field to TextBox."
+            ]
           }
         },
         "prefixOptions": {
-          "default": ["Mr.", "Mrs."],
+          "default": [
+            "Mr.",
+            "Mrs."
+          ],
           "formProps": {
             "type": "TextArea",
             "label": "Enter Prefix Options"
@@ -76,7 +84,12 @@
         "id": 8,
         "type": "Radio",
         "label": "What is your current employment status?",
-        "options": ["Employed", "Unemployed", "Student", "Freelancer"]
+        "options": [
+          "Employed",
+          "Unemployed",
+          "Student",
+          "Freelancer"
+        ]
       },
       {
         "id": 9,
@@ -94,6 +107,9 @@
       "value": "",
       "isEncoded": false
     },
-    "tags": ["application"]
-  }
+    "tags": [
+      "application"
+    ]
+  },
+  "url_title": "employment-form"
 }
