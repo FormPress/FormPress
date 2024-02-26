@@ -33,10 +33,7 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 603,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 1,
         "required": false,
         "requiredText": "Required field",
@@ -73,10 +70,7 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 603,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 3,
         "required": false,
         "requiredText": "Required field",
@@ -95,9 +89,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Report"
-    ]
+    "tags": ["Report"]
   },
   "url_title": "monthly-business-expense-report"
 }

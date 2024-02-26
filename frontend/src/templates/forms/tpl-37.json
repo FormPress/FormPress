@@ -34,17 +34,11 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 654,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 2,
@@ -104,17 +98,11 @@
         "id": 9,
         "type": "Name",
         "label": "Referral Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 654,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": true,
         "suffix": true,
         "order": 7,
@@ -164,9 +152,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Request"
-    ]
+    "tags": ["Request"]
   },
   "url_title": "referral-program"
 }

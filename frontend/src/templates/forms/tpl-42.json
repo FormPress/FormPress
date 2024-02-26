@@ -25,17 +25,11 @@
         "id": 1,
         "type": "Name",
         "label": "Your name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 661,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -54,11 +48,7 @@
         "id": 13,
         "type": "Radio",
         "label": "Priority",
-        "options": [
-          "High",
-          "Medium",
-          "Low"
-        ],
+        "options": ["High", "Medium", "Low"],
         "form_id": 661,
         "editor": false,
         "editorForOptions": false,
@@ -119,9 +109,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Report"
-    ]
+    "tags": ["Report"]
   },
   "url_title": "bug-report"
 }

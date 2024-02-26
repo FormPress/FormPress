@@ -84,12 +84,7 @@
         "id": 8,
         "type": "Radio",
         "label": "How long have you been using our service?",
-        "options": [
-          "Days only",
-          "Weeks",
-          "Months",
-          "Over a year"
-        ],
+        "options": ["Days only", "Weeks", "Months", "Over a year"],
         "required": true,
         "requiredText": "Please pick an option."
       },
@@ -138,9 +133,7 @@
       "value": "",
       "isEncoded": false
     },
-    "tags": [
-      "Feedback"
-    ]
+    "tags": ["Feedback"]
   },
   "url_title": "customer-satisfaction-report"
 }

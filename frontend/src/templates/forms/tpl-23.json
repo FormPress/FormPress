@@ -24,17 +24,11 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 612,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": true,
         "suffix": false,
         "order": 1,
@@ -117,16 +111,10 @@
         "id": 10,
         "type": "Dropdown",
         "label": "Do you require a personal trainer?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "placeholder": "Choose an option",
         "form_id": 612,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 8,
         "required": true,
         "requiredText": "Required field",
@@ -137,17 +125,10 @@
         "id": 11,
         "type": "Dropdown",
         "label": "Membership type ?",
-        "options": [
-          "Regular",
-          "Pro",
-          "VIP"
-        ],
+        "options": ["Regular", "Pro", "VIP"],
         "placeholder": "Choose an option",
         "form_id": 612,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 9,
         "required": true,
         "requiredText": "Required field",
@@ -166,9 +147,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Application"
-    ]
+    "tags": ["Application"]
   },
   "url_title": "gym-membership"
 }

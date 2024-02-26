@@ -23,12 +23,7 @@
         "id": 4,
         "type": "Radio",
         "label": "How many friends do you have at school?",
-        "options": [
-          "0 - 2",
-          "3 - 5",
-          "6 - 8",
-          "More than 8"
-        ],
+        "options": ["0 - 2", "3 - 5", "6 - 8", "More than 8"],
         "required": false,
         "requiredText": "Required field",
         "order": 1,
@@ -38,10 +33,7 @@
         "id": 5,
         "type": "Radio",
         "label": "Do you find it easy to make good friends?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": false,
         "requiredText": "Required field",
         "order": 2,
@@ -68,12 +60,7 @@
         "id": 7,
         "type": "Radio",
         "label": "How many hours do you spend with your friend(s) per week?",
-        "options": [
-          "1 - 4",
-          "5 - 8",
-          "8 - 11",
-          "More than 11"
-        ],
+        "options": ["1 - 4", "5 - 8", "8 - 11", "More than 11"],
         "required": false,
         "requiredText": "Required field",
         "order": 4,
@@ -87,12 +74,7 @@
         "id": 15,
         "type": "Radio",
         "label": "Do you trust your friends?",
-        "options": [
-          "Never",
-          "Sometimes",
-          "Usually",
-          "Always"
-        ],
+        "options": ["Never", "Sometimes", "Usually", "Always"],
         "form_id": 405,
         "editor": false,
         "editorForOptions": false,
@@ -106,10 +88,7 @@
         "id": 10,
         "type": "Radio",
         "label": "Do you feel emotionally attached to your friends?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": false,
         "requiredText": "Required field",
         "order": 6,
@@ -123,10 +102,7 @@
         "id": 11,
         "type": "Radio",
         "label": "Do you feel comfortable talking to teachers or other adults about your friendship problems?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": false,
         "requiredText": "Required field",
         "order": 7,
@@ -168,9 +144,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Survey"
-    ]
+    "tags": ["Survey"]
   },
   "url_title": "friendship-survey"
 }

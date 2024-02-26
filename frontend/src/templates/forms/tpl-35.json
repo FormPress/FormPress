@@ -24,17 +24,11 @@
         "id": 7,
         "type": "Name",
         "label": "Substitute Teacher",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 639,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -126,9 +120,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Report"
-    ]
+    "tags": ["Report"]
   },
   "url_title": "teacher-substitution-report"
 }

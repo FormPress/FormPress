@@ -24,18 +24,10 @@
         "id": 5,
         "type": "Dropdown",
         "label": "Type of Feedback",
-        "options": [
-          "Enquiry",
-          "Complaint",
-          "Compliment",
-          "Suggestion"
-        ],
+        "options": ["Enquiry", "Complaint", "Compliment", "Suggestion"],
         "placeholder": "Choose an option",
         "form_id": 614,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 1,
         "required": true,
         "requiredText": "Required field",
@@ -57,10 +49,7 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 614,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 2,
         "required": true,
         "requiredText": "Required field",
@@ -71,17 +60,11 @@
         "id": 7,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 614,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": true,
         "suffix": false,
         "order": 3,
@@ -149,9 +132,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Feedback"
-    ]
+    "tags": ["Feedback"]
   },
   "url_title": "bank-customer-feedback"
 }

@@ -24,16 +24,10 @@
         "id": 3,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "required": true,
@@ -79,11 +73,7 @@
         "id": 5,
         "type": "Radio",
         "label": "Gender",
-        "options": [
-          "Male",
-          "Female",
-          "Other"
-        ],
+        "options": ["Male", "Female", "Other"],
         "required": false,
         "requiredText": "Required field",
         "order": 5,
@@ -201,10 +191,7 @@
         "id": 14,
         "type": "Radio",
         "label": "Have you been diagnosed with COVID-19 before?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": false,
         "requiredText": "Required field",
         "order": 14,
@@ -228,10 +215,7 @@
         "id": 16,
         "type": "Radio",
         "label": "I hereby declare that all the given information is accurate.",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": false,
         "requiredText": "Required field",
         "order": 16,
@@ -253,9 +237,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Registration"
-    ]
+    "tags": ["Registration"]
   },
   "url_title": "covid-19-vaccine-registration"
 }

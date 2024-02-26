@@ -44,17 +44,11 @@
         "id": 7,
         "type": "Name",
         "label": "Parent Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 637,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 3,
@@ -65,17 +59,11 @@
         "id": 8,
         "type": "Name",
         "label": "Parent Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 637,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 4,
@@ -96,17 +84,11 @@
         "id": 4,
         "type": "Name",
         "label": "Student Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 637,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 6,
@@ -117,10 +99,7 @@
         "id": 12,
         "type": "Radio",
         "label": "Have you played in a chess tournament before?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "form_id": 637,
         "editor": false,
         "editorForOptions": false,
@@ -134,11 +113,7 @@
         "id": 11,
         "type": "Radio",
         "label": "Your level",
-        "options": [
-          "Beginning",
-          "Intermediate",
-          "Advanced"
-        ],
+        "options": ["Beginning", "Intermediate", "Advanced"],
         "form_id": 637,
         "editor": false,
         "editorForOptions": false,
@@ -160,9 +135,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Registration"
-    ]
+    "tags": ["Registration"]
   },
   "url_title": "chess-tournament-registration"
 }

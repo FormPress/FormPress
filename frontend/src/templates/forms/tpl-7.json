@@ -24,16 +24,10 @@
         "id": 20,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "prefix": true,
         "prefixTypeTextBox": true,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "required": true,
@@ -163,12 +157,7 @@
         "id": 23,
         "type": "Radio",
         "label": "Which post-war, counter-culture group in America is best defined as a vast group of bohemian creatives that deviated markedly in their ideas from mainstream society in the 1950s?",
-        "options": [
-          "A: Beatniks",
-          "B: Hippies",
-          "C: Scalawags",
-          "D: Yuppies"
-        ],
+        "options": ["A: Beatniks", "B: Hippies", "C: Scalawags", "D: Yuppies"],
         "required": false,
         "requiredText": "Required field",
         "order": 10,
@@ -328,9 +317,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Quiz"
-    ]
+    "tags": ["Quiz"]
   },
   "url_title": "history-quiz"
 }

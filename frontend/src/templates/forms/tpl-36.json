@@ -24,17 +24,11 @@
         "id": 21,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 640,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -144,9 +138,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Application"
-    ]
+    "tags": ["Application"]
   },
   "url_title": "student-roommate-application"
 }

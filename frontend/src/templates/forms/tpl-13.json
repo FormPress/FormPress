@@ -25,17 +25,11 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 601,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -75,18 +69,10 @@
         "id": 8,
         "type": "Dropdown",
         "label": "Type of Business",
-        "options": [
-          "Technology",
-          "Food",
-          "Beauty",
-          "Finance"
-        ],
+        "options": ["Technology", "Food", "Beauty", "Finance"],
         "placeholder": "Choose an option",
         "form_id": 601,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 5,
         "required": false,
         "requiredText": "Required field",
@@ -119,10 +105,7 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 601,
-        "dropdownOptions": [
-          "Option 1",
-          "Option 2"
-        ],
+        "dropdownOptions": ["Option 1", "Option 2"],
         "order": 7,
         "required": false,
         "requiredText": "Required field",
@@ -200,9 +183,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Order"
-    ]
+    "tags": ["Order"]
   },
   "url_title": "website-design-request"
 }

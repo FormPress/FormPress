@@ -24,17 +24,11 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 606,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -63,10 +57,7 @@
         "id": 7,
         "type": "Radio",
         "label": "<p>Make sure you have the legal rights to use the music &amp; images in the video. Make sure your video does not contain inappropriate content (language, imagery, etc.)</p>\n<p>Do you agree to the terms above?</p>",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "form_id": 606,
         "editor": true,
         "editorForOptions": false,
@@ -95,9 +86,7 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": [
-      "Submission"
-    ]
+    "tags": ["Submission"]
   },
   "url_title": "video-submission"
 }
