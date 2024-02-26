@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Diet Diary",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -101,7 +106,11 @@
         "order": 9
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Personal"]
-  }
+  },
+  "url_title": "diet-diary"
 }

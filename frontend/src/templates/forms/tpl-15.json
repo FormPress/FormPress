@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Monthly Business Expense Report",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 1,
@@ -80,7 +85,11 @@
         "form_id": 603
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Report"]
-  }
+  },
+  "url_title": "monthly-business-expense-report"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Website Design Request",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -174,7 +179,11 @@
         "form_id": 601
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Order"]
-  }
+  },
+  "url_title": "website-design-request"
 }

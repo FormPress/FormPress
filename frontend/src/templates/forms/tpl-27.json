@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Product Order",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
@@ -102,7 +107,11 @@
         "form_id": 619
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Order"]
-  }
+  },
+  "url_title": "product-order"
 }

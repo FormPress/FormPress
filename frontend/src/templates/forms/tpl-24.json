@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Job Application",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -130,7 +135,11 @@
         "form_id": 613
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Application"]
-  }
+  },
+  "url_title": "job-application"
 }

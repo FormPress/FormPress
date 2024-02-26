@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Identity Verification",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 9,
@@ -204,7 +209,11 @@
         "form_id": 609
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Consent"]
-  }
+  },
+  "url_title": "identity-verification"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "COVID-19 Vaccine Registration",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 17,
@@ -228,7 +233,11 @@
         "form_id": 404
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Registration"]
-  }
+  },
+  "url_title": "covid-19-vaccine-registration"
 }

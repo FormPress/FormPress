@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Bug Report",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -100,7 +105,11 @@
         "form_id": 661
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Report"]
-  }
+  },
+  "url_title": "bug-report"
 }

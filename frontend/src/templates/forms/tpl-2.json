@@ -64,5 +64,6 @@
       "isEncoded": false
     },
     "tags": ["registration"]
-  }
+  },
+  "url_title": "attendance-check"
 }

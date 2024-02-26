@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Newsletter Signup",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 6,
@@ -37,7 +42,10 @@
         },
         "prefixOptions": {
           "default": ["Mr.", "Mrs."],
-          "formProps": { "type": "TextArea", "label": "Preset Title Options" }
+          "formProps": {
+            "type": "TextArea",
+            "label": "Preset Title Options"
+          }
         },
         "middleName": {
           "default": false,
@@ -78,7 +86,11 @@
         "form_id": 310
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Signup"]
-  }
+  },
+  "url_title": "newsletter-signup"
 }

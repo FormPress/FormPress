@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Prenuptial Agreement",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -138,7 +143,11 @@
         "form_id": 628
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Agreement"]
-  }
+  },
+  "url_title": "prenuptial-agreement"
 }

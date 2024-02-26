@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Service Quality Feedback",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 4,
@@ -60,7 +65,11 @@
         "form_id": 621
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Feedback"]
-  }
+  },
+  "url_title": "service-quality-feedback"
 }

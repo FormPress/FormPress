@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Petition Signup",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -86,7 +91,11 @@
         "form_id": 657
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Signup"]
-  }
+  },
+  "url_title": "petition-signup"
 }

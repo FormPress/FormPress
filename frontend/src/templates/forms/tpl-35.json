@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Teacher Substitution Report",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -111,7 +116,11 @@
         "order": 10
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Report"]
-  }
+  },
+  "url_title": "teacher-substitution-report"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Computer Class Registration",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -127,7 +132,11 @@
         "form_id": 660
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Registration"]
-  }
+  },
+  "url_title": "computer-class-registration"
 }

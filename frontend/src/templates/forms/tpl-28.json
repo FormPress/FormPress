@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Membership Dues",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
@@ -82,7 +87,11 @@
         "placeholder": ""
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Registration"]
-  }
+  },
+  "url_title": "membership-dues"
 }

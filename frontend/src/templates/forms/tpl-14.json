@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Online Donation",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -109,7 +114,11 @@
         "form_id": 602
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Donation"]
-  }
+  },
+  "url_title": "online-donation"
 }

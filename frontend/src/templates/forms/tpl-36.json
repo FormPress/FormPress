@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Student Roommate Application",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -129,7 +134,11 @@
         "order": 11
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Application"]
-  }
+  },
+  "url_title": "student-roommate-application"
 }

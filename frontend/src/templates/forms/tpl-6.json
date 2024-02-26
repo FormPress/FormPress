@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Basic Feedback Report",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -53,9 +58,17 @@
         "requiredText": "Required field",
         "placeholder": ""
       },
-      { "id": 2, "type": "Button", "buttonText": "Submit" }
+      {
+        "id": 2,
+        "type": "Button",
+        "buttonText": "Submit"
+      }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Feedback"]
-  }
+  },
+  "url_title": "basic-feedback-report"
 }

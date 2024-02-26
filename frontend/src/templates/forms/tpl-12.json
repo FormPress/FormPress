@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Student Registration",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -157,7 +162,11 @@
         "form_id": 600
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Registration"]
-  }
+  },
+  "url_title": "student-registration"
 }

@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "File Submission",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -66,7 +71,11 @@
         "form_id": 607
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Submission"]
-  }
+  },
+  "url_title": "file-submission"
 }

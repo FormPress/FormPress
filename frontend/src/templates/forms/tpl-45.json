@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Internet Speed Survey",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -117,7 +122,11 @@
         "form_id": 664
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Survey"]
-  }
+  },
+  "url_title": "internet-speed-survey"
 }

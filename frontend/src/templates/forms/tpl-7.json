@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "History Quiz",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
@@ -308,7 +313,11 @@
         "answerExplanation": ""
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Quiz"]
-  }
+  },
+  "url_title": "history-quiz"
 }

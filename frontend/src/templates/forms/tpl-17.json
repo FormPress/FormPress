@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Free Marriage Certificate",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -108,7 +113,11 @@
         "form_id": 605
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Application"]
-  }
+  },
+  "url_title": "free-marriage-certificate"
 }

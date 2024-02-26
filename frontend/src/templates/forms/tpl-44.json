@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Computer Repair",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "mode": "sort",
@@ -110,7 +115,11 @@
         "form_id": 663
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Request"]
-  }
+  },
+  "url_title": "computer-repair"
 }

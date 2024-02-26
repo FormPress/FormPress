@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Issue Tracking",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 0,
@@ -75,7 +80,11 @@
         "placeholder": "yyyy-mm-dd - ##.## AM/PM"
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Request"]
-  }
+  },
+  "url_title": "issue-tracking"
 }

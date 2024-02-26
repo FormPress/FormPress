@@ -3,7 +3,12 @@
   "user_id": 46,
   "title": "Referral Program",
   "props": {
-    "integrations": [{ "type": "email", "value": "" }],
+    "integrations": [
+      {
+        "type": "email",
+        "value": ""
+      }
+    ],
     "elements": [
       {
         "id": 3,
@@ -143,7 +148,11 @@
         "form_id": 654
       }
     ],
-    "customCSS": { "value": "", "isEncoded": true },
+    "customCSS": {
+      "value": "",
+      "isEncoded": true
+    },
     "tags": ["Request"]
-  }
+  },
+  "url_title": "referral-program"
 }
