@@ -38,22 +38,6 @@
     "rebuild-frontend": "docker-compose stop frontend && docker-compose rm -f frontend && docker-compose build frontend && docker-compose create frontend && docker-compose start frontend",
     "lint": "eslint ."
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "testing-library/no-node-access": "off"
-    }
-  },
-  "eslintIgnore": [
-    "node_modules",
-    "build",
-    "public",
-    "src/runtime",
-    "*.plugin.js"
-  ],
   "browserslist": {
     "production": [
       ">0.2%",
@@ -66,5 +50,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
 }

@@ -4,8 +4,10 @@
   "description": "Form Builder and stuff",
   "main": "index.js",
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
+    "eslint-config-react-app": "^7.0.1",
     "prettier": "3.2.5"
   },
   "scripts": {

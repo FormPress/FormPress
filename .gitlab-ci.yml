@@ -15,7 +15,7 @@ run-prettier-check:
 run-eslint:
   stage: lint
   script:
-    - npm install eslint-config-react-app
+    - npm install
     - npm run lint
   only:
     - merge_requests
