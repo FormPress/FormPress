@@ -8,6 +8,10 @@
   font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
 }
 
+.infernal.form .elementPhone {
+  font-family: 'Twemoji Country Flags', 'Montserrat', sans-serif !important;
+}
+
 .elementPhone > .input > .dialCode {
   width: 3.1rem;
   font-size: x-large;

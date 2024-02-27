@@ -41,6 +41,7 @@ class PostSubmission extends Component {
     this.editor = React.createRef()
 
     this.state = {
+      loading: true,
       targetName: '',
       postSubmissionPages: [],
       warningMessage: '',
@@ -81,8 +82,6 @@ class PostSubmission extends Component {
           this.editor.current.innerHTML = selectedPostSubmissionPage.html
         }
       }
-
-      await this.organizePageSelectorEntries()
     } else {
       return this.setState({
         warningMessage: 'There has been an error loading pages.'
@@ -90,7 +89,7 @@ class PostSubmission extends Component {
     }
   }
 
-  async organizePageSelectorEntries() {
+  organizePageSelectorEntries() {
     const { postSubmissionPages } = this.state
     const tyPageIdIntegration = this.getCurrentIntegration()
 
@@ -119,7 +118,7 @@ class PostSubmission extends Component {
       }
     })
 
-    this.setState({ selectorOptions })
+    return selectorOptions
   }
 
   async componentDidMount() {
@@ -554,7 +553,7 @@ class PostSubmission extends Component {
                     id: 5,
                     type: 'Dropdown',
                     placeholder: 'Select a page',
-                    options: this.state.selectorOptions,
+                    options: this.organizePageSelectorEntries(),
                     value: selectedPostSubmissionPage?.id || 1
                   }
                 ]

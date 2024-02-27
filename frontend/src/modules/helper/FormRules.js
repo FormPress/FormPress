@@ -444,6 +444,7 @@ class RuleBuilder extends Component {
     this.ruleConfig = this.props.ruleConfig
 
     this.state = {
+      loading: true,
       inputElements: [],
       userTyPages: [],
       operators: operatorsWithMetadata,
@@ -509,7 +510,7 @@ class RuleBuilder extends Component {
       (e) => e.id === parseInt(currentRule.if.field)
     )
 
-    this.setState({ currentRule, selectedIfField })
+    this.setState({ currentRule, selectedIfField, loading: false })
   }
 
   addRule() {
@@ -718,7 +719,11 @@ class RuleBuilder extends Component {
   }
 
   render() {
-    const { currentRule, selectedIfField } = this.state
+    const { currentRule, selectedIfField, loading } = this.state
+
+    if (loading) {
+      return null
+    }
 
     const { ruleConfig } = this.props
 
