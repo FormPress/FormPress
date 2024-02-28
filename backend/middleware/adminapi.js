@@ -4,10 +4,9 @@ const { getPool } = require(path.resolve('./', 'db'))
 const { genRandomString, sha512 } = require(path.resolve('helper')).random
 const { token } = require(path.resolve('helper')).token
 
-const { mustHaveValidToken, mustBeAdmin } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { mustHaveValidToken, mustBeAdmin } = require(
+  path.resolve('middleware', 'authorization')
+)
 
 module.exports = (app) => {
   app.get(

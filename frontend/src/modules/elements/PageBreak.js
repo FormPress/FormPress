@@ -130,6 +130,9 @@ export default class PageBreak extends Component {
             <select
               className="currentPageSelector-select"
               data-currentpage={config.pageNumber}
+              onChange={() => {
+                /* to stop react from complaining about missing onChange */
+              }}
               value={config.pageNumber}>
               {options}
             </select>

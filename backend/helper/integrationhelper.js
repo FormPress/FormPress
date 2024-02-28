@@ -8,26 +8,21 @@ const FRONTEND = FP_ENV === 'development' ? `${FP_HOST}:${devPort}` : FP_HOST
 const { error, pdfPrinter } = require(path.resolve('helper'))
 const { replaceWithAnswers } = require(path.resolve('helper', 'stringTools'))
 
-const { gdUploadFile } = require(path.resolve(
-  'integrations',
-  'googledriveapi.js'
-))
-const { appendData } = require(path.resolve(
-  'integrations',
-  'googlesheetsapi.js'
-))
-const { triggerDiscordWebhook } = require(path.resolve(
-  'integrations',
-  'discordapi.js'
-))
-const { triggerSlackWebhook } = require(path.resolve(
-  'integrations',
-  'slackapi.js'
-))
-const { triggerCustomWebhook } = require(path.resolve(
-  'integrations',
-  'customwebhookapi.js'
-))
+const { gdUploadFile } = require(
+  path.resolve('integrations', 'googledriveapi.js')
+)
+const { appendData } = require(
+  path.resolve('integrations', 'googlesheetsapi.js')
+)
+const { triggerDiscordWebhook } = require(
+  path.resolve('integrations', 'discordapi.js')
+)
+const { triggerSlackWebhook } = require(
+  path.resolve('integrations', 'slackapi.js')
+)
+const { triggerCustomWebhook } = require(
+  path.resolve('integrations', 'customwebhookapi.js')
+)
 
 exports.triggerIntegrations = async (
   form,

@@ -19,9 +19,8 @@ class ForgotPassword extends Component {
     }
 
     this.handleFieldChange = this.handleFieldChange.bind(this)
-    this.handleForgotPasswordButtonClick = this.handleForgotPasswordButtonClick.bind(
-      this
-    )
+    this.handleForgotPasswordButtonClick =
+      this.handleForgotPasswordButtonClick.bind(this)
   }
 
   handleFieldChange(elem, e) {

@@ -8,10 +8,9 @@ const { getPool } = require(path.resolve('./', 'db'))
 const { model } = require(path.resolve('helper'))
 const { FormModel } = model
 const { submissionhandler } = require(path.resolve('helper'))
-const { userShouldOwnForm } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { userShouldOwnForm } = require(
+  path.resolve('middleware', 'authorization')
+)
 module.exports = (app) => {
   // return csv export of incoming submission IDS
   app.post(
@@ -105,11 +104,12 @@ module.exports = (app) => {
           }
         )
 
-        const questionsWithRenderedAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
-          form,
-          hydratedSubmission,
-          parseInt(submission)
-        )
+        const questionsWithRenderedAnswers =
+          submissionhandler.getQuestionsWithRenderedAnswers(
+            form,
+            hydratedSubmission,
+            parseInt(submission)
+          )
 
         const entries = {}
 
@@ -123,8 +123,8 @@ module.exports = (app) => {
         CSVData[submission].submissionId = submissionData.id
       })
 
-      const createCsvStringifier = require('csv-writer')
-        .createObjectCsvStringifier
+      const createCsvStringifier =
+        require('csv-writer').createObjectCsvStringifier
       const header = [
         { id: 'submissionId', title: 'ID' },
         { id: 'createdAt', title: 'CREATED_AT' }

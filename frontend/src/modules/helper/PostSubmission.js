@@ -31,18 +31,17 @@ class PostSubmission extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.getCurrentIntegration = this.getCurrentIntegration.bind(this)
     this.handleOnHTMLEditorPaste = this.handleOnHTMLEditorPaste.bind(this)
-    this.handleChoosePostSubmissionPage = this.handleChoosePostSubmissionPage.bind(
-      this
-    )
+    this.handleChoosePostSubmissionPage =
+      this.handleChoosePostSubmissionPage.bind(this)
     this.handleSetTyPage = this.handleSetTyPage.bind(this)
     this.handleOnHTMLEditorKeyDown = this.handleOnHTMLEditorKeyDown.bind(this)
-    this.organizePageSelectorEntries = this.organizePageSelectorEntries.bind(
-      this
-    )
+    this.organizePageSelectorEntries =
+      this.organizePageSelectorEntries.bind(this)
 
     this.editor = React.createRef()
 
     this.state = {
+      loading: true,
       targetName: '',
       postSubmissionPages: [],
       warningMessage: '',
@@ -83,8 +82,6 @@ class PostSubmission extends Component {
           this.editor.current.innerHTML = selectedPostSubmissionPage.html
         }
       }
-
-      await this.organizePageSelectorEntries()
     } else {
       return this.setState({
         warningMessage: 'There has been an error loading pages.'
@@ -92,7 +89,7 @@ class PostSubmission extends Component {
     }
   }
 
-  async organizePageSelectorEntries() {
+  organizePageSelectorEntries() {
     const { postSubmissionPages } = this.state
     const tyPageIdIntegration = this.getCurrentIntegration()
 
@@ -121,7 +118,7 @@ class PostSubmission extends Component {
       }
     })
 
-    this.setState({ selectorOptions })
+    return selectorOptions
   }
 
   async componentDidMount() {
@@ -290,8 +287,9 @@ class PostSubmission extends Component {
   }
 
   async handleOnCreateNewPageClick() {
-    const saveSuccess = await this.props.handleSaveClick()
-    if (saveSuccess === false) {
+    const savedFormExists = this.props.form.id !== null
+
+    if (savedFormExists === false) {
       return
     }
 
@@ -555,7 +553,7 @@ class PostSubmission extends Component {
                     id: 5,
                     type: 'Dropdown',
                     placeholder: 'Select a page',
-                    options: this.state.selectorOptions,
+                    options: this.organizePageSelectorEntries(),
                     value: selectedPostSubmissionPage?.id || 1
                   }
                 ]

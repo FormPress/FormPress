@@ -8,7 +8,6 @@ const sass = require('sass')
 const moment = require('moment')
 const jwt = require('jsonwebtoken')
 const { validate } = require('uuid')
-const { hydrateForm } = require(path.resolve('helper', 'formhydration'))
 const { getPool } = require(path.resolve('./', 'db'))
 
 const {
@@ -24,24 +23,20 @@ const {
 
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
-  .default
+const Renderer = require(
+  path.resolve('script', 'transformed', 'Renderer')
+).default
+
 const { FP_ENV } = process.env
 const BACKEND = process.env.FE_BACKEND
-const {
-  storage,
-  model,
-  error,
-  testStringIsJson,
-  publicStorage
-} = require(path.resolve('helper'))
+const { storage, model, error, testStringIsJson, publicStorage } = require(
+  path.resolve('helper')
+)
 const { FormModel, FormPublishedModel, user: UserModel } = model
 
-const { updateFormPropsWithNewlyAddedProps } = require(path.resolve(
-  './',
-  'helper',
-  'oldformpropshandler.js'
-))
+const { updateFormPropsWithNewlyAddedProps } = require(
+  path.resolve('./', 'helper', 'oldformpropshandler.js')
+)
 const { token } = require(path.resolve('helper')).token
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -169,6 +164,62 @@ module.exports = (app) => {
     }
   )
 
+  // Clone form
+  app.post(
+    '/api/users/:user_id/forms/clone',
+    mustHaveValidToken,
+    paramShouldMatchTokenUserId('user_id'),
+    userHaveFormLimit('user_id'),
+    userShouldOwnForm('user_id', (req) => req.body.formId, {
+      read: true,
+      edit: true,
+      matchType: 'strict' // Only allow if user has edit rights to form
+    }),
+    async (req, res) => {
+      const { formId, formTitle } = req.body
+
+      const formModel = new FormModel(req.user)
+
+      if (formId === undefined || formTitle === undefined) {
+        return res
+          .status(400)
+          .json({ message: 'formId and formTitle are required' })
+      }
+
+      const form = await formModel.get({ form_id: formId })
+
+      if (form === false) {
+        return res.status(404).json({ message: 'Form not found' })
+      }
+
+      const formattedTitle = formTitle.substring(0, 256)
+
+      form.title = formattedTitle
+      form.id = null
+      form.uuid = null
+
+      // filter out all integrations that is not email
+      form.props.integrations = form.props.integrations.filter(
+        (integration) => integration.type === 'email'
+      )
+
+      const result = await formModel.create({
+        user_id: req.params.user_id,
+        form
+      })
+
+      if (result.affectedRows === 0 && result.insertId === 0) {
+        return res.status(500).json({ message: 'Failed to clone form' })
+      } else {
+        return res.json({
+          status: 'done',
+          id: result.insertId,
+          uuid: result.uuid
+        })
+      }
+    }
+  )
+
   // return forms of given user id
   app.get(
     '/api/users/:user_id/forms',
@@ -181,12 +232,6 @@ module.exports = (app) => {
       const { user } = req
 
       const formModel = new FormModel(user)
-
-      let shouldSanitizeSensitiveData = false
-
-      if (user && user.accessType === '3rdParty') {
-        shouldSanitizeSensitiveData = true
-      }
 
       const formIds = (
         await db.query(
@@ -213,7 +258,7 @@ module.exports = (app) => {
 
       const formResults = await db.query(
         `SELECT
-            *, 
+            id, title, uuid, created_at, updated_at, published_version, private, 
             CASE WHEN (
               SELECT id FROM form_published WHERE form_id = f.id AND version = f.published_version) IS NULL
             THEN 0 ELSE
@@ -227,9 +272,8 @@ module.exports = (app) => {
       if (formResults.length === 0) {
         res.json([])
       } else {
-        const response = formResults.map((form) =>
-          hydrateForm(form, shouldSanitizeSensitiveData)
-        )
+        const response = formResults
+
         sharedIdsAndPerms.forEach((idAndPerm) => {
           response.forEach((formResult) => {
             if (formResult.id === idAndPerm.form_id) {
@@ -349,11 +393,9 @@ module.exports = (app) => {
       const formModel = new FormModel(req.user)
       const formPublishedModel = new FormPublishedModel(req.user)
 
-      const Renderer = require(path.resolve(
-        'script',
-        'transformed',
-        'Renderer'
-      )).default
+      const Renderer = require(
+        path.resolve('script', 'transformed', 'Renderer')
+      ).default
 
       let form
       const regularForm = await formModel.get({ form_id })
@@ -489,12 +531,9 @@ module.exports = (app) => {
     const elementValidators = {}
 
     elementQuery.forEach((element) => {
-      const elemClass = require(path.resolve(
-        'script',
-        'transformed',
-        'elements',
-        `${element}`
-      ))
+      const elemClass = require(
+        path.resolve('script', 'transformed', 'elements', `${element}`)
+      )
 
       if (elemClass.default !== undefined) {
         elementValidators[element] = elemClass.default?.helpers || 'unset'
@@ -852,9 +891,8 @@ module.exports = (app) => {
                   case 'lastFive':
                     elementTemplate.responseCount =
                       elementTemplate.chartItems.length
-                    elementTemplate.chartItems = elementTemplate.chartItems.slice(
-                      -5
-                    )
+                    elementTemplate.chartItems =
+                      elementTemplate.chartItems.slice(-5)
                     statistics.elements.push(elementTemplate)
 
                     break
@@ -1562,7 +1600,10 @@ module.exports = (app) => {
       googleCredentialsClientID:
         process.env.GOOGLE_CREDENTIALS_CLIENT_ID !== '',
       fileUploadBucket: process.env.FILE_UPLOAD_BUCKET !== '',
-      zapierClientID: process.env.FE_ZAPIER_APP_CLIENT_ID !== ''
+      zapierClientID: process.env.FE_ZAPIER_APP_CLIENT_ID !== '',
+      reCaptchaCredentials:
+        process.env.GCP_PROJECT_ID !== '' &&
+        process.env.RECAPTCHA_SITE_KEY !== ''
     }
     res.json(isEnvironmentVariableSet)
   })
@@ -1594,12 +1635,9 @@ module.exports = (app) => {
     try {
       datasetQuery.forEach((dataset) => {
         jsonpResponse[dataset] =
-          require(path.resolve(
-            'script',
-            'transformed',
-            'datasets',
-            `${dataset}.json`
-          )) || {}
+          require(
+            path.resolve('script', 'transformed', 'datasets', `${dataset}.json`)
+          ) || {}
       })
       res.jsonp(jsonpResponse)
     } catch (err) {
@@ -1908,11 +1946,17 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
+      const meta = req.query.meta
 
-      const result = await db.query(
-        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`,
-        [user_id]
-      )
+      let query
+      if (meta === 'true') {
+        // only return id and title
+        query = `SELECT id, title FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`
+      } else {
+        query = `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`
+      }
+
+      const result = await db.query(query, [user_id])
 
       if (result.length > 0) {
         return res.json(result)

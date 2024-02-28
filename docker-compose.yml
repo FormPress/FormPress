@@ -79,6 +79,7 @@ services:
       - REACT_APP_FE_FRONTEND=${FE_FRONTEND}
     volumes:
       - ./frontend:/src
+      - /src/node_modules
     ports:
       - '3000:3000'
     stdin_open: true

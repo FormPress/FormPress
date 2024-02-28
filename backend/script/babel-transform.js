@@ -6,7 +6,7 @@ const crypto = require('crypto')
 
 const options = {
   plugins: [
-    '@babel/plugin-proposal-class-properties',
+    '@babel/plugin-transform-class-properties',
     '@babel/plugin-transform-modules-commonjs'
   ],
   presets: ['@babel/preset-react']

@@ -331,11 +331,18 @@ $color-14: #68942f; /* forest green */
     margin-top: 8px;
     margin-right: 5px;
     cursor: pointer;
-    -webkit-transition: outline-color 0.3s ease-out,
+    -webkit-transition:
+      outline-color 0.3s ease-out,
       background-color 0.3s ease-out;
-    -moz-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
-    -o-transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
-    transition: outline-color 0.3s ease-out, background-color 0.3s ease-out;
+    -moz-transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
+    -o-transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
+    transition:
+      outline-color 0.3s ease-out,
+      background-color 0.3s ease-out;
     vertical-align: top;
     border-radius: 50%;
     border: 3px solid $bg-form;
@@ -458,7 +465,7 @@ $color-14: #68942f; /* forest green */
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 6px;
+    padding: 6px 0;
   }
 
   .elementCheckbox .input .checkbox-label {
@@ -473,6 +480,7 @@ $color-14: #68942f; /* forest green */
   }
 
   &.form .elementRadio .input .radio-label {
+    word-wrap: anywhere;
     display: inline-block;
     overflow: hidden;
     min-width: 115px;
@@ -480,7 +488,6 @@ $color-14: #68942f; /* forest green */
     -webkit-user-select: none;
     user-select: none;
     vertical-align: bottom;
-    white-space: nowrap;
     color: $text-color-labels-entries;
   }
 
@@ -493,18 +500,6 @@ $color-14: #68942f; /* forest green */
     user-select: none;
     white-space: break-spaces;
     word-break: break-all;
-    color: $text-color-labels-entries;
-  }
-
-  &.form .elementRadio .input .radio-label {
-    display: inline-block;
-    overflow: hidden;
-    min-width: 60px;
-    max-width: calc(100% - 25px);
-    margin-top: 0;
-    user-select: none;
-    white-space: break-spaces;
-    word-break: normal;
     color: $text-color-labels-entries;
   }
 
@@ -565,6 +560,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .checkboxCover {
+    padding: unset;
     display: inline-grid;
     width: 100%;
   }
@@ -759,7 +755,7 @@ $color-14: #68942f; /* forest green */
   }
 
   .adr-street > input {
-    width: 99%;
+    width: 100%;
   }
 
   .adr-state,
@@ -1144,7 +1140,9 @@ $color-14: #68942f; /* forest green */
 
   input:-webkit-autofill,
   input:-webkit-autofill:focus {
-    transition: background-color 0s 600000s, color 0s 600000s;
+    transition:
+      background-color 0s 600000s,
+      color 0s 600000s;
   }
 }
 

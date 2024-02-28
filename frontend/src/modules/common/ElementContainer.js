@@ -52,6 +52,7 @@ export default function ElementContainer(props) {
       className={classNames.join(' ')}
       {...{
         id: `qc_${config.id}`,
+        'data-testid': `qc_${config.id}`,
         'data-fp-custom-field-id': config.customFieldId
           ? `qc_${config.customFieldId}`
           : null,

@@ -90,7 +90,7 @@
     let { command, field: thenField, value: thenValue } = thenRule
 
     // continue if any of these are not found
-    if (!ifField || !operator || !expectedValue || !command || !thenField) {
+    if (!ifField || !operator || !command || !thenField) {
       continue
     }
 
@@ -184,10 +184,6 @@
       const operatorFunction = operatorFunctions[operator]
       const executeCommand = commandFunctions[command]
       const revertCommand = commandFunctions[commandNegatives[command]]
-
-      if (!ifFieldValue || !expectedValue) {
-        return revertCommand(thenFieldElementContainer)
-      }
 
       const assessment = operatorFunction(
         ifFieldValue.toLowerCase(),

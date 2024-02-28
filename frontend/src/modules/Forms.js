@@ -62,9 +62,8 @@ export default class Forms extends Component {
     this.handleCloseModalClick = this.handleCloseModalClick.bind(this)
     this.handleCloneFormTitleChange = this.handleCloneFormTitleChange.bind(this)
     this.handleCountSubmissions = this.handleCountSubmissions.bind(this)
-    this.handleFormSharePermissionsClick = this.handleFormSharePermissionsClick.bind(
-      this
-    )
+    this.handleFormSharePermissionsClick =
+      this.handleFormSharePermissionsClick.bind(this)
   }
 
   handleFormCloneClick(form, e) {
@@ -221,20 +220,15 @@ export default class Forms extends Component {
   }
 
   async formClone(form) {
-    form.id = null
-    form.title = this.state.cloneFormName
-
-    const integrationTypesNeedToBeFiltered = ['GoogleDrive']
-
-    form.props.integrations = form.props.integrations.filter(
-      (integration) =>
-        !integrationTypesNeedToBeFiltered.includes(integration.type)
-    )
+    const cloneRequest = {
+      formId: form.id,
+      formTitle: this.state.cloneFormName
+    }
 
     const { data } = await api({
-      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms`,
+      resource: `/api/users/${this.props.generalContext.auth.user_id}/forms/clone`,
       method: 'post',
-      body: form
+      body: cloneRequest
     })
 
     let modalContent = {}

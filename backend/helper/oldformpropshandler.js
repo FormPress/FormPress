@@ -1,12 +1,8 @@
 const path = require('path')
 
-const { getConfigurableSettings } = require(path.resolve(
-  './',
-  'script',
-  'transformed',
-  'modules',
-  'ConfigurableSettings'
-))
+const { getConfigurableSettings } = require(
+  path.resolve('./', 'script', 'transformed', 'modules', 'ConfigurableSettings')
+)
 
 const { cloneDeep } = require('lodash')
 

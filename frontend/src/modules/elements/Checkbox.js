@@ -250,9 +250,8 @@ export default class Checkbox extends Component {
               if (typeof inputProps.defaultChecked === 'boolean') {
                 keySpecificProps.defaultChecked = inputProps.defaultChecked
               } else {
-                keySpecificProps.defaultChecked = inputProps.defaultChecked.includes(
-                  key
-                )
+                keySpecificProps.defaultChecked =
+                  inputProps.defaultChecked.includes(key)
               }
             }
 

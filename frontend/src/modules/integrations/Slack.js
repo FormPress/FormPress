@@ -8,8 +8,7 @@ import { api } from '../../helper'
 
 export default class Slack extends Component {
   static metaData = {
-    icon:
-      'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg',
+    icon: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg',
     displayText: 'Slack',
     name: 'Slack'
   }
@@ -45,9 +44,8 @@ export default class Slack extends Component {
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
     this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
+    this.renderInputElementSelection =
+      this.renderInputElementSelection.bind(this)
   }
 
   componentDidMount() {

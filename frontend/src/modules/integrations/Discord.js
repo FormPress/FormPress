@@ -8,8 +8,7 @@ import { api } from '../../helper'
 
 export default class Discord extends Component {
   static metaData = {
-    icon:
-      'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg',
+    icon: 'https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a69f118df70ad7828d4_icon_clyde_blurple_RGB.svg',
     displayText: 'Discord',
     name: 'Discord'
   }
@@ -46,9 +45,8 @@ export default class Discord extends Component {
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
     this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
+    this.renderInputElementSelection =
+      this.renderInputElementSelection.bind(this)
   }
 
   componentDidMount() {
@@ -401,8 +399,7 @@ export default class Discord extends Component {
                   checked={this.state.customizeInputs}
                   onChange={this.toggleCustomizeInputs}
                 />
-                <label htmlFor="switch"></label>{' '}
-                <span>Advanced Configuration</span>
+                <label htmlFor="switch"> Advanced Configuration</label>
               </div>
 
               {this.state.customizeInputs && this.renderInputElementSelection()}

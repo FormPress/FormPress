@@ -35,6 +35,16 @@ module.exports = {
       }
     },
     {
+      method: 'post',
+      path: '/api/users/:user_id/forms/clone',
+      protected: true,
+      exampleRequestPath: '/api/users/1/forms/clone',
+      exampleRequestBody: {
+        formId: 1,
+        formTitle: 'Form Title'
+      }
+    },
+    {
       method: 'put',
       path: '/api/users/:user_id/forms',
       protected: true,
@@ -104,8 +114,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
+      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/entries',
       protected: true,
       exampleRequestPath: '/api/users/1/forms/1/submissions/1/entries'
     },
@@ -132,8 +141,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
+      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/questions/:question_id/:file_name',
       protected: true,
       exampleRequestPath:
         '/api/users/1/forms/1/submissions/1/questions/1/photo.png'
@@ -201,8 +209,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
+      path: '/api/users/:user_id/forms/:form_id/submissions/:submission_id/evaluate',
       exampleRequestPath: '/api/users/1/forms/1/submissions/1/evaluate',
       protected: false
     },
@@ -224,8 +231,7 @@ module.exports = {
     },
     {
       method: 'get',
-      path:
-        '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
+      path: '/api/checkIfFileIsExist/:user_id/:form_id/:submission_id/:question_id/:file_name',
       protected: false,
       exampleRequestPath: '/api/checkIfFileIsExist/1/1/1/1/asd.jpg'
     },

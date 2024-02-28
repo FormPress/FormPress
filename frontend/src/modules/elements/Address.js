@@ -261,7 +261,7 @@ export default class Address extends Component {
             <span className={`address-section adr-street`}>
               <input
                 id={`address-street_${config.id}`}
-                data-addressType="street"
+                data-addresstype="street"
                 name={`q_${config.id}[street]`}
                 type="text"
               />
@@ -286,7 +286,7 @@ export default class Address extends Component {
             <span className={`address-section adr-street`}>
               <input
                 id={`address-street2_${config.id}`}
-                data-addressType="street2"
+                data-addresstype="street2"
                 name={`q_${config.id}[street2]`}
                 type="text"
               />
@@ -312,7 +312,7 @@ export default class Address extends Component {
               <span className={` address-section adr-city`}>
                 <input
                   id={`address-city_${config.id}`}
-                  data-addressType="city"
+                  data-addresstype="city"
                   name={`q_${config.id}[city]`}
                   type="text"
                 />
@@ -337,7 +337,7 @@ export default class Address extends Component {
               <span className={`address-section adr-zip`}>
                 <input
                   id={`address-zip_${config.id}`}
-                  data-addressType="zip"
+                  data-addresstype="zip"
                   name={`q_${config.id}[zip]`}
                   type="text"
                 />
@@ -364,7 +364,7 @@ export default class Address extends Component {
                   <select
                     className="dropdown-select"
                     id={`address-state_${config.id}`}
-                    data-addressType="state"
+                    data-addresstype="state"
                     name={`q_${config.id}[state]`}
                     defaultValue={config.value ? config.value : ''}
                     data-fp-list={'usStates'}>
@@ -381,7 +381,7 @@ export default class Address extends Component {
                 ) : (
                   <input
                     id={`address-state_${config.id}`}
-                    data-addressType="state"
+                    data-addresstype="state"
                     name={`q_${config.id}[state]`}
                     type="text"
                   />
@@ -408,7 +408,7 @@ export default class Address extends Component {
                 <select
                   className="dropdown-select"
                   id={`address-country_${config.id}`}
-                  data-addressType="country"
+                  data-addresstype="country"
                   name={`q_${config.id}[country]`}
                   data-fp-defaultvalue={config.defaultCountry}
                   value={

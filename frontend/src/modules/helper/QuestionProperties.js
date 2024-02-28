@@ -18,16 +18,16 @@ export default class QuestionProperties extends Component {
         typeof e === 'string'
           ? e
           : e.target.id === 'q_required' && e.target.value === true
-          ? elem.value
-          : e.target.type === 'checkbox'
-          ? e.target.checked
-          : e.target.value
+            ? elem.value
+            : e.target.type === 'checkbox'
+              ? e.target.checked
+              : e.target.value
       const elemId =
         typeof e === 'string'
           ? elem.id
           : e.target.id === 'q_required' && value === true
-          ? elem.id.split('_')[1]
-          : elem.id
+            ? elem.id.split('_')[1]
+            : elem.id
 
       this.props.configureQuestion({
         id: this.props.selectedField.config.id,

@@ -2,10 +2,9 @@ const path = require('path')
 const frontendPath = '/frontend/'
 const fs = require('fs')
 
-const { mustHaveValidToken } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { mustHaveValidToken } = require(
+  path.resolve('middleware', 'authorization')
+)
 
 module.exports = (app) => {
   fs.readdirSync('middleware/plugins', { withFileTypes: true }).forEach(

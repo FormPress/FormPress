@@ -20,9 +20,8 @@ class FormModel {
     this.update = this.update.bind(this)
     this.list = this.list.bind(this)
     this.getFormIdFromUUID = this.getFormIdFromUUID.bind(this)
-    this.getFormsAndPermsSharedWithUser = this.getFormsAndPermsSharedWithUser.bind(
-      this
-    )
+    this.getFormsAndPermsSharedWithUser =
+      this.getFormsAndPermsSharedWithUser.bind(this)
   }
 
   async delete({ form_id }) {

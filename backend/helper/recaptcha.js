@@ -7,18 +7,20 @@ const { error } = require(path.resolve('helper'))
 // check if both env variables are set, if not, do not initialize client
 if (!process.env.GCP_PROJECT_ID || !process.env.RECAPTCHA_SITE_KEY) {
   console.log('reCAPTCHA is not initialized. Reason: missing env variables.')
-  return
 }
 
-const client = new RecaptchaEnterpriseServiceClient()
 const projectID = process.env.GCP_PROJECT_ID
-
-const projectPath = client.projectPath(projectID)
-
 const recaptchaSiteKey = process.env.RECAPTCHA_SITE_KEY
+
+const client = new RecaptchaEnterpriseServiceClient()
+const projectPath = projectID ? client.projectPath(projectID) : null
 
 async function verifyToken(token) {
   if (!token) {
+    return false
+  }
+
+  if (!projectPath) {
     return false
   }
 

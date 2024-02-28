@@ -13,9 +13,8 @@ class FormIntegrations extends Component {
 
     this.getIntegrationMetaData = this.getIntegrationMetaData.bind(this)
     this.setRenderedIntegration = this.setRenderedIntegration.bind(this)
-    this.handleCloseIntegrationClick = this.handleCloseIntegrationClick.bind(
-      this
-    )
+    this.handleCloseIntegrationClick =
+      this.handleCloseIntegrationClick.bind(this)
     this.handleOpenIntegrationClick = this.handleOpenIntegrationClick.bind(this)
 
     this.state = {

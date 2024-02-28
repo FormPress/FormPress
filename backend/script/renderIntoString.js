@@ -1,8 +1,9 @@
 const path = require('path')
 const reactDOMServer = require('react-dom/server')
 const React = require('react')
-const Renderer = require(path.resolve('script', 'transformed', 'Renderer'))
-  .default
+const Renderer = require(
+  path.resolve('script', 'transformed', 'Renderer')
+).default
 
 const props = {
   className: 'fl form',

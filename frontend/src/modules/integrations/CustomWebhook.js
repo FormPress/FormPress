@@ -55,9 +55,8 @@ export default class CustomWebhook extends Component {
     this.handleWebhookUrlChange = this.handleWebhookUrlChange.bind(this)
     this.handleChooseInputElements = this.handleChooseInputElements.bind(this)
     this.toggleCustomizeInputs = this.toggleCustomizeInputs.bind(this)
-    this.renderInputElementSelection = this.renderInputElementSelection.bind(
-      this
-    )
+    this.renderInputElementSelection =
+      this.renderInputElementSelection.bind(this)
   }
 
   componentDidMount() {

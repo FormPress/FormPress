@@ -116,6 +116,10 @@ export default class DatePicker extends Component {
         const key = entry[0]
         const value = entry[1]
 
+        if (key === 'time' && !question.timePicker) {
+          return null
+        }
+
         let defaultSublabel = true
 
         if (question[`${key}SublabelText`]) {
@@ -131,7 +135,7 @@ export default class DatePicker extends Component {
                 : question[`${key}SublabelText`]}
               :
             </strong>
-            {value}
+            {' ' + value}
             <br />
           </div>
         )
@@ -191,12 +195,8 @@ export default class DatePicker extends Component {
 
   render() {
     const { config, mode } = this.props
-    const {
-      isDateSupported,
-      flatpickrModule,
-      flatpickrOptions,
-      key
-    } = this.state
+    const { isDateSupported, flatpickrModule, flatpickrOptions, key } =
+      this.state
 
     const inputProps = {}
     let Flatpickr = null
@@ -245,6 +245,7 @@ export default class DatePicker extends Component {
                     ? this.findRelevantValue('date', config.value)
                     : ''
                 }
+                readOnly={mode !== 'renderer'}
                 {...inputProps}
               />
             ) : mode === 'builder' ? (
@@ -298,6 +299,7 @@ export default class DatePicker extends Component {
                     ? this.findRelevantValue('time', config.value)
                     : ''
                 }
+                readOnly={mode !== 'renderer'}
                 pattern={isDateSupported ? '[Hh]{2}:[Mm]{2}' : undefined}
                 className={!isDateSupported ? 'flatpickr-time-needed' : ''}
                 {...inputProps}

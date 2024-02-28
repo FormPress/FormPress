@@ -97,9 +97,8 @@
   }
 
   // get all elements with data-currentpage attribute
-  const elementsWithCurrentPage = document.querySelectorAll(
-    `[data-currentpage]`
-  )
+  const elementsWithCurrentPage =
+    document.querySelectorAll(`[data-currentpage]`)
 
   for (const element of elementsWithCurrentPage) {
     const currentPage = element.dataset.currentpage

@@ -201,6 +201,7 @@ class FormRules extends Component {
     this.uuid = this.props.uuid
 
     this.state = {
+      loading: true,
       mode: 'view',
       editingRule: null,
       ruleConfig: null
@@ -209,6 +210,24 @@ class FormRules extends Component {
     this.handleToggleRuleBuilder = this.handleToggleRuleBuilder.bind(this)
     this.deleteRule = this.deleteRule.bind(this)
     this.renderTypeSelect = this.renderTypeSelect.bind(this)
+  }
+
+  async componentDidMount() {
+    let userTyPages = []
+    try {
+      const result = await api({
+        resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou?meta=true`,
+        method: 'get'
+      })
+
+      const { data } = result
+
+      userTyPages = data
+    } catch (error) {
+      console.error(error)
+    }
+
+    this.setState({ userTyPages, loading: false })
   }
 
   deleteRule(rule) {
@@ -264,7 +283,12 @@ class FormRules extends Component {
   }
 
   render() {
-    const { mode } = this.state
+    const { mode, loading } = this.state
+
+    if (loading) {
+      return null
+    }
+
     const { form } = this.props
     const elements = form.props.elements || []
 
@@ -351,26 +375,47 @@ class FormRules extends Component {
                     resolvedTexts.ifValue = rule.if.value
                   }
 
-                  const foundThenField = elements.find(
-                    (e) => e.id === parseInt(rule.then.field)
-                  )
+                  if (rule.type !== 'changeTyPage') {
+                    const foundThenField = elements.find(
+                      (e) => e.id === parseInt(rule.then.field)
+                    )
 
-                  if (foundThenField !== undefined) {
-                    if (foundThenField.type !== 'Button') {
-                      resolvedTexts.thenField =
-                        foundThenField.label ||
-                        foundThenField.type ||
-                        ` Field ${foundThenField.id}`
-                    } else {
-                      resolvedTexts.thenField =
-                        foundThenField.buttonText || 'Button'
+                    if (foundThenField !== undefined) {
+                      switch (foundThenField.type) {
+                        case 'Button':
+                          resolvedTexts.thenField =
+                            foundThenField.buttonText || 'Button'
+                          break
+                        case 'Radio':
+                          if (foundThenField.editor === true) {
+                            resolvedTexts.thenField =
+                              foundThenField.label.replace(/<[^>]*>?/gm, '')
+                          } else {
+                            resolvedTexts.thenField = foundThenField.label
+                          }
+                          break
+                        default:
+                          resolvedTexts.thenField =
+                            foundThenField.label ||
+                            foundThenField.type ||
+                            ` Field ${foundThenField.id}`
+                          break
+                      }
+                    }
+                  } else {
+                    const foundThenField = this.state.userTyPages.find(
+                      (e) => e.id === parseInt(rule.then.field)
+                    )
+
+                    if (foundThenField !== undefined) {
+                      resolvedTexts.thenField = foundThenField.title
                     }
                   }
 
                   Object.keys(resolvedTexts).forEach((key) => {
-                    if (resolvedTexts[key].length > 20) {
+                    if (resolvedTexts[key].length > 50) {
                       resolvedTexts[key] =
-                        resolvedTexts[key].substring(0, 20) + '...'
+                        resolvedTexts[key].substring(0, 50) + '...'
                     }
                   })
 
@@ -425,6 +470,7 @@ class FormRules extends Component {
           <RuleBuilder
             className={mode === 'build' ? ' build' : ''}
             form={this.props.form}
+            userTyPages={this.state.userTyPages}
             setFormRule={this.props.setFormRule}
             editingRule={this.state.editingRule}
             ruleConfig={this.state.ruleConfig}
@@ -444,8 +490,8 @@ class RuleBuilder extends Component {
     this.ruleConfig = this.props.ruleConfig
 
     this.state = {
+      loading: true,
       inputElements: [],
-      userTyPages: [],
       operators: operatorsWithMetadata,
       commands: commandsDict[this.ruleConfig.value],
       currentRule: {
@@ -492,24 +538,11 @@ class RuleBuilder extends Component {
       })
     }
 
-    if (ruleConfig.value === 'changeTyPage') {
-      const result = await api({
-        resource: `/api/users/${this.props.generalContext.auth.user_id}/thankyou`,
-        method: 'get'
-      })
-
-      const { data } = result
-
-      if (data.length > 0) {
-        this.setState({ userTyPages: data })
-      }
-    }
-
     const selectedIfField = this.props.form.props.elements.find(
       (e) => e.id === parseInt(currentRule.if.field)
     )
 
-    this.setState({ currentRule, selectedIfField })
+    this.setState({ currentRule, selectedIfField, loading: false })
   }
 
   addRule() {
@@ -626,7 +659,7 @@ class RuleBuilder extends Component {
           // we may have to get two values one being the date and the other being the time. so we have to combine them
           const valueIncludesTime = currentRule.if.value.split(' ').length === 2
           if (htmlElem.type === 'date') {
-            currentRule.if.value = value + ' ' + '00:00'
+            currentRule.if.value = value + ' 00:00'
           } else if (htmlElem.type === 'time') {
             if (valueIncludesTime === false) {
               currentRule.if.value = currentRule.if.value + ' ' + value
@@ -718,7 +751,11 @@ class RuleBuilder extends Component {
   }
 
   render() {
-    const { currentRule, selectedIfField } = this.state
+    const { currentRule, selectedIfField, loading } = this.state
+
+    if (loading) {
+      return null
+    }
 
     const { ruleConfig } = this.props
 
@@ -742,7 +779,7 @@ class RuleBuilder extends Component {
     let thenFields
 
     if (currentRule.type === 'changeTyPage') {
-      thenFields = this.state.userTyPages.map((elem) => {
+      thenFields = this.props.userTyPages.map((elem) => {
         return { display: elem.title, value: elem.id }
       })
     } else if (currentRule.type === 'showHide') {
@@ -951,7 +988,7 @@ class RuleBuilder extends Component {
                                       : 'TextBox',
                                   placeholder: 'Enter a value',
                                   value: currentRule.if.value,
-                                  timePicker: selectedIfField.timePicker
+                                  timePicker: selectedIfField?.timePicker
                                 }
                               ]
                             }
@@ -964,7 +1001,9 @@ class RuleBuilder extends Component {
                           className="form fieldLink-checkbox"
                           theme="infernal"
                           allowInternal={true}
-                          handleFieldChange={() => this.changeRule('fieldLink')}
+                          handleFieldChange={(elem, e) =>
+                            this.changeRule('fieldLink', e.target)
+                          }
                           form={{
                             props: {
                               elements: [

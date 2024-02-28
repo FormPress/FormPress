@@ -4,10 +4,9 @@ const { FormModel, FormPublishedModel } = model
 
 const Elements = require('../script/transformed/elements/')
 
-const { mustHaveValidToken } = require(path.resolve(
-  'middleware',
-  'authorization'
-))
+const { mustHaveValidToken } = require(
+  path.resolve('middleware', 'authorization')
+)
 const { getPool } = require(path.resolve('./', 'db'))
 const { submissionhandler } = require(path.resolve('helper'))
 const { validate } = require('uuid')
@@ -270,11 +269,12 @@ exports.formWebhooksApi = (app) => {
           }
         )
 
-        const questionsWithRenderedAnswers = submissionhandler.getQuestionsWithRenderedAnswers(
-          form,
-          hydratedSubmission,
-          parseInt(submission)
-        )
+        const questionsWithRenderedAnswers =
+          submissionhandler.getQuestionsWithRenderedAnswers(
+            form,
+            hydratedSubmission,
+            parseInt(submission)
+          )
 
         const entries = questionsWithRenderedAnswers.map((QnA) => {
           const entry = {}

@@ -61,14 +61,11 @@ exports.mustBeAdmin = async (req, res, next) => {
   }
 }
 
-exports.userShouldOwnSubmission = (user_id, submission_id) => async (
-  req,
-  res,
-  next
-) => {
-  const db = await getPool()
-  const result = await db.query(
-    `SELECT
+exports.userShouldOwnSubmission =
+  (user_id, submission_id) => async (req, res, next) => {
+    const db = await getPool()
+    const result = await db.query(
+      `SELECT
       user_id
     FROM
       form 
@@ -81,25 +78,25 @@ exports.userShouldOwnSubmission = (user_id, submission_id) => async (
         WHERE
       id = ?)
   `,
-    [req.params[submission_id]]
-  )
-  if (result.length > 0) {
-    if (parseInt(req.params[user_id]) === result[0].user_id) {
-      next()
+      [req.params[submission_id]]
+    )
+    if (result.length > 0) {
+      if (parseInt(req.params[user_id]) === result[0].user_id) {
+        next()
+      } else {
+        res.status(403).send({ message: 'That submission is not yours' })
+      }
     } else {
-      res.status(403).send({ message: 'That submission is not yours' })
-    }
-  } else {
-    /*
+      /*
     TODO: returning HTTP200 here is wrong. This is done since unit tests
     mocking db does not support mocking 3 sequencial SQL queries.
 
     We should add more SQL behaviour to config/endpoints.js and
     properly extend unit tests
     */
-    res.status(200).json({ message: 'Submission not found' })
+      res.status(200).json({ message: 'Submission not found' })
+    }
   }
-}
 
 /*
   If param sharedPermissions is given, upon detecting form does not belong to user
@@ -117,75 +114,77 @@ exports.userShouldOwnSubmission = (user_id, submission_id) => async (
     => Returns true only if read permission is given, other 2 permissions does not matter
 
 */
-exports.userShouldOwnForm = (
-  user_id_arg,
-  form_id_arg,
-  sharedPermissions = {
-    matchType: 'strict',
-    read: true,
-    edit: true,
-    data: true
-  }
-) => async (req, res, next) => {
-  const form_id =
-    typeof form_id_arg === 'function'
-      ? form_id_arg(req)
-      : req.params[form_id_arg]
-  const user_id = req.params[user_id_arg]
+exports.userShouldOwnForm =
+  (
+    user_id_arg,
+    form_id_arg,
+    sharedPermissions = {
+      matchType: 'strict',
+      read: true,
+      edit: true,
+      data: true
+    }
+  ) =>
+  async (req, res, next) => {
+    const form_id =
+      typeof form_id_arg === 'function'
+        ? form_id_arg(req)
+        : req.params[form_id_arg]
+    const user_id = req.params[user_id_arg]
 
-  const db = await getPool()
-  const result = await db.query(
-    `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
-    [form_id]
-  )
-  if (result.length > 0) {
-    if (parseInt(user_id) === result[0].user_id) {
-      return next()
-    } else {
-      // Check if shared
-      const sharedResult = await db.query(
-        `SELECT * FROM \`form_permission\` WHERE target_user_id = ? AND form_id = ?`,
-        [user_id, form_id]
-      )
+    const db = await getPool()
+    const result = await db.query(
+      `SELECT \`user_id\` FROM \`form\` WHERE id = ?`,
+      [form_id]
+    )
+    if (result.length > 0) {
+      if (parseInt(user_id) === result[0].user_id) {
+        return next()
+      } else {
+        // Check if shared
+        const sharedResult = await db.query(
+          `SELECT * FROM \`form_permission\` WHERE target_user_id = ? AND form_id = ?`,
+          [user_id, form_id]
+        )
 
-      if (sharedResult.length > 0) {
-        const permissions = JSON.parse(sharedResult[0].permissions)
-        let matchCount = 0
+        if (sharedResult.length > 0) {
+          const permissions = JSON.parse(sharedResult[0].permissions)
+          let matchCount = 0
 
-        for (const key of Object.keys(sharedPermissions)) {
+          for (const key of Object.keys(sharedPermissions)) {
+            if (
+              key !== 'matchType' &&
+              permissions[key] === sharedPermissions[key]
+            ) {
+              matchCount++
+            }
+          }
+
           if (
-            key !== 'matchType' &&
-            permissions[key] === sharedPermissions[key]
+            (sharedPermissions.matchType === 'loose' && matchCount > 0) ||
+            (sharedPermissions.matchType === 'strict' &&
+              matchCount === Object.keys(sharedPermissions).length - 1)
           ) {
-            matchCount++
+            res.locals.sharedUserId = sharedResult[0].user_id
+            res.locals.sharedPermissions = permissions
+
+            return next()
           }
         }
 
-        if (
-          (sharedPermissions.matchType === 'loose' && matchCount > 0) ||
-          (sharedPermissions.matchType === 'strict' &&
-            matchCount === Object.keys(sharedPermissions).length - 1)
-        ) {
-          res.locals.sharedUserId = sharedResult[0].user_id
-          res.locals.sharedPermissions = permissions
-
-          return next()
-        }
+        res.status(403).send({ message: 'That form is not yours' })
       }
-
-      res.status(403).send({ message: 'That form is not yours' })
-    }
-  } else {
-    /*
+    } else {
+      /*
     TODO: returning HTTP200 here is wrong. This is done since unit tests
     mocking db does not support mocking 3 sequencial SQL queries.
 
     We should add more SQL behaviour to config/endpoints.js and
     properly extend unit tests
     */
-    res.status(200).json({ message: 'Form not found' })
+      res.status(200).json({ message: 'Form not found' })
+    }
   }
-}
 
 exports.userHavePermission = (req, res, next) => {
   const form = req.body
