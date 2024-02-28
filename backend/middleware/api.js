@@ -1946,11 +1946,17 @@ module.exports = (app) => {
     async (req, res) => {
       const db = await getPool()
       const user_id = req.params.user_id
+      const meta = req.query.meta
 
-      const result = await db.query(
-        `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`,
-        [user_id]
-      )
+      let query
+      if (meta === 'true') {
+        // only return id and title
+        query = `SELECT id, title FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`
+      } else {
+        query = `SELECT * FROM \`custom_thank_you\` WHERE user_id = ? OR user_id = 0`
+      }
+
+      const result = await db.query(query, [user_id])
 
       if (result.length > 0) {
         return res.json(result)
