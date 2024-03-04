@@ -56,7 +56,7 @@ $color-14: #68942f; /* forest green */
 
   .elementRadio .radioList,
   .elementCheckbox .checkboxCover {
-    padding: 4px 0;
+    padding: 6px;
     border-radius: 4px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #fdfdfd;
@@ -510,11 +510,11 @@ $color-14: #68942f; /* forest green */
 
   .elementCheckbox .input,
   .elementRadio li {
-    position: relative;
+    //position: relative;
     display: block;
     width: 100%;
     margin-bottom: 10px;
-    padding: 6px 0;
+    padding: 6px;
   }
 
   .elementCheckbox .input .checkbox-label {
@@ -588,13 +588,12 @@ $color-14: #68942f; /* forest green */
   }
 
   .elementCheckbox .input > input[type='checkbox']:checked::before {
-    position: absolute;
-    top: 6px;
-    left: 9px;
+    -webkit-text-stroke: 1px $color-0;
     display: block;
     content: '\2713';
     text-align: center;
     color: $color-0;
+    line-height: 0.8;
   }
 
   .elementCheckbox .input > input[type='checkbox']:active {

@@ -522,9 +522,8 @@ $color-14: #68942f; /* forest green */
   }
 
   .elementCheckbox .input > input[type='checkbox']:checked::before {
-    position: absolute;
-    top: 6px;
-    left: 9px;
+    -webkit-text-stroke: 1px $color-0;
+    line-height: 1;
     display: block;
     content: '\2713';
     text-align: center;
