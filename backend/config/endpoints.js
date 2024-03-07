@@ -169,18 +169,8 @@ module.exports = {
       exampleRequestPath: '/api/users/1/export/forms'
     },
     {
-      method: 'get',
-      path: '/templates/view/:id',
-      protected: false
-    },
-    {
       method: 'post',
       path: '/form/view/demo',
-      protected: false
-    },
-    {
-      method: 'get',
-      path: '/api/get/templates',
       protected: false
     },
     {
@@ -289,18 +279,6 @@ module.exports = {
         customizeInputs: false,
         paused: false
       }
-    },
-    {
-      method: 'get',
-      path: '/api/templates/metrics',
-      protected: false,
-      exampleRequestPath: '/api/templates/metrics'
-    },
-    {
-      method: 'post',
-      path: '/api/templates/:template_id/metrics',
-      protected: true,
-      exampleRequestPath: '/api/templates/1/metrics'
     }
   ]
 }

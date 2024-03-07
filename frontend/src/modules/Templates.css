@@ -9,7 +9,7 @@
   width: 1200%;
   background: #fdfdfd;
   height: 100%;
-  transition: all ease-in-out 1s;
+  transition: all ease-in-out 0.7s;
 }
 
 .main-screen.expanded {
@@ -21,7 +21,7 @@
 }
 
 .main-screen.expanded > .template-details > .vertical-back {
-  animation: slide-unhide 1.5s ease forwards;
+  animation: slide-unhide 1s ease forwards;
 }
 
 .main-screen > .template-details > .template-details-container {
@@ -112,25 +112,27 @@
 
 .screen img {
   width: 100%;
+  min-height: 500px;
+  object-fit: contain;
   height: auto;
   position: absolute;
   z-index: 0;
   margin: 0;
   padding: 5px;
-  -webkit-transition: transform 11s;
-  -moz-transition: transform 11s;
-  -ms-transition: transform 11s;
-  -o-transition: transform 11s;
-  transition: transform 11s;
+  /*-webkit-transition: transform 4s;*/
+  /*-moz-transition: transform 4s;*/
+  /*-ms-transition: transform 4s;*/
+  /*-o-transition: transform 4s;*/
+  /*transition: transform 4s;*/
 }
 
 .screen:hover img {
   transform: translateY(calc(-100% + 500px));
-  -webkit-transition: transform 11s;
-  -moz-transition: transform 11s;
-  -ms-transition: transform 11s;
-  -o-transition: transform 11s;
-  transition: transform 11s;
+  -webkit-transition: transform 6s;
+  -moz-transition: transform 6s;
+  -ms-transition: transform 6s;
+  -o-transition: transform 6s;
+  transition: transform 6s;
 }
 
 .template-card.selected {
