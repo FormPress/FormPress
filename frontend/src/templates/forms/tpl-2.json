@@ -40,11 +40,7 @@
         "id": 6,
         "type": "Radio",
         "label": "Will you be attending?",
-        "options": [
-          "Yes, I am",
-          "It's not certain still",
-          "No, I'm not"
-        ],
+        "options": ["Yes, I am", "It's not certain still", "No, I'm not"],
         "required": true,
         "requiredText": "Please pick an option."
       },

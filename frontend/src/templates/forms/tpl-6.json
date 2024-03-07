@@ -25,16 +25,10 @@
         "id": 6,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "required": true,
@@ -54,12 +48,7 @@
         "id": 4,
         "type": "Checkbox",
         "label": "Feedback Content",
-        "options": [
-          "Comments",
-          "Problems",
-          "Questions",
-          "Suggestions"
-        ],
+        "options": ["Comments", "Problems", "Questions", "Suggestions"],
         "toggle": false,
         "required": true,
         "requiredText": "Required field"

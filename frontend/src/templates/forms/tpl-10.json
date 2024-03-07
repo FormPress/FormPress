@@ -66,12 +66,7 @@
         "id": 4,
         "type": "Checkbox",
         "label": "What would you do if someone was spamming in chat?",
-        "options": [
-          "Mute",
-          "Warn",
-          "Kick",
-          "Ban"
-        ],
+        "options": ["Mute", "Warn", "Kick", "Ban"],
         "toggle": true,
         "required": true,
         "requiredText": "Required field",
@@ -82,12 +77,7 @@
         "id": 6,
         "type": "Checkbox",
         "label": "What would you do if someone was discriminating / harassing someone in chat?",
-        "options": [
-          "Mute",
-          "Warn",
-          "Kick",
-          "Ban"
-        ],
+        "options": ["Mute", "Warn", "Kick", "Ban"],
         "toggle": true,
         "required": true,
         "requiredText": "Required field",
@@ -98,12 +88,7 @@
         "id": 17,
         "type": "Radio",
         "label": "How long have you been following this channel?",
-        "options": [
-          "Less than a year",
-          "1-2 year(s)",
-          "2-3 years",
-          "Longer"
-        ],
+        "options": ["Less than a year", "1-2 year(s)", "2-3 years", "Longer"],
         "form_id": 406,
         "editor": false,
         "editorForOptions": false,
@@ -117,10 +102,7 @@
         "id": 7,
         "type": "Radio",
         "label": "Are you subscribed to the channel ?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": true,
         "requiredText": "Required field",
         "order": 8,
@@ -154,10 +136,7 @@
         "id": 10,
         "type": "Radio",
         "label": "Do you understand that if you abuse your powers, your mod rights can be taken away?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": true,
         "requiredText": "Required field",
         "order": 11,
@@ -171,10 +150,7 @@
         "id": 11,
         "type": "Radio",
         "label": "Do you understand that if you disrespect any other staff, your mod rights can be taken away?",
-        "options": [
-          "Yes",
-          "No"
-        ],
+        "options": ["Yes", "No"],
         "required": true,
         "requiredText": "Required field",
         "order": 12,
