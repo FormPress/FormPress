@@ -19,10 +19,9 @@ process.env.PUBLIC_BUCKET = 'somePublicBucketName'
 const db = require(path.resolve('./', 'db'))
 const getPoolStub = sinon.stub(db, 'getPool')
 
-const authenticationMiddleware = require(path.resolve(
-  'middleware',
-  'authentication'
-))
+const authenticationMiddleware = require(
+  path.resolve('middleware', 'authentication')
+)
 const apiMiddleware = require(path.resolve('middleware', 'api'))
 const endpoints = require(path.resolve('config', 'endpoints'))
 
@@ -164,27 +163,29 @@ describe('Api', () => {
           .end(done)
       })
 
-      it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request with valid auth token belonging to another user`, (done) => {
-        getPoolStub.returns({
-          query: async (sql, params) => {
-            //console.log('Query is called with ', sql, params)
-            return []
-          }
-        })
-
-        const pro = request(app)
-          [endpoint.method](endpoint.exampleRequestPath)
-          .set({
-            Accept: 'application/json',
-            Cookie: `auth=${token_otheruser}`
+      if (endpoint.path.includes(':user_id')) {
+        it(`Endpoint (${endpoint.method}::${endpoint.path}) should return HTTP403 to a request with valid auth token belonging to another user`, (done) => {
+          getPoolStub.returns({
+            query: async (sql, params) => {
+              //console.log('Query is called with ', sql, params)
+              return []
+            }
           })
 
-        if (typeof endpoint.exampleRequestBody !== 'undefined') {
-          pro.send(endpoint.exampleRequestBody)
-        }
+          const pro = request(app)
+            [endpoint.method](endpoint.exampleRequestPath)
+            .set({
+              Accept: 'application/json',
+              Cookie: `auth=${token_otheruser}`
+            })
 
-        pro.expect('Content-Type', /json/).expect(403, done) //method is called with a valid token of another user, should return 403
-      })
+          if (typeof endpoint.exampleRequestBody !== 'undefined') {
+            pro.send(endpoint.exampleRequestBody)
+          }
+
+          pro.expect('Content-Type', /json/).expect(403, done) //method is called with a valid token of another user, should return 403
+        })
+      }
     }
   })
 

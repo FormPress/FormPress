@@ -298,9 +298,9 @@ module.exports = {
     },
     {
       method: 'post',
-      path: '/api/templates/metrics',
+      path: '/api/templates/:template_id/metrics',
       protected: true,
-      exampleRequestPath: '/api/templates/metrics'
+      exampleRequestPath: '/api/templates/1/metrics'
     }
   ]
 }
