@@ -2109,4 +2109,39 @@ module.exports = (app) => {
       }
     }
   )
+
+  app.get('/api/templates/metrics', async (req, res) => {
+    const db = await getPool()
+    const result = await db.query(`SELECT * FROM \`templates\``)
+    if (result.length > 0) {
+      return res.json(result)
+    } else {
+      return res.json([])
+    }
+  })
+
+  app.post(
+    '/api/templates/:template_id/metrics',
+    mustHaveValidToken,
+    async (req, res) => {
+      const db = await getPool()
+
+      const template_id = req.params.template_id
+
+      if (isNaN(template_id) || parseInt(template_id) > 46) {
+        return res.status(400).json({ message: 'Invalid template id' })
+      }
+
+      const result = await db.query(
+        `INSERT INTO \`templates\` (\`id\`, \`times_cloned\`) VALUES (?, 1) ON DUPLICATE KEY UPDATE times_cloned = times_cloned + 1`,
+        [template_id]
+      )
+
+      if (result.warningCount === 0) {
+        return res.status(200).json({ message: 'Done!' })
+      } else {
+        return res.status(500).json({ message: 'Error!' })
+      }
+    }
+  )
 }

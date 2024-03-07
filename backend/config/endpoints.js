@@ -289,6 +289,18 @@ module.exports = {
         customizeInputs: false,
         paused: false
       }
+    },
+    {
+      method: 'get',
+      path: '/api/templates/metrics',
+      protected: false,
+      exampleRequestPath: '/api/templates/metrics'
+    },
+    {
+      method: 'post',
+      path: '/api/templates/metrics',
+      protected: true,
+      exampleRequestPath: '/api/templates/metrics'
     }
   ]
 }

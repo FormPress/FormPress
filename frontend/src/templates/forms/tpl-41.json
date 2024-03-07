@@ -1,7 +1,10 @@
 {
   "id": 41,
-  "user_id": 46,
   "title": "Computer Class Registration",
+  "url_title": "computer-class-registration",
+  "category": "Registration",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -25,11 +28,17 @@
         "id": 1,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 660,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -95,7 +104,12 @@
         "id": 7,
         "type": "Checkbox",
         "label": "Class Category",
-        "options": ["Class name", "Class name", "Class name", "Class name"],
+        "options": [
+          "Class name",
+          "Class name",
+          "Class name",
+          "Class name"
+        ],
         "form_id": 660,
         "toggle": false,
         "order": 7,
@@ -106,7 +120,12 @@
         "id": 8,
         "type": "Checkbox",
         "label": "Class Category",
-        "options": ["Class name", "Class name", "Class name", "Class name"],
+        "options": [
+          "Class name",
+          "Class name",
+          "Class name",
+          "Class name"
+        ],
         "form_id": 660,
         "toggle": false,
         "order": 8,
@@ -117,7 +136,11 @@
         "id": 9,
         "type": "Checkbox",
         "label": "Class Category",
-        "options": ["Class name", "Class name", "Class name"],
+        "options": [
+          "Class name",
+          "Class name",
+          "Class name"
+        ],
         "form_id": 660,
         "toggle": false,
         "order": 9,
@@ -136,7 +159,6 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": ["Registration"]
-  },
-  "url_title": "computer-class-registration"
+    "tags": []
+  }
 }

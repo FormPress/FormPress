@@ -1,7 +1,10 @@
 {
   "id": 43,
-  "user_id": 46,
   "title": "Help Desk Request",
+  "url_title": "help-desk-request",
+  "category": "Request",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -25,11 +28,17 @@
         "id": 1,
         "type": "Name",
         "label": "Your name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 662,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -87,7 +96,6 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": ["Request"]
-  },
-  "url_title": "help-desk-request"
+    "tags": []
+  }
 }
