@@ -76,7 +76,17 @@ export default class Templates extends Component {
   }
 
   handleTemplateSelect = (template) => {
-    const selectedTemplate = template
+    let { selectedTemplate, expandTemplate } = this.state
+
+    if (expandTemplate === null && selectedTemplate !== null) {
+      return
+    }
+
+    this.props.history.push(
+      `/editor/new/templates/${template.id}/${template.url_title}`
+    )
+
+    selectedTemplate = template
     this.setState({ selectedTemplate, expandTemplate: true })
   }
 
@@ -85,7 +95,7 @@ export default class Templates extends Component {
     this.setState({ expandTemplate: null }, () => {
       setTimeout(() => {
         this.setState({ selectedTemplate: null })
-      }, 1000)
+      }, 700)
     })
   }
 
@@ -130,9 +140,8 @@ export default class Templates extends Component {
       templates.forEach((template) => {
         if (template.category === category) {
           templatesMainContent.push(
-            <NavLink
+            <div
               key={template.id}
-              to={`/editor/new/templates/${template.id}/${template.url_title}`}
               id={`tpl-${template.id}`}
               className={`template-card ${
                 template.title.toLowerCase().indexOf(filterText) === -1
@@ -149,7 +158,7 @@ export default class Templates extends Component {
               <div key={template.id} className="template-info">
                 <div className="template-title">{template.title}</div>
               </div>
-            </NavLink>
+            </div>
           )
         }
       })
@@ -239,10 +248,13 @@ export default class Templates extends Component {
                 </div>
                 <div className="rightColumn">
                   <div className="selected-template-wrapper">
-                    <img
-                      src={`https://static.formpress.org/images/templates/tpl-${selectedTemplate?.id}.png`}
-                      alt={selectedTemplate?.title}
-                    />
+                    {selectedTemplate !== null &&
+                    selectedTemplate.id !== undefined ? (
+                      <img
+                        src={`https://static.formpress.org/images/templates/tpl-${selectedTemplate.id}.png`}
+                        alt={selectedTemplate.title}
+                      />
+                    ) : null}
                   </div>
                 </div>
               </div>
