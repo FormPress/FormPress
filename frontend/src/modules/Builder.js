@@ -452,7 +452,7 @@ export default class Builder extends Component {
   }
 
   cloneTemplate = (template) => {
-    this.props.history.push('/editor/new/builder')
+    this.props.history.replace('/editor/new/builder')
     this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props

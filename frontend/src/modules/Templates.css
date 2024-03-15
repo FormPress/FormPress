@@ -154,6 +154,19 @@
   background: #fdfdfd;
 }
 
+.templates-browser-content > .no-templates {
+  font-family: Montserrat;
+  font-size: 20px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: center;
+  color: #646464;
+  margin-top: 20px;
+}
+
 .templates-browser-content > .template-group {
   text-transform: capitalize;
   width: 100%;
@@ -185,8 +198,8 @@
 
 .template-card {
   float: left;
-  width: 23.4rem;
-  height: 37.5rem;
+  width: 100%;
+  height: auto;
   background-color: white;
   transition: 0.3s;
   border-radius: 8px;

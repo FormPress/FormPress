@@ -11,6 +11,7 @@ export default class Templates extends Component {
     super(props)
 
     this.state = {
+      initializing: true,
       templates: [],
       categories: [],
       selectedTemplate: {},
@@ -27,6 +28,8 @@ export default class Templates extends Component {
     const { data: templateMetrics } = await api({
       resource: `/api/templates/metrics`
     })
+
+    const nextState = {}
 
     const templates = templateListResult.map(
       // add timesCloned to each template
@@ -49,24 +52,29 @@ export default class Templates extends Component {
       // avoid duplicates
       categories = Array.from(new Set(categories))
 
-      this.setState({ templates, categories })
+      nextState.templates = templates
+      nextState.categories = categories
     } else {
       console.error('No templates found')
     }
 
     const url = window.location.pathname.split('/')
     const id = decodeURIComponent(url[url.indexOf('templates') + 1])
-    const externalCloneCommand = url.includes('clone')
+    const queryParams = new URLSearchParams(window.location.search)
+    const externalCloneCommand = queryParams.get('clone')
 
     if (id !== 'undefined') {
       const selectedTemplate = templates.find((t) => t.id === parseInt(id))
-      this.setState({ selectedTemplate })
+      nextState.selectedTemplate = selectedTemplate
       if (externalCloneCommand) {
-        this.setState({ templateToBeCloned: selectedTemplate })
+        nextState.cloneRequested = true
       }
     } else {
-      this.setState({ selectedTemplate: null })
+      nextState.selectedTemplate = null
     }
+
+    nextState.initializing = false
+    this.setState(nextState)
   }
 
   handleFilterTextChange = (e) => {
@@ -113,16 +121,28 @@ export default class Templates extends Component {
   }
 
   render() {
-    if (this.state.templateToBeCloned) {
-      this.props.cloneTemplate(this.state.templateToBeCloned)
+    if (this.state.initializing === true) {
+      return null
+    }
+
+    if (this.state.cloneRequested === true) {
+      this.props.cloneTemplate(this.state.selectedTemplate)
+      return null
     }
 
     const { templates, selectedTemplate, categories } = this.state
     const filterText = this.state.filterText.toLowerCase()
     const templatesMainContent = []
+    let visibleTemplateCount = null
 
     categories.forEach((category) => {
       let templateCount = this.filterAndCount(category)
+
+      if (visibleTemplateCount === null) {
+        visibleTemplateCount = templateCount
+      } else {
+        visibleTemplateCount += templateCount
+      }
 
       templatesMainContent.push(
         <div
@@ -185,6 +205,15 @@ export default class Templates extends Component {
             </div>
             <div className="templates-browser-content">
               {templatesMainContent}
+              <div
+                className="no-templates"
+                style={
+                  visibleTemplateCount === null || visibleTemplateCount > 0
+                    ? { display: 'none' }
+                    : { display: 'block' }
+                }>
+                No templates found
+              </div>
             </div>
           </div>
           <div className="template-details">
@@ -193,7 +222,6 @@ export default class Templates extends Component {
               onClick={() => this.handleTemplateDeselect()}>
               <FontAwesomeIcon icon={faArrowLeft} />
             </div>
-
             <div className="template-details-container">
               <div className="selected-template-title">
                 {selectedTemplate?.title || 'Select a template'}
