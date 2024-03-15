@@ -45,3 +45,29 @@ exports.get = async ({ user_id }) => {
     return false
   }
 }
+
+exports.setUserRoleWithName = async ({ user_id, role_name }) => {
+  const db = await getPool()
+
+  const roleIdResult = await db.query(`SELECT * FROM role WHERE name = ?`, [
+    role_name
+  ])
+
+  if (roleIdResult.length < 1) {
+    return false
+  }
+
+  const roleId = roleIdResult[0].id
+
+  await db.query('UPDATE user_role SET role_id = ? WHERE user_id = ?', [
+    roleId,
+    user_id
+  ])
+}
+
+exports.getAllRoles = async () => {
+  const db = await getPool()
+  const roleResult = await db.query('SELECT * FROM role')
+
+  return roleResult
+}
