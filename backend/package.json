@@ -58,5 +58,8 @@
     "mocha": "^10.2.0",
     "sinon": "17.0.1",
     "supertest": "6.3.4"
+  },
+  "nodemonConfig": {
+    "delay": 500
   }
 }

@@ -45,7 +45,7 @@ export default class Settings extends Component {
             <NavLink
               key={module.default.menuText}
               exact
-              to={module.default.path}
+              to={module.default.to || module.default.path}
               activeClassName="selected">
               {module.default.menuText}
             </NavLink>
@@ -60,18 +60,6 @@ export default class Settings extends Component {
             key={module.default.menuText}
           />
         )
-        if (module.default.menuText === 'Subscriptions and Payments') {
-          module.default.planNames.forEach((item) => {
-            routes.push(
-              <PrivateRoute
-                exact
-                path={`/settings/billing/${item}`}
-                component={module.default}
-                key={item}
-              />
-            )
-          })
-        }
       })
     }
 

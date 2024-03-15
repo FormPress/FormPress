@@ -6,10 +6,10 @@ terraform {
     }
     google = {
       source  = "hashicorp/google"
-      version = "~> 4.36"
+      version = "5.20.0"
     }
   }
-  required_version = "~> 1.5.3"
+  required_version = "1.7.4"
 }
 
 provider "google" {
