@@ -1,7 +1,10 @@
 {
   "id": 4,
-  "user_id": null,
   "title": "Support Request",
+  "url_title": "support-request",
+  "category": "contact",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -84,7 +87,6 @@
       "value": "",
       "isEncoded": false
     },
-    "tags": ["contact"]
-  },
-  "url_title": "support-request"
+    "tags": []
+  }
 }

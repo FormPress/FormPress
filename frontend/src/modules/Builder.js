@@ -452,7 +452,7 @@ export default class Builder extends Component {
   }
 
   cloneTemplate = (template) => {
-    this.props.history.push('/editor/new/builder')
+    this.props.history.replace('/editor/new/builder')
     this.setState({ loading: true })
     const form = { ...this.state.form }
     form.props = template.props
@@ -463,8 +463,13 @@ export default class Builder extends Component {
         to: this.props.generalContext.auth.email
       }
     ]
-    this.setState({ form, isTemplateModalOpen: false })
-    this.setState({ loading: false })
+
+    api({
+      resource: `/api/templates/${template.id}/metrics`,
+      method: 'post'
+    })
+
+    this.setState({ form, isTemplateModalOpen: false, loading: false })
   }
 
   constructor(props) {
@@ -1283,7 +1288,7 @@ export default class Builder extends Component {
 
   render() {
     const isInTemplates =
-      this.props.history.location.pathname.indexOf('/template') !== -1
+      this.props.history.location.pathname.indexOf('/templates') !== -1
 
     const noComponentPresent =
       this.props.history.location.pathname.endsWith('/new')
@@ -1462,7 +1467,7 @@ export default class Builder extends Component {
           <div className="options-wrapper">
             <NavLink
               className="option-container"
-              to="/editor/new/template"
+              to="/editor/new/templates"
               activeClassName="selected"
               onClick={closeModal}>
               <div className="option" onClick={closeModal}>
@@ -1858,7 +1863,7 @@ export default class Builder extends Component {
             canEdit={canEdit}
           />
         </Route>
-        <Route path="/editor/:formId/template">
+        <Route path="/editor/:formId/templates">
           <Templates
             formId={formId}
             cloneTemplate={this.cloneTemplate}

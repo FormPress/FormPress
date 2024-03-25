@@ -1,7 +1,10 @@
 {
   "id": 7,
-  "user_id": 46,
   "title": "History Quiz",
+  "url_title": "history-quiz",
+  "category": "Quiz",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -317,7 +320,6 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": ["Quiz"]
-  },
-  "url_title": "history-quiz"
+    "tags": []
+  }
 }

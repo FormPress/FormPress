@@ -1,7 +1,10 @@
 {
   "id": 13,
-  "user_id": 46,
   "title": "Website Design Request",
+  "url_title": "website-design-request",
+  "category": "Order",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -183,7 +186,6 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": ["Order"]
-  },
-  "url_title": "website-design-request"
+    "tags": []
+  }
 }

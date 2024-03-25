@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
-import TemplatePlaceholder from '../svg/TemplatePlaceholder'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { api } from '../helper'
 
 import './Templates.css'
@@ -10,49 +11,70 @@ export default class Templates extends Component {
     super(props)
 
     this.state = {
+      initializing: true,
       templates: [],
       categories: [],
       selectedTemplate: {},
-      filterText: ''
+      filterText: '',
+      expandTemplate: null
     }
   }
 
   async componentDidMount() {
-    const { data } = await api({ resource: `/api/get/templates` })
+    const { data: templateListResult } = await api({
+      resource: `/api/get/templates`
+    })
 
-    const templates = data
+    const { data: templateMetrics } = await api({
+      resource: `/api/templates/metrics`
+    })
+
+    const nextState = {}
+
+    const templates = templateListResult.map(
+      // add timesCloned to each template
+      (template) => {
+        const templateMetric = templateMetrics.find(
+          (metric) => metric.id === template.id
+        )
+        return {
+          ...template,
+          timesCloned: templateMetric?.times_cloned || 0
+        }
+      }
+    )
 
     if (templates.length > 0) {
       let categories = templates.map((template) => {
-        return template.props.tags[0] || 'Other'
+        return template.category || 'Other'
       })
 
       // avoid duplicates
       categories = Array.from(new Set(categories))
 
-      this.setState({ templates, categories })
+      nextState.templates = templates
+      nextState.categories = categories
     } else {
       console.error('No templates found')
     }
 
     const url = window.location.pathname.split('/')
-    const title = decodeURIComponent(url[url.indexOf('template') + 1])
-    const externalCloneCommand = url.includes('clone')
+    const id = decodeURIComponent(url[url.indexOf('templates') + 1])
+    const queryParams = new URLSearchParams(window.location.search)
+    const externalCloneCommand = queryParams.get('clone')
 
-    if (title !== 'undefined') {
-      const selectedTemplate = templates.find((t) => t.title === title)
-      this.setState({ selectedTemplate })
+    if (id !== 'undefined') {
+      const selectedTemplate = templates.find((t) => t.id === parseInt(id))
+      nextState.selectedTemplate = selectedTemplate
       if (externalCloneCommand) {
-        this.setState({ templateToBeCloned: selectedTemplate })
+        nextState.cloneRequested = true
       }
     } else {
-      this.setState({ selectedTemplate: templates[0] })
+      nextState.selectedTemplate = null
     }
 
-    const iframe = document.getElementById('template-iframe')
-    iframe.onload = function () {
-      iframe.classList.add('iframe-ready')
-    }
+    nextState.initializing = false
+    this.setState(nextState)
   }
 
   handleFilterTextChange = (e) => {
@@ -62,16 +84,27 @@ export default class Templates extends Component {
   }
 
   handleTemplateSelect = (template) => {
-    const selectedTemplate = template
-    const thisTemplateCard = document.getElementById(
-      `tpl-${selectedTemplate.id}`
-    )
-    if (thisTemplateCard.classList.contains('selected')) {
-      return null
+    let { selectedTemplate, expandTemplate } = this.state
+
+    if (expandTemplate === null && selectedTemplate !== null) {
+      return
     }
-    const iframe = document.getElementById('template-iframe')
-    this.setState({ selectedTemplate })
-    iframe.classList.remove('iframe-ready')
+
+    this.props.history.push(
+      `/editor/new/templates/${template.id}/${template.url_title}`
+    )
+
+    selectedTemplate = template
+    this.setState({ selectedTemplate, expandTemplate: true })
+  }
+
+  handleTemplateDeselect = () => {
+    this.props.history.push('/editor/new/templates')
+    this.setState({ expandTemplate: null }, () => {
+      setTimeout(() => {
+        this.setState({ selectedTemplate: null })
+      }, 700)
+    })
   }
 
   filterAndCount = (category) => {
@@ -80,7 +113,7 @@ export default class Templates extends Component {
 
     const templateGroup = templates.filter(
       (template) =>
-        template.props.tags[0] === category &&
+        template.category === category &&
         template.title.toLowerCase().indexOf(filterText) !== -1
     )
 
@@ -88,15 +121,28 @@ export default class Templates extends Component {
   }
 
   render() {
-    if (this.state.templateToBeCloned) {
-      this.props.cloneTemplate(this.state.templateToBeCloned)
+    if (this.state.initializing === true) {
+      return null
     }
+
+    if (this.state.cloneRequested === true) {
+      this.props.cloneTemplate(this.state.selectedTemplate)
+      return null
+    }
+
     const { templates, selectedTemplate, categories } = this.state
     const filterText = this.state.filterText.toLowerCase()
     const templatesMainContent = []
+    let visibleTemplateCount = null
 
     categories.forEach((category) => {
       let templateCount = this.filterAndCount(category)
+
+      if (visibleTemplateCount === null) {
+        visibleTemplateCount = templateCount
+      } else {
+        visibleTemplateCount += templateCount
+      }
 
       templatesMainContent.push(
         <div
@@ -112,25 +158,27 @@ export default class Templates extends Component {
         </div>
       )
       templates.forEach((template) => {
-        if (template.props.tags[0] === category) {
+        if (template.category === category) {
           templatesMainContent.push(
-            <NavLink
+            <div
               key={template.id}
-              to={`/editor/new/template/${template.title}`}
               id={`tpl-${template.id}`}
               className={`template-card ${
                 template.title.toLowerCase().indexOf(filterText) === -1
                   ? ' dn'
                   : ''
-              } ${selectedTemplate.id === template.id ? 'selected' : ''}`}
+              }`}
               onClick={() => this.handleTemplateSelect(template)}>
               <div className="screen">
-                <TemplatePlaceholder className="template-placeholder" />
+                <img
+                  src={`https://static.formpress.org/images/templates/tpl-${template.id}.png`}
+                  alt={template.title}
+                />
               </div>
               <div key={template.id} className="template-info">
                 <div className="template-title">{template.title}</div>
               </div>
-            </NavLink>
+            </div>
           )
         }
       })
@@ -138,37 +186,107 @@ export default class Templates extends Component {
 
     return (
       <div className="template-component-wrapper">
-        <div className="leftColumn">
-          <div className="templates-title">Templates</div>
-          <input
-            type="text"
-            className="search-box"
-            placeholder="Search templates..."
-            value={this.state.filterText}
-            onChange={this.handleFilterTextChange}
-          />
-          <div className="templates-wrapper">{templatesMainContent}</div>
-        </div>
-
-        <div className="rightColumn">
-          <div className="selected-template-title">
-            {this.state.selectedTemplate.title}
-            <button
-              className="cloneButton"
-              onClick={() =>
-                this.props.cloneTemplate(this.state.selectedTemplate)
-              }>
-              {' '}
-              Clone Template!{' '}
-            </button>
+        <div
+          className={
+            window.location.pathname.endsWith('/templates')
+              ? 'main-screen'
+              : 'main-screen expanded'
+          }>
+          <div className="templates-browser">
+            <div className="templates-browser-header">
+              <div className="templates-title">Templates</div>
+              <input
+                type="text"
+                className="search-box"
+                placeholder="Search templates..."
+                value={this.state.filterText}
+                onChange={this.handleFilterTextChange}
+              />
+            </div>
+            <div className="templates-browser-content">
+              {templatesMainContent}
+              <div
+                className="no-templates"
+                style={
+                  visibleTemplateCount === null || visibleTemplateCount > 0
+                    ? { display: 'none' }
+                    : { display: 'block' }
+                }>
+                No templates found
+              </div>
+            </div>
           </div>
-          <div className="selected-template-wrapper">
-            <iframe
-              id={'template-iframe'}
-              src={`${global.env.FE_BACKEND}/templates/view/${selectedTemplate.id}`}
-              title={`FP_FORM_${selectedTemplate.id}`}
-              className={'template-iframe'}
-            />
+          <div className="template-details">
+            <div
+              className="vertical-back"
+              onClick={() => this.handleTemplateDeselect()}>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </div>
+            <div className="template-details-container">
+              <div className="selected-template-title">
+                {selectedTemplate?.title || 'Select a template'}
+              </div>
+
+              <div className="template-details-content">
+                <div className="leftColumn">
+                  <div className="template-category">
+                    <span>Category: </span>
+                    {selectedTemplate?.category || 'Other'}
+                  </div>
+                  <div className="template-creator">
+                    <span>Created by: </span>
+                    {selectedTemplate?.createdBy || 'FormPress Team'}
+                  </div>
+                  <div className="template-description">
+                    <span>Description: </span>
+                    {selectedTemplate?.description ||
+                      'No description available'}
+                  </div>
+                  <div className="template-tags">
+                    <span>Tags: </span>
+                    {selectedTemplate?.props?.tags?.join(', ') || 'No tags'}
+                  </div>
+
+                  <div className="template-timescloned">
+                    <span>Times cloned: </span>
+                    {selectedTemplate?.timesCloned || 0}
+                  </div>
+
+                  <div className="template-actions">
+                    <button
+                      className="viewButton"
+                      onClick={() =>
+                        window.open(
+                          `${global.env.FE_BACKEND}/templates/view/${selectedTemplate.id}`,
+                          '_blank'
+                        )
+                      }>
+                      {' '}
+                      View in action{' '}
+                    </button>
+                    <button
+                      className="cloneButton"
+                      onClick={() =>
+                        this.props.cloneTemplate(this.state.selectedTemplate)
+                      }>
+                      {' '}
+                      Use Template{' '}
+                    </button>
+                  </div>
+                </div>
+                <div className="rightColumn">
+                  <div className="selected-template-wrapper">
+                    {selectedTemplate !== null &&
+                    selectedTemplate.id !== undefined ? (
+                      <img
+                        src={`https://static.formpress.org/images/templates/tpl-${selectedTemplate.id}.png`}
+                        alt={selectedTemplate.title}
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

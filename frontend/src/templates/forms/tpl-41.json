@@ -1,7 +1,10 @@
 {
   "id": 41,
-  "user_id": 46,
   "title": "Computer Class Registration",
+  "url_title": "computer-class-registration",
+  "category": "Registration",
+  "description": "",
+  "created_by": "FormPress Team",
   "props": {
     "integrations": [
       {
@@ -136,7 +139,6 @@
       "value": "",
       "isEncoded": true
     },
-    "tags": ["Registration"]
-  },
-  "url_title": "computer-class-registration"
+    "tags": []
+  }
 }
