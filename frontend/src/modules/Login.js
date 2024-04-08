@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect, Link } from 'react-router-dom'
-
+import { Buffer } from 'buffer'
 import { LoginPicture } from '../svg'
 import Renderer from './Renderer'
 import { api } from '../helper'
@@ -102,7 +102,10 @@ class Login extends Component {
   }
 
   async handleLoginWithGoogleClick(response) {
-    const profile = JSON.parse(atob(response.credential.split('.')[1]))
+    const toBeDecoded = response.credential.split('.')[1]
+    const decoded = Buffer.from(toBeDecoded, 'base64').toString('utf-8')
+
+    const profile = JSON.parse(decoded)
 
     this.setState({ state: 'loading', message: 'Logging in...' })
     const tokenID = response.credential
