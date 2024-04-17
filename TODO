@@ -91,7 +91,7 @@ MVP:
 - Add security check that only owner can view submissions
   Currently only user_id param is compared to the user_id in jwt token, this allows other users to query
   submissions of another user if form_id is known
-- Implement SignUp page along with login page
+- [DONE] Implement SignUp page along with login page
 - Implement forgot password feature
 - A under construction page as homepage
 - A nice homepage along with instructions to install properly and description of basic functionality
