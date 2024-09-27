@@ -37,11 +37,17 @@
         "id": 4,
         "type": "Name",
         "label": "Your name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": null,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 2,
@@ -62,7 +68,11 @@
         "id": 6,
         "type": "Radio",
         "label": "Your gender",
-        "options": ["Male", "Female", "Other"],
+        "options": [
+          "Male",
+          "Female",
+          "Other"
+        ],
         "form_id": null,
         "editor": false,
         "editorForOptions": false,
@@ -206,5 +216,12 @@
       "isEncoded": true
     },
     "tags": []
-  }
+  },
+  "seo_keywords": [
+    "Job Interview Form",
+    "Online Questionnaire",
+    "Form Builder Software",
+    "Job Application Forms",
+    "Employee Recruitment Form"
+  ]
 }

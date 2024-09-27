@@ -34,9 +34,19 @@
         "id": 2,
         "type": "Dropdown",
         "label": "Issue opened by",
-        "options": ["Name", "Name", "Name", "Name", "Name", "Name"],
+        "options": [
+          "Name",
+          "Name",
+          "Name",
+          "Name",
+          "Name",
+          "Name"
+        ],
         "placeholder": "Choose an option",
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 2,
         "form_id": 597,
         "required": false,
@@ -48,9 +58,18 @@
         "id": 3,
         "type": "Dropdown",
         "label": "Issue assigned to",
-        "options": ["Fixer 1", "Fixer 2 ", "Fixer 3", "Fixer 4 ", "Fixer 5"],
+        "options": [
+          "Fixer 1",
+          "Fixer 2 ",
+          "Fixer 3",
+          "Fixer 4 ",
+          "Fixer 5"
+        ],
         "placeholder": "Choose an option",
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 3,
         "form_id": 597,
         "required": false,
@@ -62,9 +81,16 @@
         "id": 4,
         "type": "Dropdown",
         "label": "Issue priority",
-        "options": ["Nice-to-have", "Important", "Urgent"],
+        "options": [
+          "Nice-to-have",
+          "Important",
+          "Urgent"
+        ],
         "placeholder": "Choose an option",
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 4,
         "form_id": 597,
         "required": false,
@@ -88,5 +114,12 @@
       "isEncoded": true
     },
     "tags": []
-  }
+  },
+  "seo_keywords": [
+    "Issue Tracking Form",
+    "Online Form Builder",
+    "Issue Management System",
+    "Task Assignment",
+    "Priority Setting"
+  ]
 }

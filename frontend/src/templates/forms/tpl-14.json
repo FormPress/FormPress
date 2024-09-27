@@ -28,11 +28,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 602,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -89,7 +95,11 @@
         "id": 10,
         "type": "Radio",
         "label": "Payment Methods",
-        "options": ["Debit or Credit Card", "PayPal", "Other"],
+        "options": [
+          "Debit or Credit Card",
+          "PayPal",
+          "Other"
+        ],
         "editor": false,
         "editorForOptions": false,
         "expectedAnswer": "",
@@ -122,5 +132,12 @@
       "isEncoded": true
     },
     "tags": []
-  }
+  },
+  "seo_keywords": [
+    "Online Donation Form",
+    "Charity Form Template",
+    "Fundraising Form Builder",
+    "Non-Profit Donation Template",
+    "Recurring Donation Form"
+  ]
 }

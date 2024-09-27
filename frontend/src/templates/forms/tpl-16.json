@@ -28,11 +28,17 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": ["Mr.", "Mrs."],
+        "options": [
+          "Mr.",
+          "Mrs."
+        ],
         "form_id": 604,
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": ["Mr.", "Mrs."],
+        "prefixOptions": [
+          "Mr.",
+          "Mrs."
+        ],
         "middleName": false,
         "suffix": false,
         "order": 1
@@ -62,7 +68,11 @@
         "id": 7,
         "type": "Radio",
         "label": "Seating options",
-        "options": [" Front stage ", " Middle ", " Balcony "],
+        "options": [
+          " Front stage ",
+          " Middle ",
+          " Balcony "
+        ],
         "form_id": 604,
         "editor": false,
         "editorForOptions": false,
@@ -105,5 +115,12 @@
       "isEncoded": true
     },
     "tags": []
-  }
+  },
+  "seo_keywords": [
+    "Concert Ticket Registration",
+    "Online Ticket Booking",
+    "Music Event Registration",
+    "Event Ticket Purchase",
+    "Live Concert Tickets"
+  ]
 }

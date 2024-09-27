@@ -56,7 +56,10 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 2,
         "required": false,
         "requiredText": "Required field",
@@ -87,10 +90,18 @@
         "id": 24,
         "type": "Dropdown",
         "label": "You're connected to internet via",
-        "options": ["LAN", "Wireless", "USB Cable", "Other"],
+        "options": [
+          "LAN",
+          "Wireless",
+          "USB Cable",
+          "Other"
+        ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 5,
         "required": false,
         "requiredText": "Required field",
@@ -110,7 +121,10 @@
         ],
         "placeholder": "Choose an option",
         "form_id": 664,
-        "dropdownOptions": ["Option 1", "Option 2"],
+        "dropdownOptions": [
+          "Option 1",
+          "Option 2"
+        ],
         "order": 6,
         "required": false,
         "requiredText": "Required field",
@@ -130,5 +144,12 @@
       "isEncoded": true
     },
     "tags": []
-  }
+  },
+  "seo_keywords": [
+    "Internet Speed Survey",
+    "Internet Service Provider",
+    "Download Speed",
+    "Upload Speed",
+    "Router Type"
+  ]
 }
