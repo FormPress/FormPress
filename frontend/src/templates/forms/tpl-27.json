@@ -17,16 +17,10 @@
         "id": 0,
         "type": "Name",
         "label": "Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "prefix": false,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 0,
@@ -81,11 +75,7 @@
         "id": 4,
         "type": "Checkbox",
         "label": "Which product() would you like to order?",
-        "options": [
-          "product 1 ",
-          "product 2",
-          "product 3"
-        ],
+        "options": ["product 1 ", "product 2", "product 3"],
         "toggle": false,
         "order": 4,
         "form_id": 619,

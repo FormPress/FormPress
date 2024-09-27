@@ -27,17 +27,11 @@
         "id": 4,
         "type": "Name",
         "label": "Full Name",
-        "options": [
-          "Mr.",
-          "Mrs."
-        ],
+        "options": ["Mr.", "Mrs."],
         "form_id": 656,
         "prefix": true,
         "prefixTypeTextBox": false,
-        "prefixOptions": [
-          "Mr.",
-          "Mrs."
-        ],
+        "prefixOptions": ["Mr.", "Mrs."],
         "middleName": false,
         "suffix": false,
         "order": 1,
@@ -69,11 +63,7 @@
         "id": 7,
         "type": "Radio",
         "label": "Best time of the day to contact me is",
-        "options": [
-          "Morning",
-          "Afternoon",
-          "Evening"
-        ],
+        "options": ["Morning", "Afternoon", "Evening"],
         "form_id": 656,
         "editor": false,
         "editorForOptions": false,
