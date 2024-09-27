@@ -148,7 +148,7 @@ class App extends Component {
     }
   }
 
-  //load env vars
+  //load environment variables
   loadEnvVars = async () => {
     try {
       const response = await api({
