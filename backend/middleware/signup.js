@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 const path = require('path')
 const sgMail = require('@sendgrid/mail')
 const ejs = require('ejs')
@@ -17,6 +18,9 @@ const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
 
 module.exports = (app) => {
   app.post('/api/users/signup', async (req, res) => {
+    return res
+        .status(403)
+        .json({ message: 'Signups are disabled' });
     const { email, password, isCodeBasedSignUp } = req.body
 
     const db = await getPool()

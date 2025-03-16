@@ -255,8 +255,9 @@ class Login extends Component {
                 }`}>
                 {state === 'done' ? message : null}
               </p>
-              <div className="do-not-have">
-                Don&apos;t have an account? <Link to="/signup">SIGN UP</Link>
+              <div className="do-not-have" style={{padding: 20}}>
+                As of 16/03/2025, we have disabled new signups. If you have an
+                account, please login.
               </div>
               <div className="have-trouble">
                 Having trouble?
