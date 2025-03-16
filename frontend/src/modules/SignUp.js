@@ -352,7 +352,7 @@ class SignUp extends Component {
               </div>
             </div>
             <div className="signup-mainContent">
-              <div style={{textAlign: "center"}}>
+              <div style={{ textAlign: 'center' }}>
                 Signups are currently disabled.
               </div>
               <div className="have-trouble">

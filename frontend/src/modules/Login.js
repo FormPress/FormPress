@@ -255,7 +255,7 @@ class Login extends Component {
                 }`}>
                 {state === 'done' ? message : null}
               </p>
-              <div className="do-not-have" style={{padding: 20}}>
+              <div className="do-not-have" style={{ padding: 20 }}>
                 As of 16/03/2025, we have disabled new signups. If you have an
                 account, please login.
               </div>

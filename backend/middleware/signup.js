@@ -18,9 +18,7 @@ const { locationFinder } = require(path.resolve('helper')).cfLocationFinder
 
 module.exports = (app) => {
   app.post('/api/users/signup', async (req, res) => {
-    return res
-        .status(403)
-        .json({ message: 'Signups are disabled' });
+    return res.status(403).json({ message: 'Signups are disabled' })
     const { email, password, isCodeBasedSignUp } = req.body
 
     const db = await getPool()
