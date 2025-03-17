@@ -1,3 +1,4 @@
+/* eslint-disable no-unreachable */
 const path = require('path')
 const https = require('https')
 const { genRandomString } = require(path.resolve('helper')).random
@@ -72,6 +73,7 @@ module.exports = (app) => {
     let result = await selectUserWithPermission(email)
 
     if (result.length === 0) {
+      return res.status(403).json({ message: 'Signups are disabled.' })
       const verifyCode = genRandomString(128)
       const newEntry = await db.query(`
         INSERT INTO \`user\`
